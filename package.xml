@@ -24,40 +24,18 @@ generated package.xml files -->
 
     <release>
         <version>0.9.7</version>
-        <date>2003-xx-xx</date>
+        <date>2003-07-17</date>
         <notes>
-- fixed bug in imagick_free() that would cause it to SEGFAULT everytime it's
-  called.
+- fixed bug in imagick_free() that would cause it to SEGFAULT everytime
+  it's called.
 - fixed to work with versions of ImageMagick >= 5.5.7  - special thanks to
   James Huston (hustonjs@itadevelopment.com) for helping make this happen.
-- test compiled against 5.5.3, 5.5.6 and 5.5.7 with success.
+- test compiled against ImageMagick 5.5.3, 5.5.6 and 5.5.7 with success.
+- test compiled against GraphicsMagick 1.0.1 with success.
 	</notes>
         <state>beta</state>
     </release>
   
-    <release>
-        <version>0.9.6</version>
-        <date>2003-04-11</date>
-        <notes>
-- functions added:
-	imagick_getcolorspace()
-	imagick_error()
-- added a new example called transparent_1x1.html and some explanatory text.
-  I can think of many uses for this code.
-- thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
-  imagick_getcolorspace() and testing it out.
-- added GraphicsMagick (http://www.graphicsmagick.org) support to configure 
-  script (enable it with --with-imagick-gm)
-- imagick_readimage() now returns false if ImageMagick ReadImage() fails.
-- imagick_error() returns 1 string representing any errors that have occurred
-  on an operation.  IT IS LARGELY UNTESTED!  Beware!  However, you can now
-  do things like:
-          $handle = imagick_readimage( "image.jpg" ) or die( imagick_error() ) ;
-- fixed configure script. It honours now values returned by Magick-config.
-	</notes>
-        <state>beta</state>
-    </release>
-
         <configureoptions>
             <configureoption name="with-imagick" default="shared" prompt="ImageMagick library install dir?"/>
             <configureoption name="with-imagick-gm" default="no" prompt="GraphicsMagick instead of ImageMagick?"/>
