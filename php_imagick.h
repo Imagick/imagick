@@ -37,6 +37,7 @@ extern zend_module_entry imagick_module_entry;
 #endif
 
 #include <magick/api.h>
+#include <magick/image.h>
 
 #if PHP_API_VERSION >= 20010901
 #define NEWER_API
@@ -60,6 +61,8 @@ PHP_FUNCTION(imagick_copy_resize);
 PHP_FUNCTION(imagick_copy_crop);
 PHP_FUNCTION(imagick_copy_shear);
 PHP_FUNCTION(imagick_copy_rotate);
+PHP_FUNCTION(imagick_border);
+PHP_FUNCTION(imagick_frame);
 PHP_FUNCTION(imagick_copy_morph);
 PHP_FUNCTION(imagick_resize);
 PHP_FUNCTION(imagick_sample);
