@@ -658,9 +658,15 @@ PHP_MINFO_FUNCTION( imagick )
 	smart_str		   format_list = { 0 } ;
 
 	php_info_print_table_start() ;
-	php_info_print_table_header( 2, "ImageMagick support", "enabled" ) ;
-	php_info_print_table_row( 2, "ImageMagick version",
-				  MagickLibVersionText ) ;
+
+	snprintf( buffer, 512, "%s support", IMAGICK_BACKEND ) ;
+	php_info_print_table_header( 2, buffer, "enabled" ) ;
+
+	php_info_print_table_row( 2, "Magick Backend", IMAGICK_BACKEND ) ;
+	
+	snprintf( buffer, 512, "%s version", IMAGICK_BACKEND ) ;
+	php_info_print_table_row( 2, buffer, MagickLibVersionText ) ;
+	
 	php_info_print_table_row( 2, "PHP imagick version", IMAGICK_VERSION ) ; 
 
 	snprintf( buffer, 512, "%ld\0", MaxRGB ) ;

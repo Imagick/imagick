@@ -24,6 +24,8 @@ Don't worry.  Everything should still compile fine.
 8) rm ./configure
 9) ./buildconf
 10) run configure as you normally would and add --with-imagick
+    If Imagemagick is installed in a non standard dir, add this dir to --with-imagick=dir
+    If you want GraphicsMagick instead of ImageMagick as backend, add --with-imagick-gm
 11) make
 12) make install
 
