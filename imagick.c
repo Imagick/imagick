@@ -5174,12 +5174,14 @@ PHP_FUNCTION( imagick_transparent )
 	zval* 	    handle_id ;		/* the handle identifier coming from
 					   the PHP environment */
 	char*	    trans_color ;	/* the color to make transparent */
+	int	    trans_color_len ;	/* the string length of trans_color */
 	imagick_t*  handle ;		/* the actual imagick_t struct for the
 					   handle */
 	PixelPacket target ;		/* the target transparent pixel */
 
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs",
-			&handle_id, &trans_color ) == FAILURE )
+			&handle_id, &trans_color, &trans_color_len ) ==
+				FAILURE )
 	{
 		return ;
 	}
