@@ -251,6 +251,7 @@ zend_function_entry imagick_functions[] =
         *****/
 
         PHP_FE( imagick_set_image_comment,	NULL )
+	PHP_FE( imagick_set_image_quality,	NULL )
 
 	/*****
 
@@ -5362,6 +5363,34 @@ PHP_FUNCTION( imagick_set_image_comment )
 	{
 		RETURN_FALSE ;
 	}
+}
+
+PHP_FUNCTION( imagick_set_image_quality )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+	long	   quality ;		/* the new value for the quality of
+					   the image.  100 means maintain 100%
+					   of the original quality. */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rl",
+			&handle_id, &quality ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	handle->image_info->quality = quality ;
+	RETURN_TRUE ;
 }
 
 /******************************************************************************

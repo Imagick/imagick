@@ -37,6 +37,8 @@ generated package.xml files -->
   less restrictive.  This apparently helps fix issues with certain types
   of images that otherwise appear corrupt.  Thanks to Hien Duy Nguyenxi
   <hdn@umich.edu> for finding this, recommending the change and testing it.
+- added imagick_set_image_quality() for manipulating the quality of the
+  resultant image.
 	</notes>
         <state>beta</state>
     </release>

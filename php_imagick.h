@@ -265,6 +265,7 @@
 	*****/
 
 	PHP_FUNCTION( imagick_set_image_comment ) ;
+	PHP_FUNCTION( imagick_set_image_quality ) ;
 
 	/*****
 
