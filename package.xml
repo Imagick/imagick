@@ -31,6 +31,9 @@ generated package.xml files -->
 	  where the image's profile causes the browser to not properly render
 	  images (you only get red X's).  See this posting:
 		http://studio.imagemagick.org/pipermail/magick-users/2002-September/005072.html
+	- added this filter IMAGICK_FILTER_UNKNOWN.  If the user specifies
+	  this filter to imagick_resize(), the resize function will take
+	  whatever filter is defined by the image.
 	</notes>
     <state>beta</state>
     </release>

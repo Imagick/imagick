@@ -26,6 +26,7 @@
 
 	#define IMAGICK_VERSION					"0.9.2-dev"
 	#define IMAGICK_TURN_OFF_ERRORS_TO_STDERR		1
+	#define IMAGICK_FILTER_UNKNOWN				-1 
 	#define IMAGICK_DEPCREATED()				php_error( E_WARNING, "%s(): this function is deprecated and will be removed soon", get_active_function_name( TSRMLS_C ) ) ;
 
 	/*****

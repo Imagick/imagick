@@ -26,7 +26,32 @@
 
 	imagick_convert( $handle, "GIF" ) ;
 
-	if ( !imagick_resize( $handle, 800, 600, IMAGICK_FILTER_QUADRATIC, 0 ) )
+        //
+        //  For 4th parameter, use any of the following:
+        //
+        //      IMAGICK_FILTER_UNDEFINED
+        //      IMAGICK_FILTER_POINT
+        //      IMAGICK_FILTER_BOX
+        //      IMAGICK_FILTER_TRIANGLE
+        //      IMAGICK_FILTER_HERMITE
+        //      IMAGICK_FILTER_HANNING
+        //      IMAGICK_FILTER_HAMMING
+        //      IMAGICK_FILTER_BLACKMAN
+        //      IMAGICK_FILTER_GAUSSIAN
+        //      IMAGICK_FILTER_QUADRATIC
+        //      IMAGICK_FILTER_CUBIC
+        //      IMAGICK_FILTER_CATROM
+        //      IMAGICK_FILTER_MITCHELL
+        //      IMAGICK_FILTER_LANCZOS
+        //      IMAGICK_FILTER_BESSEL
+        //      IMAGICK_FILTER_SINC
+        //      IMAGICK_FILTER_UNKNOWN
+        //
+        //  Use IMAGICK_FILTER_UNKNOWN to defer to whatever filter is defined
+        //  in the image.
+        //
+
+	if ( !imagick_resize( $handle, 800, 600, IMAGICK_FILTER_UNKNOWN, 0 ) )
 	{
 		$reason      = imagick_failedreason( $handle ) ;
 		$description = imagick_faileddescription( $handle ) ;

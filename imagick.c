@@ -305,7 +305,7 @@ PHP_MINIT_FUNCTION( imagick )
 
 	*****/
 
-	REGISTER_LONG_CONSTANT( "IMAGICK_FILTER_UNKNOWN", UndefinedFilter,
+	REGISTER_LONG_CONSTANT( "IMAGICK_FILTER_UNDEFINED", UndefinedFilter,
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_FILTER_POINT", PointFilter,
 				CONST_CS | CONST_PERSISTENT ) ;
@@ -336,6 +336,9 @@ PHP_MINIT_FUNCTION( imagick )
 	REGISTER_LONG_CONSTANT( "IMAGICK_FILTER_BESSEL", BesselFilter,
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_FILTER_SINC", SincFilter,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_FILTER_UNKNOWN",
+				IMAGICK_FILTER_UNKNOWN,
 				CONST_CS | CONST_PERSISTENT ) ;
 
 	/*****
@@ -1455,6 +1458,18 @@ PHP_FUNCTION( imagick_resize )
 	}
 
 	_php_imagick_clear_errors( handle ) ;
+
+	/*****
+
+	   If the user specifies they don't know what filter to use, then
+	   take the filter that is already defined by the image.
+
+	*****/
+
+	if ( filter == IMAGICK_FILTER_UNKNOWN )
+	{
+		filter = handle->image->filter ;
+	}
 
 	new_image = ResizeImage( handle->image, cols, rows,
 			         ( FilterTypes )filter, blur,
