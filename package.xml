@@ -39,6 +39,10 @@ generated package.xml files -->
   <hdn@umich.edu> for finding this, recommending the change and testing it.
 - added imagick_set_image_quality() for manipulating the quality of the
   resultant image.
+- added examples/set_image_quality.php for testing the
+  imagick_set_image_quality() function.  Thanks to Derrick DeLoreno Threatt
+  <dthreatt@digitalcreations.net> for bringing up the need for this function
+  and testing it.
 	</notes>
         <state>beta</state>
     </release>
