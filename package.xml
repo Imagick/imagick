@@ -36,22 +36,13 @@ generated package.xml files -->
 - changed how certain errors are handled in _php_imagick_is_error() to be
   less restrictive.  This apparently helps fix issues with certain types
   of images that otherwise appear corrupt.  Thanks to Hien Duy Nguyenxi
-  <hdn@umich.edu> for finding this, recommending the change and testing it.
+  (hdn@umich.edu) for finding this, recommending the change and testing it.
 - added imagick_set_image_quality() for manipulating the quality of the
   resultant image.
 - added examples/set_image_quality.php for testing the
   imagick_set_image_quality() function.  Thanks to Derrick DeLoreno Threatt
-  <dthreatt@digitalcreations.net> for bringing up the need for this function
+  (dthreatt@digitalcreations.net) for bringing up the need for this function
   and testing it.
-	</notes>
-        <state>beta</state>
-    </release>
-    <release>
-        <version>0.9.8</version>
-        <date>2003-09-10</date>
-        <notes>
-- fixed critical error in call to strlen() in _php_imagick_set_last_error().
-  I strongly recommend you upgrade.
 	</notes>
         <state>beta</state>
     </release>
