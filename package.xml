@@ -22,40 +22,15 @@ generated package.xml files -->
     <license>PHP License</license>  
     <release>
         <version>0.9.3</version>
-        <date>2002-12-07</date>
+        <date>2002-12-xx</date>
         <notes>
         - functions added:
                 imagick_zoom()
-        - the ifference between imagick_zoom() and imagick_resize() is
+        - the difference between imagick_zoom() and imagick_resize() is
           that zoom applies the blur and filter that are defined by
           the image.  It is a much simpler way of resizing an image.
+		- added imagick.dsp and modifications for compiling under Windows.
         </notes>
-    <state>beta</state>
-    </release>
-    <release>
-        <version>0.9.2</version>
-        <date>2002-12-07</date>
-        <notes>
-	- functions added:
-		imagick_profile()
-	- created IMAGICK_PROFILE_* to support imagick_profile().
-	- this release is significant because of the issue with Microsoft IE
-	  where the image's profile causes the browser to not properly render
-	  images (you only get red X's).  See this posting:
-		http://studio.imagemagick.org/pipermail/magick-users/2002-September/005072.html
-	- added this filter IMAGICK_FILTER_UNKNOWN.  If the user specifies
-	  this filter to imagick_resize(), the resize function will take
-	  whatever filter is defined by the image.
-	- modified imagick_resize() to take 6th optional parameter that is
-	  the modifier to the geometry to facility building geometries such
-	  as 800x600+200+200! or 450x230>.
-	- modified imagick_scale() to take 4th optional parameter that is
-	  the modifier to the geometry to facility building geometries such
-	  as 800x600+200+200! or 450x230>.
-	- modified imagick_sample() to take 4th optional parameter that is
-	  the modifier to the geometry to facility building geometries such
-	  as 800x600+200+200! or 450x230>.
-	</notes>
     <state>beta</state>
     </release>
         <configureoptions>
@@ -71,6 +46,7 @@ generated package.xml files -->
                 <file role="src">imagick.c</file>
                 <file role="src">imagick.h</file>
                 <file role="src">php_imagick.h</file>
+                <file role="src">imagick.dsp</file>				
                 <dir name="examples">
                     <file role="doc">border.php</file>
                     <file role="doc">destroyhandle.php</file>
