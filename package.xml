@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- do not use the "Type" attribute here, that one is only for
+     generated package.xml files -->
+<package>
+  <name>pecl_imagick</name>
+  <summary>Provides a wrapper do the Image Magick Library. It's a native php-extension. 
+  See http://php.chregu.tv/imagick for installation and usage notes</summary>
+  <maintainer>
+    <user>chregu</user>
+    <name>Christian Stocker</name>
+    <email>chregu@php.net</email>
+  </maintainer>
+  <release>
+    <version>0.0.1</version>
+    <date>2001-11-22</date>
+    <notes>
+	    - first offical PEAR/PECL release
+        - a lot of functionality still missing
+    </notes>
+  </release>
+  <filelist>
+    <dir role="source" name="/" baseinstalldir="imagick">
+        <file>CREDITS</file>
+        <file>EXPERIMENTAL</file>
+        <file>INSTALL</file>
+        <file>Makefile.in</file>
+        <file>config.m4</file>
+        <file>imagick.c</file>
+        <file>imagick.php</file>
+        <file>php_imagick.h</file>
+
+      <dir name="xml" role="doc">
+        <file>imagick.xml</file>
+      </dir>        
+      <dir name="doc" role="doc">
+        <file>ref.imagick.html</file>
+        <file>funcref.html</file>
+        <file>function.imagick-convert.html</file>
+        <file>function.imagick-create.html</file>
+        <file>function.imagick-crop.html</file>
+        <file>function.imagick-dump.html</file>
+        <file>function.imagick-free.html</file>
+        <file>function.imagick-get-attribute.html</file>
+        <file>function.imagick-morph.html</file>
+        <file>function.imagick-read.html</file>
+        <file>function.imagick-resize.html</file>
+        <file>function.imagick-rotate.html</file>
+        <file>function.imagick-sample.html</file>
+        <file>function.imagick-set-attribute.html</file>
+        <file>function.imagick-shear.html</file>
+        <file>function.imagick-write.html</file>
+        <file>function.list-magickinfo.html</file>
+</dir>
+      
+    </dir>
+  </filelist>
+</package>

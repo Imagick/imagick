@@ -1,0 +1,7 @@
+# $Id$
+
+LTLIBRARY_NAME        = libimagick.la
+LTLIBRARY_SOURCES     = imagick.c
+LTLIBRARY_SHARED_NAME = imagick.la
+LTLIBRARY_SHARED_LIBADD  = $(IMAGICK_SHARED_LIBADD) -lMagick
+include $(top_srcdir)/build/dynlib.mk

@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- $Revision: 1.1 $ -->
+ <reference id="ref.imagick">
+  <title>Imagick Functions</title>
+  <titleabbrev>imagick</titleabbrev>
+  <partintro>
+   &warn.experimental;
+
+   <sect1 id="imagick.partintro">
+    <title>Introduction</title>
+    <sect2 id="imagick.intro">
+     <title>About ImageMagick</title>
+     <para>
+     ImageMagick is a robust collection of tools and libraries to read, write, and manipulate an image 
+     in many image formats (over 68 major formats) including popular formats like TIFF, JPEG, PNG, PDF, 
+     PhotoCD, and GIF. With ImageMagick you can create images dynamically, making it suitable 
+     for Web applications. You can also resize, rotate, sharpen, color reduce, or add 
+     special effects to an image and save your completed work in the same or differing image format. 
+     </para>
+     <note>
+     <para>
+     The above text is from the ImageMagick Website 
+     (<ulink url="http://www.imagemagick.org/">http://www.imagemagick.org</ulink>),
+     therefore not everything does apply to this extension at the moment, but it will some time in the 
+     future. Hopefully. And the link above is also a great source, if you don't understand everything here.
+     </para>
+     </note>
+    </sect2>
+    <sect2 id="imagick.install">
+     <title>Installation</title>
+     <para>
+     short installation note:
+<simplelist>
+<member>- untar the imagick.tgz archive into php4/ext (available from <ulink url="http://pear.chregu.tv/imagick.tgz">http://pear.chregu.tv/imagick.tgz</ulink>)</member>
+<member>- run phpize in ext/imagick</member>
+<member>- run ./buildconf in php4</member>
+<member>- run configure with --with-imagick (and your other options)</member>
+<member>- make; make install</member>
+<member>- that's it.</member>
+</simplelist>
+and you need the imagemagick header files to install it (and on my system i
+needed also the libwmf header files...)
+</para>
+
+</sect2>
+    <sect2 id="imagick.contact">
+     <title>Contact Information</title>
+<para>
+If you have comments, bugfixes, enhancements or want to help developping this beast,
+you can drop me a mail at 
+ <ulink url="mailto:chregu@php.net">chregu@php.net</ulink> or
+ <ulink url="mailto:chregu@bitflux.ch">chregu@bitflux.ch</ulink>.
+Any help is very welcome.
+</para>
+</sect2>
+    </sect1>
+
+
+  </partintro>
+ 
+  <refentry id="function.imagick-create">
+   <refnamediv>
+    <refname>imagick_create</refname>
+    <refpurpose>Creates a new ImageMagick handle</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>resource <function>imagick_create</function></funcdef>
+      <paramdef><parameter>void</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+     Returns a handle on success,
+     &false; on error.
+    </para>
+    <example>
+     <title><function>imagick_create</function> example</title>
+     <programlisting role="php">
+<![CDATA[
+<?php
+$handle = imagick_create ()
+    or die ("Could not create handle");
+print("Connected successfully");
+imagick_free($handle);
+?>
+]]>
+     </programlisting>
+    </example>
+    <para>
+     See also: <function>imagick_free</function>.
+    </para>
+   </refsect1>
+  </refentry>
+ 
+  <refentry id="function.imagick-read">
+   <refnamediv>
+    <refname>imagick_read</refname>
+    <refpurpose>Reads an image</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>boolean <function>imagick_read</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>mixed <parameter>filename</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+     Returns: &true; on success, &false;
+     on error.  
+    </para>
+    <para>
+     The <parameter>filename</parameter> parameter can be either a filename on your 
+     local filesystem or a URL (e.g. http://my.server.com/picture.gif) or an array containing
+     more than one string with filenames for multiple image support. The imageformat
+     should be recognized automatically by imagick. If <function>imagick_read</function> 
+     does not recognize the 
+     imageformat, you can prefix the filename with the image format abbreviation plus a : 
+     (e.g. GIF:mygif.gif). Following imageformats are supported
+     with ImageMagick 5.4.0. 
+    </para>
+    <para>
+    <table>
+    <title>Supported image formats by ImageMagick</title>
+    <tgroup cols="3">
+    <thead>
+     <row>
+      <entry>Image Type</entry>
+      <entry>Read/Write Support</entry>
+            <entry>Description</entry>
+     </row>
+    </thead>
+    <tbody>    
+    <row><entry>8BIM*</entry><entry>rw-</entry><entry>Photoshop resource format</entry></row>
+<row><entry>AFM*</entry><entry>r--</entry><entry>TrueType font</entry></row>
+<row><entry>APP1*</entry><entry>rw-</entry><entry>Photoshop resource format</entry></row>
+<row><entry>ART*</entry><entry>r--</entry><entry>PF1: 1st Publisher</entry></row>
+<row><entry>AVI*</entry><entry>r--</entry><entry>Audio/Visual Interleaved</entry></row>
+<row><entry>AVS*</entry><entry>rw+</entry><entry>AVS X image</entry></row>
+<row><entry>BIE*</entry><entry>rw-</entry><entry>Joint Bi-level Image experts Group interchange format</entry></row>
+<row><entry>BMP*</entry><entry>rw+</entry><entry>Microsoft Windows bitmap image</entry></row>
+<row><entry>CMYK*</entry><entry>rw+</entry><entry>Raw cyan, magenta, yellow, and black bytes</entry></row>
+<row><entry>CMYKA*</entry><entry>rw+</entry><entry>Raw cyan, magenta, yellow, black, and matte bytes</entry></row>
+<row><entry>CUT*</entry><entry>r--</entry><entry>DR Hallo</entry></row>
+<row><entry>DCM*</entry><entry>r--</entry><entry>Digital Imaging and Communications in Medicine image</entry></row>
+<row><entry>DCX*</entry><entry>rw+</entry><entry>ZSoft IBM PC multi-page Paintbrush</entry></row>
+<row><entry>DIB*</entry><entry>rw+</entry><entry>Microsoft Windows bitmap image</entry></row>
+<row><entry>DPX*</entry><entry>rw+</entry><entry>Digital Moving Picture Exchange</entry></row>
+<row><entry>EPDF*</entry><entry>rw-</entry><entry>Encapsulated Portable Document Format</entry></row>
+<row><entry>EPI*</entry><entry>rw-</entry><entry>Adobe Encapsulated PostScript Interchange format</entry></row>
+<row><entry>EPS*</entry><entry>rw-</entry><entry>Adobe Encapsulated PostScript</entry></row>
+<row><entry>EPS2*</entry><entry>-w-</entry><entry>Adobe Level II Encapsulated PostScript</entry></row>
+<row><entry>EPS3*</entry><entry>-w+</entry><entry>Adobe Level III Encapsulated PostScript</entry></row>
+<row><entry>EPSF*</entry><entry>rw-</entry><entry>Adobe Encapsulated PostScript</entry></row>
+<row><entry>EPSI*</entry><entry>rw-</entry><entry>Adobe Encapsulated PostScript Interchange format</entry></row>
+<row><entry>EPT*</entry><entry>rw-</entry><entry>Adobe Encapsulated PostScript with TIFF preview</entry></row>
+<row><entry>FAX*</entry><entry>rw+</entry><entry>Group 3 FAX</entry></row>
+<row><entry>FILE*</entry><entry>r--</entry><entry>Uniform Resource Locator</entry></row>
+<row><entry>FITS*</entry><entry>rw-</entry><entry>Flexible Image Transport System</entry></row>
+<row><entry>FPX*</entry><entry>rw-</entry><entry>FlashPix Format</entry></row>
+<row><entry>FTP*</entry><entry>r--</entry><entry>Uniform Resource Locator</entry></row>
+<row><entry>G3*</entry><entry>rw-</entry><entry>Group 3 FAX</entry></row>
+<row><entry>GIF*</entry><entry>rw+</entry><entry>CompuServe graphics interchange format</entry></row>
+<row><entry>GIF87*</entry><entry>rw-</entry><entry>CompuServe graphics interchange format (version 87a)</entry></row>
+<row><entry>GRADIENT*</entry><entry>r--</entry><entry>Gradual passing from one shade to another</entry></row>
+<row><entry>GRANITE*</entry><entry>r--</entry><entry>Granite texture</entry></row>
+<row><entry>GRAY*</entry><entry>rw+</entry><entry>Raw gray bytes</entry></row>
+<row><entry>H*</entry><entry>rw-</entry><entry>Internal format</entry></row>
+<row><entry>HDF</entry><entry>rw+</entry><entry>Hierarchical Data Format</entry></row>
+<row><entry>HISTOGRAM*</entry><entry>-w-</entry><entry>Histogram of the image</entry></row>
+<row><entry>HTM*</entry><entry>-w-</entry><entry>Hypertext Markup Language and a client-side image map</entry></row>
+<row><entry>HTML*</entry><entry>-w-</entry><entry>Hypertext Markup Language and a client-side image map</entry></row>
+<row><entry>HTTP*</entry><entry>r--</entry><entry>Uniform Resource Locator</entry></row>
+<row><entry>ICB*</entry><entry>rw+</entry><entry>Truevision Targa image</entry></row>
+<row><entry>ICM*</entry><entry>rw-</entry><entry>ICC Color Profile</entry></row>
+<row><entry>ICO*</entry><entry>r--</entry><entry>Microsoft icon</entry></row>
+<row><entry>ICON*</entry><entry>r--</entry><entry>Microsoft icon</entry></row>
+<row><entry>IPTC*</entry><entry>rw-</entry><entry>IPTC Newsphoto</entry></row>
+<row><entry>JBG*</entry><entry>rw+</entry><entry>Joint Bi-level Image experts Group interchange format</entry></row>
+<row><entry>JBIG*</entry><entry>rw+</entry><entry>Joint Bi-level Image experts Group interchange format</entry></row>
+<row><entry>JP2*</entry><entry>rw-</entry><entry>JPEG-2000 JP2 File Format Syntax</entry></row>
+<row><entry>JPC*</entry><entry>rw-</entry><entry>JPEG-2000 Code Stream Syntax</entry></row>
+<row><entry>JPEG*</entry><entry>rw-</entry><entry>Joint Photographic Experts Group JFIF format</entry></row>
+<row><entry>JPG*</entry><entry>rw-</entry><entry>Joint Photographic Experts Group JFIF format</entry></row>
+<row><entry>LABEL*</entry><entry>r--</entry><entry>Text image format</entry></row>
+<row><entry>LOGO*</entry><entry>rw-</entry><entry>ImageMagick Logo</entry></row>
+<row><entry>M2V*</entry><entry>rw+</entry><entry>MPEG Video Stream</entry></row>
+<row><entry>MAP*</entry><entry>rw-</entry><entry>Colormap intensities and indices</entry></row>
+<row><entry>MAT*</entry><entry>r--</entry><entry>MATLAB image format</entry></row>
+<row><entry>MATTE*</entry><entry>-w+</entry><entry>MATTE format</entry></row>
+<row><entry>MIFF*</entry><entry>rw+</entry><entry>Magick image format</entry></row>
+<row><entry>MNG*</entry><entry>rw+</entry><entry>Multiple-image Network Graphics</entry></row>
+<row><entry>MONO*</entry><entry>rw-</entry><entry>Bi-level bitmap in least-significant-byte first order</entry></row>
+<row><entry>MPC</entry><entry>rw-</entry><entry>Magick Persistent Cache image format</entry></row>
+<row><entry>MPEG*</entry><entry>rw+</entry><entry>MPEG Video Stream</entry></row>
+<row><entry>MPG*</entry><entry>rw+</entry><entry>MPEG Video Stream</entry></row>
+<row><entry>MTV*</entry><entry>rw+</entry><entry>MTV Raytracing image format</entry></row>
+<row><entry>MVG*</entry><entry>rw-</entry><entry>Magick Vector Graphics</entry></row>
+<row><entry>NETSCAPE*</entry><entry>r--</entry><entry>Netscape 216 color cube</entry></row>
+<row><entry>NULL*</entry><entry>r--</entry><entry>Constant image of uniform color</entry></row>
+<row><entry>OTB*</entry><entry>rw-</entry><entry>On-the-air bitmap</entry></row>
+<row><entry>P7*</entry><entry>rw+</entry><entry>Xv thumbnail format</entry></row>
+<row><entry>PAL*</entry><entry>rw-</entry><entry>16bit/pixel interleaved YUV</entry></row>
+<row><entry>PBM*</entry><entry>rw+</entry><entry>Portable bitmap format (black and white)</entry></row>
+<row><entry>PCD*</entry><entry>rw-</entry><entry>Photo CD</entry></row>
+<row><entry>PCDS*</entry><entry>rw-</entry><entry>Photo CD</entry></row>
+<row><entry>PCL*</entry><entry>-w-</entry><entry>Page Control Language</entry></row>
+<row><entry>PCT*</entry><entry>rw-</entry><entry>Apple Macintosh QuickDraw/PICT</entry></row>
+<row><entry>PCX*</entry><entry>rw-</entry><entry>ZSoft IBM PC Paintbrush</entry></row>
+<row><entry>PDB*</entry><entry>r--</entry><entry>Pilot Image Format</entry></row>
+<row><entry>PDF*</entry><entry>rw+</entry><entry>Portable Document Format</entry></row>
+<row><entry>PFB*</entry><entry>r--</entry><entry>TrueType font</entry></row>
+<row><entry>PFM*</entry><entry>r--</entry><entry>TrueType font</entry></row>
+<row><entry>PGM*</entry><entry>rw+</entry><entry>Portable graymap format (gray scale)</entry></row>
+<row><entry>PICON*</entry><entry>rw-</entry><entry>Personal Icon</entry></row>
+<row><entry>PICT*</entry><entry>rw-</entry><entry>Apple Macintosh QuickDraw/PICT</entry></row>
+<row><entry>PIX*</entry><entry>r--</entry><entry>Alias/Wavefront RLE image format</entry></row>
+<row><entry>PLASMA*</entry><entry>r--</entry><entry>Plasma fractal image</entry></row>
+<row><entry>PM*</entry><entry>rw-</entry><entry>X Windows system pixmap (color)</entry></row>
+<row><entry>PNG*</entry><entry>rw-</entry><entry>Portable Network Graphics</entry></row>
+<row><entry>PNM*</entry><entry>rw+</entry><entry>Portable anymap</entry></row>
+<row><entry>PPM*</entry><entry>rw+</entry><entry>Portable pixmap format (color)</entry></row>
+<row><entry>PREVIEW*</entry><entry>-w-</entry><entry>Show a preview an image enhancement, effect, or f/x</entry></row>
+<row><entry>PS*</entry><entry>rw+</entry><entry>Adobe PostScript</entry></row>
+<row><entry>PS2*</entry><entry>-w+</entry><entry>Adobe Level II PostScript</entry></row>
+<row><entry>PS3*</entry><entry>-w+</entry><entry>Adobe Level III PostScript</entry></row>
+<row><entry>PSD*</entry><entry>rw-</entry><entry>Adobe Photoshop bitmap</entry></row>
+<row><entry>PTIF*</entry><entry>rw-</entry><entry>Pyramid encoded TIFF</entry></row>
+<row><entry>PWP*</entry><entry>r--</entry><entry>Seattle Film Works</entry></row>
+<row><entry>RAS*</entry><entry>rw+</entry><entry>SUN Rasterfile</entry></row>
+<row><entry>RGB*</entry><entry>rw+</entry><entry>Raw red, green, and blue bytes</entry></row>
+<row><entry>RGBA*</entry><entry>rw+</entry><entry>Raw red, green, blue, and matte bytes</entry></row>
+<row><entry>RLA*</entry><entry>r--</entry><entry>Alias/Wavefront image</entry></row>
+<row><entry>RLE*</entry><entry>r--</entry><entry>Utah Run length encoded image</entry></row>
+<row><entry>SCT*</entry><entry>r--</entry><entry>Scitex HandShake</entry></row>
+<row><entry>SGI*</entry><entry>rw+</entry><entry>Irix RGB image</entry></row>
+<row><entry>SHTML*</entry><entry>-w-</entry><entry>Hypertext Markup Language and a client-side image map</entry></row>
+<row><entry>STEGANO*</entry><entry>r--</entry><entry>Steganographic image</entry></row>
+<row><entry>SUN*</entry><entry>rw+</entry><entry>SUN Rasterfile</entry></row>
+<row><entry>SVG*</entry><entry>rw+</entry><entry>Scalable Vector Gaphics</entry></row>
+<row><entry>TEXT*</entry><entry>rw+</entry><entry>Raw text</entry></row>
+<row><entry>TGA*</entry><entry>rw+</entry><entry>Truevision Targa image</entry></row>
+<row><entry>TIF*</entry><entry>rw+</entry><entry>Tagged Image File Format</entry></row>
+<row><entry>TIFF*</entry><entry>rw+</entry><entry>Tagged Image File Format</entry></row>
+<row><entry>TILE*</entry><entry>r--</entry><entry>Tile image with a texture</entry></row>
+<row><entry>TIM*</entry><entry>r--</entry><entry>PSX TIM</entry></row>
+<row><entry>TTF*</entry><entry>r--</entry><entry>TrueType font</entry></row>
+<row><entry>TXT*</entry><entry>rw+</entry><entry>Raw text</entry></row>
+<row><entry>UIL*</entry><entry>-w-</entry><entry>X-Motif UIL table</entry></row>
+<row><entry>UYVY*</entry><entry>rw-</entry><entry>16bit/pixel interleaved YUV</entry></row>
+<row><entry>VDA*</entry><entry>rw+</entry><entry>Truevision Targa image</entry></row>
+<row><entry>VICAR*</entry><entry>rw-</entry><entry>VICAR rasterfile format</entry></row>
+<row><entry>VID*</entry><entry>rw+</entry><entry>Visual Image Directory</entry></row>
+<row><entry>VIFF*</entry><entry>rw+</entry><entry>Khoros Visualization image</entry></row>
+<row><entry>VST*</entry><entry>rw+</entry><entry>Truevision Targa image</entry></row>
+<row><entry>WBMP*</entry><entry>rw-</entry><entry>Wireless Bitmap (level 0) image</entry></row>
+<row><entry>WMF</entry><entry>r--</entry><entry>Windows Meta File</entry></row>
+<row><entry>WPG*</entry><entry>r--</entry><entry>Word Perfect Graphics</entry></row>
+<row><entry>X*</entry><entry>rw-</entry><entry>X Image</entry></row>
+<row><entry>XBM*</entry><entry>rw-</entry><entry>X Windows system bitmap (black and white)</entry></row>
+<row><entry>XC*</entry><entry>r--</entry><entry>Constant image uniform color</entry></row>
+<row><entry>XML*</entry><entry>r--</entry><entry>Scalable Vector Gaphics</entry></row>
+<row><entry>XPM*</entry><entry>rw-</entry><entry>X Windows system pixmap (color)</entry></row>
+<row><entry>XV*</entry><entry>rw+</entry><entry>Khoros Visualization image</entry></row>
+<row><entry>XWD*</entry><entry>rw-</entry><entry>X Windows system window dump (color)</entry></row>
+<row><entry>YUV*</entry><entry>rw-</entry><entry>CCIR 601 4:1:1</entry></row>
+</tbody>
+</tgroup>    
+</table>
+   
+    </para>
+        <note> 
+    <para>
+    r = read, w = write, * = native blob support
+    </para>
+    <para>
+    On some platforms, ImageMagick automatically processes these extensions: .gz for Zip compression, 
+    .Z for Unix compression, .bz2 for block compression, and .pgp for PGP encryption. 
+    For example, a PNM image called image.pnm.gz is automatically uncompressed with the gzip program 
+    and the image is subsequently read.
+    </para>
+    </note>
+    <para>
+     <example>
+      <title><function>imagick_read</function> example</title>
+      <programlisting role="php">
+<![CDATA[
+<?php
+$handle = image_new();
+    or die ("Could not connect");
+imagick_read($handle,"mypic.gif");    
+imagick_write($handle,"mypic.png");
+imagick_free($handle);
+?>
+]]>
+      </programlisting>
+     </example>
+     </para>
+     
+    <para>
+     <example>
+      <title><function>imagick_read</function> example with multiple images</title>
+      <programlisting role="php">
+<![CDATA[
+<?php
+$handle = image_new();
+    or die ("Could not connect");
+imagick_read($handle,array("mypic.gif","http://my.server.com/mypic.png"));    
+imagick_write($handle,"PNG:mypic.myext");
+imagick_free($handle);
+?>
+]]>
+      </programlisting>
+     </example>
+     </para>
+     
+    <para>
+     See also: <function>imagick_write</function>, <function>imagick_convert</function>.
+    </para>
+   </refsect1>
+  </refentry>
+ 
+  <refentry id="function.imagick-write">
+   <refnamediv>
+    <refname>imagick_write</refname>
+    <refpurpose>
+        Writes the image to a file.
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_write</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>string <parameter>filename</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+
+     <para>
+     Returns: &true; on success, &false;
+     on error.  
+    </para>
+    <para>
+     The <parameter>filename</parameter> parameter is a filename on your 
+     local filesystem. ImageMagick tries to find out the imageformat with the 
+     file-extension you provide. If that failes or if you want another 
+     imageformat, you can prefix the filename with the imageformat-code plus :.
+     See <function>image_read</function> for a detailed list of all supported
+     imageformats.
+    </para>
+    <para>
+     <example>
+      <title><function>imagick_write</function> example</title>
+      <programlisting role="php">
+<![CDATA[
+<?php
+$handle = image_new();
+    or die ("Could not connect");
+imagick_read($handle,"mypic.gif");    
+imagick_write($handle,"mypic.png","PNG");
+imagick_free($handle);
+?>
+]]>
+      </programlisting>
+     </example>
+     </para>
+
+
+        <para>
+     See also: <function>imagick_read</function>, <function>imagick_convert</function>, <function>imagick_dump</function>.
+    </para>
+   </refsect1>
+</refentry>
+
+  <refentry id="function.imagick-free">
+   <refnamediv>
+    <refname>imagick_free</refname>
+    <refpurpose>
+        Frees an imagick handle and all the resources attached to it
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_free</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+   <para>
+        See also: <function>imagick_create</function>.
+    </para>
+   </refsect1>
+  </refentry>
+
+
+
+  <refentry id="function.imagick-convert">
+   <refnamediv>
+    <refname>imagick_convert</refname>
+    <refpurpose>
+        Converts a file to another file or dumps it to the browser
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_convert</function></funcdef>
+      <paramdef>string <parameter>input_file</parameter></paramdef>
+      <paramdef>string <parameter>output_file</parameter></paramdef>
+    <paramdef>string <parameter><optional>imageformat</optional></parameter></paramdef>      
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+     <para>
+     Returns: &true; on success, &false;
+     on error.  
+    </para>
+    <para>
+    This is a wrapper for create, read, write/dump and free.
+    If output_file is "-" or Null it dumps the image to the output (mostly the browser). If you dump it to the 
+    output, you can give a imageformat, if you want something else than the inputformat (most likely...).
+    
+    
+    </para>
+       <para>
+        See also: <function>imagick_read</function>, <function>imagick_write</function>, <function>imagick_dump</function>.
+    </para>
+
+    
+   </refsect1>
+  </refentry>
+ 
+  <refentry id="function.imagick-crop">
+   <refnamediv>
+    <refname>imagick_crop</refname>
+    <refpurpose>
+        Crops an image
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_crop</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>int <parameter>width</parameter></paramdef>
+      <paramdef>int <parameter>height</parameter></paramdef>
+      <paramdef>int <parameter>x</parameter></paramdef>
+      <paramdef>int <parameter>y</parameter></paramdef>      
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+     <para>
+     Returns: &true; on success, &false;
+     on error.  
+    </para>
+   </refsect1>
+  </refentry>
+ 
+  <refentry id="function.imagick-sample">
+   <refnamediv>
+    <refname>imagick_sample</refname>
+    <refpurpose>
+        Scales an image to the desired dimensions with pixelsampling. 
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_sample</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>int <parameter>width</parameter></paramdef>
+      <paramdef>int <parameter>height</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+     <para>
+     Returns: &true; on success, &false;
+     on error.  
+    </para>
+    <para>
+            Scales an image to the desired dimensions with pixelsampling. 
+        Unlike other scaling methods, this method does not introduceany 
+        additional color into the scaled image.
+    </para>
+           <para>
+        See also: <function>imagick_resize</function>.
+    </para>
+
+    
+   </refsect1>
+  </refentry>
+ 
+  <refentry id="function.imagick-resize">
+   <refnamediv>
+    <refname>imagick_resize</refname>
+    <refpurpose>
+    Scales an image to the desired dimensions with a filter.
+</refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_resize</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>int <parameter>width</parameter></paramdef>
+      <paramdef>int <parameter>height</parameter></paramdef>
+      <paramdef>int <parameter>filter</parameter></paramdef>      
+      <paramdef>int <parameter>blur</parameter></paramdef>            
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+     <para>
+     Returns: &true; on success, &false;
+     on error.  
+    </para>
+    <para>
+    The possible filters are:
+    <simplelist>
+    <member>IMAGICK_FILTER_UNDEFINED</member>
+<member>IMAGICK_FILTER_POINT</member>
+<member>IMAGICK_FILTER_BOX</member>
+<member>IMAGICK_FILTER_TRIANGLE</member>
+<member>IMAGICK_FILTER_HERMITE</member>
+<member>IMAGICK_FILTER_HANNING</member>
+<member>IMAGICK_FILTER_HAMMING</member>
+<member>IMAGICK_FILTER_BLACKMAN</member>
+<member>IMAGICK_FILTER_GAUSSIAN</member>
+<member>IMAGICK_FILTER_QUADRATIC</member>
+<member>IMAGICK_FILTER_CUBIC</member>
+<member>IMAGICK_FILTER_CATROM</member>
+<member>IMAGICK_FILTER_MITCHELL</member>
+<member>IMAGICK_FILTER_LANCZOS</member>
+<member>IMAGICK_FILTER_BESSEL</member>
+<member>IMAGICK_FILTER_SINC</member>
+</simplelist>
+<parameter>blur</parameter> means the blur factor where > 1 is blurry, < 1 is sharp.
+    </para>
+    <para>
+        See also: <function>imagick_sample</function>.
+    </para>
+
+    
+   </refsect1>
+  </refentry>
+
+  <refentry id="function.list-magickinfo">
+   <refnamediv>
+    <refname>imagick_list-magickifo</refname>
+    <refpurpose>
+        Lists the image formats to a file
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_sample</function></funcdef>
+      <paramdef>string <parameter>filename</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+   </refsect1>
+  </refentry>
+  
+      <refentry id="function.imagick-rotate">
+   <refnamediv>
+    <refname>imagick_rotate</refname>
+    <refpurpose>
+        Rotates a picture
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_rotate</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>double <parameter>degrees</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+. Positive angles rotate counter-clockwise (right-hand rule), while negative angles rotate clockwise. 
+Rotated images are usually larger than the originals and have 'empty' triangular corners. 
+Empty triangles left over from rotating the image are filled with the color defined by the pixel at location (0,0). 
+    </para>
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imagick-shear">
+   <refnamediv>
+    <refname>imagick_shear</refname>
+    <refpurpose>
+        Sheares a picture
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_shear</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>double <parameter>x_shear</parameter></paramdef>
+      <paramdef>double <parameter>y_shear</parameter></paramdef>      
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+    Shearing slides one edge of an image along the X or Y axis, creating a parallelogram. 
+    An X direction shear slides an edge along the X axis, while a Y direction shear slides an edge along the Y axis. 
+    The amount of the shear is controlled by a shear angle. For X direction shears, x_shear is measured relative to the Y axis, 
+    and similarly, for Y direction shears y_shear is measured relative to the X axis. Empty triangles left over from 
+    shearing the image are filled with the color defined by the pixel at location (0,0). 
+       
+    </para>
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.imagick-morph">
+   <refnamediv>
+    <refname>imagick_morph</refname>
+    <refpurpose>
+        Morphes at least 2 pictures
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_shear</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>long <parameter>number_frames</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+    This function requires a minimum of two images. 
+    The firstimage is transformed into the second by 
+    a number of intervening images as specified by frames.
+       
+    </para>
+
+   </refsect1>
+  </refentry>
+
+  
+    <refentry id="function.imagick-dump">
+   <refnamediv>
+    <refname>imagick_dump</refname>
+    <refpurpose>
+        Dumps the picture to the output (mostly the browser)
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_dump</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>string <parameter><optional>imageformat</optional></parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+        See also: <function>imagick_write</function>.
+    </para>
+
+   </refsect1>
+  </refentry>
+
+    <refentry id="function.imagick-set-attribute">
+   <refnamediv>
+    <refname>imagick_set_attribute</refname>
+    <refpurpose>
+        Sets an image attribute.
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_set_attribute</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>mixed <parameter>attribute</parameter></paramdef>
+      <paramdef>string <parameter><optional>attribute_value</optional></parameter></paramdef>      
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+   <para>
+    This function takes either two string with the attribute and the value, or a array with 
+    attributes as key and the values as values...
+   </para>
+   <para>
+   At the moment following attributes are supported:
+   <simplelist>
+   <member>adjoin</member>
+   <member>delay</member>
+   <member>format</member>
+   <member>magick</member>   
+   <member>quality</member>      
+   <member>size</member>         
+   </simplelist>
+   
+   More Options will follow soon, it's more or less only copy&amp;paste work.
+   </para>
+   <note>
+   <para>
+       For a detailed list of what the attributes are, see 
+       <ulink url="http://www.imagemagick.org/www/perl.html#seta">http://www.imagemagick.org/www/perl.html#seta</ulink>
+    </para>
+    </note>       
+    <example>
+     <title><function>imagick_set_attribue</function> example</title>
+     <programlisting role="php">
+<![CDATA[
+<?php
+$handle = imagick_create ()
+    or die ("Could not create handle");
+imagick_read($handle,"mypic.gif");
+imagick_set_attribue($handle,"quality",10);
+imagick_write($handle,"mypic.jpg");
+imagick_free($handle);
+?>
+]]>
+     </programlisting>
+    </example>
+    <example>
+     <title><function>imagick_set_attribue</function> example with more than one attribute at once</title>
+     <programlisting role="php">
+<![CDATA[
+<?php
+$handle = imagick_create ()
+    or die ("Could not create handle");
+imagick_read($handle,"mypic.gif");
+imagick_set_attribue($handle,array("quality"=>10,"format"=>"jpeg");
+imagick_write($handle,"mypic.jpg");
+imagick_free($handle);
+?>
+]]>
+     </programlisting>
+    </example>
+
+       
+    <para>
+        See also: <function>imagick_get_attribute</function>.
+    </para>
+
+   </refsect1>
+  </refentry>
+
+    <refentry id="function.imagick-get-attribute">
+   <refnamediv>
+    <refname>imagick_get_attribute</refname>
+    <refpurpose>
+        Gets an image attribute.
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_sample</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>string <parameter>attribute_name</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+   <para>
+   At the moment are following attributes supported:
+   <simplelist>
+   <member>format</member>
+   <member>magick</member>   
+   <member>quality</member>
+   <member>height</member>         
+   <member>width</member>      
+</simplelist>
+   </para>
+    <para>
+        See also: <function>imagick_set_attribute</function>.
+    </para>
+
+   </refsect1>
+  </refentry>
+
+
+
+
+  
+  
+ </reference>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:"../../manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+vim600: syn=xml fen fdm=syntax fdl=2 si
+vim: et tw=78 syn=sgml
+vi: ts=1 sw=1
+-->
