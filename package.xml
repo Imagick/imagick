@@ -24,15 +24,15 @@ generated package.xml files -->
     <license>PHP License</license>  
     <release>
         <version>0.9.5</version>
-        <date>2003-02-xx</date>
+        <date>2003-02-19</date>
         <notes>
 - functions added:
-		imagick_newimagelist()
-		imagick_pushlist()
-		imagick_poplist()
-		imagick_mosaic()
-		imagick_setcompressiontype()
-		imagick_setcompressionquality()
+        imagick_newimagelist()
+        imagick_pushlist()
+        imagick_poplist()
+        imagick_mosaic()
+        imagick_setcompressiontype()
+        imagick_setcompressionquality()
 - modified how all functions check to see if ImageMagick has been initialized.
 - added a number of new examples for demonstrating how to use image lists.
 - fixed bugs in _php_imagick_alloc_handle() and _php_imagick_clear_errors()
@@ -50,34 +50,6 @@ generated package.xml files -->
         <state>beta</state>
     </release>
 
-    <release>
-        <version>0.9.4</version>
-        <date>2003-01-24</date>
-        <notes>
-- functions added:
-	imagick_flatten()
-	imagick_getmagick()
-	imagick_setfillopacity()
-- fixed bad code in these functions:
-	imagick_despeckle()
-	imagick_edge()
-	imagick_emboss()
-	imagick_enhance()
-	imagick_gaussianblur()
-	imagick_medianfilter()
-	imagick_motionblur()
-	imagick_reducenoise()
-	imagick_shade()
-	imagick_sharpen()
-	imagick_spread()
-	imagick_unsharpmask()
-- for the above functions, if call to corresponding ImageMagick
-  function the module would probably core dump.  If it didn't the
-  results would be really buggy and weird.
-- setfillopacity() thanks to Allen Condit, condit@isri.unlv.edu.
-	</notes>
-        <state>beta</state>
-    </release>
         <configureoptions>
             <configureoption name="with-imagick" default="shared" prompt="ImageMagick library install dir?"/>
         </configureoptions>
