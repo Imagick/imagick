@@ -198,6 +198,7 @@
 	PHP_FUNCTION( imagick_spread ) ;
 	PHP_FUNCTION( imagick_threshold ) ;
 	PHP_FUNCTION( imagick_unsharpmask ) ;
+	PHP_FUNCTION( imagick_flatten ) ;
 
 	/*****
 

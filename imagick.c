@@ -186,6 +186,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_spread,			NULL )
 	PHP_FE( imagick_threshold,		NULL )
 	PHP_FE( imagick_unsharpmask,		NULL )
+	PHP_FE( imagick_flatten,		NULL )
 
         /*****
 
@@ -3384,6 +3385,8 @@ PHP_FUNCTION( imagick_despeckle )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3427,6 +3430,8 @@ PHP_FUNCTION( imagick_edge )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3471,6 +3476,8 @@ PHP_FUNCTION( imagick_emboss )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3510,6 +3517,8 @@ PHP_FUNCTION( imagick_enhance )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3557,6 +3566,8 @@ PHP_FUNCTION( imagick_gaussianblur )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3599,6 +3610,8 @@ PHP_FUNCTION( imagick_medianfilter )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3645,6 +3658,8 @@ PHP_FUNCTION( imagick_motionblur )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3687,6 +3702,8 @@ PHP_FUNCTION( imagick_reducenoise )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3731,6 +3748,8 @@ PHP_FUNCTION( imagick_shade )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3776,6 +3795,8 @@ PHP_FUNCTION( imagick_sharpen )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3817,6 +3838,8 @@ PHP_FUNCTION( imagick_spread )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;
@@ -3832,7 +3855,6 @@ PHP_FUNCTION( imagick_threshold )
 	double     threshold ;		/* define the threshold value */
         imagick_t* handle ;             /* the actual imagick_t struct for the
                                            handle */
-
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rd",
 			&handle_id, &threshold ) == FAILURE )
         {
@@ -3877,7 +3899,6 @@ PHP_FUNCTION( imagick_unsharpmask )
                                            handle */
         Image*     new_image ;          /* the new image */
 
-
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rdddd",
 			&handle_id, &radius, &sigma, &amount, &threshold )
 					== FAILURE )
@@ -3903,6 +3924,49 @@ PHP_FUNCTION( imagick_unsharpmask )
                 {
                         DestroyImage( new_image ) ;
                 }
+
+		RETURN_FALSE ;
+	}
+
+        DestroyImage( handle->image ) ;
+        handle->image = new_image ;
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_flatten )
+{
+        zval*      handle_id ;          /* the handle identifier coming from
+                                           the PHP environment */
+        imagick_t* handle ;             /* the actual imagick_t struct for the
+                                           handle */
+        Image*     new_image ;          /* the new image */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+        {
+                return ;
+        }
+
+        handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+        if ( !handle )
+        {
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+                RETURN_FALSE ;
+        }
+
+        _php_imagick_clear_errors( handle ) ;
+
+        new_image = FlattenImages( handle->image, &handle->exception ) ;
+        if ( _php_imagick_is_error( handle ) )
+        {
+                if ( new_image )
+                {
+                        DestroyImage( new_image ) ;
+                }
+
+		RETURN_FALSE ;
 	}
 
         DestroyImage( handle->image ) ;

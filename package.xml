@@ -22,6 +22,31 @@ generated package.xml files -->
     </maintainer>
     <license>PHP License</license>  
     <release>
+        <version>0.9.4</version>
+        <date>2003-01-xx</date>
+        <notes>
+        - functions added:
+		imagick_flatten()
+	- fixed bad code in these functions:
+		imagick_despeckle()
+		imagick_edge()
+		imagick_emboss()
+		imagick_enhance()
+		imagick_gaussianblur()
+		imagick_medianfilter()
+		imagick_motionblur()
+		imagick_reducenoise()
+		imagick_shade()
+		imagick_sharpen()
+		imagick_spread()
+		imagick_unsharpmask()
+	- for the above functions, if call to corresponding ImageMagick
+	  function the module would probably core dump.  If it didn't the
+	  results would be really buddy and weird.
+	</notes>
+        <state>beta</state>
+    </release>
+    <release>
         <version>0.9.3</version>
         <date>2002-12-30</date>
         <notes>
