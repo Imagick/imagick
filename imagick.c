@@ -661,9 +661,10 @@ PHP_RSHUTDOWN_FUNCTION( imagick )
 	{
 		DestroyMagick() ;
 	}
-
-	efree( IMAGICK_G( last_error_reason ) ) ;
-	efree( IMAGICK_G( last_error_description ) ) ;
+	if ( IMAGICK_G( last_error_reason ) != NULL) {
+		efree( IMAGICK_G( last_error_reason ) ) ;
+		efree( IMAGICK_G( last_error_description ) ) ;
+	}
 	return SUCCESS ;
 }
 
