@@ -23,7 +23,7 @@ generated package.xml files -->
   
     <release>
         <version>0.9.6</version>
-        <date>2003-xx-xx</date>
+        <date>2003-04-11</date>
         <notes>
 - functions added:
 	imagick_getcolorspace()
