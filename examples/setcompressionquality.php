@@ -9,23 +9,7 @@
                 exit ;
         }
 
-	//
-	//  For the second parameter to imagick_setcompression(), use one of
-	//  these:
-	//
-	//	IMAGICK_COMPRESSION_UNDEFINED
-	//	IMAGICK_COMPRESSION_NONE
-	//	IMAGICK_COMPRESSION_BZIP
-	//	IMAGICK_COMPRESSION_FAX
-	//	IMAGICK_COMPRESSION_GROUP4
-	//	IMAGICK_COMPRESSION_JPEG
-	//	IMAGICK_COMPRESSION_LOSSLESSJPEG
-	//	IMAGICK_COMPRESSION_LZW
-	//	IMAGICK_COMPRESSION_RLE
-	//	IMAGICK_COMPRESSION_ZIP
-	//
-
-	imagick_setcompression( $handle, IMAGICK_COMPRESSION_LOSSLESSJPEG ) ;
+	imagick_setcompressionquality( $handle, 10 ) ;
 
         if ( !imagick_writeimage( $handle, "./new_image.jpg" ) )
         {

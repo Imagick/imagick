@@ -89,7 +89,8 @@ zend_function_entry imagick_functions[] =
 	*****/
 
 	PHP_FE( imagick_convert, 		NULL )
-	PHP_FE( imagick_setcompression,		NULL )
+	PHP_FE( imagick_setcompressiontype,	NULL )
+	PHP_FE( imagick_setcompressionquality,	NULL )
 
 	/*****
 
@@ -1678,7 +1679,7 @@ PHP_FUNCTION( imagick_convert )
 	RETURN_TRUE ;
 }
 
-PHP_FUNCTION( imagick_setcompression )
+PHP_FUNCTION( imagick_setcompressiontype )
 {
 	zval* 	   handle_id ;		/* the handle identifier coming from
 					   the PHP environment */
@@ -1708,6 +1709,39 @@ PHP_FUNCTION( imagick_setcompression )
 	}
 
 	handle->image->compression = ( CompressionType )compression_type ;
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_setcompressionquality )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	long       compression_quality ;/* the compression quality to set */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rl",
+			&handle_id, &compression_quality ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( handle->image_info == ( ImageInfo* )NULL )
+	{
+		RETURN_FALSE ;
+	}
+
+	handle->image_info->quality = compression_quality ;
 	RETURN_TRUE ;
 }
 

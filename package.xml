@@ -31,16 +31,19 @@ generated package.xml files -->
 		imagick_pushlist()
 		imagick_poplist()
 		imagick_mosaic()
-		imagick_setcompression()
+		imagick_setcompressiontype()
+		imagick_setcompressionquality()
 - modified how all functions check to see if ImageMagick has been initialized.
 - added a number of new examples for demonstrating how to use image lists.
 - fixed bugs in _php_imagick_alloc_handle() and _php_imagick_clear_errors()
   causing core dump when working with image lists.  I wasn't checking to make
   sure the structures I was examining were allocated.
 - thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
-  imagick_setcompression() and testing it.
+  imagick_setcompressiontype() and imagick_setcompressionquality() and
+  testing them.
 - added supporting IMAGICK_COMPRESSION_* constants for use with
-  imagick_setcompression().
+  imagick_setcompressiontype().
+- renamed imagick_setcompression() to imagick_setcompressiontype().
 	</notes>
         <state>beta</state>
     </release>
