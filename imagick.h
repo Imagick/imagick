@@ -74,5 +74,7 @@
 	static int _php_imagick_is_error( const imagick_t* ) ;
 	static imagick_t* _php_imagick_readimage( const char* ) ;
 	static int _php_imagick_first_image_in_list( imagick_t* ) ;
+	static int _php_imagick_get_geometry_rect( imagick_t*, long, long,
+						   char*, RectangleInfo* ) ;
 
 #endif /* IMAGICKH */

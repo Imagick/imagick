@@ -1431,20 +1431,29 @@ PHP_FUNCTION( imagick_convert )
 
 PHP_FUNCTION( imagick_resize )
 {
-	zval* 	   handle_id ;		/* the handle identifier coming from
+	zval* 	      handle_id ;	/* the handle identifier coming from
 					   the PHP environment */
-	long	   cols ;		/* the number of columns to resize to */
-	long	   rows ;		/* the number of rows to resize to */
-	long	   filter ;		/* the filter type to use when re-
+	long	      cols ;		/* the number of columns to resize to */
+	long	      rows ;		/* the number of rows to resize to */
+	long	      filter ;		/* the filter type to use when re-
 					   sizing - one of IMAGICK_FILTER_* */
-	double	   blur ;		/* the factor where > 1 is blurry,
+	double	      blur ;		/* the factor where > 1 is blurry,
 					   < 1 is sharp */
-	imagick_t* handle ;		/* the actual imagick_t struct for the
+	char*         geo_mods ;	/* modifiers to the geometry to create
+					   an ImageMagick geometry string */
+	int           geo_mods_len ;	/* string length of geo_mods */
+	imagick_t*    handle ;		/* the actual imagick_t struct for the
 					   handle */
-	Image*     new_image ;		/* the new, resized image */
+	Image*        new_image ;	/* the new, resized image */
+	RectangleInfo new_geometry ;	/* the new image geometry with the
+					   geometry string applied */
 
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rllld",
-			&handle_id, &cols, &rows, &filter, &blur ) == FAILURE )
+	geo_mods     = NULL ;
+	geo_mods_len = 0 ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rllld|s",
+			&handle_id, &cols, &rows, &filter, &blur,
+			&geo_mods, &geo_mods_len ) == FAILURE )
 	{
 		return ;
 	}
@@ -1471,9 +1480,15 @@ PHP_FUNCTION( imagick_resize )
 		filter = handle->image->filter ;
 	}
 
-	new_image = ResizeImage( handle->image, cols, rows,
-			         ( FilterTypes )filter, blur,
-				 &handle->exception ) ;
+	if ( !_php_imagick_get_geometry_rect( handle, cols, rows, geo_mods,
+			&new_geometry ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	new_image = ResizeImage( handle->image, new_geometry.width,
+				 new_geometry.height, ( FilterTypes )filter,
+				 blur, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		if ( new_image )
@@ -1574,16 +1589,25 @@ PHP_FUNCTION( imagick_minify )
 
 PHP_FUNCTION( imagick_scale )
 {
-	zval* 	   handle_id ;		/* the handle identifier coming from
+	zval* 	      handle_id ;	/* the handle identifier coming from
 					   the PHP environment */
-	long       cols ;		/* the number of columns to scale to */
-	long 	   rows ;		/* the number of rows to scale to */
-	imagick_t* handle ;		/* the actual imagick_t struct for the
+	long          cols ;		/* the number of columns to scale to */
+	long 	      rows ;		/* the number of rows to scale to */
+	char*         geo_mods ;	/* modifiers to the geometry to create
+					   an ImageMagick geometry string */
+	int           geo_mods_len ;	/* string length of geo_mods */
+	imagick_t*    handle ;		/* the actual imagick_t struct for the
 					   handle */
-	Image*     new_image ;		/* the new, minified image */
+	Image*        new_image ;	/* the new, minified image */
+	RectangleInfo new_geometry ;	/* the new image geometry with the
+					   geometry string applied */
 
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rll",
-			&handle_id, &cols, &rows ) == FAILURE )
+	geo_mods     = NULL ;
+	geo_mods_len = 0 ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rll|s",
+			&handle_id, &cols, &rows, &geo_mods,
+			&geo_mods_len ) == FAILURE )
 	{
 		return ;
 	}
@@ -1598,8 +1622,14 @@ PHP_FUNCTION( imagick_scale )
 
 	_php_imagick_clear_errors( handle ) ;
 
-	new_image = ScaleImage( handle->image, cols, rows,
-				&handle->exception ) ;
+	if ( !_php_imagick_get_geometry_rect( handle, cols, rows, geo_mods,
+			&new_geometry ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	new_image = ScaleImage( handle->image, new_geometry.width,
+				new_geometry.height, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		if ( new_image )
@@ -1618,16 +1648,25 @@ PHP_FUNCTION( imagick_scale )
 
 PHP_FUNCTION( imagick_sample )
 {
-	zval* 	   handle_id ;		/* the handle identifier coming from
+	zval* 	      handle_id ;	/* the handle identifier coming from
 					   the PHP environment */
-	long	   cols ;		/* the number of columns to scale to */
-	long	   rows ;		/* the number of rows to scale to */
-	imagick_t* handle ;		/* the actual imagick_t struct for the
+	long	      cols ;		/* the number of columns to scale to */
+	long	      rows ;		/* the number of rows to scale to */
+	char*         geo_mods ;	/* modifiers to the geometry to create
+					   an ImageMagick geometry string */
+	int           geo_mods_len ;	/* string length of geo_mods */
+	imagick_t*    handle ;		/* the actual imagick_t struct for the
 					   handle */
-	Image*     new_image ;		/* the new, minified image */
+	Image*        new_image ;	/* the new, minified image */
+	RectangleInfo new_geometry ;	/* the new image geometry with the
+					   geometry string applied */
 
-	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rll",
-			&handle_id, &cols, &rows ) == FAILURE )
+	geo_mods     = NULL ;
+	geo_mods_len = 0 ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rll|s",
+			&handle_id, &cols, &rows, &geo_mods,
+			&geo_mods_len ) == FAILURE )
 	{
 		return ;
 	}
@@ -1642,8 +1681,14 @@ PHP_FUNCTION( imagick_sample )
 
 	_php_imagick_clear_errors( handle ) ;
 
-	new_image = SampleImage( handle->image, cols, rows,
-				 &handle->exception ) ;
+	if ( !_php_imagick_get_geometry_rect( handle, cols, rows, geo_mods,
+			&new_geometry ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	new_image = SampleImage( handle->image, new_geometry.width,
+				 new_geometry.height, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		if ( new_image )
@@ -4592,6 +4637,39 @@ static int _php_imagick_first_image_in_list( imagick_t* handle )
 	while( handle->image->previous != ( Image* )NULL )
 	{
 		handle->image = handle->image->previous ;
+	}
+
+	return 1 ;
+}
+
+static int _php_imagick_get_geometry_rect( imagick_t* handle, long cols,
+					   long rows, char* mods,
+					   RectangleInfo* rect_info )
+{
+	char* geometry ;		/* the ImageMagick standards geometry
+					   string */
+
+	geometry = ( char* )emalloc( MaxTextExtent ) ;
+	if ( !geometry )
+	{
+		return 0 ;
+	}
+
+	if ( mods )
+	{
+		snprintf( geometry, MaxTextExtent, "%ldx%ld%s\0", cols, rows,
+			  mods ) ;
+		GetImageGeometry( handle->image, geometry, 1, rect_info ) ;
+	}
+	else
+	{
+		snprintf( geometry, MaxTextExtent, "%ldx%ld\0", cols, rows ) ;
+		GetImageGeometry( handle->image, geometry, 1, rect_info ) ;
+	}
+
+	if ( geometry )
+	{
+		efree( geometry ) ;
 	}
 
 	return 1 ;

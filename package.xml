@@ -34,6 +34,15 @@ generated package.xml files -->
 	- added this filter IMAGICK_FILTER_UNKNOWN.  If the user specifies
 	  this filter to imagick_resize(), the resize function will take
 	  whatever filter is defined by the image.
+	- modified imagick_resize() to take 6th optional parameter that is
+	  the modifier to the geometry to facility building geometries such
+	  as 800x600+200+200! or 450x230>.
+	- modified imagick_scale() to take 4th optional parameter that is
+	  the modifier to the geometry to facility building geometries such
+	  as 800x600+200+200! or 450x230>.
+	- modified imagick_sample() to take 4th optional parameter that is
+	  the modifier to the geometry to facility building geometries such
+	  as 800x600+200+200! or 450x230>.
 	</notes>
     <state>beta</state>
     </release>
