@@ -37,6 +37,8 @@
 
 	ZEND_BEGIN_MODULE_GLOBALS( imagick )
 		int imagick_was_init ;
+		char* last_error_reason ;
+		char* last_error_description ;
 	ZEND_END_MODULE_GLOBALS( imagick )
 
 	#ifdef ZTS
@@ -74,6 +76,7 @@
 	PHP_FUNCTION( imagick_iserror ) ;
 	PHP_FUNCTION( imagick_failedreason ) ;
 	PHP_FUNCTION( imagick_faileddescription ) ;
+	PHP_FUNCTION( imagick_error ) ;
 
 	/*****
 

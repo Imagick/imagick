@@ -27,6 +27,7 @@ generated package.xml files -->
         <notes>
 - functions added:
 	imagick_getcolorspace()
+	imagick_error()
 - added a new example called transparent_1x1.html and some explanatory text.
   I can think of many uses for this code.
 - thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
@@ -34,6 +35,10 @@ generated package.xml files -->
 - added GraphicsMagick (http://www.graphicsmagick.org) support to configure 
   script (enable it with --with-imagick-gm)
 - imagick_readimage() now returns false if ImageMagick ReadImage() fails.
+- imagick_error() returns 1 string representing any errors that have occurred
+  on an operation.  IT IS LARGELY UNTESTED!  Beware!  However, you can now
+  do things like:
+          $handle = imagick_readimage( "image.jpg" ) or die( imagick_error() ) ;
 	</notes>
         <state>beta</state>
     </release>

@@ -62,6 +62,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_iserror,		NULL )
 	PHP_FE( imagick_failedreason, 		NULL )
 	PHP_FE( imagick_faileddescription, 	NULL )
+	PHP_FE( imagick_error,			NULL )
 
 	/*****
 
@@ -306,14 +307,22 @@ zend_module_entry imagick_module_entry =
 	ZEND_GET_MODULE( imagick )
 #endif
 
-static void php_imagick_init_globals (zend_imagick_globals *g) 
+static void php_imagick_init_globals( zend_imagick_globals* g TSRMLS_DC )
 { 
-	g->imagick_was_init = 0; 
+	g->imagick_was_init       = 0 ;
+	g->last_error_reason      = NULL ;
+	g->last_error_description = NULL ;
+}
+
+static void php_imagick_shutdown_globals( zend_imagick_globals* g TSRMLS_DC )
+{
+	efree( g->last_error_reason ) ;
+	efree( g->last_error_description ) ;
 }
 
 PHP_MINIT_FUNCTION( imagick )
 {
-	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
+	ZEND_INIT_MODULE_GLOBALS( imagick, php_imagick_init_globals, NULL ) ;
 	le_imagick_handle = zend_register_list_destructors_ex(
 				_php_imagick_free_handle_list, NULL,
 				"imagick handle", module_number ) ;
@@ -1218,6 +1227,141 @@ PHP_FUNCTION( imagick_faileddescription )
 	}
 
 	RETURN_FALSE ;
+}
+
+PHP_FUNCTION( imagick_error )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+	char*	   error_msg ;		/* the error message */
+	int	   length ;		/* length of the error message */
+
+	handle_id = NULL ;
+	error_msg = NULL ;
+	length    = 0 ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	if ( handle_id )
+	{
+		handle = _php_imagick_get_handle_struct_from_list(
+				&handle_id TSRMLS_CC ) ;
+		if ( !handle )
+		{
+			php_error( E_WARNING, "%s(): handle is invalid",
+			   	   get_active_function_name( TSRMLS_C ) ) ;
+			RETURN_FALSE ;
+		}
+
+		if ( handle->exception.reason )
+		{
+			error_msg = ( char* )erealloc( error_msg, length +
+				strlen( handle->exception.reason ) + 1 ) ;
+			if ( !error_msg )
+			{
+				RETURN_FALSE ;
+			}
+			strcat( error_msg, handle->exception.reason ) ;
+			strcat( error_msg, " " ) ;
+
+			length += strlen( error_msg ) ;
+		}
+		else if ( handle->image->exception.reason )
+		{
+			error_msg = ( char* )erealloc( error_msg, length +
+				strlen( handle->image->exception.reason ) +
+				1 ) ;
+			if ( !error_msg )
+			{
+				RETURN_FALSE ;
+			}
+			strcat( error_msg, handle->image->exception.reason ) ;
+			strcat( error_msg, " " ) ;
+
+			length += strlen( error_msg ) ;
+		}
+
+		if ( handle->exception.description )
+		{
+			error_msg = ( char* )erealloc( error_msg, length +
+				strlen( handle->exception.description ) +
+				1 ) ;
+			if ( !error_msg )
+			{
+				RETURN_FALSE ;
+			}
+			strcat( error_msg, handle->exception.description ) ;
+			strcat( error_msg, " " ) ;
+
+			length += strlen( error_msg ) ;
+		}
+		else if ( handle->image->exception.description )
+		{
+			error_msg = ( char* )erealloc( error_msg, length +
+				strlen( handle->image->exception.description ) +
+				1 ) ;
+			if ( !error_msg )
+			{
+				RETURN_FALSE ;
+			}
+			strcat( error_msg, handle->image->exception.description ) ;
+			strcat( error_msg, " " ) ;
+
+			length += strlen( error_msg ) ;
+		}
+	}
+	else
+	{
+		if ( IMAGICK_G( last_error_reason ) )
+		{
+			error_msg = ( char* )erealloc( error_msg, length +
+				strlen( IMAGICK_G( last_error_reason ) ) +
+				1 ) ;
+			if ( !error_msg )
+			{
+				RETURN_FALSE ;
+			}
+			strcat( error_msg, IMAGICK_G( last_error_reason ) ) ;
+			strcat( error_msg, " " ) ;
+
+			length += strlen( error_msg ) ;
+		}
+
+		if ( IMAGICK_G( last_error_description ) )
+		{
+			error_msg = ( char* )erealloc( error_msg, length +
+				strlen( IMAGICK_G( last_error_description ) ) +
+				1 ) ;
+			if ( !error_msg )
+			{
+				RETURN_FALSE ;
+			}
+			strcat( error_msg, IMAGICK_G( last_error_description ) ) ;
+			strcat( error_msg, " " ) ;
+
+			length += strlen( error_msg ) ;
+		}
+	}
+
+	if ( error_msg )
+	{
+		error_msg = ( char* )erealloc( error_msg, length + 1 ) ;
+		if ( !error_msg )
+		{
+			RETURN_FALSE ;
+		}
+		strcat( error_msg, "\0" ) ;
+
+		length += strlen( error_msg ) ;
+	}
+
+	RETURN_STRINGL( error_msg, strlen( error_msg ), 1 ) ;
 }
 
 /*****************************************************************************/
@@ -5323,12 +5467,18 @@ static int _php_imagick_is_error( const imagick_t* handle )
 
 	if ( handle->exception.severity != UndefinedException )
 	{
+		_php_imagick_set_last_error( handle->exception.reason,
+			handle->exception.description ) ;
+
 		return 1 ;
 	}
 
 	if ( handle->image &&
 	     handle->image->exception.severity != UndefinedException )
 	{
+		_php_imagick_set_last_error( handle->image->exception.reason,
+			handle->image->exception.description ) ;
+
 		return 1 ;
 	}
 
@@ -5365,28 +5515,15 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 	handle->image = ReadImage( handle->image_info, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
-		if ( handle->exception.reason &&
-		     handle->exception.description )
-		{
-                	php_error( E_ERROR, "%s(): %s %s",
-                                   get_active_function_name( TSRMLS_C ),
-				   handle->exception.reason,
-				   handle->exception.description ) ;
-		}
-		else if ( handle->exception.reason )
-		{
-                	php_error( E_ERROR, "%s(): %s",
-                                   get_active_function_name( TSRMLS_C ),
-				   handle->exception.reason ) ;
-		}
-
 		_php_imagick_clean_up_handle( handle ) ;
 		return NULL ;
 	}
 
 	if ( !handle->image )
 	{
-		ThrowException( &handle->exception, FatalErrorException, "after ReadImage(), image is empty in _php_imagick_readimage()", NULL ) ;
+		php_error( E_ERROR, "%s(): after ReadImage(), image is empty",
+			   get_active_function_name( TSRMLS_C ) ) ;
+
 		_php_imagick_clean_up_handle( handle ) ;
 		return NULL ;
 	}
@@ -5454,6 +5591,47 @@ static int _php_imagick_get_geometry_rect( imagick_t* handle, long cols,
 	}
 
 	return 1 ;
+}
+
+static void _php_imagick_set_last_error( char* reason, char* description )
+{
+	if ( !reason && !description )
+	{
+		return ;
+	}
+
+	if ( reason )
+	{
+		if ( IMAGICK_G( last_error_reason ) )
+		{
+			efree( IMAGICK_G( last_error_reason ) ) ;
+		}
+
+		IMAGICK_G( last_error_reason ) = ( char* )emalloc( strlen(
+					  reason + 1 ) ) ;
+		if ( !IMAGICK_G( last_error_reason ) )
+		{
+			return ;
+		}
+		sprintf( IMAGICK_G( last_error_reason ), "%s\0", reason ) ;
+	}
+
+	if ( description )
+	{
+		if ( IMAGICK_G( last_error_description ) )
+		{
+			efree( IMAGICK_G( last_error_description ) ) ;
+		}
+
+		IMAGICK_G( last_error_description ) = ( char* )emalloc( strlen(
+					description + 1 ) ) ;
+		if ( !IMAGICK_G( last_error_description ) )
+		{
+			return ;
+		}
+		sprintf( IMAGICK_G( last_error_description ), "%s\0",
+			 	description ) ;
+	}
 }
 
 /*****************************************************************************/
