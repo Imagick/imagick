@@ -1,3 +1,12 @@
+0.1
+- imagick_sample(), imagick_resize(), imagick_crop(), imagick_shear(), im$
+- Cosmetic changes to phpinfo()
+- Fixed some critical resource allocation errors
+
+0.0.2a
+
+- The segfault at loading images was fixed
+
 0.0.2
 
 - added andrei as author
