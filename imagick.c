@@ -66,11 +66,11 @@ function_entry imagick_functions[] = {
                                         PHP_FE(imagick_add_resource, NULL)
                                         PHP_FE(imagick_copy_sample, NULL)
                                         PHP_FE(imagick_copy_resize, NULL)
-                                        PHP_FE(imagick_copy_crop, NULL)                                                
+                                        PHP_FE(imagick_copy_crop, NULL)
                                         PHP_FE(imagick_copy_shear, NULL)
                                         PHP_FE(imagick_copy_rotate, NULL)
                                         PHP_FE(imagick_copy_morph, NULL)
-                                                
+
                                         PHP_FE(imagick_sample, NULL)
                                         PHP_FE(imagick_resize, NULL)
                                         PHP_FE(imagick_crop, NULL)
@@ -78,6 +78,8 @@ function_entry imagick_functions[] = {
                                         PHP_FE(imagick_rotate, NULL)
                                         PHP_FE(imagick_oilpaint, NULL)
                                         PHP_FE(imagick_annotate, NULL)
+                                        PHP_FE(imagick_border, NULL)
+                                        PHP_FE(imagick_frame, NULL)
                                         PHP_FE(imagick_morph, NULL)
                                         PHP_FE(imagick_write, NULL)
                                         PHP_FE(imagick_list_magickinfo, NULL)
@@ -594,11 +596,11 @@ PHP_FUNCTION(imagick_copy_sample)
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rll", &arg, &columns, &rows) == FAILURE) return;
 
-    IMAGICK_FETCH_RES_AND_COPY_HANDLE()    
-            
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE()
+
     copy_handle->image = SampleImage(handle->image,columns,rows,&exception);
-    
-    IMAGICK_RET_COPY_HANDLE();   
+
+    IMAGICK_RET_COPY_HANDLE();
 }
 /* }}} */
 
@@ -622,7 +624,7 @@ PHP_FUNCTION(imagick_resize)
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rll|ld", &arg, &columns, &rows, &filter, &blur) == FAILURE) return;
 
-   
+
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     GetExceptionInfo(&exception);
@@ -655,12 +657,12 @@ PHP_FUNCTION(imagick_copy_resize)
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rll|ld", &arg, &columns, &rows, &filter, &blur) == FAILURE) return;
 
-    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
 
     copy_handle->image = ResizeImage(handle->image,columns,rows,filter,blur,&exception);
-    
-    IMAGICK_RET_COPY_HANDLE();       
-  
+
+    IMAGICK_RET_COPY_HANDLE();
+
 }
 /* }}} */
 
@@ -725,7 +727,7 @@ PHP_FUNCTION(imagick_copy_crop)
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rllll", &arg, &width, &height, &x, &y) == FAILURE) return;
 
-    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
 
     rect = (RectangleInfo *)emalloc(sizeof(RectangleInfo));
     rect->width = width;
@@ -736,7 +738,7 @@ PHP_FUNCTION(imagick_copy_crop)
     copy_handle->image = CropImage(handle->image,rect,&exception);
     efree(rect);
 
-    IMAGICK_RET_COPY_HANDLE();       
+    IMAGICK_RET_COPY_HANDLE();
 
 }
 /* }}} */
@@ -745,7 +747,7 @@ PHP_FUNCTION(imagick_copy_crop)
 /* {{{ proto bool imagick_rotate(resource handle, double degrees)
         rotates an image
         WARNING: This function will be removed soon, since it's a memory leak canditate
-        
+
 */
 PHP_FUNCTION(imagick_rotate)
 {
@@ -774,6 +776,100 @@ PHP_FUNCTION(imagick_rotate)
 }
 /* }}} */
 
+
+/* {{{ proto bool imagick_border(resource handle, int width, int height, int x, int y)
+       draw a border around the image
+*/
+PHP_FUNCTION(imagick_border)
+{
+    zval *arg;
+    int width;
+    int height;
+    char * color     = NULL;
+    char * color_index= NULL;
+    char * color_len = 0;
+
+    int argc = ZEND_NUM_ARGS();
+    RectangleInfo *rect;
+    ExceptionInfo exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rll|s", &arg, &width, &height, &color,&color_len) == FAILURE) return;
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
+    (void)QueryColorDatabase(color, &handle->info->border_color,&exception);
+    rect = (RectangleInfo *)emalloc(sizeof(RectangleInfo));
+    rect->width = width;
+    rect->height = height;
+    rect->x = 0;
+    rect->y = 0;
+
+    copy_handle->image = BorderImage(handle->image,rect,&exception);
+
+    efree(rect);
+
+    IMAGICK_RET_COPY_HANDLE();
+}
+/* }}} */
+
+
+
+/* {{{ proto bool imagick_border(resource handle, int width, int height, int x, int y)
+       draw a border around the image
+*/
+PHP_FUNCTION(imagick_frame)
+{
+    zval *arg;
+    int width;
+    int height;
+    int inner_bevel=0;
+    int outer_bevel=0;
+
+    char * color     = NULL;
+
+    char * color_len = 0;
+    const char * default_color = "#ff0000";
+
+    int argc = ZEND_NUM_ARGS();
+
+    ImageInfo * img_info=NULL;
+
+    FrameInfo *frame;
+    ExceptionInfo exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rll|s", &arg, &outer_bevel,&inner_bevel,&color,&color_len) == FAILURE) return;
+
+    width = outer_bevel + inner_bevel;
+    if( width<=0 ){
+            RETURN_FALSE;
+    }
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
+    // Does not set the matte_color
+    // someone can try to fix it?
+    if( QueryColorDatabase(color, &handle->info->matte_color,&exception) ){
+        frame = (FrameInfo *)emalloc(sizeof(FrameInfo));
+        frame->width  = handle->image->columns+(width*2);
+        frame->height = handle->image->rows+(width*2);
+        frame->x = width;
+        frame->y = width;
+        frame->inner_bevel = inner_bevel;
+        frame->outer_bevel = outer_bevel;
+
+        copy_handle->image = FrameImage(handle->image,frame,&exception);
+        efree(frame);
+        //efree(color_index);
+        IMAGICK_RET_COPY_HANDLE();
+    } else {
+        RETURN_FALSE;
+    }
+}
+/* }}} */
+
+
 /* {{{ proto bool imagick_copy_rotate(resource handle, double degrees)
         rotates an image and returns a new handle
 */
@@ -790,11 +886,11 @@ PHP_FUNCTION(imagick_copy_rotate)
     if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &degrees) == FAILURE) return;
 
 
-    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
 
     copy_handle->image = RotateImage(handle->image,degrees,&exception);
-    
-    IMAGICK_RET_COPY_HANDLE();       
+
+    IMAGICK_RET_COPY_HANDLE();
 }
 /* }}} */
 
@@ -847,11 +943,11 @@ PHP_FUNCTION(imagick_copy_shear)
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rdd", &arg, &x_shear, &y_shear) == FAILURE) return;
 
-    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
 
     copy_handle->image = ShearImage(handle->image,x_shear,y_shear,&exception);
 
-    IMAGICK_RET_COPY_HANDLE();       
+    IMAGICK_RET_COPY_HANDLE();
 }
 /* }}} */
 
@@ -932,11 +1028,11 @@ PHP_FUNCTION(imagick_copy_morph)
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &radius) == FAILURE) return;
 
-    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();
 
     copy_handle->image = MorphImages(handle->image,radius,&exception);
 
-    IMAGICK_RET_COPY_HANDLE();   
+    IMAGICK_RET_COPY_HANDLE();
 
 }
 /* }}} */
@@ -963,7 +1059,7 @@ PHP_FUNCTION(imagick_annotate)
       current;
 
     if (zend_parse_parameters(argc TSRMLS_CC, "ra", &arg, &userdata) == FAILURE) return;
-	
+
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     drawinfo = CloneDrawInfo(handle->info,(DrawInfo *) NULL);
@@ -998,10 +1094,10 @@ PHP_FUNCTION(imagick_annotate)
             }
             if (LocaleCompare(key,"fill") == 0)
             {
-              (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->fill, exception);	    	
+              (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->fill, exception);
 	      break;
             }
-	
+
         break;
     	case 'g':
         case 'G':
@@ -1036,7 +1132,7 @@ PHP_FUNCTION(imagick_annotate)
 				break;
 	  	   }
 	    break;
-	
+
         case 'p':
         case 'P':
             if (LocaleCompare(key,"primitive") == 0 )
@@ -1053,7 +1149,7 @@ PHP_FUNCTION(imagick_annotate)
         case 'S':
             if (LocaleCompare(key,"stroke") == 0)
             {
-		 (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->stroke,exception);	
+		 (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->stroke,exception);
 		 break;
 	    }
 	  break;
@@ -1066,7 +1162,7 @@ PHP_FUNCTION(imagick_annotate)
                 break;
             }
         break;
-	
+
         break;
        }
        zend_hash_move_forward(target_hash);
