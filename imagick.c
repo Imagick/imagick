@@ -788,7 +788,7 @@ PHP_FUNCTION(imagick_border)
     char * color     = NULL;
     char * color_index= NULL;
     char * color_len = 0;
-
+    char * default_color;
     int argc = ZEND_NUM_ARGS();
     RectangleInfo *rect;
     ExceptionInfo exception;
@@ -798,13 +798,17 @@ PHP_FUNCTION(imagick_border)
     if (zend_parse_parameters(argc TSRMLS_CC, "rll|s", &arg, &width, &height, &color,&color_len) == FAILURE) return;
 
     IMAGICK_FETCH_RES_AND_COPY_HANDLE();
-    (void)QueryColorDatabase(color, &handle->info->border_color,&exception);
+
+    if( color_len>0 ){
+        (void)QueryColorDatabase(color, &handle->image->border_color,&exception);
+        (void)QueryColorDatabase(color, &handle->info->border_color,&exception);
+    }
+
     rect = (RectangleInfo *)emalloc(sizeof(RectangleInfo));
     rect->width = width;
     rect->height = height;
     rect->x = 0;
     rect->y = 0;
-
     copy_handle->image = BorderImage(handle->image,rect,&exception);
 
     efree(rect);
@@ -815,7 +819,7 @@ PHP_FUNCTION(imagick_border)
 
 
 
-/* {{{ proto bool imagick_border(resource handle, int width, int height, int x, int y)
+/* {{{ proto bool imagick_frame(resource handle, int width, int height, int x, int y)
        draw a border around the image
 */
 PHP_FUNCTION(imagick_frame)
