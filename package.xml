@@ -26,27 +26,27 @@ generated package.xml files -->
         <version>0.9.4</version>
         <date>2003-01-24</date>
         <notes>
-        - functions added:
-		imagick_flatten()
-		imagick_getmagick()
-		imagick_setfillopacity()
-	- fixed bad code in these functions:
-		imagick_despeckle()
-		imagick_edge()
-		imagick_emboss()
-		imagick_enhance()
-		imagick_gaussianblur()
-		imagick_medianfilter()
-		imagick_motionblur()
-		imagick_reducenoise()
-		imagick_shade()
-		imagick_sharpen()
-		imagick_spread()
-		imagick_unsharpmask()
-	- for the above functions, if call to corresponding ImageMagick
-	  function the module would probably core dump.  If it didn't the
-	  results would be really buddy and weird.
-	- setfillopacity() thanks to Allen Condit, condit@isri.unlv.edu.
+- functions added:
+	imagick_flatten()
+	imagick_getmagick()
+	imagick_setfillopacity()
+- fixed bad code in these functions:
+	imagick_despeckle()
+	imagick_edge()
+	imagick_emboss()
+	imagick_enhance()
+	imagick_gaussianblur()
+	imagick_medianfilter()
+	imagick_motionblur()
+	imagick_reducenoise()
+	imagick_shade()
+	imagick_sharpen()
+	imagick_spread()
+	imagick_unsharpmask()
+- for the above functions, if call to corresponding ImageMagick
+  function the module would probably core dump.  If it didn't the
+  results would be really buddy and weird.
+- setfillopacity() thanks to Allen Condit, condit@isri.unlv.edu.
 	</notes>
         <state>beta</state>
     </release>
