@@ -44,6 +44,8 @@ generated package.xml files -->
 - added supporting IMAGICK_COMPRESSION_* constants for use with
   imagick_setcompressiontype().
 - renamed imagick_setcompression() to imagick_setcompressiontype().
+  (note: this was done before the new version was released so no users should
+   be impacted.)
 	</notes>
         <state>beta</state>
     </release>
