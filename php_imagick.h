@@ -139,6 +139,7 @@
 	PHP_FUNCTION( imagick_drawline ) ;
 	PHP_FUNCTION( imagick_drawpoint ) ;
 	PHP_FUNCTION( imagick_setfillcolor ) ;
+	PHP_FUNCTION( imagick_setfillopacity ) ;
 
 	/*****
 

@@ -28,6 +28,7 @@ generated package.xml files -->
         - functions added:
 		imagick_flatten()
 		imagick_getmagick()
+		imagick_setfillopacity()
 	- fixed bad code in these functions:
 		imagick_despeckle()
 		imagick_edge()
@@ -44,6 +45,7 @@ generated package.xml files -->
 	- for the above functions, if call to corresponding ImageMagick
 	  function the module would probably core dump.  If it didn't the
 	  results would be really buddy and weird.
+	- setfillopacity() thanks to Allen Condit, condit@isri.unlv.edu.
 	</notes>
         <state>beta</state>
     </release>

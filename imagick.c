@@ -127,6 +127,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_drawline,		NULL )
 	PHP_FE( imagick_drawpoint,		NULL )
 	PHP_FE( imagick_setfillcolor,		NULL )
+	PHP_FE( imagick_setfillopacity,		NULL )
 
 	/*****
 
@@ -2550,6 +2551,46 @@ PHP_FUNCTION( imagick_setfillcolor )
 	}
 
 	DrawSetFillColor( handle->draw_context, &pixel_packet ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_setfillopacity )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	double     opacity ;		/* the opacity to set */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rd",
+			&handle_id, &opacity ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( !handle->draw_info || !handle->draw_context )
+	{
+		ThrowException( &handle->exception, WarningException,
+			"you must call imagick_begindraw() first", NULL ) ;
+		RETURN_FALSE ;
+	}
+
+	DrawSetFillOpacity( handle->draw_context, opacity ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		RETURN_FALSE ;
