@@ -1,4 +1,4 @@
-We'll assume that your PHP installation is in
+We'll assume that your PHP sources are in
 	/usr/src/php
 
 1) make sure the path to Magick-config (the ImageMagick configuration
