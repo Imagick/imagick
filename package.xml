@@ -3,7 +3,7 @@
 generated package.xml files -->
 <package>
     <name>imagick</name>
-    <summary>Provides a wrapper to the Image Magick Library. </summary>
+    <summary>Provides a wrapper to the ImageMagick Library. </summary>
     <description>It's a native php-extension. 
         See the examples in the examples/ directory for some hints on how to use it.
         A compiled windows extension is available at http://php.chregu.tv/php_imagick.dll for the time being.
