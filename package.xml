@@ -29,6 +29,8 @@ generated package.xml files -->
         <notes>
 - added function imagick_set_image_comment() for setting the comment attribute
   of an image.
+- function imagick_setcompressiontype() was not setting the correct structure.
+  This was identified and tested by Sergio Salvatore (sergio@cucinalogica.com).
 	</notes>
         <state>beta</state>
     </release>

@@ -1903,7 +1903,7 @@ PHP_FUNCTION( imagick_setcompressiontype )
 		RETURN_FALSE ;
 	}
 
-	handle->image->compression = ( CompressionType )compression_type ;
+	handle->image_info->compression = ( CompressionType )compression_type ;
 	RETURN_TRUE ;
 }
 
