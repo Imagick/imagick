@@ -777,8 +777,10 @@ PHP_FUNCTION(imagick_rotate)
 /* }}} */
 
 
-/* {{{ proto bool imagick_border(resource handle, int width, int height, int x, int y)
-       draw a border around the image
+/* {{{ proto bool imagick_border(resource handle, int width, int height, string color)
+       draw a border around the image (color format name of the color or #ff23fe)
+       see http://www.imagemagick.org/www/color.html for a list of colornames.
+       width is for the sides border, height for the top&bottom border
 */
 PHP_FUNCTION(imagick_border)
 {
@@ -820,8 +822,9 @@ PHP_FUNCTION(imagick_border)
 
 
 
-/* {{{ proto bool imagick_frame(resource handle, int width, int height, int x, int y)
-       draw a border around the image
+/* {{{ proto bool imagick_frame(resource handle, int inner_bevel, int outer_bevel, string color)
+       draw a kind of 3D border around the image (color format name of the color or #ff23fe)
+       see http://www.imagemagick.org/www/color.html for a list of colornames.
 */
 PHP_FUNCTION(imagick_frame)
 {
