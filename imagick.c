@@ -89,6 +89,7 @@ zend_function_entry imagick_functions[] =
 	*****/
 
 	PHP_FE( imagick_convert, 		NULL )
+	PHP_FE( imagick_setcompression,		NULL )
 
 	/*****
 
@@ -586,6 +587,43 @@ PHP_MINIT_FUNCTION( imagick )
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_SRGB",
 				sRGBColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+
+	/*****
+
+	   Register constants for compression types.
+
+	*****/
+
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_UNDEFINED",
+				UndefinedCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_NONE",
+				NoCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_BZIP",
+				BZipCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_FAX",
+				FaxCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_GROUP4",
+				Group4Compression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_JPEG",
+				JPEGCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_LOSSLESSJPEG",
+				LosslessJPEGCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_LZW",
+				LZWCompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_RLE",
+				RLECompression,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPRESSION_ZIP",
+				ZipCompression,
 				CONST_CS | CONST_PERSISTENT ) ;
 
 	return SUCCESS ;
@@ -1637,6 +1675,39 @@ PHP_FUNCTION( imagick_convert )
 
 	*****/
 
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_setcompression )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	long       compression_type ;	/* the compression type to set */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rl",
+			&handle_id, &compression_type ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( handle->image == ( Image* )NULL )
+	{
+		RETURN_FALSE ;
+	}
+
+	handle->image->compression = ( CompressionType )compression_type ;
 	RETURN_TRUE ;
 }
 

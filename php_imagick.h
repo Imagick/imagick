@@ -101,6 +101,7 @@
 	*****/
 
 	PHP_FUNCTION( imagick_convert ) ;
+	PHP_FUNCTION( imagick_setcompression ) ;
 
 	/*****
 
