@@ -35,6 +35,7 @@ generated package.xml files -->
         - added imagick.dsp and modifications for compiling under Windows.
         - changed all instances of le_handle to le_imagick_handle to avoid
           future conflicts.
+	- added IMAGICK_TYPE_* to support imagick_getimagetype().
         </notes>
         <state>beta</state>
     </release>
