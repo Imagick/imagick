@@ -23,7 +23,7 @@ generated package.xml files -->
     <license>PHP License</license>  
     <release>
         <version>0.9.3</version>
-        <date>2002-12-xx</date>
+        <date>2002-12-30</date>
         <notes>
         - functions added:
                 imagick_zoom()
