@@ -17,7 +17,7 @@
 - added andrei as author
 - better config support
 - better errorhandling
-- support for php < 4.1
+- support for php &lt; 4.1
 - annotate text function
 
     </notes>
