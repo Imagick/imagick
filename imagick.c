@@ -5595,6 +5595,8 @@ static int _php_imagick_get_geometry_rect( imagick_t* handle, long cols,
 
 static void _php_imagick_set_last_error( char* reason, char* description )
 {
+	TSRMLS_FETCH();
+
 	if ( !reason && !description )
 	{
 		return ;
