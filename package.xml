@@ -13,11 +13,11 @@
   </maintainer>
    <license>PHP License</license>  
   <release>
-    <version>0.1.1</version>
-    <date>2002-05-29</date>
+    <version>0.1.2</version>
+    <date>2002-09-01</date>
     <notes>
-      - Make it compatible with ImageMagick 5.4.5 (and this is also the needed version now)
-      - adjust package.xml to the new "pear build" command
+      - Added imagick_border(). (pierre-alain joye)
+      - Fixed return of annotate and rotate (true on success). (pierre-alain joye)	  
     </notes>
     <state>alpha</state>
   </release>
@@ -30,16 +30,27 @@
         <file role="doc">CREDITS</file>
         <file role="doc">EXPERIMENTAL</file>
         <file role="doc">INSTALL</file>
-        <file role="src">Makefile.in</file>
-        <file role="src">config.m4</file>
-        <file role="src">imagick.c</file>
-        <file role="src">package.xml</file>	
+        <file role="ext">Makefile.in</file>
+        <file role="ext">config.m4</file>
+        <file role="ext">imagick.c</file>
+        <file role="ext">package.xml</file>	
         <file role="php">imagick.php</file>
-        <file role="src">php_imagick.h</file>
+        <file role="ext">php_imagick.h</file>
     </dir>
   </filelist>
     <changelog>
   <release>
+    <version>0.1.1</version>
+    <date>2002-05-29</date>
+    <notes>
+      - Make it compatible with ImageMagick 5.4.5 (and this is also the needed version now)
+      - adjust package.xml to the new "pear build" command
+    </notes>
+    <state>alpha</state>
+  </release>
+
+  <release>
+
     <version>0.1</version>
     <date>2002-01-15</date>
     <notes>
