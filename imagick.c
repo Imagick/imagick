@@ -214,6 +214,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_roll,			NULL )
 	PHP_FE( imagick_profile,		NULL )
 	PHP_FE( imagick_rgbtransform,		NULL )
+	PHP_FE( imagick_transformrgb,		NULL )
 
 	/*****
 
@@ -4525,6 +4526,40 @@ PHP_FUNCTION( imagick_rgbtransform )
 	_php_imagick_clear_errors( handle ) ;
 
 	RGBTransformImage( handle->image, ( ColorspaceType )colorspace ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_transformrgb )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	long       colorspace ;		/* the colorspace to transform the
+					   image to */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rl",
+			&handle_id, &colorspace ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	TransformRGBImage( handle->image, ( ColorspaceType )colorspace ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		RETURN_FALSE ;
