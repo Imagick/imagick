@@ -809,6 +809,7 @@ PHP_FUNCTION(imagick_border)
     rect->height = height;
     rect->x = 0;
     rect->y = 0;
+
     copy_handle->image = BorderImage(handle->image,rect,&exception);
 
     efree(rect);
@@ -833,7 +834,7 @@ PHP_FUNCTION(imagick_frame)
     char * color     = NULL;
 
     char * color_len = 0;
-    const char * default_color = "#ff0000";
+    //const char * default_color = "#ff0000";
 
     int argc = ZEND_NUM_ARGS();
 
@@ -852,23 +853,29 @@ PHP_FUNCTION(imagick_frame)
     }
 
     IMAGICK_FETCH_RES_AND_COPY_HANDLE();
-    // Does not set the matte_color
-    // someone can try to fix it?
-    if( QueryColorDatabase(color, &handle->info->matte_color,&exception) ){
-        frame = (FrameInfo *)emalloc(sizeof(FrameInfo));
+    // Damned stupid properties
+    if( color_len>0 ){
+        (void)QueryColorDatabase(color, &handle->info->matte_color,&exception);
+        (void)QueryColorDatabase(color, &handle->image->matte_color,&exception);
+    }
+
+    frame = (FrameInfo *)emalloc(sizeof(FrameInfo));
+    if( frame==(FrameInfo *)NULL ){
+        RETURN_FALSE;
+    } else {
         frame->width  = handle->image->columns+(width*2);
         frame->height = handle->image->rows+(width*2);
         frame->x = width;
         frame->y = width;
         frame->inner_bevel = inner_bevel;
         frame->outer_bevel = outer_bevel;
-
         copy_handle->image = FrameImage(handle->image,frame,&exception);
         efree(frame);
-        //efree(color_index);
+        GetExceptionInfo(&exception);
+        if(copy_handle->image==(Image *)NULL){
+            RETURN_FALSE;
+        }
         IMAGICK_RET_COPY_HANDLE();
-    } else {
-        RETURN_FALSE;
     }
 }
 /* }}} */
@@ -893,7 +900,7 @@ PHP_FUNCTION(imagick_copy_rotate)
     IMAGICK_FETCH_RES_AND_COPY_HANDLE();
 
     copy_handle->image = RotateImage(handle->image,degrees,&exception);
-
+    GetExceptionInfo(&exception);
     IMAGICK_RET_COPY_HANDLE();
 }
 /* }}} */
