@@ -83,6 +83,8 @@
 	PHP_FUNCTION( imagick_getwidth ) ;
 	PHP_FUNCTION( imagick_getheight ) ;
 	PHP_FUNCTION( imagick_getmimetype ) ;
+	PHP_FUNCTION( imagick_getimagedepth ) ;
+	PHP_FUNCTION( imagick_getnumbercolors ) ;
 
 	/*****
 
@@ -203,6 +205,18 @@
 	PHP_FUNCTION( imagick_getlistsize ) ;
 	PHP_FUNCTION( imagick_getlistindex ) ;
 	PHP_FUNCTION( imagick_getimagefromlist ) ;
+
+	/*****
+
+	   Transform an image.
+
+	*****/
+
+	PHP_FUNCTION( imagick_chop ) ;
+	PHP_FUNCTION( imagick_crop ) ;
+	PHP_FUNCTION( imagick_flip ) ;
+	PHP_FUNCTION( imagick_flop ) ;
+	PHP_FUNCTION( imagick_roll ) ;
 
 	/*****
 
