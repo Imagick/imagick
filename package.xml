@@ -3,7 +3,7 @@
      generated package.xml files -->
 <package>
   <name>imagick</name>
-  <summary>Provides a wrapper do the Image Magick Library. </summary>
+  <summary>Provides a wrapper to the Image Magick Library. </summary>
   <description>It's a native php-extension. 
   See http://pear.php.net/manual/en/pecl.imagick.php for installation and usage notes</description>
   <maintainer>
