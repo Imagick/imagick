@@ -267,6 +267,16 @@
 	PHP_FUNCTION( imagick_set_image_comment ) ;
 	PHP_FUNCTION( imagick_set_image_quality ) ;
 
+        /*****
+
+           DPI related functions.
+
+        *****/
+
+        PHP_FUNCTION( imagick_getdpix ) ;
+        PHP_FUNCTION( imagick_getdpiy ) ;
+	PHP_FUNCTION( imagick_setdpi ) ;
+
 	/*****
 
 	   Clean up.

@@ -253,6 +253,16 @@ zend_function_entry imagick_functions[] =
         PHP_FE( imagick_set_image_comment,	NULL )
 	PHP_FE( imagick_set_image_quality,	NULL )
 
+        /*****
+
+           DPI related functions.
+
+        *****/
+
+        PHP_FE( imagick_getdpix,                NULL )
+        PHP_FE( imagick_getdpiy,                NULL )
+	PHP_FE( imagick_setdpi,			NULL )
+
 	/*****
 
 	   Clean up.
@@ -5369,6 +5379,147 @@ PHP_FUNCTION( imagick_set_image_quality )
 	}
 
 	handle->image_info->quality = quality ;
+	RETURN_TRUE ;
+}
+
+/******************************************************************************
+
+/******************************************************************************
+ *
+ *  DPI related functions.
+ *
+ */
+
+PHP_FUNCTION( imagick_getdpix )
+{
+	zval*      handle_id ;  /* the handle identifier coming from the PHP
+				   environment */
+ 	imagick_t* handle ;  	/* the actual imagick_t struct for the handle */
+ 	long 	   dpix ;  	/* return value */
+
+ 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+   		&handle_id ) == FAILURE )
+ 	{
+  		return ;
+ 	}
+
+	handle = _php_imagick_get_handle_struct_from_list(
+		&handle_id TSRMLS_CC ) ;
+ 	if ( !handle )
+ 	{
+  		php_error( E_WARNING, "%s(): handle is invalid",
+      			get_active_function_name( TSRMLS_C ) ) ;
+  		RETURN_FALSE ;
+	}
+
+ 	_php_imagick_clear_errors( handle ) ;
+
+ 	if ( handle->image == ( Image* )NULL )
+ 	{
+  		RETURN_FALSE ;
+ 	}
+
+ 	dpix = 0 ;
+
+  	switch ( handle->image->units )
+	{
+   		case PixelsPerInchResolution:
+    			dpix = handle->image->x_resolution ;
+   			break ;
+
+   		case PixelsPerCentimeterResolution:
+    			dpix = handle->image->x_resolution * 254 / 100 ;
+   			break ;
+
+  		default:
+    			RETURN_FALSE ;
+ 	}
+
+ 	RETURN_LONG( dpix ) ;
+}
+
+PHP_FUNCTION( imagick_getdpiy )
+{
+	zval*      handle_id ;  /* the handle identifier coming from the PHP
+				   environment */
+ 	imagick_t* handle ;  	/* the actual imagick_t struct for the handle */
+ 	long	   dpiy ;  	/* return value */
+
+ 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+   		&handle_id ) == FAILURE )
+ 	{
+  		return ;
+ 	}
+
+ 	handle = _php_imagick_get_handle_struct_from_list(
+		&handle_id TSRMLS_CC ) ;
+ 	if ( !handle )
+ 	{
+  		php_error( E_WARNING, "%s(): handle is invalid",
+      			get_active_function_name( TSRMLS_C ) ) ;
+  		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( handle->image == ( Image* )NULL )
+ 	{
+  		RETURN_FALSE ;
+ 	}
+
+	dpiy = 0 ;
+
+	switch ( handle->image->units )
+	{
+   		case PixelsPerInchResolution:
+    			dpiy = handle->image->y_resolution ;
+   			break ;
+
+   		case PixelsPerCentimeterResolution:
+    			dpiy = handle->image->y_resolution * 254 / 100 ;
+   			break ;
+
+  		default:
+    			RETURN_FALSE ;
+ 	}
+
+ 	RETURN_LONG( dpiy ) ;
+}
+
+PHP_FUNCTION( imagick_setdpi )
+{
+	zval*      handle_id ;	/* the handle identifier coming from the PHP
+				   environment */
+ 	imagick_t* handle ;  	/* the actual imagick_t struct for the handle */
+ 	long       dpix ; 	/* the resoluction x */
+ 	long       dpiy ; 	/* the resoluction y */
+
+ 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rll",
+   		&handle_id, &dpix, &dpiy ) == FAILURE )
+ 	{
+  		return ;
+ 	}
+
+ 	handle = _php_imagick_get_handle_struct_from_list(
+		&handle_id TSRMLS_CC ) ;
+ 	if ( !handle )
+ 	{
+  		php_error( E_WARNING, "%s(): handle is invalid",
+      			get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+ 	_php_imagick_clear_errors( handle ) ;
+
+ 	if ( handle->image == ( Image* )NULL )
+ 	{
+ 		RETURN_FALSE ;
+ 	}
+
+	handle->image->units        = PixelsPerInchResolution ;
+	handle->image->x_resolution = dpix ;
+	handle->image->y_resolution = dpiy ;
+
 	RETURN_TRUE ;
 }
 
