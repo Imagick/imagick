@@ -807,16 +807,22 @@ PHP_FUNCTION(imagick_border)
     }
 
     rect = (RectangleInfo *)emalloc(sizeof(RectangleInfo));
-    rect->width = width;
-    rect->height = height;
-    rect->x = 0;
-    rect->y = 0;
+    if ( rect==(RectangleInfo *)NULL){
+        RETURN_FALSE;
+    } else {
+        rect->width = width;
+        rect->height = height;
+        rect->x = 0;
+        rect->y = 0;
 
-    copy_handle->image = BorderImage(handle->image,rect,&exception);
-
-    efree(rect);
-
-    IMAGICK_RET_COPY_HANDLE();
+        copy_handle->image = BorderImage(handle->image,rect,&exception);
+        efree(rect);
+        if (copy_handle->image==(Image *) NULL){
+            RETURN_FALSE;
+        } else {
+            IMAGICK_RET_COPY_HANDLE();
+        }
+    }
 }
 /* }}} */
 
