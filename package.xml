@@ -46,28 +46,6 @@ generated package.xml files -->
 	</notes>
     <state>beta</state>
     </release>
-    <release>
-        <version>0.9.1</version>
-        <date>2002-12-07</date>
-        <notes>
-	- functions added:
-		imagick_chop()
-		imagick_crop()
-		imagick_flip()
-		imagick_flop()
-		imagick_roll()
-		imagick_getimagedepth()
-		imagick_getnumbercolors()
-		imagick_isgrayimage()
-		imagick_ismonochromeimage()
-		imagick_isopaqueimage()
-		imagick_ispaletteimage()
-		imagick_ordereddither()
-		imagick_composite()
-	- Added IMAGICK_COMPOSITE_OP_* for use with imagick_composite().
-	</notes>
-    <state>beta</state>
-    </release>
         <configureoptions>
             <configureoption name="with-imagick" default="autodetect" prompt="ImageMagick library install dir?"/>
         </configureoptions>
@@ -158,6 +136,11 @@ generated package.xml files -->
 		    <file role="doc">ismonochromeimage.php</file>
 		    <file role="doc">isgrayimage.php</file>
 		    <file role="doc">composite.php</file>
+		    <file role="doc">profile.php</file>
+		    <file role="doc">resize.php</file>
+		    <file role="doc">sample.php</file>
+		    <file role="doc">scale.php</file>
+
                 </dir>
             </dir>
         </filelist>
