@@ -13,7 +13,7 @@
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
   | Author: Michael Montero   (mmontero@mail.communityconnect.com)       |
-  |         Christian Stocker (chregu@bitflux.ch)			 |
+  |         Christian Stocker (chregu@bitflux.ch)                        |
   +----------------------------------------------------------------------+
 
   $Id$ 
@@ -556,7 +556,7 @@ PHP_MINFO_FUNCTION( imagick )
 	}
 	else
 	{
-		php_error( E_WARNING, "%s(): type_info struct is NULL after call to GetTypeInfo()", get_active_function_name( TSRMLS_C ) ) ;
+		php_info_print_table_row(2, "Fonts", "No fonts found");
 	}
 
 	php_info_print_table_end();
