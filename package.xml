@@ -20,6 +20,7 @@ generated package.xml files -->
           <name>Christian Stocker</name>
         <email>chregu@php.net</email>
     </maintainer>
+    <license>PHP License</license>
   
     <release>
         <version>0.9.6</version>
@@ -39,6 +40,7 @@ generated package.xml files -->
   on an operation.  IT IS LARGELY UNTESTED!  Beware!  However, you can now
   do things like:
           $handle = imagick_readimage( "image.jpg" ) or die( imagick_error() ) ;
+- fixed configure script. It honours now values returned by Magick-config.
 	</notes>
         <state>beta</state>
     </release>
