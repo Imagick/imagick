@@ -91,6 +91,7 @@
 	PHP_FUNCTION( imagick_ispaletteimage ) ;
 	PHP_FUNCTION( imagick_getimagetype ) ;
 	PHP_FUNCTION( imagick_isimagesequal ) ;
+	PHP_FUNCTION( imagick_getmagick ) ;
 
 	/*****
 

@@ -27,6 +27,7 @@ generated package.xml files -->
         <notes>
         - functions added:
 		imagick_flatten()
+		imagick_getmagick()
 	- fixed bad code in these functions:
 		imagick_despeckle()
 		imagick_edge()
