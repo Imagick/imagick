@@ -249,7 +249,7 @@ zend_function_entry imagick_functions[] =
 
         *****/
 
-        PHP_FE( imagick_set_image_comment,	NULL ) ;
+        PHP_FE( imagick_set_image_comment,	NULL )
 
 	/*****
 
