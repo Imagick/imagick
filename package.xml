@@ -45,7 +45,7 @@ generated package.xml files -->
 	imagick_unsharpmask()
 - for the above functions, if call to corresponding ImageMagick
   function the module would probably core dump.  If it didn't the
-  results would be really buddy and weird.
+  results would be really buggy and weird.
 - setfillopacity() thanks to Allen Condit, condit@isri.unlv.edu.
 	</notes>
         <state>beta</state>
