@@ -1,5 +1,5 @@
 0.1
-- imagick_sample(), imagick_resize(), imagick_crop(), imagick_shear(), im$
+- imagick_sample(), imagick_resize(), imagick_crop(), imagick_shear(), imagick_rotate(), imagick_morph() are depraceted and replaced by the corresponding imagick_copy_* function, which return a new handle. The depracated functions will be removed in the next version.
 - Cosmetic changes to phpinfo()
 - Fixed some critical resource allocation errors
 
