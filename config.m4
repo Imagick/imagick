@@ -30,7 +30,9 @@ if test "$PHP_IMAGICK" != "no"; then
      AC_MSG_RESULT(Building with ImageMagick as backend)
   fi
   if test -r $PHP_IMAGICK/include/${GM_PATH}magick/magick.h; then
+    AC_MSG_CHECKING(for $MAGICK_NAME in provided path)
     IMAGEMAGICK_DIR=$PHP_IMAGICK
+    AC_MSG_RESULT(found in $IMAGEMAGICK_DIR)
   else
     AC_MSG_CHECKING(for $MAGICK_NAME in default path)
     for i in /usr/local /usr; do
@@ -59,16 +61,15 @@ if test "$PHP_IMAGICK" != "no"; then
     magick.h should be in <imagemagick-dir>/include/magick/)
   fi
   IMAGEMAGICK_CONFIG="${CONFIG_NAME}"
-  AC_MSG_CHECKING(for ${MAGICK_NAME} ${NEEDED_VERSION_STRING} or greater)
 
-  if ${IMAGEMAGICK_DIR}/bin/${CONFIG_NAME} --libs print > /dev/null 2>&1; then
+  if ${IMAGEMAGICK_DIR}/bin/${CONFIG_NAME} --libs  > /dev/null 2>&1; then
     IMAGEMAGICK_CONFIG=${IMAGEMAGICK_DIR}/bin/${CONFIG_NAME}
   else
-    if ${IMAGEMAGICK_DIR}/${CONFIG_NAME} --libs print > /dev/null 2>&1; then
+    if ${IMAGEMAGICK_DIR}/${CONFIG_NAME} --libs  > /dev/null 2>&1; then
        IMAGEMAGICK_CONFIG=${IMAGEMAGICK_DIR}/${CONFIG_NAME}
     fi
   fi
-  
+  AC_MSG_CHECKING(for ${MAGICK_NAME} ${NEEDED_VERSION_STRING} or greater with $IMAGEMAGICK_CONFIG)
   imagemagick_version_full=`$IMAGEMAGICK_CONFIG --version`
   imagemagick_version=`echo ${imagemagick_version_full} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   AC_MSG_RESULT($imagemagick_version_full)
