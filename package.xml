@@ -3,10 +3,11 @@
 generated package.xml files -->
 <package>
     <name>imagick</name>
-    <summary>Provides a wrapper to the ImageMagick Library. </summary>
+    <summary>Provides a wrapper to the ImageMagick/GraphicsMagick library. </summary>
     <description>It's a native php-extension. 
         See the examples in the examples/ directory for some hints on how to use it.
-        A compiled windows extension is available at http://php.chregu.tv/php_imagick.dll for the time being.
+        A compiled windows extension is available at http://kromann.info/pear-pecl.php .
+        You need the ImageMagick libraries from www.imagemagick.org to get it running.
     </description>
     <maintainer>
         <user>mcmontero</user>
