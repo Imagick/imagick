@@ -225,6 +225,7 @@
 	PHP_FUNCTION( imagick_flop ) ;
 	PHP_FUNCTION( imagick_roll ) ;
 	PHP_FUNCTION( imagick_profile ) ;
+	PHP_FUNCTION( imagick_rgbtransform ) ;
 
 	/*****
 

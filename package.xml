@@ -29,13 +29,15 @@ generated package.xml files -->
                 imagick_zoom()
 		imagick_getimagetype()
 		imagick_isimagesequal()
+		imagick_rgbtransform()
         - the difference between imagick_zoom() and imagick_resize() is
           that zoom applies the blur and filter that are defined by
           the image.  It is a much simpler way of resizing an image.
         - added imagick.dsp and modifications for compiling under Windows.
         - changed all instances of le_handle to le_imagick_handle to avoid
           future conflicts.
-	- added IMAGICK_TYPE_* to support imagick_getimagetype().
+	- added IMAGICK_COLORSPACE_* values to incorporate ImageMagick's
+	  ColorspaceType for use with imagick_rgbtransform().
         </notes>
         <state>beta</state>
     </release>

@@ -213,6 +213,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_flop,			NULL )
 	PHP_FE( imagick_roll,			NULL )
 	PHP_FE( imagick_profile,		NULL )
+	PHP_FE( imagick_rgbtransform,		NULL )
 
 	/*****
 
@@ -531,6 +532,52 @@ PHP_MINIT_FUNCTION( imagick )
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_OPTIMIZE",
 				OptimizeType,
+				CONST_CS | CONST_PERSISTENT ) ;
+
+	/*****
+
+	   Register constants for colorspace types.
+
+	*****/
+
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_UNDEFINED",
+				UndefinedColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_RGB",
+				RGBColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_GRAY",
+				GRAYColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_TRANSPARENT",
+				TransparentColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_OHTA",
+				OHTAColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_XYZ",
+				XYZColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_YCBCR",
+				YCbCrColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_YCC",
+				YCCColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_YIQ",
+				YIQColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_YPBPR",
+				YPbPrColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_YUV",
+				YUVColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_CMYK",
+				CMYKColorspace,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COLORSPACE_SRGB",
+				sRGBColorspace,
 				CONST_CS | CONST_PERSISTENT ) ;
 
 	return SUCCESS ;
@@ -4444,6 +4491,40 @@ PHP_FUNCTION( imagick_profile )
 	_php_imagick_clear_errors( handle ) ;
 
 	ProfileImage( handle->image, name, profile, profile_len, clone ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_rgbtransform )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	long       colorspace ;		/* the colorspace to transform the
+					   image to */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rl",
+			&handle_id, &colorspace ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	RGBTransformImage( handle->image, ( ColorspaceType )colorspace ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		RETURN_FALSE ;
