@@ -21,9 +21,10 @@ You should update your `aclocal.m4' by running aclocal.
 Don't worry.  Everything should still compile fine.
 
 7) cd /usr/src/php
-8) ./buildconf
-9) run configure as you normally would and add --with-imagick
-10) make
-11) make install
+8) rm ./configure
+9) ./buildconf
+10) run configure as you normally would and add --with-imagick
+11) make
+12) make install
 
 You're all set.
