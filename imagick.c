@@ -292,8 +292,14 @@ zend_module_entry imagick_module_entry =
 	ZEND_GET_MODULE( imagick )
 #endif
 
+static void php_imagick_init_globals (zend_imagick_globals *g) 
+{ 
+	g->imagick_was_init = 0; 
+}
+
 PHP_MINIT_FUNCTION( imagick )
 {
+	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
 	le_handle = zend_register_list_destructors_ex(
 			_php_imagick_free_handle_list, NULL,
 			"imagemagick handle", module_number ) ;
@@ -4472,6 +4478,7 @@ PHP_FUNCTION( imagick_destroyhandle )
 
 static void _php_imagick_init( void )
 {
+	TSRMLS_FETCH();
 	if ( IMAGICK_G( imagick_was_init ) == 1 )
 	{
 		return ;
@@ -4499,6 +4506,8 @@ static imagick_t* _php_imagick_alloc_handle( void )
 {
 	imagick_t* handle ;		/* the new handle to create */
 					
+	TSRMLS_FETCH();
+
 	handle = ( imagick_t* )emalloc( sizeof( imagick_t ) ) ;
 	if ( !handle )
 	{
@@ -4635,7 +4644,8 @@ static int _php_imagick_is_error( const imagick_t* handle )
 static imagick_t* _php_imagick_readimage( const char* file_name )
 {
 	imagick_t* handle ;		/* the new image handle */
-					
+
+	TSRMLS_FETCH();					
 	if ( !file_name )
 	{
 		return NULL ;
@@ -4678,6 +4688,8 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 
 static int _php_imagick_first_image_in_list( imagick_t* handle )
 {
+	TSRMLS_FETCH();					
+
 	if ( !handle )
 	{
 		return 0 ;
