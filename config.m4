@@ -72,7 +72,6 @@ if test "$PHP_IMAGICK" != "no"; then
   imagemagick_version_full=`$IMAGEMAGICK_CONFIG --version`
   imagemagick_version=`echo ${imagemagick_version_full} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   AC_MSG_RESULT($imagemagick_version_full)
-  AC_MSG_RESULT(${NEEDED_VERSION})  
   if test "$imagemagick_version" -ge ${NEEDED_VERSION}; then
     IMAGEMAGICK_LIBS=`$IMAGEMAGICK_CONFIG --libs`
     IMAGEMAGICK_LDFLAGS=`$IMAGEMAGICK_CONFIG --ldflags`    

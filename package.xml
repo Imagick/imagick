@@ -32,40 +32,15 @@ generated package.xml files -->
   I can think of many uses for this code.
 - thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
   imagick_getcolorspace() and testing it out.
-	</notes>
-        <state>beta</state>
-    </release>
-
-    <release>
-        <version>0.9.5</version>
-        <date>2003-02-19</date>
-        <notes>
-- functions added:
-        imagick_newimagelist()
-        imagick_pushlist()
-        imagick_poplist()
-        imagick_mosaic()
-        imagick_setcompressiontype()
-        imagick_setcompressionquality()
-- modified how all functions check to see if ImageMagick has been initialized.
-- added a number of new examples for demonstrating how to use image lists.
-- fixed bugs in _php_imagick_alloc_handle() and _php_imagick_clear_errors()
-  causing core dump when working with image lists.  I wasn't checking to make
-  sure the structures I was examining were allocated.
-- thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
-  imagick_setcompressiontype() and imagick_setcompressionquality() and
-  testing them.
-- added supporting IMAGICK_COMPRESSION_* constants for use with
-  imagick_setcompressiontype().
-- renamed imagick_setcompression() to imagick_setcompressiontype().
-  (note: this was done before the new version was released so no users should
-   be impacted.)
+- added GraphicsMagick (http://www.graphicsmagick.org) support to configure 
+  script (enable it with --with-imagick-gm)
 	</notes>
         <state>beta</state>
     </release>
 
         <configureoptions>
             <configureoption name="with-imagick" default="shared" prompt="ImageMagick library install dir?"/>
+            <configureoption name="with-imagick-gm" default="no" prompt="GraphicsMagick instead of ImageMagick?"/>
         </configureoptions>
         
         <filelist>
