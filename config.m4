@@ -15,6 +15,8 @@ if test "$PHP_IMAGICK" != "no"; then
      MAGICK_NAME="GraphicsMagick"
      NEEDED_VERSION=1000000
      NEEDED_VERSION_STRING=1.0.0
+     NOT_ABOVE_VERSION=6000000
+     NOT_ABOVE_VERSION_STRING=6.0.0
      CONFIG_NAME="GraphicsMagick-config"
      LIB_NAME="GraphicsMagick"
      AC_DEFINE(IMAGICK_BACKEND, "GraphicsMagick", [ ])
@@ -22,8 +24,10 @@ if test "$PHP_IMAGICK" != "no"; then
   else
      GM_PATH=""
      MAGICK_NAME="ImageMagick"
-     NEEDED_VERSION=5004005
-     NEEDED_VERSION_STRING=5.4.5
+     NEEDED_VERSION=5005003
+     NEEDED_VERSION_STRING=5.5.3
+     NOT_ABOVE_VERSION=6000000
+     NOT_ABOVE_VERSION_STRING=6.0.0
      CONFIG_NAME="Magick-config"
      LIB_NAME="Magick"
      AC_DEFINE(IMAGICK_BACKEND, "ImageMagick", [ ])
@@ -69,15 +73,17 @@ if test "$PHP_IMAGICK" != "no"; then
        IMAGEMAGICK_CONFIG=${IMAGEMAGICK_DIR}/${CONFIG_NAME}
     fi
   fi
-  AC_MSG_CHECKING(for ${MAGICK_NAME} ${NEEDED_VERSION_STRING} or greater with $IMAGEMAGICK_CONFIG)
+  AC_MSG_CHECKING(for ${MAGICK_NAME} ${NEEDED_VERSION_STRING} or later with $IMAGEMAGICK_CONFIG)
   imagemagick_version_full=`$IMAGEMAGICK_CONFIG --version`
   imagemagick_version=`echo ${imagemagick_version_full} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   AC_MSG_RESULT($imagemagick_version_full)
-  if test "$imagemagick_version" -ge ${NEEDED_VERSION}; then
+  if test "$imagemagick_version" -lt ${NEEDED_VERSION}; then
+    AC_MSG_ERROR(${MAGICK_NAME} ${NEEDED_VERSION_STRING} or later is required to compile php with imagick support)
+  elif test "$imagemagick_version" -ge ${NOT_ABOVE_VERSION}; then
+    AC_MSG_ERROR(${MAGICK_NAME} ${NOT_ABOVE_VERSION_STRING} or later is not supported right now. Please use an older release)
+  else
     IMAGEMAGICK_LIBS=`$IMAGEMAGICK_CONFIG --libs`
     IMAGEMAGICK_LDFLAGS=`$IMAGEMAGICK_CONFIG --ldflags`    
-  else
-    AC_MSG_ERROR(${MAGICK_NAME} ${NEEDED_VERSION_STRING} or later is required to compile php with imagick support)
   fi
 
   PHP_ADD_INCLUDE($IMAGEMAGICK_DIR/include/${GM_PATH})
