@@ -34,7 +34,7 @@ ZEND_DECLARE_MODULE_GLOBALS( imagick ) ;
 
 /* True global resources - no need for thread safety here */
 static int le_imagick ;
-static int le_handle ;
+static int le_imagick_handle ;
 
 zend_function_entry imagick_functions[] =
 {
@@ -300,9 +300,9 @@ static void php_imagick_init_globals (zend_imagick_globals *g)
 PHP_MINIT_FUNCTION( imagick )
 {
 	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
-	le_handle = zend_register_list_destructors_ex(
-			_php_imagick_free_handle_list, NULL,
-			"imagemagick handle", module_number ) ;
+	le_imagick_handle = zend_register_list_destructors_ex(
+				_php_imagick_free_handle_list, NULL,
+				"imagick handle", module_number ) ;
 
 	/*****
 
@@ -805,7 +805,7 @@ PHP_FUNCTION( imagick_clonehandle )
 	}
 	new_handle->image_info = CloneImageInfo( handle->image_info ) ;
 
-	new_handle->id = zend_list_insert( new_handle, le_handle ) ;
+	new_handle->id = zend_list_insert( new_handle, le_imagick_handle ) ;
 	RETURN_RESOURCE( new_handle->id ) ;
 }
 
@@ -898,7 +898,7 @@ PHP_FUNCTION( imagick_blob2image )
 	{
 		RETURN_FALSE ;
 	}
-	handle->id = zend_list_insert( handle, le_handle ) ;
+	handle->id = zend_list_insert( handle, le_imagick_handle ) ;
 
 	handle->image = BlobToImage( handle->image_info, ( void* )blob_data,
 				     blob_data_len, &handle->exception ) ;
@@ -937,7 +937,7 @@ PHP_FUNCTION( imagick_getcanvas )
 	{
 		RETURN_FALSE ;
 	}
-	handle->id = zend_list_insert( handle, le_handle ) ;
+	handle->id = zend_list_insert( handle, le_imagick_handle ) ;
 
 	FormatString( buffer, "%ldx%ld", width, height ) ;
 	CloneString( &handle->image_info->size, buffer ) ;
@@ -4035,7 +4035,7 @@ PHP_FUNCTION( imagick_getimagefromlist )
 	}
 	new_handle->image_info = CloneImageInfo( handle->image_info ) ;
 
-	new_handle->id = zend_list_insert( new_handle, le_handle ) ;
+	new_handle->id = zend_list_insert( new_handle, le_imagick_handle ) ;
 	RETURN_RESOURCE( new_handle->id ) ;
 }
 
@@ -4582,7 +4582,8 @@ static imagick_t* _php_imagick_get_handle_struct_from_list( zval** handle_id TSR
 					   perform any ops. on the image */	
 
 	handle = ( imagick_t* )zend_fetch_resource( handle_id TSRMLS_CC, -1,
-				"imagemagick handle", NULL, 1, le_handle ) ;
+				"imagemagick handle", NULL, 1,
+				le_imagick_handle ) ;
 	if ( !handle )
 	{
 		return ( imagick_t* )NULL ;
@@ -4667,7 +4668,7 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 	{
 		return NULL ;	
 	}
-	handle->id = zend_list_insert( handle, le_handle ) ;
+	handle->id = zend_list_insert( handle, le_imagick_handle ) ;
 
 	strncpy( handle->image_info->filename, file_name, MaxTextExtent - 1 ) ;
 

@@ -30,6 +30,8 @@ generated package.xml files -->
           that zoom applies the blur and filter that are defined by
           the image.  It is a much simpler way of resizing an image.
 		- added imagick.dsp and modifications for compiling under Windows.
+	- changed all instances of le_handle to le_imagick_handle to avoid
+	  future conflicts.
         </notes>
     <state>beta</state>
     </release>
