@@ -43,7 +43,7 @@ extern zend_module_entry imagick_module_entry;
 #define NEWER_API
 #endif
 
-#define IMAGICK_VERSION "0.1"
+#define IMAGICK_VERSION "0.1.1"
 
 PHP_MINIT_FUNCTION(imagick);
 PHP_MSHUTDOWN_FUNCTION(imagick);
