@@ -28,6 +28,9 @@ generated package.xml files -->
         <notes>
 - fixed bug in imagick_free() that would cause it to SEGFAULT everytime it's
   called.
+- fixed to work with versions of ImageMagick >= 5.5.7  - special thanks to
+  James Huston (hustonjs@itadevelopment.com) for helping make this happen.
+- test compiled against 5.5.3, 5.5.6 and 5.5.7 with success.
 	</notes>
         <state>beta</state>
     </release>

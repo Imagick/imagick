@@ -2454,17 +2454,31 @@ PHP_FUNCTION( imagick_begindraw )
 
 	if ( handle->draw_info && handle->image && !handle->draw_context )
 	{
+#if MagickLibVersion < 0x557
 		handle->draw_context = DrawAllocateContext( handle->draw_info,
 						            handle->image ) ;
+#else
+		handle->draw_context = DrawAllocateWand( handle->draw_info,
+							 handle->image ) ;
+#endif
+
 		if ( !handle->draw_context )
 		{
+#if MagickLibVersion < 0x557
 			php_error( E_ERROR, "%s(): DrawAllocateContext() did not properly allocate DrawContext structure", get_active_function_name( TSRMLS_C ) ) ;
+#else
+			php_error( E_ERROR, "%s(): DrawAllocateWand() did not properly allocate DrawContext structure", get_active_function_name( TSRMLS_C ) ) ;
+#endif
 			RETURN_FALSE ;
 		}
 	}
 	else
 	{
+#if MagickLibVersion < 0x557
 		php_error( E_WARNING, "%s(): attempt to create draw_context with DrawAllocateContext() and empty draw_info or image", get_active_function_name( TSRMLS_C ) ) ;
+#else
+		php_error( E_WARNING, "%s(): attempt to create draw_context withDrawAllocateWand() and empty draw_info or image", get_active_function_name( TSRMLS_C ) ) ;
+#endif
 	}
 
 	RETURN_TRUE ;
@@ -5380,7 +5394,11 @@ static void _php_imagick_clean_up_handle( imagick_t* handle )
 
 	if ( handle->draw_context )
 	{
+#if MagickLibVersion < 0x557
 		DrawDestroyContext( handle->draw_context ) ;
+#else
+		DestroyDrawingWand( handle->draw_context ) ;
+#endif
 	}
 
 	efree( handle ) ;
