@@ -78,6 +78,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_isopaqueimage,		NULL )
 	PHP_FE( imagick_ispaletteimage,		NULL )
 	PHP_FE( imagick_getimagetype,		NULL )
+	PHP_FE( imagick_isimagesequal,		NULL )
 
 	/*****
 
@@ -1437,6 +1438,63 @@ PHP_FUNCTION( imagick_getimagetype )
 	type = GetImageType( handle->image, &handle->exception ) ;
 
 	RETURN_LONG( type ) ;
+}
+
+PHP_FUNCTION( imagick_isimagesequal )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	zval*	   ref_id ;		/* the handle identifier coming from
+					   the PHP environment for the
+					   reference image */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+	imagick_t* ref_handle ;		/* the actual imagick_t struct for the
+					   handle of the reference image */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rr",
+			&handle_id, &ref_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	ref_handle = _php_imagick_get_handle_struct_from_list( &ref_id TSRMLS_CC ) ;
+	if ( !ref_handle )
+	{
+		php_error( E_WARNING, "%s(): reference handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+	_php_imagick_clear_errors( ref_handle ) ;
+
+	if ( handle->image     == ( Image* )NULL ||
+	     ref_handle->image == ( Image* )NULL )
+	{
+		RETURN_FALSE ;
+	}
+
+	if ( !IsImagesEqual( handle->image, ref_handle->image ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	if ( _php_imagick_is_error( handle ) ||
+	     _php_imagick_is_error( ref_handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
 }
 
 /*****************************************************************************/
