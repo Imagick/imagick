@@ -21,8 +21,8 @@ generated package.xml files -->
     </maintainer>
     <license>PHP License</license>  
     <release>
-        <version>0.9.1.0</version>
-        <date>2002-12-05</date>
+        <version>0.9.1</version>
+        <date>2002-12-07</date>
         <notes>
 	- functions added:
 		imagick_chop()
