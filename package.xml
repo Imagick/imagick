@@ -21,7 +21,6 @@ generated package.xml files -->
         <email>chregu@php.net</email>
     </maintainer>
   
-    <license>PHP License</license>  
     <release>
         <version>0.9.6</version>
         <date>2003-xx-xx</date>
@@ -34,6 +33,7 @@ generated package.xml files -->
   imagick_getcolorspace() and testing it out.
 - added GraphicsMagick (http://www.graphicsmagick.org) support to configure 
   script (enable it with --with-imagick-gm)
+- imagick_readimage() now returns false if ImageMagick ReadImage() fails.
 	</notes>
         <state>beta</state>
     </release>

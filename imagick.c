@@ -747,6 +747,11 @@ PHP_FUNCTION( imagick_readimage )
 	}
 
 	handle = _php_imagick_readimage( file_name ) ;
+	if ( !handle )
+	{
+		RETURN_FALSE ;
+	}
+
 	RETURN_RESOURCE( handle->id ) ;
 }
 
@@ -5354,22 +5359,29 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 	{
 		return NULL ;	
 	}
-	handle->id = zend_list_insert( handle, le_imagick_handle ) ;
 
 	strncpy( handle->image_info->filename, file_name, MaxTextExtent - 1 ) ;
 
 	handle->image = ReadImage( handle->image_info, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
-		return handle ;
+		if ( handle->exception.description )
+		{
+			ThrowException( &handle->exception, FatalErrorException, handle->exception.description, NULL ) ;
+		}
+
+		_php_imagick_clean_up_handle( handle ) ;
+		return NULL ;
 	}
 
 	if ( !handle->image )
 	{
 		ThrowException( &handle->exception, FatalErrorException, "after ReadImage(), image is empty in _php_imagick_readimage()", NULL ) ;
-		return handle ;
+		_php_imagick_clean_up_handle( handle ) ;
+		return NULL ;
 	}
 
+	handle->id = zend_list_insert( handle, le_imagick_handle ) ;
 	return handle ;
 }
 
@@ -5459,6 +5471,11 @@ PHP_FUNCTION( imagick_read )
         }
 
         handle = _php_imagick_readimage( file_name ) ;
+	if ( !handle )
+	{
+		RETURN_FALSE ;
+	}
+
 	RETURN_RESOURCE( handle->id ) ;
 }
 
