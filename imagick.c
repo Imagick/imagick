@@ -77,6 +77,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_ismonochromeimage,	NULL )
 	PHP_FE( imagick_isopaqueimage,		NULL )
 	PHP_FE( imagick_ispaletteimage,		NULL )
+	PHP_FE( imagick_getimagetype,		NULL )
 
 	/*****
 
@@ -489,6 +490,46 @@ PHP_MINIT_FUNCTION( imagick )
 	REGISTER_LONG_CONSTANT( "IMAGICK_PROFILE_OWN", 0,
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_PROFILE_COPY", 1,
+				CONST_CS | CONST_PERSISTENT ) ;
+
+	/*****
+
+	   Register constants for image types.
+
+	*****/
+
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_UNDEFINED",
+				UndefinedType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_BILEVEL",
+				BilevelType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_GRAYSCALE",
+				GrayscaleType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_GRAYSCALEMATTE",
+				GrayscaleMatteType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_PALETTE",
+				PaletteType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_PALETTEMATTE",
+				PaletteMatteType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_TRUECOLOR",
+				TrueColorType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_TRUECOLORMATTE",
+				TrueColorMatteType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_COLORSEPARATION",
+				ColorSeparationType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_COLORSEPARATIONMATTE",
+				ColorSeparationMatteType,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_TYPE_OPTIMIZE",
+				OptimizeType,
 				CONST_CS | CONST_PERSISTENT ) ;
 
 	return SUCCESS ;
@@ -1364,6 +1405,38 @@ PHP_FUNCTION( imagick_ispaletteimage )
 	}
 
 	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_getimagetype )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+	ImageType  type ;		/* the image type, to be returned to
+					   PHP */
+
+	type = UndefinedType ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	type = GetImageType( handle->image, &handle->exception ) ;
+
+	RETURN_LONG( type ) ;
 }
 
 /*****************************************************************************/

@@ -27,6 +27,7 @@ generated package.xml files -->
         <notes>
         - functions added:
                 imagick_zoom()
+		imagick_getimagetype()
         - the difference between imagick_zoom() and imagick_resize() is
           that zoom applies the blur and filter that are defined by
           the image.  It is a much simpler way of resizing an image.

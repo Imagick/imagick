@@ -89,6 +89,7 @@
 	PHP_FUNCTION( imagick_ismonochromeimage ) ;
 	PHP_FUNCTION( imagick_isopaqueimage ) ;
 	PHP_FUNCTION( imagick_ispaletteimage ) ;
+	PHP_FUNCTION( imagick_getimagetype ) ;
 
 	/*****
 
