@@ -33,6 +33,8 @@ generated package.xml files -->
   (monmariola@monmariola.com): imagick_getdpix(), imagick_getdpiy(),
   imagick_setdpi().
 - Added related example files.
+- Fixed segmentation fault in shutdown function.  Thanks to Mathieu Virbel
+  <tito@bankiz.org> for sending us the patch and testing.
         </notes>
         <state>beta</state>
     </release>
