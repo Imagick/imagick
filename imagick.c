@@ -5365,9 +5365,19 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 	handle->image = ReadImage( handle->image_info, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
-		if ( handle->exception.description )
+		if ( handle->exception.reason &&
+		     handle->exception.description )
 		{
-			ThrowException( &handle->exception, FatalErrorException, handle->exception.description, NULL ) ;
+                	php_error( E_ERROR, "%s(): %s %s",
+                                   get_active_function_name( TSRMLS_C ),
+				   handle->exception.reason,
+				   handle->exception.description ) ;
+		}
+		else if ( handle->exception.reason )
+		{
+                	php_error( E_ERROR, "%s(): %s",
+                                   get_active_function_name( TSRMLS_C ),
+				   handle->exception.reason ) ;
 		}
 
 		_php_imagick_clean_up_handle( handle ) ;
