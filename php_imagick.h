@@ -52,6 +52,7 @@ PHP_FUNCTION(imagick_crop);
 PHP_FUNCTION(imagick_rotate);
 PHP_FUNCTION(imagick_shear);
 PHP_FUNCTION(imagick_oilpaint);
+PHP_FUNCTION(imagick_annotate);
 PHP_FUNCTION(imagick_morph);
 PHP_FUNCTION(imagick_write);
 PHP_FUNCTION(imagick_list_magickinfo);
@@ -61,10 +62,15 @@ PHP_FUNCTION(imagick_get_attribute);
 PHP_FUNCTION(imagick_new);
 PHP_FUNCTION(imagick_convert);
 PHP_FUNCTION(imagick_free);
+PHP_FUNCTION(imagick_init);
+
+
+
 typedef struct {
 
   ImageInfo *info;
   Image *image;
+  int count;
 } php_imagick;
 
 /* 

@@ -22,12 +22,12 @@
 if(!extension_loaded('imagick')) {
 	dl('imagick.so');
 }
-
 $handle = imagick_create();
 
 
-//imagick_set_attribute($handle,"size","100x150");
-print imagick_read($handle,"bla4.png");
+
+imagick_set_attribute($handle,"size","500x500");
+imagick_read($handle,"xc:red");
 
 
 
@@ -35,20 +35,30 @@ print imagick_read($handle,"bla4.png");
 //print imagick_get_attribute($handle,"height");
 //imagick_oilpaint($handle,20);
 //print imagick_get_attribute($handle,"size");
-print imagick_set_attribute($handle,array("quality"=>1,"magick"=>"JPEG"));
+imagick_set_attribute($handle,array("quality"=>1,"magick"=>"JPEG"));
 
 
+imagick_annotate($handle,array(
+"primitive"=>"text 150,150 hello",
+            "pointsize"=>60,
+            "antialias"=>1,
+            "stroke"=>'green',            
+            "fill"=>'#ff7755',                        
+            "font"=>"Arial.ttf",
 
+            "text"=>"doedl",
+            "rotate"=>90
+            ));
 //imagick_morph($handle,3);
 
 
-imagick_write($handle,"bla3g.gif");
-imagick_free($handle);
+imagick_write($handle,"bla3.png");
+//imagick_free($handle);
 
-header("Content-type: image/gif");
+header("Content-type: image/png");
 
 
-readfile("bla3g.gif");
+readfile("bla3.png");
 
 
 

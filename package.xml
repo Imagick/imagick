@@ -11,11 +11,15 @@
     <email>chregu@php.net</email>
   </maintainer>
   <release>
-    <version>0.0.1</version>
-    <date>2001-11-22</date>
+    <version>0.0.2</version>
+    <date>2001-12-04</date>
     <notes>
-	    - first offical PEAR/PECL release
-        - a lot of functionality still missing
+- added andrei as author
+- better config support
+- better errorhandling
+- support for php < 4.1
+- annotate text function
+
     </notes>
   </release>
   <filelist>

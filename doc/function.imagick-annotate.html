@@ -1,7 +1,7 @@
 <HTML
 ><HEAD
 ><TITLE
->imagick_rotate</TITLE
+>imagick_annotate</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.73
@@ -13,11 +13,11 @@ REL="UP"
 TITLE="Imagick Functions"
 HREF="ref.imagick.html"><LINK
 REL="PREVIOUS"
-TITLE="imagick_list-magickifo"
-HREF="function.list-magickinfo.html"><LINK
+TITLE="imagick_morph"
+HREF="function.imagick-morph.html"><LINK
 REL="NEXT"
-TITLE="imagick_shear"
-HREF="function.imagick-shear.html"><META
+TITLE="imagick_dump"
+HREF="function.imagick-dump.html"><META
 HTTP-EQUIV="Content-type"
 CONTENT="text/html; charset=ISO-8859-1"></HEAD
 ><BODY
@@ -47,7 +47,7 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="function.list-magickinfo.html"
+HREF="function.imagick-morph.html"
 ACCESSKEY="P"
 >Prev</A
 ></TD
@@ -61,7 +61,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="function.imagick-shear.html"
+HREF="function.imagick-dump.html"
 ACCESSKEY="N"
 >Next</A
 ></TD
@@ -72,30 +72,30 @@ ALIGN="LEFT"
 WIDTH="100%"></DIV
 ><H1
 ><A
-NAME="function.imagick-rotate"
->imagick_rotate</A
+NAME="function.imagick-annotate"
+>imagick_annotate</A
 ></H1
 ><DIV
 CLASS="refnamediv"
 ><A
-NAME="AEN833"
+NAME="AEN889"
 ></A
 ><P
 >    (unknown)</P
->imagick_rotate&nbsp;--&nbsp;
-        Rotates a picture
+>imagick_annotate&nbsp;--&nbsp;
+        Annotates an image with a text
     </DIV
 ><DIV
 CLASS="refsect1"
 ><A
-NAME="AEN836"
+NAME="AEN892"
 ></A
 ><H2
 >Description</H2
 ><DIV
 CLASS="funcsynopsis"
 ><A
-NAME="AEN838"
+NAME="AEN894"
 ></A
 ><P
 ></P
@@ -105,9 +105,9 @@ NAME="AEN838"
 CLASS="FUNCDEF"
 >bool <B
 CLASS="function"
->imagick_rotate</B
+>imagick_annotate</B
 ></CODE
-> (resource imagick_handle, double degrees)</CODE
+> (resource imagick_handle, array options)</CODE
 ></P
 ><P
 ></P
@@ -143,10 +143,56 @@ CLASS="emphasis"
 ></TABLE
 ></DIV
 ><P
->&#13;. Positive angles rotate counter-clockwise (right-hand rule), while negative angles rotate clockwise. 
-Rotated images are usually larger than the originals and have 'empty' triangular corners. 
-Empty triangles left over from rotating the image are filled with the color defined by the pixel at location (0,0). 
+>&#13;This function can be used to draw a text on an image. See the example.       
     </P
+><P
+>&#13;    <TABLE
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+CLASS="EXAMPLE"
+><TR
+><TD
+><DIV
+CLASS="example"
+><A
+NAME="AEN907"
+></A
+><P
+><B
+>Example 1. <B
+CLASS="function"
+>imagick_annotate()</B
+> example</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+CELLPADDING="5"
+><TR
+><TD
+><PRE
+CLASS="php"
+>imagick_annotate($handle,array(
+            "primitive"=&#62;"text 150,150 hello world",
+            "pointsize"=&#62;60,
+            "antialias"=&#62;1,
+            "stroke"=&#62;'green',            
+            "fill"=&#62;'#ff7755',                        
+            "font"=&#62;"Arial.ttf",
+            "rotate"=&#62;90
+            ));
+?&#62;</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+>
+</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"
@@ -164,7 +210,7 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="function.list-magickinfo.html"
+HREF="function.imagick-morph.html"
 ACCESSKEY="P"
 >Prev</A
 ></TD
@@ -182,7 +228,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="function.imagick-shear.html"
+HREF="function.imagick-dump.html"
 ACCESSKEY="N"
 >Next</A
 ></TD
@@ -192,7 +238,7 @@ ACCESSKEY="N"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->imagick_list-magickifo</TD
+>imagick_morph</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
@@ -206,7 +252,7 @@ ACCESSKEY="U"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->imagick_shear</TD
+>imagick_dump</TD
 ></TR
 ></TABLE
 ></DIV

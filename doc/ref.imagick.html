@@ -175,11 +175,15 @@ BORDER="0"
 ><TBODY
 ><TR
 ><TD
->- untar the imagick.tgz archive into php4/ext (available from <A
+>- untar the imagick.tgz archive into php4/ext (cvs-snapshot available from <A
 HREF="http://pear.chregu.tv/imagick.tgz"
 TARGET="_top"
 >http://pear.chregu.tv/imagick.tgz</A
->)</TD
+>, released versions are available from <A
+HREF="http://pear.chregu.tv/"
+TARGET="_top"
+>http://pear.chregu.tv/</A
+>. Look there for pecl_imagick-x.y.z.tgz)</TD
 ></TR
 ><TR
 ><TD
@@ -219,7 +223,17 @@ NAME="imagick.contact"
 >Contact Information</A
 ></H2
 ><P
->&#13;If you have comments, bugfixes, enhancements or want to help developping this beast,
+>&#13;I have at the moment not very much time to further develop this extension. I will
+implement more and more features in the near future, but don't expect a full-featured extension
+soon. If you can't wait, you are very welcome to implement some of the features. It's 
+really not very hard. Just have a look at the source-code.
+Or let me know, which ImageMagick feature you urgently need, and maybe 
+I will implement that first ...
+</P
+><P
+>&#13;
+
+If you have comments, bugfixes, enhancements or want to help developping this beast,
 you can drop me a mail at 
  <A
 HREF="mailto:chregu@php.net"
@@ -322,6 +336,13 @@ HREF="function.imagick-morph.html"
 >imagick_morph</A
 >&nbsp;--&nbsp;
         Morphes at least 2 pictures
+    </DT
+><DT
+><A
+HREF="function.imagick-annotate.html"
+>imagick_annotate</A
+>&nbsp;--&nbsp;
+        Annotates an image with a text
     </DT
 ><DT
 ><A

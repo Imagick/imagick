@@ -1,0 +1,11 @@
+0.0.2
+
+- added andrei as author
+- better config support
+- better errorhandling
+- support for php < 4.1
+- annotate text function
+
+0.0.1
+
+- initial release

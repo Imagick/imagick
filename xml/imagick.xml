@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.2 $ -->
+<!-- $Revision: 1.3 $ -->
  <reference id="ref.imagick">
   <title>Imagick Functions</title>
   <titleabbrev>imagick</titleabbrev>
@@ -31,7 +31,7 @@
      <para>
      short installation note:
 <simplelist>
-<member>- untar the imagick.tgz archive into php4/ext (available from <ulink url="http://pear.chregu.tv/imagick.tgz">http://pear.chregu.tv/imagick.tgz</ulink>)</member>
+<member>- untar the imagick.tgz archive into php4/ext (cvs-snapshot available from <ulink url="http://pear.chregu.tv/imagick.tgz">http://pear.chregu.tv/imagick.tgz</ulink>, released versions are available from <ulink url="http://pear.chregu.tv/">http://pear.chregu.tv/</ulink>. Look there for pecl_imagick-x.y.z.tgz)</member>
 <member>- run phpize in ext/imagick</member>
 <member>- run ./buildconf in php4</member>
 <member>- run configure with --with-imagick (and your other options)</member>
@@ -46,6 +46,16 @@ needed also the libwmf header files...)
     <sect2 id="imagick.contact">
      <title>Contact Information</title>
 <para>
+I have at the moment not very much time to further develop this extension. I will
+implement more and more features in the near future, but don't expect a full-featured extension
+soon. If you can't wait, you are very welcome to implement some of the features. It's 
+really not very hard. Just have a look at the source-code.
+Or let me know, which ImageMagick feature you urgently need, and maybe 
+I will implement that first ...
+</para>
+<para>
+
+
 If you have comments, bugfixes, enhancements or want to help developping this beast,
 you can drop me a mail at 
  <ulink url="mailto:chregu@php.net">chregu@php.net</ulink> or
@@ -644,7 +654,7 @@ Empty triangles left over from rotating the image are filled with the color defi
        <title>Description</title>
     <funcsynopsis>
      <funcprototype>
-      <funcdef>bool <function>imagick_shear</function></funcdef>
+      <funcdef>bool <function>imagick_morph</function></funcdef>
       <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
       <paramdef>long <parameter>number_frames</parameter></paramdef>
      </funcprototype>
@@ -659,6 +669,50 @@ Empty triangles left over from rotating the image are filled with the color defi
 
    </refsect1>
   </refentry>
+
+  <refentry id="function.imagick-annotate">
+   <refnamediv>
+    <refname>imagick_annotate</refname>
+    <refpurpose>
+        Annotates an image with a text
+    </refpurpose>
+   </refnamediv>
+   <refsect1>
+       <title>Description</title>
+    <funcsynopsis>
+     <funcprototype>
+      <funcdef>bool <function>imagick_annotate</function></funcdef>
+      <paramdef>resource <parameter>imagick_handle</parameter></paramdef>
+      <paramdef>array <parameter>options</parameter></paramdef>
+     </funcprototype>
+    </funcsynopsis>
+   &warn.experimental.func;
+    <para>
+This function can be used to draw a text on an image. See the example.       
+    </para>
+    <para>
+    <example>
+     <title><function>imagick_annotate</function> example</title>
+     <programlisting role="php">
+<![CDATA[
+    
+imagick_annotate($handle,array(
+            "primitive"=>"text 150,150 hello world",
+            "pointsize"=>60,
+            "antialias"=>1,
+            "stroke"=>'green',            
+            "fill"=>'#ff7755',                        
+            "font"=>"Arial.ttf",
+            "rotate"=>90
+            ));
+?>
+]]>
+     </programlisting>
+    </example>
+</para>            
+   </refsect1>
+  </refentry>
+
 
   
     <refentry id="function.imagick-dump">
