@@ -85,6 +85,10 @@
 	PHP_FUNCTION( imagick_getmimetype ) ;
 	PHP_FUNCTION( imagick_getimagedepth ) ;
 	PHP_FUNCTION( imagick_getnumbercolors ) ;
+	PHP_FUNCTION( imagick_isgrayimage ) ;
+	PHP_FUNCTION( imagick_ismonochromeimage ) ;
+	PHP_FUNCTION( imagick_isopaqueimage ) ;
+	PHP_FUNCTION( imagick_ispaletteimage ) ;
 
 	/*****
 
@@ -217,6 +221,14 @@
 	PHP_FUNCTION( imagick_flip ) ;
 	PHP_FUNCTION( imagick_flop ) ;
 	PHP_FUNCTION( imagick_roll ) ;
+
+	/*****
+
+	   Quantize an image.
+
+	*****/
+
+	PHP_FUNCTION( imagick_ordereddither ) ;
 
 	/*****
 

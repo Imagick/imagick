@@ -73,6 +73,10 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_getmimetype,		NULL )
 	PHP_FE( imagick_getimagedepth,		NULL )
 	PHP_FE( imagick_getnumbercolors,	NULL )
+	PHP_FE( imagick_isgrayimage,		NULL )
+	PHP_FE( imagick_ismonochromeimage,	NULL )
+	PHP_FE( imagick_isopaqueimage,		NULL )
+	PHP_FE( imagick_ispaletteimage,		NULL )
 
 	/*****
 
@@ -205,6 +209,14 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_flip,			NULL )
 	PHP_FE( imagick_flop,			NULL )
 	PHP_FE( imagick_roll,			NULL )
+
+	/*****
+
+	   Quantize an image.
+
+	*****/
+
+	PHP_FE( imagick_ordereddither,		NULL )
 
 	/*****
 
@@ -1095,6 +1107,130 @@ PHP_FUNCTION( imagick_getnumbercolors )
 	}
 
 	RETURN_LONG( unique_colors ) ;
+}
+
+PHP_FUNCTION( imagick_isgrayimage )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( !IsGrayImage( handle->image, &handle->exception ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_ismonochromeimage )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( !IsMonochromeImage( handle->image, &handle->exception ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_isopaqueimage )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( !IsOpaqueImage( handle->image, &handle->exception ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_ispaletteimage )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( !IsPaletteImage( handle->image, &handle->exception ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
 }
 
 /*****************************************************************************/
@@ -3892,6 +4028,46 @@ PHP_FUNCTION( imagick_roll )
 
 	DestroyImage( handle->image ) ;
 	handle->image = new_image ;
+
+	RETURN_TRUE ;
+}
+
+/*****************************************************************************/
+
+/******************************************************************************
+ *
+ *  Quantize an image.
+ *
+ */
+
+PHP_FUNCTION( imagick_ordereddither )
+{
+	zval* 	      handle_id ;	/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t*    handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	OrderedDitherImage( handle->image ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
 
 	RETURN_TRUE ;
 }

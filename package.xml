@@ -32,6 +32,11 @@ generated package.xml files -->
 		imagick_roll()
 		imagick_getimagedepth()
 		imagick_getnumbercolors()
+		imagick_isgrayimage()
+		imagick_ismonochromeimage()
+		imagick_isopaqueimage()
+		imagick_ispaletteimage()
+		imagick_ordereddither()
 	</notes>
     </release>
     <release>
