@@ -5586,7 +5586,7 @@ static int _php_imagick_is_error( const imagick_t* handle )
 		return 1 ;
 	}
 
-	if ( handle->exception.severity != UndefinedException )
+	if ( handle->exception.severity >= ErrorException )
 	{
 		_php_imagick_set_last_error( handle->exception.reason,
 			handle->exception.description ) ;
@@ -5595,7 +5595,7 @@ static int _php_imagick_is_error( const imagick_t* handle )
 	}
 
 	if ( handle->image &&
-	     handle->image->exception.severity != UndefinedException )
+	     handle->image->exception.severity >= ErrorException )
 	{
 		_php_imagick_set_last_error( handle->image->exception.reason,
 			handle->image->exception.description ) ;

@@ -33,6 +33,10 @@ generated package.xml files -->
   This was identified and tested by Sergio Salvatore (sergio@cucinalogica.com).
 - added function imagick_transparent() for setting a particular color to be
   transparent within an image.
+- changed how certain errors are handled in _php_imagick_is_error() to be
+  less restrictive.  This apparently helps fix issues with certain types
+  of images that otherwise appear corrupt.  Thanks to Hien Duy Nguyenxi
+  <hdn@umich.edu> for finding this, recommending the change and testing it.
 	</notes>
         <state>beta</state>
     </release>
