@@ -8,6 +8,7 @@ generated package.xml files -->
         See the examples in the examples/ directory for some hints on how to use it.
         A compiled windows extension is available at http://kromann.info/pear-pecl.php .
         You need the ImageMagick libraries from www.imagemagick.org to get it running.
+        ImageMagick 6.0.0 and later is not supported currently.
     </description>
     <maintainer>
         <user>mcmontero</user>
@@ -24,25 +25,15 @@ generated package.xml files -->
     <license>PHP License</license>
 
     <release>
-        <version>0.9.9</version>
-        <date>2004-04-01</date>
+        <version>0.9.10</version>
+        <date>2004-06-06</date>
         <notes>
-- added function imagick_set_image_comment() for setting the comment attribute
-  of an image.
-- function imagick_setcompressiontype() was not setting the correct structure.
-  This was identified and tested by Sergio Salvatore (sergio@cucinalogica.com).
-- added function imagick_transparent() for setting a particular color to be
-  transparent within an image.
-- changed how certain errors are handled in _php_imagick_is_error() to be
-  less restrictive.  This apparently helps fix issues with certain types
-  of images that otherwise appear corrupt.  Thanks to Hien Duy Nguyenxi
-  (hdn@umich.edu) for finding this, recommending the change and testing it.
-- added imagick_set_image_quality() for manipulating the quality of the
-  resultant image.
-- added examples/set_image_quality.php for testing the
-  imagick_set_image_quality() function.  Thanks to Derrick DeLoreno Threatt
-  (dthreatt@digitalcreations.net) for bringing up the need for this function
-  and testing it.
+- A ./configure change release only. 
+- Changed config.m4 for checking for correct ImageMagick Version.
+  ImageMagick &gt;= 5.5.3 and &lt; 6.6.0  or
+  GraphicsMagick &gt;= 1.0.0
+  are needed.
+- ImageMagick &gt;= 6.0.0 does not work currently. Patches are welcome ;)
 	</notes>
         <state>beta</state>
     </release>
@@ -146,4 +137,5 @@ generated package.xml files -->
                 </dir>
             </dir>
         </filelist>
+
 </package>
