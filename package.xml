@@ -25,7 +25,7 @@ generated package.xml files -->
 
     <release>
         <version>0.9.9</version>
-        <date>2003-xx-xx</date>
+        <date>2004-04-01</date>
         <notes>
 - added function imagick_set_image_comment() for setting the comment attribute
   of an image.
