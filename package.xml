@@ -30,7 +30,7 @@ generated package.xml files -->
         <date>2004-07-06</date>
         <notes>
 - Added the following functions thanks to Mon Mariola
-  <monmariola@monmariola.com>: imagick_getdpix(), imagick_getdpiy(),
+  (monmariola@monmariola.com): imagick_getdpix(), imagick_getdpiy(),
   imagick_setdpi().
 - Added related example files.
         </notes>
