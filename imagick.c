@@ -226,6 +226,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_rgbtransform,		NULL )
 	PHP_FE( imagick_transformrgb,		NULL )
 	PHP_FE( imagick_mosaic,			NULL )
+	PHP_FE( imagick_transparent,		NULL )
 
 	/*****
 
@@ -5166,6 +5167,52 @@ PHP_FUNCTION( imagick_mosaic )
 	}
 
 	RETURN_RESOURCE( mosaic_handle->id ) ;
+}
+
+PHP_FUNCTION( imagick_transparent )
+{
+	zval* 	    handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	char*	    trans_color ;	/* the color to make transparent */
+	imagick_t*  handle ;		/* the actual imagick_t struct for the
+					   handle */
+	PixelPacket target ;		/* the target transparent pixel */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs",
+			&handle_id, &trans_color ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	target = AcquireOnePixel( handle->image, 0, 0, &handle->exception ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	( void )QueryColorDatabase( trans_color, &target, &handle->exception ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	( void )TransparentImage( handle->image, target, TransparentOpacity ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
 }
 
 /*****************************************************************************/

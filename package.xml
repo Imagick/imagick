@@ -31,6 +31,8 @@ generated package.xml files -->
   of an image.
 - function imagick_setcompressiontype() was not setting the correct structure.
   This was identified and tested by Sergio Salvatore (sergio@cucinalogica.com).
+- added function imagick_transparent() for setting a particular color to be
+  transparent within an image.
 	</notes>
         <state>beta</state>
     </release>

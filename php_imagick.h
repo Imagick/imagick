@@ -240,6 +240,7 @@
 	PHP_FUNCTION( imagick_rgbtransform ) ;
 	PHP_FUNCTION( imagick_transformrgb ) ;
 	PHP_FUNCTION( imagick_mosaic ) ;
+	PHP_FUNCTION( imagick_transparent ) ;
 
 	/*****
 
