@@ -114,7 +114,25 @@ generated package.xml files -->
                     <file role="doc">level.php</file>
                     <file role="doc">oilpaint.php</file>
                     <file role="doc">sharpen.php</file>
-                    </dir>
+		    <file role="doc">spread.php</file>
+		    <file role="doc">threshold.php</file>
+		    <file role="doc">unsharpmask.php</file>
+		    <file role="doc">despeckle.php</file>
+		    <file role="doc">setfillcolor.php</file>
+		    <file role="doc">roll.php</file>
+		    <file role="doc">getnumbercolors.php</file>
+		    <file role="doc">getimagedepth.php</file>
+		    <file role="doc">flop.php</file>
+		    <file role="doc">flip.php</file>
+		    <file role="doc">crop.php</file>
+		    <file role="doc">chop.php</file>
+		    <file role="doc">ordereddither.php</file>
+		    <file role="doc">ispaletteimage.php</file>
+		    <file role="doc">isopaqueimage.php</file>
+		    <file role="doc">ismonochromeimage.php</file>
+		    <file role="doc">isgrayimage.php</file>
+		    <file role="doc">composite.php</file>
+                </dir>
             </dir>
         </filelist>
 
