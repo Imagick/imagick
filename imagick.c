@@ -5776,7 +5776,7 @@ static void _php_imagick_set_last_error( char* reason, char* description )
 		}
 
 		IMAGICK_G( last_error_description ) = ( char* )emalloc( strlen(
-					description + 1 ) ) ;
+					description) + 1 ) ;
 		if ( !IMAGICK_G( last_error_description ) )
 		{
 			return ;
