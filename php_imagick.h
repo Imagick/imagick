@@ -93,6 +93,7 @@
 	PHP_FUNCTION( imagick_getimagetype ) ;
 	PHP_FUNCTION( imagick_isimagesequal ) ;
 	PHP_FUNCTION( imagick_getmagick ) ;
+	PHP_FUNCTION( imagick_getcolorspace ) ;
 
 	/*****
 

@@ -81,6 +81,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_getimagetype,		NULL )
 	PHP_FE( imagick_isimagesequal,		NULL )
 	PHP_FE( imagick_getmagick,		NULL )
+	PHP_FE( imagick_getcolorspace,		NULL )
 
 	/*****
 
@@ -1615,6 +1616,37 @@ PHP_FUNCTION( imagick_getmagick )
 
 	RETURN_STRINGL( handle->image->magick, strlen( handle->image->magick ),
 			1 ) ;
+}
+
+PHP_FUNCTION( imagick_getcolorspace )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( handle->image == ( Image* )NULL )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_LONG( handle->image->colorspace ) ;	
 }
 
 /*****************************************************************************/
