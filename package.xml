@@ -39,6 +39,8 @@ generated package.xml files -->
   sure the structures I was examining were allocated.
 - thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
   imagick_setcompression() and testing it.
+- added supporting IMAGICK_COMPRESSION_* constants for use with
+  imagick_setcompression().
 	</notes>
         <state>beta</state>
     </release>
