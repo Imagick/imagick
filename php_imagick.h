@@ -63,6 +63,7 @@
 	PHP_FUNCTION( imagick_image2blob ) ;
 	PHP_FUNCTION( imagick_blob2image ) ;
 	PHP_FUNCTION( imagick_getcanvas ) ;
+	PHP_FUNCTION( imagick_newimagelist ) ;
 
 	/*****
 
@@ -215,6 +216,8 @@
 	PHP_FUNCTION( imagick_getlistsize ) ;
 	PHP_FUNCTION( imagick_getlistindex ) ;
 	PHP_FUNCTION( imagick_getimagefromlist ) ;
+	PHP_FUNCTION( imagick_pushlist ) ;
+	PHP_FUNCTION( imagick_poplist ) ;
 
 	/*****
 

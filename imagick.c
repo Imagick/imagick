@@ -51,6 +51,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_image2blob,		NULL )
 	PHP_FE( imagick_blob2image,		NULL )
 	PHP_FE( imagick_getcanvas,		NULL )
+	PHP_FE( imagick_newimagelist,		NULL )
 
 	/*****
 
@@ -203,6 +204,8 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_getlistsize,		NULL )
 	PHP_FE( imagick_getlistindex,		NULL )
 	PHP_FE( imagick_getimagefromlist,	NULL )
+	PHP_FE( imagick_pushlist,		NULL )
+	PHP_FE( imagick_poplist,		NULL )
 
 	/*****
 
@@ -975,16 +978,7 @@ PHP_FUNCTION( imagick_blob2image )
 		return ;
 	}
 
-	if ( IMAGICK_G( imagick_was_init ) == 0 )
-	{
-		/*****
-
-		   Initialize the ImageMagick engine.
-
-		*****/
-
-		_php_imagick_init() ;
-	}
+	_php_imagick_init() ;
 
 	handle = _php_imagick_alloc_handle() ;
 	if ( !handle )
@@ -1014,16 +1008,7 @@ PHP_FUNCTION( imagick_getcanvas )
 		return ;
 	}
 
-	if ( IMAGICK_G( imagick_was_init ) == 0 )
-	{
-		/*****
-
-		   Initialize the ImageMagick engine.
-
-		*****/
-
-		_php_imagick_init() ;
-	}
+	_php_imagick_init() ;
 
 	handle = _php_imagick_alloc_handle() ;
 	if ( !handle )
@@ -1052,6 +1037,23 @@ PHP_FUNCTION( imagick_getcanvas )
 		RETURN_RESOURCE( handle->id ) ;
 	}
 
+	RETURN_RESOURCE( handle->id ) ;
+}
+
+PHP_FUNCTION( imagick_newimagelist )
+{
+	imagick_t* handle ;		/* the handle for the image list */ 
+
+        _php_imagick_init() ;
+
+	handle = _php_imagick_alloc_handle() ;
+	if ( !handle )
+	{
+		RETURN_FALSE ;
+	}
+	handle->id = zend_list_insert( handle, le_imagick_handle ) ;
+
+	handle->image = NewImageList() ;
 	RETURN_RESOURCE( handle->id ) ;
 }
 
@@ -4346,6 +4348,108 @@ PHP_FUNCTION( imagick_getimagefromlist )
 	RETURN_RESOURCE( new_handle->id ) ;
 }
 
+PHP_FUNCTION( imagick_pushlist )
+{
+        zval*      handle_id ;          /* the handle identifier coming from
+                                           the PHP environment */
+	zval*	   push_handle_id ;	/* the handle identifier for the
+					   image to push onto the list */ 
+        imagick_t* handle ;             /* the actual imagick_t struct for the
+                                           handle */
+	imagick_t* push_handle ;	/* the actual imagick_t struct for the
+					   handle containing the image to
+					   push */
+	
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rr",
+			&handle_id, &push_handle_id ) == FAILURE )
+        {
+                return ;
+	}
+
+        handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+        if ( !handle )
+        {
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+                RETURN_FALSE ;
+        }
+
+        push_handle = _php_imagick_get_handle_struct_from_list( &push_handle_id TSRMLS_CC ) ;
+        if ( !push_handle )
+        {
+		php_error( E_WARNING, "%s(): push_handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+                RETURN_FALSE ;
+        }
+
+        _php_imagick_clear_errors( handle ) ;
+        _php_imagick_clear_errors( push_handle ) ;
+
+	PushImageList( &handle->image, push_handle->image,
+		       &handle->exception ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	if ( _php_imagick_is_error( push_handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_poplist )
+{
+        zval*      handle_id ;          /* the handle identifier coming from
+                                           the PHP environment */
+        imagick_t* handle ;             /* the actual imagick_t struct for the
+                                           handle */
+	imagick_t* popped_handle ;	/* the handle containing the popped
+					   image */
+	
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+        {
+                return ;
+	}
+
+        handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+        if ( !handle )
+        {
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+                RETURN_FALSE ;
+        }
+
+        _php_imagick_init() ;
+
+	popped_handle = _php_imagick_alloc_handle() ;
+	if ( !popped_handle )
+	{
+		RETURN_FALSE ;
+	}
+	popped_handle->id = zend_list_insert( popped_handle,
+					      le_imagick_handle ) ;
+
+        _php_imagick_clear_errors( handle ) ;
+        _php_imagick_clear_errors( popped_handle ) ;
+
+	popped_handle->image = PopImageList( &handle->image ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	if ( _php_imagick_is_error( popped_handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_RESOURCE( popped_handle->id ) ;
+}
+
 /*****************************************************************************/
 
 /******************************************************************************
@@ -4853,7 +4957,8 @@ PHP_FUNCTION( imagick_destroyhandle )
 
 static void _php_imagick_init( void )
 {
-	TSRMLS_FETCH();
+	TSRMLS_FETCH() ;
+
 	if ( IMAGICK_G( imagick_was_init ) == 1 )
 	{
 		return ;
@@ -4881,7 +4986,7 @@ static imagick_t* _php_imagick_alloc_handle( void )
 {
 	imagick_t* handle ;		/* the new handle to create */
 					
-	TSRMLS_FETCH();
+	TSRMLS_FETCH() ;
 
 	handle = ( imagick_t* )emalloc( sizeof( imagick_t ) ) ;
 	if ( !handle )
@@ -4987,7 +5092,19 @@ static void _php_imagick_clear_errors( imagick_t* handle )
 	}
 
 	handle->exception.severity        = UndefinedException ;
-	handle->image->exception.severity = UndefinedException ;
+
+	/*****
+
+	   It is possible for a handle to be valid but the image object
+	   within it to be NULL.  This is true whenever you allocate a
+	   new image list.
+
+	*****/
+
+	if ( handle->image )
+	{
+		handle->image->exception.severity = UndefinedException ;
+	}
 
 	/*****
 
@@ -5021,22 +5138,14 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 {
 	imagick_t* handle ;		/* the new image handle */
 
-	TSRMLS_FETCH();					
+	TSRMLS_FETCH() ;
+
 	if ( !file_name )
 	{
 		return NULL ;
 	}
 
-	if ( IMAGICK_G( imagick_was_init ) == 0 )
-	{
-		/*****
-
-		   Initialize the ImageMagick engine.
-
-		*****/
-
-		_php_imagick_init() ;
-	}
+	_php_imagick_init() ;
 
 	handle = _php_imagick_alloc_handle() ;
 	if ( !handle )
@@ -5064,7 +5173,7 @@ static imagick_t* _php_imagick_readimage( const char* file_name )
 
 static int _php_imagick_first_image_in_list( imagick_t* handle )
 {
-	TSRMLS_FETCH();					
+	TSRMLS_FETCH() ;
 
 	if ( !handle )
 	{
