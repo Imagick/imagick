@@ -97,6 +97,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_minify,			NULL )
 	PHP_FE( imagick_scale,			NULL )
 	PHP_FE( imagick_sample,			NULL )
+	PHP_FE( imagick_zoom,			NULL )
 
 	/*****
 
@@ -1689,6 +1690,65 @@ PHP_FUNCTION( imagick_sample )
 
 	new_image = SampleImage( handle->image, new_geometry.width,
 				 new_geometry.height, &handle->exception ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		if ( new_image )
+		{
+			DestroyImage( new_image ) ;
+		}
+
+		RETURN_FALSE ;
+	}
+
+	DestroyImage( handle->image ) ;
+	handle->image = new_image ;
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_zoom )
+{
+	zval* 	      handle_id ;	/* the handle identifier coming from
+					   the PHP environment */
+	long	      cols ;		/* the number of columns to scale to */
+	long	      rows ;		/* the number of rows to scale to */
+	char*         geo_mods ;	/* modifiers to the geometry to create
+					   an ImageMagick geometry string */
+	int           geo_mods_len ;	/* string length of geo_mods */
+	imagick_t*    handle ;		/* the actual imagick_t struct for the
+					   handle */
+	Image*        new_image ;	/* the new, minified image */
+	RectangleInfo new_geometry ;	/* the new image geometry with the
+					   geometry string applied */
+
+	geo_mods     = NULL ;
+	geo_mods_len = 0 ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rll|s",
+			&handle_id, &cols, &rows, &geo_mods,
+			&geo_mods_len ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	if ( !_php_imagick_get_geometry_rect( handle, cols, rows, geo_mods,
+			&new_geometry ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	new_image = ZoomImage( handle->image, new_geometry.width,
+			       new_geometry.height, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
 		if ( new_image )

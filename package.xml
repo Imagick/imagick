@@ -21,6 +21,18 @@ generated package.xml files -->
     </maintainer>
     <license>PHP License</license>  
     <release>
+        <version>0.9.3</version>
+        <date>2002-12-07</date>
+        <notes>
+        - functions added:
+                imagick_zoom()
+        - the ifference between imagick_zoom() and imagick_resize() is
+          that zoom applies the blur and filter that are defined by
+          the image.  It is a much simpler way of resizing an image.
+        </notes>
+    <state>beta</state>
+    </release>
+    <release>
         <version>0.9.2</version>
         <date>2002-12-07</date>
         <notes>

@@ -109,6 +109,7 @@
 	PHP_FUNCTION( imagick_minify ) ;
 	PHP_FUNCTION( imagick_scale ) ;
 	PHP_FUNCTION( imagick_sample ) ;
+	PHP_FUNCTION( imagick_zoom ) ;
 
 	/*****
 
