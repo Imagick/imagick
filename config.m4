@@ -17,6 +17,18 @@ if test "$PHP_IMAGICK" != "no"; then
         AC_MSG_RESULT(found in $i)
       fi
     done
+
+    dnl red hat has some strange locations for their imagemagick files
+    dnl so here's for redhat
+
+    if test -z "$IMAGEMAGICK_DIR"; then
+      for i in /usr/local/X11R6 /usr/X11R6; do
+        if test -r $i/include/X11/magick/magick.h; then
+          IMAGEMAGICK_DIR=$i
+          AC_MSG_RESULT(found in $i)
+        fi
+      done
+    fi
   fi
 
   if test -z "$IMAGEMAGICK_DIR"; then
@@ -24,9 +36,8 @@ if test "$PHP_IMAGICK" != "no"; then
     AC_MSG_ERROR(Please reinstall the ImageMagick distribution -
     magick.h should be in <imagemagick-dir>/include/magick/)
   fi
-
   IMAGEMAGICK_CONFIG="Magick-config"
-  AC_MSG_CHECKING(for ImageMagick 5.3.8 or greater)
+  AC_MSG_CHECKING(for ImageMagick 5.4.0 or greater)
 
   if ${IMAGEMAGICK_DIR}/bin/Magick-config --libs print > /dev/null 2>&1; then
     IMAGEMAGICK_CONFIG=${IMAGEMAGICK_DIR}/bin/Magick-config
@@ -39,15 +50,16 @@ if test "$PHP_IMAGICK" != "no"; then
   imagemagick_version_full=`$IMAGEMAGICK_CONFIG --version`
   imagemagick_version=`echo ${imagemagick_version_full} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   AC_MSG_RESULT($imagemagick_version_full)
-  if test "$imagemagick_version" -ge 5003008; then
+  if test "$imagemagick_version" -ge 5004000; then
     IMAGEMAGICK_LIBS=`$IMAGEMAGICK_CONFIG --libs`
     IMAGEMAGICK_LDFLAGS=`$IMAGEMAGICK_CONFIG --ldflags`    
   else
-    AC_MSG_ERROR(ImageMagick version 5.3.8 or later is required to compile php with imagick support)
+    AC_MSG_ERROR(ImageMagick version 5.4.0 or later is required to compile php with imagick support)
   fi
 
   PHP_ADD_INCLUDE($IMAGEMAGICK_DIR/include)
   PHP_EVAL_LIBLINE($IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  PHP_EVAL_LIBLINE($IMAGEMAGICK_LDFLAGS, IMAGICK_SHARED_LIBADD)
   PHP_ADD_LIBRARY_WITH_PATH(Magick, $IMAGEMAGICK_DIR/lib, IMAGICK_SHARED_LIBADD)
 
   AC_CHECK_LIB(Magick,InitializeMagick, 

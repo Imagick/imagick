@@ -13,7 +13,7 @@
    | license@php.net so we can mail you a copy immediately.               |
    +----------------------------------------------------------------------+
    | Authors: Christian Stocker <chregu@bitflux.ch>                       |
-   |          andrei nigmatulin <anight@mail.ru>                          |
+   |          Andrei Nigmatulin <anight@mail.ru>                          |
    +----------------------------------------------------------------------+
  */
 
@@ -32,11 +32,25 @@
 #define imagick_warning() MagickWarning(exception.severity, exception.reason, exception.description)
 #define imagick_warning_p() MagickWarning(exception_p->severity, exception_p->reason, exception_p->description)
 
-#define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
-/* If you declare any globals in php_imagick.h uncomment this:
+#define IMAGICK_RET_COPY_HANDLE()    if ( copy_handle->image == (Image *)NULL ) \
+                                    { \
+                                    imagick_warning(); \
+                                    RETURN_FALSE; \
+                                    } \
+                                    ZEND_REGISTER_RESOURCE(return_value, copy_handle, le_imagick);
 
-*/
+#define IMAGICK_FETCH_RES_AND_COPY_HANDLE()    ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick); \
+                                             GetExceptionInfo(&exception); \
+                                             copy_handle = _php_imagick_new(); \
+                                             copy_handle->info = CloneImageInfo(handle->info);
+
+#define IMAGICK_DEPRECATED()     php_error(E_WARNING, "%s(): This function is deprecated and will be removed soon, use the corresponding imagick_copy_*() function instead", get_active_function_name(TSRMLS_C));
+
+
+#define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
+
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
+
 /* True global resources - no need for thread safety here */
 static int le_imagick;
 static char *_php_imagick_client_name = "php_extension";
@@ -49,30 +63,39 @@ function_entry imagick_functions[] = {
 
                                         PHP_FE(imagick_new, NULL)
                                         PHP_FE(imagick_read, NULL)
+                                        PHP_FE(imagick_add_resource, NULL)
+                                        PHP_FE(imagick_copy_sample, NULL)
+                                        PHP_FE(imagick_copy_resize, NULL)
+                                        PHP_FE(imagick_copy_crop, NULL)                                                
+                                        PHP_FE(imagick_copy_shear, NULL)
+                                        PHP_FE(imagick_copy_rotate, NULL)
+                                        PHP_FE(imagick_copy_morph, NULL)
+                                                
                                         PHP_FE(imagick_sample, NULL)
-                                        PHP_FE(imagick_resize, NULL)                                                
-                                        PHP_FE(imagick_crop, NULL)                                                
-                                        PHP_FE(imagick_shear, NULL)  
-                                        PHP_FE(imagick_rotate, NULL)  
-                                        PHP_FE(imagick_oilpaint, NULL) 
-                                        PHP_FE(imagick_annotate, NULL) 
-                                        PHP_FE(imagick_morph, NULL)                                                 
+                                        PHP_FE(imagick_resize, NULL)
+                                        PHP_FE(imagick_crop, NULL)
+                                        PHP_FE(imagick_shear, NULL)
+                                        PHP_FE(imagick_rotate, NULL)
+                                        PHP_FE(imagick_oilpaint, NULL)
+                                        PHP_FE(imagick_annotate, NULL)
+                                        PHP_FE(imagick_morph, NULL)
                                         PHP_FE(imagick_write, NULL)
                                         PHP_FE(imagick_list_magickinfo, NULL)
                                         PHP_FE(imagick_dump, NULL)
                                         PHP_FE(imagick_convert, NULL)
                                         PHP_FE(imagick_set_attribute, NULL)
                                         PHP_FE(imagick_get_attribute, NULL)
-                                        PHP_FE(imagick_free, NULL)                                                
+                                        PHP_FE(imagick_free, NULL)
                                         PHP_FALIAS(imagick_create, imagick_new, NULL)
                                         {NULL, NULL, NULL}	/* Must be the last line in imagick_functions[] */
                                     };
 /* }}} */
 
+
 /* {{{ imagick_module_entry
  */
 zend_module_entry imagick_module_entry = {
-#ifdef STANDARD_MODULE_HEADER
+#ifdef NEWER_API
                                             STANDARD_MODULE_HEADER,
 #endif
                                             "imagick",
@@ -82,19 +105,22 @@ zend_module_entry imagick_module_entry = {
                                             PHP_RINIT(imagick),		/* Replace with NULL if there's nothing to do at request start */
                                             PHP_RSHUTDOWN(imagick),	/* Replace with NULL if there's nothing to do at request end */
                                             PHP_MINFO(imagick),
-#ifdef NO_VERSION_YET
-                                            NO_VERSION_YET,
+#ifdef NEWER_API
+                                            IMAGICK_VERSION,
 #endif
                                             STANDARD_MODULE_PROPERTIES
                                         };
 /* }}} */
 
+
 #ifdef COMPILE_DL_IMAGICK
 ZEND_GET_MODULE(imagick)
 #endif
 
+
 /* {{{ PHP_INI
  */
+
 /* Remove comments and fill if you need to have entries in php.ini
 PHP_INI_BEGIN()
     STD_PHP_INI_ENTRY("imagick.global_value",      "42", PHP_INI_ALL, OnUpdateInt, global_value, zend_imagick_globals, imagick_globals)
@@ -121,6 +147,7 @@ imagick_globals->value = 0;
 	imagick_globals->string = NULL;
 */
 /* }}} */
+
 
 static void _php_imagick_warning_handler(const ExceptionType warning,
     const char *reason, const char *description) {
@@ -153,6 +180,7 @@ static php_imagick *_php_imagick_new() {
 
 }
 
+
 static void _php_imagick_free(php_imagick *handle)
 {
     if (handle->image) {
@@ -165,6 +193,7 @@ static void _php_imagick_free(php_imagick *handle)
 
 }
 
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(imagick)
@@ -174,30 +203,31 @@ PHP_MINIT_FUNCTION(imagick)
     /* If you have INI entries, uncomment these lines
     REGISTER_INI_ENTRIES();
     */
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_UNDEFINED",0, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_POINT",1, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_BOX",2, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_TRIANGLE",3, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_HERMITE",4, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_HANNING",5, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_HAMMING",6, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_BLACKMAN",7, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_GAUSSIAN",8, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_QUADRATIC",9, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_CUBIC",10, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_CATROM",11, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_MITCHELL",12, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_LANCZOS",13, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_BESSEL",14, CONST_CS | CONST_PERSISTENT);
-REGISTER_LONG_CONSTANT("IMAGICK_FILTER_SINC",15, CONST_CS | CONST_PERSISTENT);
-            
-            
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_UNDEFINED",  UndefinedFilter,    CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_POINT",      PointFilter,        CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_BOX",        BoxFilter,          CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_TRIANGLE",   TriangleFilter,     CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_HERMITE",    HermiteFilter,      CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_HANNING",    HanningFilter,      CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_HAMMING",    HammingFilter,      CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_BLACKMAN",   BlackmanFilter,     CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_GAUSSIAN",   GaussianFilter,     CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_QUADRATIC",  QuadraticFilter,    CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_CUBIC",      CubicFilter,        CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_CATROM",     CatromFilter,       CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_MITCHELL",   MitchellFilter,      CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_LANCZOS",    LanczosFilter,      CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_BESSEL",     BesselFilter,       CONST_CS | CONST_PERSISTENT);
+REGISTER_LONG_CONSTANT("IMAGICK_FILTER_SINC",       SincFilter,         CONST_CS | CONST_PERSISTENT);
+
+
     le_imagick = register_list_destructors(_php_imagick_free,NULL);
     InitializeMagick(_php_imagick_client_name);
     SetWarningHandler(_php_imagick_warning_handler);
     return SUCCESS;
 }
 /* }}} */
+
 
 /* {{{ PHP_MSHUTDOWN_FUNCTION
  */
@@ -211,6 +241,7 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 }
 /* }}} */
 
+
 /* Remove if there's nothing to do at request start */
 /* {{{ PHP_RINIT_FUNCTION
  */
@@ -219,6 +250,7 @@ PHP_RINIT_FUNCTION(imagick)
     return SUCCESS;
 }
 /* }}} */
+
 
 /* Remove if there's nothing to do at request end */
 /* {{{ PHP_RSHUTDOWN_FUNCTION
@@ -229,24 +261,32 @@ PHP_RSHUTDOWN_FUNCTION(imagick)
 }
 /* }}} */
 
+
 /* {{{ PHP_MINFO_FUNCTION
  */
 PHP_MINFO_FUNCTION(imagick)
 {
-    unsigned int version;
+    unsigned int v;
     smart_str format_list = {0};
-    MagickInfo *magick_info;
+    const MagickInfo *magick_info;
     ExceptionInfo exception;
-    register MagickInfo *p;
+    const register MagickInfo *p;
+    char version[9];
 
     php_info_print_table_start();
-    php_info_print_table_header(2, "imagick support", "enabled");
-    php_info_print_table_row(2, "ImageMagick version", GetMagickVersion(&version));
+    php_info_print_table_header(2, "Imagick support", "enabled");
+
+    php_info_print_table_row(2, "Module version", imagick_module_entry.version);
+
+    GetMagickVersion(&v);
+
+    sprintf(version, "%d.%d.%d", (v >> 8) & 0xf, (v >> 4) & 0xf, v & 0xf);
+
+    php_info_print_table_row(2, "ImageMagick version", version);
 
     GetExceptionInfo(&exception);
 
     magick_info = GetMagickInfo(NULL, &exception);
-
     if (magick_info != (MagickInfo *) NULL) {
         for (p = magick_info; p != (MagickInfo *) NULL; p = p->next) {
             smart_str_appendl(&format_list, p->name, strlen(p->name));
@@ -255,7 +295,7 @@ PHP_MINFO_FUNCTION(imagick)
             }
         }
         smart_str_0(&format_list);
-        php_info_print_table_row(2, "Supported image formats", format_list.c);
+        php_info_print_table_row(2, "Supported formats", format_list.c);
     }
 
     php_info_print_table_end();
@@ -266,14 +306,14 @@ PHP_MINFO_FUNCTION(imagick)
     */
 }
 /* }}} */
+
+
 /* {{{ proto void imagick_free(resource handle)
         frees an imagick handle
-*/        
-
+*/
 PHP_FUNCTION(imagick_free)
 {
     zval *arg;
-        php_imagick *handle;
     int argc = ZEND_NUM_ARGS();
     int id, type;
     if (zend_parse_parameters(argc TSRMLS_CC, "r", &arg) == FAILURE) return;
@@ -282,11 +322,12 @@ PHP_FUNCTION(imagick_free)
                 zend_list_delete(id);
 
 }
+/* }}} */
 
-/* {{{ proto bool imagick_new()
+
+/* {{{ proto handle imagick_new()
         creates a new imagick-handle
-*/        
-
+*/
 PHP_FUNCTION(imagick_new)
 {
     php_imagick *handle = _php_imagick_new();
@@ -298,10 +339,55 @@ PHP_FUNCTION(imagick_new)
     ZEND_REGISTER_RESOURCE(return_value, handle, le_imagick);
 
 }
-/* {{{ proto bool imagick_read(resource handle, string infile)
-        reads an image from a file
-*/        
+/* }}} */
 
+
+/* {{{ proto bool imagick_add_resource(resource image, resource frame)
+        adds an image from another ressource
+*/
+PHP_FUNCTION(imagick_add_resource)
+{
+    zval *arg;
+    zval *addarg;
+    int argc = ZEND_NUM_ARGS();
+    php_imagick *handle;
+    php_imagick *addhandle;
+    ExceptionInfo exception;
+    register Image *p;
+
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rr", &arg, &addarg) == FAILURE) return;
+
+    ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
+    ZEND_FETCH_RESOURCE(addhandle, php_imagick *, &addarg, -1,  "imagick object", le_imagick);
+
+
+        GetExceptionInfo(&exception);
+
+        if ( addhandle->image == (Image *)NULL )
+        {
+            imagick_warning();
+            RETURN_FALSE;
+        }
+
+        if (handle->image == (Image *) NULL)
+          handle->image=addhandle->image;
+        else
+          {
+            /*
+              Link image into image list.
+            */
+            for (p=handle->image; p->next != (Image *) NULL; p=p->next);
+            addhandle->image->previous=p;
+            p->next=addhandle->image;
+          }
+}
+/* }}} */
+
+
+/* {{{ proto bool imagick_read(resource handle, mixed infile)
+        reads an image from a file
+*/
 PHP_FUNCTION(imagick_read)
 {
     zval *arg;
@@ -313,19 +399,20 @@ PHP_FUNCTION(imagick_read)
     ExceptionInfo exception;
     Image *next_image;
     register Image *p;
+	char array_passed = 0;
 
-    /* array stuff */ 
+    /* array stuff */
 
 	HashTable *target_hash;
     zval **entry;				/* pointer to array entry */
 
-    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "rs", &arg, &infile, &infile_len) == SUCCESS) 
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "rs", &arg, &infile, &infile_len) == SUCCESS)
     {
         /* only one filename as a string */
         MAKE_STD_ZVAL(userdata);
         if (array_init(userdata) != SUCCESS)
         {
-         php_error(E_ERROR,"%s(): Problems with creating array",get_active_function_name(TSRMLS_C));            
+         php_error(E_ERROR,"%s(): Problems with creating array",get_active_function_name(TSRMLS_C));
             RETVAL_FALSE;
             return;
         }
@@ -333,35 +420,36 @@ PHP_FUNCTION(imagick_read)
         {
             php_error(E_ERROR,"%s(): Problems with adding string to array",get_active_function_name(TSRMLS_C));
             RETVAL_FALSE;
-            return;             
+            return;
         }
     }
-    else if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "ra", &arg, &userdata) == SUCCESS) 
+    else if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "ra", &arg, &userdata) == SUCCESS)
     {
-        /* one or more filename as an array */        
-    }        
-    else 
+		array_passed = 1;
+        /* one or more filename as an array */
+    }
+    else
     {
         WRONG_PARAM_COUNT;
             return;
     }
 
-   
+
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
-	/*array stuff, i'm not very sure about that, since the docs are very mmmh... about that 
+	/*array stuff, i'm not very sure about that, since the docs are very mmmh... about that
         it's mostly copy&paste work from other sources
-        
+
     */
-    
+
 
     /* Set up known arguments */
-    target_hash = HASH_OF(userdata);    
+    target_hash = HASH_OF(userdata);
     zend_hash_internal_pointer_reset(target_hash);
 
 	/* Iterate through hash */
-	while(zend_hash_get_current_data(target_hash, (void **)&entry) == SUCCESS) 
-    {    
+	while(zend_hash_get_current_data(target_hash, (void **)&entry) == SUCCESS)
+    {
         convert_to_string_ex(entry);
 
         if (Z_STRLEN_PP(entry) > MaxTextExtent-1) {
@@ -373,13 +461,13 @@ PHP_FUNCTION(imagick_read)
 
         GetExceptionInfo(&exception);
         next_image=ReadImage(handle->info,&exception);
-        
+
         if ( next_image == (Image *)NULL )
         {
             imagick_warning();
             RETURN_FALSE;
         }
-        
+
         if (handle->image == (Image *) NULL)
           handle->image=next_image;
         else
@@ -392,16 +480,20 @@ PHP_FUNCTION(imagick_read)
             p->next=next_image;
           }
 
-        
-       zend_hash_move_forward(target_hash); 
+
+       zend_hash_move_forward(target_hash);
     }
-	zval_dtor(userdata);
-    FREE_ZVAL(userdata);
+	if (!array_passed) {
+		zval_dtor(userdata);
+		FREE_ZVAL(userdata);
+	}
 }
+/* }}} */
+
 
 /* {{{ proto bool imagick_write(resource handle, string outfile)
         writes an image to the file with some imageformat
-*/        
+*/
 
 PHP_FUNCTION(imagick_write)
 {
@@ -421,28 +513,20 @@ PHP_FUNCTION(imagick_write)
 
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rs", &arg, &outfile, &outfile_len) == FAILURE) return;
-/*    if (zend_parse_parameters(argc TSRMLS_CC, "rs|s", &arg, &outfile, &outfile_len, &outformat, &outformat_len) == FAILURE) return;*/
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
-/*    strncpy( handle->image->filename, outfile, MaxTextExtent-1 );
-
-    if (outformat != NULL)
-    {
-        strncpy( handle->image->magick, outformat, MaxTextExtent-1 );     
-    }
-*/
 	if (outfile_len > MaxTextExtent-1) {
         php_error(E_WARNING, "%s(): Too long file name", get_active_function_name(TSRMLS_C));
 		RETURN_FALSE;
 	}
-  (void) strncpy(handle->info->filename,outfile,MaxTextExtent-1);        
+  (void) strncpy(handle->info->filename,outfile,MaxTextExtent-1);
   for (p=(handle->image); p != (Image *) NULL; p=p->next)
   {
     (void) strncpy(p->filename,outfile,MaxTextExtent-1);
     p->scene=scene++;
-  }        
-  (void) SetImageInfo(handle->info,1,&(handle->image)->exception);       
+  }
+  (void) SetImageInfo(handle->info,1,&(handle->image)->exception);
   for (p=(handle->image); p != (Image *) NULL; p=p->next)
   {
     er = WriteImage(handle->info,p);
@@ -460,11 +544,13 @@ PHP_FUNCTION(imagick_write)
     RETVAL_TRUE;
 
 }
+/* }}} */
+
 
 /* {{{ proto bool imagick_sample(resource handle, int columns, int rows)
-        samples an image 
-*/        
-
+        samples an image
+        WARNING: This function will be removed soon, since it's a memory leak canditate
+*/
 PHP_FUNCTION(imagick_sample)
 {
     zval *arg;
@@ -475,12 +561,12 @@ PHP_FUNCTION(imagick_sample)
     exception;
     php_imagick *handle;
 
+    IMAGICK_DEPRECATED();
+
     if (zend_parse_parameters(argc TSRMLS_CC, "rll", &arg, &columns, &rows) == FAILURE) return;
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
-
     GetExceptionInfo(&exception);
-
     handle->image = SampleImage(handle->image,columns,rows,&exception);
     if ( handle->image == (Image *)NULL )
     {
@@ -489,12 +575,36 @@ PHP_FUNCTION(imagick_sample)
     }
 
 }
+/* }}} */
+
+/* {{{ proto handle imagick_copy_sample(resource handle, int columns, int rows)
+        samples an image and returns a new handle
+*/
+PHP_FUNCTION(imagick_copy_sample)
+{
+    zval *arg;
+    int columns;
+    int rows;
+    int argc = ZEND_NUM_ARGS();
+    ExceptionInfo
+    exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rll", &arg, &columns, &rows) == FAILURE) return;
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE()    
+            
+    copy_handle->image = SampleImage(handle->image,columns,rows,&exception);
+    
+    IMAGICK_RET_COPY_HANDLE();   
+}
+/* }}} */
 
 /* {{{ proto bool imagick_resize(resource handle, int columns, int rows, int filter, int blur)
         resizes an image with the method filter and the blurness blur
-*/        
-
-
+        WARNING: This function will be removed soon, since it's a memory leak canditate
+*/
 PHP_FUNCTION(imagick_resize)
 {
     zval *arg;
@@ -502,13 +612,16 @@ PHP_FUNCTION(imagick_resize)
     int rows;
     int argc = ZEND_NUM_ARGS();
     int filter =13; /* IMAGICK_FILTER_LANCZOS */
-    double blur = 0;    
+    double blur = 0;
     ExceptionInfo
     exception;
     php_imagick *handle;
 
+    IMAGICK_DEPRECATED();
+
     if (zend_parse_parameters(argc TSRMLS_CC, "rll|ld", &arg, &columns, &rows, &filter, &blur) == FAILURE) return;
 
+   
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     GetExceptionInfo(&exception);
@@ -521,21 +634,55 @@ PHP_FUNCTION(imagick_resize)
     }
     RETVAL_TRUE;
 }
+/* }}} */
+
+/* {{{ proto handle imagick_copy_resize(resource handle, int columns, int rows, int filter, int blur)
+        resizes an image with the method filter and the blurness blur and returns a new handle
+*/
+PHP_FUNCTION(imagick_copy_resize)
+{
+    zval *arg;
+    int columns;
+    int rows;
+    int argc = ZEND_NUM_ARGS();
+    int filter =13; /* IMAGICK_FILTER_LANCZOS */
+    double blur = 0;
+    ExceptionInfo
+    exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rll|ld", &arg, &columns, &rows, &filter, &blur) == FAILURE) return;
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+
+    copy_handle->image = ResizeImage(handle->image,columns,rows,filter,blur,&exception);
+    
+    IMAGICK_RET_COPY_HANDLE();       
+  
+}
+/* }}} */
+
+
+
+
 /* {{{ proto bool imagick_crop(resource handle, int width, int height, int x, int y)
+        WARNING: This function will be removed soon, since it's a memory leak canditate
         crops an image
-*/        
+*/
 PHP_FUNCTION(imagick_crop)
 {
     zval *arg;
     int width;
     int height;
-    int x;    
-    int y;        
+    int x;
+    int y;
     int argc = ZEND_NUM_ARGS();
     RectangleInfo *rect;
     ExceptionInfo exception;
     php_imagick *handle;
-    
+
+    IMAGICK_DEPRECATED();
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rllll", &arg, &width, &height, &x, &y) == FAILURE) return;
 
@@ -547,7 +694,7 @@ PHP_FUNCTION(imagick_crop)
     rect->height = height;
     rect->x = x;
     rect->y = y;
-    
+
     handle->image = CropImage(handle->image,rect,&exception);
     efree(rect);
     if ( handle->image == (Image *)NULL )
@@ -557,25 +704,64 @@ PHP_FUNCTION(imagick_crop)
     }
      RETVAL_TRUE;
 }
+/* }}} */
+
+/* {{{ proto bool imagick_copy_crop(resource handle, int width, int height, int x, int y)
+        crops an image and returns a new handle
+*/
+PHP_FUNCTION(imagick_copy_crop)
+{
+    zval *arg;
+    int width;
+    int height;
+    int x;
+    int y;
+    int argc = ZEND_NUM_ARGS();
+    RectangleInfo *rect;
+    ExceptionInfo exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rllll", &arg, &width, &height, &x, &y) == FAILURE) return;
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+
+    rect = (RectangleInfo *)emalloc(sizeof(RectangleInfo));
+    rect->width = width;
+    rect->height = height;
+    rect->x = x;
+    rect->y = y;
+
+    copy_handle->image = CropImage(handle->image,rect,&exception);
+    efree(rect);
+
+    IMAGICK_RET_COPY_HANDLE();       
+
+}
+/* }}} */
+
 
 /* {{{ proto bool imagick_rotate(resource handle, double degrees)
-        crops an image
-*/        
+        rotates an image
+        WARNING: This function will be removed soon, since it's a memory leak canditate
+        
+*/
 PHP_FUNCTION(imagick_rotate)
 {
     zval *arg;
-    double degrees;    
+    double degrees;
     int argc = ZEND_NUM_ARGS();
     ExceptionInfo exception;
     php_imagick *handle;
-    
+
+    IMAGICK_DEPRECATED();
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &degrees) == FAILURE) return;
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     GetExceptionInfo(&exception);
-    
+
     handle->image = RotateImage(handle->image,degrees,&exception);
 
     if ( handle->image == (Image *)NULL )
@@ -585,26 +771,55 @@ PHP_FUNCTION(imagick_rotate)
     }
     RETVAL_TRUE;
 }
+/* }}} */
 
-/* {{{ proto bool imagick_shear(resource handle, double x_shear, double y_shear)
-        crops an image
-*/        
-PHP_FUNCTION(imagick_shear)
+/* {{{ proto bool imagick_copy_rotate(resource handle, double degrees)
+        rotates an image and returns a new handle
+*/
+PHP_FUNCTION(imagick_copy_rotate)
 {
     zval *arg;
-    double x_shear;    
-    double y_shear;        
+    double degrees;
     int argc = ZEND_NUM_ARGS();
     ExceptionInfo exception;
     php_imagick *handle;
+    php_imagick *copy_handle;
+
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &degrees) == FAILURE) return;
+
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+
+    copy_handle->image = RotateImage(handle->image,degrees,&exception);
     
+    IMAGICK_RET_COPY_HANDLE();       
+}
+/* }}} */
+
+/* {{{ proto bool imagick_shear(resource handle, double x_shear, double y_shear)
+        shears an image
+        WARNING: This function will be removed soon, since it's a memory leak canditate
+
+*/
+PHP_FUNCTION(imagick_shear)
+{
+    zval *arg;
+    double x_shear;
+    double y_shear;
+    int argc = ZEND_NUM_ARGS();
+    ExceptionInfo exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    IMAGICK_DEPRECATED();
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rdd", &arg, &x_shear, &y_shear) == FAILURE) return;
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     GetExceptionInfo(&exception);
-    
+
     handle->image = ShearImage(handle->image,x_shear,y_shear,&exception);
 
     if ( handle->image == (Image *)NULL )
@@ -614,26 +829,50 @@ PHP_FUNCTION(imagick_shear)
     }
     RETVAL_TRUE;
 }
+/* }}} */
+
+/* {{{ proto handle imagick_copy_shear(resource handle, double x_shear, double y_shear)
+        shears an image and returns a new handle
+*/
+PHP_FUNCTION(imagick_copy_shear)
+{
+    zval *arg;
+    double x_shear;
+    double y_shear;
+    int argc = ZEND_NUM_ARGS();
+    ExceptionInfo exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rdd", &arg, &x_shear, &y_shear) == FAILURE) return;
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+
+    copy_handle->image = ShearImage(handle->image,x_shear,y_shear,&exception);
+
+    IMAGICK_RET_COPY_HANDLE();       
+}
+/* }}} */
 
 /* {{{ proto bool imagick_oilpaint(resource handle, double radius)
-        crops an image
-*/        
+        oilpain effect on image
+*/
 PHP_FUNCTION(imagick_oilpaint)
 {
     zval *arg;
-    double radius;    
+    double radius;
 
     int argc = ZEND_NUM_ARGS();
     ExceptionInfo exception;
     php_imagick *handle;
-    
+
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &radius) == FAILURE) return;
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     GetExceptionInfo(&exception);
-    
+
     handle->image = OilPaintImage(handle->image,radius,&exception);
 
     if ( handle->image == (Image *)NULL )
@@ -643,26 +882,28 @@ PHP_FUNCTION(imagick_oilpaint)
     }
     RETVAL_TRUE;
 }
+/* }}} */
+
 
 /* {{{ proto bool imagick_morph(resource handle, int number_frames)
-        crops an image
-*/        
+        morph effect on image
+*/
 PHP_FUNCTION(imagick_morph)
 {
     zval *arg;
-    double radius;    
+    double radius;
 
     int argc = ZEND_NUM_ARGS();
     ExceptionInfo exception;
     php_imagick *handle;
-    
+
 
     if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &radius) == FAILURE) return;
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     GetExceptionInfo(&exception);
-    
+
     handle->image = MorphImages(handle->image,radius,&exception);
 
     if ( handle->image == (Image *)NULL )
@@ -672,25 +913,50 @@ PHP_FUNCTION(imagick_morph)
     }
     RETVAL_TRUE;
 }
+/* }}} */
 
-
-/* {{{ proto bool imagick_morph(resource handle, int number_frames)
-        crops an image
-*/        
-PHP_FUNCTION(imagick_annotate)
+/* {{{ proto handle imagick_copy_morph(resource handle, int number_frames)
+        morph effect on image an returns a new handle
+*/
+PHP_FUNCTION(imagick_copy_morph)
 {
     zval *arg;
-    zval *userdata;    
+    double radius;
 
     int argc = ZEND_NUM_ARGS();
     ExceptionInfo exception;
+    php_imagick *handle;
+    php_imagick *copy_handle;
+
+
+    if (zend_parse_parameters(argc TSRMLS_CC, "rd", &arg, &radius) == FAILURE) return;
+
+    IMAGICK_FETCH_RES_AND_COPY_HANDLE();    
+
+    copy_handle->image = MorphImages(handle->image,radius,&exception);
+
+    IMAGICK_RET_COPY_HANDLE();   
+
+}
+/* }}} */
+
+
+
+/* {{{ proto bool imagick_annotate(resource handle, int number_frames)
+        draws primitives on image
+*/
+PHP_FUNCTION(imagick_annotate)
+{
+    zval *arg;
+    zval *userdata;
+
+    int argc = ZEND_NUM_ARGS();
+/*    ExceptionInfo exception;*/
     DrawInfo *drawinfo;
-    char *text= NULL;
     php_imagick *handle;
     zval **entry;				/* pointer to array entry */
-    char *key;        
+    char *key;
 	HashTable *target_hash;
-char message[MaxTextExtent];
     AffineMatrix
       affine,
       current;
@@ -700,14 +966,14 @@ char message[MaxTextExtent];
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
 
     drawinfo = CloneDrawInfo(handle->info,(DrawInfo *) NULL);
-    (void) CloneString(&drawinfo->primitive,"");    
+    (void) CloneString(&drawinfo->primitive,"");
     /* Set up known arguments */
-    target_hash = HASH_OF(userdata);    
+    target_hash = HASH_OF(userdata);
     zend_hash_internal_pointer_reset(target_hash);
 
 	/* Iterate through hash */
-	while(zend_hash_get_current_data(target_hash, (void **)&entry) == SUCCESS) 
-    {    
+	while(zend_hash_get_current_data(target_hash, (void **)&entry) == SUCCESS)
+    {
         zend_hash_get_current_key(target_hash, &key,NULL,0);
 
        switch (*key)
@@ -716,32 +982,32 @@ char message[MaxTextExtent];
         case 'A':
             if (LocaleCompare(key,"antialias") == 0)
             {
-       
+
               drawinfo->stroke_antialias=Z_LVAL_PP(entry) != 0;
               drawinfo->text_antialias=Z_LVAL_PP(entry) != 0;
 	      break;
-	    }
+		    }
 	 break;
         case 'f':
         case 'F':
             if (LocaleCompare(key,"font") == 0)
             {
-                CloneString(&drawinfo->font, Z_STRVAL_PP(entry));    
+                CloneString(&drawinfo->font, Z_STRVAL_PP(entry));
                 break;
             }
             if (LocaleCompare(key,"fill") == 0)
             {
-              (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->fill);	    	    
+              (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->fill);	    	
 	      break;
             }
-	    
+	
         break;
     	case 'g':
         case 'G':
 		    /* no effect yet ..... */
             if (LocaleCompare(key,"geometry") == 0)
             {
-                CloneString(&drawinfo->geometry, Z_STRVAL_PP(entry));    
+                CloneString(&drawinfo->geometry, Z_STRVAL_PP(entry));
                 break;
             }
         break;
@@ -750,31 +1016,31 @@ char message[MaxTextExtent];
             if (LocaleCompare(key,"rotate") == 0)
             {
 	                current=drawinfo->affine;
-		IdentityAffine(&affine);
-	        if (Z_LVAL_PP(entry) == 0.0)
+				IdentityAffine(&affine);
+	    	    if (Z_LVAL_PP(entry) == 0.0)
                   break;
                 affine.sx=cos(DegreesToRadians(fmod(Z_LVAL_PP(entry),360.0)));
                 affine.rx=sin(DegreesToRadians(fmod(Z_LVAL_PP(entry),360.0)));
                 affine.ry=(-sin(DegreesToRadians(fmod(Z_LVAL_PP(entry),360.0))));
                 affine.sy=cos(DegreesToRadians(fmod(Z_LVAL_PP(entry),360.0)));
-		drawinfo->affine.sx=current.sx*affine.sx+current.ry*affine.rx;
+				drawinfo->affine.sx=current.sx*affine.sx+current.ry*affine.rx;
             	drawinfo->affine.rx=current.rx*affine.sx+current.sy*affine.rx;
             	drawinfo->affine.ry=current.sx*affine.ry+current.ry*affine.sy;
             	drawinfo->affine.sy=current.rx*affine.ry+current.sy*affine.sy;
             	drawinfo->affine.tx=
-              current.sx*affine.tx+current.ry*affine.ty+current.tx;
+                current.sx*affine.tx+current.ry*affine.ty+current.tx;
 	            drawinfo->affine.ty=
-              current.rx*affine.tx+current.sy*affine.ty+current.ty;
+                current.rx*affine.tx+current.sy*affine.ty+current.ty;
 
-		break;
-	     }
+				break;
+	  	   }
 	    break;
 	
         case 'p':
         case 'P':
             if (LocaleCompare(key,"primitive") == 0 )
             {
-                CloneString(&drawinfo->primitive, Z_STRVAL_PP(entry));    
+                CloneString(&drawinfo->primitive, Z_STRVAL_PP(entry));
                 break;
             }
             if (LocaleCompare(key,"pointsize") == 0)
@@ -786,7 +1052,7 @@ char message[MaxTextExtent];
         case 'S':
             if (LocaleCompare(key,"stroke") == 0)
             {
-		 (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->stroke);	    
+		 (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->stroke);	
 		 break;
 	    }
 	  break;
@@ -795,24 +1061,24 @@ char message[MaxTextExtent];
 	    /* no effect yet ..... */
             if (LocaleCompare(key,"text") == 0)
             {
-                CloneString(&drawinfo->text, Z_STRVAL_PP(entry));    
+                CloneString(&drawinfo->text, Z_STRVAL_PP(entry));
                 break;
             }
         break;
-	    
+	
         break;
        }
-       zend_hash_move_forward(target_hash);        
-   }
-(void) DrawImage(handle->image,drawinfo);
+       zend_hash_move_forward(target_hash);
+	}
 
-    
-    
+
+	(void) DrawImage(handle->image,drawinfo);
+
+
     DestroyDrawInfo(drawinfo);
 
-
 }
-
+/* }}} */
 
 
 /* {{{ proto void imagick_list_magickinfo(string filename)
@@ -838,11 +1104,12 @@ PHP_FUNCTION(imagick_list_magickinfo)
 
     fclose(f);
 }
+/* }}} */
+
 
 /* {{{ proto void imagick_dump(resource handle, string imageformat)
  dumps the image to the browser
 */
-
 PHP_FUNCTION(imagick_dump)
 {
     zval *arg;
@@ -854,6 +1121,10 @@ PHP_FUNCTION(imagick_dump)
     size_t length;
     void    *blob;
     php_imagick *handle;
+    register Image *p;
+    int scene;
+    char filename[MaxTextExtent];
+
     if (zend_parse_parameters(argc TSRMLS_CC, "r|s", &arg,&outformat,&outformat_len) == FAILURE) return;
 
     GetExceptionInfo(&exception);
@@ -867,24 +1138,62 @@ PHP_FUNCTION(imagick_dump)
             php_error(E_WARNING, "%s(): Too long format name", get_active_function_name(TSRMLS_C));
             RETURN_FALSE;
         }
-        strncpy( handle->image->magick, outformat, MaxTextExtent-1 );     
+        for (p=(handle->image); p != (Image *) NULL; p=p->next)
+       {
+            strncpy( p->magick, outformat, MaxTextExtent-1 );
+       }
     }
-    
-    length=0;
-    blob = ImageToBlob ( handle->info,handle->image, &length, &exception );
+
+    /* this multi image code is borrowed from perlMagick, but somehow it doesn't work
+        with only one image it works... anyone an idea why?
+    */
+
+    (void) strncpy(filename,handle->info->filename,MaxTextExtent-1);
+    scene = 0;
+    for (p=(handle->image); p != (Image *) NULL; p=p->next)
+    {
+      (void) strncpy(p->filename,filename,MaxTextExtent-1);
+        p->scene=scene++;
+    }
+
     php_header();
 #if APACHE && defined(CHARSET_EBCDIC)
     SLS_FETCH();
     /* This is a binary file already: avoid EBCDIC->ASCII conversion */
     ap_bsetflag(php3_rqst->connection->client, B_EBCDIC2ASCII, 0);
 #endif
-    php_write(blob, length TSRMLS_CC);
+
+    for (p=(handle->image); p != (Image *) NULL; p=p->next)
+    {
+      length=0;
+      if ( p == (Image *)NULL )
+      {
+          imagick_warning();
+          RETURN_FALSE;
+      }
+      blob = ImageToBlob ( handle->info,p, &length, &exception );
+      if ( blob == (void *)NULL )
+      {
+          imagick_warning();
+          RETURN_FALSE;
+      }
+      if (blob != (char *) NULL)
+      {
+          php_write(blob, length TSRMLS_CC);
+          LiberateMemory((void **) &blob);
+      }
+
+      if (handle->info->adjoin)
+        break;
+
+     }
 }
+/* }}} */
+
 
 /* {{{ proto mixed imagick_get_attribute(resource handle, string attribute)
         gets an attribut
-*/        
-
+*/
 PHP_FUNCTION(imagick_get_attribute)
 {
     zval *arg;
@@ -894,11 +1203,12 @@ PHP_FUNCTION(imagick_get_attribute)
     php_imagick *handle;
 
 
-
     if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "rs", &arg, &attribute, &attribute_len) == SUCCESS)
     {
     }
+
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
+
     switch (*attribute)
     {
 
@@ -952,12 +1262,12 @@ PHP_FUNCTION(imagick_get_attribute)
     }
     return;
 }
+/* }}} */
+
 
 /* {{{ proto void imagick_set_attribute(resource handle, string attribute, mixed value)
  sets an attribute
-*/        
-
-
+*/
 PHP_FUNCTION(imagick_set_attribute)
 {
     zval *arg;
@@ -967,18 +1277,16 @@ PHP_FUNCTION(imagick_set_attribute)
 
     char *attribute = NULL;
     int attribute_len = 0;
-    int intvalue = 0;
-    char *strvalue = NULL;
     php_imagick *handle;
     Image *image;
     int argc = ZEND_NUM_ARGS();
 
 	HashTable *target_hash;
     zval **entry;				/* pointer to array entry */
-    char *key;        
-	HashPosition pos;
+    char *key;
+	char array_passed = 0;
 
-    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "rsz", &arg, &attribute,&attribute_len, &value) == SUCCESS) 
+    if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "rsz", &arg, &attribute,&attribute_len, &value) == SUCCESS)
     {
 
         MAKE_STD_ZVAL(userdata);
@@ -988,20 +1296,21 @@ PHP_FUNCTION(imagick_set_attribute)
             RETVAL_FALSE;
             return;
         }
-        convert_to_string(value);            
+        convert_to_string(value);
         if (add_assoc_string(userdata,attribute,Z_STRVAL_P(value),1) != SUCCESS)
         {
             php_error(E_ERROR,"%s(): Problems with adding string to array",get_active_function_name(TSRMLS_C));
             RETVAL_FALSE;
-            return;             
+            return;
         }
     }
-        
-    else if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "ra", &arg, &userdata) == SUCCESS) 
+
+    else if (zend_parse_parameters_ex(ZEND_PARSE_PARAMS_QUIET, argc TSRMLS_CC, "ra", &arg, &userdata) == SUCCESS)
     {
-        /* one or more attribute as an array */        
-    }        
-    else 
+        /* one or more attribute as an array */
+		array_passed = 1;
+    }
+    else
     {
         WRONG_PARAM_COUNT;
         RETVAL_FALSE;
@@ -1010,14 +1319,14 @@ PHP_FUNCTION(imagick_set_attribute)
 
     ZEND_FETCH_RESOURCE(handle, php_imagick *, &arg, -1,  "imagick object", le_imagick);
     image = handle->image;
-    
+
     /* Set up known arguments */
-    target_hash = HASH_OF(userdata);    
+    target_hash = HASH_OF(userdata);
     zend_hash_internal_pointer_reset(target_hash);
 
 	/* Iterate through hash */
-	while(zend_hash_get_current_data(target_hash, (void **)&entry) == SUCCESS) 
-    {    
+	while(zend_hash_get_current_data(target_hash, (void **)&entry) == SUCCESS)
+    {
         zend_hash_get_current_key(target_hash, &key,NULL,0);
         attribute=key;
        switch (*attribute)
@@ -1026,8 +1335,8 @@ PHP_FUNCTION(imagick_set_attribute)
         case 'A':
             if (LocaleCompare(attribute,"adjoin") == 0)
             {
-                convert_to_long_ex(entry);                
-                handle->info->adjoin = Z_LVAL_PP(entry);            
+                convert_to_long_ex(entry);
+                handle->info->adjoin = Z_LVAL_PP(entry);
                 break;
             }
 
@@ -1045,9 +1354,9 @@ PHP_FUNCTION(imagick_set_attribute)
         case 'F':
             if (LocaleCompare(attribute,"format") == 0)
             {
-                convert_to_string_ex(entry);                
+                convert_to_string_ex(entry);
                 if (Z_STRLEN_PP(entry) > MaxTextExtent-1) {
-                    php_error(E_WARNING, "%s(): Too long format name", get_active_function_name(TSRMLS_C));
+                    php_error(E_WARNING, "%s(): Too long 'format' attribute", get_active_function_name(TSRMLS_C));
                 }
                 else {
                     for ( ; image; image=image->next)
@@ -1060,9 +1369,9 @@ PHP_FUNCTION(imagick_set_attribute)
         case 'M':
             if (LocaleCompare(attribute,"magick") == 0)
             {
-                convert_to_string_ex(entry);                
+                convert_to_string_ex(entry);
                 if (Z_STRLEN_PP(entry) > MaxTextExtent-1) {
-                    php_error(E_WARNING, "%s(): Too long magick", get_active_function_name(TSRMLS_C));
+                    php_error(E_WARNING, "%s(): Too long 'magick' attribute", get_active_function_name(TSRMLS_C));
                 }
                 else {
                     for ( ; image; image=image->next)
@@ -1088,19 +1397,20 @@ PHP_FUNCTION(imagick_set_attribute)
             }
         }
 
-       zend_hash_move_forward(target_hash); 
-   }
-	zval_dtor(userdata);
-    FREE_ZVAL(userdata);
+	zend_hash_move_forward(target_hash);
+	}
 
+	if (!array_passed) {
+		zval_dtor(userdata);
+		FREE_ZVAL(userdata);
+	}
 }
+/* }}} */
 
 
 /* {{{ proto string imagick_convert(string infile, string outfile)
- converts one fileformat to another in one go
-*/        
-
-
+ converts image to another format
+*/
 PHP_FUNCTION(imagick_convert)
 {
     char * infile = NULL;
@@ -1109,7 +1419,7 @@ PHP_FUNCTION(imagick_convert)
     int outfile_len = 0;
     char * outformat = NULL;
     int outformat_len = 0;
-    
+
     php_imagick *handle;
     int er = 0;
     int argc = ZEND_NUM_ARGS();
@@ -1198,6 +1508,7 @@ PHP_FUNCTION(imagick_convert)
     _php_imagick_free(handle);
 
 }
+/* }}} */
 
 
 /*

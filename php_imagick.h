@@ -17,6 +17,8 @@
    +----------------------------------------------------------------------+
  */
 
+/* $Id$ */
+
 
 #ifndef PHP_IMAGICK_H
 #define PHP_IMAGICK_H
@@ -36,6 +38,11 @@ extern zend_module_entry imagick_module_entry;
 
 #include <magick/api.h>
 
+#if PHP_API_VERSION >= 20010901
+#define NEWER_API
+#endif
+
+#define IMAGICK_VERSION "0.1"
 
 PHP_MINIT_FUNCTION(imagick);
 PHP_MSHUTDOWN_FUNCTION(imagick);
@@ -46,8 +53,16 @@ PHP_MINFO_FUNCTION(imagick);
 PHP_FUNCTION(confirm_imagick_compiled);	/* For testing, remove later. */
 
 PHP_FUNCTION(imagick_read);
-PHP_FUNCTION(imagick_sample);
+PHP_FUNCTION(imagick_add_resource);
+
+PHP_FUNCTION(imagick_copy_sample);
+PHP_FUNCTION(imagick_copy_resize);
+PHP_FUNCTION(imagick_copy_crop);
+PHP_FUNCTION(imagick_copy_shear);
+PHP_FUNCTION(imagick_copy_rotate);
+PHP_FUNCTION(imagick_copy_morph);
 PHP_FUNCTION(imagick_resize);
+PHP_FUNCTION(imagick_sample);
 PHP_FUNCTION(imagick_crop);
 PHP_FUNCTION(imagick_rotate);
 PHP_FUNCTION(imagick_shear);
