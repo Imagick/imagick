@@ -221,6 +221,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_profile,		NULL )
 	PHP_FE( imagick_rgbtransform,		NULL )
 	PHP_FE( imagick_transformrgb,		NULL )
+	PHP_FE( imagick_mosaic,			NULL )
 
 	/*****
 
@@ -4805,6 +4806,54 @@ PHP_FUNCTION( imagick_transformrgb )
 	RETURN_TRUE ;
 }
 
+PHP_FUNCTION( imagick_mosaic )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+	imagick_t* mosaic_handle ;	/* the new handle for the mosaic
+					   image */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "r",
+			&handle_id ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	mosaic_handle = _php_imagick_alloc_handle() ;
+	if ( !mosaic_handle )
+	{
+		RETURN_FALSE ;
+	}
+	mosaic_handle->id = zend_list_insert( mosaic_handle,
+					      le_imagick_handle ) ;
+
+	mosaic_handle->image = MosaicImages( handle->image,
+					     &handle->exception ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	if ( _php_imagick_is_error( mosaic_handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_RESOURCE( mosaic_handle->id ) ;
+}
+
 /*****************************************************************************/
 
 /******************************************************************************
@@ -5119,7 +5168,17 @@ static void _php_imagick_clear_errors( imagick_t* handle )
 
 static int _php_imagick_is_error( const imagick_t* handle )
 {
-	if ( handle->exception.severity        != UndefinedException ||
+	if ( handle == ( imagick_t* )NULL )
+	{
+		return 1 ;
+	}
+
+	if ( handle->exception.severity != UndefinedException )
+	{
+		return 1 ;
+	}
+
+	if ( handle->image &&
 	     handle->image->exception.severity != UndefinedException )
 	{
 		return 1 ;
