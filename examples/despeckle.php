@@ -9,7 +9,7 @@
 		exit ;
         }
 
-	if ( !imagick_despeckle( $handle, 10, 10 ) )
+	if ( !imagick_despeckle( $handle) )
 	{
                 $reason      = imagick_failedreason( $handle ) ;
                 $description = imagick_faileddescription( $handle ) ;

@@ -10,7 +10,7 @@
 	}
 
 	imagick_begindraw( $handle ) ;
-	if ( !imagick_setfillcolor( $handle, "FFFF00" ) )
+	if ( !imagick_setfillcolor( $handle, "#FFFF00" ) )
 	{
                 $reason      = imagick_failedreason( $handle ) ;
                 $description = imagick_faileddescription( $handle ) ;
