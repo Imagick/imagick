@@ -487,6 +487,7 @@ PHP_FUNCTION(imagick_read)
 		zval_dtor(userdata);
 		FREE_ZVAL(userdata);
 	}
+	RETURN_TRUE;
 }
 /* }}} */
 
@@ -1076,6 +1077,7 @@ PHP_FUNCTION(imagick_annotate)
 
 
     DestroyDrawInfo(drawinfo);
+	RETURN_TRUE;
 
 }
 /* }}} */
