@@ -209,6 +209,7 @@ zend_function_entry imagick_functions[] =
 	PHP_FE( imagick_flip,			NULL )
 	PHP_FE( imagick_flop,			NULL )
 	PHP_FE( imagick_roll,			NULL )
+	PHP_FE( imagick_profile,		NULL )
 
 	/*****
 
@@ -467,6 +468,17 @@ PHP_MINIT_FUNCTION( imagick )
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_OVERLAY",
 				OverlayCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+
+	/*****
+
+	   Register constants for manipulating an image's profile.
+
+	*****/
+
+	REGISTER_LONG_CONSTANT( "IMAGICK_PROFILE_OWN", 0,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_PROFILE_COPY", 1,
 				CONST_CS | CONST_PERSISTENT ) ;
 
 	return SUCCESS ;
@@ -4139,6 +4151,51 @@ PHP_FUNCTION( imagick_roll )
 
 	DestroyImage( handle->image ) ;
 	handle->image = new_image ;
+
+	RETURN_TRUE ;
+}
+
+PHP_FUNCTION( imagick_profile )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	char*      name ;		/* the name of the profile to affect;
+					   specifying * will affect all -
+					   ICM, IPTC, generic profile */
+	int        name_len ;		/* string length of name */
+	int	   clone ;		/* if true, copy the profile rather
+					   than taking ownership of it */
+	char*	   profile ;		/* the profile; specifying NULL will
+					   remove the profile */
+	int        profile_len ;	/* string length of profile */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+
+	profile     = NULL ;
+	profile_len = 0 ;
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rsl|s",
+			&handle_id, &name, &name_len, &clone, &profile,
+		 	&profile_len ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle ) ;
+
+	ProfileImage( handle->image, name, profile, profile_len, clone ) ;
+	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
 
 	RETURN_TRUE ;
 }

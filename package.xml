@@ -21,6 +21,20 @@ generated package.xml files -->
     </maintainer>
     <license>PHP License</license>  
     <release>
+        <version>0.9.2</version>
+        <date>2002-12-07</date>
+        <notes>
+	- functions added:
+		imagick_profile()
+	- created IMAGICK_PROFILE_* to support imagick_profile().
+	- this release is significant because of the issue with Microsoft IE
+	  where the image's profile causes the browser to not properly render
+	  images (you only get red X's).  See this posting:
+		http://studio.imagemagick.org/pipermail/magick-users/2002-September/005072.html
+	</notes>
+    <state>beta</state>
+    </release>
+    <release>
         <version>0.9.1</version>
         <date>2002-12-07</date>
         <notes>
