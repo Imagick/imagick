@@ -15,7 +15,7 @@ generated package.xml files -->
     </maintainer>
     <maintainer>
         <user>mcmontero</user>
-        <role>developer</role>
+        <role>lead</role>
         <name>Michael C. Montero</name>
         <email>mmontero@mail.communityconnect.com</email>
     </maintainer>
@@ -40,119 +40,6 @@ generated package.xml files -->
 		imagick_composite()
 	- Added IMAGICK_COMPOSITE_OP_* for use with imagick_composite().
 	</notes>
-    </release>
-    <release>
-        <version>0.9.0.1</version>
-        <date>2002-12-03</date>
-        <notes>
-        IMPORTANT!!!
-
-        This release breaks Backwards Compatibility with the 0.1.x series of ext/imagick. read the examples for more information (in $doc_dir/imagick/examples).
-        
-        Big Credits go to Michael C. Montero, who wrote the whole extension from scratch. Without him, we would still be at 0.1.x. He will be the future lead for this package (as soon as he has an account on pear).
-        
-        0.2-0.5 were never released within PEAR.
-        
-        version 0.9.0.1:
-            - more appropriate changelog/notes, no changes in code.
-        
-        version 0.9:        
-            - functions added:
-                 imagick_next()
-                 imagick_prev()
-                 imagick_first()
-                 imagick_goto()
-                 imagick_getlistsize()
-                 imagick_getlistindex()
-                 imagick_getimagefromlist()
-                 imagick_blob2image()
-                 imagick_reducenoise()
-                 imagick_shade()
-                 imagick_sharpen()
-                 imagick_spread()
-                 imagick_threshold()
-                 imagick_unsharpmask()
-             - cut over deprecation reporting to a more standized and easier to use method
-            - cut over all php_error calls to standard method
-            - added Christian's code to info function for displaying a list of supported image formats
-            - rewrote all code to use proper parameter parsing function
-            - fixed minor issue with a number of example files; was nothing critical
-          
-            version: 0.5a
-                - functions added:
-                    imagick_getcanvas()
-                    imagick_blur()
-                    imagick_despeckle()
-                    imagick_edge()
-                    imagick_emboss()
-                    imagick_enhance()
-                    imagick_gaussianblur()
-                    imagick_medianfilter()
-                    imagick_motionblur()
-                - one major change - renamed everything to imagick*; I've joined my efforts with Christian Stocker who had a previously written but smaller extension
-                - magick_getcanvas() allows you to create a blank image to draw on
-                - changed comment header in imagick.h to match the one in imagick.c
-                - added Christian Stocker to credits
-                - moved over to Christian Stocker's config.m4, removed the need for gen_configm4
-                - rewrote INSTALL to reflect new config.m4
-                - slight modifications to config.m4 to get it to work properly
-                - added package.xml
-                - removed ChangeLog, everything is now in package.xml
-                - removed imagick_free_reason() and imagick_free_description() since they are no longer necessary
-                - preceded all internal functions with _php_
-                - created imagick_read() for backward compatibility with old extension
-                - created imagick_write() for backward compatibility with old extension
-            
-                version 0.4a
-                - functions added:
-                    magick_writeimages()
-                    magick_destroyhandle()
-                    magick_image2blob()
-                    magick_drawarc()
-                    magick_drawcircle()
-                    magick_drawpoint()
-                    magick_border()
-                    magick_frame()
-                    magick_raise()
-                    magick_getwidth()
-                    magick_getheight()
-                    magick_getmimetype()
-                    magick_setfillcolor()
-                    magick_setfontface()
-                    magick_charcoal()
-                    magick_implode()
-                    magick_oilpaint()
-                    magick_solarize()
-                    magick_swirl()
-                    magick_wave()
-                - more preparation for image lists
-                - fixed incorrect comments in some examples
-                - fixed incorrect calls to magick_failedreason() and magick_faileddescription() in most examples
-                - a number of examples weren't exiting properly on errors, that's been fixed
-                - phpinfo() now displays available font family and font names
-                - coolest function so far: magick_oilpaint().  The output is awesome!
-                - added MaxRGB to phpinfo() section
-            
-                version 0.2a
-                - functions added:
-                    magick_rotate()
-                    magick_shear()
-                    magick_contrast()
-                    magick_equalize()
-                    magick_gamma()
-                    magick_level()
-                    magick_modulate()
-                    magick_negate()
-                    magick_normalize()
-                    magick_drawellipse()
-                - slight changes to output of gen_configm4
-                - fixed comments in all examples after the initial magick_readimage(), they were wrong
-                - fixed all examples so they exit properly on errors
-                - fixed all examples so they work as either standalone script or web page; they do better output as well
-                - fixed output of magick info. when calling phpinfo()
-                - more commenting
-                - significantly better error handling
-        </notes>
     <state>beta</state>
     </release>
         <configureoptions>
