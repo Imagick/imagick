@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
  <reference id="ref.imagick">
   <title>Imagick Functions</title>
   <titleabbrev>imagick</titleabbrev>

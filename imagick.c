@@ -827,7 +827,7 @@ PHP_FUNCTION(imagick_set_attribute)
             {
                 convert_to_long_ex(entry);
                 for ( ; image; image=image->next)
-                    image->delay = L_ZVAL_PP(entry);
+                    image->delay = Z_LVAL_PP(entry);
                 break;
             }
 
