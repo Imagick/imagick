@@ -6,6 +6,7 @@ generated package.xml files -->
     <summary>Provides a wrapper to the Image Magick Library. </summary>
     <description>It's a native php-extension. 
         See the examples in the examples/ directory for some hints on how to use it.
+        A compiled windows extension is available at http://php.chregu.tv/php_imagick.dll for the time being.
     </description>
     <maintainer>
         <user>chregu</user>
@@ -29,11 +30,11 @@ generated package.xml files -->
         - the difference between imagick_zoom() and imagick_resize() is
           that zoom applies the blur and filter that are defined by
           the image.  It is a much simpler way of resizing an image.
-		- added imagick.dsp and modifications for compiling under Windows.
-	- changed all instances of le_handle to le_imagick_handle to avoid
-	  future conflicts.
+        - added imagick.dsp and modifications for compiling under Windows.
+        - changed all instances of le_handle to le_imagick_handle to avoid
+          future conflicts.
         </notes>
-    <state>beta</state>
+        <state>beta</state>
     </release>
         <configureoptions>
             <configureoption name="with-imagick" default="autodetect" prompt="ImageMagick library install dir?"/>
@@ -48,7 +49,7 @@ generated package.xml files -->
                 <file role="src">imagick.c</file>
                 <file role="src">imagick.h</file>
                 <file role="src">php_imagick.h</file>
-                <file role="src">imagick.dsp</file>				
+                <file role="src">imagick.dsp</file>                
                 <dir name="examples">
                     <file role="doc">border.php</file>
                     <file role="doc">destroyhandle.php</file>
@@ -108,33 +109,29 @@ generated package.xml files -->
                     <file role="doc">level.php</file>
                     <file role="doc">oilpaint.php</file>
                     <file role="doc">sharpen.php</file>
-		    <file role="doc">spread.php</file>
-		    <file role="doc">threshold.php</file>
-		    <file role="doc">unsharpmask.php</file>
-		    <file role="doc">despeckle.php</file>
-		    <file role="doc">setfillcolor.php</file>
-		    <file role="doc">roll.php</file>
-		    <file role="doc">getnumbercolors.php</file>
-		    <file role="doc">getimagedepth.php</file>
-		    <file role="doc">flop.php</file>
-		    <file role="doc">flip.php</file>
-		    <file role="doc">crop.php</file>
-		    <file role="doc">chop.php</file>
-		    <file role="doc">ordereddither.php</file>
-		    <file role="doc">ispaletteimage.php</file>
-		    <file role="doc">isopaqueimage.php</file>
-		    <file role="doc">ismonochromeimage.php</file>
-		    <file role="doc">isgrayimage.php</file>
-		    <file role="doc">composite.php</file>
-		    <file role="doc">profile.php</file>
-		    <file role="doc">resize.php</file>
-		    <file role="doc">sample.php</file>
-		    <file role="doc">scale.php</file>
-
+                    <file role="doc">spread.php</file>
+                    <file role="doc">threshold.php</file>
+                    <file role="doc">unsharpmask.php</file>
+                    <file role="doc">despeckle.php</file>
+                    <file role="doc">setfillcolor.php</file>
+                    <file role="doc">roll.php</file>
+                    <file role="doc">getnumbercolors.php</file>
+                    <file role="doc">getimagedepth.php</file>
+                    <file role="doc">flop.php</file>
+                    <file role="doc">flip.php</file>
+                    <file role="doc">crop.php</file>
+                    <file role="doc">chop.php</file>
+                    <file role="doc">ordereddither.php</file>
+                    <file role="doc">ispaletteimage.php</file>
+                    <file role="doc">isopaqueimage.php</file>
+                    <file role="doc">ismonochromeimage.php</file>
+                    <file role="doc">isgrayimage.php</file>
+                    <file role="doc">composite.php</file>
+                    <file role="doc">profile.php</file>
+                    <file role="doc">resize.php</file>
+                    <file role="doc">sample.php</file>
+                    <file role="doc">scale.php</file>
                 </dir>
             </dir>
         </filelist>
-
-    
-    
 </package>
