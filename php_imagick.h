@@ -232,6 +232,14 @@
 
 	/*****
 
+	   Composite an image.
+
+	*****/
+
+	PHP_FUNCTION( imagick_composite ) ;
+
+	/*****
+
 	   Clean up.
 
 	*****/

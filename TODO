@@ -3,7 +3,6 @@ mmontero@mail.communityconnect.com
 Nov 20, 2002
 
 o better commenting (adding protos)
-o imagick_composite() => CompositeImage()
 o imagick_append() => AppendImages()
 o imagick_average() => AverageImages()
 o imagick_clip() => ClipImage()

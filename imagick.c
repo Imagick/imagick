@@ -220,6 +220,14 @@ zend_function_entry imagick_functions[] =
 
 	/*****
 
+	   Composite an image.
+
+	*****/
+
+	PHP_FE( imagick_composite,		NULL )
+
+	/*****
+
 	   Clean up.
 
 	*****/
@@ -356,6 +364,109 @@ PHP_MINIT_FUNCTION( imagick )
 	REGISTER_LONG_CONSTANT( "IMAGICK_RAISE", 1,
 				CONST_CS | CONST_PERSISTENT ) ;
 	REGISTER_LONG_CONSTANT( "IMAGICK_LOWER", 0,
+				CONST_CS | CONST_PERSISTENT ) ;
+
+	/*****
+
+	   Register constants for composite types.
+
+	*****/
+
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_UNDEFINED",
+				UndefinedCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_OVER",
+				OverCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_IN",
+				InCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_OUT",
+				OutCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_ATOP",
+				AtopCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_XOR",
+				XorCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_PLUS",
+				PlusCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_MINUS",
+				MinusCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_ADD",
+				AddCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_SUBTRACT",
+				SubtractCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_DIFFERENCE",
+				DifferenceCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_MULTIPLY",
+				MultiplyCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_BUMPMAP",
+				BumpmapCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_COPY",
+				CopyCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_COPYRED",
+				CopyRedCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_COPYGREEN",
+				CopyGreenCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_COPYBLUE",
+				CopyBlueCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_COPYOPACITY",
+				CopyOpacityCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_CLEAR",
+				ClearCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_DISSOLVE",
+				DissolveCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_DISPLACE",
+				DisplaceCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_MODULATE",
+				ModulateCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_THRESHOLD",
+				ThresholdCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_NONE",
+				NoCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_DARKEN",
+				DarkenCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_LIGHTEN",
+				LightenCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_HUE",
+				HueCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_SATURATE",
+				SaturateCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_COLORIZE",
+				ColorizeCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_LUMINIZE",
+				LuminizeCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_SCREEN",
+				ScreenCompositeOp,
+				CONST_CS | CONST_PERSISTENT ) ;
+	REGISTER_LONG_CONSTANT( "IMAGICK_COMPOSITE_OP_OVERLAY",
+				OverlayCompositeOp,
 				CONST_CS | CONST_PERSISTENT ) ;
 
 	return SUCCESS ;
@@ -4065,6 +4176,67 @@ PHP_FUNCTION( imagick_ordereddither )
 
 	OrderedDitherImage( handle->image ) ;
 	if ( _php_imagick_is_error( handle ) )
+	{
+		RETURN_FALSE ;
+	}
+
+	RETURN_TRUE ;
+}
+
+/*****************************************************************************/
+
+/******************************************************************************
+ *
+ *  Composite an image.
+ *
+ */
+
+PHP_FUNCTION( imagick_composite )
+{
+	zval* 	      handle_id_1 ;	/* the handle identifier coming from
+					   the PHP environment */
+	long          composite_type ;  /* one of IMAGICK_COMPOSITE_OP_* */
+	zval* 	      handle_id_2 ;	/* the handle identifier coming from
+					   the PHP environment */
+	long          x_offset ;	/* the column offset of the composited
+					   image */
+	long          y_offset ;	/* the row offset of the composited
+					   image */
+	imagick_t*    handle_1 ;	/* the actual imagick_t struct for the
+					   handle */
+	imagick_t*    handle_2 ;	/* the actual imagick_t struct for the
+					   handle */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rlrll",
+			&handle_id_1, &composite_type, &handle_id_2,
+			&x_offset, &y_offset ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle_1 = _php_imagick_get_handle_struct_from_list( &handle_id_1 TSRMLS_CC ) ;
+	if ( !handle_1 )
+	{
+		php_error( E_WARNING, "%s(): handle 1 is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	handle_2 = _php_imagick_get_handle_struct_from_list( &handle_id_2 TSRMLS_CC ) ;
+	if ( !handle_2 )
+	{
+		php_error( E_WARNING, "%s(): handle 2 is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	_php_imagick_clear_errors( handle_1 ) ;
+	_php_imagick_clear_errors( handle_2 ) ;
+
+	CompositeImage( handle_1->image, ( CompositeOperator )composite_type,
+			handle_2->image, x_offset, y_offset ) ;
+	if ( _php_imagick_is_error( handle_1 ) ||
+	     _php_imagick_is_error( handle_2 ) )
 	{
 		RETURN_FALSE ;
 	}

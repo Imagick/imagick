@@ -37,6 +37,8 @@ generated package.xml files -->
 		imagick_isopaqueimage()
 		imagick_ispaletteimage()
 		imagick_ordereddither()
+		imagick_composite()
+	- Added IMAGICK_COMPOSITE_OP_* for use with imagick_composite().
 	</notes>
     </release>
     <release>
