@@ -1,0 +1,6 @@
+Michael Montero
+mmontero@mail.communityconnect.com
+Nov 20, 2002
+
+o better commenting
+o implement imagick_set_attribute() and imagick_get_attribute()
