@@ -7,8 +7,9 @@ generated package.xml files -->
     <description>It's a native php-extension. 
         See the examples in the examples/ directory for some hints on how to use it.
         A compiled windows extension is available at http://kromann.info/pear-pecl.php .
-        You need the ImageMagick libraries from www.imagemagick.org to get it running.
-        ImageMagick 6.0.0 and later is not supported currently.
+        You need the ImageMagick libraries from www.imagemagick.org or GraphicsMagick libraries from
+        http://www.graphicsmagick.org/ to get it running.
+        ImageMagick 6 support is EXPERIMENTAL. Please report successes or failures.
     </description>
     <maintainer>
         <user>mcmontero</user>
@@ -25,15 +26,11 @@ generated package.xml files -->
     <license>PHP License</license>
 
     <release>
-        <version>0.9.10</version>
-        <date>2004-06-06</date>
+        <version>0.9.11</version>
+        <date>2004-06-28</date>
         <notes>
-- A ./configure change release only. 
-- Changed config.m4 for checking for correct ImageMagick Version.
-  ImageMagick &gt;= 5.5.3 and &lt; 6.6.0  or
-  GraphicsMagick &gt;= 1.0.0
-  are needed.
-- ImageMagick &gt;= 6.0.0 does not work currently. Patches are welcome ;)
+- Fix some segfaults on errors  (by Andrei Nigmatulin)
+- EXPERIMENTAL support for ImageMagick &gt;= 6.0.0 (hint by Stanislav Yadykin). Please report successes or failures.
 	</notes>
         <state>beta</state>
     </release>
