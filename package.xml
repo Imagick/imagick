@@ -6,11 +6,13 @@
   <summary>Provides a wrapper to the Image Magick Library. </summary>
   <description>It's a native php-extension. 
   See http://pear.php.net/manual/en/pecl.imagick.php for installation and usage notes</description>
-  <maintainer>
-    <user>chregu</user>
-    <name>Christian Stocker</name>
-    <email>chregu@php.net</email>
-  </maintainer>
+  <maintainers>
+    <maintainer>
+      <user>chregu</user>
+      <name>Christian Stocker</name>
+      <email>chregu@php.net</email>
+    </maintainer>
+  </maintainers>
    <license>PHP License</license>  
   <release>
     <version>0.1.2</version>
