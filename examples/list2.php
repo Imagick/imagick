@@ -1,5 +1,5 @@
 <?
-        $handle = imagick_readimage( "./animated.gif" ) ;
+        $handle = imagick_readimage( getcwd() . "/animated.gif" ) ;
         if ( imagick_iserror( $handle ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;

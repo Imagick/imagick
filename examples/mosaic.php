@@ -1,5 +1,5 @@
 <?
-        $handle = imagick_readimage( "./image.jpg" ) ;
+        $handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
         if ( imagick_iserror( $handle ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
@@ -18,7 +18,7 @@
 
 	imagick_pushlist( $image_list, $handle ) ;
 
-        $handle = imagick_readimage( "./animated.gif" ) ;
+        $handle = imagick_readimage( getcwd() . "/animated.gif" ) ;
         if ( imagick_iserror( $handle ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
@@ -32,7 +32,7 @@
 
 	$mosaic_handle = imagick_mosaic( $image_list ) ;
 
-        if ( !imagick_writeimage( $mosaic_handle, "./new_image.jpg" ) )
+        if ( !imagick_writeimage( $mosaic_handle, getcwd() . "/new_image.jpg" ) )
         {
                 $reason      = imagick_failedreason( $mosaic_handle ) ;
                 $description = imagick_faileddescription( $mosaic_handle ) ;

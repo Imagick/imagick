@@ -1,5 +1,5 @@
 <?
-	$handle = imagick_readimage( "./image.jpg" ) ;
+	$handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
 	if ( imagick_iserror( $handle ) )
 	{
                 $reason      = imagick_failedreason( $handle ) ;

@@ -1,5 +1,5 @@
 <?
-	$handle = imagick_readimage( "./image.jpg" ) ;
+	$handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
 	if ( imagick_iserror( $handle ) )
 	{
                 $reason      = imagick_failedreason( $handle ) ;
@@ -12,7 +12,7 @@
 	$cloned_handle = imagick_clonehandle( $handle ) ;
 	imagick_scale( $cloned_handle, 640, 480 ) ;
 
-        if ( !imagick_writeimage( $cloned_handle, "./new_image.tif" ) )
+        if ( !imagick_writeimage( $cloned_handle, getcwd() . "/new_image.tif" ) )
         {
                 $reason      = imagick_failedreason( $cloned_handle ) ;
                 $description = imagick_faileddescription( $cloned_handle ) ;

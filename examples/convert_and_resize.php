@@ -1,5 +1,5 @@
 <?
-	$handle = imagick_readimage( "./some_image_that_doesnt_exist.jpg" ) ;
+	$handle = imagick_readimage( getcwd() . "/some_image_that_doesnt_exist.jpg" ) ;
 	if ( imagick_iserror( $handle ) )
 	{
 		//
@@ -14,7 +14,7 @@
 		exit ;
 	}
 
-	$handle = imagick_readimage( "./image.jpg" ) ;
+	$handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
 	if ( imagick_iserror( $handle ) )
 	{
                 $reason      = imagick_failedreason( $handle ) ;
@@ -87,7 +87,7 @@
 		exit ;
 	}
 
-	if ( !imagick_writeimage( $handle, "./new_image.gif" ) )
+	if ( !imagick_writeimage( $handle, getcwd() . "/new_image.gif" ) )
 	{
 		$reason      = imagick_failedreason( $handle ) ;
 		$description = imagick_faileddescription( $handle ) ;

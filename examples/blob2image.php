@@ -1,12 +1,12 @@
 <?
-	$fp = fopen( "./image.jpg", "r" ) ;
+	$fp = fopen( getcwd() . "/image.jpg", "r" ) ;
 	if ( !$fp )
 	{
 		print "Cannot open image.jpg!<BR>\n" ;
 		exit ;
 	}
 
-	$blob = fread( $fp, filesize( "./image.jpg" ) ) ;
+	$blob = fread( $fp, filesize( getcwd() . "/image.jpg" ) ) ;
 	fclose( $fp ) ;
 
 	$handle = imagick_blob2image( $blob ) ;
@@ -21,7 +21,7 @@
 
 	imagick_scale( $handle, 800, 800 ) ;
 
-        if ( !imagick_writeimage( $handle, "./new_image.jpg" ) )
+        if ( !imagick_writeimage( $handle, getcwd() . "/new_image.jpg" ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
                 $description = imagick_faileddescription( $handle ) ;

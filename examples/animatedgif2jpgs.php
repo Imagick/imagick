@@ -1,5 +1,5 @@
 <?
-        $handle = imagick_readimage( "./animated.gif" ) ;
+        $handle = imagick_readimage( getcwd() . "/animated.gif" ) ;
         if ( imagick_iserror( $handle ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
@@ -9,7 +9,7 @@
 		exit ;
         }
 
-        if ( !imagick_writeimages( $handle, "./new_image.jpg" ) )
+        if ( !imagick_writeimages( $handle, getcwd() . "/new_image.jpg" ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
                 $description = imagick_faileddescription( $handle ) ;

@@ -1,5 +1,5 @@
 <?
-        $handle = imagick_readimage( "./image.jpg" ) ;
+        $handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
         if ( imagick_iserror( $handle ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
@@ -9,7 +9,7 @@
 		exit ;
         }
 
-        $ref_handle = imagick_readimage( "./animated.gif" ) ;
+        $ref_handle = imagick_readimage( getcwd() . "/animated.gif" ) ;
         if ( imagick_iserror( $ref_handle ) )
         {
                 $reason      = imagick_failedreason( $ref_handle ) ;
@@ -37,7 +37,7 @@
 	imagick_destroyhandle( $handle ) ;
 	imagick_destroyhandle( $ref_handle ) ;
 
-        $handle = imagick_readimage( "./image.jpg" ) ;
+        $handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
         if ( imagick_iserror( $handle ) )
         {
                 $reason      = imagick_failedreason( $handle ) ;
@@ -47,7 +47,7 @@
 		exit ;
         }
 
-        $ref_handle = imagick_readimage( "./image.jpg" ) ;
+        $ref_handle = imagick_readimage( getcwd() . "/image.jpg" ) ;
         if ( imagick_iserror( $ref_handle ) )
         {
                 $reason      = imagick_failedreason( $ref_handle ) ;
