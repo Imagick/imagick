@@ -15,8 +15,6 @@ if test "$PHP_IMAGICK" != "no"; then
      MAGICK_NAME="GraphicsMagick"
      NEEDED_VERSION=1000000
      NEEDED_VERSION_STRING=1.0.0
-     NOT_ABOVE_VERSION=6000000
-     NOT_ABOVE_VERSION_STRING=6.0.0
      CONFIG_NAME="GraphicsMagick-config"
      LIB_NAME="GraphicsMagick"
      AC_DEFINE(IMAGICK_BACKEND, "GraphicsMagick", [ ])
@@ -26,8 +24,6 @@ if test "$PHP_IMAGICK" != "no"; then
      MAGICK_NAME="ImageMagick"
      NEEDED_VERSION=5005003
      NEEDED_VERSION_STRING=5.5.3
-     NOT_ABOVE_VERSION=6000000
-     NOT_ABOVE_VERSION_STRING=6.0.0
      CONFIG_NAME="Magick-config"
      LIB_NAME="Magick"
      AC_DEFINE(IMAGICK_BACKEND, "ImageMagick", [ ])
@@ -79,8 +75,6 @@ if test "$PHP_IMAGICK" != "no"; then
   AC_MSG_RESULT($imagemagick_version_full)
   if test "$imagemagick_version" -lt ${NEEDED_VERSION}; then
     AC_MSG_ERROR(${MAGICK_NAME} ${NEEDED_VERSION_STRING} or later is required to compile php with imagick support)
-  elif test "$imagemagick_version" -ge ${NOT_ABOVE_VERSION}; then
-    AC_MSG_ERROR(${MAGICK_NAME} ${NOT_ABOVE_VERSION_STRING} or later is not supported right now. Please use an older release)
   else
     IMAGEMAGICK_LIBS=`$IMAGEMAGICK_CONFIG --libs`
     IMAGEMAGICK_LDFLAGS=`$IMAGEMAGICK_CONFIG --ldflags`    
@@ -98,7 +92,14 @@ if test "$PHP_IMAGICK" != "no"; then
   ],[
     $IMAGEMAGICK_LIBS -L$IMAGEMAGICK_DIR/lib $IMAGEMAGICK_LDFLAGS
   ])
-
+  AC_MSG_CHECKING(if version 6.0.0 or later)
+  if test "$imagemagick_version" -ge 6000000; then
+    AC_MSG_RESULT(yes. Adding compatibility options)
+    AC_DEFINE(IMAGICK_NEEDS_WAND,1,[ ])
+    PHP_ADD_LIBRARY_WITH_PATH(Wand, $IMAGEMAGICK_DIR/lib, IMAGICK_SHARED_LIBADD)
+  else 
+    AC_MSG_RESULT(no)
+  fi
   PHP_EXTENSION(imagick, $ext_shared)
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
 fi
