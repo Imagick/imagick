@@ -611,7 +611,7 @@ PHP_FUNCTION(imagick_resize)
     int columns;
     int rows;
     int argc = ZEND_NUM_ARGS();
-    int filter =13; /* IMAGICK_FILTER_LANCZOS */
+    int filter = LanczosFilter;
     double blur = 0;
     ExceptionInfo
     exception;
@@ -645,7 +645,7 @@ PHP_FUNCTION(imagick_copy_resize)
     int columns;
     int rows;
     int argc = ZEND_NUM_ARGS();
-    int filter =13; /* IMAGICK_FILTER_LANCZOS */
+    int filter = LanczosFilter;
     double blur = 0;
     ExceptionInfo
     exception;
@@ -951,7 +951,7 @@ PHP_FUNCTION(imagick_annotate)
     zval *userdata;
 
     int argc = ZEND_NUM_ARGS();
-/*    ExceptionInfo exception;*/
+    ExceptionInfo *exception;
     DrawInfo *drawinfo;
     php_imagick *handle;
     zval **entry;				/* pointer to array entry */
@@ -997,7 +997,7 @@ PHP_FUNCTION(imagick_annotate)
             }
             if (LocaleCompare(key,"fill") == 0)
             {
-              (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->fill);	    	
+              (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->fill, exception);	    	
 	      break;
             }
 	
@@ -1052,7 +1052,7 @@ PHP_FUNCTION(imagick_annotate)
         case 'S':
             if (LocaleCompare(key,"stroke") == 0)
             {
-		 (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->stroke);	
+		 (void) QueryColorDatabase(Z_STRVAL_PP(entry),&drawinfo->stroke,exception);	
 		 break;
 	    }
 	  break;
