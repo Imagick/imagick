@@ -2,14 +2,43 @@
 <!-- do not use the "Type" attribute here, that one is only for
      generated package.xml files -->
 <package>
-  <name>pecl_imagick</name>
-  <summary>Provides a wrapper do the Image Magick Library. It's a native php-extension. 
-  See http://php.chregu.tv/imagick for installation and usage notes</summary>
+  <name>imagick</name>
+  <summary>Provides a wrapper do the Image Magick Library. </summary>
+  <description>It's a native php-extension. 
+  See http://pear.php.net/manual/en/pecl.imagick.php for installation and usage notes</description>
   <maintainer>
     <user>chregu</user>
     <name>Christian Stocker</name>
     <email>chregu@php.net</email>
   </maintainer>
+   <license>PHP License</license>  
+  <release>
+    <version>0.1.1</version>
+    <date>2002-05-29</date>
+    <notes>
+      - Make it compatible with ImageMagick 5.4.5 (and this is also the needed version now)
+      - adjust package.xml to the new "pear build" command
+    </notes>
+    <state>alpha</state>
+  </release>
+		<configureoptions>
+			<configureoption name="with-imagick" default="autodetect" prompt="ImageMagick library install dir?"/>
+		</configureoptions>
+  
+  <filelist>
+    <dir role="source" name="/" >
+        <file role="doc">CREDITS</file>
+        <file role="doc">EXPERIMENTAL</file>
+        <file role="doc">INSTALL</file>
+        <file role="src">Makefile.in</file>
+        <file role="src">config.m4</file>
+        <file role="src">imagick.c</file>
+        <file role="src">package.xml</file>	
+        <file role="php">imagick.php</file>
+        <file role="src">php_imagick.h</file>
+    </dir>
+  </filelist>
+    <changelog>
   <release>
     <version>0.1</version>
     <date>2002-01-15</date>
@@ -18,18 +47,11 @@
       - Cosmetic changes to phpinfo()
       - bugfix for loading images without segfaults
       - Fixed some critical resource allocation errors
+      - Make it compatible with ImageMagick 5.4.5
     </notes>
+    <state>alpha</state>
   </release>
-  <filelist>
-    <dir role="source" name="/" baseinstalldir="imagick">
-        <file>CREDITS</file>
-        <file>EXPERIMENTAL</file>
-        <file>INSTALL</file>
-        <file>Makefile.in</file>
-        <file>config.m4</file>
-        <file>imagick.c</file>
-        <file>imagick.php</file>
-        <file>php_imagick.h</file>
-    </dir>
-  </filelist>
+  </changelog>
+
+
 </package>
