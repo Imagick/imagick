@@ -259,6 +259,14 @@
 
 	/*****
 
+	   Set image attributes.
+
+	*****/
+
+	PHP_FUNCTION( imagick_set_image_comment ) ;
+
+	/*****
+
 	   Clean up.
 
 	*****/

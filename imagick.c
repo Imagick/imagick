@@ -245,6 +245,14 @@ zend_function_entry imagick_functions[] =
 
 	/*****
 
+	   Set image attributes.
+
+        *****/
+
+        PHP_FE( imagick_set_image_comment,	NULL ) ;
+
+	/*****
+
 	   Clean up.
 
 	*****/
@@ -5262,6 +5270,52 @@ PHP_FUNCTION( imagick_composite )
 }
 
 /*****************************************************************************/
+
+/******************************************************************************
+ *
+ *  Set image attributes.
+ *
+ */
+
+PHP_FUNCTION( imagick_set_image_comment )
+{
+	zval* 	   handle_id ;		/* the handle identifier coming from
+					   the PHP environment */
+	imagick_t* handle ;		/* the actual imagick_t struct for the
+					   handle */
+        char*      comment ;          	/* the comment to set in the image */
+        int        comment_len ;        /* the length of the comment */
+
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs",
+			&handle_id, &comment, &comment_len ) == FAILURE )
+	{
+		return ;
+	}
+
+	handle = _php_imagick_get_handle_struct_from_list( &handle_id TSRMLS_CC ) ;
+	if ( !handle )
+	{
+		php_error( E_WARNING, "%s(): handle is invalid",
+			   get_active_function_name( TSRMLS_C ) ) ;
+		RETURN_FALSE ;
+	}
+
+	if ( comment_len == 0 )
+	{
+		comment = NULL ;
+	}
+
+	if ( SetImageAttribute( handle->image, "comment", ( char* )comment ) )
+	{
+		RETURN_TRUE ;
+	}
+	else
+	{
+		RETURN_FALSE ;
+	}
+}
+
+/******************************************************************************
 
 /******************************************************************************
  *

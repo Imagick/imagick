@@ -24,6 +24,15 @@ generated package.xml files -->
     <license>PHP License</license>
 
     <release>
+        <version>0.9.9</version>
+        <date>2003-xx-xx</date>
+        <notes>
+- added function imagick_set_image_comment() for setting the comment attribute
+  of an image.
+	</notes>
+        <state>beta</state>
+    </release>
+    <release>
         <version>0.9.8</version>
         <date>2003-09-10</date>
         <notes>
