@@ -34,7 +34,7 @@ generated package.xml files -->
   imagick_setdpi().
 - Added related example files.
 - Fixed segmentation fault in shutdown function.  Thanks to Mathieu Virbel
-  <tito@bankiz.org> for sending us the patch and testing.
+  &lt;tito@bankiz.org&gt; for sending us the patch and testing.
         </notes>
         <state>beta</state>
     </release>
