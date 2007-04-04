@@ -54,9 +54,15 @@
 		DrawInfo*	draw_info ;	/* ImageMagick DrawInfo
 						   structure to use when
 						   allocating a DrawContext */
+	#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
+		DrawingWand*    draw_context ;	/* ImageMagick DrawContext
+						   structure for vector based
+						   drawing with new API */
+	#else
 		DrawContext	draw_context ;	/* ImageMagick DrawContext
 						   structure for vector based
 						   drawing */
+	#endif
 	} imagick_t ;
 
 	/*****

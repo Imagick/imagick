@@ -13,11 +13,12 @@ if test "$PHP_IMAGICK" != "no"; then
   if test "$PHP_IMAGICK_GM" != "no"; then
      GM_PATH="GraphicsMagick/"
      MAGICK_NAME="GraphicsMagick"
-     NEEDED_VERSION=1000000
-     NEEDED_VERSION_STRING=1.0.0
+     NEEDED_VERSION=1001000
+     NEEDED_VERSION_STRING=1.1.0
      CONFIG_NAME="GraphicsMagick-config"
      LIB_NAME="GraphicsMagick"
      AC_DEFINE(IMAGICK_BACKEND, "GraphicsMagick", [ ])
+     AC_DEFINE(HAVE_GRAPHICSMAGICK, 1, [ ])
      AC_MSG_RESULT(Building with GraphicsMagick as backend)
   else
      GM_PATH=""
@@ -27,6 +28,7 @@ if test "$PHP_IMAGICK" != "no"; then
      CONFIG_NAME="Magick-config"
      LIB_NAME="Magick"
      AC_DEFINE(IMAGICK_BACKEND, "ImageMagick", [ ])
+     AC_DEFINE(HAVE_IMAGEMAGICK, 1, [ ])
      AC_MSG_RESULT(Building with ImageMagick as backend)
   fi
   if test -r $PHP_IMAGICK/include/${GM_PATH}magick/magick.h; then
@@ -92,12 +94,16 @@ if test "$PHP_IMAGICK" != "no"; then
   ],[
     $IMAGEMAGICK_LIBS -L$IMAGEMAGICK_DIR/lib $IMAGEMAGICK_LDFLAGS
   ])
-  AC_MSG_CHECKING(if version 6.0.0 or later)
-  if test "$imagemagick_version" -ge 6000000; then
+  AC_MSG_CHECKING(if new ImageMagick API is needed)
+  if test "$MAGICK_NAME" = "ImageMagick" && test "$imagemagick_version" -ge 6000000; then
     AC_MSG_RESULT(yes. Adding compatibility options)
     AC_DEFINE(IMAGICK_NEEDS_WAND,1,[ ])
     PHP_ADD_LIBRARY_WITH_PATH(Wand, $IMAGEMAGICK_DIR/lib, IMAGICK_SHARED_LIBADD)
-  else 
+  elif test "$MAGICK_NAME" = "GraphicsMagick" && test "$imagemagick_version" -ge 1001000; then
+    AC_MSG_RESULT(yes. Adding compatibility options)
+    AC_DEFINE(IMAGICK_NEEDS_WAND,1,[ ])
+    PHP_ADD_LIBRARY_WITH_PATH(GraphicsMagickWand, $IMAGEMAGICK_DIR/lib, IMAGICK_SHARED_LIBADD)
+  else
     AC_MSG_RESULT(no)
   fi
   PHP_EXTENSION(imagick, $ext_shared)

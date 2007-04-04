@@ -1247,7 +1247,7 @@ PHP_FUNCTION( imagick_faileddescription )
 		                strlen( handle->exception.description ), 1 ) ;
 	}
 
-	if ( handle->image->exception.description )
+	if ( handle->image && handle->image->exception.description )
 	{
 		RETURN_STRINGL( handle->image->exception.description,
 		                strlen( handle->image->exception.description ),
@@ -2460,30 +2460,30 @@ PHP_FUNCTION( imagick_begindraw )
 
 	if ( handle->draw_info && handle->image && !handle->draw_context )
 	{
-#if MagickLibVersion < 0x557
+#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
+		handle->draw_context = DrawAllocateWand( handle->draw_info,
+							handle->image ) ;
+#else
 		handle->draw_context = DrawAllocateContext( handle->draw_info,
 						            handle->image ) ;
-#else
-		handle->draw_context = DrawAllocateWand( handle->draw_info,
-							 handle->image ) ;
 #endif
 
 		if ( !handle->draw_context )
 		{
-#if MagickLibVersion < 0x557
-			php_error( E_ERROR, "%s(): DrawAllocateContext() did not properly allocate DrawContext structure", get_active_function_name( TSRMLS_C ) ) ;
-#else
+#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
 			php_error( E_ERROR, "%s(): DrawAllocateWand() did not properly allocate DrawContext structure", get_active_function_name( TSRMLS_C ) ) ;
+#else
+			php_error( E_ERROR, "%s(): DrawAllocateContext() did not properly allocate DrawContext structure", get_active_function_name( TSRMLS_C ) ) ;
 #endif
 			RETURN_FALSE ;
 		}
 	}
 	else
 	{
-#if MagickLibVersion < 0x557
-		php_error( E_WARNING, "%s(): attempt to create draw_context with DrawAllocateContext() and empty draw_info or image", get_active_function_name( TSRMLS_C ) ) ;
+#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
+		php_error( E_WARNING, "%s(): attempt to create draw_context with DrawAllocateWand() and empty draw_info or image", get_active_function_name( TSRMLS_C ) ) ;
 #else
-		php_error( E_WARNING, "%s(): attempt to create draw_context withDrawAllocateWand() and empty draw_info or image", get_active_function_name( TSRMLS_C ) ) ;
+		php_error( E_WARNING, "%s(): attempt to create draw_context withDrawAllocateContext() and empty draw_info or image", get_active_function_name( TSRMLS_C ) ) ;
 #endif
 	}
 
@@ -2828,6 +2828,8 @@ PHP_FUNCTION( imagick_setfillcolor )
 					   handle */
 	PixelPacket pixel_packet ;	/* the struct containing the color
 				  	   information */
+	PixelWand   *pixel_wand;	/* the struct for containing color
+					   information, new API. */
 
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs",
 			&handle_id, &color, &color_len ) == FAILURE )
@@ -2858,7 +2860,12 @@ PHP_FUNCTION( imagick_setfillcolor )
 			"color must be in the format \"#ffff00\"", NULL ) ;
 		RETURN_FALSE ;
 	}
-
+#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
+	pixel_wand = NewPixelWand();
+	PixelSetColor( pixel_wand, color );
+	DrawSetFillColor( handle->draw_context, pixel_wand ) ;
+	DestroyPixelWand( pixel_wand );
+#else
 	QueryColorDatabase( color, &pixel_packet, &handle->exception ) ;
 	if ( _php_imagick_is_error( handle ) )
 	{
@@ -2866,6 +2873,7 @@ PHP_FUNCTION( imagick_setfillcolor )
 	}
 
 	DrawSetFillColor( handle->draw_context, &pixel_packet ) ;
+#endif
 	if ( _php_imagick_is_error( handle ) )
 	{
 		RETURN_FALSE ;
@@ -5663,10 +5671,10 @@ static void _php_imagick_clean_up_handle( imagick_t* handle )
 
 	if ( handle->draw_context )
 	{
-#if MagickLibVersion < 0x557
-		DrawDestroyContext( handle->draw_context ) ;
-#else
+#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
 		DestroyDrawingWand( handle->draw_context ) ;
+#else
+		DestroyDrawingContext( handle->draw_context ) ;
 #endif
 	}
 
