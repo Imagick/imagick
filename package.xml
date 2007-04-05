@@ -1,152 +1,144 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!-- do not use the "Type" attribute here, that one is only for
 generated package.xml files -->
-<package>
-    <name>imagick</name>
-    <summary>Provides a wrapper to the ImageMagick/GraphicsMagick library. </summary>
-    <description>It's a native php-extension. 
+<package version="1.0">
+	<name>imagick</name>
+	<summary>Provides a wrapper to the ImageMagick/GraphicsMagick library. </summary>
+	<description>It's a native php-extension. 
         See the examples in the examples/ directory for some hints on how to use it.
         A compiled windows extension is available at http://kromann.info/pear-pecl.php .
         You need the ImageMagick libraries from www.imagemagick.org or GraphicsMagick libraries from
         http://www.graphicsmagick.org/ to get it running.
-        ImageMagick 6 support is EXPERIMENTAL. Please report successes or failures.
-    </description>
-    <maintainer>
-        <user>mcmontero</user>
-        <role>lead</role>
-        <name>Michael C. Montero</name>
-        <email>mmontero@mail.communityconnect.com</email>
-    </maintainer>
-	 <maintainer>
-        <user>chregu</user>
-        <role>lead</role>
-          <name>Christian Stocker</name>
-        <email>chregu@php.net</email>
-    </maintainer>
-    <license>PHP License</license>
+	</description>
+	<license>PHP License</license>
+	<maintainers>
+		<maintainer>
+			<user>scottmac</user>
+			<role>lead</role>
+			<name>Scott MacVicar</name>
+			<email>scottmac@php.net</email>
+		</maintainer>
+		<maintainer>
+ 			<user>mcmontero</user>
+			<role>lead</role>
+			<name>Michael C. Montero</name>
+			<email>mmontero@mail.communityconnect.com</email>
+		</maintainer>
+		<maintainer>
+			<user>chregu</user>
+			<role>lead</role>
+			<name>Christian Stocker</name>
+			<email>chregu@php.net</email>
+		</maintainer>
+	</maintainers>
 
-    <release>
-        <version>0.9.12</version>
-        <date>2004-07-06</date>
-        <notes>
-- Added the following functions thanks to Mon Mariola
-  (monmariola@monmariola.com): imagick_getdpix(), imagick_getdpiy(),
-  imagick_setdpi().
-- Added related example files.
-- Fixed segmentation fault in shutdown function.  Thanks to Mathieu Virbel
-  &lt;tito@bankiz.org&gt; for sending us the patch and testing.
-        </notes>
-        <state>beta</state>
-    </release>
-
-    <release>
-        <version>0.9.11</version>
-        <date>2004-06-28</date>
-        <notes>
-- Fix some segfaults on errors  (by Andrei Nigmatulin)
-- EXPERIMENTAL support for ImageMagick &gt;= 6.0.0 (hint by Stanislav Yadykin). Please report successes or failures.
-	</notes>
-        <state>beta</state>
-    </release>
-  
-        <configureoptions>
-            <configureoption name="with-imagick" default="shared" prompt="ImageMagick library install dir?"/>
-            <configureoption name="with-imagick-gm" default="no" prompt="GraphicsMagick instead of ImageMagick?"/>
-        </configureoptions>
-        
-        <filelist>
-            <dir role="src" name="/" >
-                <file role="doc">CREDITS</file>
-                <file role="doc">INSTALL</file>
-                <file role="src">Makefile.in</file>
-                <file role="src">config.m4</file>
-                <file role="src">imagick.c</file>
-                <file role="src">imagick.h</file>
-                <file role="src">php_imagick.h</file>
-                <file role="src">imagick.dsp</file>                
-                <dir name="examples">
-                    <file role="doc">border.php</file>
-                    <file role="doc">destroyhandle.php</file>
-                    <file role="doc">getcanvas.php</file>
-                    <file role="doc">line.php</file>
-                    <file role="doc">point.php</file>
-                    <file role="doc">shear.php</file>
-                    <file role="doc">charcoal.php</file>
-                    <file role="doc">edge.php</file>
-                    <file role="doc">getlistindex.php</file>
-                    <file role="doc">list1.php</file>
-                    <file role="doc">raise.php</file>
-                    <file role="doc">solarize.php</file>
-                    <file role="doc">circle.php</file>
-                    <file role="doc">ellipse.php</file>
-                    <file role="doc">getlistsize.php</file>
-                    <file role="doc">list2.php</file>
-                    <file role="doc">rectangle.php</file>
-                    <file role="doc">spread.php</file>
-                    <file role="doc">animated.gif</file>
-                    <file role="doc">clone_handle.php</file>
-                    <file role="doc">emboss.php</file>
-                    <file role="doc">getmimetype.php</file>
-                    <file role="doc">medianfilter.php</file>
-                    <file role="doc">reducenoise.php</file>
-                    <file role="doc">swirl.php</file>
-                    <file role="doc">animatedgif2jpgs.php</file>
-                    <file role="doc">contrast.php</file>
-                    <file role="doc">enhance.php</file>
-                    <file role="doc">goto.php</file>
-                    <file role="doc">modulate.php</file>
-                    <file role="doc">rotate.php</file>
-                    <file role="doc">threshold.php</file>
-                    <file role="doc">annotate.php</file>
-                    <file role="doc">convert1.php</file>
-                    <file role="doc">equalize.php</file>
-                    <file role="doc">image.jpg</file>
-                    <file role="doc">motionblur.php</file>
-                    <file role="doc">setfillcolor.php</file>
-                    <file role="doc">unsharpmask.php</file>
-                    <file role="doc">arc.php</file>
-                    <file role="doc">convert2.php</file>
-                    <file role="doc">first.php</file>
-                    <file role="doc">image2blob.php</file>
-                    <file role="doc">negate.php</file>
-                    <file role="doc">setfontface.php</file>
-                    <file role="doc">wave.php</file>
-                    <file role="doc">blob2image.php</file>
-                    <file role="doc">convert_and_resize.php</file>
-                    <file role="doc">gamma.php</file>
-                    <file role="doc">implode.php</file>
-                    <file role="doc">normalize.php</file>
-                    <file role="doc">shade.php</file>
-                    <file role="doc">blur.php</file>
-                    <file role="doc">despeckle.php</file>
-                    <file role="doc">gaussianblur.php</file>
-                    <file role="doc">level.php</file>
-                    <file role="doc">oilpaint.php</file>
-                    <file role="doc">sharpen.php</file>
-                    <file role="doc">spread.php</file>
-                    <file role="doc">threshold.php</file>
-                    <file role="doc">unsharpmask.php</file>
-                    <file role="doc">despeckle.php</file>
-                    <file role="doc">setfillcolor.php</file>
-                    <file role="doc">roll.php</file>
-                    <file role="doc">getnumbercolors.php</file>
-                    <file role="doc">getimagedepth.php</file>
-                    <file role="doc">flop.php</file>
-                    <file role="doc">flip.php</file>
-                    <file role="doc">crop.php</file>
-                    <file role="doc">chop.php</file>
-                    <file role="doc">ordereddither.php</file>
-                    <file role="doc">ispaletteimage.php</file>
-                    <file role="doc">isopaqueimage.php</file>
-                    <file role="doc">ismonochromeimage.php</file>
-                    <file role="doc">isgrayimage.php</file>
-                    <file role="doc">composite.php</file>
-                    <file role="doc">profile.php</file>
-                    <file role="doc">resize.php</file>
-                    <file role="doc">sample.php</file>
-                    <file role="doc">scale.php</file>
-                </dir>
-            </dir>
-        </filelist>
-
+	<release>
+		<version>0.9.13</version>
+		<date>2007-04-??</date>
+		<license>PHP License</license>
+		<state>beta</state>
+		<notes>
+- Fixed compile error with newer versions of GraphicsMagick and ImageMagick.
+- Fixed assertion when using imagick_setfillcolor
+- Fixed segfault when an empty blob is loaded
+		</notes>
+		<configureoptions>
+			<configureoption name="with-imagick" default="shared" prompt="ImageMagick library install dir?"/>
+			<configureoption name="with-imagick-gm" default="no" prompt="GraphicsMagick instead of ImageMagick?"/>
+		</configureoptions>
+		<filelist>
+			<dir role="src" name="/" >
+				<file role="doc" name="CREDITS" />
+				<file role="doc" name="INSTALL" />
+				<file role="src" name="Makefile.in" />
+				<file role="src" name="config.m4" />
+				<file role="src" name="imagick.c" />
+				<file role="src" name="imagick.h" />
+				<file role="src" name="php_imagick.h" />
+				<file role="src" name="imagick.dsp" />               
+				<dir name="examples">
+					<file role="doc" name="border.php" />
+					<file role="doc" name="destroyhandle.php" />
+					<file role="doc" name="getcanvas.php" />
+					<file role="doc" name="line.php" />
+					<file role="doc" name="point.php" />
+					<file role="doc" name="shear.php" />
+					<file role="doc" name="charcoal.php" />
+					<file role="doc" name="edge.php" />
+					<file role="doc" name="getlistindex.php" />
+					<file role="doc" name="list1.php" />
+					<file role="doc" name="raise.php" />
+					<file role="doc" name="solarize.php" />
+					<file role="doc" name="circle.php" />
+					<file role="doc" name="ellipse.php" />
+					<file role="doc" name="getlistsize.php" />
+					<file role="doc" name="list2.php" />
+					<file role="doc" name="rectangle.php" />
+					<file role="doc" name="spread.php" />
+					<file role="doc" name="animated.gif" />
+					<file role="doc" name="clone_handle.php" />
+					<file role="doc" name="emboss.php" />
+					<file role="doc" name="getmimetype.php" />
+					<file role="doc" name="medianfilter.php" />
+					<file role="doc" name="reducenoise.php" />
+					<file role="doc" name="swirl.php" />
+					<file role="doc" name="animatedgif2jpgs.php" />
+					<file role="doc" name="contrast.php" />
+					<file role="doc" name="enhance.php" />
+					<file role="doc" name="goto.php" />
+					<file role="doc" name="modulate.php" />
+					<file role="doc" name="rotate.php" />
+					<file role="doc" name="threshold.php" />
+					<file role="doc" name="annotate.php" />
+					<file role="doc" name="convert1.php" />
+					<file role="doc" name="equalize.php" />
+					<file role="doc" name="image.jpg" />
+					<file role="doc" name="motionblur.php" />
+					<file role="doc" name="setfillcolor.php" />
+					<file role="doc" name="unsharpmask.php" />
+					<file role="doc" name="arc.php" />
+					<file role="doc" name="convert2.php" />
+					<file role="doc" name="first.php" />
+					<file role="doc" name="image2blob.php" />
+					<file role="doc" name="negate.php" />
+					<file role="doc" name="setfontface.php" />
+					<file role="doc" name="wave.php" />
+					<file role="doc" name="blob2image.php" />
+					<file role="doc" name="convert_and_resize.php" />
+					<file role="doc" name="gamma.php" />
+					<file role="doc" name="implode.php" />
+					<file role="doc" name="normalize.php" />
+					<file role="doc" name="shade.php" />
+					<file role="doc" name="blur.php" />
+					<file role="doc" name="despeckle.php" />
+					<file role="doc" name="gaussianblur.php" />
+					<file role="doc" name="level.php" />
+					<file role="doc" name="oilpaint.php" />
+					<file role="doc" name="sharpen.php" />
+					<file role="doc" name="spread.php" />
+					<file role="doc" name="threshold.php" />
+					<file role="doc" name="unsharpmask.php" />
+					<file role="doc" name="despeckle.php" />
+					<file role="doc" name="setfillcolor.php" />
+					<file role="doc" name="roll.php" />
+					<file role="doc" name="getnumbercolors.php" />
+					<file role="doc" name="getimagedepth.php" />
+					<file role="doc" name="flop.php" />
+					<file role="doc" name="flip.php" />
+					<file role="doc" name="crop.php" />
+					<file role="doc" name="chop.php" />
+					<file role="doc" name="ordereddither.php" />
+					<file role="doc" name="ispaletteimage.php" />
+					<file role="doc" name="isopaqueimage.php" />
+					<file role="doc" name="ismonochromeimage.php" />
+					<file role="doc" name="isgrayimage.php" />
+					<file role="doc" name="composite.php" />
+					<file role="doc" name="profile.php" />
+					<file role="doc" name="resize.php" />
+					<file role="doc" name="sample.php" />
+					<file role="doc" name="scale.php" />
+				</dir>
+			</dir>
+		</filelist>
+	</release>
 </package>

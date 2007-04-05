@@ -5674,7 +5674,7 @@ static void _php_imagick_clean_up_handle( imagick_t* handle )
 #if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600 /* Graphics Magick 1.1+ or ImageMagick 6.0+ */
 		DestroyDrawingWand( handle->draw_context ) ;
 #else
-		DestroyDrawingContext( handle->draw_context ) ;
+		DrawDestroyContext( handle->draw_context ) ;
 #endif
 	}
 
