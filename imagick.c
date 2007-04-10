@@ -783,6 +783,12 @@ PHP_FUNCTION( imagick_readimage )
 		return ;
 	}
 
+	if (file_name_len == 0)
+	{
+		php_error(E_NOTICE, "Empty string as filename");
+		RETURN_FALSE;
+	}
+
 	handle = _php_imagick_readimage( file_name ) ;
 	if ( !handle )
 	{
