@@ -687,12 +687,23 @@ PHP_RSHUTDOWN_FUNCTION( imagick )
 
 PHP_MINFO_FUNCTION( imagick )
 {
-	const MagickInfo*          magick_info ;
+#if (defined(HAVE_IMAGEMAGICK) && MagickLibVersion > 0x600)
+	const MagickInfo		**magick_info;
+	unsigned long			number_formats, x;
+	const TypeInfo		**type_info;
+#else
+#if defined(HAVE_GRAPHICSMAGICK)
+	MagickInfo			*magick_info, *p;
+#else
+	const MagickInfo*		magick_info ;
 	const register MagickInfo* p ;
-	const TypeInfo*            type_info ;
+#endif
+	const TypeInfo*		type_info ;
+#endif
+
 	ExceptionInfo              exception ;
 	char                       buffer[ 512 ] ;
-	smart_str		   format_list = { 0 } ;
+	smart_str		      format_list = { 0 } ;
 
 	php_info_print_table_start() ;
 
@@ -715,6 +726,42 @@ PHP_MINFO_FUNCTION( imagick )
 
 	*****/
 
+#if (defined(HAVE_IMAGEMAGICK) && MagickLibVersion > 0x600)
+	magick_info = GetMagickInfoList("*", &number_formats, &exception);
+	for(x = 0; x < number_formats; x++)
+	{
+		smart_str_appendl( &format_list, magick_info[x]->name,
+			strlen( magick_info[x]->name ) ) ;
+		if ( x < number_formats)
+		{
+			smart_str_appendl( &format_list, ", ", 2 ) ;
+		}
+	}
+	smart_str_0( &format_list ) ;
+	php_info_print_table_row( 2, "Supported image formats", format_list.c ) ;
+
+	number_formats = 0;
+	type_info = GetTypeInfoList("*", &number_formats, &exception);
+
+	for(x = 0; x < number_formats; x++)
+	{
+		snprintf( buffer, 512, "%s - %s\0", type_info[x]->family, type_info[x]->name ) ;
+		php_info_print_table_row( 2, "Font Family - Name", buffer ) ;
+	}
+#else
+#if defined(HAVE_GRAPHICSMAGICK)
+	magick_info = (MagickInfo *)GetMagickInfoArray(&exception);
+	for(p = magick_info; p != NULL; p = p->next)
+	{
+		smart_str_appendl( &format_list, p->name, strlen( p->name ) ) ;
+		if ( p->next )
+		{
+			smart_str_appendl( &format_list, ", ", 2 ) ;
+		}
+		smart_str_0( &format_list ) ;
+	}
+	php_info_print_table_row( 2, "Supported image formats", format_list.c ) ;
+#else
 	magick_info = GetMagickInfo( NULL, &exception ) ;
 	if ( magick_info != ( MagickInfo* )NULL )
 	{
@@ -737,6 +784,7 @@ PHP_MINFO_FUNCTION( imagick )
 		php_error( E_WARNING, "%s(): magick_info struct is NULL after call to GetMagickInfo()", get_active_function_name( TSRMLS_C ) ) ;
 	}
 
+#endif
 	/*****
 
 	   Get a list of the available font names.
@@ -760,7 +808,7 @@ PHP_MINFO_FUNCTION( imagick )
 	{
 		php_info_print_table_row(2, "Fonts", "No fonts found");
 	}
-
+#endif
 	php_info_print_table_end();
 }
 
@@ -2832,10 +2880,13 @@ PHP_FUNCTION( imagick_setfillcolor )
 	int	    color_len ;		/* string length of color */
 	imagick_t*  handle ;		/* the actual imagick_t struct for the
 					   handle */
-	PixelPacket pixel_packet ;	/* the struct containing the color
-				  	   information */
+#if (defined(HAVE_GRAPHICSMAGICK) && MagickLibVersion >= 0x010000) || MagickLibVersion > 0x600
 	PixelWand   *pixel_wand;	/* the struct for containing color
 					   information, new API. */
+#else
+	PixelPacket pixel_packet ;	/* the struct containing the color
+				  	   information */
+#endif
 
 	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "rs",
 			&handle_id, &color, &color_len ) == FAILURE )
