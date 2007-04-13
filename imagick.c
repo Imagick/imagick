@@ -727,7 +727,11 @@ PHP_MINFO_FUNCTION( imagick )
 	*****/
 
 #if (defined(HAVE_IMAGEMAGICK) && MagickLibVersion > 0x600)
+#if MagickLibVersion >= 0x611
 	magick_info = GetMagickInfoList("*", &number_formats, &exception);
+#else
+	magick_info = GetMagickInfoList("*", &number_formats);
+#endif
 	for(x = 0; x < number_formats; x++)
 	{
 		smart_str_appendl( &format_list, magick_info[x]->name,
@@ -741,7 +745,12 @@ PHP_MINFO_FUNCTION( imagick )
 	php_info_print_table_row( 2, "Supported image formats", format_list.c ) ;
 
 	number_formats = 0;
+
+#if MagickLibVersion >= 0x610
 	type_info = GetTypeInfoList("*", &number_formats, &exception);
+#else
+	type_info = GetTypeInfoList("*", &number_formats);
+#endif
 
 	for(x = 0; x < number_formats; x++)
 	{

@@ -6,7 +6,7 @@ generated package.xml files -->
 	<summary>Provides a wrapper to the ImageMagick/GraphicsMagick library. </summary>
 	<description>It's a native php-extension. 
         See the examples in the examples/ directory for some hints on how to use it.
-        A compiled windows extension is available at http://kromann.info/pear-pecl.php .
+        A compiled windows extension is available at http://pecl4win.php.net/.
         You need the ImageMagick libraries from www.imagemagick.org or GraphicsMagick libraries from
         http://www.graphicsmagick.org/ to get it running.
 	</description>
@@ -34,13 +34,14 @@ generated package.xml files -->
 
 	<release>
 		<version>0.9.13</version>
-		<date>2007-04-??</date>
+		<date>2007-04-13</date>
 		<license>PHP License</license>
 		<state>beta</state>
 		<notes>
-- Fixed compile error with newer versions of GraphicsMagick and ImageMagick.
+- Fixed compile error with newer versions of GraphicsMagick and ImageMagick
 - Fixed assertion when using imagick_setfillcolor
 - Fixed segfault when an empty blob is loaded
+- Use new API for fetching support image formats / fonts
 		</notes>
 		<configureoptions>
 			<configureoption name="with-imagick" default="shared" prompt="ImageMagick library install dir?"/>
