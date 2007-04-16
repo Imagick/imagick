@@ -1,8 +1,8 @@
 /*
    +----------------------------------------------------------------------+
-   | PHP Version 5 / Magickwand                                           |
+   | PHP Version 5 / Imagick	                                          |
    +----------------------------------------------------------------------+
-   | Copyright (c) 2006-2007 Mikko Koppanen                               |
+   | Copyright (c) 2006-2007 Mikko Koppanen, Scott MacVicar               |
    | Imagemagick (c) ImageMagick Studio LLC                               |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
@@ -13,7 +13,8 @@
    | obtain it through the world-wide-web, please send a note to          |
    | license@php.net so we can mail you a copy immediately.               |
    +----------------------------------------------------------------------+
-   | Author: Mikko Kopppanen <mikko.koppanen@gmail.com>                   |
+   | Author: Mikko Kopppanen <mkoppanen@php.net>						  |
+   |		 Scott MacVicar <scottmac@php.net>							  |
    +----------------------------------------------------------------------+
 */
 
