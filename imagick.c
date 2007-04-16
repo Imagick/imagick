@@ -13,8 +13,8 @@
    | obtain it through the world-wide-web, please send a note to          |
    | license@php.net so we can mail you a copy immediately.               |
    +----------------------------------------------------------------------+
-   | Author: Mikko Kopppanen <mkoppanen@php.net>						  |
-   |		 Scott MacVicar <scottmac@php.net>							  |
+   | Author: Mikko Kopppanen <mkoppanen@php.net>                          |
+   |         Scott MacVicar <scottmac@php.net>                            |
    +----------------------------------------------------------------------+
 */
 
