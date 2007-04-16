@@ -1,0 +1,9 @@
+Imagick TODO
+
+- Unit tests
+- config.w32
+- Comment all the php methods in imagick.c
+- Create documentation
+- package.xml
+- Create build-test scripts
+- Add more examples of the most common use cases

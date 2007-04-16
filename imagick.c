@@ -4919,7 +4919,7 @@ PHP_METHOD(imagick, removeimageprofile)
 	char *name;
 	unsigned char *profile;
 	int nameLen;
-#if MagickLibVersion < 0x630
+#if MagickLibVersion < 0x628
 	long profileLen;
 #else
 	size_t profileLen;
@@ -6931,11 +6931,7 @@ PHP_METHOD(imagick, getimageprofile)
 	zval *object;
 	char *profile, *name;
 	int nameLen;
-	/*
-	The type of the profile length has changed between versions.
-	Im not quite sure if it changed in 6.3.0 So this is a lucky guess.
-	*/
-#if MagickLibVersion < 0x630
+#if MagickLibVersion < 0x628
 	long length;
 #else
 	size_t length;
