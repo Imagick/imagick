@@ -2699,7 +2699,7 @@ void throwImagickException( MagickWand *magick_wand, long code TSRMLS_DC)
 
 	if ( strlen( description ) == 0 )
 	{
-		description = "Undefined exception";
+		description = "Undefined exception.";
 		free = 0;
 	}
 
@@ -4843,12 +4843,13 @@ PHP_METHOD(imagick, quantizeimage)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
-PHP_METHOD(imagick, quantizeimages)
 /* {{{ proto Imagick::quantizeImages(int number_colors, COLORSPACE colorspace, int treedepth, bool dither,
     bool measure_error)
 	Analyzes the colors within a sequence of images and chooses a fixed number of colors to represent the image.  The goal of the algorithm is to minimize the color difference between the input and output image while minimizing the processing time.
 */
+PHP_METHOD(imagick, quantizeimages)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -4881,12 +4882,12 @@ PHP_METHOD(imagick, quantizeimages)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, reducenoiseimage)
+
 /* {{{ proto Imagick::reduceNoiseImage(float radius)
 	Smooths the contours of an image while still preserving edge information.  The algorithm works by replacing each pixel with its neighbor closest in value.  A neighbor is defined by radius.  Use a radius of 0 and Imagick::ReduceNoiseImage() selects a suitable radius for you.
 */
+PHP_METHOD(imagick, reducenoiseimage)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -4918,12 +4919,12 @@ PHP_METHOD(imagick, reducenoiseimage)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, removeimageprofile)
+
 /* {{{ proto Imagick::removeImageProfile(string name)
 	Removes the named image profile and returns it.
 */
+PHP_METHOD(imagick, removeimageprofile)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -4958,12 +4959,12 @@ PHP_METHOD(imagick, removeimageprofile)
 	IMAGICK_FREE_MEMORY( unsigned char *, profile );
 	return;
 }
-
 /* }}} */
-PHP_METHOD(imagick, separateimagechannel)
+
 /* {{{ proto Imagick::separateImageChannel(CHANNELTYPE channel)
 	Separates a channel from the image and returns a grayscale image.  A channel is a particular color component of each pixel in the image.
 */
+PHP_METHOD(imagick, separateimagechannel)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -4995,12 +4996,12 @@ PHP_METHOD(imagick, separateimagechannel)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, sepiatoneimage)
+
 /* {{{ proto Imagick::sepiaToneImage(float threshold)
 	Applies a special effect to the image, similar to the effect achieved in a photo darkroom by sepia toning.  Threshold ranges from 0 to QuantumRange and is a measure of the extent of the sepia toning.  A threshold of 80 is a good starting point for a reasonable tone.
 */
+PHP_METHOD(imagick, sepiatoneimage)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5035,12 +5036,12 @@ PHP_METHOD(imagick, sepiatoneimage)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagebias)
+
 /* {{{ proto Imagick::setImageBias(float bias)
 	Sets the image bias for any method that convolves an image (e.g. Imagick::ConvolveImage()).
 */
+PHP_METHOD(imagick, setimagebias)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5072,12 +5073,12 @@ PHP_METHOD(imagick, setimagebias)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimageblueprimary)
+
 /* {{{ proto Imagick::setImageBluePrimary(float x,float y)
 	Sets the image chromaticity blue primary point.
 */
+PHP_METHOD(imagick, setimageblueprimary)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5109,12 +5110,12 @@ PHP_METHOD(imagick, setimageblueprimary)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagebordercolor)
+
 /* {{{ proto Imagick::setImageBorderColor(ImagickPixel border)
 	Sets the image border color.
 */
+PHP_METHOD(imagick, setimagebordercolor)
 {
 	zval *object, *objvar;
 	php_imagick_object *intern;
@@ -5145,12 +5146,12 @@ PHP_METHOD(imagick, setimagebordercolor)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagechanneldepth)
+
 /* {{{ proto Imagick::setImageChannelDepth(CHANNELTYPE channel, int depth)
 	Sets the depth of a particular image channel.
 */
+PHP_METHOD(imagick, setimagechanneldepth)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5182,20 +5183,20 @@ PHP_METHOD(imagick, setimagechanneldepth)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagecolormapcolor)
+
 /* {{{ proto Imagick::setImageColormapColor(int index, ImagickPixel color)
 	Sets the color of the specified colormap index.
 */
+PHP_METHOD(imagick, setimagecolormapcolor)
 {
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagecolorspace)
+
 /* {{{ proto Imagick::setImageColorspace(COLORSPACE colorspace)
 	Sets the image colorspace.
 */
+PHP_METHOD(imagick, setimagecolorspace)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5227,12 +5228,12 @@ PHP_METHOD(imagick, setimagecolorspace)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagedispose)
+
 /* {{{ proto Imagick::setImageDispose(DISPOSETYPE dispose)
 	Sets the image disposal method.
 */
+PHP_METHOD(imagick, setimagedispose)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5264,12 +5265,12 @@ PHP_METHOD(imagick, setimagedispose)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimageextent)
+
 /* {{{ proto Imagick::setImageExtent(int columns,int rows)
 	Sets the image size (i.e. columns & rows).
 */
+PHP_METHOD(imagick, setimageextent)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5301,12 +5302,12 @@ PHP_METHOD(imagick, setimageextent)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagegreenprimary)
+
 /* {{{ proto Imagick::setImageGreenPrimary(float x,float y)
 	Sets the image chromaticity green primary point.
 */
+PHP_METHOD(imagick, setimagegreenprimary)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5338,12 +5339,12 @@ PHP_METHOD(imagick, setimagegreenprimary)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
+
 /* {{{ proto Imagick::setImageInterlaceScheme(INTERLACE interlace_scheme)
 	Sets the image compression.
 */
+PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5375,12 +5376,12 @@ PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
+
 /* {{{ proto Imagick::setImageInterpolateMethod(INTERPOLATEPIXELMETHOD method)
 	Sets the image interpolate pixel method.
 */
+PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5413,12 +5414,12 @@ PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
 	RETURN_TRUE;
 
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
+
 /* {{{ proto Imagick::setImageProfile(string name,string profile)
 	Adds a named profile to the magick wand.  If a profile with the same name already exists, it is replaced.  This method differs from the Imagick::ProfileImage() method in that it does not apply any CMS color profiles.
 */
+PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5452,12 +5453,12 @@ PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimageredprimary)
+
 /* {{{ proto Imagick::setImageRedPrimary(float x,float y)
 	Sets the image chromaticity red primary point.
 */
+PHP_METHOD(imagick, setimageredprimary)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5489,12 +5490,12 @@ PHP_METHOD(imagick, setimageredprimary)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagerenderingintent)
+
 /* {{{ proto Imagick::setImageRenderingIntent(RENDERINGINTENT rendering_intent)
 	Sets the image rendering intent.
 */
+PHP_METHOD(imagick, setimagerenderingintent)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5526,12 +5527,12 @@ PHP_METHOD(imagick, setimagerenderingintent)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagevirtualpixelmethod)
+
 /* {{{ proto Imagick::setImageVirtualPixelMethod(VIRTUALPIXELMETHOD method)
 	Sets the image virtual pixel method.
 */
+PHP_METHOD(imagick, setimagevirtualpixelmethod)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5563,12 +5564,12 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, setimagewhitepoint)
+
 /* {{{ proto Imagick::setImageWhitePoint(float x,float y)
 	Sets the image chromaticity white point.
 */
+PHP_METHOD(imagick, setimagewhitepoint)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5600,12 +5601,12 @@ PHP_METHOD(imagick, setimagewhitepoint)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, sigmoidalcontrastimage)
+
 /* {{{ proto Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta)
 	Adjusts the contrast of an image with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black).  Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
+PHP_METHOD(imagick, sigmoidalcontrastimage)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5638,12 +5639,12 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
+
 /* {{{ proto Imagick::sigmoidalContrastChannel(CHANNELTYPE channel, bool sharpen, float alpha, float beta)
 	Adjusts the contrast of an image channel with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image channel using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black). Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
+PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5678,10 +5679,10 @@ PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
 	RETURN_TRUE;
 }
 
-PHP_METHOD(imagick, stereoimage)
 /* {{{ proto Imagick::stereoImage(Imagick offset_wand)
 	Composites two images and produces a single image that is the composite of a left and right image of a stereo pair
 */
+PHP_METHOD(imagick, stereoimage)
 {
 	MagickWand *tmpWand;
 	zval *object, *magickObject;
@@ -5719,12 +5720,12 @@ PHP_METHOD(imagick, stereoimage)
 
 	return;
 }
-
 /* }}} */
-PHP_METHOD(imagick, textureimage)
+
 /* {{{ proto Imagick::textureImage(Imagick texture_wand)
 	Repeatedly tiles the texture image across and down the image canvas.
 */
+PHP_METHOD(imagick, textureimage)
 {
 	MagickWand *tmpWand;
 	zval *object, *magickObject;
@@ -5762,12 +5763,12 @@ PHP_METHOD(imagick, textureimage)
 
 	return;
 }
-
 /* }}} */
-PHP_METHOD(imagick, tintimage)
+
 /* {{{ proto Imagick::tintImage(ImagickPixel tint, ImagickPixel opacity)
 	Applies a color vector to each pixel in the image.  The length of the vector is 0 for black and white and at its maximum for the midtones.  The vector weighting function is f(x)=(1-(4.0*((x-0.5)*(x-0.5)))).
 */
+PHP_METHOD(imagick, tintimage)
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_tint, *intern_opacity;
@@ -5802,12 +5803,12 @@ PHP_METHOD(imagick, tintimage)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, uniqueimagecolors)
+
 /* {{{ proto Imagick::uniqueImageColors()
 	Discards all but one of any pixel color.
 */
+PHP_METHOD(imagick, uniqueimagecolors)
 {
 	zval *object;
 	php_imagick_object *intern;
@@ -5826,12 +5827,12 @@ PHP_METHOD(imagick, uniqueimagecolors)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, unsharpmaskimage)
+
 /* {{{ proto Imagick::unsharpMaskImage(float radius, float sigma, float amount, float threshold)
 	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Imagick::UnsharpMaskImage() selects a suitable radius for you.
 */
+PHP_METHOD(imagick, unsharpmaskimage)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5863,12 +5864,12 @@ PHP_METHOD(imagick, unsharpmaskimage)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, unsharpmaskimagechannel)
+
 /* {{{ proto Imagick::unsharpMaskChannel(CHANNELTYPE channel, float radius, float sigma, float amount, float threshold)
 	Sharpens an image channel.  We convolve the image channel with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Imagick::UnsharpMaskImage() selects a suitable radius for you.
 */
+PHP_METHOD(imagick, unsharpmaskimagechannel)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5901,12 +5902,12 @@ PHP_METHOD(imagick, unsharpmaskimagechannel)
 	}
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, contraststretchimage)
+
 /* {{{ proto Imagick::contrastStretchImage(float black_point, float white_point)
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
+PHP_METHOD(imagick, contraststretchimage)
 {
 
 	php_imagick_object *intern;
@@ -5940,12 +5941,12 @@ PHP_METHOD(imagick, contraststretchimage)
 
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, contraststretchimagechannel)
+
 /* {{{ proto Imagick::contrastStretchImage(CHANNELTYPE channel, float black_point, float white_point)
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
+PHP_METHOD(imagick, contraststretchimagechannel)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -5979,12 +5980,12 @@ PHP_METHOD(imagick, contraststretchimagechannel)
 
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, convolveimage)
+
 /* {{{ proto Imagick::convolveImage(array kernel)
 	Applies a custom convolution kernel to the image.
 */
+PHP_METHOD(imagick, convolveimage)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -6028,12 +6029,12 @@ PHP_METHOD(imagick, convolveimage)
 
 	RETURN_TRUE;
 }
-
 /* }}} */
-PHP_METHOD(imagick, convolveimagechannel)
+
 /* {{{ proto Imagick::convolveImageChannel(CHANNELTYPE channel, array kernel)
 	Applies a custom convolution kernel to the image.
 */
+PHP_METHOD(imagick, convolveimagechannel)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -6077,8 +6078,8 @@ PHP_METHOD(imagick, convolveimagechannel)
 
 	RETURN_TRUE;
 }
-
 /* }}} */
+
 /* {{{ proto Imagick::cycleColormapImage(int displace)
 	Displaces an image's colormap by a given number of positions.  If you cycle the colormap a number of times you can produce a psychodelic effect.
 */
@@ -6530,7 +6531,7 @@ PHP_METHOD(imagick, getimagebordercolor)
 
 	if ( tmpWand == (PixelWand *)NULL || !IsPixelWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 4, "Get image backgroundcolor failed", 4 TSRMLS_CC );
+		throwExceptionWithMessage( 4, "Get image bordercolor failed", 4 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -10534,7 +10535,7 @@ PHP_METHOD(imagick, steganoimage)
 /* }}} */
 
 /* {{{ proto Imagick::clone
-	Makes an exact copy of the Imagick object.
+	Makes an exact copy of a MagickWand.
 */
 PHP_METHOD(imagick, clone)
 {
@@ -12374,7 +12375,7 @@ PHP_METHOD(imagick, settype)
 }
 /* }}} */
 
-/* end of magickwand*/
+/* end of Imagick */
 
 PHP_METHOD(imagickdraw, __construct)
 {
@@ -13500,17 +13501,17 @@ PHP_METHOD(imagickdraw, clone)
 {
 	zval *object;
 	php_imagickdraw_object *internd, *intern_return;
-  DrawingWand *tmpWand;
+	DrawingWand *tmpWand;
 
-  IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
 
-  object_init_ex( return_value, php_imagickdraw_sc_entry );
-  tmpWand = CloneDrawingWand( internd->drawing_wand );
+	object_init_ex( return_value, php_imagickdraw_sc_entry );
+	tmpWand = CloneDrawingWand( internd->drawing_wand );
 
-  intern_return = (php_imagickdraw_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-  intern_return->drawing_wand = tmpWand;
+	intern_return = (php_imagickdraw_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	intern_return->drawing_wand = tmpWand;
 
-  return;
+	return;
 }
 
 PHP_METHOD(imagickdraw, affine)
@@ -15290,7 +15291,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15334,7 +15335,7 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15432,13 +15433,13 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15519,13 +15520,13 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15695,7 +15696,7 @@ PHP_METHOD(imagickpixel, clear)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 3, "PixelWand is not allocated.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixel is not allocated.", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15717,7 +15718,7 @@ PHP_METHOD(imagickpixel, destroy)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 4, "PixelWand is not allocated.", 4 TSRMLS_CC);
+		throwExceptionWithMessage( 4, "ImagickPixel is not allocated.", 4 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16448,7 +16449,7 @@ static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type
 	intern = emalloc( sizeof( php_imagickdraw_object ) );
 	memset( &intern->zo, 0, sizeof( php_imagickdraw_object ) );
 
-	/* Set the drawingwand */
+	/* Set the DrawingWand */
 	intern->drawing_wand = NewDrawingWand();
 
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
@@ -16497,7 +16498,7 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	intern = emalloc( sizeof( php_imagickpixel_object ) );
 	memset( &intern->zo, 0, sizeof( php_imagickpixel_object ) );
 
-	/* Set the pixel iterator */
+	/* Set the pixeliterator */
 	intern->pixel_wand = NULL;
 	intern->initialized_via_iterator = 0;
 
