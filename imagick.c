@@ -5912,7 +5912,7 @@ PHP_METHOD(imagick, convolveimagechannel)
 	zval *kernelArray;
 	double *kernel;
 
-	if ( ZEND_NUM_ARGS() != 1 )
+	if ( ZEND_NUM_ARGS() != 2 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
 	}
