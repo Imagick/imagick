@@ -2,7 +2,7 @@ Imagick TODO
 
 - Unit tests
 - config.w32
-- Comment all the php methods in imagick.c
+- Comment all the php methods in imagick.c (DONE)
 - Create documentation
 - package.xml
 - Create build-test scripts
