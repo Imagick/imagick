@@ -2924,7 +2924,7 @@ double *getDoublesFromZval( zval *zArray, long *numElements TSRMLS_DC )
 	return dArray;
 }
 
-/* {{{ proto Imagick::__construct()
+/* {{{ proto Imagick Imagick::__construct()
    The Imagick constructor
 */
 PHP_METHOD(imagick, __construct)
@@ -2933,7 +2933,7 @@ PHP_METHOD(imagick, __construct)
 }
 /* }}} */
 
-/* {{{ proto Imagick::queryFormats( [string pattern] )
+/* {{{ proto array Imagick::queryFormats( [string pattern] )
    Returns formats supported by ImageMagick
 */
 PHP_METHOD(imagick, queryformats)
@@ -2961,7 +2961,7 @@ PHP_METHOD(imagick, queryformats)
 }
 /* }}} */
 
-/* {{{ proto Imagick::valid()
+/* {{{ proto bool Imagick::valid()
     Checks if the current item is valid
 */
 PHP_METHOD(imagick, valid)
@@ -2981,8 +2981,8 @@ PHP_METHOD(imagick, valid)
 }
 /* }}} */
 
-/* {{{ proto Imagick::current()
-    Returns information of current image
+/* {{{ proto array Imagick::current()
+    Returns information of current image.
 */
 PHP_METHOD(imagick, current)
 {
@@ -3018,7 +3018,7 @@ PHP_METHOD(imagick, current)
 }
 /* }}} */
 
-/* {{{ proto Imagick::readImage( string filename )
+/* {{{ proto bool Imagick::readImage( string filename )
     Reads image from filename
 */
 PHP_METHOD(imagick, readimage)
@@ -3062,7 +3062,7 @@ PHP_METHOD(imagick, readimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::pingImage( string filename )
+/* {{{ proto bool Imagick::pingImage( string filename )
     This method can be used to query image width, height, size, and format without reading the whole image in to memory.
 */
 PHP_METHOD(imagick, pingimage)
@@ -3106,7 +3106,7 @@ PHP_METHOD(imagick, pingimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::readImage( resource filehandle )
+/* {{{ proto bool Imagick::readImage( resource filehandle )
     Reads image from open filehandle
 */
 PHP_METHOD(imagick, readimagefile)
@@ -3155,7 +3155,7 @@ PHP_METHOD(imagick, readimagefile)
 }
 /* }}} */
 
-/* {{{ proto Imagick::pingImageFile( resource filehandle )
+/* {{{ proto bool Imagick::pingImageFile( resource filehandle )
     This method can be used to query image width, height, size, and format without reading the whole image to memory.
 */
 PHP_METHOD(imagick, pingimagefile)
@@ -3204,7 +3204,7 @@ PHP_METHOD(imagick, pingimagefile)
 }
 /* }}} */
 
-/* {{{ proto Imagick::readBlob( string image )
+/* {{{ proto bool Imagick::readBlob( string image )
     Reads image from a binary string
 */
 PHP_METHOD(imagick, readimageblob)
@@ -3248,7 +3248,7 @@ PHP_METHOD(imagick, readimageblob)
 }
 /* }}} */
 
-/* {{{ proto Imagick::pingImageBlob( string image )
+/* {{{ proto bool Imagick::pingImageBlob( string image )
 	This method can be used to query image width, height, size, and format without reading the whole image to memory.
 */
 PHP_METHOD(imagick, pingimageblob)
@@ -3286,7 +3286,7 @@ PHP_METHOD(imagick, pingimageblob)
 }
 /* }}} */
 
-/* {{{ proto Imagick::blurImage( float radius, float sigma )
+/* {{{ proto bool Imagick::blurImage( float radius, float sigma )
 	Adds blur filter to image
 */
 PHP_METHOD(imagick, blurimage)
@@ -3325,7 +3325,7 @@ PHP_METHOD(imagick, blurimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::blurImageChannel( CHANNELTYPE, float radius, float sigma )
+/* {{{ proto bool Imagick::blurImageChannel( CHANNELTYPE, float radius, float sigma )
 	Adds blur filter to image channel.
 */
 PHP_METHOD(imagick, blurimagechannel)
@@ -3365,7 +3365,7 @@ PHP_METHOD(imagick, blurimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::adaptiveBlurImage( float radius, float sigma )
+/* {{{ proto bool Imagick::adaptiveBlurImage( float radius, float sigma )
 	Adds adaptive blur filter to image.
 */
 PHP_METHOD(imagick, adaptiveblurimage)
@@ -3405,7 +3405,7 @@ PHP_METHOD(imagick, adaptiveblurimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::adaptiveBlurImageChannel( CHANNELTYPE, float radius, float sigma )
+/* {{{ proto bool Imagick::adaptiveBlurImageChannel(int channeltype, float radius, float sigma )
 	Adds adaptive blur filter to image channel.
 */
 PHP_METHOD(imagick, adaptiveblurimagechannel)
@@ -3446,7 +3446,7 @@ PHP_METHOD(imagick, adaptiveblurimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::waveImage( float amplitude, float length )
+/* {{{ proto bool Imagick::waveImage( float amplitude, float length )
 	Adds wave filter to the image.
 */
 PHP_METHOD(imagick, waveimage)
@@ -3485,7 +3485,7 @@ PHP_METHOD(imagick, waveimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::vignetteImage( float blackPoint, float whitePoint, int x, int y )
+/* {{{ proto bool Imagick::vignetteImage( float blackPoint, float whitePoint, int x, int y )
 	Adds vignette filter to the image
 */
 PHP_METHOD(imagick, vignetteimage)
@@ -3525,7 +3525,7 @@ PHP_METHOD(imagick, vignetteimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::clear()
+/* {{{ proto bool Imagick::clear()
 	Clears all resources associated to Imagick object
 */
 PHP_METHOD(imagick, clear)
@@ -3548,7 +3548,7 @@ PHP_METHOD(imagick, clear)
 }
 /* }}} */
 
-/* {{{ proto Imagick::destroy()
+/* {{{ proto bool Imagick::destroy()
 	Destroys the Imagick object
 */
 PHP_METHOD(imagick, destroy)
@@ -3571,7 +3571,7 @@ PHP_METHOD(imagick, destroy)
 }
 /* }}} */
 
-/* {{{ proto Imagick::scaleImage( int cols, int rows )
+/* {{{ proto bool Imagick::scaleImage( int cols, int rows )
 	Scales the size of an image to the given dimensions. Passing zero as either of
 	the arguments will preserve dimension while scaling.
 */
@@ -3637,7 +3637,7 @@ PHP_METHOD(imagick, scaleimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::cropImage( int width, height, int x, int y )
+/* {{{ proto bool Imagick::cropImage( int width, height, int x, int y )
 	Extracts a region of the image.
 */
 PHP_METHOD(imagick, cropimage)
@@ -3677,7 +3677,7 @@ PHP_METHOD(imagick, cropimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::spreadImage( float radius )
+/* {{{ proto bool Imagick::spreadImage( float radius )
 	Special effects method that randomly displaces each pixel in a block defined by the radius parameter.
 */
 PHP_METHOD(imagick, spreadimage)
@@ -3717,7 +3717,7 @@ PHP_METHOD(imagick, spreadimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::swirlImage( float degrees )
+/* {{{ proto bool Imagick::swirlImage( float degrees )
 	Swirls the pixels about the center of the image, where degrees indicates the sweep of the arc through which each pixel is moved. You get a more dramatic effect as the degrees move from 1 to 360.
 */
 PHP_METHOD(imagick, swirlimage)
@@ -3756,7 +3756,7 @@ PHP_METHOD(imagick, swirlimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::stripImage()
+/* {{{ proto bool Imagick::stripImage()
 	Strips an image of all profiles and comments.
 */
 PHP_METHOD(imagick, stripimage)
@@ -3781,7 +3781,7 @@ PHP_METHOD(imagick, stripimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::stripImage()
+/* {{{ proto bool Imagick::stripImage()
 	Strips an image of all profiles and comments.
 */
 PHP_METHOD(imagick, transposeimage)
@@ -3807,7 +3807,7 @@ PHP_METHOD(imagick, transposeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::transverseImage()
+/* {{{ proto bool Imagick::transverseImage()
 	Creates a horizontal mirror image by reflecting the pixels around the central y-axis while rotating them 270-degrees.
 */
 PHP_METHOD(imagick, transverseimage)
@@ -3833,7 +3833,7 @@ PHP_METHOD(imagick, transverseimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::trimImage(double fuzz)
+/* {{{ proto bool Imagick::trimImage(double fuzz)
 	Remove edges that are the background color from the image.
 */
 PHP_METHOD(imagick, trimimage)
@@ -3872,7 +3872,7 @@ PHP_METHOD(imagick, trimimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::chopImage( int width, int height, int x, int y)
+/* {{{ proto bool Imagick::chopImage( int width, int height, int x, int y)
 	Removes a region of an image and collapses the image to occupy the removed portion
 */
 PHP_METHOD(imagick, chopimage)
@@ -3912,7 +3912,7 @@ PHP_METHOD(imagick, chopimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::clipImage()
+/* {{{ proto bool Imagick::clipImage()
 	Clips along the first path from the 8BIM profile, if present.
 */
 PHP_METHOD(imagick, clipimage)
@@ -3936,7 +3936,7 @@ PHP_METHOD(imagick, clipimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::clipPathImage( string pathname, bool inside)
+/* {{{ proto bool Imagick::clipPathImage( string pathname, bool inside)
 	Clips along the named paths from the 8BIM profile, if present. Later operations take effect inside the path.  Id may be a number if preceded with #, to work on a numbered path, e.g., "#1" to use the first path.
 */
 PHP_METHOD(imagick, clippathimage)
@@ -3978,7 +3978,7 @@ PHP_METHOD(imagick, clippathimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::coalesceImages()
+/* {{{ proto bool Imagick::coalesceImages()
 	Composites a set of images while respecting any page offsets and disposal methods.  GIF, MIFF, and MNG animation sequences typically start with an image background and each subsequent image varies in size and offset.  returns a new sequence where each image in the sequence is the same size as the first and composited with the next image in the sequence.
 */
 PHP_METHOD(imagick, coalesceimages)
@@ -4007,7 +4007,7 @@ PHP_METHOD(imagick, coalesceimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::colorFloodfillImage( ImagickPixel fill, double fuzz, ImagickPixel bordercolor, int x, int y)
+/* {{{ proto bool Imagick::colorFloodfillImage( ImagickPixel fill, double fuzz, ImagickPixel bordercolor, int x, int y)
 	Changes the color value of any pixel that matches target and is an immediate neighbor.
 */
 PHP_METHOD(imagick, colorfloodfillimage)
@@ -4051,7 +4051,7 @@ PHP_METHOD(imagick, colorfloodfillimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::combineImages()
+/* {{{ proto bool Imagick::combineImages()
 	Combines one or more images into a single image. The grayscale value of the pixels of each image in the sequence is assigned in order to the specified channels of the combined image. The typical ordering would be image 1 => Red, 2 => Green, 3 => Blue, etc.
 */
 PHP_METHOD(imagick, combineimages)
@@ -4093,7 +4093,7 @@ PHP_METHOD(imagick, combineimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImage()
+/* {{{ proto bool Imagick::getImage()
 	Returns a new Imagick object with the current image sequence.
 */
 PHP_METHOD(imagick, getimage)
@@ -4121,7 +4121,7 @@ PHP_METHOD(imagick, getimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::addImage( Imagick source )
+/* {{{ proto bool Imagick::addImage( Imagick source )
 	Adds new image to Imagick object from the current position of the source object.
 */
 PHP_METHOD(imagick, addimage)
@@ -4158,7 +4158,7 @@ PHP_METHOD(imagick, addimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::newImage( int cols, int rows, ImagickPixel background )
+/* {{{ proto bool Imagick::newImage( int cols, int rows, ImagickPixel background )
 	Creates a new image and associates ImagickPixel value as background color
 */
 PHP_METHOD(imagick, newimage)
@@ -4196,7 +4196,7 @@ PHP_METHOD(imagick, newimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageTotalInkDensity()
+/* {{{ proto bool Imagick::getImageTotalInkDensity()
 	Gets the image total ink density.
 */
 PHP_METHOD(imagick, getimagetotalinkdensity)
@@ -4213,7 +4213,7 @@ PHP_METHOD(imagick, getimagetotalinkdensity)
 }
 /* }}} */
 
-/* {{{ proto Imagick::implodeImage( float radius )
+/* {{{ proto bool Imagick::implodeImage( float radius )
 	Creates a new image that is a copy of an existing one with the image pixels "implode" by the specified percentage. It allocates the memory necessary for the new Image structure and returns a pointer to the new image.
 */
 PHP_METHOD(imagick, implodeimage)
@@ -4250,7 +4250,7 @@ PHP_METHOD(imagick, implodeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::levelImage( float blackPoint, float gamma, float whitePoint )
+/* {{{ proto bool Imagick::levelImage( float blackPoint, float gamma, float whitePoint )
 	Adjusts the levels of an image by scaling the colors falling between specified white and black points to the full available quantum range. The parameters provided represent the black, mid, and white points. The black point specifies the darkest color in the image. Colors darker than the black point are set to zero. Mid point specifies a gamma correction to apply to the image.  White point specifies the lightest color in the image. Colors brighter than the white point are set to the maximum quantum value.
 */
 PHP_METHOD(imagick, levelimage)
@@ -4287,7 +4287,7 @@ PHP_METHOD(imagick, levelimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::levelImageChannel( CHANNELTYPE channel, float blackPoint, float gamma, float whitePoint )
+/* {{{ proto bool Imagick::levelImageChannel( int channel, float blackPoint, float gamma, float whitePoint )
 	Adjusts the levels of an image by scaling the colors falling between specified white and black points to the full available quantum range. The parameters provided represent the black, mid, and white points. The black point specifies the darkest color in the image. Colors darker than the black point are set to zero. Mid point specifies a gamma correction to apply to the image.  White point specifies the lightest color in the image. Colors brighter than the white point are set to the maximum quantum value.
 */
 PHP_METHOD(imagick, levelimagechannel)
@@ -4325,7 +4325,7 @@ PHP_METHOD(imagick, levelimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::linearStretchImage( float blackPoint, float whitePoint)
+/* {{{ proto bool Imagick::linearStretchImage( float blackPoint, float whitePoint)
 	Stretches with saturation the image intensity.
 */
 PHP_METHOD(imagick, linearstretchimage)
@@ -4362,7 +4362,7 @@ PHP_METHOD(imagick, linearstretchimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::magnifyImage()
+/* {{{ proto bool Imagick::magnifyImage()
 	Is a convenience method that scales an image proportionally to twice its original size.
 */
 PHP_METHOD(imagick, magnifyimage)
@@ -4385,7 +4385,7 @@ PHP_METHOD(imagick, magnifyimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::cycleColormapImage(Imagick map, bool dither)
+/* {{{ proto bool Imagick::cycleColormapImage(Imagick map, bool dither)
 	Replaces the colors of an image with the closest color from a reference image.
 */
 PHP_METHOD(imagick, mapimage)
@@ -4423,7 +4423,7 @@ PHP_METHOD(imagick, mapimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::matteFloodfillImage( float alpha,float fuzz,ImagickPixel bordercolor, int x, int y)
+/* {{{ proto bool Imagick::matteFloodfillImage( float alpha,float fuzz,ImagickPixel bordercolor, int x, int y)
 	Changes the transparency value of any pixel that matches target and is an immediate neighbor.  If the method FillToBorderMethod is specified, the transparency value is changed for any neighbor pixel that does not match the bordercolor member of image.
 */
 PHP_METHOD(imagick, mattefloodfillimage)
@@ -4463,7 +4463,7 @@ PHP_METHOD(imagick, mattefloodfillimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::medianFilterImage(float radius)
+/* {{{ proto bool Imagick::medianFilterImage(float radius)
 	Applies a digital filter that improves the quality of a noisy image.  Each pixel is replaced by the median in a set of neighboring pixels as defined by radius.
 */
 PHP_METHOD(imagick, medianfilterimage)
@@ -4500,7 +4500,7 @@ PHP_METHOD(imagick, medianfilterimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::negateImage( bool gray )
+/* {{{ proto bool Imagick::negateImage( bool gray )
 	Negates the colors in the reference image.  The Grayscale option means that only grayscale values within the image are negated.
 */
 PHP_METHOD(imagick, negateimage)
@@ -4537,7 +4537,7 @@ PHP_METHOD(imagick, negateimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::negateImageChannel( CHANNELTYPE channel, bool gray )
+/* {{{ proto bool Imagick::negateImageChannel(int channel, bool gray )
 	Negates the colors in the reference image.  The Grayscale option means that only grayscale values within the image are negated.
 */
 PHP_METHOD(imagick, negateimagechannel)
@@ -4575,7 +4575,7 @@ PHP_METHOD(imagick, negateimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::paintOpaqueImage( ImagickPixel target, ImagickPixel fill, float fuzz)
+/* {{{ proto bool Imagick::paintOpaqueImage( ImagickPixel target, ImagickPixel fill, float fuzz)
 	Changes any pixel that matches color with the color defined by fill.
 */
 PHP_METHOD(imagick, paintopaqueimage)
@@ -4617,7 +4617,7 @@ PHP_METHOD(imagick, paintopaqueimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::paintOpaqueImageChannel( CHANNELTYPE channel, ImagickPixel target, ImagickPixel fill, float fuzz)
+/* {{{ proto bool Imagick::paintOpaqueImageChannel( int channel, ImagickPixel target, ImagickPixel fill, float fuzz)
 	Changes any pixel that matches color with the color defined by fill.
 */
 PHP_METHOD(imagick, paintopaqueimagechannel)
@@ -4660,7 +4660,7 @@ PHP_METHOD(imagick, paintopaqueimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::optimizeImageLayers()
+/* {{{ proto bool Imagick::optimizeImageLayers()
 	Compares each image the GIF disposed forms of the previous image in the sequence.  From this it attempts to select the smallest cropped image to replace each frame, while preserving the results of the animation.
 */
 PHP_METHOD(imagick, optimizeimagelayers)
@@ -4688,7 +4688,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 }
 /* }}} */
 
-/* {{{ proto Imagick::paintTransparentImage( ImagickPixel target, float alpha, float fuzz)
+/* {{{ proto bool Imagick::paintTransparentImage( ImagickPixel target, float alpha, float fuzz)
 	Changes any pixel that matches color with the color defined by fill.
 */
 PHP_METHOD(imagick, painttransparentimage)
@@ -4727,7 +4727,7 @@ PHP_METHOD(imagick, painttransparentimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::paintTransparentImage( PREVIEWTYPE preview )
+/* {{{ proto bool Imagick::paintTransparentImage( int preview )
 	Tiles 9 thumbnails of the specified image with an image processing operation applied at varying strengths.  This is helpful to quickly pin-point an appropriate parameter for an image processing operation.
 */
 PHP_METHOD(imagick, previewimages)
@@ -4767,7 +4767,7 @@ PHP_METHOD(imagick, previewimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::profileImage( string name,string profile)
+/* {{{ proto bool Imagick::profileImage( string name,string profile)
 	Adds or removes a ICC, IPTC, or generic profile from an image.  If the profile is NULL, it is removed from the image otherwise added.  Use a name of '*' and a profile of NULL to remove all profiles from the image.
 */
 PHP_METHOD(imagick, profileimage)
@@ -4806,7 +4806,7 @@ PHP_METHOD(imagick, profileimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::quantizeImage( int numberColors, COLORSPACE colorspace, int treedepth, bool dither,
+/* {{{ proto bool Imagick::quantizeImage( int numberColors, int colorspace, int treedepth, bool dither,
     bool measureError)
 	Analyzes the colors within a reference image and chooses a fixed number of colors to represent the image.  The goal of the algorithm is to minimize the color difference between the input and output image while minimizing the processing time.
 */
@@ -4845,7 +4845,7 @@ PHP_METHOD(imagick, quantizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::quantizeImages(int number_colors, COLORSPACE colorspace, int treedepth, bool dither,
+/* {{{ proto bool Imagick::quantizeImages(int number_colors, int colorspace, int treedepth, bool dither,
     bool measure_error)
 	Analyzes the colors within a sequence of images and chooses a fixed number of colors to represent the image.  The goal of the algorithm is to minimize the color difference between the input and output image while minimizing the processing time.
 */
@@ -4884,7 +4884,7 @@ PHP_METHOD(imagick, quantizeimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::reduceNoiseImage(float radius)
+/* {{{ proto bool Imagick::reduceNoiseImage(float radius)
 	Smooths the contours of an image while still preserving edge information.  The algorithm works by replacing each pixel with its neighbor closest in value.  A neighbor is defined by radius.  Use a radius of 0 and Imagick::ReduceNoiseImage() selects a suitable radius for you.
 */
 PHP_METHOD(imagick, reducenoiseimage)
@@ -4921,7 +4921,7 @@ PHP_METHOD(imagick, reducenoiseimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::removeImageProfile(string name)
+/* {{{ proto string Imagick::removeImageProfile(string name)
 	Removes the named image profile and returns it.
 */
 PHP_METHOD(imagick, removeimageprofile)
@@ -4961,7 +4961,7 @@ PHP_METHOD(imagick, removeimageprofile)
 }
 /* }}} */
 
-/* {{{ proto Imagick::separateImageChannel(CHANNELTYPE channel)
+/* {{{ proto bool Imagick::separateImageChannel(int channel)
 	Separates a channel from the image and returns a grayscale image.  A channel is a particular color component of each pixel in the image.
 */
 PHP_METHOD(imagick, separateimagechannel)
@@ -4998,7 +4998,7 @@ PHP_METHOD(imagick, separateimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sepiaToneImage(float threshold)
+/* {{{ proto bool Imagick::sepiaToneImage(float threshold)
 	Applies a special effect to the image, similar to the effect achieved in a photo darkroom by sepia toning.  Threshold ranges from 0 to QuantumRange and is a measure of the extent of the sepia toning.  A threshold of 80 is a good starting point for a reasonable tone.
 */
 PHP_METHOD(imagick, sepiatoneimage)
@@ -5038,7 +5038,7 @@ PHP_METHOD(imagick, sepiatoneimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageBias(float bias)
+/* {{{ proto bool Imagick::setImageBias(float bias)
 	Sets the image bias for any method that convolves an image (e.g. Imagick::ConvolveImage()).
 */
 PHP_METHOD(imagick, setimagebias)
@@ -5075,7 +5075,7 @@ PHP_METHOD(imagick, setimagebias)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageBluePrimary(float x,float y)
+/* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
 	Sets the image chromaticity blue primary point.
 */
 PHP_METHOD(imagick, setimageblueprimary)
@@ -5112,7 +5112,7 @@ PHP_METHOD(imagick, setimageblueprimary)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageBorderColor(ImagickPixel border)
+/* {{{ proto bool Imagick::setImageBorderColor(ImagickPixel border)
 	Sets the image border color.
 */
 PHP_METHOD(imagick, setimagebordercolor)
@@ -5148,7 +5148,7 @@ PHP_METHOD(imagick, setimagebordercolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageChannelDepth(CHANNELTYPE channel, int depth)
+/* {{{ proto bool Imagick::setImageChannelDepth(int channel, int depth)
 	Sets the depth of a particular image channel.
 */
 PHP_METHOD(imagick, setimagechanneldepth)
@@ -5185,7 +5185,7 @@ PHP_METHOD(imagick, setimagechanneldepth)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageColormapColor(int index, ImagickPixel color)
+/* {{{ proto bool Imagick::setImageColormapColor(int index, ImagickPixel color)
 	Sets the color of the specified colormap index.
 */
 PHP_METHOD(imagick, setimagecolormapcolor)
@@ -5193,7 +5193,7 @@ PHP_METHOD(imagick, setimagecolormapcolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageColorspace(COLORSPACE colorspace)
+/* {{{ proto bool Imagick::setImageColorspace(int colorspace)
 	Sets the image colorspace.
 */
 PHP_METHOD(imagick, setimagecolorspace)
@@ -5230,7 +5230,7 @@ PHP_METHOD(imagick, setimagecolorspace)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageDispose(DISPOSETYPE dispose)
+/* {{{ proto bool Imagick::setImageDispose(int dispose)
 	Sets the image disposal method.
 */
 PHP_METHOD(imagick, setimagedispose)
@@ -5267,7 +5267,7 @@ PHP_METHOD(imagick, setimagedispose)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageExtent(int columns,int rows)
+/* {{{ proto bool Imagick::setImageExtent(int columns, int rows)
 	Sets the image size (i.e. columns & rows).
 */
 PHP_METHOD(imagick, setimageextent)
@@ -5304,7 +5304,7 @@ PHP_METHOD(imagick, setimageextent)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageGreenPrimary(float x,float y)
+/* {{{ proto bool Imagick::setImageGreenPrimary(float x, float y)
 	Sets the image chromaticity green primary point.
 */
 PHP_METHOD(imagick, setimagegreenprimary)
@@ -5341,7 +5341,7 @@ PHP_METHOD(imagick, setimagegreenprimary)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageInterlaceScheme(INTERLACE interlace_scheme)
+/* {{{ proto bool Imagick::setImageInterlaceScheme(int interlace_scheme)
 	Sets the image compression.
 */
 PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
@@ -5378,7 +5378,7 @@ PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageInterpolateMethod(INTERPOLATEPIXELMETHOD method)
+/* {{{ proto bool Imagick::setImageInterpolateMethod(int method)
 	Sets the image interpolate pixel method.
 */
 PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
@@ -5416,7 +5416,7 @@ PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageProfile(string name,string profile)
+/* {{{ proto bool Imagick::setImageProfile(string name, string profile)
 	Adds a named profile to the magick wand.  If a profile with the same name already exists, it is replaced.  This method differs from the Imagick::ProfileImage() method in that it does not apply any CMS color profiles.
 */
 PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
@@ -5455,7 +5455,7 @@ PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageRedPrimary(float x,float y)
+/* {{{ proto bool Imagick::setImageRedPrimary(float x,float y)
 	Sets the image chromaticity red primary point.
 */
 PHP_METHOD(imagick, setimageredprimary)
@@ -5492,7 +5492,7 @@ PHP_METHOD(imagick, setimageredprimary)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageRenderingIntent(RENDERINGINTENT rendering_intent)
+/* {{{ proto bool Imagick::setImageRenderingIntent(int rendering_intent)
 	Sets the image rendering intent.
 */
 PHP_METHOD(imagick, setimagerenderingintent)
@@ -5529,7 +5529,7 @@ PHP_METHOD(imagick, setimagerenderingintent)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageVirtualPixelMethod(VIRTUALPIXELMETHOD method)
+/* {{{ proto bool Imagick::setImageVirtualPixelMethod(int method)
 	Sets the image virtual pixel method.
 */
 PHP_METHOD(imagick, setimagevirtualpixelmethod)
@@ -5566,7 +5566,7 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageWhitePoint(float x,float y)
+/* {{{ proto bool Imagick::setImageWhitePoint(float x,float y)
 	Sets the image chromaticity white point.
 */
 PHP_METHOD(imagick, setimagewhitepoint)
@@ -5603,7 +5603,7 @@ PHP_METHOD(imagick, setimagewhitepoint)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta)
+/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta)
 	Adjusts the contrast of an image with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black).  Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
 PHP_METHOD(imagick, sigmoidalcontrastimage)
@@ -5641,7 +5641,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sigmoidalContrastChannel(CHANNELTYPE channel, bool sharpen, float alpha, float beta)
+/* {{{ proto bool Imagick::sigmoidalContrastChannel(int channel, bool sharpen, float alpha, float beta)
 	Adjusts the contrast of an image channel with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image channel using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black). Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
 PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
@@ -5679,7 +5679,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
 	RETURN_TRUE;
 }
 
-/* {{{ proto Imagick::stereoImage(Imagick offset_wand)
+/* {{{ proto bool Imagick::stereoImage(Imagick offset_wand)
 	Composites two images and produces a single image that is the composite of a left and right image of a stereo pair
 */
 PHP_METHOD(imagick, stereoimage)
@@ -5722,7 +5722,7 @@ PHP_METHOD(imagick, stereoimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::textureImage(Imagick texture_wand)
+/* {{{ proto bool Imagick::textureImage(Imagick texture_wand)
 	Repeatedly tiles the texture image across and down the image canvas.
 */
 PHP_METHOD(imagick, textureimage)
@@ -5765,7 +5765,7 @@ PHP_METHOD(imagick, textureimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::tintImage(ImagickPixel tint, ImagickPixel opacity)
+/* {{{ proto bool Imagick::tintImage(ImagickPixel tint, ImagickPixel opacity)
 	Applies a color vector to each pixel in the image.  The length of the vector is 0 for black and white and at its maximum for the midtones.  The vector weighting function is f(x)=(1-(4.0*((x-0.5)*(x-0.5)))).
 */
 PHP_METHOD(imagick, tintimage)
@@ -5805,7 +5805,7 @@ PHP_METHOD(imagick, tintimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::uniqueImageColors()
+/* {{{ proto bool Imagick::uniqueImageColors()
 	Discards all but one of any pixel color.
 */
 PHP_METHOD(imagick, uniqueimagecolors)
@@ -5829,7 +5829,7 @@ PHP_METHOD(imagick, uniqueimagecolors)
 }
 /* }}} */
 
-/* {{{ proto Imagick::unsharpMaskImage(float radius, float sigma, float amount, float threshold)
+/* {{{ proto bool Imagick::unsharpMaskImage(float radius, float sigma, float amount, float threshold)
 	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Imagick::UnsharpMaskImage() selects a suitable radius for you.
 */
 PHP_METHOD(imagick, unsharpmaskimage)
@@ -5866,7 +5866,7 @@ PHP_METHOD(imagick, unsharpmaskimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::unsharpMaskChannel(CHANNELTYPE channel, float radius, float sigma, float amount, float threshold)
+/* {{{ proto bool Imagick::unsharpMaskChannel(int channel, float radius, float sigma, float amount, float threshold)
 	Sharpens an image channel.  We convolve the image channel with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Imagick::UnsharpMaskImage() selects a suitable radius for you.
 */
 PHP_METHOD(imagick, unsharpmaskimagechannel)
@@ -5904,7 +5904,7 @@ PHP_METHOD(imagick, unsharpmaskimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::contrastStretchImage(float black_point, float white_point)
+/* {{{ proto bool Imagick::contrastStretchImage(float black_point, float white_point)
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
 PHP_METHOD(imagick, contraststretchimage)
@@ -5943,7 +5943,7 @@ PHP_METHOD(imagick, contraststretchimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::contrastStretchImage(CHANNELTYPE channel, float black_point, float white_point)
+/* {{{ proto bool Imagick::contrastStretchImage(CHANNELTYPE channel, float black_point, float white_point)
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
 PHP_METHOD(imagick, contraststretchimagechannel)
@@ -5982,7 +5982,7 @@ PHP_METHOD(imagick, contraststretchimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::convolveImage(array kernel)
+/* {{{ proto bool Imagick::convolveImage(array kernel)
 	Applies a custom convolution kernel to the image.
 */
 PHP_METHOD(imagick, convolveimage)
@@ -6031,7 +6031,7 @@ PHP_METHOD(imagick, convolveimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::convolveImageChannel(CHANNELTYPE channel, array kernel)
+/* {{{ proto bool Imagick::convolveImageChannel(int channel, array kernel)
 	Applies a custom convolution kernel to the image.
 */
 PHP_METHOD(imagick, convolveimagechannel)
@@ -6080,7 +6080,7 @@ PHP_METHOD(imagick, convolveimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::cycleColormapImage(int displace)
+/* {{{ proto bool Imagick::cycleColormapImage(int displace)
 	Displaces an image's colormap by a given number of positions.  If you cycle the colormap a number of times you can produce a psychodelic effect.
 */
 PHP_METHOD(imagick, cyclecolormapimage)
@@ -6118,7 +6118,7 @@ PHP_METHOD(imagick, cyclecolormapimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::deconstructImages()
+/* {{{ proto bool Imagick::deconstructImages()
 	Compares each image with the next in a sequence and returns the maximum bounding region of any pixel differences it discovers.
 */
 PHP_METHOD(imagick, deconstructimages)
@@ -6146,7 +6146,7 @@ PHP_METHOD(imagick, deconstructimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageRegion(int width, int height, int x, int y)
+/* {{{ proto bool Imagick::getImageRegion(int width, int height, int x, int y)
 	Extracts a region of the image and returns it as a a new wand.
 */
 PHP_METHOD(imagick, getimageregion)
@@ -6188,7 +6188,7 @@ PHP_METHOD(imagick, getimageregion)
 }
 /* }}} */
 
-/* {{{ proto Imagick::despeckleImage()
+/* {{{ proto bool Imagick::despeckleImage()
 	Reduces the speckle noise in an image while perserving the edges of the original image.
 */
 PHP_METHOD(imagick, despeckleimage)
@@ -6213,7 +6213,7 @@ PHP_METHOD(imagick, despeckleimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::edgeImage(float radius)
+/* {{{ proto bool Imagick::edgeImage(float radius)
 	Enhance edges within the image with a convolution filter of the given radius.  Use a radius of 0 and Edge() selects a suitable radius for you.
 */
 PHP_METHOD(imagick, edgeimage)
@@ -6252,7 +6252,7 @@ PHP_METHOD(imagick, edgeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::embossImage(float radius, float sigma)
+/* {{{ proto bool Imagick::embossImage(float radius, float sigma)
 	Returns a grayscale image with a three-dimensional effect.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma).  For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Emboss() selects a suitable radius for you.
 */
 PHP_METHOD(imagick, embossimage)
@@ -6290,7 +6290,7 @@ PHP_METHOD(imagick, embossimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::enhanceImage()
+/* {{{ proto bool Imagick::enhanceImage()
 	Applies a digital filter that improves the quality of a noisy image.
 */
 PHP_METHOD(imagick, enhanceimage)
@@ -6315,7 +6315,7 @@ PHP_METHOD(imagick, enhanceimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::equalizeImage()
+/* {{{ proto bool Imagick::equalizeImage()
 	Equalizes the image histogram.
 */
 PHP_METHOD(imagick, equalizeimage)
@@ -6340,7 +6340,7 @@ PHP_METHOD(imagick, equalizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::evaluateImage(EVALUATEOPERATOR op, float constant)
+/* {{{ proto bool Imagick::evaluateImage(int op, float constant)
 	Applys an arithmetic, relational, or logical expression to an image.  Use these operators to lighten or darken an image, to increase or decrease contrast in an image, or to produce the "negative" of an image.
 */
 PHP_METHOD(imagick, evaluateimage)
@@ -6379,7 +6379,7 @@ PHP_METHOD(imagick, evaluateimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::evaluateImageChannel(CHANNEL channel, EVALUATOROPERATOR op, float constant)
+/* {{{ proto bool Imagick::evaluateImageChannel(int channel, int op, float constant)
 	Applys an arithmetic, relational, or logical expression to an image.  Use these operators to lighten or darken an image, to increase or decrease contrast in an image, or to produce the "negative" of an image.
 */
 PHP_METHOD(imagick, evaluateimagechannel)
@@ -6418,7 +6418,7 @@ PHP_METHOD(imagick, evaluateimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageGeometry()
+/* {{{ proto array Imagick::getImageGeometry()
 	Returns the width and height as an associative array.
 */
 PHP_METHOD(imagick, getimagegeometry)
@@ -6443,7 +6443,7 @@ PHP_METHOD(imagick, getimagegeometry)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageBackgroundColor(ImagickPixel background_color)
+/* {{{ proto ImagickPixel Imagick::getImageBackgroundColor()
 	Returns the image background color.
 */
 PHP_METHOD(imagick, getimagebackgroundcolor)
@@ -6481,7 +6481,7 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageBluePrimary(float *x, float *y)
+/* {{{ proto ImagickPixel Imagick::getImageBluePrimary(float x, float y)
 	Returns the chromaticy blue primary point for the image.
 */
 PHP_METHOD(imagick, getimageblueprimary)
@@ -6510,7 +6510,7 @@ PHP_METHOD(imagick, getimageblueprimary)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageBorderColor(ImagickPixel border_color)
+/* {{{ proto ImagickPixel Imagick::getImageBorderColor()
 	Returns the image border color.
 */
 PHP_METHOD(imagick, getimagebordercolor)
@@ -6548,7 +6548,7 @@ PHP_METHOD(imagick, getimagebordercolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageChannelDepth(CHANNELTYPE channel)
+/* {{{ proto int Imagick::getImageChannelDepth()
 	Gets the depth for a particular image channel.
 */
 PHP_METHOD(imagick, getimagechanneldepth)
@@ -6578,7 +6578,7 @@ PHP_METHOD(imagick, getimagechanneldepth)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageChannelDistortion(Imagick reference, CHANNELTYPE channel, METRICTYPE metric)
+/* {{{ proto float Imagick::getImageChannelDistortion(Imagick reference, int channel, int metric)
 	Compares one or more image channels of an image to a reconstructed image and returns the specified distortion metric.
 */
 PHP_METHOD(imagick, getimagechanneldistortion)
@@ -6619,7 +6619,7 @@ PHP_METHOD(imagick, getimagechanneldistortion)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageChannelExtrema(CHANNELTYPE channel)
+/* {{{ proto array Imagick::getImageChannelExtrema(int channel)
 	Gets the extrema for one or more image channels.  Return value is an associative array with the keys "minima" and "maxima".
 */
 PHP_METHOD(imagick, getimagechannelextrema)
@@ -6662,7 +6662,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageChannelMean(CHANNELTYPE channel)
+/* {{{ proto array Imagick::getImageChannelMean(int channel)
 	Gets the mean and standard deviation of one or more image channels.  Return value is an associative array with the keys "mean" and "standardDeviation".
 */
 PHP_METHOD(imagick, getimagechannelmean)
@@ -6703,7 +6703,7 @@ PHP_METHOD(imagick, getimagechannelmean)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageChannelStatistics()
+/* {{{ proto array Imagick::getImageChannelStatistics()
 	Returns statistics for each channel in the image.  The statistics incude the channel depth, its minima and maxima, the mean, and the standard deviation.  You can access the red channel mean, for example, like this:
 */
 PHP_METHOD(imagick, getimagechannelstatistics)
@@ -6741,7 +6741,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageColormapColor(int index, ImagickPixel color)
+/* {{{ proto ImagickPixel Imagick::getImageColormapColor(int index, ImagickPixel color)
 	Returns the color of the specified colormap index.
 */
 PHP_METHOD(imagick, getimagecolormapcolor)
@@ -6791,7 +6791,7 @@ PHP_METHOD(imagick, getimagecolormapcolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageColorspace()
+/* {{{ proto int Imagick::getImageColorspace()
 	Gets the image colorspace.
 */
 PHP_METHOD(imagick, getimagecolorspace)
@@ -6808,7 +6808,7 @@ PHP_METHOD(imagick, getimagecolorspace)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageCompose()
+/* {{{ proto int Imagick::getImageCompose()
 	Returns the composite operator associated with the image.
 */
 PHP_METHOD(imagick, getimagecompose)
@@ -6825,7 +6825,7 @@ PHP_METHOD(imagick, getimagecompose)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageDelay()
+/* {{{ proto int Imagick::getImageDelay()
 	Gets the image delay.
 */
 PHP_METHOD(imagick, getimagedelay)
@@ -6842,7 +6842,7 @@ PHP_METHOD(imagick, getimagedelay)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageDepth()
+/* {{{ proto int Imagick::getImageDepth()
 	Gets the image depth.
 */
 PHP_METHOD(imagick, getimagedepth)
@@ -6859,6 +6859,9 @@ PHP_METHOD(imagick, getimagedepth)
 }
 /* }}} */
 
+/* {{{ proto float Imagick::getImageDistortion(MagickWand reference, int metric)
+	Compares an image to a reconstructed image and returns the specified distortion metric.
+*/
 PHP_METHOD(imagick, getimagedistortion)
 {
 	zval *object, *objvar;
@@ -6894,8 +6897,9 @@ PHP_METHOD(imagick, getimagedistortion)
 
 	RETVAL_DOUBLE( distortion );
 }
+/* }}} */
 
-/* {{{ proto Imagick::getImageExtrema()
+/* {{{ proto array Imagick::getImageExtrema()
 	Gets the extrema for the image.  Returns an associative array with the keys "min" and "max".
 */
 PHP_METHOD(imagick, getimageextrema)
@@ -6924,10 +6928,9 @@ PHP_METHOD(imagick, getimageextrema)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageDispose()
+/* {{{ proto long Imagick::getImageDispose()
 	Gets the image disposal method.
 */
-
 PHP_METHOD(imagick, getimagedispose)
 {
 	zval *object;
@@ -6942,7 +6945,7 @@ PHP_METHOD(imagick, getimagedispose)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageGamma()
+/* {{{ proto float Imagick::getImageGamma()
 	Gets the image gamma.
 */
 PHP_METHOD(imagick, getimagegamma)
@@ -6959,7 +6962,7 @@ PHP_METHOD(imagick, getimagegamma)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageGreenPrimary()
+/* {{{ proto array Imagick::getImageGreenPrimary()
 	Returns the chromaticy green primary point. Returns an array with the keys "x" and "y".
 */
 PHP_METHOD(imagick, getimagegreenprimary)
@@ -6988,7 +6991,7 @@ PHP_METHOD(imagick, getimagegreenprimary)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageHeight()
+/* {{{ proto int Imagick::getImageHeight()
 	Returns the image height.
 */
 PHP_METHOD(imagick, getimageheight)
@@ -7005,7 +7008,7 @@ PHP_METHOD(imagick, getimageheight)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageHistogram()
+/* {{{ proto int Imagick::getImageHistogram()
 	Returns the image histogram as an array of ImagickPixel objects.
 */
 PHP_METHOD(imagick, getimagehistogram) // TODO: does this work like iterator?
@@ -7013,7 +7016,7 @@ PHP_METHOD(imagick, getimagehistogram) // TODO: does this work like iterator?
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageInterlaceScheme()
+/* {{{ proto int Imagick::getImageInterlaceScheme()
 	Gets the image interlace scheme.
 */
 PHP_METHOD(imagick, getimageinterlacescheme)
@@ -7030,7 +7033,7 @@ PHP_METHOD(imagick, getimageinterlacescheme)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageInterpolateMethod()
+/* {{{ proto int Imagick::getImageInterpolateMethod()
 	Returns the interpolation method for the sepcified image.
 */
 PHP_METHOD(imagick, getimageinterpolatemethod)
@@ -7047,7 +7050,7 @@ PHP_METHOD(imagick, getimageinterpolatemethod)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageIterations()
+/* {{{ proto int Imagick::getImageIterations()
 	Gets the image iterations.
 */
 PHP_METHOD(imagick, getimageiterations)
@@ -7064,7 +7067,7 @@ PHP_METHOD(imagick, getimageiterations)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageMatte()
+/* {{{ proto int Imagick::getImageMatte()
 	Returns MagickTrue if the image has a matte channel otherwise MagickFalse.
 */
 PHP_METHOD(imagick, getimagematte)
@@ -7081,7 +7084,7 @@ PHP_METHOD(imagick, getimagematte)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageMatteColor(ImagickPixel matte_color)
+/* {{{ proto ImagickPixel Imagick::getImageMatteColor()
 	Returns the image matte color.
 */
 PHP_METHOD(imagick, getimagemattecolor)
@@ -7120,7 +7123,7 @@ PHP_METHOD(imagick, getimagemattecolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImagePage()
+/* {{{ proto array Imagick::getImagePage()
 	Returns the page geometry associated with the image in an array with the keys "width", "height", "x", and "y".
 */
 PHP_METHOD(imagick, getimagepage)
@@ -7153,7 +7156,7 @@ PHP_METHOD(imagick, getimagepage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImagePixelColor(int x, int y)
+/* {{{ proto ImagickPixel Imagick::getImagePixelColor(int x, int y)
 	Returns the color of the specified pixel.
 */
 PHP_METHOD(imagick, getimagepixelcolor)
@@ -7203,7 +7206,7 @@ PHP_METHOD(imagick, getimagepixelcolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageProfile(string name)
+/* {{{ proto string Imagick::getImageProfile(string name)
 	Returns the named image profile.
 */
 PHP_METHOD(imagick, getimageprofile)
@@ -7240,7 +7243,7 @@ PHP_METHOD(imagick, getimageprofile)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageRedPrimary()
+/* {{{ proto array Imagick::getImageRedPrimary()
 	Returns the chromaticy red primary point as an array with the keys "x" and "y".
 */
 PHP_METHOD(imagick, getimageredprimary)
@@ -7269,7 +7272,7 @@ PHP_METHOD(imagick, getimageredprimary)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageRenderingIntent()
+/* {{{ proto int Imagick::getImageRenderingIntent()
 	Gets the image rendering intent.
 */
 PHP_METHOD(imagick, getimagerenderingintent)
@@ -7286,7 +7289,7 @@ PHP_METHOD(imagick, getimagerenderingintent)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageResolution()
+/* {{{ proto array Imagick::getImageResolution()
 	Gets the image X and Y resolution.
 */
 PHP_METHOD(imagick, getimageresolution)
@@ -7315,7 +7318,7 @@ PHP_METHOD(imagick, getimageresolution)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageScene()
+/* {{{ proto int Imagick::getImageScene()
 	Gets the image scene.
 */
 PHP_METHOD(imagick, getimagescene)
@@ -7332,7 +7335,7 @@ PHP_METHOD(imagick, getimagescene)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageSignature()
+/* {{{ proto string Imagick::getImageSignature()
 	Generates an SHA-256 message digest for the image pixel stream.
 */
 PHP_METHOD(imagick, getimagesignature)
@@ -7351,7 +7354,7 @@ PHP_METHOD(imagick, getimagesignature)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageTicksPerSecond()
+/* {{{ proto int Imagick::getImageTicksPerSecond()
 	Gets the image ticks-per-second.
 */
 PHP_METHOD(imagick, getimagetickspersecond)
@@ -7368,7 +7371,7 @@ PHP_METHOD(imagick, getimagetickspersecond)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageType()
+/* {{{ proto int Imagick::getImageType()
 	Gets the potential image type:
 */
 PHP_METHOD(imagick, getimagetype)
@@ -7385,7 +7388,7 @@ PHP_METHOD(imagick, getimagetype)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageUnits()
+/* {{{ proto int Imagick::getImageUnits()
 	Gets the image units of resolution.
 */
 PHP_METHOD(imagick, getimageunits)
@@ -7402,7 +7405,7 @@ PHP_METHOD(imagick, getimageunits)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageVirtualPixelMethod()
+/* {{{ proto int Imagick::getImageVirtualPixelMethod()
 	Returns the virtual pixel method for the sepcified image.
 */
 PHP_METHOD(imagick, getimagevirtualpixelmethod)
@@ -7419,7 +7422,7 @@ PHP_METHOD(imagick, getimagevirtualpixelmethod)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageWhitePoint()
+/* {{{ proto array Imagick::getImageWhitePoint()
 	Returns the chromaticy white point as an associative array with the keys "x" and "y".
 */
 PHP_METHOD(imagick, getimagewhitepoint)
@@ -7448,7 +7451,7 @@ PHP_METHOD(imagick, getimagewhitepoint)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageWidth()
+/* {{{ proto int Imagick::getImageWidth()
 	Returns the image width.
 */
 PHP_METHOD(imagick, getimagewidth)
@@ -7465,7 +7468,7 @@ PHP_METHOD(imagick, getimagewidth)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getNumberImages()
+/* {{{ proto int Imagick::getNumberImages()
 	Returns the number of images associated with a magick wand.
 */
 PHP_METHOD(imagick, getnumberimages)
@@ -7482,7 +7485,7 @@ PHP_METHOD(imagick, getnumberimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::thumbnailImage(int columns, int rows)
+/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows)
 	 Changes the size of an image to the given dimensions and removes any associated profiles.  The goal is to produce small low cost thumbnail images suited for display on the Web.
 */
 PHP_METHOD(imagick, thumbnailimage)
@@ -7550,7 +7553,7 @@ PHP_METHOD(imagick, thumbnailimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::resetIterator();
+/* {{{ proto bool Imagick::resetIterator();
 	Resets the iterator.  Use it in conjunction with Imagick::nextImage() to iterate over all the images in a wand container.
 */
 PHP_METHOD(imagick, resetiterator)
@@ -7574,7 +7577,7 @@ PHP_METHOD(imagick, resetiterator)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setFirstIterator()
+/* {{{ proto bool Imagick::setFirstIterator()
 	Sets the wand iterator to the first image.
 */
 PHP_METHOD(imagick, setfirstiterator)
@@ -7598,7 +7601,7 @@ PHP_METHOD(imagick, setfirstiterator)
 }
 /* }}} */
 
-/* {{{ proto Imagick::previousImage()
+/* {{{ proto bool Imagick::previousImage()
 	Assocates the previous image in an image list with the magick wand.
 */
 PHP_METHOD(imagick, previousimage)
@@ -7621,7 +7624,7 @@ PHP_METHOD(imagick, previousimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::nextImage()
+/* {{{ proto bool Imagick::nextImage()
 	Associates the next image in the image list with a magick wand.
 */
 PHP_METHOD(imagick, nextimage)
@@ -7646,7 +7649,7 @@ PHP_METHOD(imagick, nextimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::hasPreviousImage()
+/* {{{ proto bool Imagick::hasPreviousImage()
 	Returns true if the wand has more images when traversing the list in the reverse direction
 */
 PHP_METHOD(imagick, haspreviousimage)
@@ -7669,7 +7672,7 @@ PHP_METHOD(imagick, haspreviousimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::hasNextImage()
+/* {{{ proto bool Imagick::hasNextImage()
 	Returns MagickTrue if the wand has more images when traversing the list in the forward direction
 */
 PHP_METHOD(imagick, hasnextimage)
@@ -7692,7 +7695,7 @@ PHP_METHOD(imagick, hasnextimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageIndex()
+/* {{{ proto int Imagick::getImageIndex()
 	Returns the index of the current active image, within the Imagick object.
 */
 PHP_METHOD(imagick, getimageindex)
@@ -7709,7 +7712,7 @@ PHP_METHOD(imagick, getimageindex)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageIndex(int index)
+/* {{{ proto bool Imagick::setImageIndex(int index)
 	Returns the index of the current active image, within the Imagick object.
 */
 PHP_METHOD(imagick, setimageindex)
@@ -7747,7 +7750,7 @@ PHP_METHOD(imagick, setimageindex)
 }
 /* }}} */
 
-/* {{{ proto Imagick::removeImage()
+/* {{{ proto bool Imagick::removeImage()
 	Removes an image from the image list.
 */
 PHP_METHOD(imagick, removeimage)
@@ -7773,7 +7776,9 @@ PHP_METHOD(imagick, removeimage)
 }
 /* }}} */
 
-
+/* {{{ proto string Imagick::getImageFilename()
+	Returns the filename of a particular image in a sequence, or explicit FALSE (suitable for === testing) if an error occurs.
+*/
 PHP_METHOD(imagick, getimagefilename)
 {
 	php_imagick_object *intern;
@@ -7789,8 +7794,9 @@ PHP_METHOD(imagick, getimagefilename)
 	IMAGICK_FREE_MEMORY( char *, fileName );
 	return;
 }
+/* }}} */
 
-/* {{{ proto Imagick::getImageFilename()
+/* {{{ proto int Imagick::getImageFilename()
 	Returns the filename of a particular image in a sequence.
 */
 PHP_METHOD(imagick, getimagesize)
@@ -7807,7 +7813,7 @@ PHP_METHOD(imagick, getimagesize)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageBlob()
+/* {{{ proto string Imagick::getImageBlob()
 	Implements direct to memory image formats.  It returns the image sequence as a blob and its length.  The format of the image determines the format of the returned blob (GIF, JPEG,  PNG, etc.).  To return a different image format, use MagickSetImageFormat().
 */
 PHP_METHOD(imagick, getimageblob)
@@ -7831,7 +7837,7 @@ PHP_METHOD(imagick, getimageblob)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageFormat()
+/* {{{ proto string Imagick::getImageFormat()
 	Returns the format of a particular image in a sequence.
 */
 PHP_METHOD(imagick, getimageformat)
@@ -7854,7 +7860,7 @@ PHP_METHOD(imagick, getimageformat)
 }
 /* }}} */
 
-/* {{{ proto Imagick::identifyImage()
+/* {{{ proto string Imagick::identifyImage()
 	Identifies an image by printing its attributes to the file.  Attributes include the image width, height, size, and others.
 */
 /* FIX THIS WHOLE FUNCTION */
@@ -7955,7 +7961,7 @@ PHP_METHOD(imagick, identifyimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getImageColors()
+/* {{{ proto int Imagick::getImageColors()
 	Gets the number of unique colors in the image.
 */
 PHP_METHOD(imagick, getimagecolors)
@@ -7972,7 +7978,7 @@ PHP_METHOD(imagick, getimagecolors)
 }
 /* }}} */
 
-/* {{{ proto Imagick::commentImage(string comment)
+/* {{{ proto bool Imagick::commentImage(string comment)
 	Adds a comment to your image.
 */
 PHP_METHOD(imagick, commentimage)
@@ -8014,7 +8020,7 @@ PHP_METHOD(imagick, commentimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageFilename(string filename)
+/* {{{ proto bool Imagick::setImageFilename(string filename)
 	Sets the filename of a particular image in a sequence.
 */
 PHP_METHOD(imagick, setimagefilename)
@@ -8056,7 +8062,7 @@ PHP_METHOD(imagick, setimagefilename)
 }
 /* }}} */
 
-
+/* PS, DEPRECATED please remove: http://www.imagemagick.org/discourse-server/viewtopic.php?f=6&t=8196 */
 PHP_METHOD(imagick, setimageattribute)
 {
 	php_imagick_object *intern;
@@ -8094,7 +8100,7 @@ PHP_METHOD(imagick, setimageattribute)
 	RETURN_TRUE;
 }
 
-/* {{{ proto Imagick::setImageBackgroundColor(ImagickPixel background)
+/* {{{ proto bool Imagick::setImageBackgroundColor(ImagickPixel background)
 	Sets the image background color.
 */
 PHP_METHOD(imagick, setimagebackgroundcolor)
@@ -8134,7 +8140,7 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageCompose(COMPOSITEOPERATOR compose)
+/* {{{ proto bool Imagick::setImageCompose(int compose)
 	Sets the image composite operator, useful for specifying how to composite the image thumbnail when using the MagickMontageImage() method.
 */
 PHP_METHOD(imagick, setimagecompose)
@@ -8173,7 +8179,7 @@ PHP_METHOD(imagick, setimagecompose)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageCompression(COMPRESSIONTYPE compression)
+/* {{{ proto bool Imagick::setImageCompression(int compression)
 	Sets the image compression.
 */
 PHP_METHOD(imagick, setimagecompression)
@@ -8212,7 +8218,7 @@ PHP_METHOD(imagick, setimagecompression)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageDelay(int delay)
+/* {{{ proto bool Imagick::setImageDelay(int delay)
 	Sets the image delay.
 */
 PHP_METHOD(imagick, setimagedelay)
@@ -8251,7 +8257,7 @@ PHP_METHOD(imagick, setimagedelay)
 }
 /* }}} */
 
-/* {{{ proto Imagick::colorizeImage(ImagickPixel colorize, ImagickPixel opacity)
+/* {{{ proto bool Imagick::colorizeImage(ImagickPixel colorize, ImagickPixel opacity)
 	Blends the fill color with each pixel in the image.
 */
 PHP_METHOD(imagick, colorizeimage)
@@ -8292,7 +8298,7 @@ PHP_METHOD(imagick, colorizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::compareImageChannels(Imagick reference, CHANNELTYPE channel, METRICTYPE metric)
+/* {{{ proto Imagick Imagick::compareImageChannels(Imagick reference, int channel, int metric)
 	Compares one or more image channels of an image to a reconstructed image and returns the difference image.
 */
 PHP_METHOD(imagick, compareimagechannels)
@@ -8343,7 +8349,7 @@ PHP_METHOD(imagick, compareimagechannels)
 }
 /* }}} */
 
-/* {{{ proto Imagick::compareImageLayers(MAGICKLAYERMETHOD method)
+/* {{{ proto Imagick Imagick::compareImageLayers(int method)
 	Compares each image with the next in a sequence and returns the maximum bounding region of any pixel differences it discovers.
 */
 PHP_METHOD(imagick, compareimagelayers)
@@ -8384,7 +8390,7 @@ PHP_METHOD(imagick, compareimagelayers)
 }
 /* }}} */
 
-/* {{{ proto Imagick::flattenImages()
+/* {{{ proto bool Imagick::flattenImages()
 	Merges a sequence of images.  This is useful for combining Photoshop layers into a single image.
 */
 PHP_METHOD(imagick, flattenimages)
@@ -8412,7 +8418,7 @@ PHP_METHOD(imagick, flattenimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::flipImage()
+/* {{{ proto bool Imagick::flipImage()
 	Creates a vertical mirror image by reflecting the pixels around the central x-axis.
 */
 PHP_METHOD(imagick, flipimage)
@@ -8436,7 +8442,7 @@ PHP_METHOD(imagick, flipimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::flopImage()
+/* {{{ proto bool Imagick::flopImage()
 	Creates a horizontal mirror image by reflecting the pixels around the central y-axis.
 */
 PHP_METHOD(imagick, flopimage)
@@ -8460,7 +8466,7 @@ PHP_METHOD(imagick, flopimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::frameImage(ImagickPixel matte_color, int width, int height, int inner_bevel, int outer_bevel)
+/* {{{ proto bool Imagick::frameImage(ImagickPixel matte_color, int width, int height, int inner_bevel, int outer_bevel)
 	Adds a simulated three-dimensional border around the image.  The width and height specify the border width of the vertical and horizontal sides of the frame.  The inner and outer bevels indicate the width of the inner and outer shadows of the frame.
 */
 PHP_METHOD(imagick, frameimage)
@@ -8499,7 +8505,7 @@ PHP_METHOD(imagick, frameimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::fxImage(string expression)
+/* {{{ proto Imagick Imagick::fxImage(string expression)
 	Evaluate expression for each pixel in the image.
 */
 PHP_METHOD(imagick, fximage)
@@ -8541,7 +8547,7 @@ PHP_METHOD(imagick, fximage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::fxImageChannel(CHANNELTYPE channel, string expression)
+/* {{{ proto bool Imagick::fxImageChannel(int channel, string expression)
 	Evaluate expression for each pixel in the image.
 */
 PHP_METHOD(imagick, fximagechannel)
@@ -8584,7 +8590,7 @@ PHP_METHOD(imagick, fximagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::gammaImage(float gamma)
+/* {{{ proto bool Imagick::gammaImage(float gamma)
 	Gamma-corrects an image.  The same image viewed on different devices will have perceptual differences in the way the image's intensities are represented on the screen.  Specify individual gamma levels for the red, green, and blue channels, or adjust all three with the gamma parameter.  Values typically range from 0.8 to 2.3.
 */
 PHP_METHOD(imagick, gammaimage)
@@ -8621,7 +8627,7 @@ PHP_METHOD(imagick, gammaimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::gammaImageChannel(CHANNELTYPE channel, float gamma)
+/* {{{ proto bool Imagick::gammaImageChannel(int channel, float gamma)
 	Gamma-corrects an image.  The same image viewed on different devices will have perceptual differences in the way the image's intensities are represented on the screen.  Specify individual gamma levels for the red, green, and blue channels, or adjust all three with the gamma parameter.  Values typically range from 0.8 to 2.3.
 */
 PHP_METHOD(imagick, gammaimagechannel)
@@ -8659,7 +8665,7 @@ PHP_METHOD(imagick, gammaimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::gaussianBlurImage(float radius, float sigma)
+/* {{{ proto bool Imagick::gaussianBlurImage(float radius, float sigma)
 	Blurs an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
 */
 PHP_METHOD(imagick, gaussianblurimage)
@@ -8696,7 +8702,7 @@ PHP_METHOD(imagick, gaussianblurimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::gaussianBlurImage(CHANNELTYPE channel, float radius, float sigma)
+/* {{{ proto bool Imagick::gaussianBlurImage(int channel, float radius, float sigma)
 	Blurs an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
 */
 PHP_METHOD(imagick, gaussianblurimagechannel)
@@ -8734,7 +8740,7 @@ PHP_METHOD(imagick, gaussianblurimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::compareImageChannels(METRICTYPE metric, int distortion)
+/* {{{ proto Imagick Imagick::compareImageChannels(int metric, int distortion)
 	Compares one or more images and returns the difference image.
 */
 PHP_METHOD(imagick, compareimages)
@@ -8785,7 +8791,7 @@ PHP_METHOD(imagick, compareimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::contrastImage(bool sharpen)
+/* {{{ proto bool Imagick::contrastImage(bool sharpen)
 	Enhances the intensity differences between the lighter and darker elements of the image.  Set sharpen to a value other than 0 to increase the image contrast otherwise the contrast is reduced.
 */
 PHP_METHOD(imagick, contrastimage)
@@ -8822,7 +8828,7 @@ PHP_METHOD(imagick, contrastimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageDepth(int depth)
+/* {{{ proto bool Imagick::setImageDepth(int depth)
 	Sets the image depth.
 */
 PHP_METHOD(imagick, setimagedepth)
@@ -8861,7 +8867,7 @@ PHP_METHOD(imagick, setimagedepth)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageGamma(float gamma)
+/* {{{ proto bool Imagick::setImageGamma(float gamma)
 	Sets the image gamma.
 */
 PHP_METHOD(imagick, setimagegamma)
@@ -8900,7 +8906,7 @@ PHP_METHOD(imagick, setimagegamma)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageIterations(int iterations)
+/* {{{ proto bool Imagick::setImageIterations(int iterations)
 	Sets the image iterations.
 */
 PHP_METHOD(imagick, setimageiterations)
@@ -8939,7 +8945,7 @@ PHP_METHOD(imagick, setimageiterations)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageMatte(bool matte)
+/* {{{ proto bool Imagick::setImageMatte(bool matte)
 	Sets the image matte channel.
 */
 PHP_METHOD(imagick, setimagematte)
@@ -8977,7 +8983,7 @@ PHP_METHOD(imagick, setimagematte)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageMatteColor(ImagickPixel matte)
+/* {{{ proto bool Imagick::setImageMatteColor(ImagickPixel matte)
 	Sets the image matte color.
 */
 PHP_METHOD(imagick, setimagemattecolor)
@@ -9016,7 +9022,7 @@ PHP_METHOD(imagick, setimagemattecolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImagePage(int width, int height, int x, int y)
+/* {{{ proto bool Imagick::setImagePage(int width, int height, int x, int y)
 	Sets the page geometry of the image.
 */
 PHP_METHOD(imagick, setimagepage)
@@ -9055,7 +9061,7 @@ PHP_METHOD(imagick, setimagepage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageResolution(float x_resolution,const float y_resolution)
+/* {{{ proto bool Imagick::setImageResolution(float x_resolution,const float y_resolution)
 	Sets the image resolution.
 */
 PHP_METHOD(imagick, setimageresolution)
@@ -9094,7 +9100,7 @@ PHP_METHOD(imagick, setimageresolution)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageScene(int scene)
+/* {{{ proto bool Imagick::setImageScene(int scene)
 	Sets the image scene.
 */
 PHP_METHOD(imagick, setimagescene)
@@ -9133,7 +9139,7 @@ PHP_METHOD(imagick, setimagescene)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageTicksPerSecond(int ticks_per-second)
+/* {{{ proto bool Imagick::setImageTicksPerSecond(int ticks_per-second)
 	Sets the image ticks-per-second.
 */
 PHP_METHOD(imagick, setimagetickspersecond)
@@ -9172,7 +9178,7 @@ PHP_METHOD(imagick, setimagetickspersecond)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageType(IMAGETYPE image_type)
+/* {{{ proto bool Imagick::setImageType(int image_type)
 	Sets the image type.
 */
 PHP_METHOD(imagick, setimagetype)
@@ -9211,7 +9217,7 @@ PHP_METHOD(imagick, setimagetype)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageUnits(RESOLUTIONTYPE units)
+/* {{{ proto bool Imagick::setImageUnits(int units)
 	Sets the image units of resolution.
 */
 PHP_METHOD(imagick, setimageunits)
@@ -9249,7 +9255,7 @@ PHP_METHOD(imagick, setimageunits)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageFormat(string format)
+/* {{{ proto bool Imagick::setImageFormat(string format)
 	Sets the format of a particular image in a sequence.
 */
 PHP_METHOD(imagick, setimageformat)
@@ -9289,7 +9295,7 @@ PHP_METHOD(imagick, setimageformat)
 }
 /* }}} */
 
-/* {{{ proto Imagick::charcoalImage(float radius, float sigma)
+/* {{{ proto bool Imagick::charcoalImage(float radius, float sigma)
 	Simulates a charcoal drawing.
 */
 PHP_METHOD(imagick, charcoalimage)
@@ -9327,7 +9333,7 @@ PHP_METHOD(imagick, charcoalimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::oilPaintImage(float radius)
+/* {{{ proto bool Imagick::oilPaintImage(float radius)
 	Applies a special effect filter that simulates an oil painting.  Each pixel is replaced by the most frequent color occurring in a circular region defined by radius.
 */
 PHP_METHOD(imagick, oilpaintimage)
@@ -9365,7 +9371,7 @@ PHP_METHOD(imagick, oilpaintimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::normalizeImage()
+/* {{{ proto bool Imagick::normalizeImage()
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
 PHP_METHOD(imagick, normalizeimage)
@@ -9390,7 +9396,7 @@ PHP_METHOD(imagick, normalizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::normalizeImageChannel(CHANNELTYPE channel)
+/* {{{ proto bool Imagick::normalizeImageChannel(int channel)
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
 PHP_METHOD(imagick, normalizeimagechannel)
@@ -9426,7 +9432,7 @@ PHP_METHOD(imagick, normalizeimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::labelImage(string label)
+/* {{{ proto bool Imagick::labelImage(string label)
 	Adds a label to your image.
 */
 PHP_METHOD(imagick, labelimage)
@@ -9465,7 +9471,7 @@ PHP_METHOD(imagick, labelimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::writeImage(string filename)
+/* {{{ proto bool Imagick::writeImage(string filename)
 	Writes an image to the specified filename.  If the filename parameter is NULL, the image is written to the filename set by MagickReadImage() or MagickSetImageFilename().
 */
 PHP_METHOD(imagick, writeimage)
@@ -9522,7 +9528,7 @@ PHP_METHOD(imagick, writeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::writeImages(string filename, bool adjoin)
+/* {{{ proto bool Imagick::writeImages(string filename, bool adjoin)
 	Writes an image or image sequence.
 */
 PHP_METHOD(imagick, writeimages)
@@ -9573,7 +9579,7 @@ PHP_METHOD(imagick, writeimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::drawImage(ImagickDraw drawing_wand)
+/* {{{ proto bool Imagick::drawImage(ImagickDraw drawing_wand)
 	Renders the drawing wand on the current image.
 */
 PHP_METHOD(imagick, drawimage)
@@ -9613,7 +9619,7 @@ PHP_METHOD(imagick, drawimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::annotateImage(ImagickDraw drawing_wand, float x, float y, float angle, string text)
+/* {{{ proto bool Imagick::annotateImage(ImagickDraw drawing_wand, float x, float y, float angle, string text)
 	Annotates an image with text.
 */
 PHP_METHOD(imagick, annotateimage)
@@ -9656,7 +9662,7 @@ PHP_METHOD(imagick, annotateimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setImageCompression(COMPRESSIONTYPE compression)
+/* {{{ proto bool Imagick::setImageCompression(int compression)
 	Sets the image compression.
 */
 PHP_METHOD(imagick, setimagecompressionquality)
@@ -9694,7 +9700,7 @@ PHP_METHOD(imagick, setimagecompressionquality)
 }
 /* }}} */
 
-/* {{{ proto Imagick::compositeImage(Imagick composite_wand, COMPOSITEOPERATOR compose, int x, int y)
+/* {{{ proto bool Imagick::compositeImage(Imagick composite_wand, int compose, int x, int y)
 	Composite one image onto another at the specified offset.
 */
 PHP_METHOD(imagick, compositeimage)
@@ -9728,7 +9734,7 @@ PHP_METHOD(imagick, compositeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::compositeImageChannel(Imagick composite_wand, COMPOSITEOPERATOR compose, CHANNELTYPE channel, int x, int y)
+/* {{{ proto bool Imagick::compositeImageChannel(Imagick composite_wand, int compose, int channel, int x, int y)
 	Composite one image onto another at the specified offset.
 */
 PHP_METHOD(imagick, compositeimagechannel)
@@ -9761,7 +9767,7 @@ PHP_METHOD(imagick, compositeimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::modulateImage(float brightness, float saturation, float hue)
+/* {{{ proto bool Imagick::modulateImage(float brightness, float saturation, float hue)
 	Lets you control the brightness, saturation, and hue of an image.  Hue is the percentage of absolute rotation from the current position.  For example 50 results in a counter-clockwise rotation of 90 degrees, 150 results in a clockwise rotation of 90 degrees, with 0 and 200 both resulting in a rotation of 180 degrees.
 */
 PHP_METHOD(imagick, modulateimage)
@@ -9798,7 +9804,7 @@ PHP_METHOD(imagick, modulateimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::addNoiseImage(NOISETYPE noise_type)
+/* {{{ proto bool Imagick::addNoiseImage(int noise_type)
 	Adds random noise to the image.
 */
 PHP_METHOD(imagick, addnoiseimage)
@@ -9835,7 +9841,7 @@ PHP_METHOD(imagick, addnoiseimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::addNoiseImage(CHANNELTYPE channel, NOISETYPE noise_type)
+/* {{{ proto bool Imagick::addNoiseImage(int channel, int noise_type)
 	Adds random noise to the image.
 */
 PHP_METHOD(imagick, addnoiseimagechannel)
@@ -9872,7 +9878,7 @@ PHP_METHOD(imagick, addnoiseimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::adaptiveResizeImage(float radius, float sigma)
+/* {{{ proto bool Imagick::adaptiveResizeImage(float radius, float sigma)
 	Adaptively resize image with data dependent triangulation.
 */
 PHP_METHOD(imagick, adaptiveresizeimage)
@@ -9909,7 +9915,7 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::adaptiveSharpenImage(float radius, float sigma)
+/* {{{ proto bool Imagick::adaptiveSharpenImage(float radius, float sigma)
 	Adaptively resize image with data dependent triangulation.
 */
 PHP_METHOD(imagick, adaptivesharpenimage)
@@ -9946,7 +9952,7 @@ PHP_METHOD(imagick, adaptivesharpenimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::adaptiveSharpenImageChannel(CHANNELTYPE channel, float radius, float sigma)
+/* {{{ proto bool Imagick::adaptiveSharpenImageChannel(int channel, float radius, float sigma)
 	Adaptively resize image with data dependent triangulation.
 */
 PHP_METHOD(imagick, adaptivesharpenimagechannel)
@@ -9984,7 +9990,7 @@ PHP_METHOD(imagick, adaptivesharpenimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::montageImage(ImagickDraw drawing_wand, string tile_geometry, string thumbnail_geometry, MONTAGEMODE mode, string frame)
+/* {{{ proto Imagick Imagick::montageImage(ImagickDraw drawing_wand, string tile_geometry, string thumbnail_geometry, int mode, string frame)
 	Creates a composite image by combining several separate images. The images are tiled on the composite image with the name of the image optionally appearing just below the individual tile.
 */
 
@@ -10035,7 +10041,7 @@ PHP_METHOD(imagick, montageimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::affineTransformImage(ImagickDraw drawing_wand)
+/* {{{ proto bool Imagick::affineTransformImage(ImagickDraw drawing_wand)
 	Transforms an image as dictated by the affine matrix of the drawing wand.
 */
 PHP_METHOD(imagick, affinetransformimage)
@@ -10074,7 +10080,7 @@ PHP_METHOD(imagick, affinetransformimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::averageImages()
+/* {{{ proto Imagick Imagick::averageImages()
 	Average a set of images.
 */
 PHP_METHOD(imagick, averageimages)
@@ -10102,7 +10108,7 @@ PHP_METHOD(imagick, averageimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::borderImage(ImagickPixel bordercolor, int width, int height)
+/* {{{ proto bool Imagick::borderImage(ImagickPixel bordercolor, int width, int height)
 	Surrounds the image with a border of the color defined by the bordercolor pixel wand.
 */
 PHP_METHOD(imagick, borderimage)
@@ -10142,7 +10148,7 @@ PHP_METHOD(imagick, borderimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::thresholdImage(float threshold)
+/* {{{ proto bool Imagick::thresholdImage(float threshold)
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
 */
 PHP_METHOD(imagick, thresholdimage)
@@ -10180,7 +10186,7 @@ PHP_METHOD(imagick, thresholdimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::thresholdImage(CHANNELTYPE channel, float threshold)
+/* {{{ proto bool Imagick::thresholdImage(int channel, float threshold)
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
 */
 PHP_METHOD(imagick, thresholdimagechannel)
@@ -10219,7 +10225,7 @@ PHP_METHOD(imagick, thresholdimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::adaptiveThresholdImage(int width, int height, int offset)
+/* {{{ proto bool Imagick::adaptiveThresholdImage(int width, int height, int offset)
 	Selects an individual threshold for each pixel based on the range of intensity values in its local neighborhood.  This allows for thresholding of an image whose global intensity histogram doesn't contain distinctive peaks.
 */
 PHP_METHOD(imagick, adaptivethresholdimage)
@@ -10257,7 +10263,7 @@ PHP_METHOD(imagick, adaptivethresholdimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sharpenImage(float radius, float sigma)
+/* {{{ proto bool Imagick::sharpenImage(float radius, float sigma)
 	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
 */
 PHP_METHOD(imagick, sharpenimage)
@@ -10295,7 +10301,7 @@ PHP_METHOD(imagick, sharpenimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sharpenImage(CHANNELTYPE channel, float radius, float sigma)
+/* {{{ proto bool Imagick::sharpenImage(int channel, float radius, float sigma)
 	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
 */
 PHP_METHOD(imagick, sharpenimagechannel)
@@ -10335,7 +10341,7 @@ PHP_METHOD(imagick, sharpenimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::shaveImage(int columns, int rows)
+/* {{{ proto bool Imagick::shaveImage(int columns, int rows)
 	Shaves pixels from the image edges.  It allocates the memory necessary for the new Image structure and returns a pointer to the new image.
 */
 PHP_METHOD(imagick, shaveimage)
@@ -10373,7 +10379,7 @@ PHP_METHOD(imagick, shaveimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::shearImage(ImagickPixel background, float x_shear, float y_shear)
+/* {{{ proto bool Imagick::shearImage(ImagickPixel background, float x_shear, float y_shear)
 	Slides one edge of an image along the X or Y axis, creating a parallelogram.  An X direction shear slides an edge along the X axis, while a Y direction shear slides an edge along the Y axis.  The amount of the shear is controlled by a shear angle.  For X direction shears, x_shear is measured relative to the Y axis, and similarly, for Y direction shears y_shear is measured relative to the X axis.  Empty triangles left over from shearing the image are filled with the background color.
 */
 PHP_METHOD(imagick, shearimage)
@@ -10415,7 +10421,7 @@ PHP_METHOD(imagick, shearimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sketchImage(float radius, float sigma, float angle)
+/* {{{ proto bool Imagick::sketchImage(float radius, float sigma, float angle)
 	Simulates a pencil sketch.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and SketchImage() selects a suitable radius for you. Angle gives the angle of the blurring motion.
 */
 PHP_METHOD(imagick, sketchimage)
@@ -10453,7 +10459,7 @@ PHP_METHOD(imagick, sketchimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::spliceImage(int width, int height, int x, int y)
+/* {{{ proto bool Imagick::spliceImage(int width, int height, int x, int y)
 	Splices a solid color into the image.
 */
 PHP_METHOD(imagick, spliceimage)
@@ -10492,7 +10498,7 @@ PHP_METHOD(imagick, spliceimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::steganoImage(Imagick watermark_wand, int offset)
+/* {{{ proto Imagick Imagick::steganoImage(Imagick watermark_wand, int offset)
 	Hides a digital watermark within the image. Recover the hidden watermark later to prove that the authenticity of an image.  Offset defines the start position within the image to hide the watermark.
 */
 PHP_METHOD(imagick, steganoimage)
@@ -10534,7 +10540,7 @@ PHP_METHOD(imagick, steganoimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::clone
+/* {{{ proto Imagick Imagick::clone
 	Makes an exact copy of a MagickWand.
 */
 PHP_METHOD(imagick, clone)
@@ -10559,7 +10565,7 @@ PHP_METHOD(imagick, clone)
 }
 /* }}} */
 
-/* {{{ proto Imagick::randomThresholdImage(float low, float high)
+/* {{{ proto bool Imagick::randomThresholdImage(float low, float high)
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
 */
 PHP_METHOD(imagick, randomthresholdimage)
@@ -10597,7 +10603,7 @@ PHP_METHOD(imagick, randomthresholdimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::randomThresholdImage(CHANNELTYPE channel, float low, float high)
+/* {{{ proto bool Imagick::randomThresholdImage(CHANNELTYPE channel, float low, float high)
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
 */
 PHP_METHOD(imagick, randomthresholdimagechannel)
@@ -10636,7 +10642,7 @@ PHP_METHOD(imagick, randomthresholdimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::rotateImage(ImagickPixel background, float degrees)
+/* {{{ proto bool Imagick::rotateImage(ImagickPixel background, float degrees)
 	Rotates an image the specified number of degrees. Empty triangles left over from rotating the image are filled with the background color.
 */
 PHP_METHOD(imagick, rotateimage)
@@ -10677,7 +10683,7 @@ PHP_METHOD(imagick, rotateimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::sampleImage(int columns, int rows)
+/* {{{ proto bool Imagick::sampleImage(int columns, int rows)
 	Scales an image to the desired dimensions with pixel sampling.  Unlike other scaling methods, this method does not introduce any additional color into the scaled image.
 */
 PHP_METHOD(imagick, sampleimage)
@@ -10715,7 +10721,7 @@ PHP_METHOD(imagick, sampleimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::solarizeImage(float threshold)
+/* {{{ proto bool Imagick::solarizeImage(float threshold)
 	Applies a special effect to the image, similar to the effect achieved in a photo darkroom by selectively exposing areas of photo sensitive paper to light.  Threshold ranges from 0 to QuantumRange and is a measure of the extent of the solarization.
 */
 PHP_METHOD(imagick, solarizeimage)
@@ -10753,7 +10759,7 @@ PHP_METHOD(imagick, solarizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::shadeImage(bool gray, float azimuth, float elevation)
+/* {{{ proto bool Imagick::shadeImage(bool gray, float azimuth, float elevation)
 	Shines a distant light on an image to create a three-dimensional effect. You control the positioning of the light with azimuth and elevation; azimuth is measured in degrees off the x axis and elevation is measured in pixels above the Z axis.
 */
 PHP_METHOD(imagick, shadeimage)
@@ -10791,7 +10797,7 @@ PHP_METHOD(imagick, shadeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::shadowImage(float opacity, float sigma, int x, int y)
+/* {{{ proto bool Imagick::shadowImage(float opacity, float sigma, int x, int y)
 	Simulates an image shadow.
 */
 PHP_METHOD(imagick, shadowimage)
@@ -10829,7 +10835,7 @@ PHP_METHOD(imagick, shadowimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::motionBlurImage(float radius, float sigma, float angle)
+/* {{{ proto bool Imagick::motionBlurImage(float radius, float sigma, float angle)
 	Simulates motion blur.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and MotionBlurImage() selects a suitable radius for you. Angle gives the angle of the blurring motion.
 */
 PHP_METHOD(imagick, motionblurimage)
@@ -10869,7 +10875,7 @@ PHP_METHOD(imagick, motionblurimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::mosaicImages()
+/* {{{ proto Imagick Imagick::mosaicImages()
 	Inlays an image sequence to form a single coherent picture.  It returns a wand with each image in the sequence composited at the location defined by the page offset of the image.
 */
 PHP_METHOD(imagick, mosaicimages)
@@ -10898,7 +10904,7 @@ PHP_METHOD(imagick, mosaicimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::morphImages(int number_frames)
+/* {{{ proto Imagick Imagick::morphImages(int number_frames)
 	Method morphs a set of images.  Both the image pixels and size are linearly interpolated to give the appearance of a meta-morphosis from one image to the next.
 */
 PHP_METHOD(imagick, morphimages)
@@ -10939,7 +10945,7 @@ PHP_METHOD(imagick, morphimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::minifyImage()
+/* {{{ proto bool Imagick::minifyImage()
 	Is a convenience method that scales an image proportionally to one-half its original size
 */
 PHP_METHOD(imagick, minifyimage)
@@ -10965,7 +10971,7 @@ PHP_METHOD(imagick, minifyimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::posterizeImage(int levels, bool dither)
+/* {{{ proto bool Imagick::posterizeImage(int levels, bool dither)
 	Reduces the image to a limited number of color level.
 */
 PHP_METHOD(imagick, posterizeimage)
@@ -11004,7 +11010,7 @@ PHP_METHOD(imagick, posterizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::radialBlurImage(float angle)
+/* {{{ proto bool Imagick::radialBlurImage(float angle)
 	Radial blurs an image.
 */
 PHP_METHOD(imagick, radialblurimage)
@@ -11041,7 +11047,7 @@ PHP_METHOD(imagick, radialblurimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::radialBlurImage(CHANNELTYPE channel, float angle)
+/* {{{ proto bool Imagick::radialBlurImage(int channel, float angle)
 	Radial blurs an image.
 */
 PHP_METHOD(imagick, radialblurimagechannel)
@@ -11079,7 +11085,7 @@ PHP_METHOD(imagick, radialblurimagechannel)
 }
 /* }}} */
 
-/* {{{ proto Imagick::raiseImage(int width, int height, int x, int y, bool raise)
+/* {{{ proto bool Imagick::raiseImage(int width, int height, int x, int y, bool raise)
 	Creates a simulated three-dimensional button-like effect by lightening and darkening the edges of the image.  Members width and height of raise_info define the width of the vertical and horizontal edge of the effect.
 */
 PHP_METHOD(imagick, raiseimage)
@@ -11117,7 +11123,7 @@ PHP_METHOD(imagick, raiseimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::blackThresholdImage(ImagickPixel threshold)
+/* {{{ proto bool Imagick::blackThresholdImage(ImagickPixel threshold)
 	Is like MagickThresholdImage() but  forces all pixels below the threshold into black while leaving all pixels above the threshold unchanged.
 */
 PHP_METHOD(imagick, blackthresholdimage)
@@ -11155,7 +11161,7 @@ PHP_METHOD(imagick, blackthresholdimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::resampleImage(float x_resolution, float y_resolution, FILTERTYPES filter, float blur)
+/* {{{ proto bool Imagick::resampleImage(float x_resolution, float y_resolution, int filter, float blur)
 	Resample image to desired resolution.
 */
 PHP_METHOD(imagick, resampleimage)
@@ -11192,7 +11198,7 @@ PHP_METHOD(imagick, resampleimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::resizeImage(int columns, int rows, FILTERTYPES filter, float blur)
+/* {{{ proto bool Imagick::resizeImage(int columns, int rows, int filter, float blur)
 	Scales an image to the desired dimensions with one of these filters:
 */
 PHP_METHOD(imagick, resizeimage)
@@ -11229,7 +11235,7 @@ PHP_METHOD(imagick, resizeimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::rollImage(int x, int y)
+/* {{{ proto bool Imagick::rollImage(int x, int y)
 	Offsets an image as defined by x and y.
 */
 PHP_METHOD(imagick, rollimage)
@@ -11265,7 +11271,7 @@ PHP_METHOD(imagick, rollimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::appendImages(bool stack)
+/* {{{ proto Imagick Imagick::appendImages(bool stack)
 	Append a set of images.
 */
 PHP_METHOD(imagick, appendimages)
@@ -11315,7 +11321,7 @@ PHP_METHOD(imagick, appendimages)
 }
 /* }}} */
 
-/* {{{ proto Imagick::whiteThresholdImage(ImagickPixel threshold)
+/* {{{ proto bool Imagick::whiteThresholdImage(ImagickPixel threshold)
 	Is like ThresholdImage() but  force all pixels above the threshold into white while leaving all pixels below the threshold unchanged.
 */
 PHP_METHOD(imagick, whitethresholdimage)
@@ -11353,7 +11359,7 @@ PHP_METHOD(imagick, whitethresholdimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getPixelIterator()
+/* {{{ proto ImagickPixelIterator Imagick::getPixelIterator()
 	Returns a MagickPixelIterator.
 */
 PHP_METHOD(imagick, getpixeliterator)
@@ -11392,7 +11398,7 @@ PHP_METHOD(imagick, getpixeliterator)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getPixelRegionIterator(long x, long y, long columns, long rows)
+/* {{{ proto ImagickPixelIterator Imagick::getPixelRegionIterator(long x, long y, long columns, long rows)
 	Returns a subset of pixels in a MagickPixelIterator object.
 */
 PHP_METHOD(imagick, getpixelregioniterator)
@@ -11443,7 +11449,7 @@ PHP_METHOD(imagick, getpixelregioniterator)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getCompression()
+/* {{{ proto int Imagick::getCompression()
 	Gets the wand compression type.
 */
 PHP_METHOD(imagick, getcompression)
@@ -11456,7 +11462,7 @@ PHP_METHOD(imagick, getcompression)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getCompressionQuality()
+/* {{{ proto int Imagick::getCompressionQuality()
 	Gets the wand compression quality.
 */
 PHP_METHOD(imagick, getcompressionquality)
@@ -11469,7 +11475,7 @@ PHP_METHOD(imagick, getcompressionquality)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getCopyright()
+/* {{{ proto string Imagick::getCopyright()
 	Returns the ImageMagick API copyright as a string constant.
 */
 PHP_METHOD(imagick, getcopyright)
@@ -11488,7 +11494,7 @@ PHP_METHOD(imagick, getcopyright)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getFilename()
+/* {{{ proto string Imagick::getFilename()
 	Returns the filename associated with an image sequence.
 */
 PHP_METHOD(imagick, getfilename)
@@ -11507,7 +11513,7 @@ PHP_METHOD(imagick, getfilename)
 }
 /* }}} */
 
-/* {{{ proto Imagick:getFormat()
+/* {{{ proto string Imagick:getFormat()
 	Returns the format of the magick wand.
 */
 PHP_METHOD(imagick, getformat)
@@ -11526,7 +11532,7 @@ PHP_METHOD(imagick, getformat)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getHomeURL()
+/* {{{ proto string Imagick::getHomeURL()
 	Returns the ImageMagick home URL.
 */
 PHP_METHOD(imagick, gethomeurl)
@@ -11545,7 +11551,7 @@ PHP_METHOD(imagick, gethomeurl)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getInterlaceScheme()
+/* {{{ proto int Imagick::getInterlaceScheme()
 	Gets the wand interlace scheme.
 */
 PHP_METHOD(imagick, getinterlacescheme)
@@ -11558,7 +11564,7 @@ PHP_METHOD(imagick, getinterlacescheme)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getOption(string key)
+/* {{{ proto string Imagick::getOption(string key)
 	Returns a value associated with a wand and the specified key. Use MagickRelinquishMemory() to free the value when you are finished with it.
 */
 PHP_METHOD(imagick, getoption)
@@ -11590,7 +11596,7 @@ PHP_METHOD(imagick, getoption)
 }
 /* }}} */
 
-/* {{{ proto MagickGetPackageName()
+/* {{{ proto string MagickGetPackageName()
 	Returns the ImageMagick package name as a string constant.
 */
 PHP_METHOD(imagick, getpackagename)
@@ -11609,7 +11615,7 @@ PHP_METHOD(imagick, getpackagename)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getPage()
+/* {{{ proto array Imagick::getPage()
 	Returns the page geometry associated with the magick wand in an associative array with the keys "width", "height", "x", and "y".
 */
 PHP_METHOD(imagick, getpage)
@@ -11639,7 +11645,7 @@ PHP_METHOD(imagick, getpage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getQuantumDepth()
+/* {{{ proto array Imagick::getQuantumDepth()
 	Returns the ImageMagick quantum depth as a string constant.
 */
 PHP_METHOD(imagick, getquantumdepth)
@@ -11662,7 +11668,7 @@ PHP_METHOD(imagick, getquantumdepth)
 }
 /* }}} */
 
-/* {{{ proto Imagick::GetQuantumRange()
+/* {{{ proto array Imagick::GetQuantumRange()
 	Returns the ImageMagick quantum range as a string constant.
 */
 PHP_METHOD(imagick, getquantumrange)
@@ -11685,7 +11691,7 @@ PHP_METHOD(imagick, getquantumrange)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getReleaseDate()
+/* {{{ proto string Imagick::getReleaseDate()
 	Returns the ImageMagick release date as a string constant.
 */
 PHP_METHOD(imagick, getreleasedate)
@@ -11704,7 +11710,7 @@ PHP_METHOD(imagick, getreleasedate)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getResource(RESOURCETYPE type)
+/* {{{ proto int Imagick::getResource(int type)
 	Returns the specified resource in megabytes.
 */
 PHP_METHOD(imagick, getresource)
@@ -11730,7 +11736,7 @@ PHP_METHOD(imagick, getresource)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getResourceLimit(RESOURCETYPE type)
+/* {{{ proto Imagick Imagick::getResourceLimit(int type)
 	Returns the specified resource limit in megabytes.
 */
 PHP_METHOD(imagick, getresourcelimit)
@@ -11756,7 +11762,7 @@ PHP_METHOD(imagick, getresourcelimit)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getSamplingFactors()
+/* {{{ proto array Imagick::getSamplingFactors()
 	Gets the horizontal and vertical sampling factor.
 */
 PHP_METHOD(imagick, getsamplingfactors)
@@ -11781,7 +11787,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getSize()
+/* {{{ proto array Imagick::getSize()
 	Returns the size associated with the magick wand as an array with the keys "columns" and "rows".
 */
 PHP_METHOD(imagick, getsize)
@@ -11808,7 +11814,7 @@ PHP_METHOD(imagick, getsize)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getSizeOffset()
+/* {{{ proto int Imagick::getSizeOffset()
 	Returns the size offset associated with the magick wand.
 */
 PHP_METHOD(imagick, getsizeoffset)
@@ -11831,7 +11837,7 @@ PHP_METHOD(imagick, getsizeoffset)
 }
 /* }}} */
 
-/* {{{ proto Imagick::getVersion()
+/* {{{ proto array Imagick::getVersion()
 	Returns the ImageMagick API version as a string constant and as a number.
 */
 PHP_METHOD(imagick, getversion)
@@ -11854,7 +11860,7 @@ PHP_METHOD(imagick, getversion)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setBackgroundColor(ImagickPixel background)
+/* {{{ proto bool Imagick::setBackgroundColor(ImagickPixel background)
 	Sets the wand background color.
 */
 PHP_METHOD(imagick, setbackgroundcolor)
@@ -11892,7 +11898,7 @@ PHP_METHOD(imagick, setbackgroundcolor)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setCompression(COMPRESSIONTYPE compression)
+/* {{{ proto bool Imagick::setCompression(COMPRESSIONTYPE compression)
 	Sets the wand compression type.
 */
 PHP_METHOD(imagick, setcompression)
@@ -11928,7 +11934,7 @@ PHP_METHOD(imagick, setcompression)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setCompressionQuality(int quality)
+/* {{{ proto bool Imagick::setCompressionQuality(int quality)
 	Sets the wand compression quality.
 */
 PHP_METHOD(imagick, setcompressionquality)
@@ -11964,7 +11970,7 @@ PHP_METHOD(imagick, setcompressionquality)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setFilename(string filename)
+/* {{{ proto bool Imagick::setFilename(string filename)
 	Sets the filename before you read or write an image file.
 */
 PHP_METHOD(imagick, setfilename)
@@ -12002,7 +12008,7 @@ PHP_METHOD(imagick, setfilename)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setFormat(string format)
+/* {{{ proto bool Imagick::setFormat(string format)
 	Sets the format of the magick wand.
 */
 PHP_METHOD(imagick, setformat)
@@ -12040,7 +12046,7 @@ PHP_METHOD(imagick, setformat)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setInterlaceScheme(INTERLACETYPE interlace_scheme)
+/* {{{ proto bool Imagick::setInterlaceScheme(INTERLACETYPE interlace_scheme)
 	Sets the image compression.
 */
 PHP_METHOD(imagick, setinterlacescheme)
@@ -12076,7 +12082,7 @@ PHP_METHOD(imagick, setinterlacescheme)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setOption(string key, string value)
+/* {{{ proto bool Imagick::setOption(string key, string value)
 	Associates one or options with the wand (.e.g MagickSetOption(wand,"jpeg:perserve","yes")).
 */
 PHP_METHOD(imagick, setoption)
@@ -12113,7 +12119,7 @@ PHP_METHOD(imagick, setoption)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setPage(int width, int height, int x, int y)
+/* {{{ proto bool Imagick::setPage(int width, int height, int x, int y)
 	Sets the page geometry of the magick wand.
 */
 PHP_METHOD(imagick, setpage)
@@ -12149,7 +12155,7 @@ PHP_METHOD(imagick, setpage)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setResourceLimit(RESOURCETYPE type, int limit)
+/* {{{ proto bool Imagick::setResourceLimit(RESOURCETYPE type, int limit)
 	Sets the limit for a particular resource in megabytes.
 */
 PHP_METHOD(imagick, setresourcelimit)
@@ -12185,7 +12191,7 @@ PHP_METHOD(imagick, setresourcelimit)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setResolution(float x_resolution, float y_resolution)
+/* {{{ proto bool Imagick::setResolution(float x_resolution, float y_resolution)
 	Sets the image resolution.
 */
 PHP_METHOD(imagick, setresolution)
@@ -12221,7 +12227,7 @@ PHP_METHOD(imagick, setresolution)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setSamplingFactors(array factors)
+/* {{{ proto bool Imagick::setSamplingFactors(array factors)
 	Sets the image sampling factors.
 */
 PHP_METHOD(imagick, setsamplingfactors)
@@ -12267,7 +12273,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setSize(int columns, int rows)
+/* {{{ proto bool Imagick::setSize(int columns, int rows)
 	Sets the size of the magick wand.  Set it before you read a raw image format such as RGB, GRAY, or CMYK.
 */
 PHP_METHOD(imagick, setsize)
@@ -12303,7 +12309,7 @@ PHP_METHOD(imagick, setsize)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setSizeOffset(int columns, int rows, int offset)
+/* {{{ proto bool Imagick::setSizeOffset(int columns, int rows, int offset)
 	Sets the size and offset of the magick wand.  Set it before you read a raw image format such as RGB, GRAY, or CMYK.
 */
 PHP_METHOD(imagick, setsizeoffset)
@@ -12339,7 +12345,7 @@ PHP_METHOD(imagick, setsizeoffset)
 }
 /* }}} */
 
-/* {{{ proto Imagick::setType(IMAGETYPE image_type)
+/* {{{ proto bool Imagick::setType(IMAGETYPE image_type)
 	Sets the image type attribute.
 */
 PHP_METHOD(imagick, settype)
@@ -12377,12 +12383,18 @@ PHP_METHOD(imagick, settype)
 
 /* end of Imagick */
 
+/* {{{ proto ImagickDraw ImagickDraw::__construct()
+   The ImagickDraw constructor
+*/
 PHP_METHOD(imagickdraw, __construct)
 {
 
 }
+/* }}} */
 
-
+/* {{{ proto Imagickdraw::circle(float ox, float oy, float px, float py)
+	Draws a circle on the image.
+*/
 PHP_METHOD(imagickdraw, circle)
 {
 	zval *object;
@@ -12406,8 +12418,11 @@ PHP_METHOD(imagickdraw, circle)
 	DrawCircle( internd->drawing_wand, ox, oy, px, py );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::rectangle(float x1, float y1, float x2, float y2)
+	Draws a rectangle given two coordinates and using the current stroke, stroke width, and fill settings.
+*/
 PHP_METHOD(imagickdraw, rectangle)
 {
 	zval *object;
@@ -12431,8 +12446,11 @@ PHP_METHOD(imagickdraw, rectangle)
 	DrawRectangle( internd->drawing_wand, x1, y1, x2, y2 );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::roundRectangle(float x1, float y1, float x2, float y2, float rx, float ry)
+	Draws a rounted rectangle given two coordinates, x & y corner radiuses and using the current stroke, stroke width, and fill settings.
+*/
 PHP_METHOD(imagickdraw, roundrectangle)
 {
 	zval *object;
@@ -12456,8 +12474,11 @@ PHP_METHOD(imagickdraw, roundrectangle)
 	DrawRoundRectangle( internd->drawing_wand, x1, y1, x2, y2, rx, ry );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::ellipse(float ox, float oy, float rx, float ry, float start, float end)
+	Draws an ellipse on the image.
+*/
 PHP_METHOD(imagickdraw, ellipse)
 {
 	zval *object;
@@ -12481,8 +12502,11 @@ PHP_METHOD(imagickdraw, ellipse)
 	DrawEllipse( internd->drawing_wand, ox, oy, rx, ry, start, end );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::skewX(float degrees)
+	Skews the current coordinate system in the horizontal direction.
+*/
 PHP_METHOD(imagickdraw, skewx)
 {
 
@@ -12508,8 +12532,11 @@ PHP_METHOD(imagickdraw, skewx)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::skewY(float degrees)
+	Skews the current coordinate system in the vertical direction.
+*/
 PHP_METHOD(imagickdraw, skewy)
 {
 
@@ -12535,8 +12562,11 @@ PHP_METHOD(imagickdraw, skewy)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::translate(float x, float y)
+	Applies a translation to the current coordinate system which moves the coordinate system origin to the specified coordinate.
+*/
 PHP_METHOD(imagickdraw, translate)
 {
 
@@ -12562,8 +12592,11 @@ PHP_METHOD(imagickdraw, translate)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFillColor(PixelWand fill_wand)
+	Sets the fill color to be used for drawing filled objects.
+*/
 PHP_METHOD(imagickdraw, setfillcolor)
 {
 	zval *object;
@@ -12589,8 +12622,11 @@ PHP_METHOD(imagickdraw, setfillcolor)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setStrokeColor(PixelWand stroke_wand)
+	Sets the color used for stroking object outlines.
+*/
 PHP_METHOD(imagickdraw, setstrokecolor)
 {
 	zval *object;
@@ -12617,8 +12653,11 @@ PHP_METHOD(imagickdraw, setstrokecolor)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFillAlpha(float opacity)
+	Sets the opacity to use when drawing using the fill color or fill texture. Fully opaque is 1.0.
+*/
 PHP_METHOD(imagickdraw, setfillalpha)
 {
 	zval *object;
@@ -12641,8 +12680,11 @@ PHP_METHOD(imagickdraw, setfillalpha)
 	DrawSetFillAlpha( internd->drawing_wand, opacity );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::getAntialias()
+	Returns the antialias property associated with the wand.
+*/
 PHP_METHOD(imagickdraw, settextantialias)
 {
 	zval *object;
@@ -12665,8 +12707,11 @@ PHP_METHOD(imagickdraw, settextantialias)
 	DrawSetTextAntialias( internd->drawing_wand, antiAlias );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setTextEncoding(string encoding)
+	Specifies specifies the code set to use for text annotations. The only character encoding which may be specified at this time is "UTF-8" for representing Unicode as a sequence of bytes. Specify an empty string to set text encoding to the system's default. Successful text annotation using Unicode may require fonts designed to support Unicode.
+*/
 PHP_METHOD(imagickdraw, settextencoding)
 {
 	zval *object;
@@ -12690,8 +12735,11 @@ PHP_METHOD(imagickdraw, settextencoding)
 	DrawSetTextEncoding( internd->drawing_wand, encoding );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImageDraw::setStrokeAlpha(float opacity)
+	Specifies the opacity of stroked object outlines.
+*/
 PHP_METHOD(imagickdraw, setstrokealpha)
 {
 	zval *object;
@@ -12714,8 +12762,11 @@ PHP_METHOD(imagickdraw, setstrokealpha)
 	DrawSetStrokeAlpha( internd->drawing_wand, opacity );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setStrokeWidth(float stroke_width)
+	Sets the width of the stroke used to draw object outlines.
+*/
 PHP_METHOD(imagickdraw, setstrokewidth)
 {
 	zval *object;
@@ -12738,8 +12789,11 @@ PHP_METHOD(imagickdraw, setstrokewidth)
 	DrawSetStrokeWidth( internd->drawing_wand, width );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFont(string font_name)
+	Sets the fully-sepecified font to use when annotating with text.
+*/
 PHP_METHOD(imagickdraw, setfont)
 {
 	zval *object;
@@ -12773,8 +12827,11 @@ PHP_METHOD(imagickdraw, setfont)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFontFamily(string font_family)
+	Sets the font family to use when annotating with text.
+*/
 PHP_METHOD(imagickdraw, setfontfamily)
 {
 	zval *object;
@@ -12808,8 +12865,11 @@ PHP_METHOD(imagickdraw, setfontfamily)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFontSize(float pointsize)
+	Sets the font pointsize to use when annotating with text.
+*/
 PHP_METHOD(imagickdraw, setfontsize)
 {
 	zval *object;
@@ -12833,8 +12893,11 @@ PHP_METHOD(imagickdraw, setfontsize)
 	DrawSetFontSize( internd->drawing_wand, fontSize );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFontStyle(int style)
+	Sets the font style to use when annotating with text. The AnyStyle enumeration acts as a wild-card "don't care" option.
+*/
 PHP_METHOD(imagickdraw, setfontstyle)
 {
 	zval *object;
@@ -12858,8 +12921,11 @@ PHP_METHOD(imagickdraw, setfontstyle)
 	DrawSetFontStyle( internd->drawing_wand, styleId );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFontWeight(int font_weight)
+	Sets the font weight to use when annotating with text.
+*/
 PHP_METHOD(imagickdraw, setfontweight)
 {
 	zval *object;
@@ -12891,8 +12957,11 @@ PHP_METHOD(imagickdraw, setfontweight)
 		RETURN_FALSE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setFontStretch(int fontStretch)
+	Sets the font stretch to use when annotating with text. The AnyStretch enumeration acts as a wild-card "don't care" option.
+*/
 PHP_METHOD(imagickdraw, setfontstretch)
 {
 	zval *object;
@@ -12916,7 +12985,11 @@ PHP_METHOD(imagickdraw, setfontstretch)
 	DrawSetFontStretch( internd->drawing_wand, stretch );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeAntialias(bool stroke_antialias)
+	Controls whether stroked outlines are antialiased. Stroked outlines are antialiased by default.  When antialiasing is disabled stroked pixels are thresholded to determine if the stroke color or underlying canvas color should be used.
+*/
 PHP_METHOD(imagickdraw, setstrokeantialias)
 {
 	zval *object;
@@ -12941,7 +13014,11 @@ PHP_METHOD(imagickdraw, setstrokeantialias)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setTextAlignment(int alignment)
+	Specifies a text alignment to be applied when annotating with text.
+*/
 PHP_METHOD(imagickdraw, settextalignment)
 {
 	zval *object;
@@ -12966,7 +13043,11 @@ PHP_METHOD(imagickdraw, settextalignment)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setTextDecoration(int decoration)
+	Specifies a decoration to be applied when annotating with text.
+*/
 PHP_METHOD(imagickdraw, settextdecoration)
 {
 	zval *object;
@@ -12991,7 +13072,11 @@ PHP_METHOD(imagickdraw, settextdecoration)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setTextUnderColor(PixelWand under_wand)
+	Specifies the color of a background rectangle to place under text annotations.
+*/
 PHP_METHOD(imagickdraw, settextundercolor)
 {
 	zval *object;
@@ -13018,6 +13103,7 @@ PHP_METHOD(imagickdraw, settextundercolor)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
 PHP_METHOD(imagickdraw, setviewbox)
 {
@@ -13043,7 +13129,9 @@ PHP_METHOD(imagickdraw, setviewbox)
 	RETURN_TRUE;
 }
 
-
+/* {{{ proto ImagickDraw::setViewbox(int x1, int y1, int x2, int y2)
+	Sets the overall canvas size to be recorded with the drawing vector data.  Usually this will be specified using the same size as the canvas image.  When the vector data is saved to SVG or MVG formats, the viewbox is use to specify the size of the canvas image that a viewer will render the vector data on.
+*/
 PHP_METHOD(imagickdraw, getfont)
 {
 	zval *object;
@@ -13058,8 +13146,11 @@ PHP_METHOD(imagickdraw, getfont)
 	IMAGICK_FREE_MEMORY( char *, font );
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::getFontFamily()
+	Returns the font family to use when annotating with text. The value returned must be freed by the user when it is no longer needed.
+*/
 PHP_METHOD(imagickdraw, getfontfamily)
 {
 	zval *object;
@@ -13074,8 +13165,11 @@ PHP_METHOD(imagickdraw, getfontfamily)
 	IMAGICK_FREE_MEMORY( char *, fontFamily );
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::getFontSize()
+	Returns the font pointsize used when annotating with text.
+*/
 PHP_METHOD(imagickdraw, getfontsize)
 {
 	zval *object;
@@ -13088,8 +13182,11 @@ PHP_METHOD(imagickdraw, getfontsize)
 	ZVAL_DOUBLE( return_value, fontSize );
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::getFontStyle()
+	Returns the font style used when annotating with text.
+*/
 PHP_METHOD(imagickdraw, getfontstyle)
 {
 	zval *object;
@@ -13102,8 +13199,11 @@ PHP_METHOD(imagickdraw, getfontstyle)
 	ZVAL_LONG( return_value, fontStyle );
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::getFontWeight()
+	Returns the font weight used when annotating with text.
+*/
 PHP_METHOD(imagickdraw, getfontweight)
 {
 	zval *object;
@@ -13116,10 +13216,11 @@ PHP_METHOD(imagickdraw, getfontweight)
 	ZVAL_LONG( return_value, weight );
 	return;
 }
+/* }}} */
 
-
-
-
+/* {{{ proto ImagickDraw::clear()
+	Clears a DrawingWand resource of any accumulated commands, and resets the settings it contains to their defaults.
+*/
 PHP_METHOD(imagickdraw, clear)
 {
 	zval *object;
@@ -13139,8 +13240,11 @@ PHP_METHOD(imagickdraw, clear)
 	ClearDrawingWand( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::getTextDecoration()
+	Returns the decoration applied when annotating with text.
+*/
 PHP_METHOD(imagickdraw, gettextdecoration)
 {
 	zval *object;
@@ -13154,7 +13258,11 @@ PHP_METHOD(imagickdraw, gettextdecoration)
 	return;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getTextEncoding()
+	Returns a null-terminated string which specifies the code set used for text annotations. The string must be freed by the user once it is no longer required.
+*/
 PHP_METHOD(imagickdraw, gettextencoding)
 {
 	zval *object;
@@ -13169,9 +13277,11 @@ PHP_METHOD(imagickdraw, gettextencoding)
 
 	return;
 }
+/* }}} */
 
-
-
+/* {{{ proto ImagickDraw::destroy()
+	Frees all resources associated with the drawing wand.
+*/
 PHP_METHOD(imagickdraw, destroy)
 {
 
@@ -13193,8 +13303,11 @@ PHP_METHOD(imagickdraw, destroy)
 	internd->drawing_wand = DestroyDrawingWand( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::annotation(float x, float y, string *text)
+	Draws text on the image.
+*/
 PHP_METHOD(imagickdraw, annotation)
 {
 	zval *object;
@@ -13220,8 +13333,11 @@ PHP_METHOD(imagickdraw, annotation)
 	DrawAnnotation( internd->drawing_wand, x, y, text );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::arc(float sx, float sy, float ex, float ey, float sd, float ed)
+	Draws an arc falling within a specified bounding rectangle on the image.
+*/
 PHP_METHOD(imagickdraw, arc)
 {
 	double sx, sy, ex, ey, sd, ed;
@@ -13245,8 +13361,11 @@ PHP_METHOD(imagickdraw, arc)
 	DrawArc( internd->drawing_wand, sx, sy, ex, ey, sd, ed );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::matte(float x, float y, int paintMethod)
+	Paints on the image's opacity channel in order to set effected pixels to transparent. to influence the opacity of pixels. The available paint methods are:
+*/
 PHP_METHOD(imagickdraw, matte)
 {
 	double x, y;
@@ -13271,7 +13390,7 @@ PHP_METHOD(imagickdraw, matte)
 	DrawMatte( internd->drawing_wand, x, y, paintMethod );
 	RETURN_TRUE;
 }
-
+/* }}} */
 
 void *getPointInfoFromZval( zval *coordinateArray, int *numElements TSRMLS_DC)
 {
@@ -13375,6 +13494,9 @@ void *getPointInfoFromZval( zval *coordinateArray, int *numElements TSRMLS_DC)
 	return coordinates;
 }
 
+/* {{{ proto ImagickDraw::polygon(array coordinates)
+	Draws a polygon using the current stroke, stroke width, and fill color or texture, using the specified array of coordinates.
+*/
 PHP_METHOD(imagickdraw, polygon)
 {
 	zval *coordinateArray, *object;
@@ -13410,7 +13532,11 @@ PHP_METHOD(imagickdraw, polygon)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::bezier(array coordinates)
+	Draws a bezier curve through a set of points on the image.
+*/
 PHP_METHOD(imagickdraw, bezier)
 {
 	zval *coordinateArray, *object;
@@ -13446,7 +13572,11 @@ PHP_METHOD(imagickdraw, bezier)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::point(float x, float y)
+	Draws a point using the current stroke color and stroke thickness at the specified coordinates.
+*/
 PHP_METHOD(imagickdraw, point)
 {
 
@@ -13471,8 +13601,11 @@ PHP_METHOD(imagickdraw, point)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::line(float sx, float sy, float ex, float ey)
+	Draws a line on the image using the current stroke color, stroke opacity, and stroke width.
+*/
 PHP_METHOD(imagickdraw, line)
 {
 	zval *object;
@@ -13496,7 +13629,11 @@ PHP_METHOD(imagickdraw, line)
 	DrawLine( internd->drawing_wand, sx, sy, ex, ey );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::cloneingWand()
+	Makes an exact copy of the specified wand.
+*/
 PHP_METHOD(imagickdraw, clone)
 {
 	zval *object;
@@ -13513,7 +13650,11 @@ PHP_METHOD(imagickdraw, clone)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::affine(array affine)
+	Adjusts the current affine transformation matrix with the specified affine transformation matrix. Note that the current affine transform is adjusted rather than replaced.
+*/
 PHP_METHOD(imagickdraw, affine)
 {
 	zval *object;
@@ -13606,7 +13747,11 @@ PHP_METHOD(imagickdraw, affine)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::composite(int compose, float x, float y, float width, float height, MagickWand magick_wand)
+	Composites an image onto the current image, using the specified composition operator, specified position, and at the specified size.
+*/
 PHP_METHOD(imagickdraw, composite)
 {
 	php_imagickdraw_object *internd;
@@ -13644,7 +13789,11 @@ PHP_METHOD(imagickdraw, composite)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::color(float x, float y, int paintMethod)
+	Draws color on image using the current fill color, starting at specified position, and using specified paint method. The available paint methods are:
+*/
 PHP_METHOD(imagickdraw, color)
 {
 	zval *object;
@@ -13670,7 +13819,11 @@ PHP_METHOD(imagickdraw, color)
 	DrawColor( internd->drawing_wand, x, y, paintMethod );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::comment(string comment)
+	Adds a comment to a vector output stream.
+*/
 PHP_METHOD(imagickdraw, comment)
 {
 	zval *object;
@@ -13696,7 +13849,11 @@ PHP_METHOD(imagickdraw, comment)
 	DrawComment( internd->drawing_wand, comment );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getClipPath()
+	Obtains the current clipping path ID. The value returned must be deallocated by the user when it is no longer needed.
+*/
 PHP_METHOD(imagickdraw, getclippath)
 {
 	zval *object;
@@ -13711,7 +13868,11 @@ PHP_METHOD(imagickdraw, getclippath)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getClipRule()
+	Returns the current polygon fill rule to be used by the clipping path.
+*/
 PHP_METHOD(imagickdraw, getcliprule)
 {
 	zval *object;
@@ -13723,7 +13884,11 @@ PHP_METHOD(imagickdraw, getcliprule)
 
 	RETVAL_LONG( clipRule );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getClipUnits()
+	Returns the interpretation of clip path units.
+*/
 PHP_METHOD(imagickdraw, getclipunits)
 {
 	zval *object;
@@ -13735,7 +13900,11 @@ PHP_METHOD(imagickdraw, getclipunits)
 
 	RETVAL_LONG( units );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getFillColor(PixelWand fill_color)
+	Returns the fill color used for drawing filled objects.
+*/
 PHP_METHOD(imagickdraw, getfillcolor)
 {
 	php_imagickpixel_object *internp;
@@ -13754,7 +13923,11 @@ PHP_METHOD(imagickdraw, getfillcolor)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getFillOpacity()
+	Returns the opacity used when drawing using the fill color or fill texture.  Fully opaque is 1.0.
+*/
 PHP_METHOD(imagickdraw, getfillopacity)
 {
 	zval *object;
@@ -13766,7 +13939,11 @@ PHP_METHOD(imagickdraw, getfillopacity)
 
 	RETVAL_DOUBLE( opacity );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getFillRule(const DrawingWand *wand)
+	Returns the fill rule used while drawing polygons.
+*/
 PHP_METHOD(imagickdraw, getfillrule)
 {
 	zval *object;
@@ -13778,7 +13955,11 @@ PHP_METHOD(imagickdraw, getfillrule)
 
 	RETVAL_LONG( fillRule );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getGravity()
+	Returns the text placement gravity used when annotating with text.
+*/
 PHP_METHOD(imagickdraw, getgravity)
 {
 	zval *object;
@@ -13790,7 +13971,11 @@ PHP_METHOD(imagickdraw, getgravity)
 
 	RETVAL_LONG( gravity );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeAntialias()
+	Returns the current stroke antialias setting. Stroked outlines are antialiased by default.  When antialiasing is disabled stroked pixels are thresholded to determine if the stroke color or underlying canvas color should be used.
+*/
 PHP_METHOD(imagickdraw, getstrokeantialias)
 {
 	zval *object;
@@ -13809,7 +13994,11 @@ PHP_METHOD(imagickdraw, getstrokeantialias)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeColor(PixelWand stroke_color)
+	Returns the color used for stroking object outlines.
+*/
 PHP_METHOD(imagickdraw, getstrokecolor)
 {
 	php_imagickpixel_object *internp;
@@ -13828,7 +14017,11 @@ PHP_METHOD(imagickdraw, getstrokecolor)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeDashArray()
+	Returns an array representing the pattern of dashes and gaps used to stroke paths (see DrawSetStrokeDashArray). The array must be freed once it is no longer required by the user.
+*/
 PHP_METHOD(imagickdraw, getstrokedasharray)
 {
 	zval *object;
@@ -13848,7 +14041,11 @@ PHP_METHOD(imagickdraw, getstrokedasharray)
 	IMAGICK_FREE_MEMORY( double *, strokeArray );
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeDashArray(array dashArray)
+	Specifies the pattern of dashes and gaps used to stroke paths. The strokeDashArray represents an array of numbers that specify the lengths of alternating dashes and gaps in pixels. If an odd number of values is provided, then the list of values is repeated to yield an even number of values. To remove an existing dash array, pass a zero number_elements argument and null dash_array. A typical strokeDashArray_ array might contain the members 5 3 2.
+*/
 PHP_METHOD(imagickdraw, setstrokedasharray)
 {
 	zval *zArray;
@@ -13886,7 +14083,11 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeDashOffset()
+	Returns the offset into the dash pattern to start the dash.
+*/
 PHP_METHOD(imagickdraw, getstrokedashoffset)
 {
 	zval *object;
@@ -13898,7 +14099,11 @@ PHP_METHOD(imagickdraw, getstrokedashoffset)
 
 	RETVAL_DOUBLE( offset );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeLineCap()
+	Returns the shape to be used at the end of open subpaths when they are stroked. Values of LineCap are UndefinedCap, ButtCap, RoundCap, and SquareCap.
+*/
 PHP_METHOD(imagickdraw, getstrokelinecap)
 {
 	zval *object;
@@ -13910,7 +14115,11 @@ PHP_METHOD(imagickdraw, getstrokelinecap)
 
 	RETVAL_LONG( lineCap );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeLineJoin()
+	Returns the shape to be used at the corners of paths (or other vector shapes) when they are stroked. Values of LineJoin are UndefinedJoin, MiterJoin, RoundJoin, and BevelJoin.
+*/
 PHP_METHOD(imagickdraw, getstrokelinejoin)
 {
 	zval *object;
@@ -13922,7 +14131,11 @@ PHP_METHOD(imagickdraw, getstrokelinejoin)
 
 	RETVAL_LONG( lineJoin );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeMiterLimit()
+	Returns the miter limit. When two line segments meet at a sharp angle and miter joins have been specified for 'lineJoin', it is possible for the miter to extend far beyond the thickness of the line stroking the path. The miterLimit' imposes a limit on the ratio of the miter length to the 'lineWidth'.
+*/
 PHP_METHOD(imagickdraw, getstrokemiterlimit)
 {
 	zval *object;
@@ -13934,7 +14147,11 @@ PHP_METHOD(imagickdraw, getstrokemiterlimit)
 
 	RETVAL_LONG( miterLimit );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeOpacity()
+	Returns the opacity of stroked object outlines.
+*/
 PHP_METHOD(imagickdraw, getstrokeopacity)
 {
 	zval *object;
@@ -13946,7 +14163,11 @@ PHP_METHOD(imagickdraw, getstrokeopacity)
 
 	RETVAL_DOUBLE( opacity );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getStrokeWidth()
+	Returns the width of the stroke used to draw object outlines.
+*/
 PHP_METHOD(imagickdraw, getstrokewidth)
 {
 	zval *object;
@@ -13958,7 +14179,11 @@ PHP_METHOD(imagickdraw, getstrokewidth)
 
 	RETVAL_DOUBLE( width );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getTextAlignment()
+	Returns the alignment applied when annotating with text.
+*/
 PHP_METHOD(imagickdraw, gettextalignment)
 {
 	zval *object;
@@ -13970,7 +14195,11 @@ PHP_METHOD(imagickdraw, gettextalignment)
 
 	RETVAL_LONG( alignType );
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getTextAntialias()
+	Returns the current text antialias setting, which determines whether text is antialiased.  Text is antialiased by default.
+*/
 PHP_METHOD(imagickdraw, gettextantialias)
 {
 	zval *object;
@@ -13989,7 +14218,11 @@ PHP_METHOD(imagickdraw, gettextantialias)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getVectorGraphics()
+	Returns a null-terminated string which specifies the vector graphics generated by any graphics calls made since the wand was instantiated.  The string must be freed by the user once it is no longer required.
+*/
 PHP_METHOD(imagickdraw, getvectorgraphics)
 {
 	zval *object;
@@ -14004,7 +14237,11 @@ PHP_METHOD(imagickdraw, getvectorgraphics)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::getTextUnderColor(PixelWand under_color)
+	Returns the color of a background rectangle to place under text annotations.
+*/
 PHP_METHOD(imagickdraw, gettextundercolor)
 {
 	php_imagickpixel_object *internp;
@@ -14023,7 +14260,11 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathClose()
+	Adds a path element to the current path which closes the current subpath by drawing a straight line from the current point to the current subpath's most recent starting point (usually, the most recent moveto point).
+*/
 PHP_METHOD(imagickdraw, pathclose)
 {
 	zval *object;
@@ -14033,8 +14274,11 @@ PHP_METHOD(imagickdraw, pathclose)
 	DrawPathClose( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::pathCurveToAbsolute(float x1, float y1, float x2, float y2, float x, float y)
+	Draws a cubic Bezier curve from the current point to (x,y) using (x1,y1) as the control point at the beginning of the curve and (x2,y2) as the control point at the end of the curve using absolute coordinates. At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetoabsolute)
 {
 	zval *object;
@@ -14059,7 +14303,11 @@ PHP_METHOD(imagickdraw, pathcurvetoabsolute)
 	DrawPathCurveToAbsolute( internd->drawing_wand, x1, y1, x2, y2, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathCurveToRelative(float x1, float y1, float x2, float y2, float x, float y)
+	Draws a cubic Bezier curve from the current point to (x,y) using (x1,y1) as the control point at the beginning of the curve and (x2,y2) as the control point at the end of the curve using relative coordinates. At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetorelative)
 {
 	zval *object;
@@ -14084,7 +14332,11 @@ PHP_METHOD(imagickdraw, pathcurvetorelative)
 	DrawPathCurveToRelative( internd->drawing_wand, x1, y1, x2, y2, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathCurveToQuadraticBezierAbsolute(float x1, float y1, float x, float y)
+	Draws a quadratic Bezier curve from the current point to (x,y) using (x1,y1) as the control point using absolute coordinates. At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetoquadraticbezierabsolute)
 {
 	zval *object;
@@ -14108,7 +14360,11 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbezierabsolute)
 	DrawPathCurveToQuadraticBezierAbsolute( internd->drawing_wand, x1, y1, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathCurveToQuadraticBezierRelative(float x1, float y1, float x, float y)
+	Draws a quadratic Bezier curve from the current point to (x,y) using (x1,y1) as the control point using relative coordinates. At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetoquadraticbezierrelative)
 {
 
@@ -14133,7 +14389,11 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbezierrelative)
 	DrawPathCurveToQuadraticBezierRelative( internd->drawing_wand, x1, y1, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathCurveToQuadraticBezierSmoothAbsolute(float x, float y)
+	Draws a quadratic Bezier curve (using relative coordinates) from the current point to (x,y). The control point is assumed to be the reflection of the control point on the previous command relative to the current point. (If there is no previous command or if the previous command was not a DrawPathCurveToQuadraticBezierAbsolute, DrawPathCurveToQuadraticBezierRelative, DrawPathCurveToQuadraticBezierSmoothAbsolut or DrawPathCurveToQuadraticBezierSmoothRelative, assume the control point is coincident with the current point.). At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetoquadraticbeziersmoothabsolute)
 {
 	zval *object;
@@ -14158,7 +14418,11 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbeziersmoothabsolute)
 	DrawPathCurveToQuadraticBezierSmoothAbsolute( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* ImagickDraw::pathCurveToQuadraticBezierSmoothRelative(float x, float y)
+	Draws a quadratic Bezier curve (using relative coordinates) from the current point to (x, y). The control point is assumed to be the reflection of the control point on the previous command relative to the current point. (If there is no previous command or if the previous command was not a DrawPathCurveToQuadraticBezierAbsolute, DrawPathCurveToQuadraticBezierRelative, DrawPathCurveToQuadraticBezierSmoothAbsolut or DrawPathCurveToQuadraticBezierSmoothRelative, assume the control point is coincident with the current point). At the end of the command, the new current point becomes the final (x, y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetoquadraticbeziersmoothrelative)
 {
 	zval *object;
@@ -14182,7 +14446,11 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbeziersmoothrelative)
 	DrawPathCurveToQuadraticBezierSmoothRelative( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathCurveToSmoothAbsolute(float x2, float y2, float x, float y)
+	Draws a cubic Bezier curve from the current point to (x,y) using absolute coordinates. The first control point is assumed to be the reflection of the second control point on the previous command relative to the current point. (If there is no previous command or if the previous command was not an DrawPathCurveToAbsolute, DrawPathCurveToRelative, DrawPathCurveToSmoothAbsolute or DrawPathCurveToSmoothRelative, assume the first control point is coincident with the current point.) (x2,y2) is the second control point (i.e., the control point at the end of the curve). At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetosmoothabsolute)
 {
 	zval *object;
@@ -14207,7 +14475,11 @@ PHP_METHOD(imagickdraw, pathcurvetosmoothabsolute)
 	DrawPathCurveToSmoothAbsolute( internd->drawing_wand, x1, y1, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathCurveToSmoothRelative(float x2, float y2, float x, float y)
+	Draws a cubic Bezier curve from the current point to (x,y) using relative coordinates. The first control point is assumed to be the reflection of the second control point on the previous command relative to the current point. (If there is no previous command or if the previous command was not an DrawPathCurveToAbsolute, DrawPathCurveToRelative, DrawPathCurveToSmoothAbsolute or DrawPathCurveToSmoothRelative, assume the first control point is coincident with the current point.) (x2,y2) is the second control point (i.e., the control point at the end of the curve). At the end of the command, the new current point becomes the final (x,y) coordinate pair used in the polybezier.
+*/
 PHP_METHOD(imagickdraw, pathcurvetosmoothrelative)
 {
 	zval *object;
@@ -14232,9 +14504,11 @@ PHP_METHOD(imagickdraw, pathcurvetosmoothrelative)
 	DrawPathCurveToSmoothRelative( internd->drawing_wand, x1, y1, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
-
+/* {{{ proto ImagickDraw::pathEllipticArcAbsolute(float rx, float ry, float x_axis_rotation, bool large_arc_flag, bool sweep_flag, float x, float y)
+	Draws an elliptical arc from the current point to (x, y) using absolute coordinates. The size and orientation of the ellipse are defined by two radii (rx, ry) and an xAxisRotation, which indicates how the ellipse as a whole is rotated relative to the current coordinate system. The center (cx, cy) of the ellipse is calculated automatically to satisfy the constraints imposed by the other parameters. largeArcFlag and sweepFlag contribute to the automatic calculations and help determine how the arc is drawn. If largeArcFlag is true then draw the larger of the available arcs. If sweepFlag is true, then draw the arc matching a clock-wise rotation.
+*/
 PHP_METHOD(imagickdraw, pathellipticarcabsolute)
 {
 	zval *object;
@@ -14259,7 +14533,11 @@ PHP_METHOD(imagickdraw, pathellipticarcabsolute)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathEllipticArcRelative(float rx, float ry, float x_axis_rotation, bool large_arc_flag, bool sweep_flag, float x, float y)
+	Draws an elliptical arc from the current point to (x, y) using relative coordinates. The size and orientation of the ellipse are defined by two radii (rx, ry) and an xAxisRotation, which indicates how the ellipse as a whole is rotated relative to the current coordinate system. The center (cx, cy) of the ellipse is calculated automatically to satisfy the constraints imposed by the other parameters. largeArcFlag and sweepFlag contribute to the automatic calculations and help determine how the arc is drawn. If largeArcFlag is true then draw the larger of the available arcs. If sweepFlag is true, then draw the arc matching a clock-wise rotation.
+*/
 PHP_METHOD(imagickdraw, pathellipticarcrelative)
 {
 
@@ -14285,7 +14563,11 @@ PHP_METHOD(imagickdraw, pathellipticarcrelative)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathFinish()
+	Terminates the current path.
+*/
 PHP_METHOD(imagickdraw, pathfinish)
 {
 	zval *object;
@@ -14295,7 +14577,11 @@ PHP_METHOD(imagickdraw, pathfinish)
 	DrawPathFinish( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathLineToAbsolute(float x, float y)
+	Draws a line path from the current point to the given coordinate using absolute coordinates. The coordinate then becomes the new current point.
+*/
 PHP_METHOD(imagickdraw, pathlinetoabsolute)
 {
 	zval *object;
@@ -14319,7 +14605,11 @@ PHP_METHOD(imagickdraw, pathlinetoabsolute)
 	DrawPathLineToAbsolute( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathLineToRelative(float x, float y)
+	Draws a line path from the current point to the given coordinate using relative coordinates. The coordinate then becomes the new current point.
+*/
 PHP_METHOD(imagickdraw, pathlinetorelative)
 {
 	zval *object;
@@ -14343,7 +14633,11 @@ PHP_METHOD(imagickdraw, pathlinetorelative)
 	DrawPathLineToRelative( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathLineToHorizontalAbsolute(float x)
+	Draws a horizontal line path from the current point to the target point using absolute coordinates.  The target point then becomes the new current point.
+*/
 PHP_METHOD(imagickdraw, pathlinetohorizontalabsolute)
 {
 	zval *object;
@@ -14368,7 +14662,11 @@ PHP_METHOD(imagickdraw, pathlinetohorizontalabsolute)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathLineToHorizontalRelative(float x)
+	Draws a horizontal line path from the current point to the target point using relative coordinates.  The target point then becomes the new current point.
+*/
 PHP_METHOD(imagickdraw, pathlinetohorizontalrelative)
 {
 	zval *object;
@@ -14392,7 +14690,11 @@ PHP_METHOD(imagickdraw, pathlinetohorizontalrelative)
 	DrawPathLineToHorizontalRelative( internd->drawing_wand, x );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathLineToVerticalAbsolute(float y)
+	Draws a vertical line path from the current point to the target point using absolute coordinates.  The target point then becomes the new current point.
+*/
 PHP_METHOD(imagickdraw, pathlinetoverticalabsolute)
 {
 	zval *object;
@@ -14416,7 +14718,11 @@ PHP_METHOD(imagickdraw, pathlinetoverticalabsolute)
 	DrawPathLineToVerticalAbsolute( internd->drawing_wand, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathLineToVerticalRelative(float y)
+	Draws a vertical line path from the current point to the target point using relative coordinates.  The target point then becomes the new current point.
+*/
 PHP_METHOD(imagickdraw, pathlinetoverticalrelative)
 {
 	zval *object;
@@ -14440,7 +14746,11 @@ PHP_METHOD(imagickdraw, pathlinetoverticalrelative)
 	DrawPathLineToVerticalRelative( internd->drawing_wand, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathMoveToAbsolute(float x, float y)
+	Starts a new sub-path at the given coordinate using absolute coordinates. The current point then becomes the specified coordinate.
+*/
 PHP_METHOD(imagickdraw, pathmovetoabsolute)
 {
 	zval *object;
@@ -14464,7 +14774,11 @@ PHP_METHOD(imagickdraw, pathmovetoabsolute)
 	DrawPathMoveToAbsolute( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathMoveToRelative(float x, float y)
+	Starts a new sub-path at the given coordinate using relative coordinates. The current point then becomes the specified coordinate.
+*/
 PHP_METHOD(imagickdraw, pathmovetorelative)
 {
 	zval *object;
@@ -14488,7 +14802,11 @@ PHP_METHOD(imagickdraw, pathmovetorelative)
 	DrawPathMoveToRelative( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pathStart()
+	Declares the start of a path drawing list which is terminated by a matching DrawPathFinish() command. All other DrawPath commands must be enclosed between a and a DrawPathFinish() command. This is because path drawing commands are subordinate commands and they do not function by themselves.
+*/
 PHP_METHOD(imagickdraw, pathstart)
 {
 	zval *object;
@@ -14498,7 +14816,11 @@ PHP_METHOD(imagickdraw, pathstart)
 	DrawPathStart( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::polyline(array coordinates)
+	Draws a polyline using the current stroke, stroke width, and fill color or texture, using the specified array of coordinates.
+*/
 PHP_METHOD(imagickdraw, polyline)
 {
 
@@ -14535,7 +14857,11 @@ PHP_METHOD(imagickdraw, polyline)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::popClipPath()
+	Terminates a clip path definition.
+*/
 PHP_METHOD(imagickdraw, popclippath)
 {
 	zval *object;
@@ -14545,7 +14871,11 @@ PHP_METHOD(imagickdraw, popclippath)
 	DrawPopClipPath( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::popDefs()
+	Terminates a definition list
+*/
 PHP_METHOD(imagickdraw, popdefs)
 {
 	zval *object;
@@ -14555,7 +14885,11 @@ PHP_METHOD(imagickdraw, popdefs)
 	DrawPopDefs( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::popPattern()
+	Terminates a pattern definition.
+*/
 PHP_METHOD(imagickdraw, poppattern)
 {
 	zval *object;
@@ -14574,7 +14908,11 @@ PHP_METHOD(imagickdraw, poppattern)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pushClipPath(string clip_mask_id)
+	Starts a clip path definition which is comprized of any number of drawing commands and terminated by a DrawPopClipPath() command.
+*/
 PHP_METHOD(imagickdraw, pushclippath)
 {
 	zval *object;
@@ -14600,7 +14938,11 @@ PHP_METHOD(imagickdraw, pushclippath)
 	DrawPushClipPath( internd->drawing_wand, clipMask );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pushDefs()
+	Indicates that commands up to a terminating DrawPopDefs() command create named elements (e.g. clip-paths, textures, etc.) which may safely be processed earlier for the sake of efficiency.
+*/
 PHP_METHOD(imagickdraw, pushdefs)
 {
 	zval *object;
@@ -14610,7 +14952,11 @@ PHP_METHOD(imagickdraw, pushdefs)
 	DrawPushDefs( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::pushPattern(string pattern_id, float x, float y, float width, float height)
+	Indicates that subsequent commands up to a DrawPopPattern() command comprise the definition of a named pattern. The pattern space is assigned top left corner coordinates, a width and height, and becomes its own drawing space.  Anything which can be drawn may be used in a pattern definition. Named patterns may be used as stroke or brush definitions.
+*/
 PHP_METHOD(imagickdraw, pushpattern)
 {
 	zval *object;
@@ -14637,6 +14983,7 @@ PHP_METHOD(imagickdraw, pushpattern)
 	DrawPushPattern( internd->drawing_wand, patternId, x, y, width, height );
 	RETURN_TRUE;
 }
+/* }}} */
 
 PHP_METHOD(imagickdraw, render)
 {
@@ -14657,6 +15004,9 @@ PHP_METHOD(imagickdraw, render)
 	}
 }
 
+/* {{{ proto ImagickDraw::render()
+	Renders all preceding drawing commands onto the image.
+*/
 PHP_METHOD(imagickdraw, resetvectorgraphics)
 {
 	zval *object;
@@ -14666,7 +15016,11 @@ PHP_METHOD(imagickdraw, resetvectorgraphics)
 	DrawResetVectorGraphics( internd->drawing_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::rotate(float degrees)
+	Applies the specified rotation to the current coordinate space.
+*/
 PHP_METHOD(imagickdraw, rotate)
 {
 	zval *object;
@@ -14691,7 +15045,11 @@ PHP_METHOD(imagickdraw, rotate)
 	DrawRotate( internd->drawing_wand, degrees );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::scale(float x, float y)
+	Adjusts the scaling factor to apply in the horizontal and vertical directions to the current coordinate space.
+*/
 PHP_METHOD(imagickdraw, scale)
 {
 	zval *object;
@@ -14716,7 +15074,11 @@ PHP_METHOD(imagickdraw, scale)
 	DrawScale( internd->drawing_wand, x, y );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setClipPath(string clip_mask)
+	Associates a named clipping path with the image.  Only the areas drawn on by the clipping path will be modified as long as it remains in effect.
+*/
 PHP_METHOD(imagickdraw, setclippath)
 {
 	zval *object;
@@ -14751,8 +15113,11 @@ PHP_METHOD(imagickdraw, setclippath)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
-
+/* {{{ proto ImagickDraw::setClipRule(DrawingWand *wand,const FillRule fill_rule)
+	Set the polygon fill rule to be used by the clipping path.
+*/
 PHP_METHOD(imagickdraw, setcliprule)
 {
 	zval *object;
@@ -14777,7 +15142,11 @@ PHP_METHOD(imagickdraw, setcliprule)
 	DrawSetClipRule( internd->drawing_wand, fillRule );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setClipUnits(int clip_units)
+	Sets the interpretation of clip path units.
+*/
 PHP_METHOD(imagickdraw, setclipunits)
 {
 	zval *object;
@@ -14801,7 +15170,11 @@ PHP_METHOD(imagickdraw, setclipunits)
 	DrawSetClipUnits( internd->drawing_wand, units );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setFillOpacity(Dfloat fillOpacity)
+	Sets the opacity to use when drawing using the fill color or fill texture.  Fully opaque is 1.0.
+*/
 PHP_METHOD(imagickdraw, setfillopacity)
 {
 	zval *object;
@@ -14825,7 +15198,11 @@ PHP_METHOD(imagickdraw, setfillopacity)
 	DrawSetFillOpacity( internd->drawing_wand, fillOpacity );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setFillPatternURL(string fill_url)
+	Sets the URL to use as a fill pattern for filling objects. Only local URLs ("#identifier") are supported at this time. These local URLs are normally created by defining a named fill pattern with DrawPushPattern/DrawPopPattern.
+*/
 PHP_METHOD(imagickdraw, setfillpatternurl)
 {
 	zval *object;
@@ -14860,7 +15237,11 @@ PHP_METHOD(imagickdraw, setfillpatternurl)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setFillRule(int fill_rule)
+	Sets the fill rule to use while drawing polygons.
+*/
 PHP_METHOD(imagickdraw, setfillrule)
 {
 	zval *object;
@@ -14884,7 +15265,11 @@ PHP_METHOD(imagickdraw, setfillrule)
 	DrawSetFillRule( internd->drawing_wand, fillRule );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setGravity(int gravity)
+	Sets the text placement gravity to use when annotating with text.
+*/
 PHP_METHOD(imagickdraw, setgravity)
 {
 	zval *object;
@@ -14908,7 +15293,11 @@ PHP_METHOD(imagickdraw, setgravity)
 	DrawSetGravity( internd->drawing_wand, gravity );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokePatternURL(string stroke_url)
+	Sets the pattern used for stroking object outlines.
+*/
 PHP_METHOD(imagickdraw, setstrokepatternurl)
 {
 	zval *object;
@@ -14943,7 +15332,11 @@ PHP_METHOD(imagickdraw, setstrokepatternurl)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeDashOffset(float dash_offset)
+	Specifies the offset into the dash pattern to start the dash.
+*/
 PHP_METHOD(imagickdraw, setstrokedashoffset)
 {
 	zval *object;
@@ -14967,7 +15360,11 @@ PHP_METHOD(imagickdraw, setstrokedashoffset)
 	DrawSetStrokeDashOffset( internd->drawing_wand, offset );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeLineCap(int linecap)
+	Specifies the shape to be used at the end of open subpaths when they are stroked. Values of LineCap are UndefinedCap, ButtCap, RoundCap, and SquareCap.
+*/
 PHP_METHOD(imagickdraw, setstrokelinecap)
 {
 	zval *object;
@@ -14991,7 +15388,11 @@ PHP_METHOD(imagickdraw, setstrokelinecap)
 	DrawSetStrokeLineCap( internd->drawing_wand, lineCap );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeLineJoin(int linejoin)
+	Specifies the shape to be used at the corners of paths (or other vector shapes) when they are stroked. Values of LineJoin are UndefinedJoin, MiterJoin, RoundJoin, and BevelJoin.
+*/
 PHP_METHOD(imagickdraw, setstrokelinejoin)
 {
 	zval *object;
@@ -15015,7 +15416,11 @@ PHP_METHOD(imagickdraw, setstrokelinejoin)
 	DrawSetStrokeLineJoin( internd->drawing_wand, lineJoin );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeMiterLimit(int miterlimit)
+	Specifies the miter limit. When two line segments meet at a sharp angle and miter joins have been specified for 'lineJoin', it is possible for the miter to extend far beyond the thickness of the line stroking the path. The miterLimit' imposes a limit on the ratio of the miter length to the 'lineWidth'.
+*/
 PHP_METHOD(imagickdraw, setstrokemiterlimit)
 {
 	zval *object;
@@ -15039,7 +15444,11 @@ PHP_METHOD(imagickdraw, setstrokemiterlimit)
 	DrawSetStrokeMiterLimit( internd->drawing_wand, miterLimit );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setStrokeOpacity(float stroke_opacity)
+	Specifies the opacity of stroked object outlines.
+*/
 PHP_METHOD(imagickdraw, setstrokeopacity)
 {
 	zval *object;
@@ -15063,7 +15472,11 @@ PHP_METHOD(imagickdraw, setstrokeopacity)
 	DrawSetStrokeOpacity( internd->drawing_wand, opacity );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::setVectorGraphics(string xml)
+	Sets the vector graphics associated with the specified wand.  Use this method with DrawGetVectorGraphics() as a method to persist the vector graphics state.
+*/
 PHP_METHOD(imagickdraw, setvectorgraphics)
 {
 
@@ -15099,7 +15512,11 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImagickDraw::popDrawingWand() 
+	Destroys the current DrawingWand in the stack, and returns to the previously pushed DrawingWand. Multiple DrawingWands may exist. It is an error to attempt to pop more DrawingWands than have been pushed, and it is proper form to pop all DrawingWands which have been pushed.
+*/
 PHP_METHOD(imagickdraw, popdrawingwand)
 {
 	zval *object;
@@ -15118,7 +15535,11 @@ PHP_METHOD(imagickdraw, popdrawingwand)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
+/* {{{ proto ImageDraw::pushDrawingWand() 
+	Clones the current DrawingWand to create a new DrawingWand, which is then added to the DrawingWand stack. The original drawing DrawingWand(s) may be returned to by invoking PopDrawingWand(). The DrawingWands are stored on a DrawingWand stack. For every Pop there must have already been an equivalent Push.
+*/
 PHP_METHOD(imagickdraw, pushdrawingwand)
 {
 	zval *object;
@@ -15137,15 +15558,22 @@ PHP_METHOD(imagickdraw, pushdrawingwand)
 		RETURN_TRUE;
 	}
 }
+/* }}} */
 
 /* END OF DRAWINGWAND METHODS */
 
+/* {{{ proto ImagickPixelIterator::__construct()
+   The ImagickPixelIterator constructor
+*/
 PHP_METHOD(imagickpixeliterator, __construct)
 {
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::resetIterator()
+	Resets the pixel iterator.  Use it in conjunction with PixelGetNextIteratorRow() to iterate over all the pixels in a pixel container.
+*/
 PHP_METHOD(imagickpixeliterator, resetiterator)
 {
 	zval *object;
@@ -15169,8 +15597,11 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::syncIterator()
+	Syncs the pixel iterator.
+*/
 PHP_METHOD(imagickpixeliterator, synciterator)
 {
 	zval *object;
@@ -15201,8 +15632,11 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::setIteratorFirstRow()
+	Sets the pixel iterator to the first pixel row.
+*/
 PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 {
 	zval *object;
@@ -15226,8 +15660,11 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::setIteratorLastRow()
+	Sets the pixel iterator to the last pixel row.
+*/
 PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 {
 	zval *object;
@@ -15251,8 +15688,11 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::newPixelIterator()
+	Returns a new pixel iterator.
+*/
 PHP_METHOD(imagickpixeliterator, newpixeliterator)
 {
 
@@ -15299,8 +15739,11 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::newPixelRegionIterator(Imagick wand, int x, int y, int columns, int rows)
+	Returns a new pixel iterator.
+*/
 PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 {
 	zval *magickObject;
@@ -15343,8 +15786,11 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::getIteratorRow()
+	Returns the crurent pixel iterator row.
+*/
 PHP_METHOD(imagickpixeliterator, getiteratorrow)
 {
 	zval *object;
@@ -15368,8 +15814,11 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 	ZVAL_LONG( return_value, (long) status );
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::setIteratorRow(int row)
+	Set the pixel iterator row.
+*/
 PHP_METHOD(imagickpixeliterator, setiteratorrow)
 {
 	zval *object;
@@ -15417,8 +15866,11 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::getPreviousIteratorRow()
+	Returns the previous row as an array of pixel wands from the pixel iterator.
+*/
 PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 {
 	zval *object;
@@ -15461,8 +15913,11 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::getCurrentIteratorRow()
+	Returns the current row as an array of pixel wands from the pixel iterator.
+*/
 PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 {
 	zval *object;
@@ -15504,8 +15959,11 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	}
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixelIterator::getNextIteratorRow()
+	Returns the next row as an array of pixel wands from the pixel iterator.
+*/
 PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 {
 	zval *object;
@@ -15548,7 +16006,11 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 
 	return;
 }
+/* }}} */
 
+/* {{{ proto ImagickPixelIterator::destroy()
+	Deallocates resources associated with a PixelIterator.
+*/
 PHP_METHOD(imagickpixeliterator, destroy)
 {
 	zval *object;
@@ -15571,7 +16033,11 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	internpix->pixel_iterator = DestroyPixelIterator( internpix->pixel_iterator );
 	RETURN_TRUE;
 }
+/* }}} */
 
+/* {{{ proto ImagickPixelIterator::clear()
+	Clear resources associated with a PixelIterator.
+*/
 PHP_METHOD(imagickpixeliterator, clear)
 {
 	zval *object;
@@ -15594,9 +16060,12 @@ PHP_METHOD(imagickpixeliterator, clear)
 	ClearPixelIterator( internpix->pixel_iterator );
 	RETURN_TRUE;
 }
+/* }}} */
 
 /* END OF PIXELITERATOR */
-
+/* {{{ proto ImagickPixel::__construct()
+   The ImagickPixel constructor
+*/
 PHP_METHOD(imagickpixel, __construct)
 {
 	zval *object;
@@ -15607,8 +16076,11 @@ PHP_METHOD(imagickpixel, __construct)
 	internp->pixel_wand = NewPixelWand();
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setAlpha(float alpha)
+	Sets the normalized alpha color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setalpha)
 {
 	zval *object;
@@ -15632,8 +16104,11 @@ PHP_METHOD(imagickpixel, setalpha)
 	PixelSetAlpha( internp->pixel_wand, opacity );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getAlpha()
+	Returns the normalized alpha color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getalpha)
 {
 	zval *object;
@@ -15647,8 +16122,11 @@ PHP_METHOD(imagickpixel, getalpha)
 
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setColor(string color)
+	Sets the color of the pixel wand with a string (e.g. "blue", "#0000ff", "rgb(0,0,255)", "cmyk(100,100,100,10)", etc.).
+*/
 PHP_METHOD(imagickpixel, setcolor)
 {
 	char *colorName;
@@ -15681,8 +16159,11 @@ PHP_METHOD(imagickpixel, setcolor)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::clear()
+	Clears resources associated with the wand.
+*/
 PHP_METHOD(imagickpixel, clear)
 {
 	zval *object;
@@ -15703,8 +16184,11 @@ PHP_METHOD(imagickpixel, clear)
 	ClearPixelWand( internp->pixel_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::destroy()
+	Deallocates resources associated with a PixelWand.
+*/
 PHP_METHOD(imagickpixel, destroy)
 {
 	zval *object;
@@ -15726,8 +16210,11 @@ PHP_METHOD(imagickpixel, destroy)
 	internp->pixel_wand = DestroyPixelWand( internp->pixel_wand );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::isSimilar(PixelWand *q, float fuzz)
+	Returns MagickTrue if the distance between two colors is less than the specified distance.
+*/
 PHP_METHOD(imagickpixel, issimilar)
 {
 	zval *object, *objvar;
@@ -15759,8 +16246,11 @@ PHP_METHOD(imagickpixel, issimilar)
 
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getBlack()
+	Returns the normalized black color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getblack)
 {
 	zval *object;
@@ -15772,8 +16262,11 @@ PHP_METHOD(imagickpixel, getblack)
 	color = PixelGetBlack( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setBlack(float black)
+	Sets the normalized black color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setblack)
 {
 	zval *object;
@@ -15785,8 +16278,11 @@ PHP_METHOD(imagickpixel, setblack)
 	PixelSetBlack( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getBlue()
+	Returns the normalized blue color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getblue)
 {
 	zval *object;
@@ -15798,8 +16294,11 @@ PHP_METHOD(imagickpixel, getblue)
 	color = PixelGetBlue( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setBlue(float blue)
+	Sets the normalized blue color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setblue)
 {
 	zval *object;
@@ -15811,8 +16310,11 @@ PHP_METHOD(imagickpixel, setblue)
 	PixelSetBlue( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getCyan()
+	Returns the normalized cyan color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getcyan)
 {
 	zval *object;
@@ -15824,8 +16326,11 @@ PHP_METHOD(imagickpixel, getcyan)
 	color = PixelGetCyan( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setCyan(float cyan)
+	Sets the normalized cyan color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setcyan)
 {
 	zval *object;
@@ -15838,8 +16343,11 @@ PHP_METHOD(imagickpixel, setcyan)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getGreen()
+	Returns the normalized green color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getgreen)
 {
 	zval *object;
@@ -15851,8 +16359,11 @@ PHP_METHOD(imagickpixel, getgreen)
 	color = PixelGetGreen( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setGreen(float green)
+	Sets the normalized green color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setgreen)
 {
 	zval *object;
@@ -15865,8 +16376,11 @@ PHP_METHOD(imagickpixel, setgreen)
 	RETURN_TRUE;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getRed(const PixelWand *wand)
+	Returns the normalized red color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getred)
 {
 	zval *object;
@@ -15878,8 +16392,11 @@ PHP_METHOD(imagickpixel, getred)
 	color = PixelGetRed( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setRed(float red)
+	Sets the normalized red color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setred)
 {
 	zval *object;
@@ -15891,8 +16408,11 @@ PHP_METHOD(imagickpixel, setred)
 	PixelSetRed( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getYellow()
+	Returns the normalized yellow color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getyellow)
 {
 	zval *object;
@@ -15904,8 +16424,11 @@ PHP_METHOD(imagickpixel, getyellow)
 	color = PixelGetYellow( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setYellow(float yellow)
+	Sets the normalized yellow color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setyellow)
 {
 	zval *object;
@@ -15917,8 +16440,11 @@ PHP_METHOD(imagickpixel, setyellow)
 	PixelSetYellow( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getMagenta()
+	Returns the normalized magenta color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getmagenta)
 {
 	zval *object;
@@ -15930,8 +16456,11 @@ PHP_METHOD(imagickpixel, getmagenta)
 	color = PixelGetMagenta( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setMagenta(float magenta)
+	Sets the normalized magenta color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setmagenta)
 {
 	zval *object;
@@ -15943,8 +16472,11 @@ PHP_METHOD(imagickpixel, setmagenta)
 	PixelSetMagenta( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getOpacity()
+	Returns the normalized opacity color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getopacity)
 {
 	zval *object;
@@ -15956,8 +16488,11 @@ PHP_METHOD(imagickpixel, getopacity)
 	color = PixelGetOpacity( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setOpacity(float opacity)
+	Sets the normalized opacity color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setopacity)
 {
 	zval *object;
@@ -15969,8 +16504,11 @@ PHP_METHOD(imagickpixel, setopacity)
 	PixelSetOpacity( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getFuzz()
+	Returns the normalized fuzz value of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, getfuzz)
 {
 	zval *object;
@@ -15982,8 +16520,11 @@ PHP_METHOD(imagickpixel, getfuzz)
 	color = PixelGetFuzz( internp->pixel_wand );
 	RETVAL_DOUBLE( color );
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setFuzz(float fuzz)
+	Sets the fuzz value of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, setfuzz)
 {
 	zval *object;
@@ -15995,8 +16536,11 @@ PHP_METHOD(imagickpixel, setfuzz)
 	PixelSetFuzz( internp->pixel_wand, color );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getHSL()
+	Returns the normalized HSL color of the pixel wand in an array with the keys "hue", "saturation", and "luminosity".
+*/
 PHP_METHOD(imagickpixel, gethsl)
 {
 	zval *object;
@@ -16013,8 +16557,11 @@ PHP_METHOD(imagickpixel, gethsl)
 	add_assoc_double( return_value, "luminosity", luminosity );
 	return;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::setHSL(float hue, float saturation, float luminosity)
+	Sets the normalized HSL color of the pixel wand.
+*/
 PHP_METHOD(imagickpixel, sethsl)
 {
 	zval *object;
@@ -16038,8 +16585,11 @@ PHP_METHOD(imagickpixel, sethsl)
 	PixelSetHSL( internp->pixel_wand, hue, saturation, luminosity );
 	RETURN_TRUE;
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getColorAsString()
+	Returnsd the color of the pixel wand as a string.
+*/
 PHP_METHOD(imagickpixel, getcolorasstring)
 {
 
@@ -16055,8 +16605,11 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 	return;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getColorAsNormalizedString()
+	Returns the normalized color of the pixel wand as a string.
+*/
 PHP_METHOD(imagickpixel, getcolorasnormalizedstring)
 {
 
@@ -16072,8 +16625,11 @@ PHP_METHOD(imagickpixel, getcolorasnormalizedstring)
 	return;
 
 }
+/* }}} */
 
-
+/* {{{ proto ImagickPixel::getColorCount()
+	Returns the color count associated with this color.
+*/
 PHP_METHOD(imagickpixel, getcolorcount)
 {
 	zval *object;
@@ -16085,7 +16641,7 @@ PHP_METHOD(imagickpixel, getcolorcount)
 	colorCount = PixelGetColorCount( internp->pixel_wand );
 	RETVAL_LONG( colorCount );
 }
-
+/* }}} */
 
 
 
