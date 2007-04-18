@@ -84,6 +84,9 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	IMAGICK_FREE_MEMORY( char *, buffer ); throwExceptionWithMessage( 1, "Image has no format.", 1 TSRMLS_CC ); RETURN_FALSE;}\
 	else { IMAGICK_FREE_MEMORY( char *, buffer ); }
 
+#define IMAGICK_METHOD_DEPRECATED( className, methodName )\
+	php_error( E_STRICT, "%s::%s is deprecated.", className, methodName );
+
 /* Forward declarations (Imagick) */
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, readimage);
@@ -8072,6 +8075,9 @@ PHP_METHOD(imagick, setimageattribute)
 
 	zval *object;
 	MagickBooleanType status;
+
+	/* Tell user that this method has been deprecated. */
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "setImageAttribute" );
 
 	if ( ZEND_NUM_ARGS() != 2 )
 	{
