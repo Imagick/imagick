@@ -54,6 +54,7 @@ if test $PHP_IMAGICK != "no"; then
 				AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
 		fi
 
+		AC_DEFINE(HAVE_IMAGICK,1,[ ])
 
 		PHP_ADD_LIBRARY_WITH_PATH(Magick, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 		PHP_ADD_LIBRARY_WITH_PATH(Wand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)

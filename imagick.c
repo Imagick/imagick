@@ -9485,11 +9485,11 @@ PHP_METHOD(imagick, writeimage)
 	char *fileName;
 	int fileNameLen;
 	zval *object;
-	object = getThis();
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	char *absolute;
 	char *buffer;
+	object = getThis();
 
 	fileName = (char *)NULL;
 
@@ -9543,10 +9543,10 @@ PHP_METHOD(imagick, writeimages)
 	zend_bool adjoin;
 	int fileNameLen;
 	zval *object;
-	object = getThis();
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	char *absolute;
+	object = getThis();
 
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
