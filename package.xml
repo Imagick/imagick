@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.7" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+	<name>imagick</name>
+	<channel>pecl.php.net</channel>
+	<summary>Provides a wrapper to the ImageMagick library.</summary>
+	<description>imagick is a native php extension to create and modify images using the ImageMagick API.</description>
+	<lead>
+		<name>Mikko Koppanen</name>
+		<user>mkoppanen</user>
+		<email>mkoppanen@php.net</email>
+		<active>yes</active>
+	</lead>
+	<lead>
+		<name>Scott MacVicar</name>
+		<user>scottmac</user>
+		<email>scottmac@php.net</email>
+		<active>yes</active>
+	</lead>
+	<date>2007-04-??</date>
+	<version>
+		<release>2.0.0a1</release>
+		<api>2.0.0</api>
+	</version>
+	<stability>
+		<release>alpha</release>
+		<api>alpha</api>
+	</stability>
+	<license uri="http://www.php.net/license">PHP License</license>
+	<notes>- Initial Release</notes>
+	<contents>
+		<dir name="/">
+			<file name="config.m4" role="src" />
+			<file name="config.w32" role="src" />
+			<file name="CREDITS" role="doc" />
+			<file name="imagick.c" role="src">
+				<tasks:replace from="@PACKAGE_VERSION@" to="version" type="package-info" />
+			</file>
+			<file name="php_imagick.h" role="src" />
+			<file name="TODO" role="doc" />
+			<dir name="examples">
+				<file name="polygon.php" role="doc" />
+			</dir>
+		</dir>
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>5.1.0</min>
+			</php>
+			<pearinstaller>
+				<min>1.4.0</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<providesextension>imagick</providesextension>
+</package>
