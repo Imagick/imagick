@@ -13111,7 +13111,7 @@ PHP_METHOD(imagickdraw, settextundercolor)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickDraw::setViewbox(float x1, float y1, float x2, float y2 ) 
+/* {{{ proto bool ImagickDraw::setViewbox(float x1, float y1, float x2, float y2 )
 	Sets the overall canvas size to be recorded with the drawing vector data. Usually this will be specified using the same size as the canvas image. When the vector data is saved to SVG or MVG formats, the viewbox is use to specify the size of the canvas image that a viewer will render the vector data on.
 */
 PHP_METHOD(imagickdraw, setviewbox)
@@ -15527,7 +15527,7 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickDraw::popDrawingWand() 
+/* {{{ proto bool ImagickDraw::popDrawingWand()
 	Destroys the current DrawingWand in the stack, and returns to the previously pushed DrawingWand. Multiple DrawingWands may exist. It is an error to attempt to pop more DrawingWands than have been pushed, and it is proper form to pop all DrawingWands which have been pushed.
 */
 PHP_METHOD(imagickdraw, popdrawingwand)
@@ -15550,7 +15550,7 @@ PHP_METHOD(imagickdraw, popdrawingwand)
 }
 /* }}} */
 
-/* {{{ proto bool ImageDraw::pushDrawingWand() 
+/* {{{ proto bool ImageDraw::pushDrawingWand()
 	Clones the current DrawingWand to create a new DrawingWand, which is then added to the DrawingWand stack. The original drawing DrawingWand(s) may be returned to by invoking PopDrawingWand(). The DrawingWands are stored on a DrawingWand stack. For every Pop there must have already been an equivalent Push.
 */
 PHP_METHOD(imagickdraw, pushdrawingwand)
@@ -16766,14 +16766,18 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "NOISE_POISSON", PoissonNoise );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_UNDEFINED", UndefinedChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_RED", RedChannel );
+	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_GRAY", GrayChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_CYAN", CyanChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_GREEN", GreenChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_MAGENTA", MagentaChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_BLUE", BlueChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_YELLOW", YellowChannel );
+	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_ALPHA", AlphaChannel );
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_OPACITY", OpacityChannel );
+	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_MATTE", MatteChannel ); /* deprecated, needs to throw E_STRICT if used */
 	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_BLACK", BlackChannel );
-	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_MATTE", MatteChannel );
+	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_INDEX", IndexChannel );
+	IMAGICK_REGISTER_CONST_LONG( "CHANNEL_ALL", AllChannels );
 	IMAGICK_REGISTER_CONST_LONG( "METRIC_UNDEFINED", UndefinedMetric );
 	IMAGICK_REGISTER_CONST_LONG( "METRIC_MEANABSOLUTEERROR", MeanAbsoluteErrorMetric );
 	IMAGICK_REGISTER_CONST_LONG( "METRIC_MEANSQUAREERROR", MeanSquaredErrorMetric );
