@@ -118,7 +118,6 @@ PHP_METHOD(imagick, getimagegeometry);
 PHP_METHOD(imagick, getimagecolors);
 PHP_METHOD(imagick, scaleimage);
 PHP_METHOD(imagick, blurimage);
-PHP_METHOD(imagick, blurimagechannel);
 PHP_METHOD(imagick, thumbnailimage);
 PHP_METHOD(imagick, commentimage);
 PHP_METHOD(imagick, cropimage);
@@ -130,25 +129,20 @@ PHP_METHOD(imagick, getimageblob);
 PHP_METHOD(imagick, setimagecompressionquality);
 PHP_METHOD(imagick, annotateimage);
 PHP_METHOD(imagick, compositeimage);
-PHP_METHOD(imagick, compositeimagechannel);
 PHP_METHOD(imagick, modulateimage);
 PHP_METHOD(imagick, montageimage);
 PHP_METHOD(imagick, identifyimage);
 PHP_METHOD(imagick, thresholdimage);
-PHP_METHOD(imagick, thresholdimagechannel);
 PHP_METHOD(imagick, randomthresholdimage);
-PHP_METHOD(imagick, randomthresholdimagechannel);
 PHP_METHOD(imagick, adaptivethresholdimage);
 PHP_METHOD(imagick, blackthresholdimage);
 PHP_METHOD(imagick, whitethresholdimage);
 PHP_METHOD(imagick, appendimages);
 PHP_METHOD(imagick, charcoalimage);
 PHP_METHOD(imagick, normalizeimage);
-PHP_METHOD(imagick, normalizeimagechannel);
 PHP_METHOD(imagick, oilpaintimage);
 PHP_METHOD(imagick, posterizeimage);
 PHP_METHOD(imagick, radialblurimage);
-PHP_METHOD(imagick, radialblurimagechannel);
 PHP_METHOD(imagick, raiseimage);
 PHP_METHOD(imagick, resampleimage);
 PHP_METHOD(imagick, resizeimage);
@@ -175,7 +169,6 @@ PHP_METHOD(imagick, setimagetickspersecond);
 PHP_METHOD(imagick, setimagetype);
 PHP_METHOD(imagick, setimageunits);
 PHP_METHOD(imagick, sharpenimage);
-PHP_METHOD(imagick, sharpenimagechannel);
 PHP_METHOD(imagick, shaveimage);
 PHP_METHOD(imagick, shearimage);
 PHP_METHOD(imagick, sketchimage);
@@ -197,10 +190,8 @@ PHP_METHOD(imagick, mosaicimages);
 PHP_METHOD(imagick, morphimages);
 PHP_METHOD(imagick, minifyimage);
 PHP_METHOD(imagick, addnoiseimage);
-PHP_METHOD(imagick, addnoiseimagechannel);
 PHP_METHOD(imagick, adaptiveresizeimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
-PHP_METHOD(imagick, adaptivesharpenimagechannel);
 PHP_METHOD(imagick, affinetransformimage);
 PHP_METHOD(imagick, averageimages);
 PHP_METHOD(imagick, borderimage);
@@ -216,9 +207,7 @@ PHP_METHOD(imagick, compareimages);
 PHP_METHOD(imagick, contrastimage);
 PHP_METHOD(imagick, combineimages);
 PHP_METHOD(imagick, contraststretchimage);
-PHP_METHOD(imagick, contraststretchimagechannel);
 PHP_METHOD(imagick, convolveimage);
-PHP_METHOD(imagick, convolveimagechannel);
 PHP_METHOD(imagick, cyclecolormapimage);
 PHP_METHOD(imagick, deconstructimages);
 PHP_METHOD(imagick, despeckleimage);
@@ -227,19 +216,14 @@ PHP_METHOD(imagick, embossimage);
 PHP_METHOD(imagick, enhanceimage);
 PHP_METHOD(imagick, equalizeimage);
 PHP_METHOD(imagick, evaluateimage);
-PHP_METHOD(imagick, evaluateimagechannel);
 PHP_METHOD(imagick, adaptiveblurimage);
-PHP_METHOD(imagick, adaptiveblurimagechannel);
 PHP_METHOD(imagick, flattenimages);
 PHP_METHOD(imagick, flipimage);
 PHP_METHOD(imagick, flopimage);
 PHP_METHOD(imagick, frameimage);
 PHP_METHOD(imagick, fximage);
-PHP_METHOD(imagick, fximagechannel);
 PHP_METHOD(imagick, gammaimage);
-PHP_METHOD(imagick, gammaimagechannel);
 PHP_METHOD(imagick, gaussianblurimage);
-PHP_METHOD(imagick, gaussianblurimagechannel);
 PHP_METHOD(imagick, getimagebackgroundcolor);
 PHP_METHOD(imagick, getimageblueprimary);
 PHP_METHOD(imagick, getimagebordercolor);
@@ -284,16 +268,13 @@ PHP_METHOD(imagick, getimagetotalinkdensity);
 PHP_METHOD(imagick, getimageregion);
 PHP_METHOD(imagick, implodeimage);
 PHP_METHOD(imagick, levelimage);
-PHP_METHOD(imagick, levelimagechannel);
 PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, magnifyimage);
 PHP_METHOD(imagick, mapimage);
 PHP_METHOD(imagick, mattefloodfillimage);
 PHP_METHOD(imagick, medianfilterimage);
 PHP_METHOD(imagick, negateimage);
-PHP_METHOD(imagick, negateimagechannel);
 PHP_METHOD(imagick, paintopaqueimage);
-PHP_METHOD(imagick, paintopaqueimagechannel);
 PHP_METHOD(imagick, optimizeimagelayers);
 PHP_METHOD(imagick, painttransparentimage);
 PHP_METHOD(imagick, previewimages);
@@ -321,13 +302,11 @@ PHP_METHOD(imagick, setimagerenderingintent);
 PHP_METHOD(imagick, setimagevirtualpixelmethod);
 PHP_METHOD(imagick, setimagewhitepoint);
 PHP_METHOD(imagick, sigmoidalcontrastimage);
-PHP_METHOD(imagick, sigmoidalcontrastimagechannel);
 PHP_METHOD(imagick, stereoimage);
 PHP_METHOD(imagick, textureimage);
 PHP_METHOD(imagick, tintimage);
 PHP_METHOD(imagick, uniqueimagecolors);
 PHP_METHOD(imagick, unsharpmaskimage);
-PHP_METHOD(imagick, unsharpmaskimagechannel);
 PHP_METHOD(imagick, getimage);
 PHP_METHOD(imagick, addimage);
 PHP_METHOD(imagick, newimage);
@@ -1293,13 +1272,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_blurimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_blurimagechannel_args, 0, 0, 3)
-		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, radius)
-		ZEND_ARG_INFO(0, sigma)
+		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1361,17 +1334,8 @@ static
 		ZEND_ARG_INFO(0, COMPOSITE)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
+		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_compositeimagechannel_args, 0, 0, 5)
-		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
-		ZEND_ARG_INFO(0, COMPOSITE)
-		ZEND_ARG_INFO(0, x)
-		ZEND_ARG_INFO(0, y)
-	ZEND_END_ARG_INFO()
-
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_modulateimage_args, 0, 0, 3)
@@ -1392,25 +1356,14 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thresholdimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_thresholdimagechannel_args, 0, 0, 2)
-		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, threshold)
+		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_randomthresholdimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, low)
 		ZEND_ARG_INFO(0, high)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_randomthresholdimagechannel_args, 0, 0, 3)
-		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, low)
-		ZEND_ARG_INFO(0, high)
+		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1442,7 +1395,7 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_normalizeimagechannel_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_normalizeimage_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
@@ -1460,12 +1413,7 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_radialblurimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, angle)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_radialblurimagechannel_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, angle)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1618,13 +1566,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sharpenimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_sharpenimagechannel_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, radius)
-		ZEND_ARG_INFO(0, sigma)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1722,12 +1664,7 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX( imagick_addnoiseimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, NOISE)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX( imagick_addnoiseimagechannel_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, NOISE)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1740,13 +1677,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptivesharpenimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptivesharpenimagechannel_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, radius)
-		ZEND_ARG_INFO(0, sigma)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1830,24 +1761,13 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_contraststretchimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, whitePoint)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_contraststretchimagechannel_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, blackPoint)
-		ZEND_ARG_INFO(0, whitePoint)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_convolveimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, kernel)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_convolveimagechannel_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, kernel)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1870,26 +1790,14 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_evaluateimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, EVALUATE)
 		ZEND_ARG_INFO(0, constant)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_evaluateimagechannel_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, EVALUATE)
-		ZEND_ARG_INFO(0, constant)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptiveblurimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptiveblurimagechannel_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, radius)
-		ZEND_ARG_INFO(0, sigma)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1904,36 +1812,20 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_fximage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, expression)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_fximagechannel_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, expression)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_gammaimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, gamma)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_gammaimagechannel_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, gamma)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_gaussianblurimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_gaussianblurimagechannel_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, radius)
-		ZEND_ARG_INFO(0, sigma)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1998,14 +1890,7 @@ static
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, gamma)
 		ZEND_ARG_INFO(0, whitePoint)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_levelimagechannel_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, blackPoint)
-		ZEND_ARG_INFO(0, gamma)
-		ZEND_ARG_INFO(0, whitePoint)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2037,12 +1922,7 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_negateimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, gray)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_negateimagechannel_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, gray)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2050,14 +1930,7 @@ static
 		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
 		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
 		ZEND_ARG_INFO(0, fuzz)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_paintopaqueimagechannel_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
-		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2210,14 +2083,7 @@ static
 		ZEND_ARG_INFO(0, sharpen)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, beta)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_sigmoidalcontrastimagechannel_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, sharpen)
-		ZEND_ARG_INFO(0, alpha)
-		ZEND_ARG_INFO(0, beta)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2242,15 +2108,7 @@ static
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, amount)
 		ZEND_ARG_INFO(0, threshold)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_unsharpmaskimagechannel_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, CHANNEL)
-		ZEND_ARG_INFO(0, radius)
-		ZEND_ARG_INFO(0, sigma)
-		ZEND_ARG_INFO(0, amount)
-		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2372,7 +2230,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, writeimage, imagick_writeimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, writeimages, imagick_writeimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, blurimage, imagick_blurimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, blurimagechannel, imagick_blurimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, thumbnailimage, imagick_thumbnailimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagefilename, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagefilename, imagick_setimagefilename_args, ZEND_ACC_PUBLIC)
@@ -2399,27 +2256,22 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimagecompressionquality, imagick_setimagecompressionquality_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, annotateimage, imagick_annotateimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, compositeimage, imagick_compositeimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, compositeimagechannel, imagick_compositeimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, modulateimage, imagick_modulateimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagecolors, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, montageimage, imagick_montageimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, identifyimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, thresholdimage, imagick_thresholdimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, thresholdimagechannel, imagick_thresholdimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, randomthresholdimagechannel, imagick_randomthresholdimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptivethresholdimage, imagick_adaptivethresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, blackthresholdimage, imagick_blackthresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, whitethresholdimage, imagick_whitethresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, appendimages, imagick_appendimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, charcoalimage, imagick_charcoalimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, normalizeimage, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, normalizeimagechannel, imagick_normalizeimagechannel_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, normalizeimage, imagick_normalizeimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, oilpaintimage, imagick_oilpaintimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, posterizeimage, imagick_posterizeimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, radialblurimage, imagick_radialblurimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, radialblurimagechannel, imagick_radialblurimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, raiseimage, imagick_raiseimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, resampleimage, imagick_resampleimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, resizeimage, imagick_resizeimage_args, ZEND_ACC_PUBLIC)
@@ -2446,7 +2298,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimagetype, imagick_setimagetype_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageunits, imagick_setimageunits_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, sharpenimage, imagick_sharpenimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, sharpenimagechannel, imagick_sharpenimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, shaveimage, imagick_shaveimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, shearimage, imagick_shearimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, sketchimage, imagick_sketchimage_args, ZEND_ACC_PUBLIC)
@@ -2467,10 +2318,8 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getpixelregioniterator, imagick_getpixelregioniterator_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, steganoimage, imagick_steganoimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, addnoiseimage, imagick_addnoiseimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, addnoiseimagechannel, imagick_addnoiseimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptiveresizeimage, imagick_adaptiveresizeimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptivesharpenimage, imagick_adaptivesharpenimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, adaptivesharpenimagechannel, imagick_adaptivesharpenimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, motionblurimage, imagick_motionblurimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, mosaicimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, morphimages, imagick_morphimages_args, ZEND_ACC_PUBLIC)
@@ -2490,9 +2339,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, contrastimage, imagick_contrastimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, combineimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, contraststretchimage, imagick_contraststretchimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, contraststretchimagechannel, imagick_contraststretchimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, convolveimage, imagick_convolveimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, convolveimagechannel, imagick_convolveimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, cyclecolormapimage, imagick_cyclecolormapimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, deconstructimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, despeckleimage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2501,19 +2348,14 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, enhanceimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, equalizeimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, evaluateimage, imagick_evaluateimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, evaluateimagechannel, imagick_evaluateimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptiveblurimage, imagick_adaptiveblurimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, adaptiveblurimagechannel, imagick_adaptiveblurimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, flattenimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, flipimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, flopimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, frameimage, imagick_frameimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, fximage, imagick_fximage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, fximagechannel, imagick_fximagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gammaimage, imagick_gammaimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, gammaimagechannel, imagick_gammaimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gaussianblurimage, imagick_gaussianblurimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, gaussianblurimagechannel, imagick_gaussianblurimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagebackgroundcolor, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageblueprimary, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagebordercolor, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2558,16 +2400,13 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimageregion, imagick_getimageregion_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, implodeimage, imagick_getimagetotalinkdensity_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, levelimage, imagick_levelimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, levelimagechannel, imagick_levelimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, magnifyimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, mapimage, imagick_mapimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, mattefloodfillimage, imagick_mattefloodfillimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, medianfilterimage, imagick_medianfilterimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, negateimage, imagick_negateimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, negateimagechannel, imagick_negateimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, paintopaqueimage, imagick_paintopaqueimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, paintopaqueimagechannel, imagick_paintopaqueimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, optimizeimagelayers, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, painttransparentimage, imagick_painttransparentimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, previewimages, imagick_previewimages_args, ZEND_ACC_PUBLIC)
@@ -2595,13 +2434,11 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimagevirtualpixelmethod, imagick_setimagevirtualpixelmethod_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagewhitepoint, imagick_setimagewhitepoint_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, sigmoidalcontrastimage, imagick_sigmoidalcontrastimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, sigmoidalcontrastimagechannel, imagick_sigmoidalcontrastimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, stereoimage, imagick_stereoimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, textureimage, imagick_textureimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, tintimage, imagick_tintimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, uniqueimagecolors, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, unsharpmaskimage, imagick_unsharpmaskimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, unsharpmaskimagechannel, imagick_unsharpmaskimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, addimage, imagick_addimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, newimage, imagick_newimage_args, ZEND_ACC_PUBLIC)
@@ -2612,7 +2449,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getformat, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gethomeurl, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getinterlacescheme, imagick_zero_args, ZEND_ACC_PUBLIC)
-
 	PHP_ME(imagick, getoption, imagick_getoption_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpackagename, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -3289,8 +3125,8 @@ PHP_METHOD(imagick, pingimageblob)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::blurImage( float radius, float sigma )
-	Adds blur filter to image
+/* {{{ proto bool Imagick::blurImage( float radius, float sigma[, int channel ] )
+	Adds blur filter to image. Optional third parameter to blur a specific channel.
 */
 PHP_METHOD(imagick, blurimage)
 {
@@ -3298,54 +3134,11 @@ PHP_METHOD(imagick, blurimage)
 	php_imagick_object *intern;
 	zval *object;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	/* Initialize channel type to all channels*/
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickBlurImage( intern->magick_wand, radius, sigma );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::blurImageChannel( int channel, float radius, float sigma )
-	Adds blur filter to image channel.
-*/
-PHP_METHOD(imagick, blurimagechannel)
-{
-	double radius, sigma;
-	php_imagick_object *intern;
-	zval *object;
-	MagickBooleanType status;
-	long channel;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &radius, &sigma ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -3368,64 +3161,19 @@ PHP_METHOD(imagick, blurimagechannel)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::adaptiveBlurImage( float radius, float sigma )
+/* {{{ proto bool Imagick::adaptiveBlurImage( float radius, float sigma[, int channel] )
 	Adds adaptive blur filter to image.
 */
 PHP_METHOD(imagick, adaptiveblurimage)
 {
-
 	double radius, sigma;
 	php_imagick_object *intern;
 	zval *object;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickAdaptiveBlurImage( intern->magick_wand, radius, sigma );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::adaptiveBlurImageChannel(int channeltype, float radius, float sigma )
-	Adds adaptive blur filter to image channel.
-*/
-PHP_METHOD(imagick, adaptiveblurimagechannel)
-{
-	double radius, sigma;
-	php_imagick_object *intern;
-	zval *object;
-	MagickBooleanType status;
-	long channel;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &radius, &sigma ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -3445,7 +3193,6 @@ PHP_METHOD(imagick, adaptiveblurimagechannel)
 	}
 
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -4253,7 +4000,7 @@ PHP_METHOD(imagick, implodeimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::levelImage( float blackPoint, float gamma, float whitePoint )
+/* {{{ proto bool Imagick::levelImage( float blackPoint, float gamma, float whitePoint[, int channel] )
 	Adjusts the levels of an image by scaling the colors falling between specified white and black points to the full available quantum range. The parameters provided represent the black, mid, and white points. The black point specifies the darkest color in the image. Colors darker than the black point are set to zero. Mid point specifies a gamma correction to apply to the image.  White point specifies the lightest color in the image. Colors brighter than the white point are set to the maximum quantum value.
 */
 PHP_METHOD(imagick, levelimage)
@@ -4262,52 +4009,10 @@ PHP_METHOD(imagick, levelimage)
 	zval *object;
 	double blackPoint, gamma, whitePoint;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &blackPoint, &gamma, &whitePoint ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickLevelImage( intern->magick_wand, blackPoint, gamma, whitePoint );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::levelImageChannel( int channel, float blackPoint, float gamma, float whitePoint )
-	Adjusts the levels of an image by scaling the colors falling between specified white and black points to the full available quantum range. The parameters provided represent the black, mid, and white points. The black point specifies the darkest color in the image. Colors darker than the black point are set to zero. Mid point specifies a gamma correction to apply to the image.  White point specifies the lightest color in the image. Colors brighter than the white point are set to the maximum quantum value.
-*/
-PHP_METHOD(imagick, levelimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long channel;
-	double blackPoint, gamma, whitePoint;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 4 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lddd", &channel, &blackPoint, &gamma, &whitePoint ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &blackPoint, &gamma, &whitePoint, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -4503,7 +4208,7 @@ PHP_METHOD(imagick, medianfilterimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::negateImage( bool gray )
+/* {{{ proto bool Imagick::negateImage( bool gray[, int channel] )
 	Negates the colors in the reference image.  The Grayscale option means that only grayscale values within the image are negated.
 */
 PHP_METHOD(imagick, negateimage)
@@ -4512,52 +4217,10 @@ PHP_METHOD(imagick, negateimage)
 	zval *object;
 	zend_bool gray;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "b", &gray ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickNegateImage( intern->magick_wand, gray );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::negateImageChannel(int channel, bool gray )
-	Negates the colors in the reference image.  The Grayscale option means that only grayscale values within the image are negated.
-*/
-PHP_METHOD(imagick, negateimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long channel;
-	zend_bool gray;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lb", &channel, &gray ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "b|l", &gray, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -4578,7 +4241,7 @@ PHP_METHOD(imagick, negateimagechannel)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::paintOpaqueImage( ImagickPixel target, ImagickPixel fill, float fuzz)
+/* {{{ proto bool Imagick::paintOpaqueImage( ImagickPixel target, ImagickPixel fill, float fuzz[, int channel])
 	Changes any pixel that matches color with the color defined by fill.
 */
 PHP_METHOD(imagick, paintopaqueimage)
@@ -4588,57 +4251,10 @@ PHP_METHOD(imagick, paintopaqueimage)
 	zval *object, *targetObj, *fillObj;
 	double fuzz;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "OOd", &targetObj, php_imagickpixel_sc_entry, &fillObj, php_imagickpixel_sc_entry, &fuzz ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	intern_target = (php_imagickpixel_object *)zend_object_store_get_object(targetObj TSRMLS_CC);
-	intern_fill = (php_imagickpixel_object *)zend_object_store_get_object(fillObj TSRMLS_CC);
-
-	status = MagickPaintOpaqueImage( intern->magick_wand, intern_target->pixel_wand, intern_fill->pixel_wand, fuzz );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::paintOpaqueImageChannel( int channel, ImagickPixel target, ImagickPixel fill, float fuzz)
-	Changes any pixel that matches color with the color defined by fill.
-*/
-PHP_METHOD(imagick, paintopaqueimagechannel)
-{
-	php_imagick_object *intern;
-	php_imagickpixel_object *intern_fill, *intern_target;
-	zval *object, *targetObj, *fillObj;
-	long channel;
-	double fuzz;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lOOd", &channel, &targetObj, php_imagickpixel_sc_entry, &fillObj, php_imagickpixel_sc_entry, &fuzz ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "OOd|l", &targetObj, php_imagickpixel_sc_entry, &fillObj, php_imagickpixel_sc_entry, &fuzz, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -5606,7 +5222,7 @@ PHP_METHOD(imagick, setimagewhitepoint)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta)
+/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta[, int channel])
 	Adjusts the contrast of an image with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black).  Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
 PHP_METHOD(imagick, sigmoidalcontrastimage)
@@ -5616,53 +5232,10 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 	zend_bool sharpen;
 	double alpha, beta;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "bdd", &sharpen, &alpha, &beta ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickSigmoidalContrastImage( intern->magick_wand, sharpen, alpha, beta );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::sigmoidalContrastChannel(int channel, bool sharpen, float alpha, float beta)
-	Adjusts the contrast of an image channel with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image channel using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black). Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
-*/
-PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long channel;
-	zend_bool sharpen;
-	double alpha, beta;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 4 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lbdd", &channel, &sharpen, &alpha, &beta ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &alpha, &beta, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -5681,6 +5254,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimagechannel)
 	}
 	RETURN_TRUE;
 }
+/* }}} */
 
 /* {{{ proto bool Imagick::stereoImage(Imagick offset_wand)
 	Composites two images and produces a single image that is the composite of a left and right image of a stereo pair
@@ -5832,7 +5406,7 @@ PHP_METHOD(imagick, uniqueimagecolors)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::unsharpMaskImage(float radius, float sigma, float amount, float threshold)
+/* {{{ proto bool Imagick::unsharpMaskImage(float radius, float sigma, float amount, float threshold[, int channel])
 	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Imagick::UnsharpMaskImage() selects a suitable radius for you.
 */
 PHP_METHOD(imagick, unsharpmaskimage)
@@ -5841,52 +5415,10 @@ PHP_METHOD(imagick, unsharpmaskimage)
 	zval *object;
 	double radius, sigma, amount, threshold;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 4 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &radius, &sigma, &amount, &threshold ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickUnsharpMaskImage( intern->magick_wand, radius, sigma, amount, threshold );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::unsharpMaskChannel(int channel, float radius, float sigma, float amount, float threshold)
-	Sharpens an image channel.  We convolve the image channel with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and Imagick::UnsharpMaskImage() selects a suitable radius for you.
-*/
-PHP_METHOD(imagick, unsharpmaskimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long channel;
-	double radius, sigma, amount, threshold;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 5 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ldddd", &channel, &radius, &sigma, &amount, &threshold ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd|l", &radius, &sigma, &amount, &threshold, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -5907,7 +5439,7 @@ PHP_METHOD(imagick, unsharpmaskimagechannel)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::contrastStretchImage(float black_point, float white_point)
+/* {{{ proto bool Imagick::contrastStretchImage(float black_point, float white_point[, int channel])
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
 PHP_METHOD(imagick, contraststretchimage)
@@ -5917,53 +5449,10 @@ PHP_METHOD(imagick, contraststretchimage)
 	zval *object;
 	double blackPoint, whitePoint;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &blackPoint, &whitePoint ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickContrastStretchImage( intern->magick_wand, blackPoint, whitePoint );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::contrastStretchImage(CHANNELTYPE channel, float black_point, float white_point)
-	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
-*/
-PHP_METHOD(imagick, contraststretchimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long channel;
-	double blackPoint, whitePoint;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &blackPoint, &whitePoint ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &blackPoint, &whitePoint, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -5985,7 +5474,7 @@ PHP_METHOD(imagick, contraststretchimagechannel)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::convolveImage(array kernel)
+/* {{{ proto bool Imagick::convolveImage(array kernel[, int channel])
 	Applies a custom convolution kernel to the image.
 */
 PHP_METHOD(imagick, convolveimage)
@@ -5996,63 +5485,10 @@ PHP_METHOD(imagick, convolveimage)
 	MagickBooleanType status;
 	zval *kernelArray;
 	double *kernel;
-
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a",  &kernelArray ) == FAILURE )
-	{
-		return;
-	}
-
-	kernel = getDoublesFromZval( kernelArray, &order TSRMLS_CC );
-
-	if( kernel == (double *)NULL )
-	{
-		throwExceptionWithMessage( 1, "Unable to read matrix array.", 1 TSRMLS_CC );
-		RETURN_FALSE;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickConvolveImage( intern->magick_wand, order, kernel );
-	efree( kernel );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::convolveImageChannel(int channel, array kernel)
-	Applies a custom convolution kernel to the image.
-*/
-PHP_METHOD(imagick, convolveimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long order, channel;
-	MagickBooleanType status;
-	zval *kernelArray;
-	double *kernel;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "la", &channel, &kernelArray ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a|l",  &kernelArray, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -6343,7 +5779,7 @@ PHP_METHOD(imagick, equalizeimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::evaluateImage(int op, float constant)
+/* {{{ proto bool Imagick::evaluateImage(int op, float constant[, int channel])
 	Applys an arithmetic, relational, or logical expression to an image.  Use these operators to lighten or darken an image, to increase or decrease contrast in an image, or to produce the "negative" of an image.
 */
 PHP_METHOD(imagick, evaluateimage)
@@ -6353,53 +5789,10 @@ PHP_METHOD(imagick, evaluateimage)
 	long evaluateOperator;
 	double constant;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ld", &evaluateOperator, &constant ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickEvaluateImage( intern->magick_wand, evaluateOperator, constant );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::evaluateImageChannel(int channel, int op, float constant)
-	Applys an arithmetic, relational, or logical expression to an image.  Use these operators to lighten or darken an image, to increase or decrease contrast in an image, or to produce the "negative" of an image.
-*/
-PHP_METHOD(imagick, evaluateimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long channel, evaluateOperator;
-	double constant;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lld", &channel, &evaluateOperator, &constant ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ld|l", &evaluateOperator, &constant, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -8511,7 +7904,7 @@ PHP_METHOD(imagick, frameimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::fxImage(string expression)
+/* {{{ proto Imagick Imagick::fxImage(string expression[, int channel])
 	Evaluate expression for each pixel in the image.
 */
 PHP_METHOD(imagick, fximage)
@@ -8521,14 +7914,10 @@ PHP_METHOD(imagick, fximage)
 	zval *object;
 	char *expression;
 	int expressionLen;
-
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &expression, &expressionLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &expression, &expressionLen, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -8538,7 +7927,7 @@ PHP_METHOD(imagick, fximage)
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	object_init_ex( return_value, php_imagick_sc_entry );
-	tmpWand = MagickFxImage( intern->magick_wand, expression );
+	tmpWand = MagickFxImageChannel( intern->magick_wand, channel, expression );
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
@@ -8553,50 +7942,7 @@ PHP_METHOD(imagick, fximage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::fxImageChannel(int channel, string expression)
-	Evaluate expression for each pixel in the image.
-*/
-PHP_METHOD(imagick, fximagechannel)
-{
-	MagickWand *tmpWand;
-	php_imagick_object *intern, *intern_return;
-	zval *object;
-	char *expression;
-	int expressionLen;
-	long channel;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ls", &channel, &expression, &expressionLen ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	object_init_ex( return_value, php_imagick_sc_entry );
-	tmpWand = MagickFxImageChannel( intern->magick_wand, channel, expression );
-
-	if ( !IsMagickWand( tmpWand ) )
-	{
-		throwExceptionWithMessage( 1, "Fx image channel failed.", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	intern_return->magick_wand = tmpWand;
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::gammaImage(float gamma)
+/* {{{ proto bool Imagick::gammaImage(float gamma[, int channel])
 	Gamma-corrects an image.  The same image viewed on different devices will have perceptual differences in the way the image's intensities are represented on the screen.  Specify individual gamma levels for the red, green, and blue channels, or adjust all three with the gamma parameter.  Values typically range from 0.8 to 2.3.
 */
 PHP_METHOD(imagick, gammaimage)
@@ -8605,51 +7951,9 @@ PHP_METHOD(imagick, gammaimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double gamma;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &gamma ) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickGammaImage( intern->magick_wand, gamma );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::gammaImageChannel(int channel, float gamma)
-	Gamma-corrects an image.  The same image viewed on different devices will have perceptual differences in the way the image's intensities are represented on the screen.  Specify individual gamma levels for the red, green, and blue channels, or adjust all three with the gamma parameter.  Values typically range from 0.8 to 2.3.
-*/
-PHP_METHOD(imagick, gammaimagechannel)
-{
-	zval *object;
-	php_imagick_object *intern;
-	MagickBooleanType status;
-	long channel;
-	double gamma;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &channel, &gamma ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &gamma, &channel ) == FAILURE)
 	{
 		return;
 	}
@@ -8671,7 +7975,7 @@ PHP_METHOD(imagick, gammaimagechannel)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::gaussianBlurImage(float radius, float sigma)
+/* {{{ proto bool Imagick::gaussianBlurImage(float radius, float sigma[, int channel])
 	Blurs an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
 */
 PHP_METHOD(imagick, gaussianblurimage)
@@ -8680,51 +7984,9 @@ PHP_METHOD(imagick, gaussianblurimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double radius, sigma;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma ) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickGaussianBlurImage( intern->magick_wand, radius, sigma );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::gaussianBlurImage(int channel, float radius, float sigma)
-	Blurs an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
-*/
-PHP_METHOD(imagick, gaussianblurimagechannel)
-{
-	zval *object;
-	php_imagick_object *intern;
-	MagickBooleanType status;
-	long channel;
-	double radius, sigma;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &radius, &sigma ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel ) == FAILURE)
 	{
 		return;
 	}
@@ -9377,7 +8639,7 @@ PHP_METHOD(imagick, oilpaintimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::normalizeImage()
+/* {{{ proto bool Imagick::normalizeImage([int channel])
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
 */
 PHP_METHOD(imagick, normalizeimage)
@@ -9385,40 +8647,10 @@ PHP_METHOD(imagick, normalizeimage)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	zval *object;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickNormalizeImage( intern->magick_wand );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::normalizeImageChannel(int channel)
-	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available
-*/
-PHP_METHOD(imagick, normalizeimagechannel)
-{
-	MagickBooleanType status;
-	php_imagick_object *intern;
-	zval *object;
 	long channel;
 
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -9706,7 +8938,7 @@ PHP_METHOD(imagick, setimagecompressionquality)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::compositeImage(Imagick composite_wand, int compose, int x, int y)
+/* {{{ proto bool Imagick::compositeImage(Imagick composite_wand, int compose, int x, int y[, int channel] )
 	Composite one image onto another at the specified offset.
 */
 PHP_METHOD(imagick, compositeimage)
@@ -9717,46 +8949,9 @@ PHP_METHOD(imagick, compositeimage)
 	php_imagick_object *intern_second;
 	long x, y;
 	long compositeId = 0;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 4 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Olll", &objvar, php_imagick_sc_entry, &compositeId, &x, &y ) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	intern_second = (php_imagick_object *)zend_object_store_get_object(objvar TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern_second->magick_wand, 1, 1 );
-
-	MagickCompositeImage( intern->magick_wand, intern_second->magick_wand, compositeId, x, y );
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::compositeImageChannel(Imagick composite_wand, int compose, int channel, int x, int y)
-	Composite one image onto another at the specified offset.
-*/
-PHP_METHOD(imagick, compositeimagechannel)
-{
-	zval *object;
-	zval *objvar;
-	php_imagick_object *intern;
-	php_imagick_object *intern_second;
-	long x, y, channel, compositeId;
-
-	if ( ZEND_NUM_ARGS() != 5 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ollll", &objvar, php_imagick_sc_entry, &channel, &compositeId, &x, &y ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Olll|l", &objvar, php_imagick_sc_entry, &compositeId, &x, &y, &channel ) == FAILURE)
 	{
 		return;
 	}
@@ -9810,7 +9005,7 @@ PHP_METHOD(imagick, modulateimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::addNoiseImage(int noise_type)
+/* {{{ proto bool Imagick::addNoiseImage(int noise_type[, int channel])
 	Adds random noise to the image.
 */
 PHP_METHOD(imagick, addnoiseimage)
@@ -9819,50 +9014,9 @@ PHP_METHOD(imagick, addnoiseimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long noise;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &noise ) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickAddNoiseImage( intern->magick_wand, noise );
-
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::addNoiseImage(int channel, int noise_type)
-	Adds random noise to the image.
-*/
-PHP_METHOD(imagick, addnoiseimagechannel)
-{
-	zval *object;
-	php_imagick_object *intern;
-	MagickBooleanType status;
-	long channel, noise;
-
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &channel, &noise ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l|l", &noise, &channel ) == FAILURE)
 	{
 		return;
 	}
@@ -9921,7 +9075,7 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::adaptiveSharpenImage(float radius, float sigma)
+/* {{{ proto bool Imagick::adaptiveSharpenImage(float radius, float sigma[, int channel])
 	Adaptively resize image with data dependent triangulation.
 */
 PHP_METHOD(imagick, adaptivesharpenimage)
@@ -9930,51 +9084,9 @@ PHP_METHOD(imagick, adaptivesharpenimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double radius, sigma;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma ) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickAdaptiveSharpenImage( intern->magick_wand, radius, sigma );
-
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::adaptiveSharpenImageChannel(int channel, float radius, float sigma)
-	Adaptively resize image with data dependent triangulation.
-*/
-PHP_METHOD(imagick, adaptivesharpenimagechannel)
-{
-	zval *object;
-	php_imagick_object *intern;
-	MagickBooleanType status;
-	long channel;
-	double radius, sigma;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &radius, &sigma ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel ) == FAILURE)
 	{
 		return;
 	}
@@ -10154,7 +9266,7 @@ PHP_METHOD(imagick, borderimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::thresholdImage(float threshold)
+/* {{{ proto bool Imagick::thresholdImage(float threshold[, int channel] )
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
 */
 PHP_METHOD(imagick, thresholdimage)
@@ -10163,52 +9275,9 @@ PHP_METHOD(imagick, thresholdimage)
 	double threshold;
 	zval *object;
 	MagickBooleanType status;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &threshold) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickThresholdImage( intern->magick_wand, threshold );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::thresholdImage(int channel, float threshold)
-	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
-*/
-PHP_METHOD(imagick, thresholdimagechannel)
-{
-	php_imagick_object *intern;
-	long channel;
-	double threshold;
-	zval *object;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &channel, &threshold) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &threshold, &channel) == FAILURE)
 	{
 		return;
 	}
@@ -10269,7 +9338,7 @@ PHP_METHOD(imagick, adaptivethresholdimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::sharpenImage(float radius, float sigma)
+/* {{{ proto bool Imagick::sharpenImage(float radius, float sigma[, int channel])
 	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
 */
 PHP_METHOD(imagick, sharpenimage)
@@ -10278,53 +9347,10 @@ PHP_METHOD(imagick, sharpenimage)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	zval *object;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickSharpenImage( intern->magick_wand, sigma, radius );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::sharpenImage(int channel, float radius, float sigma)
-	Sharpens an image.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, the radius should be larger than sigma.  Use a radius of 0 and selects a suitable radius for you.
-*/
-PHP_METHOD(imagick, sharpenimagechannel)
-{
-	long channel;
-	double sigma, radius;
-	MagickBooleanType status;
-	php_imagick_object *intern;
-	zval *object;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &radius, &sigma ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel ) == FAILURE )
 	{
 		return;
 	}
@@ -10343,7 +9369,6 @@ PHP_METHOD(imagick, sharpenimagechannel)
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -10571,7 +9596,7 @@ PHP_METHOD(imagick, clone)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::randomThresholdImage(float low, float high)
+/* {{{ proto bool Imagick::randomThresholdImage(float low, float high[, int channel])
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
 */
 PHP_METHOD(imagick, randomthresholdimage)
@@ -10580,52 +9605,9 @@ PHP_METHOD(imagick, randomthresholdimage)
 	double low, high;
 	zval *object;
 	MagickBooleanType status;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &low, &high) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickRandomThresholdImage( intern->magick_wand, low, high );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::randomThresholdImage(CHANNELTYPE channel, float low, float high)
-	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
-*/
-PHP_METHOD(imagick, randomthresholdimagechannel)
-{
-	php_imagick_object *intern;
-	long channel;
-	double low, high;
-	zval *object;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd", &channel, &low, &high) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &low, &high, &channel) == FAILURE)
 	{
 		return;
 	}
@@ -11016,7 +9998,7 @@ PHP_METHOD(imagick, posterizeimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::radialBlurImage(float angle)
+/* {{{ proto bool Imagick::radialBlurImage(float angle[, int channel])
 	Radial blurs an image.
 */
 PHP_METHOD(imagick, radialblurimage)
@@ -11025,51 +10007,9 @@ PHP_METHOD(imagick, radialblurimage)
 	zval *object;
 	MagickBooleanType status;
 	double angle;
+	long channel = AllChannels;
 
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &angle) == FAILURE)
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickRadialBlurImage( intern->magick_wand, angle );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::radialBlurImage(int channel, float angle)
-	Radial blurs an image.
-*/
-PHP_METHOD(imagick, radialblurimagechannel)
-{
-	php_imagick_object *intern;
-	zval *object;
-	MagickBooleanType status;
-	long channel;
-	double angle;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &channel, &angle) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &angle, &channel) == FAILURE)
 	{
 		return;
 	}
