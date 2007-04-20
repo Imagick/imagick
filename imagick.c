@@ -2821,39 +2821,11 @@ PHP_METHOD(imagick, valid)
 /* }}} */
 
 /* {{{ proto array Imagick::current()
-    Returns information of current image.
+    Returns reference to the current imagick object with image pointer at the correct sequence.
 */
 PHP_METHOD(imagick, current)
 {
-	zval *object;
-	php_imagick_object *intern;
-
-	long size, width, height;
-	char *format;
-	char *name;
-	object = getThis();
-
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	size = MagickGetImageSize( intern->magick_wand );
-	width = MagickGetImageWidth( intern->magick_wand );
-	height = MagickGetImageHeight( intern->magick_wand );
-	format = MagickGetImageFormat( intern->magick_wand );
-	name = MagickGetImageFilename( intern->magick_wand );
-
-	array_init( return_value );
-	add_assoc_string( return_value, "name", name, 1 );
-	add_assoc_long( return_value, "size", size );
-	add_assoc_string( return_value, "format", (char *)format, 1 );
-	add_assoc_long( return_value, "width", width );
-	add_assoc_long( return_value, "height", height );
-
-	IMAGICK_FREE_MEMORY( char *, name );
-	IMAGICK_FREE_MEMORY( char *, format );
-
-	return;
+	RETURN_ZVAL(getThis(), 1, 0);
 }
 /* }}} */
 
