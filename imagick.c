@@ -63,12 +63,6 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	object = getThis();\
 	intern = (wandType)zend_object_store_get_object(object TSRMLS_CC);
 
-#define IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color )\
-	if ( ZEND_NUM_ARGS() != 1 ) { ZEND_WRONG_PARAM_COUNT(); }\
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &color ) == FAILURE ) { return; }\
-	object = getThis();\
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
-
 #define IMAGICK_FREE_MEMORY( type, value )\
 	if ( value != (type) NULL ) { value = (type) MagickRelinquishMemory( value ); value = (type)NULL; }
 
@@ -484,27 +478,10 @@ PHP_METHOD(imagickpixel, __construct);
 PHP_METHOD(imagickpixel, setcolor);
 PHP_METHOD(imagickpixel, clear);
 PHP_METHOD(imagickpixel, destroy);
-PHP_METHOD(imagickpixel, setalpha);
 PHP_METHOD(imagickpixel, getalpha);
 PHP_METHOD(imagickpixel, issimilar);
-PHP_METHOD(imagickpixel, getblack);
-PHP_METHOD(imagickpixel, setblack);
-PHP_METHOD(imagickpixel, getblue);
-PHP_METHOD(imagickpixel, setblue);
-PHP_METHOD(imagickpixel, getcyan);
-PHP_METHOD(imagickpixel, setcyan);
-PHP_METHOD(imagickpixel, getgreen);
-PHP_METHOD(imagickpixel, setgreen);
-PHP_METHOD(imagickpixel, getred);
-PHP_METHOD(imagickpixel, setred);
-PHP_METHOD(imagickpixel, getyellow);
-PHP_METHOD(imagickpixel, setyellow);
-PHP_METHOD(imagickpixel, getmagenta);
-PHP_METHOD(imagickpixel, setmagenta);
-PHP_METHOD(imagickpixel, getopacity);
-PHP_METHOD(imagickpixel, setopacity);
-PHP_METHOD(imagickpixel, getfuzz);
-PHP_METHOD(imagickpixel, setfuzz);
+PHP_METHOD(imagickpixel, getcolorvalue);
+PHP_METHOD(imagickpixel, setcolorvalue);
 PHP_METHOD(imagickpixel, gethsl);
 PHP_METHOD(imagickpixel, sethsl);
 PHP_METHOD(imagickpixel, getcolorasstring);
@@ -1134,58 +1111,24 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setalpha_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, alpha)
-	ZEND_END_ARG_INFO()
-
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_issimilar_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, imagickpixel, imagickpixel, 0)
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setblack_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, black)
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorvalue_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, color)
+		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setblue_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, blue)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcyan_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, cyan)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setgreen_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, green)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setred_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, red)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setyellow_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, yellow)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setmagenta_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, magenta)
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_getcolorvalue_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, opacity)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setfuzz_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1199,29 +1142,11 @@ static function_entry php_imagickpixel_class_methods[] =
 {
 	PHP_ME(imagickpixel, __construct, imagickpixel_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixel, setcolor, imagickpixel_setcolor_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setalpha, imagickpixel_setalpha_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getalpha, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, setcolorvalue, imagickpixel_setcolorvalue_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getcolorvalue, imagickpixel_getcolorvalue_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, clear, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, destroy, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, issimilar, imagickpixel_issimilar_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getblack, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setblack, imagickpixel_setblack_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getblue, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setblue, imagickpixel_setblue_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getcyan, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setcyan, imagickpixel_setcyan_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getgreen, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setgreen, imagickpixel_setgreen_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getred, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setred, imagickpixel_setred_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getyellow, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setyellow, imagickpixel_setyellow_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getmagenta, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setmagenta, imagickpixel_setmagenta_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getopacity, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setopacity, imagickpixel_setopacity_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getfuzz, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, setfuzz, imagickpixel_setfuzz_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, gethsl, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, sethsl, imagickpixel_sethsl_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorasstring, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
@@ -2217,9 +2142,6 @@ static
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
 
-
-
-
 static function_entry php_imagick_class_methods[] =
 {
 	PHP_ME(imagick, __construct, imagick_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
@@ -2467,20 +2389,14 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setfilename, imagick_setfilename_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setformat, imagick_setformat_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setinterlacescheme, imagick_setinterlacescheme_args, ZEND_ACC_PUBLIC)
-
 	PHP_ME(imagick, setoption, imagick_setoption_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setpage, imagick_setpage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setresourcelimit, imagick_setresourcelimit_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setresolution, imagick_setresolution_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setsamplingfactors, imagick_setsamplingfactors_args, ZEND_ACC_PUBLIC)
-
-
 	PHP_ME(imagick, setsize, imagick_setsize_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setsizeoffset, imagick_setsizeoffset_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, settype, imagick_settype_args, ZEND_ACC_PUBLIC)
-
-
-
 
 	PHP_MALIAS(imagick, key, getimageindex, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_MALIAS(imagick, next, nextimage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -15003,52 +14919,6 @@ PHP_METHOD(imagickpixel, __construct)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickPixel::setAlpha(float alpha)
-	Sets the normalized alpha color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setalpha)
-{
-	zval *object;
-	double opacity;
-	php_imagickpixel_object *internp;
-
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &opacity ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	PixelSetAlpha( internp->pixel_wand, opacity );
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getAlpha()
-	Returns the normalized alpha color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getalpha)
-{
-	zval *object;
-	double alpha;
-	php_imagickpixel_object *internp;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	alpha = PixelGetAlpha( internp->pixel_wand );
-	ZVAL_DOUBLE( return_value, alpha );
-
-	return;
-}
-/* }}} */
-
 /* {{{ proto bool ImagickPixel::setColor(string color)
 	Sets the color of the pixel wand with a string (e.g. "blue", "#0000ff", "rgb(0,0,255)", "cmyk(100,100,100,10)", etc.).
 */
@@ -15173,293 +15043,152 @@ PHP_METHOD(imagickpixel, issimilar)
 }
 /* }}} */
 
-/* {{{ proto float ImagickPixel::getBlack()
-	Returns the normalized black color of the pixel wand.
+/* {{{ proto float ImagickPixel::getColorValue( int color )
+	Gets the normalized color of the ImagickPixel.
 */
-PHP_METHOD(imagickpixel, getblack)
+PHP_METHOD(imagickpixel, getcolorvalue)
 {
 	zval *object;
 	php_imagickpixel_object *internp;
-	double color;
+	long color, colorValue;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
 
-	color = PixelGetBlack( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &color ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	switch ( color )
+	{
+		case IMAGICKCOLORBLACK:
+			colorValue = PixelGetBlack( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLORBLUE:
+			colorValue = PixelGetBlue( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLORCYAN:
+			colorValue = PixelGetCyan( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLORGREEN:
+			colorValue = PixelGetGreen( internp->pixel_wand );
+		break;		
+		
+		case IMAGICKCOLORRED:
+			colorValue = PixelGetRed( internp->pixel_wand );
+		break;
+		
+		case IMAGICKCOLORYELLOW:
+			colorValue = PixelGetYellow( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLORMAGENTA:
+			colorValue = PixelGetMagenta( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLOROPACITY:
+			colorValue = PixelGetOpacity( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLORALPHA:
+			colorValue = PixelGetAlpha( internp->pixel_wand );
+		break;
+
+		case IMAGICKCOLORFUZZ:
+			colorValue = PixelGetFuzz( internp->pixel_wand );
+		break;
+
+		default:
+			throwExceptionWithMessage( 4, "Unknown color type.", 4 TSRMLS_CC );
+			RETVAL_FALSE;
+		break;
+	}
+	RETVAL_DOUBLE( colorValue );
 }
 /* }}} */
 
-/* {{{ proto bool ImagickPixel::setBlack(float black)
-	Sets the normalized black color of the pixel wand.
+/* {{{ proto float ImagickPixel::setColorValue( int color, float value )
+	Sets the normalized color of the ImagickPixel.
 */
-PHP_METHOD(imagickpixel, setblack)
+PHP_METHOD(imagickpixel, setcolorvalue)
 {
 	zval *object;
 	php_imagickpixel_object *internp;
-	double color;
+	long color;
+	double colorValue;
 
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
 
-	PixelSetBlack( internp->pixel_wand, color );
-	RETURN_TRUE;
-}
-/* }}} */
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &colorValue ) == FAILURE )
+	{
+		return;
+	}
 
-/* {{{ proto float ImagickPixel::getBlue()
-	Returns the normalized blue color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getblue)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
+	object = getThis();
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+	switch ( color )
+	{
+		case IMAGICKCOLORBLACK:
+			PixelSetBlack( internp->pixel_wand, colorValue );
+		break;
 
-	color = PixelGetBlue( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
+		case IMAGICKCOLORBLUE:
+			PixelSetBlue( internp->pixel_wand, colorValue );
+		break;
 
-/* {{{ proto bool ImagickPixel::setBlue(float blue)
-	Sets the normalized blue color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setblue)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
+		case IMAGICKCOLORCYAN:
+			PixelSetCyan( internp->pixel_wand, colorValue );
+		break;
 
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
+		case IMAGICKCOLORGREEN:
+			PixelSetGreen( internp->pixel_wand, colorValue );
+		break;		
+		
+		case IMAGICKCOLORRED:
+			PixelSetRed( internp->pixel_wand, colorValue );
+		break;
+		
+		case IMAGICKCOLORYELLOW:
+			PixelSetYellow( internp->pixel_wand, colorValue );
+		break;
 
-	PixelSetBlue( internp->pixel_wand, color );
-	RETURN_TRUE;
-}
-/* }}} */
+		case IMAGICKCOLORMAGENTA:
+			PixelSetMagenta( internp->pixel_wand, colorValue );
+		break;
 
-/* {{{ proto float ImagickPixel::getCyan()
-	Returns the normalized cyan color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getcyan)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
+		case IMAGICKCOLOROPACITY:
+			PixelSetOpacity( internp->pixel_wand, colorValue );
+		break;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+		case IMAGICKCOLORALPHA:
+			PixelSetAlpha( internp->pixel_wand, colorValue );
+		break;
 
-	color = PixelGetCyan( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
+		case IMAGICKCOLORFUZZ:
+			PixelSetFuzz( internp->pixel_wand, colorValue );
+		break;
 
-/* {{{ proto bool ImagickPixel::setCyan(float cyan)
-	Sets the normalized cyan color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setcyan)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetCyan( internp->pixel_wand, color );
-	RETURN_TRUE;
-
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getGreen()
-	Returns the normalized green color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getgreen)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	color = PixelGetGreen( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::setGreen(float green)
-	Sets the normalized green color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setgreen)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetGreen( internp->pixel_wand, color );
-	RETURN_TRUE;
-
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getRed()
-	Returns the normalized red color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getred)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	color = PixelGetRed( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::setRed(float red)
-	Sets the normalized red color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setred)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetRed( internp->pixel_wand, color );
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getYellow()
-	Returns the normalized yellow color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getyellow)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	color = PixelGetYellow( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::setYellow(float yellow)
-	Sets the normalized yellow color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setyellow)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetYellow( internp->pixel_wand, color );
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getMagenta()
-	Returns the normalized magenta color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getmagenta)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	color = PixelGetMagenta( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::setMagenta(float magenta)
-	Sets the normalized magenta color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setmagenta)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetMagenta( internp->pixel_wand, color );
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getOpacity()
-	Returns the normalized opacity color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getopacity)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	color = PixelGetOpacity( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::setOpacity(float opacity)
-	Sets the normalized opacity color of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setopacity)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetOpacity( internp->pixel_wand, color );
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto float ImagickPixel::getFuzz()
-	Returns the normalized fuzz value of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, getfuzz)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	color = PixelGetFuzz( internp->pixel_wand );
-	RETVAL_DOUBLE( color );
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::setFuzz(float fuzz)
-	Sets the fuzz value of the pixel wand.
-*/
-PHP_METHOD(imagickpixel, setfuzz)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-	double color;
-
-	IMAGICKPIXEL_INITIALIZE_SET_COLOR( object, internp, color );
-
-	PixelSetFuzz( internp->pixel_wand, color );
-	RETURN_TRUE;
+		default:
+			throwExceptionWithMessage( 4, "Unknown color type.", 4 TSRMLS_CC );
+			RETVAL_FALSE;
+		break;
+	}
+	RETVAL_TRUE;
 }
 /* }}} */
 
@@ -15577,6 +15306,19 @@ void initializeMagickConstants()
 {
 	TSRMLS_FETCH();
 
+	/* Constants defined in php_imagick.h */
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_BLACK", IMAGICKCOLORBLACK );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_BLUE", IMAGICKCOLORBLUE );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_CYAN", IMAGICKCOLORCYAN );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_GREEN", IMAGICKCOLORGREEN );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_RED", IMAGICKCOLORRED );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_YELLOW", IMAGICKCOLORYELLOW );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_MAGENTA", IMAGICKCOLORMAGENTA );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_OPACITY", IMAGICKCOLOROPACITY );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_ALPHA", IMAGICKCOLORALPHA );
+	IMAGICK_REGISTER_CONST_LONG( "COLOR_FUZZ", IMAGICKCOLORFUZZ );
+
+	/* ImageMagick defined constants */
 	IMAGICK_REGISTER_CONST_LONG( "COMPOSITE_OVER", OverCompositeOp );
 	IMAGICK_REGISTER_CONST_LONG( "COMPOSITE_IN", InCompositeOp );
 	IMAGICK_REGISTER_CONST_LONG( "COMPOSITE_OUT", OutCompositeOp );

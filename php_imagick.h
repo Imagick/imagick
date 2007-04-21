@@ -71,6 +71,18 @@ long getImageCount( MagickWand *magick_wand TSRMLS_DC);
 char *getHashValue( HashTable *hashTable TSRMLS_DC );
 int count_occurences_of( char needle, char *hayStack TSRMLS_DC);
 
+/* Define some color constants */
+#define IMAGICKCOLORBLACK 11
+#define IMAGICKCOLORBLUE 12
+#define IMAGICKCOLORCYAN 13
+#define IMAGICKCOLORGREEN 14
+#define IMAGICKCOLORRED 15
+#define IMAGICKCOLORYELLOW 16
+#define IMAGICKCOLORMAGENTA 17
+#define IMAGICKCOLOROPACITY 18
+#define IMAGICKCOLORALPHA 19
+#define IMAGICKCOLORFUZZ 20
+
 /* Define the entry point symbol
  * Zend will use when loading this module
  */
