@@ -1,4 +1,7 @@
 <?php
+/*
+	This examples was ported from Imagemagick C examples.
+*/
 
 /* Create Imagick objects */
 $Imagick = new Imagick();
