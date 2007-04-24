@@ -37,9 +37,7 @@ $ImagickDraw->line( rand( 0, 70 ), rand( 0, 30 ), rand( 0, 70 ), rand( 0, 30 ) )
 $ImagickDraw->line( rand( 0, 70 ), rand( 0, 30 ), rand( 0, 70 ), rand( 0, 30 ) );
 $ImagickDraw->line( rand( 0, 70 ), rand( 0, 30 ), rand( 0, 70 ), rand( 0, 30 ) );
 
-/* Draw the ImagickDraw object contents to the image.
-   The text and the lines.
-*/
+/* Draw the ImagickDraw object contents to the image. */
 $Imagick->drawImage( $ImagickDraw );
 
 /* Give the image a format */
