@@ -478,7 +478,6 @@ PHP_METHOD(imagickpixel, __construct);
 PHP_METHOD(imagickpixel, setcolor);
 PHP_METHOD(imagickpixel, clear);
 PHP_METHOD(imagickpixel, destroy);
-PHP_METHOD(imagickpixel, getalpha);
 PHP_METHOD(imagickpixel, issimilar);
 PHP_METHOD(imagickpixel, getcolorvalue);
 PHP_METHOD(imagickpixel, setcolorvalue);
@@ -11571,7 +11570,7 @@ PHP_METHOD(imagickdraw, settextencoding)
 }
 /* }}} */
 
-/* {{{ proto bool ImageDraw::setStrokeAlpha(float opacity)
+/* {{{ proto bool ImagickDraw::setStrokeAlpha(float opacity)
 	Specifies the opacity of stroked object outlines.
 */
 PHP_METHOD(imagickdraw, setstrokealpha)
@@ -15082,12 +15081,12 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 
 		case IMAGICKCOLORGREEN:
 			colorValue = PixelGetGreen( internp->pixel_wand );
-		break;		
-		
+		break;
+
 		case IMAGICKCOLORRED:
 			colorValue = PixelGetRed( internp->pixel_wand );
 		break;
-		
+
 		case IMAGICKCOLORYELLOW:
 			colorValue = PixelGetYellow( internp->pixel_wand );
 		break;
@@ -15157,12 +15156,12 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 
 		case IMAGICKCOLORGREEN:
 			PixelSetGreen( internp->pixel_wand, colorValue );
-		break;		
-		
+		break;
+
 		case IMAGICKCOLORRED:
 			PixelSetRed( internp->pixel_wand, colorValue );
 		break;
-		
+
 		case IMAGICKCOLORYELLOW:
 			PixelSetYellow( internp->pixel_wand, colorValue );
 		break;
