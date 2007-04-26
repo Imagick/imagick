@@ -4694,8 +4694,39 @@ PHP_METHOD(imagick, setimagechanneldepth)
 /* {{{ proto bool Imagick::setImageColormapColor(int index, ImagickPixel color)
 	Sets the color of the specified colormap index.
 */
-PHP_METHOD(imagick, setimagecolormapcolor)
+PHP_METHOD(imagick, setimagecolormapcolor) // TODO: not sure if the implementation is correct
 {
+	php_imagick_object *intern;
+	php_imagickpixel_object *color;
+	zval *object;
+	long index;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lO", &index, &color, php_imagickpixel_sc_entry ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickSetImageColormapColor( intern->magick_wand, index, color->pixel_wand );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+
 }
 /* }}} */
 
@@ -6291,11 +6322,38 @@ PHP_METHOD(imagick, getimageheight)
 }
 /* }}} */
 
-/* {{{ proto int Imagick::getImageHistogram()
+/* {{{ proto array Imagick::getImageHistogram()
 	Returns the image histogram as an array of ImagickPixel objects.
 */
-PHP_METHOD(imagick, getimagehistogram) // TODO: does this work like iterator?
+PHP_METHOD(imagick, getimagehistogram) // TODO: this might leak small amounts of memory
 {
+	php_imagick_object *intern;
+	php_imagickpixel_object *internp;
+	zval *object;
+	PixelWand **wandArray;
+	unsigned long colors = 0;
+	unsigned long i;
+	zval *tmpPixelWand;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	wandArray = MagickGetImageHistogram( intern->magick_wand, &colors );
+	array_init( return_value );
+
+	for (i = 0; i < colors; i++ )
+	{
+		if ( IsPixelWand ( wandArray[i] ) )
+		{
+			MAKE_STD_ZVAL( tmpPixelWand );
+			object_init_ex( tmpPixelWand, php_imagickpixel_sc_entry );
+			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmpPixelWand TSRMLS_CC);
+			internp->pixel_wand = wandArray[i];
+			add_next_index_zval( return_value, tmpPixelWand );
+		}
+	}
+
+	return;
 }
 /* }}} */
 
