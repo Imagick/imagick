@@ -2,11 +2,28 @@ ARG_WITH("imagick", "ImageMagick support", "no");
 
 if (PHP_IMAGICK != "no") {
 
-	if (CHECK_HEADER_ADD_INCLUDE("wand/magick-wand.h", "CFLAGS_IMAGICK", PHP_PHP_BUILD + "\\include\\imagemagick;" + PHP_IMAGICK) &&
-			CHECK_LIB("CORE_RL_magick_.lib", "imagick", PHP_PHP_BUILD + "\\lib;" + PHP_IMAGICK) &&
-			CHECK_LIB("CORE_RL_wand_.lib", "imagick", PHP_PHP_BUILD + "\\lib;" + PHP_IMAGICK)
+	if (CHECK_HEADER_ADD_INCLUDE("wand/magick-wand.h", "CFLAGS_IMAGICK", PHP_PHP_BUILD + "\\include\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_zlib_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_bzlib_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_jpeg_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_coders_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_filters_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_jbig_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_lcms_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_libxml_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_png_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_tiff_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_ttf_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_wand_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_xlib_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_jp2_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_wmf_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_magick_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("Gdi32.lib", "imagick")
+			&& CHECK_LIB("oleaut32.lib", "imagick")
 			)
 	{
+		ADD_FLAG("CFLAGS_IMAGICK", "/D _VISUALC_ /D NeedFunctionPrototypes /D _LIB");
 		EXTENSION('imagick', 'imagick.c');
 		AC_DEFINE('HAVE_IMAGICK', 1);
 	} else {
