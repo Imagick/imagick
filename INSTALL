@@ -1,0 +1,26 @@
+Linux install
+
+	Installing with `pecl` command-line utility
+
+		1. Install ImageMagick libraries (at least version 6.2.4)
+		2. Execute command "pecl install imagick"
+		3. Make sure you have extension=imagick.so in your php.ini
+
+
+	Installing from sources
+
+		1. Install ImageMagick libraries (at least version 6.2.4)
+		2. Unpack imagick source package
+		3. Go to imagick folder and type "phpize && ./configure && make && make install"
+		4. Make sure you have extension=imagick.so in your php.ini
+
+
+	Compiling Imagick into PHP
+
+		1. Install ImageMagick libraries (at least version 6.2.4)
+		2. Unpack imagick source package to $PHP_SOURCE_DIR/ext/imagick
+		3. In php source root directory run commands: "rm configure && ./buildconf --force"
+		4. Configure PHP with command "./configure --with-imagick"
+		5. Run make && make install
+
+Windows install
