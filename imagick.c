@@ -12035,10 +12035,16 @@ PHP_METHOD(imagickdraw, getfont)
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
 
 	font = DrawGetFont( internd->drawing_wand );
-	ZVAL_STRING( return_value, font, 1 );
-
-	IMAGICK_FREE_MEMORY( char *, font );
-	return;
+	if( font == (char *)NULL || *font == '\0' )
+	{
+		RETURN_FALSE;
+	}
+	else
+	{	
+		ZVAL_STRING( return_value, font, 1 );
+		IMAGICK_FREE_MEMORY( char *, font );
+		return;
+	}
 }
 /* }}} */
 
@@ -12054,10 +12060,16 @@ PHP_METHOD(imagickdraw, getfontfamily)
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
 
 	fontFamily = DrawGetFontFamily( internd->drawing_wand );
-	ZVAL_STRING( return_value, fontFamily, 1 );
-
-	IMAGICK_FREE_MEMORY( char *, fontFamily );
-	return;
+	if( fontFamily == (char *)NULL || *fontFamily == '\0' )
+	{
+		RETURN_FALSE;
+	}
+	else
+	{	
+		ZVAL_STRING( return_value, fontFamily, 1 );
+		IMAGICK_FREE_MEMORY( char *, fontFamily );
+		return;
+	}
 }
 /* }}} */
 
@@ -12166,10 +12178,17 @@ PHP_METHOD(imagickdraw, gettextencoding)
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
 
 	encoding = DrawGetTextEncoding( internd->drawing_wand );
-	ZVAL_STRING( return_value, encoding, 1 );
-	IMAGICK_FREE_MEMORY( char *, encoding );
-
-	return;
+	
+	if( encoding == (char *)NULL || *encoding == '\0' )
+	{
+		RETURN_FALSE;
+	}
+	else
+	{	
+		ZVAL_STRING( return_value, encoding, 1 );
+		IMAGICK_FREE_MEMORY( char *, encoding );
+		return;
+	}
 }
 /* }}} */
 
@@ -12756,11 +12775,16 @@ PHP_METHOD(imagickdraw, getclippath)
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
 	clipPath = DrawGetClipPath( internd->drawing_wand );
-
-	ZVAL_STRING( return_value, clipPath, 1 );
-	IMAGICK_FREE_MEMORY( char *, clipPath );
-
-	return;
+	if( clipPath == (char *)NULL || *clipPath == '\0' )
+	{
+		RETURN_FALSE;
+	}
+	else
+	{	
+		ZVAL_STRING( return_value, clipPath, 1 );
+		IMAGICK_FREE_MEMORY( char *, clipPath );
+		return;
+	}
 }
 /* }}} */
 
