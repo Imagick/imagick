@@ -54,6 +54,24 @@ if test $PHP_IMAGICK != "no"; then
 				AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
 		fi
 
+		AC_MSG_CHECKING(if PHP version is at least 5.1.3)
+		if test -r $PHP_CONFIG; then
+			AC_MSG_ERROR(Failed to detect PHP version. php-config not found)
+		fi
+
+		IMAGICK_PHP_VERSION_ORIG=`$PHP_CONFIG --version`;
+		IMAGICK_PHP_VERSION_MASK=`echo ${IMAGICK_PHP_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+
+		if test -z $IMAGICK_PHP_VERSION_ORIG; then
+			AC_MSG_ERROR(Failed to detect PHP version.)
+		fi
+
+		if test $IMAGICK_PHP_VERSION_MASK -ge 5001003; then
+				AC_MSG_RESULT(found version $IMAGICK_PHP_VERSION_ORIG)
+		else
+				AC_MSG_ERROR(no. You need at least PHP version 5.1.3 to use Imagick.)
+		fi
+
 		AC_DEFINE(HAVE_IMAGICK,1,[ ])
 
 		PHP_ADD_LIBRARY_WITH_PATH(Magick, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
