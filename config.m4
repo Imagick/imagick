@@ -34,7 +34,7 @@ if test $PHP_IMAGICK != "no"; then
         fi
 
 		WAND_DIR=`$WAND_CONFIG_PATH/Wand-config --prefix`
-		AC_MSG_CHECKING(magick-wand.h header file)
+		AC_MSG_CHECKING(for magick-wand.h header file)
 
 		if test -r $WAND_DIR/include/wand/magick-wand.h; then
 				AC_MSG_RESULT(found in $WAND_DIR/include/wand/magick-wand.h)
@@ -54,17 +54,27 @@ if test $PHP_IMAGICK != "no"; then
 				AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
 		fi
 
-		AC_MSG_CHECKING(if PHP version is at least 5.1.3)
-		if test -r $PHP_CONFIG; then
-			AC_MSG_ERROR(Failed to detect PHP version. php-config not found)
-		fi
+		dnl Thanks to Antony Dovgal for pointing out that the
+		dnl earlier version would not have worked if compiling
+		dnl statically and no php-config present.
 
-		IMAGICK_PHP_VERSION_ORIG=`$PHP_CONFIG --version`;
-		IMAGICK_PHP_VERSION_MASK=`echo ${IMAGICK_PHP_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+		AC_MSG_CHECKING(if PHP version is at least 5.1.3)
+
+		tmp_version=$PHP_VERSION
+		if test -z "$tmp_version"; then
+    		if test -z "$PHP_CONFIG"; then
+      			AC_MSG_ERROR([php-config not found])
+    		fi
+   			IMAGICK_PHP_VERSION_ORIG=`$PHP_CONFIG --version`;
+		else
+			IMAGICK_PHP_VERSION_ORIG=$tmp_version
+		fi
 
 		if test -z $IMAGICK_PHP_VERSION_ORIG; then
-			AC_MSG_ERROR(Failed to detect PHP version.)
+			AC_MSG_ERROR([failed to detect PHP version, please report])
 		fi
+
+		IMAGICK_PHP_VERSION_MASK=`echo ${IMAGICK_PHP_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
 
 		if test $IMAGICK_PHP_VERSION_MASK -ge 5001003; then
 				AC_MSG_RESULT(found version $IMAGICK_PHP_VERSION_ORIG)
