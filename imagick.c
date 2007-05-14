@@ -1276,6 +1276,11 @@ static
 		ZEND_ARG_INFO(0, MONTAGEMODE)
 		ZEND_ARG_INFO(0, frame)
 	ZEND_END_ARG_INFO()
+	
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_identifyimage_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, appendRawOutput)
+	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thresholdimage_args, 0, 0, 1)
@@ -2180,7 +2185,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, modulateimage, imagick_modulateimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagecolors, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, montageimage, imagick_montageimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, identifyimage, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, identifyimage, imagick_identifyimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, thresholdimage, imagick_thresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
@@ -2735,7 +2740,7 @@ PHP_METHOD(imagick, valid)
 }
 /* }}} */
 
-/* {{{ proto array Imagick::current()
+/* {{{ proto Imagick Imagick::current()
     Returns reference to the current imagick object with image pointer at the correct sequence.
 */
 PHP_METHOD(imagick, current)
@@ -7201,8 +7206,9 @@ PHP_METHOD(imagick, getimageformat)
 }
 /* }}} */
 
-/* {{{ proto string Imagick::identifyImage()
-	Identifies an image by printing its attributes to the file.  Attributes include the image width, height, size, and others.
+/* {{{ proto string Imagick::identifyImage( bool appendRawOutput )
+	Identifies an image and returns the attributes.  Attributes include the image width, height, size, and others.
+	If true is passed as argument, then the raw output is appended to the array.
 */
 /* FIX THIS WHOLE FUNCTION */
 PHP_METHOD(imagick, identifyimage)
@@ -9516,7 +9522,7 @@ PHP_METHOD(imagick, steganoimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::clone
+/* {{{ proto Imagick Imagick::clone()
 	Makes an exact copy of the Imagick object.
 */
 PHP_METHOD(imagick, clone)
@@ -10404,7 +10410,7 @@ PHP_METHOD(imagick, getfilename)
 }
 /* }}} */
 
-/* {{{ proto string Imagick:getFormat()
+/* {{{ proto string Imagick::getFormat()
 	Returns the format of the Imagick object.
 */
 PHP_METHOD(imagick, getformat)
@@ -10487,7 +10493,7 @@ PHP_METHOD(imagick, getoption)
 }
 /* }}} */
 
-/* {{{ proto string MagickGetPackageName()
+/* {{{ proto string Imagick::getPackageName()
 	Returns the ImageMagick package name as a string constant.
 */
 PHP_METHOD(imagick, getpackagename)
@@ -10559,7 +10565,7 @@ PHP_METHOD(imagick, getquantumdepth)
 }
 /* }}} */
 
-/* {{{ proto array Imagick::GetQuantumRange()
+/* {{{ proto array Imagick::getQuantumRange()
 	Returns the ImageMagick quantum range as a string constant.
 */
 PHP_METHOD(imagick, getquantumrange)
@@ -11283,7 +11289,7 @@ PHP_METHOD(imagickdraw, __construct)
 }
 /* }}} */
 
-/* {{{ proto bool Imagickdraw::circle(float ox, float oy, float px, float py)
+/* {{{ proto bool ImagickDraw::circle(float ox, float oy, float px, float py)
 	Draws a circle on the image.
 */
 PHP_METHOD(imagickdraw, circle)
@@ -12544,7 +12550,7 @@ PHP_METHOD(imagickdraw, line)
 }
 /* }}} */
 
-/* {{{ proto ImagickDraw ImagickDraw::cloneingWand()
+/* {{{ proto ImagickDraw ImagickDraw::clone()
 	Makes an exact copy of the specified wand.
 */
 PHP_METHOD(imagickdraw, clone)
@@ -14459,7 +14465,7 @@ PHP_METHOD(imagickdraw, popdrawingwand)
 }
 /* }}} */
 
-/* {{{ proto bool ImageDraw::pushDrawingWand()
+/* {{{ proto bool ImagickDraw::pushDrawingWand()
 	Clones the current DrawingWand to create a new DrawingWand, which is then added to the DrawingWand stack. The original drawing DrawingWand(s) may be returned to by invoking PopDrawingWand(). The DrawingWands are stored on a DrawingWand stack. For every Pop there must have already been an equivalent Push.
 */
 PHP_METHOD(imagickdraw, pushdrawingwand)
