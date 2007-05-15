@@ -1105,6 +1105,11 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_construct_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, color)
+	ZEND_END_ARG_INFO()	
+	
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
@@ -1139,7 +1144,7 @@ static
 
 static function_entry php_imagickpixel_class_methods[] =
 {
-	PHP_ME(imagickpixel, __construct, imagickpixel_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(imagickpixel, __construct, imagickpixel_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixel, setcolor, imagickpixel_setcolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorvalue, imagickpixel_setcolorvalue_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorvalue, imagickpixel_getcolorvalue_args, ZEND_ACC_PUBLIC)
@@ -7206,7 +7211,7 @@ PHP_METHOD(imagick, getimageformat)
 }
 /* }}} */
 
-/* {{{ proto string Imagick::identifyImage( bool appendRawOutput )
+/* {{{ proto string Imagick::identifyImage( [bool appendRawOutput] )
 	Identifies an image and returns the attributes.  Attributes include the image width, height, size, and others.
 	If true is passed as argument, then the raw output is appended to the array.
 */
@@ -14991,7 +14996,7 @@ PHP_METHOD(imagickpixeliterator, clear)
 /* }}} */
 
 /* END OF PIXELITERATOR */
-/* {{{ proto ImagickPixel ImagickPixel::__construct()
+/* {{{ proto ImagickPixel ImagickPixel::__construct( [string color] )
    The ImagickPixel constructor
 */
 PHP_METHOD(imagickpixel, __construct)
