@@ -14998,10 +14998,29 @@ PHP_METHOD(imagickpixel, __construct)
 {
 	zval *object;
 	php_imagickpixel_object *internp;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
+	MagickBooleanType status;
+	char *colorName = (char *)0;
+	int colorNameLen = 0;
+	
+	object = getThis();
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);	
 	internp->pixel_wand = NewPixelWand();
+	
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &colorName, &colorNameLen ) == FAILURE )
+	{
+		return;
+	}
+	
+	/* If color was given as parameter, set it here.*/
+	if ( colorNameLen != 0 && colorName != (char *)0 )
+	{
+		status = PixelSetColor( internp->pixel_wand, colorName );
+		if( status == MagickFalse )
+		{
+			throwImagickPixelException( internp->pixel_wand, 3 TSRMLS_CC);
+			RETURN_FALSE;
+		}		
+	}
 	RETURN_TRUE;
 }
 /* }}} */
@@ -15031,7 +15050,7 @@ PHP_METHOD(imagickpixel, setcolor)
 	object = getThis();
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	status = PixelSetColor( internp->pixel_wand , colorName );
+	status = PixelSetColor( internp->pixel_wand, colorName );
 
 	if( status == MagickFalse )
 	{
