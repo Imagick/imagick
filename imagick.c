@@ -10391,7 +10391,7 @@ PHP_METHOD(imagick, getcopyright)
 	copyright = (char *)MagickGetCopyright();
 	ZVAL_STRING( return_value, copyright, 1 );
 
-	IMAGICK_FREE_MEMORY( char *, copyright );
+	/* IMAGICK_FREE_MEMORY( char *, copyright ); */
 	return;
 }
 /* }}} */
@@ -10512,7 +10512,7 @@ PHP_METHOD(imagick, getpackagename)
 	packageName = (char *)MagickGetPackageName();
 	ZVAL_STRING( return_value, packageName, 1 );
 
-	IMAGICK_FREE_MEMORY( char *, packageName );
+	/* IMAGICK_FREE_MEMORY( char *, packageName ); */
 	return;
 }
 /* }}} */
@@ -10565,7 +10565,7 @@ PHP_METHOD(imagick, getquantumdepth)
 	add_assoc_long( return_value, "quantumDepthLong", depth );
 	add_assoc_string( return_value, "quantumDepthString", quantumDepth, 1 );
 
-	IMAGICK_FREE_MEMORY( char *, quantumDepth );
+	/* IMAGICK_FREE_MEMORY( char *, quantumDepth ); */
 	return;
 }
 /* }}} */
@@ -10588,7 +10588,7 @@ PHP_METHOD(imagick, getquantumrange)
 	add_assoc_long( return_value, "quantumRangeLong", range );
 	add_assoc_string( return_value, "quantumRangeString", quantumRange, 1 );
 
-	IMAGICK_FREE_MEMORY( char *, quantumRange );
+	/* IMAGICK_FREE_MEMORY( char *, quantumRange ); */
 	return;
 }
 /* }}} */
@@ -10604,10 +10604,10 @@ PHP_METHOD(imagick, getreleasedate)
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 
-	releaseDate = (char *)MagickGetPackageName();
+	releaseDate = (char *)MagickGetReleaseDate();
 	ZVAL_STRING( return_value, releaseDate, 1 );
 
-	IMAGICK_FREE_MEMORY( char *, releaseDate );
+	/* IMAGICK_FREE_MEMORY( char *, releaseDate ); */
 	return;
 }
 /* }}} */
@@ -10757,7 +10757,7 @@ PHP_METHOD(imagick, getversion)
 	add_assoc_long( return_value, "versionNumber", versionNumber );
 	add_assoc_string( return_value, "versionString", versionString, 1 );
 
-	IMAGICK_FREE_MEMORY( char *, versionString );
+	/* IMAGICK_FREE_MEMORY( char *, versionString ); */
 	return;
 }
 /* }}} */
