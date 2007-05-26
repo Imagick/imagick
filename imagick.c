@@ -1077,13 +1077,18 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_construct_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_setiteratorrow_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, row)
 	ZEND_END_ARG_INFO()
 
 static function_entry php_imagickpixeliterator_class_methods[] =
 {
-	PHP_ME(imagickpixeliterator, __construct, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixeliterator, __construct, imagickpixeliterator_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixeliterator, newpixeliterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixeliterator, newpixelregioniterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixeliterator, getiteratorrow, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
@@ -2443,7 +2448,7 @@ void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC
 			break;
 
 		case 3:
-			zend_throw_exception( php_imagickpixeliterator_sc_entry, description, (long)code TSRMLS_CC);
+			zend_throw_exception( php_imagickpixeliterator_exception_class_entry, description, (long)code TSRMLS_CC);
 			break;
 
 		case 4:
@@ -14500,6 +14505,49 @@ PHP_METHOD(imagickdraw, pushdrawingwand)
 */
 PHP_METHOD(imagickpixeliterator, __construct)
 {
+
+	zval *magickObject;
+	zval *object;
+	php_imagickpixeliterator_object *internpix;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		throwExceptionWithMessage( 3, "Invalid arguments passed to ImagickPixelIterator::__construct()", 3 TSRMLS_CC);
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &magickObject, php_imagick_sc_entry ) == FAILURE )
+	{
+		printf( "exiting" );
+		return;
+	}
+
+	object = getThis();
+	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(magickObject TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = IsMagickWand( intern->magick_wand );
+
+	if ( status == MagickFalse )
+	{
+		throwExceptionWithMessage( 3, "Invalid Imagick object passed.", 3 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	internpix->pixel_iterator = NewPixelIterator( intern->magick_wand );
+	internpix->iterator_type = 1;
+
+	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	{
+		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator.", 3 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	internpix->instanciated_correctly = 1;
+
 	RETURN_TRUE;
 }
 /* }}} */
@@ -14637,7 +14685,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
-		ZEND_WRONG_PARAM_COUNT();
+		throwExceptionWithMessage( 3, "Invalid arguments passed to ImagickPixelIterator::newPixelIterator()", 3 TSRMLS_CC);
 	}
 
 	/* Parse parameters given to function */
@@ -14685,6 +14733,11 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	zval *x, *y, *columns, *rows;
+
+	if ( ZEND_NUM_ARGS() != 5 )
+	{
+		throwExceptionWithMessage( 3, "Invalid arguments passed to ImagickPixelIterator::newPixelRegionIterator()", 3 TSRMLS_CC);
+	}
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Ozzzz", &magickObject, php_imagick_sc_entry, &x, &y, &columns, &rows ) == FAILURE )
@@ -15008,7 +15061,7 @@ PHP_METHOD(imagickpixel, __construct)
 	int colorNameLen = 0;
 	
 	object = getThis();
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);	
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 	internp->pixel_wand = NewPixelWand();
 	
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &colorName, &colorNameLen ) == FAILURE )
@@ -15924,8 +15977,8 @@ PHP_MINIT_FUNCTION(imagick)
 	Initialize exceptions (ImagickPixelIterator exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME, NULL);
-	php_imagickpixeliterator_sc_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
-	php_imagickpixeliterator_sc_entry->ce_flags |= ZEND_ACC_FINAL;
+	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+	php_imagickpixeliterator_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
 	Initialize exceptions (ImagickPixel exception)
