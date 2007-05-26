@@ -14500,7 +14500,7 @@ PHP_METHOD(imagickdraw, pushdrawingwand)
 
 /* END OF DRAWINGWAND METHODS */
 
-/* {{{ proto ImagickPixelIterator ImagickPixelIterator::__construct()
+/* {{{ proto ImagickPixelIterator ImagickPixelIterator::__construct( Imagick source )
    The ImagickPixelIterator constructor
 */
 PHP_METHOD(imagickpixeliterator, __construct)
@@ -14671,7 +14671,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 }
 /* }}} */
 
-/* {{{ proto ImagickPixelIterator ImagickPixelIterator::newPixelIterator()
+/* {{{ proto ImagickPixelIterator ImagickPixelIterator::newPixelIterator( Imagick source )
 	Returns a new pixel iterator.
 */
 PHP_METHOD(imagickpixeliterator, newpixeliterator)
@@ -14722,7 +14722,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickPixelIterator::newPixelRegionIterator(Imagick wand, int x, int y, int columns, int rows)
+/* {{{ proto bool ImagickPixelIterator::newPixelRegionIterator(Imagick source, int x, int y, int columns, int rows)
 	Returns a new pixel iterator.
 */
 PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
