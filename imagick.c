@@ -112,6 +112,7 @@ PHP_METHOD(imagick, setsizeoffset);
 PHP_METHOD(imagick, adaptiveblurimage);
 PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
+PHP_METHOD(imagick, randomthresholdimage);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, readimage);
@@ -156,7 +157,6 @@ PHP_METHOD(imagick, modulateimage);
 PHP_METHOD(imagick, montageimage);
 PHP_METHOD(imagick, identifyimage);
 PHP_METHOD(imagick, thresholdimage);
-PHP_METHOD(imagick, randomthresholdimage);
 PHP_METHOD(imagick, adaptivethresholdimage);
 PHP_METHOD(imagick, blackthresholdimage);
 PHP_METHOD(imagick, whitethresholdimage);
@@ -1287,6 +1287,13 @@ static
 		ZEND_ARG_INFO(0, rows)
 		ZEND_ARG_INFO(0, offset)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_randomthresholdimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, low)
+		ZEND_ARG_INFO(0, high)
+		ZEND_ARG_INFO(0, CHANNELTYPE)
+	ZEND_END_ARG_INFO()
 #endif
 
 static
@@ -1419,13 +1426,6 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thresholdimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold)
-		ZEND_ARG_INFO(0, CHANNELTYPE)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_randomthresholdimage_args, 0, 0, 2)
-		ZEND_ARG_INFO(0, low)
-		ZEND_ARG_INFO(0, high)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
@@ -2206,6 +2206,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, adaptiveblurimage, imagick_adaptiveblurimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, contraststretchimage, imagick_contraststretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptivesharpenimage, imagick_adaptivesharpenimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
 	#endif
 	PHP_ME(imagick, __construct, imagick_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
@@ -2246,7 +2247,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, montageimage, imagick_montageimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, identifyimage, imagick_identifyimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, thresholdimage, imagick_thresholdimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptivethresholdimage, imagick_adaptivethresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, blackthresholdimage, imagick_blackthresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, whitethresholdimage, imagick_whitethresholdimage_args, ZEND_ACC_PUBLIC)
@@ -3381,19 +3381,105 @@ PHP_METHOD(imagick, randomthresholdimage)
 	RETURN_TRUE;
 }
 /* }}} */
-
-
 #endif
 
-
-
-
-/* {{{ proto Imagick Imagick::__construct()
+/* {{{ proto Imagick Imagick::__construct( [mixed files] )
    The Imagick constructor
 */
 PHP_METHOD(imagick, __construct)
 {
-	RETURN_TRUE;
+	php_imagick_object *intern;
+	zval *object = getThis();
+	zval *files;
+	char *filename, *absolute;
+	HashPosition pos;
+	HashTable *hash_table;
+	MagickBooleanType status;
+	zval **ppzval, tmpcopy;
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z", &files ) == FAILURE )
+	{
+		return;
+	}
+	
+	/* No files given.. */
+	if (Z_TYPE_P(files) == IS_NULL) 
+	{
+        RETURN_TRUE;
+    }
+
+	/* A single file was given */
+	if (Z_TYPE_P(files) == IS_STRING) 
+	{
+		/* get the filenam */  
+		filename = Z_STRVAL_P( files );
+
+		/* Fix because magickwand doesnt want to take relative paths */
+		absolute = expand_filepath( filename, NULL TSRMLS_CC);
+
+		IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
+
+		object = getThis();
+		intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+		status = MagickReadImage( intern->magick_wand, absolute );
+		efree( absolute );
+
+		/* No magick is going to happen */
+		if ( status == MagickFalse )
+		{
+			throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+			RETURN_FALSE;
+		}
+		RETURN_TRUE;
+    }
+
+	/* an array of filenames was given */
+	if (Z_TYPE_P(files) == IS_ARRAY) 
+	{
+
+		hash_table = Z_ARRVAL_P( files );
+
+		for(zend_hash_internal_pointer_reset_ex(hash_table, &pos);
+			zend_hash_has_more_elements_ex(hash_table, &pos) == SUCCESS;
+			zend_hash_move_forward_ex(hash_table, &pos)) 
+		{
+
+			if (zend_hash_get_current_data_ex(hash_table, (void**)&ppzval, &pos) == FAILURE) 
+			{
+				continue;
+		    }
+			
+			tmpcopy = **ppzval;
+			zval_copy_ctor(&tmpcopy);
+			INIT_PZVAL(&tmpcopy);
+			convert_to_string(&tmpcopy);
+
+			filename = Z_STRVAL(tmpcopy);
+
+			/* Fix because magickwand doesnt want to take relative paths */
+			absolute = expand_filepath( filename, NULL TSRMLS_CC);
+
+			IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
+
+			object = getThis();
+			intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+			status = MagickReadImage( intern->magick_wand, absolute );
+			efree( absolute );
+
+			/* No magick is going to happen */
+			if ( status == MagickFalse )
+			{
+				throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+				RETURN_FALSE;
+			}
+
+
+			zval_dtor(&tmpcopy);
+		}
+		RETURN_TRUE;
+	}
+
 }
 /* }}} */
 
