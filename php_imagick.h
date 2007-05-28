@@ -45,6 +45,7 @@ typedef struct _php_imagickdraw_object  {
 	DrawingWand *drawing_wand;
 } php_imagickdraw_object;
 
+#if MagickLibVersion > 0x628
 /* Structure for pixeliterator object. */
 typedef struct _php_imagickpixeliterator_object  {
 	zend_object zo;
@@ -52,6 +53,7 @@ typedef struct _php_imagickpixeliterator_object  {
 	long instanciated_correctly;
 	int iterator_type;
 } php_imagickpixeliterator_object;
+#endif
 
 /* Structure for pixelwand object. */
 typedef struct _php_imagickpixel_object  {
