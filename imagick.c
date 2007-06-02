@@ -501,6 +501,7 @@ PHP_METHOD(imagickpixel, getcolorvalue);
 PHP_METHOD(imagickpixel, setcolorvalue);
 PHP_METHOD(imagickpixel, getcolorasstring);
 PHP_METHOD(imagickpixel, getcolorcount);
+PHP_METHOD(imagickpixel, setcolorcount);
 
 static function_entry php_imagick_functions[] =
 {
@@ -1163,6 +1164,10 @@ static
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorcount_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, colorCount)
+	ZEND_END_ARG_INFO()
 
 
 static function_entry php_imagickpixel_class_methods[] =
@@ -1181,7 +1186,7 @@ static function_entry php_imagickpixel_class_methods[] =
 	PHP_ME(imagickpixel, issimilar, imagickpixel_issimilar_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorasstring, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorcount, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-
+	PHP_ME(imagickpixel, setcolorcount, imagickpixel_setcolorcount_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -15609,8 +15614,33 @@ PHP_METHOD(imagickpixel, getcolorcount)
 }
 /* }}} */
 
+/* {{{ proto int ImagickPixel::setColorCount( int colorCount )
+	Sets the color count associated with this color.
+*/
+PHP_METHOD(imagickpixel, setcolorcount)
+{
+	zval *object;
+	php_imagickpixel_object *internp;
+	long colorCount;
 
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
 
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &colorCount ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+    PixelSetColorCount( internp->pixel_wand, colorCount );
+	RETVAL_TRUE;
+}
+/* }}} */
 
 /* End of pixelwand methods */
 
