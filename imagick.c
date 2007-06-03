@@ -465,8 +465,8 @@ PHP_METHOD(imagickdraw, setstrokelinejoin);
 PHP_METHOD(imagickdraw, setstrokemiterlimit);
 PHP_METHOD(imagickdraw, setstrokeopacity);
 PHP_METHOD(imagickdraw, setvectorgraphics);
-PHP_METHOD(imagickdraw, popdrawingwand);
-PHP_METHOD(imagickdraw, pushdrawingwand);
+PHP_METHOD(imagickdraw, pop);
+PHP_METHOD(imagickdraw, push);
 
 #if MagickLibVersion > 0x628
 /* Imagick Pixel iterator */
@@ -1084,8 +1084,8 @@ static function_entry php_imagickdraw_class_methods[] =
 	PHP_ME(imagickdraw, setstrokemiterlimit, imagickdraw_setstrokemiterlimit_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setstrokeopacity, imagickdraw_setstrokeopacity_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setvectorgraphics, imagickdraw_setvectorgraphics_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickdraw, popdrawingwand, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickdraw, pushdrawingwand, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, pop, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, push, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setstrokedasharray, imagickdraw_setstrokedasharray_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
@@ -14595,10 +14595,10 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickDraw::popDrawingWand()
+/* {{{ proto bool ImagickDraw::pop()
 	Destroys the current DrawingWand in the stack, and returns to the previously pushed DrawingWand. Multiple DrawingWands may exist. It is an error to attempt to pop more DrawingWands than have been pushed, and it is proper form to pop all DrawingWands which have been pushed.
 */
-PHP_METHOD(imagickdraw, popdrawingwand)
+PHP_METHOD(imagickdraw, pop)
 {
 	zval *object;
 	php_imagickdraw_object *internd;
@@ -14618,10 +14618,10 @@ PHP_METHOD(imagickdraw, popdrawingwand)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickDraw::pushDrawingWand()
+/* {{{ proto bool ImagickDraw::push()
 	Clones the current DrawingWand to create a new DrawingWand, which is then added to the DrawingWand stack. The original drawing DrawingWand(s) may be returned to by invoking PopDrawingWand(). The DrawingWands are stored on a DrawingWand stack. For every Pop there must have already been an equivalent Push.
 */
-PHP_METHOD(imagickdraw, pushdrawingwand)
+PHP_METHOD(imagickdraw, push)
 {
 	zval *object;
 	php_imagickdraw_object *internd;
