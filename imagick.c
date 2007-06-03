@@ -11335,7 +11335,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 
 	if ( dArray == (double *)NULL )
 	{
-		throwExceptionWithMessage( 2, "Can't read array.", 2 TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Can't read array.", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -14731,7 +14731,6 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 {
 	zval *object;
 	php_imagickpixeliterator_object *internpix;
-	MagickBooleanType status;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
 
@@ -14748,12 +14747,6 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 	}
 
 	PixelSyncIterator( internpix->pixel_iterator );
-
-	if ( status == MagickFalse )
-	{
-		throwExceptionWithMessage( 3, "Invalid Imagick object passed.", 3 TSRMLS_CC);
-		RETURN_FALSE;
-	}
 
 	RETURN_TRUE;
 }
