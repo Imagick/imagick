@@ -490,7 +490,6 @@ PHP_METHOD(imagickpixeliterator, clear);
 #if MagickLibVersion > 0x628
 PHP_METHOD(imagickpixel, gethsl);
 PHP_METHOD(imagickpixel, sethsl);
-PHP_METHOD(imagickpixel, getcolorasnormalizedstring);
 #endif
 PHP_METHOD(imagickpixel, __construct);
 PHP_METHOD(imagickpixel, setcolor);
@@ -499,7 +498,7 @@ PHP_METHOD(imagickpixel, destroy);
 PHP_METHOD(imagickpixel, issimilar);
 PHP_METHOD(imagickpixel, getcolorvalue);
 PHP_METHOD(imagickpixel, setcolorvalue);
-PHP_METHOD(imagickpixel, getcolorasstring);
+PHP_METHOD(imagickpixel, getcolor);
 PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);
 
@@ -1169,13 +1168,16 @@ static
 		ZEND_ARG_INFO(0, colorCount)
 	ZEND_END_ARG_INFO()
 
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_getcolor_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, normalized)
+	ZEND_END_ARG_INFO()
 
 static function_entry php_imagickpixel_class_methods[] =
 {
 	#if MagickLibVersion > 0x628
 	PHP_ME(imagickpixel, gethsl, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, sethsl, imagickpixel_sethsl_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getcolorasnormalizedstring, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	#endif
 	PHP_ME(imagickpixel, __construct, imagickpixel_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixel, setcolor, imagickpixel_setcolor_args, ZEND_ACC_PUBLIC)
@@ -1184,7 +1186,7 @@ static function_entry php_imagickpixel_class_methods[] =
 	PHP_ME(imagickpixel, clear, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, destroy, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, issimilar, imagickpixel_issimilar_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getcolorasstring, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getcolor, imagickpixel_getcolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorcount, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorcount, imagickpixel_setcolorcount_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
@@ -3407,17 +3409,17 @@ PHP_METHOD(imagick, __construct)
 	{
 		return;
 	}
-	
+
 	/* No files given.. */
-	if (Z_TYPE_P(files) == IS_NULL) 
+	if (Z_TYPE_P(files) == IS_NULL)
 	{
         RETURN_TRUE;
     }
 
 	/* A single file was given */
-	if (Z_TYPE_P(files) == IS_STRING) 
+	if (Z_TYPE_P(files) == IS_STRING)
 	{
-		/* get the filenam */  
+		/* get the filenam */
 		filename = Z_STRVAL_P( files );
 
 		/* Fix because magickwand doesnt want to take relative paths */
@@ -3440,21 +3442,21 @@ PHP_METHOD(imagick, __construct)
     }
 
 	/* an array of filenames was given */
-	if (Z_TYPE_P(files) == IS_ARRAY) 
+	if (Z_TYPE_P(files) == IS_ARRAY)
 	{
 
 		hash_table = Z_ARRVAL_P( files );
 
 		for(zend_hash_internal_pointer_reset_ex(hash_table, &pos);
 			zend_hash_has_more_elements_ex(hash_table, &pos) == SUCCESS;
-			zend_hash_move_forward_ex(hash_table, &pos)) 
+			zend_hash_move_forward_ex(hash_table, &pos))
 		{
 
-			if (zend_hash_get_current_data_ex(hash_table, (void**)&ppzval, &pos) == FAILURE) 
+			if (zend_hash_get_current_data_ex(hash_table, (void**)&ppzval, &pos) == FAILURE)
 			{
 				continue;
 		    }
-			
+
 			tmpcopy = **ppzval;
 			zval_copy_ctor(&tmpcopy);
 			INIT_PZVAL(&tmpcopy);
@@ -15238,26 +15240,6 @@ PHP_METHOD(imagickpixel, sethsl)
 }
 /* }}} */
 
-/* {{{ proto string ImagickPixel::getColorAsNormalizedString()
-	Returns the normalized color of the pixel wand as a string.
-*/
-PHP_METHOD(imagickpixel, getcolorasnormalizedstring)
-{
-
-	zval *object;
-	php_imagickpixel_object *internp;
-	char *colorString;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
-
-	colorString = (char *)PixelGetColorAsNormalizedString( internp->pixel_wand );
-	ZVAL_STRING( return_value, colorString, 1 );
-	IMAGICK_FREE_MEMORY( char *, colorString );
-	return;
-
-}
-/* }}} */
-
 #endif
 
 /* {{{ proto ImagickPixel ImagickPixel::__construct( [string color] )
@@ -15571,23 +15553,119 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 }
 /* }}} */
 
-/* {{{ proto string ImagickPixel::getColorAsString()
-	Returns the color of the pixel wand as a string.
+/* {{{ proto array ImagickPixel::getColor( [bool normalized] )
+	Returns the color of the pixel in an array
 */
-PHP_METHOD(imagickpixel, getcolorasstring)
+PHP_METHOD(imagickpixel, getcolor)
 {
-
 	zval *object;
 	php_imagickpixel_object *internp;
+	zend_bool normalized = 0;
 	char *colorString;
+	int red, green, blue;
+	double normalizedRed, normalizedGreen, normalizedBlue;
+	double alpha;
+	int setAlpha = 0;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|b", &normalized ) == FAILURE )
+	{
+		return;
+	}
 
-	colorString = PixelGetColorAsString( internp->pixel_wand );
-	ZVAL_STRING( return_value, colorString, 1 );
-	IMAGICK_FREE_MEMORY( char *, colorString );
-	return;
+	object = getThis();
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 
+	if ( normalized == 1 )
+	{
+		#if MagickLibVersion > 0x628
+		colorString = PixelGetColorAsNormalizedString( internp->pixel_wand );
+
+		if( count_occurences_of( ',', colorString TSRMLS_CC ) == 3 )
+		{
+			sscanf( colorString, "%lf,%lf,%lf,%lf", &normalizedRed, &normalizedGreen, &normalizedBlue, &alpha );
+			setAlpha = 1;
+		}
+		else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 2 )
+		{
+			sscanf( colorString, "%lf,%lf,%lf", &normalizedRed, &normalizedGreen, &normalizedBlue );
+		}
+		else
+		{
+			throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+			RETURN_FALSE;
+		}
+
+		array_init( return_value );
+
+		add_assoc_double( return_value, "r", normalizedRed );
+		add_assoc_double( return_value, "g", normalizedGreen );
+		add_assoc_double( return_value, "b", normalizedBlue );
+
+		if ( setAlpha != 0 )
+		{
+			add_assoc_double( return_value, "a", alpha );
+		}
+
+		IMAGICK_FREE_MEMORY( char *, colorString );
+		return;
+
+		#else
+		RETURN_FALSE;
+		#endif
+	}
+	else
+	{
+		colorString = PixelGetColorAsString( internp->pixel_wand );
+
+		if ( colorString != (char *)NULL && *colorString != '\0' )
+		{
+			if( strstr( colorString, "rgba" ) != NULL )
+			{
+				sscanf( colorString, "rgba%d,%d,%d,%lf", &red, &green, &blue, &alpha );
+				setAlpha = 1;
+			}
+			else if( strstr( colorString, "rgb" ) != NULL )
+			{
+				sscanf( colorString, "rgb%d,%d,%d", &red, &green, &blue );
+			}
+			else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 3 )
+			{
+				sscanf( colorString, "%d,%d,%d,%lf", &red, &green, &blue, &alpha );
+				setAlpha = 1;
+			}
+			else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 2 )
+			{
+				sscanf( colorString, "%d,%d,%d", &red, &green, &blue );
+			}
+			else
+			{
+				throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+				RETURN_FALSE;
+			}
+
+			array_init( return_value );
+
+			add_assoc_long( return_value, "r", red );
+			add_assoc_long( return_value, "g", green );
+			add_assoc_long( return_value, "b", blue );
+
+			if ( setAlpha != 0 )
+			{
+				add_assoc_double( return_value, "a", alpha );
+			}
+
+			IMAGICK_FREE_MEMORY( char *, colorString );
+			return;
+		}
+		else
+		{
+			throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+			RETURN_FALSE;
+		}
+	}
+	/* Should never be reached. */
+	RETURN_FALSE;
 }
 /* }}} */
 
