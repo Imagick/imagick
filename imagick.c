@@ -315,6 +315,7 @@ PHP_METHOD(imagick, unsharpmaskimage);
 PHP_METHOD(imagick, getimage);
 PHP_METHOD(imagick, addimage);
 PHP_METHOD(imagick, newimage);
+PHP_METHOD(imagick, newpseudoimage);
 PHP_METHOD(imagick, getcompression);
 PHP_METHOD(imagick, getcompressionquality);
 PHP_METHOD(imagick, getcopyright);
@@ -2099,6 +2100,13 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_newpseudoimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, columns)
+		ZEND_ARG_INFO(0, rows)
+		ZEND_ARG_INFO(0, pseudoString)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getoption_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
@@ -2414,6 +2422,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, addimage, imagick_addimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, newimage, imagick_newimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, newpseudoimage, imagick_newpseudoimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getcompression, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getcompressionquality, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getcopyright, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -4411,6 +4420,55 @@ PHP_METHOD(imagick, newimage)
 
 	internbg = (php_imagickpixel_object *)zend_object_store_get_object(bgObj TSRMLS_CC);
 	status = MagickNewImage( intern->magick_wand, columns, rows, internbg->pixel_wand );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::newPseudoImage( int cols, int rows, string pseudoString )
+	Creates a new image using pseudo format
+*/
+PHP_METHOD(imagick, newpseudoimage)
+{
+	php_imagick_object *intern;
+	zval *object;
+	MagickBooleanType status;
+	long columns, rows;
+	char *pseudoString;
+	int pseudoStringLen;
+
+	if ( ZEND_NUM_ARGS() != 3 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lls", &columns, &rows, &pseudoString, &pseudoStringLen ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	
+	/* Pseudo image needs a size set manually */
+	status = MagickSetSize( intern->magick_wand, columns, rows );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	/* Read image from the pseudo string */
+	status = MagickReadImage( intern->magick_wand, pseudoString );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
