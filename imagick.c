@@ -113,6 +113,8 @@ PHP_METHOD(imagick, adaptiveblurimage);
 PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
 PHP_METHOD(imagick, randomthresholdimage);
+PHP_METHOD(imagick, getimageproperty);
+PHP_METHOD(imagick, setimageproperty);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, readimage);
@@ -1302,10 +1304,26 @@ static
 		ZEND_ARG_INFO(0, high)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageproperty_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, name)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageproperty_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, name)
+		ZEND_ARG_INFO(0, value)
+	ZEND_END_ARG_INFO()
 #endif
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_construct_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, files)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2222,8 +2240,10 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, contraststretchimage, imagick_contraststretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptivesharpenimage, imagick_adaptivesharpenimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
 	#endif
-	PHP_ME(imagick, __construct, imagick_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimageblob, imagick_readimageblob_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageformat, imagick_setimageformat_args, ZEND_ACC_PUBLIC)
@@ -2511,7 +2531,7 @@ void throwImagickException( MagickWand *magick_wand, long code TSRMLS_DC)
 
 	if ( strlen( description ) == 0 )
 	{
-		description = "Undefined exception.";
+		description = "Undefined exception";
 		free = 0;
 	}
 
@@ -3397,6 +3417,80 @@ PHP_METHOD(imagick, randomthresholdimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto string Imagick::getImageProperty( string name )
+	returns a value associated with the specified property
+*/
+PHP_METHOD(imagick, getimageproperty)
+{
+	php_imagick_object *intern;
+	zval *object;
+	char *name, *value;
+	int nameLen;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &nameLen) == FAILURE)
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	value = MagickGetImageProperty( intern->magick_wand, name );
+
+	if ( value != (char *)NULL && *value != '\0' )
+	{
+		ZVAL_STRING( return_value, (char *)value, 1 );
+		IMAGICK_FREE_MEMORY( char *, value );
+		return;
+	}
+	RETURN_FALSE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setImageProperty( string name, string value )
+	returns a value associated with the specified property
+*/
+PHP_METHOD(imagick, setimageproperty)
+{
+	php_imagick_object *intern;
+	zval *object;
+	char *name, *value;
+	int nameLen, valueLen;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &name, &nameLen, &value, &valueLen) == FAILURE)
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	status = MagickSetImageProperty( intern->magick_wand, name, value );
+	
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_FALSE;
+}
+/* }}} */
 #endif
 
 /* {{{ proto Imagick Imagick::__construct( [mixed files] )
@@ -3406,7 +3500,7 @@ PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
 	zval *object = getThis();
-	zval *files;
+	zval *files = (zval *)NULL;
 	char *filename, *absolute;
 	HashPosition pos;
 	HashTable *hash_table;
@@ -3416,14 +3510,14 @@ PHP_METHOD(imagick, __construct)
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z", &files ) == FAILURE )
 	{
-		return;
+		RETURN_NULL();
 	}
 
 	/* No files given.. */
-	if (Z_TYPE_P(files) == IS_NULL)
+	if ( files == (zval *)NULL || Z_TYPE_P(files) == IS_NULL ) 
 	{
-        RETURN_TRUE;
-    }
+		RETURN_TRUE;
+	}
 
 	/* A single file was given */
 	if (Z_TYPE_P(files) == IS_STRING)
@@ -3448,7 +3542,7 @@ PHP_METHOD(imagick, __construct)
 			RETURN_FALSE;
 		}
 		RETURN_TRUE;
-    }
+	}
 
 	/* an array of filenames was given */
 	if (Z_TYPE_P(files) == IS_ARRAY)
@@ -3464,7 +3558,7 @@ PHP_METHOD(imagick, __construct)
 			if (zend_hash_get_current_data_ex(hash_table, (void**)&ppzval, &pos) == FAILURE)
 			{
 				continue;
-		    }
+			}
 
 			tmpcopy = **ppzval;
 			zval_copy_ctor(&tmpcopy);
@@ -3489,7 +3583,6 @@ PHP_METHOD(imagick, __construct)
 				throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
 				RETURN_FALSE;
 			}
-
 
 			zval_dtor(&tmpcopy);
 		}
