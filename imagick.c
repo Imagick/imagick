@@ -81,7 +81,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	else { IMAGICK_FREE_MEMORY( char *, buffer ); }
 
 #define IMAGICK_METHOD_DEPRECATED( className, methodName )\
-	php_error( E_STRICT, "%s::%s is deprecated.", className, methodName );
+	php_error( E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName );
 
 /* Forward declarations (Imagick) */
 
@@ -117,6 +117,7 @@ PHP_METHOD(imagick, getimageproperty);
 PHP_METHOD(imagick, setimageproperty);
 #endif
 PHP_METHOD(imagick, __construct);
+PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, readimage);
 PHP_METHOD(imagick, pingimage);
 PHP_METHOD(imagick, readimageblob);
@@ -205,7 +206,6 @@ PHP_METHOD(imagick, mosaicimages);
 PHP_METHOD(imagick, morphimages);
 PHP_METHOD(imagick, minifyimage);
 PHP_METHOD(imagick, addnoiseimage);
-
 PHP_METHOD(imagick, affinetransformimage);
 PHP_METHOD(imagick, averageimages);
 PHP_METHOD(imagick, borderimage);
@@ -219,7 +219,6 @@ PHP_METHOD(imagick, compareimagechannels);
 PHP_METHOD(imagick, compareimages);
 PHP_METHOD(imagick, contrastimage);
 PHP_METHOD(imagick, combineimages);
-
 PHP_METHOD(imagick, convolveimage);
 PHP_METHOD(imagick, cyclecolormapimage);
 PHP_METHOD(imagick, deconstructimages);
@@ -229,7 +228,6 @@ PHP_METHOD(imagick, embossimage);
 PHP_METHOD(imagick, enhanceimage);
 PHP_METHOD(imagick, equalizeimage);
 PHP_METHOD(imagick, evaluateimage);
-
 PHP_METHOD(imagick, flattenimages);
 PHP_METHOD(imagick, flipimage);
 PHP_METHOD(imagick, flopimage);
@@ -349,7 +347,6 @@ PHP_METHOD(imagick, setresolution);
 PHP_METHOD(imagick, setsamplingfactors);
 PHP_METHOD(imagick, setsize);
 PHP_METHOD(imagick, settype);
-
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
@@ -1315,6 +1312,11 @@ static
 		ZEND_ARG_INFO(0, name)
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimagelayers_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, LAYER)
+	ZEND_END_ARG_INFO()
 #endif
 
 static
@@ -1759,12 +1761,7 @@ static
 		ZEND_ARG_INFO(0, CHANNEL)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
-#if MagickLibVersion > 0x628
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimagelayers_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, LAYER)
-	ZEND_END_ARG_INFO()
-#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimages_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
@@ -1958,7 +1955,6 @@ static
 		ZEND_ARG_INFO(0, dither)
 		ZEND_ARG_INFO(0, measureError)
 	ZEND_END_ARG_INFO()
-
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_quantizeimages_args, 0, 0, 5)
@@ -2244,6 +2240,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
 	#endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
+	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimageblob, imagick_readimageblob_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageformat, imagick_setimageformat_args, ZEND_ACC_PUBLIC)
@@ -2326,7 +2323,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, queryformats, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, steganoimage, imagick_steganoimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, addnoiseimage, imagick_addnoiseimage_args, ZEND_ACC_PUBLIC)
-
 	PHP_ME(imagick, motionblurimage, imagick_motionblurimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, mosaicimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, morphimages, imagick_morphimages_args, ZEND_ACC_PUBLIC)
@@ -2344,7 +2340,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, compareimages, imagick_compareimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, contrastimage, imagick_contrastimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, combineimages, imagick_zero_args, ZEND_ACC_PUBLIC)
-
 	PHP_ME(imagick, convolveimage, imagick_convolveimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, cyclecolormapimage, imagick_cyclecolormapimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, deconstructimages, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2354,7 +2349,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, enhanceimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, equalizeimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, evaluateimage, imagick_evaluateimage_args, ZEND_ACC_PUBLIC)
-
 	PHP_ME(imagick, flattenimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, flipimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, flopimage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2480,7 +2474,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_MALIAS(imagick, rewind, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, valid, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, current, imagick_zero_args, ZEND_ACC_PUBLIC)
-
 	{ NULL, NULL, NULL }
 };
 
@@ -2496,7 +2489,6 @@ long getImageCount( MagickWand *magick_wand TSRMLS_DC)
 	images = MagickGetNumberImages( magick_wand );
 	return images;
 }
-
 
 void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC )
 {
@@ -2642,7 +2634,6 @@ char *getHashValue( HashTable *hashTable TSRMLS_DC)
 	}
 	return tmpVal;
 }
-
 
 int count_occurences_of( char needle, char *hayStack TSRMLS_DC )
 {
@@ -3592,6 +3583,29 @@ PHP_METHOD(imagick, __construct)
 }
 /* }}} */
 
+/* {{{ proto string Imagick::__toString()
+   Returns the current image as string
+*/
+PHP_METHOD(imagick, __tostring)
+{
+	php_imagick_object *intern;
+	zval *object;
+	unsigned char *image;
+	char *buffer;
+	size_t imageSize;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
+
+	image = MagickGetImageBlob( intern->magick_wand, &imageSize );
+	ZVAL_STRINGL( return_value, (char *)image, imageSize, 1 );
+	IMAGICK_FREE_MEMORY( unsigned char *, image );
+	return;
+}
+/* }}} */
+
 /* {{{ proto array Imagick::queryFormats( [string pattern] )
    Returns formats supported by ImageMagick
 */
@@ -4347,6 +4361,8 @@ PHP_METHOD(imagick, colorfloodfillimage)
 	double fuzz;
 	MagickBooleanType status;
 
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "colorFloodFillImage" );
+
 	if ( ZEND_NUM_ARGS() != 5 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
@@ -4732,6 +4748,8 @@ PHP_METHOD(imagick, mattefloodfillimage)
 	long x, y;
 	double alpha, fuzz;
 	MagickBooleanType status;
+
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "matteFloodfillImage" );
 
 	if ( ZEND_NUM_ARGS() != 5 )
 	{
@@ -5744,6 +5762,8 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 	zval *object;
 	long virtualPixel;
 	MagickBooleanType status;
+
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "setImageVirtualPixelMethod" );
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -7641,6 +7661,8 @@ PHP_METHOD(imagick, setimageindex)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "setImageIndex" );
+
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
@@ -7696,7 +7718,7 @@ PHP_METHOD(imagick, removeimage)
 /* }}} */
 
 /* {{{ proto string Imagick::getImageFilename()
-	Returns the filename of a particular image in a sequence, or explicit FALSE (suitable for === testing) if an error occurs.
+	Returns the filename of a particular image in a sequence
 */
 PHP_METHOD(imagick, getimagefilename)
 {
@@ -7715,13 +7737,15 @@ PHP_METHOD(imagick, getimagefilename)
 }
 /* }}} */
 
-/* {{{ proto int Imagick::getImageFilename()
-	Returns the filename of a particular image in a sequence.
+/* {{{ proto int Imagick::getImageSize()
+	returns the image length in bytes
 */
 PHP_METHOD(imagick, getimagesize)
 {
 	php_imagick_object *intern;
 	zval *object;
+
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "getImageSize" );
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 
@@ -11881,6 +11905,8 @@ PHP_METHOD(imagickdraw, setfillalpha)
 	php_imagickdraw_object *internd;
 	double opacity;
 
+	IMAGICK_METHOD_DEPRECATED( "ImagickDraw", "setFillAlpha" );
+
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
@@ -11962,6 +11988,8 @@ PHP_METHOD(imagickdraw, setstrokealpha)
 	zval *object;
 	php_imagickdraw_object *internd;
 	double opacity;
+
+	IMAGICK_METHOD_DEPRECATED( "ImagickDraw", "setStrokeAlpha" );
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
