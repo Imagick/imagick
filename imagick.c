@@ -3486,7 +3486,7 @@ PHP_METHOD(imagick, setimageproperty)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 	status = MagickSetImageProperty( intern->magick_wand, name, value );
-	
+
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
@@ -3519,7 +3519,7 @@ PHP_METHOD(imagick, __construct)
 	}
 
 	/* No files given.. */
-	if ( files == (zval *)NULL || Z_TYPE_P(files) == IS_NULL ) 
+	if ( files == (zval *)NULL || Z_TYPE_P(files) == IS_NULL )
 	{
 		RETURN_TRUE;
 	}
@@ -4649,7 +4649,7 @@ PHP_METHOD(imagick, newpseudoimage)
 
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	
+
 	/* Pseudo image needs a size set manually */
 	status = MagickSetSize( intern->magick_wand, columns, rows );
 
@@ -15826,7 +15826,9 @@ PHP_METHOD(imagickpixel, getcolor)
 	zend_bool normalized = 0;
 	char *colorString;
 	int red, green, blue;
+	#if MagickLibVersion > 0x628
 	double normalizedRed, normalizedGreen, normalizedBlue;
+	#endif
 	double alpha;
 	int setAlpha = 0;
 
