@@ -122,6 +122,8 @@ PHP_METHOD(imagick, readimage);
 PHP_METHOD(imagick, pingimage);
 PHP_METHOD(imagick, readimageblob);
 PHP_METHOD(imagick, readimagefile);
+PHP_METHOD(imagick, displayimage);
+PHP_METHOD(imagick, displayimages);
 PHP_METHOD(imagick, destroy);
 PHP_METHOD(imagick, clear);
 PHP_METHOD(imagick, clone);
@@ -1680,6 +1682,16 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_displayimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, serverName)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_displayimages_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, serverName)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_spreadimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
@@ -2317,6 +2329,8 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, spliceimage, imagick_spliceimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, pingimage, imagick_pingimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimagefile, imagick_readimagefile_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, displayimage, imagick_displayimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, displayimages, imagick_displayimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, spreadimage, imagick_spreadimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, swirlimage, imagick_swirlimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, stripimage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -3797,6 +3811,76 @@ PHP_METHOD(imagick, readimagefile)
 	MagickSetImageFilename( intern->magick_wand, fileName );
 
 	RETURN_TRUE
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::displayImage( string serverName )
+	Displays an image
+*/
+PHP_METHOD(imagick, displayimage)
+{
+	php_imagick_object *intern;
+	zval *object;
+	MagickBooleanType status;
+	char *serverName;
+	int serverNameLen;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &serverName, &serverNameLen ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickDisplayImage( intern->magick_wand, serverName );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::displayImages( string serverName )
+	displays an image or image sequence
+*/
+PHP_METHOD(imagick, displayimages)
+{
+	php_imagick_object *intern;
+	zval *object;
+	MagickBooleanType status;
+	char *serverName;
+	int serverNameLen;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &serverName, &serverNameLen ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickDisplayImages( intern->magick_wand, serverName );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 
