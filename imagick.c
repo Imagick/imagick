@@ -116,6 +116,9 @@ PHP_METHOD(imagick, randomthresholdimage);
 PHP_METHOD(imagick, getimageproperty);
 PHP_METHOD(imagick, setimageproperty);
 #endif
+#if MagickLibVersion > 0x631
+PHP_METHOD(imagick, polaroidimage);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, readimage);
@@ -1322,6 +1325,14 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x631
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_polaroidimage_args, 0, 0, 2)
+		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
+		ZEND_ARG_INFO(0, angle)
+	ZEND_END_ARG_INFO()
+#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2257,6 +2268,9 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
+	#endif
+	#if MagickLibVersion > 0x631
+	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
 	#endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -3502,6 +3516,49 @@ PHP_METHOD(imagick, setimageproperty)
 		RETURN_FALSE;
 	}
 	RETURN_FALSE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x631
+/* {{{ proto bool Imagick::polaroidImage( ImagickDraw properties, double angle )
+	Simulates a Polaroid picture.
+*/
+PHP_METHOD(imagick, polaroidimage)
+{
+	zval *object;
+	zval *objvar;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	php_imagickdraw_object *internd;
+	double angle;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Od", &objvar, php_imagickdraw_sc_entry, &angle) == FAILURE)
+	{
+		return;
+	}
+
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	status = MagickPolaroidImage( intern->magick_wand, internd->drawing_wand, angle );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 #endif
@@ -16219,7 +16276,7 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "STRETCH_ANY", AnyStretch );
 	IMAGICK_REGISTER_CONST_LONG( "ALIGN_UNDEFINED", UndefinedAlign );
 	IMAGICK_REGISTER_CONST_LONG( "ALIGN_LEFT", LeftAlign );
-	IMAGICK_REGISTER_CONST_LONG( "ALIGN_CENTER",	CenterAlign );
+	IMAGICK_REGISTER_CONST_LONG( "ALIGN_CENTER", CenterAlign );
 	IMAGICK_REGISTER_CONST_LONG( "ALIGN_RIGHT",	RightAlign );
 	IMAGICK_REGISTER_CONST_LONG( "DECORATION_NO", NoDecoration );
 	IMAGICK_REGISTER_CONST_LONG( "DECORATION_UNDERLINE", UnderlineDecoration );
@@ -16359,11 +16416,12 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "RESOURCETYPE_FILE", FileResource );
 	IMAGICK_REGISTER_CONST_LONG( "RESOURCETYPE_MAP", MapResource );
 	IMAGICK_REGISTER_CONST_LONG( "RESOURCETYPE_MEMORY", MemoryResource );
-
+	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_UNRECOGNIZED", UnrecognizedDispose );
+	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_UNDEFINED", UndefinedDispose );
+	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_NONE", NoneDispose );
+	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_BACKGROUND", BackgroundDispose );
+	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_PREVIOUS", PreviousDispose );
 }
-
-
-
 
 static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 {
