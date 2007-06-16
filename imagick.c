@@ -148,6 +148,7 @@ PHP_METHOD(imagick, getimagecolors);
 PHP_METHOD(imagick, scaleimage);
 PHP_METHOD(imagick, blurimage);
 PHP_METHOD(imagick, thumbnailimage);
+PHP_METHOD(imagick, cropthumbnailimage);
 PHP_METHOD(imagick, commentimage);
 PHP_METHOD(imagick, cropimage);
 PHP_METHOD(imagick, labelimage);
@@ -1377,6 +1378,12 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_cropthumbnailimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagefilename_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fileName)
 	ZEND_END_ARG_INFO()
@@ -2261,6 +2268,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, writeimages, imagick_writeimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, blurimage, imagick_blurimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, thumbnailimage, imagick_thumbnailimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, cropthumbnailimage, imagick_cropthumbnailimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagefilename, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagefilename, imagick_setimagefilename_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageformat, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -7569,6 +7577,93 @@ PHP_METHOD(imagick, thumbnailimage)
 	if ( status == MagickFalse )
 	{
 		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+void calculateCropThumbnailDimensions( long *width, long *height, long *cropX, long *cropY, long cropWidth, long cropHeight, long imageWidth, long imageHeight TSRMLS_DC)
+{
+	double tmp;
+
+	if ( imageWidth < imageHeight )
+	{
+		tmp = (double)imageHeight / (double)imageWidth;
+		(*((long*)height)) =  tmp * (*((long*)width));
+
+		(*((long*)cropY)) = ( (*((long*)height)) - cropHeight ) / 2;
+		(*((long*)cropX)) = 0;
+	}
+	else
+	{
+		tmp = (double)imageWidth / (double)imageHeight;
+		(*((long*)width)) = tmp * (*((long*)height));
+
+		(*((long*)cropY)) = ( (*((long*)width)) - cropWidth ) / 2;
+		(*((long*)cropY)) = 0;
+	}
+}
+
+
+/* {{{ proto bool Imagick::cropthumbnailImage(int columns, int rows)
+	 Creates a crop thumbnail
+*/
+PHP_METHOD(imagick, cropthumbnailimage)
+{
+	long cropWidth, cropHeight;
+	php_imagick_object *intern;
+	zval *object;
+	MagickBooleanType status;
+	long imageWidth, imageHeight, cropX, cropY, thumbWidth, thumbHeight;
+	double tmp, foo;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll", &cropWidth, &cropHeight ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	if ( ( cropWidth == 0 ) || ( cropHeight == 0 ) )
+	{
+		throwExceptionWithMessage( 1, "Can't cropthumbnail image to zero size", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	imageWidth = MagickGetImageWidth( intern->magick_wand );
+	imageHeight = MagickGetImageHeight( intern->magick_wand );
+
+	thumbWidth = cropWidth;
+	thumbHeight = cropHeight;
+
+	calculateCropThumbnailDimensions( &thumbWidth, &thumbHeight, &cropX, &cropY, cropWidth, cropHeight, imageWidth, imageHeight TSRMLS_CC );
+
+	status = MagickThumbnailImage( intern->magick_wand, thumbWidth, thumbHeight );
+
+	/* The world collapses.. */
+	if ( status == MagickFalse )
+	{
+		throwExceptionWithMessage( 1, "Failed to thumbnail the image", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	status = MagickCropImage( intern->magick_wand, cropWidth, cropHeight, cropX, cropY );
+
+	/* The world collapses.. */
+	if ( status == MagickFalse )
+	{
+		throwExceptionWithMessage( 1, "Failed to crop the image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 

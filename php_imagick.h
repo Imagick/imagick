@@ -31,7 +31,7 @@
 #include "php_ini.h"
 
 
-/* Structure for magickwand object. */
+/* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
 	zend_object zo;
 	MagickWand *magick_wand;
@@ -39,14 +39,14 @@ typedef struct _php_imagick_object  {
 	int next_out_of_bound;
 } php_imagick_object;
 
-/* Structure for drawingwand object. */
+/* Structure for ImagickDraw object. */
 typedef struct _php_imagickdraw_object  {
 	zend_object zo;
 	DrawingWand *drawing_wand;
 } php_imagickdraw_object;
 
 #if MagickLibVersion > 0x628
-/* Structure for pixeliterator object. */
+/* Structure for ImagickPixelIterator object. */
 typedef struct _php_imagickpixeliterator_object  {
 	zend_object zo;
 	PixelIterator *pixel_iterator;
@@ -55,7 +55,7 @@ typedef struct _php_imagickpixeliterator_object  {
 } php_imagickpixeliterator_object;
 #endif
 
-/* Structure for pixelwand object. */
+/* Structure for ImagickPixel object. */
 typedef struct _php_imagickpixel_object  {
     zend_object zo;
     PixelWand *pixel_wand;
@@ -72,6 +72,7 @@ void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC
 long getImageCount( MagickWand *magick_wand TSRMLS_DC);
 char *getHashValue( HashTable *hashTable TSRMLS_DC );
 int count_occurences_of( char needle, char *hayStack TSRMLS_DC);
+void calculateCropThumbnailDimensions( long *width, long *height, long *cropX, long *cropY, long cropWidth, long cropHeight, long imageWidth, long imageHeight TSRMLS_DC);
 
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11
@@ -91,5 +92,5 @@ int count_occurences_of( char needle, char *hayStack TSRMLS_DC);
 extern zend_module_entry imagick_module_entry;
 #define phpext_imagick_ptr &imagick_module_entry
 
-#endif /* PHP_MAGICKWAND_H */
+#endif /* PHP_IMAGICK_H */
 
