@@ -11,7 +11,7 @@ fi
 if test $PHP_IMAGICK != "no"; then
 
         if test -r $PHP_IMAGICK/bin/Wand-config; then
-                $WAND_CONFIG_PATH=$PHP_IMAGICK/bin
+                WAND_CONFIG_PATH=$PHP_IMAGICK/bin
         else
                 AC_MSG_CHECKING(Wand-config in default path)
 
