@@ -3674,9 +3674,21 @@ PHP_METHOD(imagick, __tostring)
 	size_t imageSize;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	buffer = MagickGetImageFormat( intern->magick_wand );
 
-	IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
+	if( buffer == (char *)NULL || *buffer == '\0' ) 
+	{
+		RETURN_FALSE;
+	}
+	else 
+	{ 
+		IMAGICK_FREE_MEMORY( char *, buffer ); 
+	}
+	
+	if( getImageCount( intern->magick_wand TSRMLS_CC ) == 0 )
+	{
+		RETURN_FALSE;
+	}
 
 	image = MagickGetImageBlob( intern->magick_wand, &imageSize );
 	ZVAL_STRINGL( return_value, (char *)image, imageSize, 1 );
