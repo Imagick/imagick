@@ -121,6 +121,7 @@ PHP_METHOD(imagick, polaroidimage);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
+PHP_METHOD(imagick, roundcorners);
 PHP_METHOD(imagick, readimage);
 PHP_METHOD(imagick, pingimage);
 PHP_METHOD(imagick, readimageblob);
@@ -1343,6 +1344,12 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_roundcorners_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, xRounding)
+		ZEND_ARG_INFO(0, yRounding)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_readimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
@@ -2274,6 +2281,7 @@ static function_entry php_imagick_class_methods[] =
 	#endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, roundcorners, imagick_roundcorners_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimageblob, imagick_readimageblob_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageformat, imagick_setimageformat_args, ZEND_ACC_PUBLIC)
@@ -3694,6 +3702,189 @@ PHP_METHOD(imagick, __tostring)
 	ZVAL_STRINGL( return_value, (char *)image, imageSize, 1 );
 	IMAGICK_FREE_MEMORY( unsigned char *, image );
 	return;
+}
+/* }}} */
+
+
+void unallocateWands( MagickWand *magick, DrawingWand *draw, PixelWand *pixel TSRMLS_DC )
+{
+	if ( magick != (MagickWand *)NULL && IsMagickWand( magick ))
+	{
+		magick = (MagickWand *)DestroyMagickWand( magick ); 
+	}
+
+	if ( draw != (DrawingWand *)NULL && IsDrawingWand( draw ))
+	{
+		draw = (DrawingWand *)DestroyDrawingWand( draw ); 
+	}
+
+	if ( pixel != (PixelWand *)NULL && IsPixelWand( pixel ))
+	{
+		pixel = (PixelWand *)DestroyPixelWand( pixel ); 
+	}
+}
+
+
+/* {{{ proto string Imagick::roundCorners( float x_rounding, float y_rounding )
+   Rounds image corners
+*/
+PHP_METHOD(imagick, roundcorners)
+{
+	double xRounding, yRounding;
+	DrawingWand *draw;
+	MagickWand *maskImage;
+	PixelWand *color;
+	php_imagick_object *intern;
+	zval *object;
+	long imageWidth, imageHeight;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &xRounding, &yRounding ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	imageWidth = MagickGetImageWidth( intern->magick_wand );
+	imageHeight = MagickGetImageHeight( intern->magick_wand );
+
+	status = MagickSetImageMatte( intern->magick_wand, MagickTrue );
+	
+	if ( status == MagickFalse )
+	{		
+		throwExceptionWithMessage( 1, "Unable to set image matte", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	/* Here we go.. */
+	color = (PixelWand *)NewPixelWand();
+	draw = (DrawingWand *)NewDrawingWand();
+	maskImage = (MagickWand *)NewMagickWand();
+
+	status = PixelSetColor( color, "transparent" );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to set pixel color", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	status = MagickNewImage( maskImage, imageWidth, imageHeight, color );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to allocate mask image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	MagickSetImageBackgroundColor( maskImage, color );
+
+	status = PixelSetColor( color, "white" );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to set pixel color", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	DrawSetFillColor( draw, color );
+
+	status = PixelSetColor( color, "black" );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to set pixel color", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	DrawSetStrokeColor( draw, color );
+	DrawSetStrokeWidth( draw, 1 );
+	DrawRoundRectangle( draw, 0, 0, imageWidth, imageHeight, xRounding, yRounding );
+
+	status = MagickDrawImage( maskImage, draw );
+	
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to draw on image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	status = MagickCompositeImage( intern->magick_wand, maskImage, DstInCompositeOp, 0, 0 );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to composite image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	/* Clear some resources at this point */
+	ClearMagickWand( maskImage );
+	ClearDrawingWand( draw );
+	ClearPixelWand( color );
+
+	status = PixelSetColor( color, "transparent" );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to set pixel color", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	status = MagickNewImage( maskImage, imageWidth, imageHeight, color );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to allocate mask image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	/* Set colors */
+	DrawSetFillColor( draw, color );
+	DrawSetStrokeColor( draw, color );
+	DrawSetStrokeWidth( draw, 2 );
+	
+	/* Draw rectangle  */
+	DrawRoundRectangle( draw, 0, 0, imageWidth, imageHeight, xRounding, yRounding );
+	MagickSetImageBackgroundColor( maskImage, color );
+	status = MagickDrawImage( maskImage, draw );
+	
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to draw on image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	status = MagickCompositeImage( intern->magick_wand, maskImage, OverCompositeOp, 0, 0 );
+
+	if ( status == MagickFalse )
+	{
+		unallocateWands( maskImage, draw, color TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to composite image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	unallocateWands( maskImage, draw, color TSRMLS_CC );
+
+	RETURN_TRUE;
 }
 /* }}} */
 
