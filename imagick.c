@@ -3678,7 +3678,7 @@ PHP_METHOD(imagick, __tostring)
 
 	if( buffer == (char *)NULL || *buffer == '\0' ) 
 	{
-		RETURN_FALSE;
+		RETVAL_STRING( "", 0 );
 	}
 	else 
 	{ 
@@ -3687,7 +3687,7 @@ PHP_METHOD(imagick, __tostring)
 	
 	if( getImageCount( intern->magick_wand TSRMLS_CC ) == 0 )
 	{
-		RETURN_FALSE;
+		RETVAL_STRING( "", 0 );
 	}
 
 	image = MagickGetImageBlob( intern->magick_wand, &imageSize );
