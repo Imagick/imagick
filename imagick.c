@@ -1347,6 +1347,9 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_roundcorners_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xRounding)
 		ZEND_ARG_INFO(0, yRounding)
+		ZEND_ARG_INFO(0, strokeWidth)
+		ZEND_ARG_INFO(0, displace)
+		ZEND_ARG_INFO(0, sizeCorrection)
 	ZEND_END_ARG_INFO()
 
 static
@@ -3725,7 +3728,7 @@ void unallocateWands( MagickWand *magick, DrawingWand *draw, PixelWand *pixel TS
 }
 
 
-/* {{{ proto string Imagick::roundCorners( float x_rounding, float y_rounding )
+/* {{{ proto string Imagick::roundCorners( float x_rounding, float y_rounding[, float stroke_width, float displace, float size_correction] )
    Rounds image corners
 */
 PHP_METHOD(imagick, roundcorners)
@@ -3738,14 +3741,11 @@ PHP_METHOD(imagick, roundcorners)
 	zval *object;
 	long imageWidth, imageHeight;
 	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	double strokeWidth = 10, displace = 5, correction = -6;
+	
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &xRounding, &yRounding ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|ddd", &xRounding, &yRounding, &strokeWidth, &displace, &correction ) == FAILURE )
 	{
 		return;
 	}
@@ -3810,8 +3810,8 @@ PHP_METHOD(imagick, roundcorners)
 	}
 
 	DrawSetStrokeColor( draw, color );
-	DrawSetStrokeWidth( draw, 10 );
-	DrawRoundRectangle( draw, 5, 5, imageWidth - 6, imageHeight - 6, xRounding, yRounding );
+	DrawSetStrokeWidth( draw, strokeWidth );
+	DrawRoundRectangle( draw, displace, displace, imageWidth + correction, imageHeight + correction, xRounding, yRounding );
 
 	status = MagickDrawImage( maskImage, draw );
 	
