@@ -3790,7 +3790,6 @@ PHP_METHOD(imagick, roundcorners)
 	}
 
 	MagickSetImageBackgroundColor( maskImage, color );
-
 	status = PixelSetColor( color, "white" );
 
 	if ( status == MagickFalse )
@@ -3801,7 +3800,6 @@ PHP_METHOD(imagick, roundcorners)
 	}
 
 	DrawSetFillColor( draw, color );
-
 	status = PixelSetColor( color, "black" );
 
 	if ( status == MagickFalse )
@@ -3812,8 +3810,8 @@ PHP_METHOD(imagick, roundcorners)
 	}
 
 	DrawSetStrokeColor( draw, color );
-	DrawSetStrokeWidth( draw, 1 );
-	DrawRoundRectangle( draw, 0, 0, imageWidth, imageHeight, xRounding, yRounding );
+	DrawSetStrokeWidth( draw, 10 );
+	DrawRoundRectangle( draw, 5, 5, imageWidth - 6, imageHeight - 6, xRounding, yRounding );
 
 	status = MagickDrawImage( maskImage, draw );
 	
@@ -3833,7 +3831,9 @@ PHP_METHOD(imagick, roundcorners)
 		RETURN_FALSE;
 	}
 
-	/* Clear some resources at this point */
+	/* Everything below this seems to be useless
+
+
 	ClearMagickWand( maskImage );
 	ClearDrawingWand( draw );
 	ClearPixelWand( color );
@@ -3856,12 +3856,10 @@ PHP_METHOD(imagick, roundcorners)
 		RETURN_FALSE;
 	}
 
-	/* Set colors */
 	DrawSetFillColor( draw, color );
 	DrawSetStrokeColor( draw, color );
 	DrawSetStrokeWidth( draw, 2 );
 	
-	/* Draw rectangle  */
 	DrawRoundRectangle( draw, 0, 0, imageWidth, imageHeight, xRounding, yRounding );
 	MagickSetImageBackgroundColor( maskImage, color );
 	status = MagickDrawImage( maskImage, draw );
@@ -3880,7 +3878,7 @@ PHP_METHOD(imagick, roundcorners)
 		unallocateWands( maskImage, draw, color TSRMLS_CC );
 		throwExceptionWithMessage( 1, "Unable to composite image", 1 TSRMLS_CC );
 		RETURN_FALSE;
-	}
+	} */
 
 	unallocateWands( maskImage, draw, color TSRMLS_CC );
 
