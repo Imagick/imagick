@@ -21,28 +21,35 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-05-29</date>
+	<date>2007-06-18</date>
 	<version>
-		<release>2.0.0a3</release>
+		<release>2.0.0b1</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
-		<release>alpha</release>
-		<api>alpha</api>
+		<release>beta</release>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Removed support for ImagickPixelIterator if compiled against older version of ImageMagick (below 6.2.8)
-- Fixed a lot of functions which were not present in older ImageMagick versions. (below 6.2.8)
-- Added support for passing color name as parameter for ImagickPixel constructor
-- Added support for passing a filename or an array of filenames to Imagick constructor
-- Fixed anomalies with ImagickPixelIterator exceptions
-- Fixed a possible segfault in Imagick::appendImages
-- Fixed double-free errors in some Imagick methods
-- Added composite operator constants.
-- Fixed ImagickPixelIterator::__construct to accept Imagick object as parameter.
-
-+ Some of the changes are a bit experimental so please report bugs.
+- fix PECL bug #10967 - supplied path fails to compile
+- Added new methods
+  + Imagick::displayImage()
+  + Imagick::displayImages()
+  + Imagick::cropThumbnailImage()
+  + Imagick::roundCorners()
+  + Imagick::polaroidImage()
+  + Imagick::getImageProperty()
+  + Imagick::setImageProperty()
+  + Imagick::newPseudoImage()
+  + Imagick::__toString()
+  + ImagickPixel::setColorCount()
+- Added missing DisposeType constants.
+- Merged ImagickPixel::getColorAsString and ImagickPixel::getColorAsNormalizedString into ImagickPixel::getColor( [bool normalized] )
+- Fixed wrong exception type in Imagick::setSamplingFactors
+- Removed useless check from ImagickPixelIterator::syncIterator
+- Renamed ImagickDraw::pushDrawingWand to ImagickDraw::push
+- Renamed ImagickDraw::popDrawingWand to ImagickDraw::pop
 </notes>
 	<contents>
 		<dir name="/">
