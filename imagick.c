@@ -97,10 +97,7 @@ PHP_METHOD(imagick, vignetteimage);
 PHP_METHOD(imagick, getpixeliterator);
 PHP_METHOD(imagick, getpixelregioniterator);
 PHP_METHOD(imagick, compareimagelayers);
-PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, optimizeimagelayers);
-PHP_METHOD(imagick, setimageinterpolatemethod);
-PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, uniqueimagecolors);
 PHP_METHOD(imagick, getimagematte);
 PHP_METHOD(imagick, setimagematte);
@@ -113,11 +110,14 @@ PHP_METHOD(imagick, adaptiveblurimage);
 PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
 PHP_METHOD(imagick, randomthresholdimage);
-PHP_METHOD(imagick, getimageproperty);
-PHP_METHOD(imagick, setimageproperty);
 #endif
 #if MagickLibVersion > 0x631
 PHP_METHOD(imagick, polaroidimage);
+PHP_METHOD(imagick, getimageproperty);
+PHP_METHOD(imagick, setimageproperty);
+PHP_METHOD(imagick, setimageinterpolatemethod);
+PHP_METHOD(imagick, getimageinterpolatemethod);
+PHP_METHOD(imagick, linearstretchimage);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
@@ -1278,21 +1278,10 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_linearstretchimage_args, 0, 0, 2)
-		ZEND_ARG_INFO(0, blackPoint)
-		ZEND_ARG_INFO(0, whitePoint)
-	ZEND_END_ARG_INFO()
-
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptivesharpenimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, CHANNEL)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageinterpolatemethod_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, INTERPOLATE)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1310,6 +1299,19 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimagelayers_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, LAYER)
+	ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x631
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_polaroidimage_args, 0, 0, 2)
+		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
+		ZEND_ARG_INFO(0, angle)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageproperty_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, name)
 	ZEND_END_ARG_INFO()
@@ -1321,16 +1323,14 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimagelayers_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, LAYER)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageinterpolatemethod_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, INTERPOLATE)
 	ZEND_END_ARG_INFO()
-#endif
 
-#if MagickLibVersion > 0x631
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_polaroidimage_args, 0, 0, 2)
-		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
-		ZEND_ARG_INFO(0, angle)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_linearstretchimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, blackPoint)
+		ZEND_ARG_INFO(0, whitePoint)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -2261,9 +2261,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, trimimage, imagick_trimimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, waveimage, imagick_waveimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, vignetteimage, imagick_vignetteimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, uniqueimagecolors, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagematte, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagematte, imagick_setimagematte_args, ZEND_ACC_PUBLIC)
@@ -2276,11 +2273,14 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, contraststretchimage, imagick_contraststretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, adaptivesharpenimage, imagick_adaptivesharpenimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
 	#endif
 	#if MagickLibVersion > 0x631
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
 	#endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -2975,81 +2975,6 @@ PHP_METHOD(imagick, transverseimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::linearStretchImage( float blackPoint, float whitePoint)
-	Stretches with saturation the image intensity.
-*/
-PHP_METHOD(imagick, linearstretchimage)
-{
-	php_imagick_object *intern;
-	zval *object;
-	double blackPoint, whitePoint;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &blackPoint, &whitePoint ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickLinearStretchImage( intern->magick_wand, blackPoint, whitePoint );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::setImageInterpolateMethod(int method)
-	Sets the image interpolate pixel method.
-*/
-PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
-{
-	php_imagick_object *intern;
-	zval *object;
-	long interpolate;
-	MagickBooleanType status;
-
-	if ( ZEND_NUM_ARGS() != 1 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &interpolate ) == FAILURE )
-	{
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickSetImageInterpolateMethod( intern->magick_wand, interpolate );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	RETURN_TRUE;
-
-}
-/* }}} */
-
 /* {{{ proto bool Imagick::adaptiveBlurImage( float radius, float sigma[, int channel] )
 	Adds adaptive blur filter to image.
 */
@@ -3144,23 +3069,6 @@ PHP_METHOD(imagick, contraststretchimage)
 }
 /* }}} */
 
-
-/* {{{ proto int Imagick::getImageInterpolateMethod()
-	Returns the interpolation method for the sepcified image.
-*/
-PHP_METHOD(imagick, getimageinterpolatemethod)
-{
-	php_imagick_object *intern;
-	zval *object;
-	long interpolate;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	interpolate = MagickGetImageInterpolateMethod( intern->magick_wand );
-	RETVAL_LONG( interpolate );
-}
-/* }}} */
 
 /* {{{ proto int Imagick::getImageMatte()
 	Returns true if the image has a matte channel otherwise false.
@@ -3455,6 +3363,49 @@ PHP_METHOD(imagick, randomthresholdimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
+
+#if MagickLibVersion > 0x631
+/* {{{ proto bool Imagick::polaroidImage( ImagickDraw properties, double angle )
+	Simulates a Polaroid picture.
+*/
+PHP_METHOD(imagick, polaroidimage)
+{
+	zval *object;
+	zval *objvar;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	php_imagickdraw_object *internd;
+	double angle;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Od", &objvar, php_imagickdraw_sc_entry, &angle) == FAILURE)
+	{
+		return;
+	}
+
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	status = MagickPolaroidImage( intern->magick_wand, internd->drawing_wand, angle );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 
 /* {{{ proto string Imagick::getImageProperty( string name )
 	returns a value associated with the specified property
@@ -3529,38 +3480,50 @@ PHP_METHOD(imagick, setimageproperty)
 	RETURN_FALSE;
 }
 /* }}} */
-#endif
 
-#if MagickLibVersion > 0x631
-/* {{{ proto bool Imagick::polaroidImage( ImagickDraw properties, double angle )
-	Simulates a Polaroid picture.
+/* {{{ proto int Imagick::getImageInterpolateMethod()
+	Returns the interpolation method for the sepcified image.
 */
-PHP_METHOD(imagick, polaroidimage)
+PHP_METHOD(imagick, getimageinterpolatemethod)
 {
-	zval *object;
-	zval *objvar;
 	php_imagick_object *intern;
-	MagickBooleanType status;
-	php_imagickdraw_object *internd;
-	double angle;
+	zval *object;
+	long interpolate;
 
-	if ( ZEND_NUM_ARGS() != 2 )
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	interpolate = MagickGetImageInterpolateMethod( intern->magick_wand );
+	RETVAL_LONG( interpolate );
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setImageInterpolateMethod(int method)
+	Sets the image interpolate pixel method.
+*/
+PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
+{
+	php_imagick_object *intern;
+	zval *object;
+	long interpolate;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 1 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Od", &objvar, php_imagickdraw_sc_entry, &angle) == FAILURE)
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &interpolate ) == FAILURE )
 	{
 		return;
 	}
 
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
-	status = MagickPolaroidImage( intern->magick_wand, internd->drawing_wand, angle );
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickSetImageInterpolateMethod( intern->magick_wand, interpolate );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -3568,7 +3531,44 @@ PHP_METHOD(imagick, polaroidimage)
 		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+	RETURN_TRUE;
 
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::linearStretchImage( float blackPoint, float whitePoint)
+	Stretches with saturation the image intensity.
+*/
+PHP_METHOD(imagick, linearstretchimage)
+{
+	php_imagick_object *intern;
+	zval *object;
+	double blackPoint, whitePoint;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &blackPoint, &whitePoint ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickLinearStretchImage( intern->magick_wand, blackPoint, whitePoint );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
 	RETURN_TRUE;
 }
 /* }}} */
@@ -7875,7 +7875,6 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	zval *object;
 	MagickBooleanType status;
 	long imageWidth, imageHeight, cropX, cropY, thumbWidth, thumbHeight;
-	double tmp, foo;
 
 	if ( ZEND_NUM_ARGS() != 2 )
 	{
@@ -9820,6 +9819,9 @@ PHP_METHOD(imagick, annotateimage)
 	char *text;
 	int textLen;
 	zval *objvar;
+	#if MagickLibVersion < 0x632
+	char *font;
+	#endif
 
 	if ( ZEND_NUM_ARGS() != 5 )
 	{
@@ -9837,6 +9839,18 @@ PHP_METHOD(imagick, annotateimage)
 	}
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	
+	#if MagickLibVersion < 0x632
+	font = DrawGetFont( internd->drawing_wand );
+		
+	/* Fixes PECL Bug #11328 */
+	if( font == (char *)NULL || *font == '\0' )
+	{
+		throwExceptionWithMessage( 2, "Font needs to be set before annotating an image", 2 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	#endif
+
 	status = MagickAnnotateImage( intern->magick_wand, internd->drawing_wand, x, y, angle, text );
 
 	/* No magick is going to happen */
@@ -13019,6 +13033,9 @@ PHP_METHOD(imagickdraw, annotation)
 	double x, y;
 	unsigned char *text;
 	int textLen;
+	#if MagickLibVersion < 0x632
+	char *font;
+	#endif
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -13033,6 +13050,17 @@ PHP_METHOD(imagickdraw, annotation)
 
 	object = getThis();
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	font = DrawGetFont( internd->drawing_wand );
+		
+	#if MagickLibVersion < 0x632
+	/* Fixes PECL Bug #11328 */
+	if( font == (char *)NULL || *font == '\0' )
+	{
+		throwExceptionWithMessage( 2, "Font needs to be set before annotating an image", 2 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	#endif
 
 	DrawAnnotation( internd->drawing_wand, x, y, text );
 	RETURN_TRUE;

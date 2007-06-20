@@ -15,6 +15,9 @@ $bg->setColor( 'white' );
 
 /* Create a drawing object and set the font size */
 $ImagickDraw = new ImagickDraw();
+
+/* Set font and font size. You can also specify /path/to/font.ttf */
+$ImagickDraw->setFont( 'Helvetica Regular' );
 $ImagickDraw->setFontSize( 20 );
 
 /* Create the text */
