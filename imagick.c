@@ -13050,10 +13050,9 @@ PHP_METHOD(imagickdraw, annotation)
 
 	object = getThis();
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
-
+	#if MagickLibVersion < 0x632
 	font = DrawGetFont( internd->drawing_wand );
 		
-	#if MagickLibVersion < 0x632
 	/* Fixes PECL Bug #11328 */
 	if( font == (char *)NULL || *font == '\0' )
 	{
