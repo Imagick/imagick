@@ -3938,8 +3938,8 @@ PHP_METHOD(imagick, queryformats)
 */
 PHP_METHOD(imagick, queryfonts)
 {
-	char **supportedFormats;
-	unsigned long numFormats = 0;
+	char **fonts;
+	unsigned long numFonts = 0;
 	char *pattern = "*";
 	int i, patternLen = 1;
 
@@ -3948,15 +3948,15 @@ PHP_METHOD(imagick, queryfonts)
 		return;
 	}
 
-	supportedFormats = (char **) MagickQueryFonts( pattern, &numFormats );
+	fonts = (char **) MagickQueryFonts( pattern, &numFonts );
 	array_init( return_value );
 
-	for( i = 0 ; i < numFormats ; i++ )
+	for( i = 0 ; i < numFonts ; i++ )
 	{
-		add_next_index_string( return_value, supportedFormats[i], 1 );
-		IMAGICK_FREE_MEMORY( char *, supportedFormats[i] );
+		add_next_index_string( return_value, fonts[i], 1 );
+		IMAGICK_FREE_MEMORY( char *, fonts[i] );
 	}
-	IMAGICK_FREE_MEMORY( char **, supportedFormats );
+	IMAGICK_FREE_MEMORY( char **, fonts );
 	return;
 }
 /* }}} */
