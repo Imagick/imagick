@@ -977,9 +977,9 @@ static
 
 static function_entry php_imagickdraw_class_methods[] =
 {
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	PHP_ME(imagickdraw, resetvectorgraphics, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
-	#endif
+#endif
 	PHP_ME(imagickdraw, __construct, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setfillcolor, imagickdraw_setfillcolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setfillalpha, imagickdraw_setfillalpha_args, ZEND_ACC_PUBLIC)
@@ -1184,10 +1184,10 @@ static
 
 static function_entry php_imagickpixel_class_methods[] =
 {
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	PHP_ME(imagickpixel, gethsl, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, sethsl, imagickpixel_sethsl_args, ZEND_ACC_PUBLIC)
-	#endif
+#endif
 	PHP_ME(imagickpixel, __construct, imagickpixel_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixel, setcolor, imagickpixel_setcolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorvalue, imagickpixel_setcolorvalue_args, ZEND_ACC_PUBLIC)
@@ -2268,7 +2268,7 @@ static
 
 static function_entry php_imagick_class_methods[] =
 {
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	PHP_ME(imagick, optimizeimagelayers, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixelregioniterator, imagick_getpixelregioniterator_args, ZEND_ACC_PUBLIC)
@@ -2293,15 +2293,15 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, adaptivesharpenimage, imagick_adaptivesharpenimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, roundcorners, imagick_roundcorners_args, ZEND_ACC_PUBLIC)
-	#endif
-	#if MagickLibVersion > 0x631
+#endif
+#if MagickLibVersion > 0x631
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
-	#endif
+#endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
@@ -5351,11 +5351,11 @@ PHP_METHOD(imagick, paintopaqueimage)
 	intern_target = (php_imagickpixel_object *)zend_object_store_get_object(targetObj TSRMLS_CC);
 	intern_fill = (php_imagickpixel_object *)zend_object_store_get_object(fillObj TSRMLS_CC);
 
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	status = MagickPaintOpaqueImageChannel( intern->magick_wand, channel, intern_target->pixel_wand, intern_fill->pixel_wand, fuzz );
-	#else
+#else
 	status = MagickPaintOpaqueImage( intern->magick_wand, intern_target->pixel_wand, intern_fill->pixel_wand, fuzz );
-	#endif
+#endif
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -5395,6 +5395,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 }
 /* }}} */
 #endif
+
 /* {{{ proto bool Imagick::paintTransparentImage( ImagickPixel target, float alpha, float fuzz)
 	Changes any pixel that matches color with the color defined by fill.
 */
@@ -5638,11 +5639,11 @@ PHP_METHOD(imagick, removeimageprofile)
 	char *name;
 	unsigned char *profile;
 	int nameLen;
-	#if MagickLibVersion < 0x628
+#if MagickLibVersion < 0x628
 	long profileLen;
-	#else
+#else
 	size_t profileLen;
-	#endif
+#endif
 
 
 	if ( ZEND_NUM_ARGS() != 1 )
@@ -7630,11 +7631,11 @@ PHP_METHOD(imagick, getimageprofile)
 	zval *object;
 	char *profile, *name;
 	int nameLen;
-	#if MagickLibVersion < 0x628
+#if MagickLibVersion < 0x628
 	long length;
-	#else
+#else
 	size_t length;
-	#endif
+#endif
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -9730,11 +9731,11 @@ PHP_METHOD(imagick, normalizeimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	status = MagickNormalizeImageChannel( intern->magick_wand, channel );
-	#else
+#else
 	status = MagickNormalizeImage( intern->magick_wand );
-	#endif
+#endif
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
@@ -9945,9 +9946,9 @@ PHP_METHOD(imagick, annotateimage)
 	char *text;
 	int textLen;
 	zval *objvar;
-	#if MagickLibVersion < 0x632
+#if MagickLibVersion < 0x632
 	char *font;
-	#endif
+#endif
 
 	if ( ZEND_NUM_ARGS() != 5 )
 	{
@@ -9966,7 +9967,7 @@ PHP_METHOD(imagick, annotateimage)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	
-	#if MagickLibVersion < 0x632
+#if MagickLibVersion < 0x632
 	font = DrawGetFont( internd->drawing_wand );
 		
 	/* Fixes PECL Bug #11328 */
@@ -9975,7 +9976,7 @@ PHP_METHOD(imagick, annotateimage)
 		throwExceptionWithMessage( 2, "Font needs to be set before annotating an image", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-	#endif
+#endif
 
 	status = MagickAnnotateImage( intern->magick_wand, internd->drawing_wand, x, y, angle, text );
 
@@ -10053,11 +10054,11 @@ PHP_METHOD(imagick, compositeimage)
 	intern_second = (php_imagick_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern_second->magick_wand, 1, 1 );
 
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	MagickCompositeImageChannel( intern->magick_wand, channel, intern_second->magick_wand, compositeId, x, y );
-	#else
+#else
 	MagickCompositeImage( intern->magick_wand, intern_second->magick_wand, compositeId, x, y );
-	#endif
+#endif
 
 	RETURN_TRUE;
 }
@@ -10121,11 +10122,11 @@ PHP_METHOD(imagick, addnoiseimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	status = MagickAddNoiseImageChannel( intern->magick_wand, channel, noise );
-	#else
+#else
 	status = MagickAddNoiseImage( intern->magick_wand, noise );
-	#endif
+#endif
 
 	if ( status == MagickFalse )
 	{
@@ -13159,9 +13160,9 @@ PHP_METHOD(imagickdraw, annotation)
 	double x, y;
 	unsigned char *text;
 	int textLen;
-	#if MagickLibVersion < 0x632
+#if MagickLibVersion < 0x632
 	char *font;
-	#endif
+#endif
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -13176,7 +13177,7 @@ PHP_METHOD(imagickdraw, annotation)
 
 	object = getThis();
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
-	#if MagickLibVersion < 0x632
+#if MagickLibVersion < 0x632
 	font = DrawGetFont( internd->drawing_wand );
 		
 	/* Fixes PECL Bug #11328 */
@@ -13185,7 +13186,7 @@ PHP_METHOD(imagickdraw, annotation)
 		throwExceptionWithMessage( 2, "Font needs to be set before annotating an image", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-	#endif
+#endif
 
 	DrawAnnotation( internd->drawing_wand, x, y, text );
 	RETURN_TRUE;
@@ -16230,11 +16231,11 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 			colorValue = PixelGetAlpha( internp->pixel_wand );
 		break;
 
-		#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 		case IMAGICKCOLORFUZZ:
 			colorValue = PixelGetFuzz( internp->pixel_wand );
 		break;
-		#endif
+#endif
 
 		default:
 			throwExceptionWithMessage( 4, "Unknown color type.", 4 TSRMLS_CC );
@@ -16307,11 +16308,11 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 			PixelSetAlpha( internp->pixel_wand, colorValue );
 		break;
 
-		#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 		case IMAGICKCOLORFUZZ:
 			PixelSetFuzz( internp->pixel_wand, colorValue );
 		break;
-		#endif
+#endif
 
 		default:
 			throwExceptionWithMessage( 4, "Unknown color type.", 4 TSRMLS_CC );
@@ -16332,9 +16333,9 @@ PHP_METHOD(imagickpixel, getcolor)
 	zend_bool normalized = 0;
 	char *colorString;
 	int red, green, blue;
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	double normalizedRed, normalizedGreen, normalizedBlue;
-	#endif
+#endif
 	double alpha;
 	int setAlpha = 0;
 
@@ -16349,7 +16350,7 @@ PHP_METHOD(imagickpixel, getcolor)
 
 	if ( normalized == 1 )
 	{
-		#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 		colorString = PixelGetColorAsNormalizedString( internp->pixel_wand );
 
 		if( count_occurences_of( ',', colorString TSRMLS_CC ) == 3 )
@@ -16381,9 +16382,9 @@ PHP_METHOD(imagickpixel, getcolor)
 		IMAGICK_FREE_MEMORY( char *, colorString );
 		return;
 
-		#else
+#else
 		RETURN_FALSE;
-		#endif
+#endif
 	}
 	else
 	{
@@ -16996,14 +16997,14 @@ PHP_MINIT_FUNCTION(imagick)
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 	php_imagickdraw_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	/*
 	Initialize exceptions (ImagickPixelIterator exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME, NULL);
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 	php_imagickpixeliterator_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
-	#endif
+#endif
 	/*
 	Initialize exceptions (ImagickPixel exception)
 	*/
@@ -17028,7 +17029,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickdraw_object_handlers.clone_obj = NULL;
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	/*
 		Initialize the class (ImagickPixelIterator)
 	*/
@@ -17036,7 +17037,7 @@ PHP_MINIT_FUNCTION(imagick)
 	ce.create_object = php_imagickpixeliterator_object_new;
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
-	#endif
+#endif
 	/*
 		Initialize the class (ImagickPixel)
 	*/
@@ -17070,11 +17071,11 @@ PHP_MINFO_FUNCTION(imagick)
 	php_info_print_table_start();
 	php_info_print_table_row( 2, "imagick module", "enabled" );
 	php_info_print_table_row( 2, "imagick module version", PHP_IMAGICK_EXTVER );
-	#if MagickLibVersion > 0x628
+#if MagickLibVersion > 0x628
 	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator" );
-	#else
+#else
 	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel" );
-	#endif
+#endif
 	php_info_print_table_row( 2, "ImageMagick version", imageMagickVersion );
 	php_info_print_table_row( 2, "ImageMagick release date", imageMagickReleaseDate );
 	php_info_print_table_row( 2, "ImageMagick Number of supported formats: ", buffer );
@@ -17110,9 +17111,9 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 
 zend_module_entry imagick_module_entry =
 {
-	#if ZEND_MODULE_API_NO >= 20010901
+#if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
-	#endif
+#endif
 	PHP_IMAGICK_EXTNAME,
 	php_imagick_functions,			/* Functions */
 	PHP_MINIT(imagick),			/* MINIT */
@@ -17120,9 +17121,9 @@ zend_module_entry imagick_module_entry =
 	NULL,						    /* RINIT */
 	NULL,						    /* RSHUTDOWN */
 	PHP_MINFO(imagick),			/* MINFO */
-	#if ZEND_MODULE_API_NO >= 20010901
+#if ZEND_MODULE_API_NO >= 20010901
 	PHP_IMAGICK_EXTVER,
-	#endif
+#endif
 	STANDARD_MODULE_PROPERTIES
 };
 
