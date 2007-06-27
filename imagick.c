@@ -5045,7 +5045,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	}
 
 	/* Allow only pseudo formats in this method */
-	if ( count_occurences_of( ':', pseudoString ) < 1 )
+	if ( count_occurences_of( ':', pseudoString TSRMLS_CC ) < 1 )
 	{
 		throwExceptionWithMessage( 1, "Invalid pseudo format string", 1 TSRMLS_CC );
 		RETURN_FALSE;
