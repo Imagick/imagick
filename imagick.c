@@ -72,7 +72,11 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	if( PG(safe_mode) ) {\
 		if ( php_check_open_basedir_ex( fileName, 0 TSRMLS_CC ) || php_checkuid_ex( fileName, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) ){\
 		zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC,\
-								 message, fileName); efree( fileName ); RETURN_FALSE; } }
+								 message, fileName); efree( fileName ); RETURN_FALSE; } }\
+	else { if ( php_check_open_basedir_ex( fileName, 0 TSRMLS_CC ) ) {\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC,\
+								 "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", fileName); efree( fileName ); RETURN_FALSE; } }\
+
 
 #define IMAGICK_HAS_FORMAT( buffer, magick_wand )\
 	buffer = MagickGetImageFormat( magick_wand );\
@@ -3389,17 +3393,17 @@ void unallocateWands( MagickWand *magick, DrawingWand *draw, PixelWand *pixel TS
 {
 	if ( magick != (MagickWand *)NULL && IsMagickWand( magick ))
 	{
-		magick = (MagickWand *)DestroyMagickWand( magick ); 
+		magick = (MagickWand *)DestroyMagickWand( magick );
 	}
 
 	if ( draw != (DrawingWand *)NULL && IsDrawingWand( draw ))
 	{
-		draw = (DrawingWand *)DestroyDrawingWand( draw ); 
+		draw = (DrawingWand *)DestroyDrawingWand( draw );
 	}
 
 	if ( pixel != (PixelWand *)NULL && IsPixelWand( pixel ))
 	{
-		pixel = (PixelWand *)DestroyPixelWand( pixel ); 
+		pixel = (PixelWand *)DestroyPixelWand( pixel );
 	}
 }
 
@@ -3417,7 +3421,7 @@ PHP_METHOD(imagick, roundcorners)
 	long imageWidth, imageHeight;
 	MagickBooleanType status;
 	double strokeWidth = 10, displace = 5, correction = -6;
-	
+
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|ddd", &xRounding, &yRounding, &strokeWidth, &displace, &correction ) == FAILURE )
@@ -3434,9 +3438,9 @@ PHP_METHOD(imagick, roundcorners)
 	imageHeight = MagickGetImageHeight( intern->magick_wand );
 
 	status = MagickSetImageMatte( intern->magick_wand, MagickTrue );
-	
+
 	if ( status == MagickFalse )
-	{		
+	{
 		throwExceptionWithMessage( 1, "Unable to set image matte", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
@@ -3489,7 +3493,7 @@ PHP_METHOD(imagick, roundcorners)
 	DrawRoundRectangle( draw, displace, displace, imageWidth + correction, imageHeight + correction, xRounding, yRounding );
 
 	status = MagickDrawImage( maskImage, draw );
-	
+
 	if ( status == MagickFalse )
 	{
 		unallocateWands( maskImage, draw, color TSRMLS_CC );
@@ -3534,11 +3538,11 @@ PHP_METHOD(imagick, roundcorners)
 	DrawSetFillColor( draw, color );
 	DrawSetStrokeColor( draw, color );
 	DrawSetStrokeWidth( draw, 2 );
-	
+
 	DrawRoundRectangle( draw, 0, 0, imageWidth, imageHeight, xRounding, yRounding );
 	MagickSetImageBackgroundColor( maskImage, color );
 	status = MagickDrawImage( maskImage, draw );
-	
+
 	if ( status == MagickFalse )
 	{
 		unallocateWands( maskImage, draw, color TSRMLS_CC );
@@ -3884,15 +3888,15 @@ PHP_METHOD(imagick, __tostring)
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 	buffer = MagickGetImageFormat( intern->magick_wand );
 
-	if( buffer == (char *)NULL || *buffer == '\0' ) 
+	if( buffer == (char *)NULL || *buffer == '\0' )
 	{
 		RETVAL_STRING( "", 0 );
 	}
-	else 
-	{ 
-		IMAGICK_FREE_MEMORY( char *, buffer ); 
+	else
+	{
+		IMAGICK_FREE_MEMORY( char *, buffer );
 	}
-	
+
 	if( getImageCount( intern->magick_wand TSRMLS_CC ) == 0 )
 	{
 		RETVAL_STRING( "", 0 );
@@ -3983,7 +3987,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
-	
+
 	/* If wand is empty, create a 1x1 pixel image to use as a temporary canvas */
 	if ( MagickGetNumberImages( intern->magick_wand ) == 0 )
 	{
@@ -4011,7 +4015,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 		}
 	}
-	
+
 	if ( metrics != (double *)NULL )
 	{
 		array_init( return_value );
@@ -5027,6 +5031,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	long columns, rows;
 	char *pseudoString;
 	int pseudoStringLen;
+	char *format, *pch, *absolute, *tmpString;
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -5039,11 +5044,34 @@ PHP_METHOD(imagick, newpseudoimage)
 		return;
 	}
 
+	/* Allow only pseudo formats in this method */
+	if ( count_occurences_of( ':', pseudoString ) < 1 )
+	{
+		throwExceptionWithMessage( 1, "Invalid pseudo format string", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	tmpString = estrndup( pseudoString, pseudoStringLen );
+
+	/* These formats potentially read images */
+	if ( strncasecmp( tmpString, "vid:", 4 ) == 0 || strncasecmp( tmpString, "tile:", 5 ) == 0 )
+	{
+		pch = strtok( tmpString, ":" );
+		if ( pch != NULL )
+		{
+			pch = strtok (NULL, ":");
+			if ( pch != NULL )
+			{
+				absolute = expand_filepath( pch, NULL TSRMLS_CC);
+				IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
+				efree( absolute );
+			}
+		}
+	}
+	efree( tmpString );
+
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	/* Pseudo image needs a size set manually */
-	status = MagickSetSize( intern->magick_wand, columns, rows );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -5051,6 +5079,9 @@ PHP_METHOD(imagick, newpseudoimage)
 		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+
+	/* Pseudo image needs a size set manually */
+	status = MagickSetSize( intern->magick_wand, columns, rows );
 
 	/* Read image from the pseudo string */
 	status = MagickReadImage( intern->magick_wand, pseudoString );
@@ -9966,10 +9997,10 @@ PHP_METHOD(imagick, annotateimage)
 	}
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
-	
+
 #if MagickLibVersion < 0x632
 	font = DrawGetFont( internd->drawing_wand );
-		
+
 	/* Fixes PECL Bug #11328 */
 	if( font == (char *)NULL || *font == '\0' )
 	{
@@ -13179,7 +13210,7 @@ PHP_METHOD(imagickdraw, annotation)
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
 #if MagickLibVersion < 0x632
 	font = DrawGetFont( internd->drawing_wand );
-		
+
 	/* Fixes PECL Bug #11328 */
 	if( font == (char *)NULL || *font == '\0' )
 	{
