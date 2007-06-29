@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-06-18</date>
+	<date>2007-06-29</date>
 	<version>
-		<release>2.0.0b1</release>
+		<release>2.0.0b2</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -32,24 +32,13 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- fix PECL bug #10967 - supplied path fails to compile
-- Added new methods
-  + Imagick::displayImage()
-  + Imagick::displayImages()
-  + Imagick::cropThumbnailImage()
-  + Imagick::roundCorners()
-  + Imagick::polaroidImage()
-  + Imagick::getImageProperty()
-  + Imagick::setImageProperty()
-  + Imagick::newPseudoImage()
-  + Imagick::__toString()
-  + ImagickPixel::setColorCount()
-- Added missing DisposeType constants.
-- Merged ImagickPixel::getColorAsString and ImagickPixel::getColorAsNormalizedString into ImagickPixel::getColor( [bool normalized] )
-- Fixed wrong exception type in Imagick::setSamplingFactors
-- Removed useless check from ImagickPixelIterator::syncIterator
-- Renamed ImagickDraw::pushDrawingWand to ImagickDraw::push
-- Renamed ImagickDraw::popDrawingWand to ImagickDraw::pop
++ Fixed open_basedir bypasses.
++ Fixed PECL Bug #11328
++ Added methods:
+  - Imagick::queryFonts()
+  - Imagick::queryFontMetrics()
+
+NOTE: Using threaded SAPI in Windows is not currently recommended.
 </notes>
 	<contents>
 		<dir name="/">
