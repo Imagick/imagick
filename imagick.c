@@ -81,7 +81,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 #define IMAGICK_HAS_FORMAT( buffer, magick_wand )\
 	buffer = MagickGetImageFormat( magick_wand );\
 	if( buffer == (char *)NULL || *buffer == '\0' ) {\
-	IMAGICK_FREE_MEMORY( char *, buffer ); throwExceptionWithMessage( 1, "Image has no format.", 1 TSRMLS_CC ); RETURN_FALSE;}\
+	IMAGICK_FREE_MEMORY( char *, buffer ); throwExceptionWithMessage( 1, "Image has no format", 1 TSRMLS_CC ); RETURN_FALSE;}\
 	else { IMAGICK_FREE_MEMORY( char *, buffer ); }
 
 #define IMAGICK_METHOD_DEPRECATED( className, methodName )\
@@ -164,6 +164,7 @@ PHP_METHOD(imagick, valid);
 PHP_METHOD(imagick, current);
 PHP_METHOD(imagick, drawimage);
 PHP_METHOD(imagick, getimageblob);
+PHP_METHOD(imagick, getimagesblob);
 PHP_METHOD(imagick, setimagecompressionquality);
 PHP_METHOD(imagick, annotateimage);
 PHP_METHOD(imagick, compositeimage);
@@ -2326,6 +2327,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, clone, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagesize, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageblob, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimagesblob, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, resetiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, previousimage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -8351,7 +8353,7 @@ PHP_METHOD(imagick, getimagesize)
 /* }}} */
 
 /* {{{ proto string Imagick::getImageBlob()
-	Implements direct to memory image formats.  It returns the image sequence as a blob and its length.  The format of the image determines the format of the returned blob (GIF, JPEG,  PNG, etc.).  To return a different image format, use MagickSetImageFormat().
+	Returns the current image sequence as a string
 */
 PHP_METHOD(imagick, getimageblob)
 {
@@ -8368,6 +8370,51 @@ PHP_METHOD(imagick, getimageblob)
 	IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
 
 	imageContents = MagickGetImageBlob( intern->magick_wand, &imageSize );
+	ZVAL_STRINGL( return_value, (char *)imageContents, imageSize, 1 );
+	IMAGICK_FREE_MEMORY( unsigned char *, imageContents );
+	return;
+}
+/* }}} */
+
+/* {{{ proto string Imagick::getImagesBlob()
+	Returns all image sequences as a string
+*/
+PHP_METHOD(imagick, getimagesblob)
+{
+	php_imagick_object *intern;
+	zval *object;
+	unsigned char *imageContents;
+	size_t imageSize;
+	char *buffer;
+	int i, current;
+	MagickBooleanType status;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	/* Get the current iterator position */
+	current = MagickGetIteratorIndex( intern->magick_wand );
+
+	/* Reset the iterator */
+	MagickResetIterator( intern->magick_wand );
+
+	/* Loop all images to make sure they have a format */
+	while ( MagickNextImage( intern->magick_wand ) )
+	{
+		IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
+	}
+
+	/* Set iterator back to correct index */
+	status = MagickSetIteratorIndex( intern->magick_wand, current );
+	
+	if ( status == MagickFalse )
+	{
+		throwExceptionWithMessage( 1, "Unable to set the iterator index", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	imageContents = MagickGetImagesBlob( intern->magick_wand, &imageSize );
 	ZVAL_STRINGL( return_value, (char *)imageContents, imageSize, 1 );
 	IMAGICK_FREE_MEMORY( unsigned char *, imageContents );
 	return;
