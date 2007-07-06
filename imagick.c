@@ -16442,6 +16442,7 @@ PHP_METHOD(imagickpixel, getcolor)
 		}
 		else
 		{
+			IMAGICK_FREE_MEMORY( char *, colorString );
 			throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
 			RETURN_FALSE;
 		}
@@ -16470,28 +16471,50 @@ PHP_METHOD(imagickpixel, getcolor)
 
 		if ( colorString != (char *)NULL && *colorString != '\0' )
 		{
-			if( strstr( colorString, "rgba" ) != NULL )
+			if ( count_occurences_of( '(', colorString TSRMLS_CC ) == 0 && count_occurences_of( ')', colorString TSRMLS_CC ) == 0 )
 			{
-				sscanf( colorString, "rgba%d,%d,%d,%lf", &red, &green, &blue, &alpha );
-				setAlpha = 1;
-			}
-			else if( strstr( colorString, "rgb" ) != NULL )
-			{
-				sscanf( colorString, "rgb%d,%d,%d", &red, &green, &blue );
-			}
-			else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 3 )
-			{
-				sscanf( colorString, "%d,%d,%d,%lf", &red, &green, &blue, &alpha );
-				setAlpha = 1;
-			}
-			else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 2 )
-			{
-				sscanf( colorString, "%d,%d,%d", &red, &green, &blue );
+				if( strstr( colorString, "rgba" ) != NULL )
+				{
+					sscanf( colorString, "rgba%d,%d,%d,%lf", &red, &green, &blue, &alpha );
+					setAlpha = 1;
+				}
+				else if( strstr( colorString, "rgb" ) != NULL )
+				{
+					sscanf( colorString, "rgb%d,%d,%d", &red, &green, &blue );
+				}
+				else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 3 )
+				{
+					sscanf( colorString, "%d,%d,%d,%lf", &red, &green, &blue, &alpha );
+					setAlpha = 1;
+				}
+				else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 2 )
+				{
+					sscanf( colorString, "%d,%d,%d", &red, &green, &blue );
+				}
+				else
+				{
+					IMAGICK_FREE_MEMORY( char *, colorString );
+					throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+					RETURN_FALSE;
+				}
 			}
 			else
 			{
-				throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
-				RETURN_FALSE;
+				if( strstr( colorString, "rgba" ) != NULL )
+				{
+					sscanf( colorString, "rgba(%d,%d,%d,%lf)", &red, &green, &blue, &alpha );
+					setAlpha = 1;
+				}
+				else if( strstr( colorString, "rgb" ) != NULL )
+				{
+					sscanf( colorString, "rgb(%d,%d,%d)", &red, &green, &blue );
+				}
+				else
+				{
+					IMAGICK_FREE_MEMORY( char *, colorString );
+					throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+					RETURN_FALSE;
+				}
 			}
 
 			array_init( return_value );
@@ -16929,10 +16952,9 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 	{
 		return;
 	}
-
-	if( intern->pixel_wand != (PixelWand *)NULL && IsPixelWand( intern->pixel_wand ) )
+	if ( intern->initialized_via_iterator < 1 )
 	{
-		if ( intern->initialized_via_iterator < 1 )
+		if( intern->pixel_wand != (PixelWand *)NULL && IsPixelWand( intern->pixel_wand ) )
 		{
 			ClearPixelWand( intern->pixel_wand );
 			intern->pixel_wand = DestroyPixelWand( intern->pixel_wand );
