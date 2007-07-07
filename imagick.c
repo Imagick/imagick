@@ -2649,7 +2649,7 @@ void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, char *fa
 }
 #endif
 
-void throwImagickPixelException( PixelWand *pixel_wand, long code TSRMLS_DC)
+void throwImagickPixelException( PixelWand *pixel_wand, char *fallback, long code TSRMLS_DC)
 {
 	ExceptionType severity;
 	char *description;
@@ -16100,7 +16100,7 @@ PHP_METHOD(imagickpixel, __construct)
 		status = PixelSetColor( internp->pixel_wand, colorName );
 		if( status == MagickFalse )
 		{
-			throwImagickPixelException( internp->pixel_wand, "Unable to construct ImagickPixel", 3 TSRMLS_CC);
+			throwImagickPixelException( internp->pixel_wand, "Unable to construct ImagickPixel", 4 TSRMLS_CC);
 			RETURN_FALSE;
 		}
 	}
@@ -16137,7 +16137,7 @@ PHP_METHOD(imagickpixel, setcolor)
 
 	if( status == MagickFalse )
 	{
-		throwImagickPixelException( internp->pixel_wand, "Unable to set ImagickPixel color", 3 TSRMLS_CC);
+		throwImagickPixelException( internp->pixel_wand, "Unable to set ImagickPixel color", 4 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16161,7 +16161,7 @@ PHP_METHOD(imagickpixel, clear)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 3, "ImagickPixel is not allocated", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 4, "ImagickPixel is not allocated", 4 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
