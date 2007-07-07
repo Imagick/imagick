@@ -58,7 +58,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 
 #define IMAGICK_CHECK_NOT_EMPTY( magick_wand, type, code )\
 	if( getImageCount( magick_wand TSRMLS_CC) == 0 )\
-	{ throwExceptionWithMessage( (long)type, "Can not process empty wand.", (long)code TSRMLS_CC); RETURN_FALSE; }
+	{ throwExceptionWithMessage( (long)type, "Can not process empty wand", (long)code TSRMLS_CC); RETURN_FALSE; }
 
 #define IMAGICK_INITIALIZE_ZERO_ARGS( object, wandType, intern )\
 	if ( ZEND_NUM_ARGS() != 0 ) { ZEND_WRONG_PARAM_COUNT(); }\
@@ -2588,31 +2588,27 @@ void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC
 }
 
 
-void throwImagickException( MagickWand *magick_wand, long code TSRMLS_DC)
+void throwImagickException( MagickWand *magick_wand, char *fallback, long code TSRMLS_DC)
 {
 	ExceptionType severity;
 	char *description;
-	int free = 1;
 	description = MagickGetException( magick_wand, &severity );
 
 	if ( strlen( description ) == 0 )
 	{
-		description = "Undefined exception";
-		free = 0;
+		zend_throw_exception( php_imagick_exception_class_entry, fallback, (long)code TSRMLS_CC);
 	}
-
-	zend_throw_exception( php_imagick_exception_class_entry, description, (long)code TSRMLS_CC);
-
-	if( free == 1 )
+	else
 	{
+		zend_throw_exception( php_imagick_exception_class_entry, description, (long)code TSRMLS_CC);
 		IMAGICK_FREE_MEMORY( char *, description );
 		MagickClearException( magick_wand );
+		description = (char *)NULL;
 	}
-	description = (char *)NULL;
 }
 
 
-void throwImagickDrawException( DrawingWand *drawing_wand, long code TSRMLS_DC)
+void throwImagickDrawException( DrawingWand *drawing_wand, char *fallback, long code TSRMLS_DC)
 {
 	ExceptionType severity;
 	char *description;
@@ -2621,42 +2617,35 @@ void throwImagickDrawException( DrawingWand *drawing_wand, long code TSRMLS_DC)
 
 	if ( strlen( description ) == 0 )
 	{
-		description = "Undefined exception";
-		free = 0;
+		zend_throw_exception( php_imagickdraw_exception_class_entry, fallback, (long)code TSRMLS_CC);
 	}
-
-	zend_throw_exception( php_imagickdraw_exception_class_entry, description, (long)code TSRMLS_CC);
-
-	if( free == 1 )
+	else
 	{
+		zend_throw_exception( php_imagickdraw_exception_class_entry, description, (long)code TSRMLS_CC);
 		IMAGICK_FREE_MEMORY( char *, description );
 		DrawClearException( drawing_wand );
+		description = (char *)NULL;
 	}
-	description = (char *)NULL;
 }
 
 #if MagickLibVersion > 0x628
-void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, long code TSRMLS_DC)
+void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, char *fallback, long code TSRMLS_DC)
 {
 	ExceptionType severity;
 	char *description;
-	int free = 1;
 	description = PixelGetIteratorException( pixel_iterator, &severity );
 
 	if ( strlen( description ) == 0 )
 	{
-		description = "Undefined exception";
-		free = 0;
+		zend_throw_exception( php_imagickpixeliterator_sc_entry, fallback, (long)code TSRMLS_CC);
 	}
-
-	zend_throw_exception( php_imagickpixeliterator_sc_entry, description, (long)code TSRMLS_CC);
-
-	if( free == 1 )
+	else
 	{
+		zend_throw_exception( php_imagickpixeliterator_sc_entry, description, (long)code TSRMLS_CC);
 		IMAGICK_FREE_MEMORY( char *, description );
 		PixelClearIteratorException( pixel_iterator );
+		description = (char *)NULL;
 	}
-	description = (char *)NULL;
 }
 #endif
 
@@ -2664,23 +2653,19 @@ void throwImagickPixelException( PixelWand *pixel_wand, long code TSRMLS_DC)
 {
 	ExceptionType severity;
 	char *description;
-	int free = 1;
 	description = PixelGetException( pixel_wand, &severity );
 
 	if ( strlen( description ) == 0 )
 	{
-		description = "Undefined exception";
-		free = 0;
+		zend_throw_exception( php_imagickpixel_exception_class_entry, fallback, (long)code TSRMLS_CC);
 	}
-
-	zend_throw_exception( php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC);
-
-	if( free == 1 )
+	else
 	{
+		zend_throw_exception( php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC);
 		IMAGICK_FREE_MEMORY( char *, description );
 		PixelClearException( pixel_wand );
+		description = (char *)NULL;
 	}
-	description = (char *)NULL;
 }
 
 
@@ -2861,7 +2846,7 @@ PHP_METHOD(imagick, pingimagefile)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to ping image file", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -2891,7 +2876,7 @@ PHP_METHOD(imagick, pingimageblob)
 
 	if ( strlen( imageString ) == 0 )
 	{
-		throwExceptionWithMessage( 1, "Zero size image string passed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Zero size image string passed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -2902,7 +2887,7 @@ PHP_METHOD(imagick, pingimageblob)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to ping image blob", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -2942,7 +2927,7 @@ PHP_METHOD(imagick, vignetteimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to apply vignette filter", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -2968,7 +2953,7 @@ PHP_METHOD(imagick, transposeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to transpose image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -2994,7 +2979,7 @@ PHP_METHOD(imagick, transverseimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to transverse image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3029,7 +3014,7 @@ PHP_METHOD(imagick, adaptiveblurimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to adaptive blur image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3054,7 +3039,7 @@ PHP_METHOD(imagick, uniqueimagecolors)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get unique image colors", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -3088,7 +3073,7 @@ PHP_METHOD(imagick, contraststretchimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to contrast strech image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3145,7 +3130,7 @@ PHP_METHOD(imagick, setimagematte)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image matte", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -3181,7 +3166,7 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to adaptive resize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3219,7 +3204,7 @@ PHP_METHOD(imagick, sketchimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to sketch image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -3256,7 +3241,7 @@ PHP_METHOD(imagick, shadeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to shade image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3279,7 +3264,7 @@ PHP_METHOD(imagick, getsizeoffset)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC );
+		throwImagickException( intern->magick_wand, "Unable to get size offset", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -3316,7 +3301,7 @@ PHP_METHOD(imagick, setsizeoffset)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set size offset", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -3348,7 +3333,7 @@ PHP_METHOD(imagick, adaptivesharpenimage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to adaptive sharpen image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3383,7 +3368,7 @@ PHP_METHOD(imagick, randomthresholdimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to random threshold image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3602,7 +3587,7 @@ PHP_METHOD(imagick, polaroidimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to polaroid image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -3677,7 +3662,7 @@ PHP_METHOD(imagick, setimageproperty)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image property", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_FALSE;
@@ -3731,7 +3716,7 @@ PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image interpolate method", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -3769,7 +3754,7 @@ PHP_METHOD(imagick, linearstretchimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to linear strech image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -3822,7 +3807,7 @@ PHP_METHOD(imagick, __construct)
 		/* No magick is going to happen */
 		if ( status == MagickFalse )
 		{
-			throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+			throwImagickException( intern->magick_wand, "Unable to construct Imagick object", 1 TSRMLS_CC);
 			RETURN_FALSE;
 		}
 		RETURN_TRUE;
@@ -3864,7 +3849,7 @@ PHP_METHOD(imagick, __construct)
 			/* No magick is going to happen */
 			if ( status == MagickFalse )
 			{
-				throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+				throwImagickException( intern->magick_wand, "Unable to construct Imagick object", 1 TSRMLS_CC);
 				RETURN_FALSE;
 			}
 
@@ -4112,7 +4097,7 @@ PHP_METHOD(imagick, readimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to read image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -4155,7 +4140,7 @@ PHP_METHOD(imagick, pingimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to ping image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4202,7 +4187,7 @@ PHP_METHOD(imagick, readimagefile)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to read image from filepointer", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4239,7 +4224,7 @@ PHP_METHOD(imagick, displayimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to display image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4274,7 +4259,7 @@ PHP_METHOD(imagick, displayimages)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to display images", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4305,7 +4290,7 @@ PHP_METHOD(imagick, readimageblob)
 
 	if ( strlen( imageString ) == 0 )
 	{
-		throwExceptionWithMessage( 1, "Zero size image string passed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Zero size image string passed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4316,7 +4301,7 @@ PHP_METHOD(imagick, readimageblob)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to read image blob", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4354,7 +4339,7 @@ PHP_METHOD(imagick, blurimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to blur image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4393,7 +4378,7 @@ PHP_METHOD(imagick, waveimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to wave image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4478,7 +4463,7 @@ PHP_METHOD(imagick, scaleimage)
 
 	if ( ( x == 0 ) && ( y == 0 ) )
 	{
-		throwExceptionWithMessage( 1, "Can't scale image to zero size.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Can't scale image to zero size", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4505,7 +4490,7 @@ PHP_METHOD(imagick, scaleimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to scale image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4545,7 +4530,7 @@ PHP_METHOD(imagick, cropimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to crop image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4558,7 +4543,6 @@ PHP_METHOD(imagick, cropimage)
 */
 PHP_METHOD(imagick, spreadimage)
 {
-
 	double radius;
 	php_imagick_object *intern;
 	zval *object;
@@ -4585,7 +4569,7 @@ PHP_METHOD(imagick, spreadimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to spread image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4624,7 +4608,7 @@ PHP_METHOD(imagick, swirlimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to swirl image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4649,7 +4633,7 @@ PHP_METHOD(imagick, stripimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to strip image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4688,7 +4672,7 @@ PHP_METHOD(imagick, trimimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to trim image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4727,7 +4711,7 @@ PHP_METHOD(imagick, chopimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to chop image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4753,7 +4737,7 @@ PHP_METHOD(imagick, clipimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to clip image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -4793,7 +4777,7 @@ PHP_METHOD(imagick, clippathimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to clip path image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4820,7 +4804,7 @@ PHP_METHOD(imagick, coalesceimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Coalesce image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Coalesce image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4870,7 +4854,7 @@ PHP_METHOD(imagick, colorfloodfillimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to color floodfill image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -4908,7 +4892,7 @@ PHP_METHOD(imagick, combineimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Combine images failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Combine images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4936,7 +4920,7 @@ PHP_METHOD(imagick, getimage)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Get image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Get image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4977,7 +4961,7 @@ PHP_METHOD(imagick, addimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to add image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5015,7 +4999,7 @@ PHP_METHOD(imagick, newimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to create new image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5078,7 +5062,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to create new pseudo image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -5091,7 +5075,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to create new pseudo image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5145,7 +5129,7 @@ PHP_METHOD(imagick, implodeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to implode image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5178,7 +5162,7 @@ PHP_METHOD(imagick, levelimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to level image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5201,7 +5185,7 @@ PHP_METHOD(imagick, magnifyimage)
 		/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to magnify image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5239,7 +5223,7 @@ PHP_METHOD(imagick, mapimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to map image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5281,7 +5265,7 @@ PHP_METHOD(imagick, mattefloodfillimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to matte floodfill image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5318,7 +5302,7 @@ PHP_METHOD(imagick, medianfilterimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to median filter image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5351,7 +5335,7 @@ PHP_METHOD(imagick, negateimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to negate image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5393,7 +5377,7 @@ PHP_METHOD(imagick, paintopaqueimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable paint opaque image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5417,7 +5401,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Optimize image layers failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Optimize image layers failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -5461,7 +5445,7 @@ PHP_METHOD(imagick, painttransparentimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to paint transparent image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5498,7 +5482,7 @@ PHP_METHOD(imagick, previewimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Preview image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Preview image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -5540,7 +5524,7 @@ PHP_METHOD(imagick, profileimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to profile image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5579,7 +5563,7 @@ PHP_METHOD(imagick, quantizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to quantize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5618,7 +5602,7 @@ PHP_METHOD(imagick, quantizeimages)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to quantize images", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5655,7 +5639,7 @@ PHP_METHOD(imagick, reducenoiseimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to reduce image noise", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5732,7 +5716,7 @@ PHP_METHOD(imagick, separateimagechannel)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to separate image channel", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5772,7 +5756,7 @@ PHP_METHOD(imagick, sepiatoneimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to sepia tone image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5809,7 +5793,7 @@ PHP_METHOD(imagick, setimagebias)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image bias", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5846,7 +5830,7 @@ PHP_METHOD(imagick, setimageblueprimary)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image blue primary", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5882,7 +5866,7 @@ PHP_METHOD(imagick, setimagebordercolor)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image border color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5919,7 +5903,7 @@ PHP_METHOD(imagick, setimagechanneldepth)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image channel depth", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5957,7 +5941,7 @@ PHP_METHOD(imagick, setimagecolormapcolor) // TODO: not sure if the implementati
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image color map", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5995,7 +5979,7 @@ PHP_METHOD(imagick, setimagecolorspace)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image colorspace", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6009,7 +5993,7 @@ PHP_METHOD(imagick, setimagedispose)
 {
 	php_imagick_object *intern;
 	zval *object;
-	long composite;
+	long dispose;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
@@ -6018,7 +6002,7 @@ PHP_METHOD(imagick, setimagedispose)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &composite ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &dispose ) == FAILURE )
 	{
 		return;
 	}
@@ -6027,12 +6011,12 @@ PHP_METHOD(imagick, setimagedispose)
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = MagickSetImageCompose( intern->magick_wand, composite );
+	status = MagickSetImageDispose( intern->magick_wand, dispose );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image dispose", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6069,7 +6053,7 @@ PHP_METHOD(imagick, setimageextent)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image extent", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6106,7 +6090,7 @@ PHP_METHOD(imagick, setimagegreenprimary)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image green primary", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6143,7 +6127,7 @@ PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image interlace scheme", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6182,7 +6166,7 @@ PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image profile", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6219,7 +6203,7 @@ PHP_METHOD(imagick, setimageredprimary)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image red primary", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6256,7 +6240,7 @@ PHP_METHOD(imagick, setimagerenderingintent)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image rendering intent", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6295,7 +6279,7 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image virtual pixel method", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6332,7 +6316,7 @@ PHP_METHOD(imagick, setimagewhitepoint)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image white point", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6366,7 +6350,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to sigmoidal contrast image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6405,7 +6389,7 @@ PHP_METHOD(imagick, stereoimage)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Stereo image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Stereo image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6448,7 +6432,7 @@ PHP_METHOD(imagick, textureimage)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Texture image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Texture image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6492,7 +6476,7 @@ PHP_METHOD(imagick, tintimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable tint image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6525,7 +6509,7 @@ PHP_METHOD(imagick, unsharpmaskimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to unsharp mask image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -6555,7 +6539,7 @@ PHP_METHOD(imagick, convolveimage)
 
 	if( kernel == (double *)NULL )
 	{
-		throwExceptionWithMessage( 1, "Unable to read matrix array.", 1 TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Unable to read matrix array", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -6569,7 +6553,7 @@ PHP_METHOD(imagick, convolveimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to convolve image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6607,7 +6591,7 @@ PHP_METHOD(imagick, cyclecolormapimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to cycle image colormap", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6632,7 +6616,7 @@ PHP_METHOD(imagick, deconstructimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Deconstruct image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Deconstruct image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6673,7 +6657,7 @@ PHP_METHOD(imagick, getimageregion)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Get image region failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Get image region failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6702,7 +6686,7 @@ PHP_METHOD(imagick, despeckleimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to despeckle image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6740,7 +6724,7 @@ PHP_METHOD(imagick, edgeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to edge image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6779,7 +6763,7 @@ PHP_METHOD(imagick, embossimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to emboss image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6804,7 +6788,7 @@ PHP_METHOD(imagick, enhanceimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to enchance image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6829,7 +6813,7 @@ PHP_METHOD(imagick, equalizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to equalize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6864,7 +6848,7 @@ PHP_METHOD(imagick, evaluateimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to evaluate image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6918,13 +6902,13 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 
 	if ( tmpWand == (PixelWand *)NULL || !IsPixelWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 4, "Get image backgroundcolor failed", 4 TSRMLS_CC );
+		throwExceptionWithMessage( 4, "Unable to get image background color", 4 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image background color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6952,7 +6936,7 @@ PHP_METHOD(imagick, getimageblueprimary)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image blue primary", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -6985,13 +6969,13 @@ PHP_METHOD(imagick, getimagebordercolor)
 
 	if ( tmpWand == (PixelWand *)NULL || !IsPixelWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 4, "Get image bordercolor failed", 4 TSRMLS_CC );
+		throwExceptionWithMessage( 4, "Unable to get image border color", 4 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image border color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7064,7 +7048,7 @@ PHP_METHOD(imagick, getimagechanneldistortion)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image channel distortion", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7103,7 +7087,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image channel extrema", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7145,7 +7129,7 @@ PHP_METHOD(imagick, getimagechannelmean)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image channel mean", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7228,13 +7212,13 @@ PHP_METHOD(imagick, getimagecolormapcolor)
 
 	if ( tmpWand == (PixelWand *)NULL || !IsPixelWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 4, "Get image colormap color failed", 4 TSRMLS_CC );
+		throwExceptionWithMessage( 4, "Unable to get image colormap color", 4 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image colormap color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7345,7 +7329,7 @@ PHP_METHOD(imagick, getimagedistortion)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image distortion", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7370,7 +7354,7 @@ PHP_METHOD(imagick, getimageextrema)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image extrema", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7433,7 +7417,7 @@ PHP_METHOD(imagick, getimagegreenprimary)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image green primary", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7555,13 +7539,13 @@ PHP_METHOD(imagick, getimagemattecolor)
 
 	if ( tmpWand == (PixelWand *)NULL || !IsPixelWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 4, "Get image matte color failed", 4 TSRMLS_CC );
+		throwExceptionWithMessage( 4, "Unable to get image matte color", 4 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable get image matter color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7590,7 +7574,7 @@ PHP_METHOD(imagick, getimagepage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image page", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7638,13 +7622,13 @@ PHP_METHOD(imagick, getimagepixelcolor)
 
 	if ( tmpWand == (PixelWand *)NULL || !IsPixelWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 4, "Get image pixel color failed", 4 TSRMLS_CC );
+		throwExceptionWithMessage( 4, "Unable to get image pixel color", 4 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable get image pixel color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7709,7 +7693,7 @@ PHP_METHOD(imagick, getimageredprimary)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image red primary", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7755,7 +7739,7 @@ PHP_METHOD(imagick, getimageresolution)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image resolution", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7888,7 +7872,7 @@ PHP_METHOD(imagick, getimagewhitepoint)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to get image white point", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7967,7 +7951,7 @@ PHP_METHOD(imagick, thumbnailimage)
 
 	if ( ( x == 0 ) && ( y == 0 ) )
 	{
-		throwExceptionWithMessage( 1, "Can't thumbnail image to zero size.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Can't thumbnail image to zero size", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -7994,7 +7978,7 @@ PHP_METHOD(imagick, thumbnailimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to thumbnail image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8278,7 +8262,7 @@ PHP_METHOD(imagick, setimageindex)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image index", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	intern->next_out_of_bound = 0;
@@ -8305,7 +8289,7 @@ PHP_METHOD(imagick, removeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to remove image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	intern->next_out_of_bound = 0;
@@ -8501,7 +8485,7 @@ PHP_METHOD(imagick, identifyimage)
 	{
 		zval_dtor( array );
 		FREE_ZVAL( array );
-		throwExceptionWithMessage( 1, "Identifying image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Identifying image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8597,7 +8581,7 @@ PHP_METHOD(imagick, commentimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to comment image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8639,7 +8623,7 @@ PHP_METHOD(imagick, setimagefilename)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image filename", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8682,7 +8666,7 @@ PHP_METHOD(imagick, setimageattribute)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image attribute", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -8720,7 +8704,7 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image background color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8760,7 +8744,7 @@ PHP_METHOD(imagick, setimagecompose)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image composite operator", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -8799,7 +8783,7 @@ PHP_METHOD(imagick, setimagecompression)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image compression", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -8838,7 +8822,7 @@ PHP_METHOD(imagick, setimagedelay)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image delay", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -8878,7 +8862,7 @@ PHP_METHOD(imagick, colorizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to colorize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -8923,7 +8907,7 @@ PHP_METHOD(imagick, compareimagechannels)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Compare image channels failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Compare image channels failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8966,7 +8950,7 @@ PHP_METHOD(imagick, compareimagelayers)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Compare image layers failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Compare image layers failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -8995,7 +8979,7 @@ PHP_METHOD(imagick, flattenimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Flatten images failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Flatten images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9023,7 +9007,7 @@ PHP_METHOD(imagick, flipimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to flip image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9047,7 +9031,7 @@ PHP_METHOD(imagick, flopimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to flop image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9086,7 +9070,7 @@ PHP_METHOD(imagick, frameimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to frame image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9120,7 +9104,7 @@ PHP_METHOD(imagick, fximage)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Fx image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Fx image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9156,7 +9140,7 @@ PHP_METHOD(imagick, gammaimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to gamma image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9189,7 +9173,7 @@ PHP_METHOD(imagick, gaussianblurimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to gaussian blur image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9234,7 +9218,7 @@ PHP_METHOD(imagick, compareimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Compare images failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Compare images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9278,7 +9262,7 @@ PHP_METHOD(imagick, contrastimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to contrast image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9317,7 +9301,7 @@ PHP_METHOD(imagick, setimagedepth)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image depth", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9356,7 +9340,7 @@ PHP_METHOD(imagick, setimagegamma)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image gamma", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9395,7 +9379,7 @@ PHP_METHOD(imagick, setimageiterations)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image iterations", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9433,7 +9417,7 @@ PHP_METHOD(imagick, setimagemattecolor)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image matte color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9473,7 +9457,7 @@ PHP_METHOD(imagick, setimagepage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image page", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9512,7 +9496,7 @@ PHP_METHOD(imagick, setimageresolution)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image resolution", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9551,7 +9535,7 @@ PHP_METHOD(imagick, setimagescene)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image scene", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9590,7 +9574,7 @@ PHP_METHOD(imagick, setimagetickspersecond)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image ticks per second", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9629,7 +9613,7 @@ PHP_METHOD(imagick, setimagetype)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image type", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9662,12 +9646,12 @@ PHP_METHOD(imagick, setimageunits)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = MagickSetImageType( intern->magick_wand, units );
+	status = MagickSetImageUnits( intern->magick_wand, units );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image units", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9706,7 +9690,7 @@ PHP_METHOD(imagick, setimageformat)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image format", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9745,7 +9729,7 @@ PHP_METHOD(imagick, charcoalimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to charcoal image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9783,7 +9767,7 @@ PHP_METHOD(imagick, oilpaintimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to oilpaint image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9817,7 +9801,7 @@ PHP_METHOD(imagick, normalizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to normalize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9855,7 +9839,7 @@ PHP_METHOD(imagick, labelimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to label image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9898,7 +9882,7 @@ PHP_METHOD(imagick, writeimage)
 
 	if ( strlen( fileName ) == 0 )
 	{
-		throwExceptionWithMessage( 1, "No image filename specified.", 1 TSRMLS_CC );
+		throwExceptionWithMessage( 1, "No image filename specified", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -9911,7 +9895,7 @@ PHP_METHOD(imagick, writeimage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to write image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -9962,7 +9946,7 @@ PHP_METHOD(imagick, writeimages)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to write images", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10003,7 +9987,7 @@ PHP_METHOD(imagick, drawimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to draw image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10051,7 +10035,7 @@ PHP_METHOD(imagick, annotateimage)
 	/* Fixes PECL Bug #11328 */
 	if( font == (char *)NULL || *font == '\0' )
 	{
-		throwExceptionWithMessage( 2, "Font needs to be set before annotating an image", 2 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Font needs to be set before annotating an image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 #endif
@@ -10061,7 +10045,7 @@ PHP_METHOD(imagick, annotateimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to annotate image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10099,7 +10083,7 @@ PHP_METHOD(imagick, setimagecompressionquality)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image compression quality", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10171,7 +10155,7 @@ PHP_METHOD(imagick, modulateimage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to modulate image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10208,7 +10192,7 @@ PHP_METHOD(imagick, addnoiseimage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to add image noise", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10256,7 +10240,7 @@ PHP_METHOD(imagick, montageimage)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Montage image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Montage image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10298,7 +10282,7 @@ PHP_METHOD(imagick, affinetransformimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to affine transform image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10324,7 +10308,7 @@ PHP_METHOD(imagick, averageimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "AffineTransform image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "AffineTransform image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10366,7 +10350,7 @@ PHP_METHOD(imagick, borderimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to border image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10400,7 +10384,7 @@ PHP_METHOD(imagick, thresholdimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to threshold image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10438,7 +10422,7 @@ PHP_METHOD(imagick, adaptivethresholdimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to adaptive threshold image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10473,7 +10457,7 @@ PHP_METHOD(imagick, sharpenimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to sharpen image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -10510,7 +10494,7 @@ PHP_METHOD(imagick, shaveimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to shave image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10552,7 +10536,7 @@ PHP_METHOD(imagick, shearimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to shear image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10591,7 +10575,7 @@ PHP_METHOD(imagick, spliceimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to splice image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10632,7 +10616,7 @@ PHP_METHOD(imagick, steganoimage)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Stegano image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Stegano image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
@@ -10657,7 +10641,7 @@ PHP_METHOD(imagick, clone)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Cloning Imagick object failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Cloning Imagick object failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
@@ -10699,7 +10683,7 @@ PHP_METHOD(imagick, rotateimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to rotate image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10737,7 +10721,7 @@ PHP_METHOD(imagick, sampleimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to sample image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10775,7 +10759,7 @@ PHP_METHOD(imagick, solarizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to solarize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10813,7 +10797,7 @@ PHP_METHOD(imagick, shadowimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to shadow image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10851,7 +10835,7 @@ PHP_METHOD(imagick, motionblurimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to motion blur image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10878,7 +10862,7 @@ PHP_METHOD(imagick, mosaicimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Mosaic image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Mosaic image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10919,7 +10903,7 @@ PHP_METHOD(imagick, morphimages)
 
 	if ( !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( 1, "Mosaic image failed.", 1 TSRMLS_CC);
+		throwExceptionWithMessage( 1, "Morph image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10948,7 +10932,7 @@ PHP_METHOD(imagick, minifyimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to minify image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -10987,7 +10971,7 @@ PHP_METHOD(imagick, posterizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to posterize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11021,7 +11005,7 @@ PHP_METHOD(imagick, radialblurimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to radial blur image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11059,7 +11043,7 @@ PHP_METHOD(imagick, raiseimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to raise image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11097,7 +11081,7 @@ PHP_METHOD(imagick, blackthresholdimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to black threshold image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11134,7 +11118,7 @@ PHP_METHOD(imagick, resampleimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to resample image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11171,7 +11155,7 @@ PHP_METHOD(imagick, resizeimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to resize image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11207,7 +11191,7 @@ PHP_METHOD(imagick, rollimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to roll image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11245,7 +11229,7 @@ PHP_METHOD(imagick, appendimages)
 
 	if ( !IsMagickWand( newWand ) )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to append images", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11284,7 +11268,7 @@ PHP_METHOD(imagick, whitethresholdimage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to white threshold image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11568,7 +11552,7 @@ PHP_METHOD(imagick, getpage)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC );
+		throwImagickException( intern->magick_wand, "Unable to get page", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -11739,7 +11723,7 @@ PHP_METHOD(imagick, getsize)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC );
+		throwImagickException( intern->magick_wand, "Unable to get size", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -11804,7 +11788,7 @@ PHP_METHOD(imagick, setbackgroundcolor)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set background color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11841,7 +11825,7 @@ PHP_METHOD(imagick, setcompression)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set compression", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -11877,7 +11861,7 @@ PHP_METHOD(imagick, setcompressionquality)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set compression quality", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -11914,7 +11898,7 @@ PHP_METHOD(imagick, setfilename)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set filename", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11952,7 +11936,7 @@ PHP_METHOD(imagick, setformat)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set format", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -11989,7 +11973,7 @@ PHP_METHOD(imagick, setinterlacescheme)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set interlace scheme", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12026,7 +12010,7 @@ PHP_METHOD(imagick, setoption)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set option", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12062,7 +12046,7 @@ PHP_METHOD(imagick, setpage)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set page", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12098,7 +12082,7 @@ PHP_METHOD(imagick, setresourcelimit)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set resource limit", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12134,7 +12118,7 @@ PHP_METHOD(imagick, setresolution)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set resolution", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12168,7 +12152,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 
 	if ( dArray == (double *)NULL )
 	{
-		throwExceptionWithMessage( 1, "Can't read array.", 1 TSRMLS_CC );
+		throwExceptionWithMessage( 1, "Can't read array", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -12180,7 +12164,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set sampling factors", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12216,7 +12200,7 @@ PHP_METHOD(imagick, setsize)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set size", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12252,7 +12236,7 @@ PHP_METHOD(imagick, settype)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set type", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -12722,7 +12706,7 @@ PHP_METHOD(imagickdraw, setfont)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickDrawException( internd->drawing_wand, 1 TSRMLS_CC);
+		throwImagickDrawException( internd->drawing_wand, "Unable to set font", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -12760,7 +12744,7 @@ PHP_METHOD(imagickdraw, setfontfamily)
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickDrawException( internd->drawing_wand, 1 TSRMLS_CC);
+		throwImagickDrawException( internd->drawing_wand, "Unable to set font family", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -12854,7 +12838,7 @@ PHP_METHOD(imagickdraw, setfontweight)
 	}
 	else
 	{
-		throwExceptionWithMessage( 4, "Font weight valid range is 100-900.", 4 TSRMLS_CC);
+		throwExceptionWithMessage( 2, "Font weight valid range is 100-900", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 }
@@ -13149,7 +13133,7 @@ PHP_METHOD(imagickdraw, clear)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 2, "ImagickDraw is not allocated.", 2 TSRMLS_CC);
+		throwExceptionWithMessage( 2, "ImagickDraw is not allocated", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -13219,7 +13203,7 @@ PHP_METHOD(imagickdraw, destroy)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 2, "ImagickDraw is not allocated.", 2 TSRMLS_CC);
+		throwExceptionWithMessage( 2, "ImagickDraw is not allocated", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	ClearDrawingWand( internd->drawing_wand );
@@ -13456,7 +13440,7 @@ PHP_METHOD(imagickdraw, polygon)
 	if ( coordinates == (PointInfo *)NULL )
 	{
 		efree( coordinates );
-		throwExceptionWithMessage( 1, "Unable to read coordinate array.", 1 TSRMLS_CC );
+		throwExceptionWithMessage( 2, "Unable to read coordinate array", 2 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -13496,7 +13480,7 @@ PHP_METHOD(imagickdraw, bezier)
 	if ( coordinates == (PointInfo *)NULL )
 	{
 		efree( coordinates );
-		throwExceptionWithMessage( 1, "Unable to read coordinate array.", 1 TSRMLS_CC );
+		throwExceptionWithMessage( 2, "Unable to read coordinate array", 2 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -13625,12 +13609,12 @@ PHP_METHOD(imagickdraw, affine)
 	{
 		if ( zend_hash_find( affine, matrixElements[i], 3, (void**)&ppzval ) == FAILURE )
 		{
-			throwExceptionWithMessage( 1, "AffineMatrix should contain keys: sx, rx, ry, sy, tx and ty.", 1 TSRMLS_CC);
+			throwExceptionWithMessage( 2, "AffineMatrix should contain keys: sx, rx, ry, sy, tx and ty", 2 TSRMLS_CC);
 			RETURN_FALSE;
 		}
 		else if( Z_TYPE_PP( ppzval ) != IS_DOUBLE || Z_TYPE_PP( ppzval ) != IS_LONG )
 		{
-			throwExceptionWithMessage( 1, "AffineMatrix values should be ints or floats.", 1 TSRMLS_CC);
+			throwExceptionWithMessage( 2, "AffineMatrix values should be ints or floats", 2 TSRMLS_CC);
 			RETURN_FALSE;
 		}
 		else
@@ -13670,7 +13654,7 @@ PHP_METHOD(imagickdraw, affine)
 			}
 			else
 			{
-				throwExceptionWithMessage( 1, "Unkown key in AffineMatrix.", 1 TSRMLS_CC);
+				throwExceptionWithMessage( 2, "Unkown key in AffineMatrix", 2 TSRMLS_CC);
 				RETURN_FALSE;
 			}
 		}
@@ -13719,7 +13703,7 @@ PHP_METHOD(imagickdraw, composite)
 
 	if ( status == MagickFalse )
 	{
-		throwImagickDrawException( internd->drawing_wand, 2 TSRMLS_CC);
+		throwImagickDrawException( internd->drawing_wand, "Unable to composite", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -14010,7 +13994,7 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 
 	if ( dArray == (double *)NULL )
 	{
-		throwExceptionWithMessage( 2, "Can't read array.", 2 TSRMLS_CC );
+		throwExceptionWithMessage( 2, "Can't read array", 2 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -14786,7 +14770,7 @@ PHP_METHOD(imagickdraw, polyline)
 	if ( coordinates == (PointInfo *)NULL )
 	{
 		efree( coordinates );
-		throwExceptionWithMessage( 1, "Unable to read coordinate array.", 1 TSRMLS_CC );
+		throwExceptionWithMessage( 2, "Unable to read coordinate array", 2 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -15527,7 +15511,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 3, "Invalid Imagick object passed.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Invalid Imagick object passed", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15536,7 +15520,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15558,13 +15542,13 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15586,13 +15570,13 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15614,13 +15598,13 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15642,13 +15626,13 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 
 	if ( internpix->instanciated_correctly != 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15690,7 +15674,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 3, "Invalid Imagick object passed.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Invalid Imagick object passed", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15699,7 +15683,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15742,7 +15726,7 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 3, "Invalid Imagick object passed.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Invalid Imagick object passed", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15751,7 +15735,7 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15774,12 +15758,12 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 	}
 
 	status = PixelGetIteratorRow( internpix->pixel_iterator );
@@ -15814,26 +15798,26 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( internpix->iterator_type == 2 )
 	{
-		throwExceptionWithMessage( 3, "Can't set row in RegionPixelIterator.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "Unable to set RegionPixelIterator row", 3 TSRMLS_CC);
 	}
 
 	status = PixelSetIteratorRow( internpix->pixel_iterator, row );
 
 	if ( status == MagickFalse)
 	{
-		throwImagickPixelIteratorException( internpix->pixel_iterator, 3 TSRMLS_CC );
+		throwImagickPixelIteratorException( internpix->pixel_iterator, "Unable to set iterator row", 3 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
@@ -15858,13 +15842,13 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15905,13 +15889,13 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15951,13 +15935,13 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -15993,13 +15977,13 @@ PHP_METHOD(imagickpixeliterator, destroy)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16020,13 +16004,13 @@ PHP_METHOD(imagickpixeliterator, clear)
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
-		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16116,7 +16100,7 @@ PHP_METHOD(imagickpixel, __construct)
 		status = PixelSetColor( internp->pixel_wand, colorName );
 		if( status == MagickFalse )
 		{
-			throwImagickPixelException( internp->pixel_wand, 3 TSRMLS_CC);
+			throwImagickPixelException( internp->pixel_wand, "Unable to construct ImagickPixel", 3 TSRMLS_CC);
 			RETURN_FALSE;
 		}
 	}
@@ -16153,7 +16137,7 @@ PHP_METHOD(imagickpixel, setcolor)
 
 	if( status == MagickFalse )
 	{
-		throwImagickPixelException( internp->pixel_wand, 3 TSRMLS_CC);
+		throwImagickPixelException( internp->pixel_wand, "Unable to set ImagickPixel color", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16177,7 +16161,7 @@ PHP_METHOD(imagickpixel, clear)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 3, "ImagickPixel is not allocated.", 3 TSRMLS_CC);
+		throwExceptionWithMessage( 3, "ImagickPixel is not allocated", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16202,7 +16186,7 @@ PHP_METHOD(imagickpixel, destroy)
 
 	if ( status == MagickFalse )
 	{
-		throwExceptionWithMessage( 4, "ImagickPixel is not allocated.", 4 TSRMLS_CC);
+		throwExceptionWithMessage( 4, "ImagickPixel is not allocated", 4 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16316,7 +16300,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 #endif
 
 		default:
-			throwExceptionWithMessage( 4, "Unknown color type.", 4 TSRMLS_CC );
+			throwExceptionWithMessage( 4, "Unknown color type", 4 TSRMLS_CC );
 			RETVAL_FALSE;
 		break;
 	}
@@ -16393,7 +16377,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 #endif
 
 		default:
-			throwExceptionWithMessage( 4, "Unknown color type.", 4 TSRMLS_CC );
+			throwExceptionWithMessage( 4, "Unknown color type", 4 TSRMLS_CC );
 			RETVAL_FALSE;
 		break;
 	}
@@ -16443,7 +16427,7 @@ PHP_METHOD(imagickpixel, getcolor)
 		else
 		{
 			IMAGICK_FREE_MEMORY( char *, colorString );
-			throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+			throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
 			RETURN_FALSE;
 		}
 
@@ -16494,7 +16478,7 @@ PHP_METHOD(imagickpixel, getcolor)
 				else
 				{
 					IMAGICK_FREE_MEMORY( char *, colorString );
-					throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+					throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
 					RETURN_FALSE;
 				}
 			}
@@ -16512,7 +16496,7 @@ PHP_METHOD(imagickpixel, getcolor)
 				else
 				{
 					IMAGICK_FREE_MEMORY( char *, colorString );
-					throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+					throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
 					RETURN_FALSE;
 				}
 			}
@@ -16533,7 +16517,7 @@ PHP_METHOD(imagickpixel, getcolor)
 		}
 		else
 		{
-			throwExceptionWithMessage( 3, "Unable to read the color string", 3 TSRMLS_CC );
+			throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
 			RETURN_FALSE;
 		}
 	}
