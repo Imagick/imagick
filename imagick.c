@@ -7833,7 +7833,7 @@ PHP_METHOD(imagick, getimageunits)
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	resolutionType = MagickGetImageType( intern->magick_wand );
+	resolutionType = MagickGetImageUnits( intern->magick_wand );
 	RETVAL_LONG( resolutionType );
 }
 /* }}} */
