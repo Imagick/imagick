@@ -5059,15 +5059,15 @@ PHP_METHOD(imagick, newpseudoimage)
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
+	/* Pseudo image needs a size set manually */
+	status = MagickSetSize( intern->magick_wand, columns, rows );
+
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
 		throwImagickException( intern->magick_wand, "Unable to create new pseudo image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-
-	/* Pseudo image needs a size set manually */
-	status = MagickSetSize( intern->magick_wand, columns, rows );
 
 	/* Read image from the pseudo string */
 	status = MagickReadImage( intern->magick_wand, pseudoString );
