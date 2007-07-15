@@ -5044,6 +5044,12 @@ PHP_METHOD(imagick, newpseudoimage)
 	char *pseudoString;
 	int pseudoStringLen;
 	char *pch, *absolute, *tmpString;
+	int i, match;
+	char *noBaseDirFormats[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
+									"histogram:", "label:", "map:", "matte:",
+									"null:", "plasma:", "preview:", "print:",
+									"scan:", "stegano:", "unique:", "win:",
+									"x:", "xc:", "magick:", "pattern:" };
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -5065,8 +5071,17 @@ PHP_METHOD(imagick, newpseudoimage)
 
 	tmpString = estrndup( pseudoString, pseudoStringLen );
 
+	for ( i = 0; i < 19 ; i++ )
+	{
+		/* No open_basedir check needed */
+		if ( strncasecmp( tmpString, noBaseDirFormats[i], strlen( noBaseDirFormats[i] ) ) == 0 )
+		{
+			match = 1;
+		}
+	}
+
 	/* These formats potentially read images */
-	if ( strncasecmp( tmpString, "vid:", 4 ) == 0 || strncasecmp( tmpString, "tile:", 5 ) == 0 )
+	if ( match == 1 )
 	{
 		pch = strtok( tmpString, ":" );
 		if ( pch != NULL )
