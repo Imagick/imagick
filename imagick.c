@@ -3958,7 +3958,7 @@ PHP_METHOD(imagick, queryfonts)
 PHP_METHOD(imagick, queryfontmetrics)
 {
 	zval *objvar, *object, *tmpArr;
-	zend_bool multiline = 0;
+	zval *multiline;
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
 	char *text;
@@ -3966,9 +3966,35 @@ PHP_METHOD(imagick, queryfontmetrics)
 	double *metrics;
 	PixelWand *tmpPixelWand;
 
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|b", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|z", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
 	{
 		return;
+	}
+
+	/* Accept only null or boolean */
+	switch ( Z_TYPE_P( multiline ) )
+	{
+		/* Passing null means we autodetect */
+		case IS_NULL:
+			if ( count_occurences_of( '\n', text TSRMLS_CC ) > 0 )
+			{
+				ZVAL_TRUE( multiline );
+			}
+			else
+			{
+				ZVAL_FALSE( multiline );
+			}
+		break;
+
+		/* It is a boolean. do nothing */
+		case IS_BOOL:
+		break;
+
+		/* The given value was something else */
+		default:
+			php_error( E_ERROR, "Expecting null or boolean as third parameter in queryFontMetrics" );
+			RETURN_NULL();
+		break;
 	}
 
 	object = getThis();
@@ -3980,26 +4006,26 @@ PHP_METHOD(imagick, queryfontmetrics)
 	{
 		tmpPixelWand = (PixelWand *)NewPixelWand();
 		MagickNewImage( intern->magick_wand, 1, 1, tmpPixelWand );
-		if ( multiline == 0)
+		if ( Z_BVAL_P( multiline ) )
 		{
-			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
+			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );	
 		}
 		else
 		{
-			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
+			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 		}
 		MagickRemoveImage( intern->magick_wand );
 		tmpPixelWand = (PixelWand *)DestroyPixelWand( tmpPixelWand );
 	}
 	else
 	{
-		if ( multiline == 0)
+		if ( Z_BVAL_P( multiline ) )
 		{
-			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
+			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 		}
 		else
 		{
-			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
+			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );	
 		}
 	}
 
@@ -4025,7 +4051,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		add_assoc_double( return_value, "originX", metrics[11] );
 		add_assoc_double( return_value, "originY", metrics[12] );
 
-		IMAGICK_FREE_MEMORY( double *, metrics );
+		IMAGICK_FREE_MEMORY( double *, metrics ); 
 		return;
 	}
 	RETURN_FALSE;
@@ -5017,7 +5043,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	long columns, rows;
 	char *pseudoString;
 	int pseudoStringLen;
-	char *format, *pch, *absolute, *tmpString;
+	char *pch, *absolute, *tmpString;
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -8370,7 +8396,7 @@ PHP_METHOD(imagick, getimagesblob)
 	unsigned char *imageContents;
 	size_t imageSize;
 	char *buffer;
-	int i, current;
+	int current;
 	MagickBooleanType status;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
