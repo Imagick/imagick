@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-06-29</date>
+	<date>2007-07-16</date>
 	<version>
-		<release>2.0.0b2</release>
+		<release>2.0.0b3</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -32,11 +32,12 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ Fixed open_basedir bypasses.
-+ Fixed PECL Bug #11328
-+ Added methods:
-  - Imagick::queryFonts()
-  - Imagick::queryFontMetrics()
++ Closes PECL Request #11513
++ Fixes ImagickPixel bug reported by Imran Nazar.
++ Fixed Imagick::setImageDispose and Imagick::setImageUnits.
++ Fixed Imagick::queryFontMetrics to autodetect multiline text if multiline argument is not passed or is null.
++ Fixed open_basedir bypasses in Imagick::newPseudoImage
++ Fixed "Undefined Exception" error messages
 
 NOTE: Using threaded SAPI in Windows is not currently recommended.
 </notes>
