@@ -2835,7 +2835,7 @@ PHP_METHOD(imagick, pingimagefile)
 		RETURN_FALSE;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&fp, REPORT_ERRORS) == FAILURE)
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&fp, 0) == FAILURE)
 	{
 		RETURN_FALSE;
 	}
@@ -4202,7 +4202,7 @@ PHP_METHOD(imagick, readimagefile)
 		RETURN_FALSE;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&fp, REPORT_ERRORS) == FAILURE)
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&fp, 0) == FAILURE)
 	{
 		RETURN_FALSE;
 	}
