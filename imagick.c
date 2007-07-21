@@ -5049,7 +5049,7 @@ PHP_METHOD(imagick, newpseudoimage)
 									"histogram:", "label:", "map:", "matte:",
 									"null:", "plasma:", "preview:", "print:",
 									"scan:", "stegano:", "unique:", "win:",
-									"x:", "xc:", "magick:", "pattern:" };
+									"x:", "xc:", "magick:", "pattern:", "http:", "ftp:" };
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -5071,7 +5071,16 @@ PHP_METHOD(imagick, newpseudoimage)
 
 	tmpString = estrndup( pseudoString, pseudoStringLen );
 
-	for ( i = 0; i < 19 ; i++ )
+	if ( !PG( allow_url_fopen ) )
+	{
+		if ( ( strncasecmp( tmpString, "http:", 5 ) == 0 ) || ( strncasecmp( tmpString, "ftp:", 4 ) == 0 ) )
+		{
+			throwExceptionWithMessage( 1, "Trying to open from an url and allow_url_fopen is off", 1 TSRMLS_CC );
+			RETURN_FALSE;
+		}
+	}
+
+	for ( i = 0; i < 21 ; i++ )
 	{
 		/* No open_basedir check needed */
 		if ( strncasecmp( tmpString, noBaseDirFormats[i], strlen( noBaseDirFormats[i] ) ) == 0 )
