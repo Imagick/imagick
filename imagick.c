@@ -3873,20 +3873,23 @@ PHP_METHOD(imagick, __tostring)
 	size_t imageSize;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+
+	if( getImageCount( intern->magick_wand TSRMLS_CC ) == 0 )
+	{
+		ZVAL_STRING( return_value, "", 1 );
+		return;
+	}
+	
 	buffer = MagickGetImageFormat( intern->magick_wand );
 
 	if( buffer == (char *)NULL || *buffer == '\0' )
 	{
-		RETVAL_STRING( "", 0 );
+		ZVAL_STRING( return_value, "", 1 );
+		return;
 	}
 	else
 	{
 		IMAGICK_FREE_MEMORY( char *, buffer );
-	}
-
-	if( getImageCount( intern->magick_wand TSRMLS_CC ) == 0 )
-	{
-		RETVAL_STRING( "", 0 );
 	}
 
 	image = MagickGetImageBlob( intern->magick_wand, &imageSize );
