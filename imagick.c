@@ -8430,8 +8430,13 @@ PHP_METHOD(imagick, getimagesblob)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
+#if MagickLibVersion > 0x628
 	/* Get the current iterator position */
 	current = MagickGetIteratorIndex( intern->magick_wand );
+#else
+	/* Get the current iterator position */
+	current = MagickGetImageIndex( intern->magick_wand );	
+#endif
 
 	/* Reset the iterator */
 	MagickResetIterator( intern->magick_wand );
@@ -8442,9 +8447,14 @@ PHP_METHOD(imagick, getimagesblob)
 		IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
 	}
 
-	/* Set iterator back to correct index */
+#if MagickLibVersion > 0x628
+	/* Get the current iterator position */
 	status = MagickSetIteratorIndex( intern->magick_wand, current );
-	
+#else
+	/* Get the current iterator position */
+	status = MagickSetImageIndex( intern->magick_wand, current );	
+#endif
+
 	if ( status == MagickFalse )
 	{
 		throwExceptionWithMessage( 1, "Unable to set the iterator index", 1 TSRMLS_CC );
