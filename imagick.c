@@ -115,6 +115,8 @@ PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
 PHP_METHOD(imagick, randomthresholdimage);
 PHP_METHOD(imagick, roundcorners);
+PHP_METHOD(imagick, setiteratorindex);
+PHP_METHOD(imagick, getiteratorindex);
 #endif
 #if MagickLibVersion > 0x631
 PHP_METHOD(imagick, polaroidimage);
@@ -1318,6 +1320,11 @@ static
 		ZEND_ARG_INFO(0, displace)
 		ZEND_ARG_INFO(0, sizeCorrection)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setiteratorindex_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, index)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x631
@@ -2298,6 +2305,8 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, adaptivesharpenimage, imagick_adaptivesharpenimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, randomthresholdimage, imagick_randomthresholdimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, roundcorners, imagick_roundcorners_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setiteratorindex, imagick_setiteratorindex_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getiteratorindex, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x631
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
@@ -2542,8 +2551,11 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setsamplingfactors, imagick_setsamplingfactors_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setsize, imagick_setsize_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, settype, imagick_settype_args, ZEND_ACC_PUBLIC)
-
+#if MagickLibVersion > 0x628
+	PHP_MALIAS(imagick, key, getiteratorindex, imagick_zero_args, ZEND_ACC_PUBLIC)
+#else
 	PHP_MALIAS(imagick, key, getimageindex, imagick_zero_args, ZEND_ACC_PUBLIC)
+#endif
 	PHP_MALIAS(imagick, next, nextimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_MALIAS(imagick, rewind, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, valid, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2612,7 +2624,6 @@ void throwImagickDrawException( DrawingWand *drawing_wand, char *fallback, long 
 {
 	ExceptionType severity;
 	char *description;
-	int free = 1;
 	description = DrawGetException( drawing_wand, &severity );
 
 	if ( strlen( description ) == 0 )
@@ -3549,6 +3560,61 @@ PHP_METHOD(imagick, roundcorners)
 	unallocateWands( maskImage, draw, color TSRMLS_CC );
 
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto int Imagick::getIteratorIndex()
+	Returns the index of the current active image, within the Imagick object.
+*/
+PHP_METHOD(imagick, getiteratorindex)
+{
+	zval *object;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+
+	status = MagickGetIteratorIndex( intern->magick_wand );
+	ZVAL_LONG( return_value, (long)status );
+	return;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setIteratorIndex(int index)
+	Sets the index of the Imagick object.
+*/
+PHP_METHOD(imagick, setiteratorindex)
+{
+	const long index;
+	zval *object;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &index ) == FAILURE )
+	{
+		return;
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	status = MagickSetIteratorIndex( intern->magick_wand, index );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set iterator index", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	intern->next_out_of_bound = 0;
+	RETURN_TRUE;
+
 }
 /* }}} */
 #endif
@@ -8276,6 +8342,10 @@ PHP_METHOD(imagick, getimageindex)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
+#if MagickLibVersion > 0x628
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "getImageindex" );
+#endif
+
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 
 	status = MagickGetImageIndex( intern->magick_wand );
@@ -8294,7 +8364,9 @@ PHP_METHOD(imagick, setimageindex)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
+#if MagickLibVersion > 0x628
 	IMAGICK_METHOD_DEPRECATED( "Imagick", "setImageIndex" );
+#endif
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
