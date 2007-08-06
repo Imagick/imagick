@@ -3834,8 +3834,7 @@ PHP_METHOD(imagick, linearstretchimage)
 PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
-	zval *object = getThis();
-	zval *files;
+	zval *object, *files;
 	char *filename, *absolute;
 	HashPosition pos;
 	HashTable *hash_table;
@@ -3844,7 +3843,6 @@ PHP_METHOD(imagick, __construct)
 
 	MAKE_STD_ZVAL(files);
 	Z_TYPE_P(files) = IS_NULL;
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z", &files ) == FAILURE )
 	{
