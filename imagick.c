@@ -3843,13 +3843,12 @@ PHP_METHOD(imagick, __construct)
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z!", &files ) == FAILURE )
 	{
-		RETURN_NULL();
+		return;
 	}
 
 	/* No files given.. */
 	if ( files == NULL )
 	{
-		FREE_ZVAL(files);
 		RETURN_TRUE;
 	}
 
