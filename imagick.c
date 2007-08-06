@@ -3835,12 +3835,15 @@ PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
 	zval *object = getThis();
-	zval *files = (zval *)NULL;
+	zval *files;
 	char *filename, *absolute;
 	HashPosition pos;
 	HashTable *hash_table;
 	MagickBooleanType status;
 	zval **ppzval, tmpcopy;
+
+	MAKE_STD_ZVAL(files);
+	Z_TYPE_P(files) = IS_NULL;
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z", &files ) == FAILURE )
@@ -3849,8 +3852,9 @@ PHP_METHOD(imagick, __construct)
 	}
 
 	/* No files given.. */
-	if ( files == (zval *)NULL || Z_TYPE_P(files) == IS_NULL )
+	if ( Z_TYPE_P(files) == IS_NULL )
 	{
+		FREE_ZVAL(files);
 		RETURN_TRUE;
 	}
 
@@ -3945,7 +3949,7 @@ PHP_METHOD(imagick, __tostring)
 		ZVAL_STRING( return_value, "", 1 );
 		return;
 	}
-	
+
 	buffer = MagickGetImageFormat( intern->magick_wand );
 
 	if( buffer == (char *)NULL || *buffer == '\0' )
@@ -4077,7 +4081,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		MagickNewImage( intern->magick_wand, 1, 1, tmpPixelWand );
 		if ( Z_BVAL_P( multiline ) )
 		{
-			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );	
+			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 		}
 		else
 		{
@@ -4094,7 +4098,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		}
 		else
 		{
-			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );	
+			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 		}
 	}
 
@@ -4120,7 +4124,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		add_assoc_double( return_value, "originX", metrics[11] );
 		add_assoc_double( return_value, "originY", metrics[12] );
 
-		IMAGICK_FREE_MEMORY( double *, metrics ); 
+		IMAGICK_FREE_MEMORY( double *, metrics );
 		return;
 	}
 	RETURN_FALSE;
@@ -8507,7 +8511,7 @@ PHP_METHOD(imagick, getimagesblob)
 	current = MagickGetIteratorIndex( intern->magick_wand );
 #else
 	/* Get the current iterator position */
-	current = MagickGetImageIndex( intern->magick_wand );	
+	current = MagickGetImageIndex( intern->magick_wand );
 #endif
 
 	/* Reset the iterator */
@@ -8524,7 +8528,7 @@ PHP_METHOD(imagick, getimagesblob)
 	status = MagickSetIteratorIndex( intern->magick_wand, current );
 #else
 	/* Get the current iterator position */
-	status = MagickSetImageIndex( intern->magick_wand, current );	
+	status = MagickSetImageIndex( intern->magick_wand, current );
 #endif
 
 	if ( status == MagickFalse )
