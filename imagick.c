@@ -3834,7 +3834,7 @@ PHP_METHOD(imagick, linearstretchimage)
 PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
-	zval *object, *files;
+	zval *object, *files = NULL;
 	char *filename, *absolute;
 	HashPosition pos;
 	HashTable *hash_table;
@@ -3846,16 +3846,16 @@ PHP_METHOD(imagick, __construct)
 		return;
 	}
 
-	/* No files given.. */
+	/* No files given.. or null passed */
 	if ( files == NULL )
 	{
-		RETURN_TRUE;
+		return;
 	}
 
 	/* A single file was given */
 	if (Z_TYPE_P(files) == IS_STRING)
 	{
-		/* get the filenam */
+		/* get the filename */
 		filename = Z_STRVAL_P( files );
 
 		/* Fix because magickwand doesnt want to take relative paths */
