@@ -3841,16 +3841,13 @@ PHP_METHOD(imagick, __construct)
 	MagickBooleanType status;
 	zval **ppzval, tmpcopy;
 
-	MAKE_STD_ZVAL(files);
-	Z_TYPE_P(files) = IS_NULL;
-
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z", &files ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z!", &files ) == FAILURE )
 	{
 		RETURN_NULL();
 	}
 
 	/* No files given.. */
-	if ( Z_TYPE_P(files) == IS_NULL )
+	if ( files == NULL )
 	{
 		FREE_ZVAL(files);
 		RETURN_TRUE;
