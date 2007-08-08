@@ -150,6 +150,7 @@ PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, readimage);
+PHP_METHOD(imagick, readimages);
 PHP_METHOD(imagick, pingimage);
 PHP_METHOD(imagick, readimageblob);
 PHP_METHOD(imagick, readimagefile);
@@ -1393,6 +1394,11 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_readimages_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, filenames)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_readimageblob_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, imageContents)
 		ZEND_ARG_INFO(0, fileName)
@@ -2340,6 +2346,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, readimages, imagick_readimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimageblob, imagick_readimageblob_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageformat, imagick_setimageformat_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, scaleimage, imagick_scaleimage_args, ZEND_ACC_PUBLIC)
@@ -4209,6 +4216,57 @@ PHP_METHOD(imagick, readimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto bool Imagick::readImages( array files )
+    Reads image from an array of filenames
+*/
+PHP_METHOD(imagick, readimages)
+{
+	zval *files;
+	char *filename;
+	int status;
+	php_imagick_object *intern;
+	HashPosition pos;
+	HashTable *hash_table;
+	zval **ppzval, tmpcopy;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &files ) == FAILURE )
+	{
+		return;
+	}
+
+	hash_table = Z_ARRVAL_P( files );
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	for(zend_hash_internal_pointer_reset_ex(hash_table, &pos);
+		zend_hash_has_more_elements_ex(hash_table, &pos) == SUCCESS;
+		zend_hash_move_forward_ex(hash_table, &pos))
+	{
+		if (zend_hash_get_current_data_ex(hash_table, (void**)&ppzval, &pos) == FAILURE)
+		{
+			continue;
+		}
+
+		tmpcopy = **ppzval;
+		zval_copy_ctor(&tmpcopy);
+		INIT_PZVAL(&tmpcopy);
+		convert_to_string(&tmpcopy);
+
+		filename = Z_STRVAL(tmpcopy);
+		status = readImageIntoMagickWand( intern, filename TSRMLS_CC );
+		IMAGICK_CHECK_READ_ERROR( intern, filename, status );
+
+		zval_dtor(&tmpcopy);
+	}
+	RETURN_TRUE;
+}
+
 
 /* {{{ proto bool Imagick::pingImage( string filename )
     This method can be used to query image width, height, size, and format without reading the whole image in to memory.
