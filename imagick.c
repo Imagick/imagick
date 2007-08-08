@@ -87,6 +87,27 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 #define IMAGICK_METHOD_DEPRECATED( className, methodName )\
 	php_error( E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName );
 
+#define IMAGICK_CHECK_READ_ERROR(intern, filename, error)\
+	switch ( error )\
+	{\
+		default:\
+		case 0:\
+			/* No error */\
+		break;\
+		case 1:\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read image: %s", filename );\
+			RETURN_NULL();\
+		break;\
+		case 2:\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
+			RETURN_NULL();\
+		break;\
+		case 3:\
+			throwImagickException( intern->magick_wand, "Unable to read image", 1 TSRMLS_CC);\
+			RETURN_NULL();\
+		break;\
+	}
+
 /* Forward declarations (Imagick) */
 
 /* The conditional methods */
@@ -2817,6 +2838,37 @@ double *getDoublesFromZval( zval *zArray, long *numElements TSRMLS_DC )
 	return dArray;
 }
 
+int readImageIntoMagickWand( php_imagick_object *intern, char *filename TSRMLS_DC )
+{
+	MagickBooleanType status;
+	char *absolute = expand_filepath( filename, NULL TSRMLS_CC);
+	
+	if( PG(safe_mode) ) 
+	{
+		if ( php_check_open_basedir_ex( absolute, 0 TSRMLS_CC ) || 
+			 php_checkuid_ex( absolute, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) )
+		{
+			return 1;
+		}
+	}
+	else 
+	{ 
+		if ( php_check_open_basedir_ex( absolute, 0 TSRMLS_CC ) ) 
+		{
+			return 2;
+		}		
+	}
+
+	status = MagickReadImage( intern->magick_wand, absolute );
+	efree(absolute);
+
+	if ( status == MagickFalse )
+	{
+		return 3;
+	}
+	return 0;
+}
+
 #if MagickLibVersion > 0x628
 /* {{{ proto bool Imagick::pingImageFile( resource filehandle )
     This method can be used to query image width, height, size, and format without reading the whole image to memory.
@@ -3834,11 +3886,11 @@ PHP_METHOD(imagick, linearstretchimage)
 PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
-	zval *object, *files = NULL;
-	char *filename, *absolute;
+	zval *files = NULL;
+	char *filename;
 	HashPosition pos;
 	HashTable *hash_table;
-	MagickBooleanType status;
+	int status;
 	zval **ppzval, tmpcopy;
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z!", &files ) == FAILURE )
@@ -3858,22 +3910,10 @@ PHP_METHOD(imagick, __construct)
 		/* get the filename */
 		filename = Z_STRVAL_P( files );
 
-		/* Fix because magickwand doesnt want to take relative paths */
-		absolute = expand_filepath( filename, NULL TSRMLS_CC);
+		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+		status = readImageIntoMagickWand( intern, filename TSRMLS_CC );
+		IMAGICK_CHECK_READ_ERROR( intern, filename, status );
 
-		IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
-
-		object = getThis();
-		intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-		status = MagickReadImage( intern->magick_wand, absolute );
-		efree( absolute );
-
-		/* No magick is going to happen */
-		if ( status == MagickFalse )
-		{
-			throwImagickException( intern->magick_wand, "Unable to construct Imagick object", 1 TSRMLS_CC);
-			RETURN_FALSE;
-		}
 		RETURN_TRUE;
 	}
 
@@ -3882,6 +3922,7 @@ PHP_METHOD(imagick, __construct)
 	{
 
 		hash_table = Z_ARRVAL_P( files );
+		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 		for(zend_hash_internal_pointer_reset_ex(hash_table, &pos);
 			zend_hash_has_more_elements_ex(hash_table, &pos) == SUCCESS;
@@ -3900,22 +3941,9 @@ PHP_METHOD(imagick, __construct)
 
 			filename = Z_STRVAL(tmpcopy);
 
-			/* Fix because magickwand doesnt want to take relative paths */
-			absolute = expand_filepath( filename, NULL TSRMLS_CC);
-
-			IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
-
-			object = getThis();
-			intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-			status = MagickReadImage( intern->magick_wand, absolute );
-			efree( absolute );
-
-			/* No magick is going to happen */
-			if ( status == MagickFalse )
-			{
-				throwImagickException( intern->magick_wand, "Unable to construct Imagick object", 1 TSRMLS_CC);
-				RETURN_FALSE;
-			}
+			
+			status = readImageIntoMagickWand( intern, filename TSRMLS_CC );
+			IMAGICK_CHECK_READ_ERROR( intern, filename, status );
 
 			zval_dtor(&tmpcopy);
 		}
@@ -4160,11 +4188,8 @@ PHP_METHOD(imagick, current)
 PHP_METHOD(imagick, readimage)
 {
 	char *fileName;
-	int fileNameLen;
-	zval *object;
-	MagickBooleanType status;
+	int fileNameLen, status;
 	php_imagick_object *intern;
-	char *absolute;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -4177,22 +4202,10 @@ PHP_METHOD(imagick, readimage)
 		return;
 	}
 
-	/* Fix because magickwand doesnt want to take relative paths */
-	absolute = expand_filepath( fileName, NULL TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	status = readImageIntoMagickWand( intern, fileName TSRMLS_CC );
+	IMAGICK_CHECK_READ_ERROR( intern, fileName, status );
 
-	IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	status = MagickReadImage( intern->magick_wand, absolute );
-	efree( absolute );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, "Unable to read image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
 	RETURN_TRUE;
 }
 /* }}} */
@@ -7288,7 +7301,9 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 		add_assoc_double( tmp, "minima", statistics[channels[i]].minima );
 		add_assoc_double( tmp, "maxima", statistics[channels[i]].maxima );
 		add_assoc_double( tmp, "standardDeviation", statistics[channels[i]].standard_deviation );
+#if MagickLibVersion < 0x635		
 		add_assoc_long( tmp, "scale", statistics[channels[i]].scale );
+#endif
 		add_assoc_long( tmp, "depth", statistics[channels[i]].depth );
 		add_index_zval( return_value, channels[i], tmp );
 	}
@@ -8120,11 +8135,10 @@ void calculateCropThumbnailDimensions( long *width, long *height, long *cropX, l
 		tmp = (double)imageWidth / (double)imageHeight;
 		(*((long*)width)) = tmp * (*((long*)height));
 
-		(*((long*)cropY)) = ( (*((long*)width)) - cropWidth ) / 2;
+		(*((long*)cropX)) = ( (*((long*)width)) - cropWidth ) / 2;
 		(*((long*)cropY)) = 0;
 	}
 }
-
 
 /* {{{ proto bool Imagick::cropthumbnailImage(int columns, int rows)
 	 Creates a crop thumbnail
@@ -8166,7 +8180,6 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	thumbHeight = cropHeight;
 
 	calculateCropThumbnailDimensions( &thumbWidth, &thumbHeight, &cropX, &cropY, cropWidth, cropHeight, imageWidth, imageHeight TSRMLS_CC );
-
 	status = MagickThumbnailImage( intern->magick_wand, thumbWidth, thumbHeight );
 
 	/* The world collapses.. */
