@@ -20,6 +20,11 @@
 
 #include "php_imagick.h"
 
+#if defined(ZTS) && defined(PHP_WIN32)
+static MUTEX_T imagick_mutex;
+static THREAD_T imagick_thread_id;
+#endif
+
 /* Class names */
 #define PHP_IMAGICK_SC_NAME "Imagick"
 #define PHP_IMAGICK_EXCEPTION_SC_NAME "ImagickException"
@@ -17170,6 +17175,15 @@ static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSR
 	intern = emalloc( sizeof( php_imagick_object ) );
 	memset( &intern->zo, 0, sizeof( php_imagick_object ) );
 
+#if defined(ZTS) && defined(PHP_WIN32)
+	/* If its our thread then we already hack the lock so skip locking */
+	if (imagick_thread_id != tsrm_thread_id())
+	{
+		tsrm_mutex_lock(imagick_mutex);
+		imagick_thread_id = tsrm_thread_id();
+	}
+#endif
+
 	/* Set the magickwand */
 	intern->magick_wand = NewMagickWand();
 	intern->numImages = 0;
@@ -17341,6 +17355,10 @@ PHP_MINIT_FUNCTION(imagick)
 
 	initializeMagickConstants();
 
+#if defined(ZTS) && defined(PHP_WIN32)
+	imagick_mutex = tsrm_mutex_alloc();
+#endif
+
 	return SUCCESS;
 }
 
@@ -17398,9 +17416,25 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 {
 	/* Destroy the magick wand env */
 	MagickWandTerminus();
+#if defined(ZTS) && defined(PHP_WIN32)
+	tsrm_mutex_free(imagick_mutex);
+#endif
 	return( SUCCESS );
 }
 
+#if defined(ZTS) && defined(PHP_WIN32)
+PHP_RSHUTDOWN_FUNCTION(imagick)
+{
+	/* We have the lock so lets release it */
+	if (imagick_thread_id == tsrm_thread_id())
+	{
+		imagick_thread_id = NULL;
+		tsrm_mutex_unlock(imagick_mutex);
+	}
+
+	return SUCCESS;
+}
+#endif
 
 zend_module_entry imagick_module_entry =
 {
@@ -17412,7 +17446,11 @@ zend_module_entry imagick_module_entry =
 	PHP_MINIT(imagick),			/* MINIT */
 	PHP_MSHUTDOWN(imagick),		/* MSHUTDOWN */
 	NULL,						    /* RINIT */
+#if defined(ZTS) && defined(PHP_WIN32)
+	RSHUTDOWN(imagick),
+#else
 	NULL,						    /* RSHUTDOWN */
+#endif
 	PHP_MINFO(imagick),			/* MINFO */
 #if ZEND_MODULE_API_NO >= 20010901
 	PHP_IMAGICK_EXTVER,
