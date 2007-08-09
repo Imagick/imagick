@@ -68,15 +68,22 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 #define IMAGICK_FREE_MEMORY( type, value )\
 	if ( value != (type) NULL ) { value = (type) MagickRelinquishMemory( value ); value = (type)NULL; }
 
-#define IMAGICK_SAFE_MODE_CHECK( message, fileName )\
-	if( PG(safe_mode) ) {\
-		if ( php_check_open_basedir_ex( fileName, 0 TSRMLS_CC ) || php_checkuid_ex( fileName, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) ){\
-		zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC,\
-								 message, fileName); efree( fileName ); RETURN_FALSE; } }\
-	else { if ( php_check_open_basedir_ex( fileName, 0 TSRMLS_CC ) ) {\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC,\
-								 "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", fileName); efree( fileName ); RETURN_FALSE; } }\
-
+#define IMAGICK_SAFE_MODE_CHECK( filename, status )\
+	if ( PG(safe_mode) ) \
+	{ \
+		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ||  \
+				php_checkuid_ex( filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) ) \
+		{ \
+			status = 1; \
+		} \
+	} \
+	else \
+	{ \
+		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ) \
+		{ \
+			status = 2; \
+		} \
+	}
 
 #define IMAGICK_HAS_FORMAT( buffer, magick_wand )\
 	buffer = MagickGetImageFormat( magick_wand );\
@@ -87,7 +94,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 #define IMAGICK_METHOD_DEPRECATED( className, methodName )\
 	php_error( E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName );
 
-#define IMAGICK_CHECK_READ_ERROR(intern, filename, error)\
+#define IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, free)\
 	switch ( error )\
 	{\
 		default:\
@@ -96,14 +103,17 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		break;\
 		case 1:\
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read image: %s", filename );\
+			if ( free == 1 ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
 		case 2:\
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
+			if ( free == 1 ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
 		case 3:\
 			throwImagickException( intern->magick_wand, "Unable to read image", 1 TSRMLS_CC);\
+			if ( free == 1 ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
 	}
@@ -2845,28 +2855,27 @@ double *getDoublesFromZval( zval *zArray, long *numElements TSRMLS_DC )
 	return dArray;
 }
 
-int readImageIntoMagickWand( php_imagick_object *intern, char *filename TSRMLS_DC )
+int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int type TSRMLS_DC )
 {
+	int error = 0;
 	MagickBooleanType status;
 	char *absolute = expand_filepath( filename, NULL TSRMLS_CC);
-	
-	if( PG(safe_mode) ) 
-	{
-		if ( php_check_open_basedir_ex( absolute, 0 TSRMLS_CC ) || 
-			 php_checkuid_ex( absolute, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) )
-		{
-			return 1;
-		}
-	}
-	else 
-	{ 
-		if ( php_check_open_basedir_ex( absolute, 0 TSRMLS_CC ) ) 
-		{
-			return 2;
-		}		
-	}
 
-	status = MagickReadImage( intern->magick_wand, absolute );
+	IMAGICK_SAFE_MODE_CHECK( absolute, status );
+
+	if ( error != 0 )
+	{
+		efree(absolute);
+		return error;
+	}
+	if ( type == 1 )
+	{
+		status = MagickReadImage( intern->magick_wand, absolute );
+	}
+	else
+	{
+		status = MagickPingImage( intern->magick_wand, absolute );
+	}
 	efree(absolute);
 
 	if ( status == MagickFalse )
@@ -3894,10 +3903,10 @@ PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
 	zval *files = NULL;
-	char *filename;
+	char *filename = "";
 	HashPosition pos;
 	HashTable *hash_table;
-	int status;
+	int status = 0;
 	zval **ppzval, tmpcopy;
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|z!", &files ) == FAILURE )
@@ -3918,8 +3927,8 @@ PHP_METHOD(imagick, __construct)
 		filename = Z_STRVAL_P( files );
 
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-		status = readImageIntoMagickWand( intern, filename TSRMLS_CC );
-		IMAGICK_CHECK_READ_ERROR( intern, filename, status );
+		status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0 );
 
 		RETURN_TRUE;
 	}
@@ -3927,7 +3936,6 @@ PHP_METHOD(imagick, __construct)
 	/* an array of filenames was given */
 	if (Z_TYPE_P(files) == IS_ARRAY)
 	{
-
 		hash_table = Z_ARRVAL_P( files );
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
@@ -3948,12 +3956,16 @@ PHP_METHOD(imagick, __construct)
 
 			filename = Z_STRVAL(tmpcopy);
 
-			
-			status = readImageIntoMagickWand( intern, filename TSRMLS_CC );
-			IMAGICK_CHECK_READ_ERROR( intern, filename, status );
-
+			status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
 			zval_dtor(&tmpcopy);
+
+			if ( status != 0 )
+			{
+				break;
+			}
 		}
+
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0 );
 		RETURN_TRUE;
 	}
 
@@ -4210,8 +4222,8 @@ PHP_METHOD(imagick, readimage)
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = readImageIntoMagickWand( intern, fileName TSRMLS_CC );
-	IMAGICK_CHECK_READ_ERROR( intern, fileName, status );
+	status = readImageIntoMagickWand( intern, fileName, 1 TSRMLS_CC );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, fileName, status, 0 );
 
 	RETURN_TRUE;
 }
@@ -4223,8 +4235,8 @@ PHP_METHOD(imagick, readimage)
 PHP_METHOD(imagick, readimages)
 {
 	zval *files;
-	char *filename;
-	int status;
+	char *filename = "";
+	int status = 0;
 	php_imagick_object *intern;
 	HashPosition pos;
 	HashTable *hash_table;
@@ -4259,11 +4271,16 @@ PHP_METHOD(imagick, readimages)
 		convert_to_string(&tmpcopy);
 
 		filename = Z_STRVAL(tmpcopy);
-		status = readImageIntoMagickWand( intern, filename TSRMLS_CC );
-		IMAGICK_CHECK_READ_ERROR( intern, filename, status );
+		status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
 
 		zval_dtor(&tmpcopy);
+
+		if ( status != 0 )
+		{
+			break;
+		}
 	}
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0 );
 	RETURN_TRUE;
 }
 
@@ -4275,10 +4292,8 @@ PHP_METHOD(imagick, pingimage)
 {
 	char *fileName;
 	int fileNameLen;
-	zval *object;
-	MagickBooleanType status;
+	int status = 0;
 	php_imagick_object *intern;
-	char *absolute;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -4291,22 +4306,10 @@ PHP_METHOD(imagick, pingimage)
 		return;
 	}
 
-	/* Fix because magickwand doesnt want to take relative paths */
-	absolute = expand_filepath( fileName, NULL TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	status = MagickPingImage( intern->magick_wand, absolute );
-	efree( absolute );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, "Unable to ping image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
+	status = readImageIntoMagickWand( intern, fileName, 2 TSRMLS_CC );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, fileName, status, 0 );
 
 	RETURN_TRUE;
 }
@@ -5176,13 +5179,12 @@ PHP_METHOD(imagick, newimage)
 PHP_METHOD(imagick, newpseudoimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	long columns, rows;
 	char *pseudoString;
 	int pseudoStringLen;
-	char *pch, *absolute, *tmpString;
-	int i, match;
+	char *pch, *absolute = "", *tmpString;
+	int i, match = 1, error = 0;
 	char *noBaseDirFormats[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
 									"histogram:", "label:", "map:", "matte:",
 									"null:", "plasma:", "preview:", "print:",
@@ -5223,9 +5225,12 @@ PHP_METHOD(imagick, newpseudoimage)
 		/* No open_basedir check needed */
 		if ( strncasecmp( tmpString, noBaseDirFormats[i], strlen( noBaseDirFormats[i] ) ) == 0 )
 		{
-			match = 1;
+			match = 0;
+			break;
 		}
 	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	/* These formats potentially read images */
 	if ( match == 1 )
@@ -5237,15 +5242,17 @@ PHP_METHOD(imagick, newpseudoimage)
 			if ( pch != NULL )
 			{
 				absolute = expand_filepath( pch, NULL TSRMLS_CC);
-				IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to read image: %s", absolute );
-				efree( absolute );
+				IMAGICK_SAFE_MODE_CHECK( absolute, error );
 			}
 		}
 	}
 	efree( tmpString );
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	if ( match == 1 )
+	{
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
+		efree( absolute );
+	}
 
 	/* Pseudo image needs a size set manually */
 	status = MagickSetSize( intern->magick_wand, columns, rows );
@@ -7359,7 +7366,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 		add_assoc_double( tmp, "minima", statistics[channels[i]].minima );
 		add_assoc_double( tmp, "maxima", statistics[channels[i]].maxima );
 		add_assoc_double( tmp, "standardDeviation", statistics[channels[i]].standard_deviation );
-#if MagickLibVersion < 0x635		
+#if MagickLibVersion < 0x635
 		add_assoc_long( tmp, "scale", statistics[channels[i]].scale );
 #endif
 		add_assoc_long( tmp, "depth", statistics[channels[i]].depth );
@@ -10056,35 +10063,31 @@ PHP_METHOD(imagick, labelimage)
 */
 PHP_METHOD(imagick, writeimage)
 {
-	char *fileName;
+	char *fileName = NULL;
+	int error = 0;
 	int fileNameLen;
-	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	char *absolute;
 	char *buffer;
-	object = getThis();
 
-	fileName = (char *)NULL;
-
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &fileName, &fileNameLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s!", &fileName, &fileNameLen ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
 
-	if ( fileName == (char *)NULL )
+	if ( fileName == NULL )
 	{
 		fileName = MagickGetImageFilename( intern->magick_wand );
 	}
 
-	if ( strlen( fileName ) == 0 )
+	if ( fileName == NULL || strlen( fileName ) == 0 )
 	{
 		throwExceptionWithMessage( 1, "No image filename specified", 1 TSRMLS_CC );
 		RETURN_FALSE;
@@ -10092,7 +10095,8 @@ PHP_METHOD(imagick, writeimage)
 
 	absolute = expand_filepath( fileName, NULL TSRMLS_CC);
 
-	IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to write image: %s", absolute );
+	IMAGICK_SAFE_MODE_CHECK( absolute, error );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
 
 	status = MagickWriteImage( intern->magick_wand, absolute );
 	efree( absolute );
@@ -10116,15 +10120,10 @@ PHP_METHOD(imagick, writeimages)
 	char *fileName;
 	zend_bool adjoin;
 	int fileNameLen;
-	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	char *absolute;
-	object = getThis();
-
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	int error = 0;
 
 	if( ZEND_NUM_ARGS() != 2 )
 	{
@@ -10136,13 +10135,19 @@ PHP_METHOD(imagick, writeimages)
 		return;
 	}
 
-	if ( strlen( fileName ) == 0 )
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	if ( fileNameLen == 0 )
 	{
+		throwImagickException( intern->magick_wand, "No image filename specified", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
 	absolute = expand_filepath( fileName, NULL TSRMLS_CC);
-	IMAGICK_SAFE_MODE_CHECK( "Safe mode restricts user to write image: %s", absolute );
+
+	IMAGICK_SAFE_MODE_CHECK( absolute, error );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
 
 	status = MagickWriteImages( intern->magick_wand, fileName, adjoin );
 	efree( absolute );
