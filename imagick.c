@@ -17176,7 +17176,7 @@ static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSR
 	memset( &intern->zo, 0, sizeof( php_imagick_object ) );
 
 #if defined(ZTS) && defined(PHP_WIN32)
-	/* If its our thread then we already hack the lock so skip locking */
+	/* If its our thread then we already have the lock so no need to lock again */
 	if (imagick_thread_id != tsrm_thread_id())
 	{
 		tsrm_mutex_lock(imagick_mutex);
@@ -17447,7 +17447,7 @@ zend_module_entry imagick_module_entry =
 	PHP_MSHUTDOWN(imagick),		/* MSHUTDOWN */
 	NULL,						    /* RINIT */
 #if defined(ZTS) && defined(PHP_WIN32)
-	RSHUTDOWN(imagick),
+	PHP_RSHUTDOWN(imagick),
 #else
 	NULL,						    /* RSHUTDOWN */
 #endif
