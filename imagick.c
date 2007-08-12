@@ -13826,7 +13826,7 @@ PHP_METHOD(imagickdraw, affine)
 			throwExceptionWithMessage( 2, "AffineMatrix should contain keys: sx, rx, ry, sy, tx and ty", 2 TSRMLS_CC);
 			RETURN_FALSE;
 		}
-		else if( Z_TYPE_PP( ppzval ) != IS_DOUBLE || Z_TYPE_PP( ppzval ) != IS_LONG )
+		else if ( ( Z_TYPE_PP( ppzval ) != IS_DOUBLE ) && ( Z_TYPE_PP( ppzval ) != IS_LONG ) )
 		{
 			throwExceptionWithMessage( 2, "AffineMatrix values should be ints or floats", 2 TSRMLS_CC);
 			RETURN_FALSE;
