@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-07-16</date>
+	<date>2007-08-15</date>
 	<version>
-		<release>2.0.0b3</release>
+		<release>2.0.0rc1</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -32,14 +32,16 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ Closes PECL Request #11513
-+ Fixes ImagickPixel bug reported by Imran Nazar.
-+ Fixed Imagick::setImageDispose and Imagick::setImageUnits.
-+ Fixed Imagick::queryFontMetrics to autodetect multiline text if multiline argument is not passed or is null.
-+ Fixed open_basedir bypasses in Imagick::newPseudoImage
-+ Fixed "Undefined Exception" error messages
++ Suppress error when reading image from a stream.
++ Fixed allow_url_fopen bypass in Imagick::newPseudoImage().
++ Fixed imagick::__tostring to return empty string if the object doesnt contain images.
++ Fixed a problem with Imagick::getImagesBlob() when an older version of ImageMagick is used.
++ Fixed a crash on Windows when no arguments are passed to the Imagick constructor.
++ Fixed a crash when using a threaded SAPI under Windows.
++ Fixed a bug in ImagickDraw::affine().
++ Added Imagick::getIteratorIndex() and Imagick::setIteratorIndex().
++ Added Imagick::readImages()
 
-NOTE: Using threaded SAPI in Windows is not currently recommended.
 </notes>
 	<contents>
 		<dir name="/">
