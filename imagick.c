@@ -2866,7 +2866,7 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 	MagickBooleanType status;
 	char *absolute = expand_filepath( filename, NULL TSRMLS_CC);
 
-	IMAGICK_SAFE_MODE_CHECK( absolute, status );
+	IMAGICK_SAFE_MODE_CHECK( absolute, error );
 
 	if ( error != 0 )
 	{
