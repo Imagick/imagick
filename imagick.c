@@ -288,6 +288,7 @@ PHP_METHOD(imagick, frameimage);
 PHP_METHOD(imagick, fximage);
 PHP_METHOD(imagick, gammaimage);
 PHP_METHOD(imagick, gaussianblurimage);
+PHP_METHOD(imagick, getimageattribute);
 PHP_METHOD(imagick, getimagebackgroundcolor);
 PHP_METHOD(imagick, getimageblueprimary);
 PHP_METHOD(imagick, getimagebordercolor);
@@ -1654,6 +1655,11 @@ static
 	ZEND_END_ARG_INFO()
 
 static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageattribute_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, key)
+	ZEND_END_ARG_INFO()
+
+static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebackgroundcolor_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
 	ZEND_END_ARG_INFO()
@@ -2482,6 +2488,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, fximage, imagick_fximage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gammaimage, imagick_gammaimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gaussianblurimage, imagick_gaussianblurimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageattribute, imagick_getimageattribute_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagebackgroundcolor, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageblueprimary, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagebordercolor, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -7076,6 +7083,43 @@ PHP_METHOD(imagick, getimagegeometry)
 	array_init( return_value );
 	add_assoc_long( return_value, "width", width );
 	add_assoc_long( return_value, "height", height );
+
+	return;
+}
+/* }}} */
+
+/* {{{ proto ImagickPixel Imagick::getImageAttribute( string key )
+	Returns a named attribute
+*/
+PHP_METHOD(imagick, getimageattribute)
+{
+	php_imagick_object *intern;
+	char *key, *attribute;
+	int keyLen;
+
+	IMAGICK_METHOD_DEPRECATED( "Imagick", "getImageAttribute" );
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &keyLen ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	attribute = MagickGetImageAttribute(intern->magick_wand, key );
+
+	if ( attribute == NULL || *attribute == '\0' )
+	{
+		RETURN_FALSE;
+	}
+
+	ZVAL_STRING( return_value, attribute, 1 );
+	IMAGICK_FREE_MEMORY( char *, attribute );
 
 	return;
 }
