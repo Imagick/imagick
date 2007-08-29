@@ -6460,9 +6460,7 @@ PHP_METHOD(imagick, setimagerenderingintent)
 PHP_METHOD(imagick, setimagevirtualpixelmethod)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long virtualPixel;
-	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED( "Imagick", "setImageVirtualPixelMethod" );
 
@@ -6477,18 +6475,10 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = MagickSetImageVirtualPixelMethod( intern->magick_wand, virtualPixel );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, "Unable to set image virtual pixel method", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
+	MagickSetImageVirtualPixelMethod( intern->magick_wand, virtualPixel );
 	RETURN_TRUE;
 }
 /* }}} */
