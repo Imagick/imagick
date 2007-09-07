@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-08-15</date>
+	<date>2007-09-08</date>
 	<version>
-		<release>2.0.0rc1</release>
+		<release>2.0.0rc2</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -32,16 +32,12 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ Suppress error when reading image from a stream.
-+ Fixed allow_url_fopen bypass in Imagick::newPseudoImage().
-+ Fixed imagick::__tostring to return empty string if the object doesnt contain images.
-+ Fixed a problem with Imagick::getImagesBlob() when an older version of ImageMagick is used.
-+ Fixed a crash on Windows when no arguments are passed to the Imagick constructor.
-+ Fixed a crash when using a threaded SAPI under Windows.
-+ Fixed a bug in ImagickDraw::affine().
-+ Added Imagick::getIteratorIndex() and Imagick::setIteratorIndex().
-+ Added Imagick::readImages()
-
++ Added support for forcing image format during write operations.
++ Added more interlace constants. They are present if imagick is compiled against ImagickMagick 6.3.4 or newer.
++ Added Imagick::getImageAttribute.
++ Added LAYERMETHOD constants. Available if compiled against ImageMagick 6.2.8 or later.
++ Closes PECL Bug #11934 - setImageVirtualPixelMethod triggers exception
++ Fixed safe_mode and open_basedir bypass for __construct, readImage, readImages and pingImage
 </notes>
 	<contents>
 		<dir name="/">
