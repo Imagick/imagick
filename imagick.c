@@ -10217,7 +10217,6 @@ PHP_METHOD(imagick, writeimages)
 	int filenameLen;
 	php_imagick_object *intern;
 	int error = 0;
-	char *buffer;
 
 	if( ZEND_NUM_ARGS() != 2 )
 	{
