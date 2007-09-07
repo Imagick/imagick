@@ -2897,6 +2897,79 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 	return 0;
 }
 
+/* type 1 = writeimage, type 2 = writeimages */
+int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC )
+{
+	int error = 0, occurences = 0;
+	MagickBooleanType status;
+	char *absolute, *buffer, *format, *tmp;
+
+	occurences = count_occurences_of( ':', filename TSRMLS_CC );
+
+	switch ( occurences )
+	{
+		case 0:
+		
+			absolute = expand_filepath( filename, NULL TSRMLS_CC );
+			IMAGICK_SAFE_MODE_CHECK( absolute, error );
+			
+			if ( error != 0 )
+			{
+				efree(absolute);
+				return error;
+			}
+
+		break;
+
+		case 1:
+			format = strtok( filename, ":" );
+			buffer = strtok( NULL, ":" );
+
+			/* Safe mode checking */
+			tmp = expand_filepath( buffer, NULL TSRMLS_CC );
+			IMAGICK_SAFE_MODE_CHECK( tmp, error );
+
+			if ( error != 0 )
+			{
+				efree(tmp);
+				return error;
+			}
+
+			/* Allocate space */
+			absolute = emalloc( strlen( format ) + strlen( tmp ) + 2 );
+			memset( absolute, '\0', strlen( format ) + strlen( tmp ) + 2 );
+
+			/* The final filename */
+			strncat( absolute, format, strlen( format ) );
+			strncat( absolute, ":", 1 );
+			strncat( absolute, tmp, strlen( tmp ) );
+
+			/* absolute now contains the path */
+		break;
+	
+		default:
+			return 3;
+		break;
+	}
+
+	if ( type == 1 )
+	{
+		status = MagickWriteImage( intern->magick_wand, absolute );
+	}
+	else
+	{
+		status = MagickWriteImages( intern->magick_wand, absolute, adjoin );
+	}
+	efree(absolute);
+
+	if ( status == MagickFalse )
+	{
+		return 3;
+	}
+	return 0;
+}
+
+
 #if MagickLibVersion > 0x628
 /* {{{ proto bool Imagick::pingImageFile( resource filehandle )
     This method can be used to query image width, height, size, and format without reading the whole image to memory.
@@ -10098,53 +10171,36 @@ PHP_METHOD(imagick, labelimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::writeImage(string filename)
-	Writes an image to the specified filename.  If the filename parameter is NULL, the image is written to the filename set by MagickReadImage() or MagickSetImageFilename().
+	Writes an image to the specified filename
 */
 PHP_METHOD(imagick, writeimage)
 {
-	char *fileName = NULL;
+	char *filename = NULL;
 	int error = 0;
-	int fileNameLen;
-	MagickBooleanType status;
+	int filenameLen;
 	php_imagick_object *intern;
-	char *absolute;
-	char *buffer;
 
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s!", &fileName, &fileNameLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s!", &filename, &filenameLen ) == FAILURE )
 	{
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_HAS_FORMAT( buffer, intern->magick_wand );
-
-	if ( fileName == NULL )
+	if ( filename == NULL )
 	{
-		fileName = MagickGetImageFilename( intern->magick_wand );
+		filename = MagickGetImageFilename( intern->magick_wand );
 	}
 
-	if ( fileName == NULL || strlen( fileName ) == 0 )
+	if ( filename == NULL || strlen( filename ) == 0 )
 	{
 		throwExceptionWithMessage( 1, "No image filename specified", 1 TSRMLS_CC );
 		RETURN_FALSE;
 	}
 
-	absolute = expand_filepath( fileName, NULL TSRMLS_CC);
-
-	IMAGICK_SAFE_MODE_CHECK( absolute, error );
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
-
-	status = MagickWriteImage( intern->magick_wand, absolute );
-	efree( absolute );
-
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, "Unable to write image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
+	error = writeImageFromFilename( intern, filename, 0, 1 TSRMLS_CC );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, error, 0 );
 
 	RETURN_TRUE;
 
@@ -10156,20 +10212,19 @@ PHP_METHOD(imagick, writeimage)
 */
 PHP_METHOD(imagick, writeimages)
 {
-	char *fileName;
+	char *filename;
 	zend_bool adjoin;
-	int fileNameLen;
-	MagickBooleanType status;
+	int filenameLen;
 	php_imagick_object *intern;
-	char *absolute;
 	int error = 0;
+	char *buffer;
 
 	if( ZEND_NUM_ARGS() != 2 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "sb", &fileName, &fileNameLen, &adjoin ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "sb", &filename, &filenameLen, &adjoin ) == FAILURE )
 	{
 		return;
 	}
@@ -10177,26 +10232,15 @@ PHP_METHOD(imagick, writeimages)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	if ( fileNameLen == 0 )
+
+	if ( filename == 0 )
 	{
 		throwImagickException( intern->magick_wand, "No image filename specified", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
-	absolute = expand_filepath( fileName, NULL TSRMLS_CC);
-
-	IMAGICK_SAFE_MODE_CHECK( absolute, error );
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
-
-	status = MagickWriteImages( intern->magick_wand, fileName, adjoin );
-	efree( absolute );
-
-	/* No magick is going to happen */
-	if ( status == MagickFalse )
-	{
-		throwImagickException( intern->magick_wand, "Unable to write images", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
+	error = writeImageFromFilename( intern, filename, adjoin, 2 TSRMLS_CC );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, error, 0 );
 
 	RETURN_TRUE;
 
