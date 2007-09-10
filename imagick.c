@@ -123,6 +123,10 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		break;\
 	}
 
+/* Thanks for Imran Nazar for submitting this set of macros */
+#define IMAGICK_RETRIEVE_REVISION(a,b,c,d) d
+#define IMAGICK_CHECK_MAGICKLIB_REVISION(a) IMAGICK_RETRIEVE_REVISION(a)
+
 /* Forward declarations (Imagick) */
 
 /* The conditional methods */
@@ -161,6 +165,9 @@ PHP_METHOD(imagick, setimageproperty);
 PHP_METHOD(imagick, setimageinterpolatemethod);
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
+#endif
+#if MagickLibVersion > 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7
+PHP_METHOD(imagick, clutimage);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
@@ -1395,6 +1402,14 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_clutimage_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+		ZEND_ARG_INFO(0, CHANNELTYPE)
+	ZEND_END_ARG_INFO()
+#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2363,6 +2378,9 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7
+	PHP_ME(imagick, clutimage, imagick_clutimage_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -3976,6 +3994,43 @@ PHP_METHOD(imagick, linearstretchimage)
 		throwImagickException( intern->magick_wand, "Unable to linear strech image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7
+/* {{{ proto Imagick Imagick::clutImage( Imagick lookup[, int channel] )
+   Replaces colors in the image from a color lookup table
+*/
+PHP_METHOD(imagick, clutimage)
+{
+	zval *objvar;
+	php_imagick_object *intern, *lookup;
+	MagickBooleanType status;
+	long channel = AllChannels;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O|d", &objvar, php_imagick_sc_entry, &channel ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	lookup = (php_imagick_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( lookup->magick_wand, 1, 1 );
+
+	status = MagickClutImageChannel( intern->magick_wand, channel, lookup->magick_wand );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to replace colors in the image from a color lookup table", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
 	RETURN_TRUE;
 }
 /* }}} */
