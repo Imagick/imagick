@@ -374,6 +374,7 @@ PHP_METHOD(imagick, textureimage);
 PHP_METHOD(imagick, tintimage);
 PHP_METHOD(imagick, unsharpmaskimage);
 PHP_METHOD(imagick, getimage);
+PHP_METHOD(imagick, setimage);
 PHP_METHOD(imagick, addimage);
 PHP_METHOD(imagick, newimage);
 PHP_METHOD(imagick, newpseudoimage);
@@ -2236,7 +2237,12 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_addimage_args, 0, 0, 4)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_addimage_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
@@ -2586,6 +2592,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, unsharpmaskimage, imagick_unsharpmaskimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, addimage, imagick_addimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimage, imagick_setimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, newimage, imagick_newimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, newpseudoimage, imagick_newpseudoimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getcompression, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -5207,6 +5214,45 @@ PHP_METHOD(imagick, combineimages)
 	intern_return->magick_wand = tmpWand;
 
 	return;
+}
+/* }}} */
+
+/* {{{ proto Imagick Imagick::setImage( Imagick replace )
+	Replaces the current sequence
+*/
+PHP_METHOD(imagick, setimage)
+{
+	zval *objvar;
+	MagickBooleanType status;
+	php_imagick_object *intern, *replace;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagick_sc_entry ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	replace = (php_imagick_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( replace->magick_wand, 1, 1 );
+
+	status = MagickSetImage( intern->magick_wand, replace->magick_wand );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set the image", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+
 }
 /* }}} */
 
