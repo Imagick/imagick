@@ -3004,7 +3004,7 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 PHP_METHOD(imagick, pingimagefile)
 {
 	FILE *fp;
-	char *fileName;
+	char *fileName = NULL;
 	int fileNameLen;
 	zval *object;
 	MagickBooleanType status;
@@ -3012,9 +3012,7 @@ PHP_METHOD(imagick, pingimagefile)
 	zval *zstream;
 	php_stream *stream;
 
-	fileName = (char *)NULL;
-
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s", &zstream, &fileName, &fileNameLen) == FAILURE)
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &fileName, &fileNameLen) == FAILURE)
 	{
 		return;
 	}
@@ -4221,7 +4219,7 @@ PHP_METHOD(imagick, queryfonts)
 PHP_METHOD(imagick, queryfontmetrics)
 {
 	zval *objvar, *object, *tmpArr;
-	zval *multiline;
+	zend_bool multiline = NULL, dealloc = 0;
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
 	char *text;
@@ -4229,39 +4227,26 @@ PHP_METHOD(imagick, queryfontmetrics)
 	double *metrics;
 	PixelWand *tmpPixelWand;
 
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|z", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|b!", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
 	{
 		return;
 	}
 
-	/* Accept only null or boolean */
-	switch ( Z_TYPE_P( multiline ) )
+	/* No parameter passed, this means we should autodetect */
+	if (multiline == NULL)
 	{
-		/* Passing null means we autodetect */
-		case IS_NULL:
-			if ( count_occurences_of( '\n', text TSRMLS_CC ) > 0 )
-			{
-				ZVAL_TRUE( multiline );
-			}
-			else
-			{
-				ZVAL_FALSE( multiline );
-			}
-		break;
-
-		/* It is a boolean. do nothing */
-		case IS_BOOL:
-		break;
-
-		/* The given value was something else */
-		default:
-			php_error( E_ERROR, "Expecting null or boolean as third parameter in queryFontMetrics" );
-			RETURN_NULL();
-		break;
+		if ( count_occurences_of( '\n', text TSRMLS_CC ) > 0 )
+		{
+			multiline = 1;
+		}
+		else
+		{
+			multiline = 0;
+		}
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	/* fetch the objects */
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 
 	/* If wand is empty, create a 1x1 pixel image to use as a temporary canvas */
@@ -4269,27 +4254,24 @@ PHP_METHOD(imagick, queryfontmetrics)
 	{
 		tmpPixelWand = (PixelWand *)NewPixelWand();
 		MagickNewImage( intern->magick_wand, 1, 1, tmpPixelWand );
-		if ( Z_BVAL_P( multiline ) )
-		{
-			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
-		}
-		else
-		{
-			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
-		}
-		MagickRemoveImage( intern->magick_wand );
-		tmpPixelWand = (PixelWand *)DestroyPixelWand( tmpPixelWand );
+		dealloc = 1;
+	}
+
+	/* Multiline testing */
+	if ( multiline )
+	{
+		metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 	}
 	else
 	{
-		if ( Z_BVAL_P( multiline ) )
-		{
-			metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
-		}
-		else
-		{
-			metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
-		}
+		metrics = MagickQueryFontMetrics( intern->magick_wand, internd->drawing_wand, text );
+	}
+
+	/* Deallocate the image and pixelwand */
+	if ( dealloc )
+	{
+		MagickRemoveImage( intern->magick_wand );
+		tmpPixelWand = (PixelWand *)DestroyPixelWand( tmpPixelWand );
 	}
 
 	if ( metrics != (double *)NULL )
@@ -4470,7 +4452,7 @@ PHP_METHOD(imagick, pingimage)
 PHP_METHOD(imagick, readimagefile)
 {
 	FILE *fp;
-	char *fileName;
+	char *fileName = NULL;
 	int fileNameLen;
 	zval *object;
 	MagickBooleanType status;
@@ -4478,9 +4460,7 @@ PHP_METHOD(imagick, readimagefile)
 	zval *zstream;
 	php_stream *stream;
 
-	fileName = (char *)NULL;
-
-	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s", &zstream, &fileName, &fileNameLen) == FAILURE)
+	if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &fileName, &fileNameLen) == FAILURE)
 	{
 		return;
 	}
@@ -4589,17 +4569,16 @@ PHP_METHOD(imagick, displayimages)
 PHP_METHOD(imagick, readimageblob)
 {
 	char *imageString;
-	char *fileName;
+	char *fileName = NULL;
 	long fileNameLen;
 	size_t imageStringLen;
 	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
-	fileName = (char *)NULL;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|s", &imageString, &imageStringLen, &fileName, &fileNameLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s|s!", &imageString, &imageStringLen, &fileName, &fileNameLen ) == FAILURE )
 	{
 		return;
 	}
