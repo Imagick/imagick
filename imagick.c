@@ -4264,12 +4264,12 @@ PHP_METHOD(imagick, queryfonts)
 /* }}} */
 
 /* {{{ proto array Imagick::queryFontMetrics( ImagickDraw draw, string text[, bool multiline] )
-   Returns a 13 element array representing the following font metrics
+   Returns a 13 element array representing the font metrics
 */
 PHP_METHOD(imagick, queryfontmetrics)
 {
-	zval *objvar, *tmpArr;
-	zend_bool multiline = (zend_bool)NULL, dealloc = 0;
+	zval *objvar, *tmpArr, *multiline = NULL;
+	zend_bool dealloc = 0, queryMulti;
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
 	PixelWand *tmpPixelWand = NULL;
@@ -4277,21 +4277,33 @@ PHP_METHOD(imagick, queryfontmetrics)
 	int textLen;
 	double *metrics;
 
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|b!", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|z!", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
 	{
 		return;
 	}
 
 	/* No parameter passed, this means we should autodetect */
-	if (multiline == (zend_bool)NULL)
+	if (multiline == NULL)
 	{
-		if ( count_occurences_of( '\n', text TSRMLS_CC ) > 0 )
+		if (count_occurences_of( '\n', text TSRMLS_CC ) > 0)
 		{
-			multiline = 1;
+			queryMulti = 1;
 		}
 		else
 		{
-			multiline = 0;
+			queryMulti = 0;
+		}
+	}
+	else 
+	{
+		if (Z_TYPE_P(multiline) == IS_BOOL)
+		{
+			queryMulti = Z_BVAL_P(multiline) ? 1 : 0;
+		}
+		else
+		{
+			throwExceptionWithMessage( 1, "The third parameter must be a null or a boolean", 1 TSRMLS_CC );
+			return;			
 		}
 	}
 
@@ -4308,7 +4320,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 	}
 
 	/* Multiline testing */
-	if ( multiline )
+	if ( queryMulti )
 	{
 		metrics = MagickQueryMultilineFontMetrics( intern->magick_wand, internd->drawing_wand, text );
 	}
