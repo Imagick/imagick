@@ -4268,14 +4268,14 @@ PHP_METHOD(imagick, queryfonts)
 */
 PHP_METHOD(imagick, queryfontmetrics)
 {
-	zval *objvar, *object, *tmpArr;
-	zend_bool multiline = NULL, dealloc = 0;
+	zval *objvar, *tmpArr;
+	zend_bool multiline = (zend_bool)NULL, dealloc = 0;
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
+	PixelWand *tmpPixelWand = NULL;
 	char *text;
 	int textLen;
 	double *metrics;
-	PixelWand *tmpPixelWand;
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Os|b!", &objvar, php_imagickdraw_sc_entry, &text, &textLen, &multiline ) == FAILURE )
 	{
@@ -4283,7 +4283,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 	}
 
 	/* No parameter passed, this means we should autodetect */
-	if (multiline == NULL)
+	if (multiline == (zend_bool)NULL)
 	{
 		if ( count_occurences_of( '\n', text TSRMLS_CC ) > 0 )
 		{
