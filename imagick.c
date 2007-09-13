@@ -8679,7 +8679,7 @@ PHP_METHOD(imagick, getimageindex)
 */
 PHP_METHOD(imagick, setimageindex)
 {
-	const long index;
+	long index;
 	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
