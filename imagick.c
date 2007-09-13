@@ -158,6 +158,9 @@ PHP_METHOD(imagick, roundcorners);
 PHP_METHOD(imagick, setiteratorindex);
 PHP_METHOD(imagick, getiteratorindex);
 #endif
+#if MagickLibVersion > 0x630
+PHP_METHOD(imagick, setimageopacity);
+#endif
 #if MagickLibVersion > 0x631
 PHP_METHOD(imagick, polaroidimage);
 PHP_METHOD(imagick, getimageproperty);
@@ -1404,6 +1407,13 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x630
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageopacity_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, opacity)
+	ZEND_END_ARG_INFO()
+#endif
+
 #if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_clutimage_args, 0, 0, 1)
@@ -2377,6 +2387,9 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, roundcorners, imagick_roundcorners_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setiteratorindex, imagick_setiteratorindex_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getiteratorindex, imagick_zero_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x630
+	PHP_ME(imagick, setimageopacity, imagick_setimageopacity_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x631
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
@@ -3796,6 +3809,43 @@ PHP_METHOD(imagick, setiteratorindex)
 }
 /* }}} */
 #endif
+
+#if MagickLibVersion > 0x630
+/* {{{ proto bool Imagick::setImageOpacity(float opacity)
+	Sets the image to the specified opacity level
+*/
+PHP_METHOD(imagick, setimageopacity)
+{
+	double opacity;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &opacity ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickSetImageOpacity( intern->magick_wand, opacity );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set image opacity", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif 
 
 #if MagickLibVersion > 0x631
 /* {{{ proto bool Imagick::polaroidImage( ImagickDraw properties, double angle )
