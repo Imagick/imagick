@@ -126,7 +126,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 /* Thanks for Imran Nazar for submitting this set of macros */
 #if defined(PHP_WIN32)
 #define IMAGICK_CHECK_MAGICKLIB_REVISION(a,b,c,d) d
-#elseif
+#else
 #define IMAGICK_RETRIEVE_REVISION(a,b,c,d) d
 #define IMAGICK_CHECK_MAGICKLIB_REVISION(a) IMAGICK_RETRIEVE_REVISION(a)
 #endif
@@ -173,6 +173,10 @@ PHP_METHOD(imagick, setimageproperty);
 PHP_METHOD(imagick, setimageinterpolatemethod);
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
+#endif
+#if MagickLibVersion > 0x633
+PHP_METHOD(imagick, getimageorientation);
+PHP_METHOD(imagick, setimageorientation);
 #endif
 #if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
 PHP_METHOD(imagick, clutimage);
@@ -1412,6 +1416,13 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x633
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageorientation_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, ORIENTATION)
+	ZEND_END_ARG_INFO()
+#endif
+
 #if MagickLibVersion > 0x630
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageopacity_args, 0, 0, 1)
@@ -2403,6 +2414,10 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x631
+	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageorientation, imagick_setimageorientation_args, ZEND_ACC_PUBLIC)
 #endif
 #if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
 	PHP_ME(imagick, clutimage, imagick_clutimage_args, ZEND_ACC_PUBLIC)
@@ -4054,6 +4069,58 @@ PHP_METHOD(imagick, linearstretchimage)
 	if ( status == MagickFalse )
 	{
 		throwImagickException( intern->magick_wand, "Unable to linear strech image", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x633
+/* {{{ proto Imagick Imagick::getImageOrientation(void)
+   Gets the image orientation
+*/
+PHP_METHOD(imagick, getimageorientation)
+{
+	zval *object;
+	php_imagick_object *intern;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	RETVAL_LONG( MagickGetImageOrientation( intern->magick_wand ) );
+}
+/* }}} */
+
+/* {{{ proto Imagick Imagick::setImageOrientation(int orientation)
+   Sets the image orientation
+*/
+PHP_METHOD(imagick, setimageorientation)
+{
+	php_imagick_object *intern;
+	long orientation;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &orientation ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickSetImageOrientation( intern->magick_wand, orientation );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set image orientation", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -17347,13 +17414,21 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_REMOVEDUPS", RemoveDupsLayer );
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_REMOVEZERO", RemoveZeroLayer );
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_COMPOSITE", CompositeLayer );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_UNDEFINED", UndefinedOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_TOPLEFT", TopLeftOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_TOPRIGHT", TopRightOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_BOTTOMRIGHT", BottomRightOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_BOTTOMLEFT", BottomLeftOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_LEFTTOP", LeftTopOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_RIGHTTOP", RightTopOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_RIGHTBOTTOM", RightBottomOrientation );
+	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_LEFTBOTTOM", LeftBottomOrientation );
 #endif
 }
 
 static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 {
 	php_imagick_object *intern = (php_imagick_object *)object;
-
 
 	if (!intern)
 	{
