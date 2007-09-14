@@ -124,8 +124,13 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	}
 
 /* Thanks for Imran Nazar for submitting this set of macros */
+#if defined(PHP_WIN32)
+#define IMAGICK_CHECK_MAGICKLIB_REVISION(a,b,c,d) d
+#elseif
 #define IMAGICK_RETRIEVE_REVISION(a,b,c,d) d
 #define IMAGICK_CHECK_MAGICKLIB_REVISION(a) IMAGICK_RETRIEVE_REVISION(a)
+#endif
+
 
 /* Forward declarations (Imagick) */
 
