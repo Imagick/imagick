@@ -82,6 +82,21 @@ if test $PHP_IMAGICK != "no"; then
 				AC_MSG_ERROR(no. You need at least PHP version 5.1.3 to use Imagick.)
 		fi
 
+		dnl ImageMagick 6.3.5-9 provides a few useful functions to get some image properties and profiles
+		dnl That is why this version is tested separately
+		AC_TRY_COMPILE([
+			#include <stdlib.h>
+			#include <wand/magick-wand.h>
+  		], [
+			MagickWand *magick = (MagickWand *)NewMagickWand();
+			char **test, *pattern = "*";
+			unsigned long i;
+			test = MagickGetImageProperties( magick, pattern, &i );
+			test = (char **)MagickRelinquishMemory(test);
+  		], [
+    		AC_DEFINE(HAVE_IMAGEMAGICK6359ORLATER, 1, [ ])
+  		])
+
 		AC_DEFINE(HAVE_IMAGICK,1,[ ])
 
 		PHP_ADD_LIBRARY_WITH_PATH(Magick, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)

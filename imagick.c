@@ -123,9 +123,6 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		break;\
 	}
 
-#define IMAGICK_RETRIEVE_REVISION(a) a
-#define IMAGICK_CHECK_MAGICKLIB_REVISION(a) IMAGICK_RETRIEVE_REVISION((a))
-
 /* Forward declarations (Imagick) */
 
 /* The conditional methods */
@@ -172,8 +169,10 @@ PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, getimageorientation);
 PHP_METHOD(imagick, setimageorientation);
 #endif
-#if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
+#ifdef HAVE_IMAGEMAGICK6359ORLATER
 PHP_METHOD(imagick, clutimage);
+PHP_METHOD(imagick, getimageproperties);
+PHP_METHOD(imagick, getimageprofiles);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
@@ -1424,11 +1423,21 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
-#if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
+#ifdef HAVE_IMAGEMAGICK6359ORLATER
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_clutimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageproperties_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, pattern)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageprofiles_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, pattern)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -2413,8 +2422,10 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageorientation, imagick_setimageorientation_args, ZEND_ACC_PUBLIC)
 #endif
-#if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
+#ifdef HAVE_IMAGEMAGICK6359ORLATER
 	PHP_ME(imagick, clutimage, imagick_clutimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageproperties, imagick_getimageproperties_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageprofiles, imagick_getimageprofiles_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -2963,10 +2974,10 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 	switch ( occurences )
 	{
 		case 0:
-		
+
 			absolute = expand_filepath( filename, NULL TSRMLS_CC );
 			IMAGICK_SAFE_MODE_CHECK( absolute, error );
-			
+
 			if ( error != 0 )
 			{
 				efree(absolute);
@@ -3000,7 +3011,7 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 			/* absolute now contains the path */
 		break;
-	
+
 		default:
 			return 3;
 		break;
@@ -3859,7 +3870,7 @@ PHP_METHOD(imagick, setimageopacity)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif 
+#endif
 
 #if MagickLibVersion > 0x631
 /* {{{ proto bool Imagick::polaroidImage( ImagickDraw properties, double angle )
@@ -4122,7 +4133,7 @@ PHP_METHOD(imagick, setimageorientation)
 /* }}} */
 #endif
 
-#if (MagickLibVersion == 0x635 && IMAGICK_CHECK_MAGICKLIB_REVISION(MagickLibVersionNumber) >= 7) || ( MagickLibVersion > 0x635 )
+#ifdef HAVE_IMAGEMAGICK6359ORLATER
 /* {{{ proto Imagick Imagick::clutImage( Imagick lookup[, int channel] )
    Replaces colors in the image from a color lookup table
 */
@@ -4155,6 +4166,72 @@ PHP_METHOD(imagick, clutimage)
 	}
 
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto Imagick Imagick::getImageProperties( [string pattern] )
+  	Returns all the property names that match the specified pattern
+*/
+PHP_METHOD(imagick, getimageproperties)
+{
+	char *pattern = "*", **properties;
+	int patternLen;
+	unsigned long propertiesCount, i;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &patternLen ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	properties = MagickGetImageProperties(intern->magick_wand, pattern, &propertiesCount);
+	array_init( return_value );
+
+	for ( i = 0; i < propertiesCount; i++ )
+	{
+		add_next_index_string( return_value, properties[i], 1 );
+	}
+
+	IMAGICK_FREE_MEMORY( char **, properties );
+	return;
+}
+/* }}} */
+
+/* {{{ proto Imagick Imagick::getImageProfiles( [string pattern] )
+  	Returns all the profile names that match the specified pattern
+*/
+PHP_METHOD(imagick, getimageprofiles)
+{
+	char *pattern = "*", **profiles;
+	int patternLen;
+	unsigned long profilesCount, i;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &patternLen ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	profiles = MagickGetImageProfiles(intern->magick_wand, pattern, &profilesCount);
+	array_init( return_value );
+
+	for ( i = 0; i < profilesCount; i++ )
+	{
+		add_next_index_string( return_value, profiles[i], 1 );
+	}
+
+	IMAGICK_FREE_MEMORY( char **, profiles );
+	return;
 }
 /* }}} */
 #endif
@@ -4360,7 +4437,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 			queryMulti = 0;
 		}
 	}
-	else 
+	else
 	{
 		if (Z_TYPE_P(multiline) == IS_BOOL)
 		{
@@ -4369,7 +4446,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		else
 		{
 			throwExceptionWithMessage( 1, "The third parameter must be a null or a boolean", 1 TSRMLS_CC );
-			return;			
+			return;
 		}
 	}
 
@@ -8873,7 +8950,7 @@ PHP_METHOD(imagick, getimagelength)
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageLength( intern->magick_wand, &length );
-	
+
 	if ( status == MagickFalse )
 	{
 		throwExceptionWithMessage( 1, "Unable to acquire image length", 1 TSRMLS_CC );
