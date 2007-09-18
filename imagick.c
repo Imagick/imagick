@@ -1433,11 +1433,13 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageproperties_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, pattern)
+		ZEND_ARG_INFO(0, values)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageprofiles_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, pattern)
+		ZEND_ARG_INFO(0, values)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -4169,19 +4171,20 @@ PHP_METHOD(imagick, clutimage)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::getImageProperties( [string pattern] )
+/* {{{ proto Imagick Imagick::getImageProperties( [string pattern, bool values] )
   	Returns all the property names that match the specified pattern
 */
 PHP_METHOD(imagick, getimageproperties)
 {
-	char *pattern = "*", **properties;
+	zend_bool values = 1;
+	char *pattern = "*", **properties, *property;
 	int patternLen;
 	unsigned long propertiesCount, i;
 	php_imagick_object *intern;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &patternLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &patternLen, &values ) == FAILURE )
 	{
 		return;
 	}
@@ -4192,9 +4195,21 @@ PHP_METHOD(imagick, getimageproperties)
 	properties = MagickGetImageProperties(intern->magick_wand, pattern, &propertiesCount);
 	array_init( return_value );
 
-	for ( i = 0; i < propertiesCount; i++ )
+	if ( values )
 	{
-		add_next_index_string( return_value, properties[i], 1 );
+		for ( i = 0; i < propertiesCount; i++ )
+		{
+			property = MagickGetImageProperty( intern->magick_wand, properties[i] );
+			add_assoc_string( return_value, properties[i], property, 1 );
+			IMAGICK_FREE_MEMORY( char *, property );
+		}
+	}
+	else
+	{
+		for ( i = 0; i < propertiesCount; i++ )
+		{
+			add_next_index_string( return_value, properties[i], 1 );
+		}
 	}
 
 	IMAGICK_FREE_MEMORY( char **, properties );
@@ -4202,19 +4217,21 @@ PHP_METHOD(imagick, getimageproperties)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::getImageProfiles( [string pattern] )
+/* {{{ proto Imagick Imagick::getImageProfiles( [string pattern, bool values] )
   	Returns all the profile names that match the specified pattern
 */
 PHP_METHOD(imagick, getimageprofiles)
 {
-	char *pattern = "*", **profiles;
+	zend_bool values = 1;
+	char *pattern = "*", **profiles, *profile;
 	int patternLen;
 	unsigned long profilesCount, i;
 	php_imagick_object *intern;
 	MagickBooleanType status;
+	size_t length;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &patternLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &patternLen, &values ) == FAILURE )
 	{
 		return;
 	}
@@ -4225,9 +4242,21 @@ PHP_METHOD(imagick, getimageprofiles)
 	profiles = MagickGetImageProfiles(intern->magick_wand, pattern, &profilesCount);
 	array_init( return_value );
 
-	for ( i = 0; i < profilesCount; i++ )
+	if ( values )
 	{
-		add_next_index_string( return_value, profiles[i], 1 );
+		for ( i = 0; i < profilesCount; i++ )
+		{
+			profile = MagickGetImageProfile( intern->magick_wand, profiles[i], &length );
+			add_assoc_stringl( return_value, profiles[i], profile, length, 1 );
+			IMAGICK_FREE_MEMORY( char *, profile );
+		}
+	}
+	else
+	{
+		for ( i = 0; i < profilesCount; i++ )
+		{
+			add_next_index_string( return_value, profiles[i], 1 );
+		}
 	}
 
 	IMAGICK_FREE_MEMORY( char **, profiles );
