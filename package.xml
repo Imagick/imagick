@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-09-08</date>
+	<date>2007-09-18</date>
 	<version>
-		<release>2.0.0RC2</release>
+		<release>2.0.0RC3</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -32,12 +32,16 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ Added support for forcing image format during write operations.
-+ Added more interlace constants. They are present if imagick is compiled against ImagickMagick 6.3.4 or newer.
-+ Added Imagick::getImageAttribute.
-+ Added LAYERMETHOD constants. Available if compiled against ImageMagick 6.2.8 or later.
-+ Closes PECL Bug #11934 - setImageVirtualPixelMethod triggers exception
-+ Fixed safe_mode and open_basedir bypass for __construct, readImage, readImages and pingImage
++ Closes PECL Bug #12006
++ Fixes a possible crash in queryFontMetrics
++ New methods:
+  + Imagick::clutImage
+  + Imagick::setImage
+  + Imagick::getImageLength
+  + Imagick::getImageOrientation 
+  + Imagick::setImageOrientation
+  + Imagick::getImageProperties
+  + Imagick::getImageProfiles
 </notes>
 	<contents>
 		<dir name="/">
