@@ -2420,7 +2420,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x631
+#if MagickLibVersion > 0x633
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageorientation, imagick_setimageorientation_args, ZEND_ACC_PUBLIC)
 #endif
@@ -4181,7 +4181,6 @@ PHP_METHOD(imagick, getimageproperties)
 	int patternLen;
 	unsigned long propertiesCount, i;
 	php_imagick_object *intern;
-	MagickBooleanType status;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &patternLen, &values ) == FAILURE )
@@ -4227,7 +4226,6 @@ PHP_METHOD(imagick, getimageprofiles)
 	int patternLen;
 	unsigned long profilesCount, i;
 	php_imagick_object *intern;
-	MagickBooleanType status;
 	size_t length;
 
 	/* Parse parameters given to function */
