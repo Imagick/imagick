@@ -1501,6 +1501,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thumbnailimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
+		ZEND_ARG_INFO(0, below)
 	ZEND_END_ARG_INFO()
 
 static
@@ -8541,8 +8542,8 @@ PHP_METHOD(imagick, getnumberimages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows)
-	 Changes the size of an image to the given dimensions and removes any associated profiles.  The goal is to produce small low cost thumbnail images suited for display on the Web.
+/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool below])
+	 Changes the size of an image to the given dimensions and removes any associated profiles
 */
 PHP_METHOD(imagick, thumbnailimage)
 {
@@ -8552,25 +8553,16 @@ PHP_METHOD(imagick, thumbnailimage)
 	MagickBooleanType status;
 	long imageY, imageX;
 	double tmp;
-
-
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	zend_bool below = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll", &x, &y ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &x, &y, &below ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
 
 	if ( ( x == 0 ) && ( y == 0 ) )
 	{
@@ -8578,11 +8570,25 @@ PHP_METHOD(imagick, thumbnailimage)
 		RETURN_FALSE;
 	}
 
+	imageX = MagickGetImageWidth( intern->magick_wand );
+	imageY = MagickGetImageHeight( intern->magick_wand );
+
+	/* If below parameter is set we check which side has higher scaling
+		ratio and scale by that side */
+	if ( below && ( x != 0 ) && ( y != 0 ) )
+	{
+		if ( ( imageX / x ) > ( imageY / y ) )
+		{
+			y = 0;
+		}
+		else
+		{
+			x = 0;
+		}
+	}
+
 	if ( ( x == 0 ) || ( y == 0 ) )
 	{
-		imageX = MagickGetImageWidth( intern->magick_wand );
-		imageY = MagickGetImageHeight( intern->magick_wand );
-
 		if( x == 0 )
 		{
 			tmp = (double)imageX / (double)imageY;
