@@ -8542,7 +8542,7 @@ PHP_METHOD(imagick, getnumberimages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool below])
+/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool fit])
 	 Changes the size of an image to the given dimensions and removes any associated profiles
 */
 PHP_METHOD(imagick, thumbnailimage)
@@ -8610,6 +8610,16 @@ PHP_METHOD(imagick, thumbnailimage)
 				tmp = (double)imageY / (double)y;
 				x = (double)imageX / tmp;
 			}
+		}
+
+		if ( x < 1 )
+		{
+			x = 1;
+		}
+
+		if ( y < 1 )
+		{
+			y = 1;
 		}
 	}
 	else
