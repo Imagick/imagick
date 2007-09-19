@@ -8573,34 +8573,66 @@ PHP_METHOD(imagick, thumbnailimage)
 	imageX = MagickGetImageWidth( intern->magick_wand );
 	imageY = MagickGetImageHeight( intern->magick_wand );
 
-	/* If below parameter is set we check which side has higher scaling
-		ratio and scale by that side */
-	if ( below && ( x != 0 ) && ( y != 0 ) )
+	php_printf ( "imageX: %d, imageY: %d, X: %d, Y: %d\n", imageX, imageY, x, y );
+
+	/* If below parameter is set we check which side has higher
+		scaling ratio and scale by that side */
+	if ( below )
 	{
-		if ( ( imageX / x ) > ( imageY / y ) )
+		/* Both sides are smaller
+			than the desired size */
+		if ( imageX <= x && imageY <= y )
 		{
-			y = 0;
+			RETURN_TRUE;
 		}
+
+		/* Only width is larger than */
+		else if ( x < imageX && imageY <= y )
+		{
+			y = imageY / (imageX / x);
+		}
+
+		/* Height is larger, width is within param */
+		else if ( y < imageY && imageX <= x )
+		{
+			x = imageX / (imageY / y);
+		}
+
+		/* Both sides are larger than desired size */
 		else
 		{
-			x = 0;
+			/* Width has higher scaling ratio */
+			if ( (imageX / x) > (imageY / y) )
+			{
+				tmp = (double)imageX / (double)x;
+				y = (double)imageY / tmp;
+			}
+			else
+			{
+				tmp = (double)imageY / (double)y;
+				x = (double)imageX / tmp;
+			}
 		}
 	}
-
-	if ( ( x == 0 ) || ( y == 0 ) )
+	else
 	{
-		if( x == 0 )
+		if ( ( x == 0 ) || ( y == 0 ) )
 		{
-			tmp = (double)imageX / (double)imageY;
-			x = tmp * (double)y;
-		}
+			if( x == 0 )
+			{
+				tmp = (double)imageX / (double)imageY;
+				x = tmp * (double)y;
+			}
 
-		if ( y == 0 )
-		{
-			tmp = (double)imageY / (double)imageX;
-			y = tmp * (double)x;
+			if ( y == 0 )
+			{
+				tmp = (double)imageY / (double)imageX;
+				y = tmp * (double)x;
+			}
 		}
 	}
+
+	php_printf ( "X: %d, Y: %d\n", x, y );
 
 	status = MagickThumbnailImage( intern->magick_wand, x, y );
 
