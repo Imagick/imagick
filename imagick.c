@@ -8573,8 +8573,6 @@ PHP_METHOD(imagick, thumbnailimage)
 	imageX = MagickGetImageWidth( intern->magick_wand );
 	imageY = MagickGetImageHeight( intern->magick_wand );
 
-	php_printf ( "imageX: %d, imageY: %d, X: %d, Y: %d\n", imageX, imageY, x, y );
-
 	/* If below parameter is set we check which side has higher
 		scaling ratio and scale by that side */
 	if ( below )
@@ -8631,8 +8629,6 @@ PHP_METHOD(imagick, thumbnailimage)
 			}
 		}
 	}
-
-	php_printf ( "X: %d, Y: %d\n", x, y );
 
 	status = MagickThumbnailImage( intern->magick_wand, x, y );
 
