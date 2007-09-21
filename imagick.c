@@ -1501,7 +1501,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thumbnailimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
-		ZEND_ARG_INFO(0, below)
+		ZEND_ARG_INFO(0, fit)
 	ZEND_END_ARG_INFO()
 
 static
@@ -8547,16 +8547,14 @@ PHP_METHOD(imagick, getnumberimages)
 */
 PHP_METHOD(imagick, thumbnailimage)
 {
-	long x, y;
+	long x, y, imageY, imageX;
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
-	long imageY, imageX;
 	double tmp;
-	zend_bool below = 0;
+	zend_bool fit = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &x, &y, &below ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &x, &y, &fit ) == FAILURE )
 	{
 		return;
 	}
@@ -8573,9 +8571,9 @@ PHP_METHOD(imagick, thumbnailimage)
 	imageX = MagickGetImageWidth( intern->magick_wand );
 	imageY = MagickGetImageHeight( intern->magick_wand );
 
-	/* If below parameter is set we check which side has higher
+	/* If fit parameter is set we check which side has higher
 		scaling ratio and scale by that side */
-	if ( below )
+	if ( fit )
 	{
 		/* Both sides are smaller
 			than the desired size */
