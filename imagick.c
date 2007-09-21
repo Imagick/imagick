@@ -8582,34 +8582,18 @@ PHP_METHOD(imagick, thumbnailimage)
 			RETURN_TRUE;
 		}
 
-		/* Only width is larger than */
-		else if ( x < imageX && imageY <= y )
+		/* Width has higher scaling ratio */
+		if ( (imageX / x) > (imageY / y) )
 		{
-			y = imageY / (imageX / x);
+			tmp = (double)imageX / (double)x;
+			y = (double)imageY / tmp;
 		}
-
-		/* Height is larger, width is within param */
-		else if ( y < imageY && imageX <= x )
-		{
-			x = imageX / (imageY / y);
-		}
-
-		/* Both sides are larger than desired size */
 		else
 		{
-			/* Width has higher scaling ratio */
-			if ( (imageX / x) > (imageY / y) )
-			{
-				tmp = (double)imageX / (double)x;
-				y = (double)imageY / tmp;
-			}
-			else
-			{
-				tmp = (double)imageY / (double)y;
-				x = (double)imageX / tmp;
-			}
+			tmp = (double)imageY / (double)y;
+			x = (double)imageX / tmp;
 		}
-
+		
 		if ( x < 1 )
 		{
 			x = 1;
