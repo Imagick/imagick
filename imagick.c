@@ -164,6 +164,7 @@ PHP_METHOD(imagick, setimageproperty);
 PHP_METHOD(imagick, setimageinterpolatemethod);
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
+PHP_METHOD(imagick, getimagelength);
 #endif
 #if MagickLibVersion > 0x633
 PHP_METHOD(imagick, getimageorientation);
@@ -202,7 +203,6 @@ PHP_METHOD(imagick, setimagefilename);
 PHP_METHOD(imagick, getimagefilename);
 PHP_METHOD(imagick, getimageformat);
 PHP_METHOD(imagick, getimagesize);
-PHP_METHOD(imagick, getimagelength);
 PHP_METHOD(imagick, getimagegeometry);
 PHP_METHOD(imagick, getimagecolors);
 PHP_METHOD(imagick, scaleimage);
@@ -2420,6 +2420,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimagelength, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x633
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2450,7 +2451,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, clear, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, clone, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagesize, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, getimagelength, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageblob, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagesblob, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -4080,6 +4080,31 @@ PHP_METHOD(imagick, linearstretchimage)
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto int Imagick::getImageLength()
+	returns the image length in bytes
+*/
+PHP_METHOD(imagick, getimagelength)
+{
+	php_imagick_object *intern;
+	zval *object;
+	MagickSizeType length;
+	MagickBooleanType status;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickGetImageLength( intern->magick_wand, &length );
+
+	if ( status == MagickFalse )
+	{
+		throwExceptionWithMessage( 1, "Unable to acquire image length", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	RETVAL_LONG( length );
 }
 /* }}} */
 #endif
@@ -8593,7 +8618,7 @@ PHP_METHOD(imagick, thumbnailimage)
 			tmp = (double)imageY / (double)y;
 			x = (double)imageX / tmp;
 		}
-		
+
 		if ( x < 1 )
 		{
 			x = 1;
@@ -8986,31 +9011,6 @@ PHP_METHOD(imagick, getimagesize)
 
 	ZVAL_LONG( return_value, (long)MagickGetImageSize( intern->magick_wand ) );
 	return;
-}
-/* }}} */
-
-/* {{{ proto int Imagick::getImageLength()
-	returns the image length in bytes
-*/
-PHP_METHOD(imagick, getimagelength)
-{
-	php_imagick_object *intern;
-	zval *object;
-	MagickSizeType length;
-	MagickBooleanType status;
-
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = MagickGetImageLength( intern->magick_wand, &length );
-
-	if ( status == MagickFalse )
-	{
-		throwExceptionWithMessage( 1, "Unable to acquire image length", 1 TSRMLS_CC );
-		RETURN_FALSE;
-	}
-
-	RETVAL_LONG( length );
 }
 /* }}} */
 
