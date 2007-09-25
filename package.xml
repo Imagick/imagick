@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-09-18</date>
+	<date>2007-09-25</date>
 	<version>
-		<release>2.0.0RC3</release>
+		<release>2.0.0RC4</release>
 		<api>2.0.0</api>
 	</version>
 	<stability>
@@ -32,16 +32,10 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
++ Moved getimagelength into #if block
++ Added optional third parameter to thumbnailImage
++ Added second optional parameter to getImageProperties and getImageProfiles to return just the available properties. 
 + Closes PECL Bug #12006
-+ Fixes a possible crash in queryFontMetrics
-+ New methods:
-  + Imagick::clutImage
-  + Imagick::setImage
-  + Imagick::getImageLength
-  + Imagick::getImageOrientation 
-  + Imagick::setImageOrientation
-  + Imagick::getImageProperties
-  + Imagick::getImageProfiles
 </notes>
 	<contents>
 		<dir name="/">
