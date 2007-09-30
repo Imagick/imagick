@@ -165,6 +165,7 @@ PHP_METHOD(imagick, setimageinterpolatemethod);
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, getimagelength);
+PHP_METHOD(imagick, extentimage);
 #endif
 #if MagickLibVersion > 0x633
 PHP_METHOD(imagick, getimageorientation);
@@ -1407,6 +1408,14 @@ static
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, whitePoint)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_extentimage_args, 0, 0, 4)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x633
@@ -2421,6 +2430,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagelength, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, extentimage, imagick_extentimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x633
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -4105,6 +4115,41 @@ PHP_METHOD(imagick, getimagelength)
 	}
 
 	RETVAL_LONG( length );
+}
+/* }}} */
+
+/* {{{ proto int Imagick::extentImage( int width, int height, int x, int y )
+	Sets the image size
+*/
+PHP_METHOD(imagick, extentimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long width, height, x, y;
+	
+	if ( ZEND_NUM_ARGS() != 4 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	status = MagickExtentImage( intern->magick_wand, width, height, x, y );
+
+	if ( status == MagickFalse )
+	{
+		throwExceptionWithMessage( 1, "Unable to extent image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 #endif
