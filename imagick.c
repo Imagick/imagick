@@ -5608,7 +5608,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	long columns, rows;
 	char *pseudoString;
 	int pseudoStringLen;
-	char *pch, *absolute = "", *tmpString;
+	char *pch, *absolute = NULL, *tmpString;
 	int i, match = 1, error = 0;
 	char *noBaseDirFormats[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
 									"histogram:", "label:", "map:", "matte:",
@@ -5676,7 +5676,11 @@ PHP_METHOD(imagick, newpseudoimage)
 	if ( match == 1 )
 	{
 		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
-		efree( absolute );
+		
+		if ( absolute != NULL )
+		{
+			efree( absolute );
+		}
 	}
 
 	/* Pseudo image needs a size set manually */
