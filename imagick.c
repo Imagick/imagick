@@ -4118,7 +4118,7 @@ PHP_METHOD(imagick, getimagelength)
 }
 /* }}} */
 
-/* {{{ proto int Imagick::extentImage( int width, int height, int x, int y )
+/* {{{ proto bool Imagick::extentImage( int width, int height, int x, int y )
 	Sets the image size
 */
 PHP_METHOD(imagick, extentimage)
