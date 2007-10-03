@@ -4,7 +4,8 @@
 
 /* Define Extension Properties */
 #define PHP_IMAGICK_EXTNAME    "imagick"
-#define PHP_IMAGICK_EXTVER     "2.0.0-rc4"
+#define PHP_IMAGICK_EXTVER     "2.0.1-b1"
+#define PHP_IMAGICK_EXTNUM     20001
 
 /* Import configure options
    when building outside of
