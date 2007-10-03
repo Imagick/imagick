@@ -176,6 +176,9 @@ PHP_METHOD(imagick, clutimage);
 PHP_METHOD(imagick, getimageproperties);
 PHP_METHOD(imagick, getimageprofiles);
 #endif
+#if MagickLibVersion > 0x635
+PHP_METHOD(imagick, distortimage);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, readimage);
@@ -1452,6 +1455,15 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x635
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_distortimage_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, method)
+		ZEND_ARG_INFO(0, arguments)
+		ZEND_ARG_INFO(0, bestfit)
+	ZEND_END_ARG_INFO()
+#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2440,6 +2452,9 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, clutimage, imagick_clutimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageproperties, imagick_getimageproperties_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageprofiles, imagick_getimageprofiles_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x635
+	PHP_ME(imagick, distortimage, imagick_distortimage_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -4126,7 +4141,7 @@ PHP_METHOD(imagick, extentimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long width, height, x, y;
-	
+
 	if ( ZEND_NUM_ARGS() != 4 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
@@ -4330,6 +4345,55 @@ PHP_METHOD(imagick, getimageprofiles)
 
 	IMAGICK_FREE_MEMORY( char **, profiles );
 	return;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x635
+/* {{{ proto Imagick Imagick::distortImage( int distortMethod, array arguments, bool bestfit )
+   Distorts an image using various distortion methods
+*/
+PHP_METHOD(imagick, distortimage)
+{
+	php_imagick_object *intern;
+	double *arguments;
+	long distortMethod, elements;
+	zend_bool bestfit;
+	zval *argArray;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 3 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lab", &distortMethod, &argArray, &bestfit ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	arguments = getDoublesFromZval( argArray, &elements TSRMLS_CC );
+
+	if ( arguments == (double *)NULL )
+	{
+		throwExceptionWithMessage( 1, "Can't read argument array", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	status = MagickDistortImage( intern->magick_wand, distortMethod, elements, arguments, bestfit );
+	efree( arguments );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to distort the image", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 #endif
@@ -5721,7 +5785,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	if ( match == 1 )
 	{
 		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
-		
+
 		if ( absolute != NULL )
 		{
 			efree( absolute );
@@ -12865,6 +12929,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	status = MagickSetSamplingFactors( intern->magick_wand, elements, dArray );
+	efree( dArray );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -17596,6 +17661,16 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_RIGHTTOP", RightTopOrientation );
 	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_RIGHTBOTTOM", RightBottomOrientation );
 	IMAGICK_REGISTER_CONST_LONG( "ORIENTATION_LEFTBOTTOM", LeftBottomOrientation );
+#endif
+#if MagickLibVersion > 0x635
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_UNDEFINED", UndefinedDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_AFFINE", AffineDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_AFFINEPROJECTION", AffineProjectionDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_ARC", ArcDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_BILINEAR", BilinearDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_PERSPECTIVE", PerspectiveDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_PERSPECTIVEPROJECTION", PerspectiveProjectionDistortion );
+	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_SCALEROTATETRANSLATE", ScaleRotateTranslateDistortion );
 #endif
 }
 
