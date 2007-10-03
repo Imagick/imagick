@@ -4518,9 +4518,9 @@ PHP_METHOD(imagick, __tostring)
 PHP_METHOD(imagick, queryformats)
 {
 	char **supportedFormats;
-	unsigned long numFormats = 0;
+	unsigned long numFormats = 0, i;
 	char *pattern = "*";
-	int i, patternLen = 1;
+	int patternLen = 1;
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &patternLen ) == FAILURE )
 	{
@@ -4546,9 +4546,9 @@ PHP_METHOD(imagick, queryformats)
 PHP_METHOD(imagick, queryfonts)
 {
 	char **fonts;
-	unsigned long numFonts = 0;
+	unsigned long numFonts = 0, i;
 	char *pattern = "*";
-	int i, patternLen = 1;
+	int patternLen = 1;
 
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &patternLen ) == FAILURE )
 	{
@@ -7894,8 +7894,8 @@ PHP_METHOD(imagick, getimagechannelmean)
 	}
 
 	array_init( return_value );
-	add_assoc_long( return_value, "mean", mean );
-	add_assoc_long( return_value, "standardDeviation", standardDeviation );
+	add_assoc_double( return_value, "mean", mean );
+	add_assoc_double( return_value, "standardDeviation", standardDeviation );
 
 	return;
 }
@@ -11900,8 +11900,8 @@ PHP_METHOD(imagick, resampleimage)
 */
 PHP_METHOD(imagick, resizeimage)
 {
-	double columns, rows, blur;
-	long filter = 0;
+	double blur;
+	long columns, rows, filter = 0;
 	php_imagick_object *intern;
 	zval *object;
 	MagickBooleanType status;
@@ -11911,7 +11911,7 @@ PHP_METHOD(imagick, resizeimage)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddld", &columns, &rows, &filter, &blur ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld", &columns, &rows, &filter, &blur ) == FAILURE)
 	{
 		return;
 	}
@@ -16604,8 +16604,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	php_imagickpixeliterator_object *internpix;
 	php_imagickpixel_object *internp;
 	PixelWand **wandArray;
-	unsigned long numWands;
-	int i;
+	unsigned long numWands, i;
 	zval *tmpPixelWand;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
@@ -16697,8 +16696,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	php_imagickpixeliterator_object *internpix;
 	php_imagickpixel_object *internp;
 	PixelWand **wandArray;
-	unsigned long numWands;
-	int i;
+	unsigned long numWands, i;
 	zval *tmpPixelWand;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
@@ -17009,7 +17007,8 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 {
 	zval *object;
 	php_imagickpixel_object *internp;
-	long color, colorValue = 0;
+	long color;
+	double colorValue = 0;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -17966,9 +17965,8 @@ PHP_MINFO_FUNCTION(imagick)
 	const char *imageMagickVersion = MagickGetVersion( &versionNumber );
 
 	char **supportedFormats;
-	unsigned long numFormats = 0;
+	unsigned long numFormats = 0, i;
 	char *pattern = "*";
-	int i;
 	char formats[2056];
 	char buffer[4];
 
@@ -18024,7 +18022,7 @@ PHP_RSHUTDOWN_FUNCTION(imagick)
 	/* We have the lock so lets release it */
 	if (imagick_thread_id == tsrm_thread_id())
 	{
-		imagick_thread_id = NULL;
+		imagick_thread_id = (THREAD_T)NULL;
 		tsrm_mutex_unlock(imagick_mutex);
 	}
 
