@@ -204,6 +204,7 @@ PHP_METHOD(imagick, writeimage);
 PHP_METHOD(imagick, writeimages);
 PHP_METHOD(imagick, resetiterator);
 PHP_METHOD(imagick, setfirstiterator);
+PHP_METHOD(imagick, setlastiterator);
 PHP_METHOD(imagick, previousimage);
 PHP_METHOD(imagick, nextimage);
 PHP_METHOD(imagick, haspreviousimage);
@@ -2487,6 +2488,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimageblob, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagesblob, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setlastiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, resetiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, previousimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, nextimage, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -8913,6 +8915,28 @@ PHP_METHOD(imagick, setfirstiterator)
 	}
 	intern->next_out_of_bound = 0;
 	MagickSetFirstIterator( intern->magick_wand );
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setLastIterator()
+	Sets the wand iterator to the last image.
+*/
+PHP_METHOD(imagick, setlastiterator)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	status = IsMagickWand( intern->magick_wand );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		RETURN_FALSE;
+	}
+	intern->next_out_of_bound = 0;
+	MagickSetLastIterator( intern->magick_wand );
 	RETURN_TRUE;
 }
 /* }}} */
