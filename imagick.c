@@ -123,6 +123,14 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		break;\
 	}
 
+#if MagickLibVersion > 0x628
+#define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
+	MagickSetIteratorIndex( intern->magick_wand, MagickGetIteratorIndex( intern->magick_wand ) + 1 );
+#else
+#define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
+	MagickSetImageIndex( intern->magick_wand, MagickGetImageIndex( intern->magick_wand ) + 1 );
+#endif
+
 /* Forward declarations (Imagick) */
 
 /* The conditional methods */
@@ -2987,6 +2995,7 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 	{
 		return 3;
 	}
+	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
 	return 0;
 }
 
@@ -4855,8 +4864,8 @@ PHP_METHOD(imagick, readimagefile)
 	}
 
 	MagickSetImageFilename( intern->magick_wand, fileName );
-
-	RETURN_TRUE
+	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
+	RETURN_TRUE;
 }
 /* }}} */
 
@@ -4969,6 +4978,7 @@ PHP_METHOD(imagick, readimageblob)
 
 	/* Even if filename is null we need to give a name here. Otherwise segfaults will happen */
 	MagickSetImageFilename( intern->magick_wand, fileName );
+	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
 	RETURN_TRUE;
 }
 /* }}} */
@@ -5703,6 +5713,7 @@ PHP_METHOD(imagick, newimage)
 		throwImagickException( intern->magick_wand, "Unable to create new image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
 	RETURN_TRUE;
 }
 /* }}} */
@@ -5811,6 +5822,7 @@ PHP_METHOD(imagick, newpseudoimage)
 		throwImagickException( intern->magick_wand, "Unable to create new pseudo image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
 	RETURN_TRUE;
 }
 /* }}} */
