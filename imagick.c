@@ -125,10 +125,10 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 
 #if MagickLibVersion > 0x628
 #define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
-	MagickSetIteratorIndex( intern->magick_wand, MagickGetIteratorIndex( intern->magick_wand ) + 1 );
+	MagickSetIteratorIndex( intern->magick_wand, MagickGetNumberImages( intern->magick_wand ) - 1 );
 #else
 #define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
-	MagickSetImageIndex( intern->magick_wand, MagickGetImageIndex( intern->magick_wand ) + 1 );
+	MagickSetImageIndex( intern->magick_wand, MagickGetNumberImages( intern->magick_wand ) - 1 );
 #endif
 
 /* Forward declarations (Imagick) */
@@ -9096,6 +9096,7 @@ PHP_METHOD(imagick, removeimage)
 		RETURN_FALSE;
 	}
 	intern->next_out_of_bound = 0;
+	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
 	RETURN_TRUE;
 }
 /* }}} */
