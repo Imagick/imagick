@@ -123,13 +123,8 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		break;\
 	}
 
-#if MagickLibVersion > 0x628
 #define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
-	MagickSetIteratorIndex( intern->magick_wand, MagickGetNumberImages( intern->magick_wand ) - 1 );
-#else
-#define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
-	MagickSetImageIndex( intern->magick_wand, MagickGetNumberImages( intern->magick_wand ) - 1 );
-#endif
+	MagickSetLastIterator( intern->magick_wand );
 
 /* Forward declarations (Imagick) */
 
@@ -2314,6 +2309,7 @@ static
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, format)
 	ZEND_END_ARG_INFO()
 
 static
@@ -5691,14 +5687,11 @@ PHP_METHOD(imagick, newimage)
 	zval *object, *bgObj;
 	MagickBooleanType status;
 	long columns, rows;
-
-	if ( ZEND_NUM_ARGS() != 3 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	char *format = NULL;
+	int formatLen;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llO", &columns, &rows, &bgObj, php_imagickpixel_sc_entry ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llO|s", &columns, &rows, &bgObj, php_imagickpixel_sc_entry, &format, &formatLen ) == FAILURE )
 	{
 		return;
 	}
@@ -5715,6 +5708,21 @@ PHP_METHOD(imagick, newimage)
 		throwImagickException( intern->magick_wand, "Unable to create new image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+
+	/* If the optional fourth parameter was given
+		set the image format here */
+	if ( format != NULL && formatLen > 0 )
+	{
+		status = MagickSetImageFormat( intern->magick_wand, format );
+
+		/* No magick is going to happen */
+		if ( status == MagickFalse )
+		{
+			throwImagickException( intern->magick_wand, "Unable to set the image format", 1 TSRMLS_CC);
+			RETURN_FALSE;
+		}
+	}
+
 	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
 	RETURN_TRUE;
 }
