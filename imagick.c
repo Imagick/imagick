@@ -11682,6 +11682,9 @@ PHP_METHOD(imagick, mosaicimages)
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
+	/* Fixes a crash */
+	MagickSetFirstIterator( intern->magick_wand );
+
 	object_init_ex( return_value, php_imagick_sc_entry );
 	tmpWand = MagickMosaicImages( intern->magick_wand );
 
