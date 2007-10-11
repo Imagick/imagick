@@ -3004,8 +3004,19 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 	MagickBooleanType status;
 	char *absolute, *buffer, *format, *tmp;
 
-	occurences = count_occurences_of( ':', filename TSRMLS_CC );
 
+#if defined(PHP_WIN32)
+	if ( count_occurences_of( ':', filename TSRMLS_CC ) == 2 )
+	{
+		occurences = 1;
+	}
+	else
+	{
+		occurences = 0;
+	}
+#else
+	occurences = count_occurences_of( ':', filename TSRMLS_CC );
+#endif
 	switch ( occurences )
 	{
 		case 0:
