@@ -11668,17 +11668,17 @@ PHP_METHOD(imagick, motionblurimage)
 */
 PHP_METHOD(imagick, mosaicimages)
 {
-	MagickWand *tmpWand;
+	MagickWand *tmpWand = NULL;
 	zval *object;
 	php_imagick_object *intern, *intern_return;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-
+	MagickSetFirstIterator( intern->magick_wand );
 	tmpWand = MagickMosaicImages( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( 1, "Mosaic image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
