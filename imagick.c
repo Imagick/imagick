@@ -127,17 +127,29 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	MagickSetLastIterator( intern->magick_wand );
 
 #define IMAGICK_REPLACE_MAGICKWAND( intern, new_wand )\
-	intern->magick_wand = (MagickWand *)DestroyMagickWand( intern->magick_wand );\
-	intern->magick_wand = new_wand;
+	if ( intern->magick_wand != NULL )\
+	{\
+		intern->magick_wand = (MagickWand *)DestroyMagickWand( intern->magick_wand );\
+		intern->magick_wand = new_wand;\
+	}
 
 #define IMAGICKPIXEL_REPLACE_PIXELWAND( intern, new_wand )\
+	if( intern->pixel_wand != NULL )\
+	{\
 	intern->pixel_wand = (PixelWand *)DestroyPixelWand( intern->pixel_wand );\
-	intern->pixel_wand = new_wand;
+	intern->pixel_wand = new_wand;\
+	}\
+	else\
+	{\
+		intern->pixel_wand = new_wand;\
+	}
 
 #define IMAGICKDRAW_REPLACE_DRAWINGWAND( intern, new_wand )\
-	intern->drawing_wand = (DrawingWand *)DestroyDrawingWand( intern->drawing_wand );\
-	intern->drawing_wand = new_wand;
-
+	if ( intern->drawing_wand != NULL )\
+	{\
+		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand( intern->drawing_wand );\
+		intern->drawing_wand = new_wand;\
+	}
 /* Forward declarations (Imagick) */
 
 /* The conditional methods */
@@ -16326,7 +16338,6 @@ PHP_METHOD(imagickpixeliterator, __construct)
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &magickObject, php_imagick_sc_entry ) == FAILURE )
 	{
-		printf( "exiting" );
 		return;
 	}
 
@@ -16541,6 +16552,13 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Ozzzz", &magickObject, php_imagick_sc_entry, &x, &y, &columns, &rows ) == FAILURE )
 	{
+		return;
+	}
+
+	if ( Z_TYPE_P( x ) != IS_LONG || Z_TYPE_P( y ) != IS_LONG ||
+		 Z_TYPE_P( columns ) != IS_LONG || Z_TYPE_P( rows ) != IS_LONG )
+	{
+		throwExceptionWithMessage( 4, "ImagickPixelIterator::newPixelRegionIterator() parameters should be ints", 4 TSRMLS_CC );
 		return;
 	}
 
@@ -17221,7 +17239,7 @@ PHP_METHOD(imagickpixel, getcolor)
 	php_imagickpixel_object *internp;
 	zend_bool normalized = 0;
 	char *colorString;
-	int red, green, blue;
+	double red, green, blue;
 #if MagickLibVersion > 0x628
 	double normalizedRed, normalizedGreen, normalizedBlue;
 #endif
@@ -17286,21 +17304,21 @@ PHP_METHOD(imagickpixel, getcolor)
 			{
 				if( strstr( colorString, "rgba" ) != NULL )
 				{
-					sscanf( colorString, "rgba%d,%d,%d,%lf", &red, &green, &blue, &alpha );
+					sscanf( colorString, "rgba%lf,%lf,%lf,%lf", &red, &green, &blue, &alpha );
 					setAlpha = 1;
 				}
 				else if( strstr( colorString, "rgb" ) != NULL )
 				{
-					sscanf( colorString, "rgb%d,%d,%d", &red, &green, &blue );
+					sscanf( colorString, "rgb%lf,%lf,%lf", &red, &green, &blue );
 				}
 				else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 3 )
 				{
-					sscanf( colorString, "%d,%d,%d,%lf", &red, &green, &blue, &alpha );
+					sscanf( colorString, "%lf,%lf,%lf,%lf", &red, &green, &blue, &alpha );
 					setAlpha = 1;
 				}
 				else if( count_occurences_of( ',', colorString TSRMLS_CC ) == 2 )
 				{
-					sscanf( colorString, "%d,%d,%d", &red, &green, &blue );
+					sscanf( colorString, "%lf,%lf,%lf", &red, &green, &blue );
 				}
 				else
 				{
@@ -17311,28 +17329,49 @@ PHP_METHOD(imagickpixel, getcolor)
 			}
 			else
 			{
-				if( strstr( colorString, "rgba" ) != NULL )
+				if ( count_occurences_of( '%', colorString TSRMLS_CC ) == 0 )
 				{
-					sscanf( colorString, "rgba(%d,%d,%d,%lf)", &red, &green, &blue, &alpha );
-					setAlpha = 1;
-				}
-				else if( strstr( colorString, "rgb" ) != NULL )
-				{
-					sscanf( colorString, "rgb(%d,%d,%d)", &red, &green, &blue );
+					if( strstr( colorString, "rgba" ) != NULL )
+					{
+						sscanf( colorString, "rgba(%lf,%lf,%lf,%lf)", &red, &green, &blue, &alpha );
+						setAlpha = 1;
+					}
+					else if( strstr( colorString, "rgb" ) != NULL )
+					{
+						sscanf( colorString, "rgb(%lf,%lf,%lf)", &red, &green, &blue );
+					}
+					else
+					{
+						IMAGICK_FREE_MEMORY( char *, colorString );
+						throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
+						RETURN_FALSE;
+					}
 				}
 				else
 				{
-					IMAGICK_FREE_MEMORY( char *, colorString );
-					throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
-					RETURN_FALSE;
+					if( strstr( colorString, "rgba" ) != NULL )
+					{
+						sscanf( colorString, "rgba(%lf%%,%lf%%,%lf%%,%lf%%)", &red, &green, &blue, &alpha );
+						setAlpha = 1;
+					}
+					else if( strstr( colorString, "rgb" ) != NULL )
+					{
+						sscanf( colorString, "rgb(%lf%%,%lf%%,%lf%%)", &red, &green, &blue );
+					}
+					else
+					{
+						IMAGICK_FREE_MEMORY( char *, colorString );
+						throwExceptionWithMessage( 4, "Unable to read the color string", 4 TSRMLS_CC );
+						RETURN_FALSE;
+					}
 				}
 			}
 
 			array_init( return_value );
 
-			add_assoc_long( return_value, "r", red );
-			add_assoc_long( return_value, "g", green );
-			add_assoc_long( return_value, "b", blue );
+			add_assoc_double( return_value, "r", red );
+			add_assoc_double( return_value, "g", green );
+			add_assoc_double( return_value, "b", blue );
 
 			if ( setAlpha != 0 )
 			{
