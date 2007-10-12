@@ -3016,8 +3016,18 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 	MagickBooleanType status;
 	char *absolute, *buffer, *format, *tmp;
 
+#if defined(PHP_WIN32)
+	if ( count_occurences_of( ':', filename TSRMLS_CC ) == 2 )
+	{
+		occurences = 1;
+	}
+	else
+	{
+		occurences = 0;
+	}
+#else
 	occurences = count_occurences_of( ':', filename TSRMLS_CC );
-
+#endif
 	switch ( occurences )
 	{
 		case 0:
@@ -5689,7 +5699,7 @@ PHP_METHOD(imagick, addimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::newImage( int cols, int rows, ImagickPixel background )
+/* {{{ proto bool Imagick::newImage( int cols, int rows, ImagickPixel background[, string format] )
 	Creates a new image and associates ImagickPixel value as background color
 */
 PHP_METHOD(imagick, newimage)
@@ -5700,7 +5710,7 @@ PHP_METHOD(imagick, newimage)
 	MagickBooleanType status;
 	long columns, rows;
 	char *format = NULL;
-	int formatLen;
+	int formatLen = 0;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llO|s", &columns, &rows, &bgObj, php_imagickpixel_sc_entry, &format, &formatLen ) == FAILURE )
