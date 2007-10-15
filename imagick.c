@@ -8763,6 +8763,12 @@ PHP_METHOD(imagick, thumbnailimage)
 		scaling ratio and scale by that side */
 	if ( fit )
 	{
+		if ( ( x <= 0 ) || ( y <= 0 ) )
+		{
+			throwExceptionWithMessage( 1, "Can not fit thumbnail to zero size", 1 TSRMLS_CC );
+			return;
+		}
+
 		/* Both sides are smaller
 			than the desired size */
 		if ( imageX <= x && imageY <= y )
