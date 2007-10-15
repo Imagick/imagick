@@ -5131,7 +5131,8 @@ PHP_METHOD(imagick, destroy)
 		RETURN_FALSE;
 	}
 
-	intern->magick_wand = (MagickWand *) DestroyMagickWand( intern->magick_wand );
+	ClearMagickWand( intern->magick_wand );
+	object->refcount = 0;
 	RETURN_TRUE;
 }
 /* }}} */
@@ -14053,8 +14054,9 @@ PHP_METHOD(imagickdraw, destroy)
 		throwExceptionWithMessage( 2, "ImagickDraw is not allocated", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+
 	ClearDrawingWand( internd->drawing_wand );
-	internd->drawing_wand = DestroyDrawingWand( internd->drawing_wand );
+	object->refcount = 0;
 	RETURN_TRUE;
 }
 /* }}} */
@@ -16837,7 +16839,8 @@ PHP_METHOD(imagickpixeliterator, destroy)
 		RETURN_FALSE;
 	}
 
-	internpix->pixel_iterator = DestroyPixelIterator( internpix->pixel_iterator );
+	ClearPixelIterator( internpix->pixel_iterator );
+	object->refcount = 0;
 	RETURN_TRUE;
 }
 /* }}} */
@@ -17041,7 +17044,7 @@ PHP_METHOD(imagickpixel, destroy)
 	}
 
 	ClearPixelWand( internp->pixel_wand );
-	internp->pixel_wand = DestroyPixelWand( internp->pixel_wand );
+	object->refcount = 0;
 	RETURN_TRUE;
 }
 /* }}} */
