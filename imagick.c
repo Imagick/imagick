@@ -5132,7 +5132,11 @@ PHP_METHOD(imagick, destroy)
 	}
 
 	ClearMagickWand( intern->magick_wand );
+#ifdef Z_SET_REFCOUNT_P
+	Z_SET_REFCOUNT_P( object, 0 );
+#else
 	object->refcount = 0;
+#endif	
 	RETURN_TRUE;
 }
 /* }}} */
@@ -14056,7 +14060,11 @@ PHP_METHOD(imagickdraw, destroy)
 	}
 
 	ClearDrawingWand( internd->drawing_wand );
+#ifdef Z_SET_REFCOUNT_P
+	Z_SET_REFCOUNT_P( object, 0 );
+#else
 	object->refcount = 0;
+#endif	
 	RETURN_TRUE;
 }
 /* }}} */
@@ -16840,7 +16848,11 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	}
 
 	ClearPixelIterator( internpix->pixel_iterator );
+#ifdef Z_SET_REFCOUNT_P
+	Z_SET_REFCOUNT_P( object, 0 );
+#else
 	object->refcount = 0;
+#endif	
 	RETURN_TRUE;
 }
 /* }}} */
@@ -17044,7 +17056,11 @@ PHP_METHOD(imagickpixel, destroy)
 	}
 
 	ClearPixelWand( internp->pixel_wand );
+#ifdef Z_SET_REFCOUNT_P
+	Z_SET_REFCOUNT_P( object, 0 );
+#else
 	object->refcount = 0;
+#endif	
 	RETURN_TRUE;
 }
 /* }}} */
