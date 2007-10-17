@@ -5783,7 +5783,10 @@ char *getPseudoFilename( char *pseudoString TSRMLS_DC )
 		if ( begin == 1 )
 		{
 			if ( x == PATH_MAX )
+			{
+				efree( filename );
 				return NULL;
+			}
 
 			filename[x] = c;
 			x++;
