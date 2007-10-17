@@ -5136,7 +5136,7 @@ PHP_METHOD(imagick, destroy)
 	Z_SET_REFCOUNT_P( object, 0 );
 #else
 	object->refcount = 0;
-#endif	
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -5767,6 +5767,37 @@ PHP_METHOD(imagick, newimage)
 }
 /* }}} */
 
+char *getPseudoFilename( char *pseudoString TSRMLS_DC )
+{
+	char c, *filename;
+	int begin = 0, i = 0, x = 0;
+
+	filename = (char *)emalloc( PATH_MAX + 1 );
+	memset( filename, '\0', PATH_MAX+1 );
+
+	while ( *pseudoString != '\0' )
+	{
+		i++;
+		c = *(pseudoString++);
+
+		if ( begin == 1 )
+		{
+			if ( x == PATH_MAX )
+				return NULL;
+
+			filename[x] = c;
+			x++;
+		}
+
+		if ( c == ':' && begin != 1 )
+		{
+			begin = 1;
+		}
+	}
+
+	return filename;
+}
+
 /* {{{ proto bool Imagick::newPseudoImage( int cols, int rows, string pseudoString )
 	Creates a new image using pseudo format
 */
@@ -5775,15 +5806,27 @@ PHP_METHOD(imagick, newpseudoimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long columns, rows;
-	char *pseudoString;
+	char *pseudoString, *filename;
 	int pseudoStringLen;
-	char *pch, *absolute = NULL, *tmpString;
+	char *pch, *absolute = NULL;
 	int i, match = 1, error = 0;
+
+#ifdef PHP_WIN32
+	int formats = 20;
+	char *noBaseDirFormats[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
+									"histogram:", "label:", "map:", "matte:",
+									"null:", "plasma:", "preview:", "print:",
+									"scan:", "stegano:", "unique:", "win:",
+								    "xc:", "magick:", "pattern:", "http:", "ftp:" };
+#else
+	int formats = 21;
 	char *noBaseDirFormats[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
 									"histogram:", "label:", "map:", "matte:",
 									"null:", "plasma:", "preview:", "print:",
 									"scan:", "stegano:", "unique:", "win:",
 									"x:", "xc:", "magick:", "pattern:", "http:", "ftp:" };
+#endif
+
 
 	if ( ZEND_NUM_ARGS() != 3 )
 	{
@@ -5803,21 +5846,19 @@ PHP_METHOD(imagick, newpseudoimage)
 		RETURN_FALSE;
 	}
 
-	tmpString = estrndup( pseudoString, pseudoStringLen );
-
 	if ( !PG( allow_url_fopen ) )
 	{
-		if ( ( strncasecmp( tmpString, "http:", 5 ) == 0 ) || ( strncasecmp( tmpString, "ftp:", 4 ) == 0 ) )
+		if ( ( strncasecmp( pseudoString, "http:", 5 ) == 0 ) || ( strncasecmp( pseudoString, "ftp:", 4 ) == 0 ) )
 		{
 			throwExceptionWithMessage( 1, "Trying to open from an url and allow_url_fopen is off", 1 TSRMLS_CC );
 			RETURN_FALSE;
 		}
 	}
 
-	for ( i = 0; i < 21 ; i++ )
+	for ( i = 0; i < formats ; i++ )
 	{
 		/* No open_basedir check needed */
-		if ( strncasecmp( tmpString, noBaseDirFormats[i], strlen( noBaseDirFormats[i] ) ) == 0 )
+		if ( strncasecmp( pseudoString, noBaseDirFormats[i], strlen( noBaseDirFormats[i] ) ) == 0 )
 		{
 			match = 0;
 			break;
@@ -5829,18 +5870,19 @@ PHP_METHOD(imagick, newpseudoimage)
 	/* These formats potentially read images */
 	if ( match == 1 )
 	{
-		pch = strtok( tmpString, ":" );
-		if ( pch != NULL )
+		filename = getPseudoFilename( pseudoString TSRMLS_CC );
+
+		if ( filename == NULL )
 		{
-			pch = strtok (NULL, ":");
-			if ( pch != NULL )
-			{
-				absolute = expand_filepath( pch, NULL TSRMLS_CC);
-				IMAGICK_SAFE_MODE_CHECK( absolute, error );
-			}
+			throwExceptionWithMessage( 1, "Filename exceeds the PATH_MAX length", 1 TSRMLS_CC );
+			RETURN_FALSE;
 		}
+
+		absolute = expand_filepath( filename, NULL TSRMLS_CC);
+		IMAGICK_SAFE_MODE_CHECK( absolute, error );
+
+		efree( filename );
 	}
-	efree( tmpString );
 
 	if ( match == 1 )
 	{
@@ -14064,7 +14106,7 @@ PHP_METHOD(imagickdraw, destroy)
 	Z_SET_REFCOUNT_P( object, 0 );
 #else
 	object->refcount = 0;
-#endif	
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -16852,7 +16894,7 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	Z_SET_REFCOUNT_P( object, 0 );
 #else
 	object->refcount = 0;
-#endif	
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -17060,7 +17102,7 @@ PHP_METHOD(imagickpixel, destroy)
 	Z_SET_REFCOUNT_P( object, 0 );
 #else
 	object->refcount = 0;
-#endif	
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
