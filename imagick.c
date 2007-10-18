@@ -61,6 +61,9 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 #define IMAGICK_REGISTER_CONST_LONG(const_name, value)\
 	zend_declare_class_constant_long(php_imagick_sc_entry, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
 
+#define IMAGICK_REGISTER_CONST_STRING(const_name, value)\
+	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value TSRMLS_CC);
+
 #define IMAGICK_CHECK_NOT_EMPTY( magick_wand, type, code )\
 	if( getImageCount( magick_wand TSRMLS_CC) == 0 )\
 	{ throwExceptionWithMessage( (long)type, "Can not process empty wand", (long)code TSRMLS_CC); RETURN_FALSE; }
@@ -17523,6 +17526,10 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "COLOR_OPACITY", IMAGICKCOLOROPACITY );
 	IMAGICK_REGISTER_CONST_LONG( "COLOR_ALPHA", IMAGICKCOLORALPHA );
 	IMAGICK_REGISTER_CONST_LONG( "COLOR_FUZZ", IMAGICKCOLORFUZZ );
+
+	/* Returning the version as a constant string */
+	IMAGICK_REGISTER_CONST_LONG( "IMAGICK_EXTNUM", PHP_IMAGICK_EXTNUM );
+	IMAGICK_REGISTER_CONST_STRING( "IMAGICK_EXTVER", PHP_IMAGICK_EXTVER );
 
 	/* ImageMagick defined constants */
 	IMAGICK_REGISTER_CONST_LONG( "COMPOSITE_DEFAULT", OverCompositeOp );
