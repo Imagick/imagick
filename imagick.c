@@ -5775,8 +5775,8 @@ char *getPseudoFilename( char *pseudoString TSRMLS_DC )
 	char c, *filename;
 	int begin = 0, i = 0, x = 0;
 
-	filename = (char *)emalloc( PATH_MAX + 1 );
-	memset( filename, '\0', PATH_MAX+1 );
+	filename = (char *)emalloc( MAXPATHLEN + 1 );
+	memset( filename, '\0', MAXPATHLEN+1 );
 
 	while ( *pseudoString != '\0' )
 	{
@@ -5785,7 +5785,7 @@ char *getPseudoFilename( char *pseudoString TSRMLS_DC )
 
 		if ( begin == 1 )
 		{
-			if ( x == PATH_MAX )
+			if ( x > MAXPATHLEN )
 			{
 				efree( filename );
 				return NULL;
@@ -5880,7 +5880,7 @@ PHP_METHOD(imagick, newpseudoimage)
 
 		if ( filename == NULL )
 		{
-			throwExceptionWithMessage( 1, "Filename exceeds the PATH_MAX length", 1 TSRMLS_CC );
+			throwExceptionWithMessage( 1, "Filename exceeds the MAXPATHLEN length", 1 TSRMLS_CC );
 			RETURN_FALSE;
 		}
 

@@ -31,10 +31,6 @@
 #include "ext/standard/info.h"
 #include "php_ini.h"
 
-#ifndef PATH_MAX
-#define PATH_MAX 1024
-#endif
-
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
 	zend_object zo;
