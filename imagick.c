@@ -126,6 +126,30 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		break;\
 	}
 
+#define IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR(internd, filename, error, free)\
+	switch ( error )\
+	{\
+		default:\
+		case 0:\
+			/* No error */\
+		break;\
+		case 1:\
+			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read file: %s", filename );\
+			if ( free == 1 ) { efree( filename ); }\
+			RETURN_NULL();\
+		break;\
+		case 2:\
+			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
+			if ( free == 1 ) { efree( filename ); }\
+			RETURN_NULL();\
+		break;\
+		case 3:\
+			throwImagickDrawException( internd->drawing_wand, "Unable to read file", 1 TSRMLS_CC);\
+			if ( free == 1 ) { efree( filename ); }\
+			RETURN_NULL();\
+		break;\
+	}
+
 #define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
 	MagickSetLastIterator( intern->magick_wand );
 
@@ -13576,15 +13600,37 @@ PHP_METHOD(imagickdraw, setstrokewidth)
 }
 /* }}} */
 
+int checkIfFontIsConfigured( char *font, int fontLen TSRMLS_DC )
+{
+	int retval = 0;
+	char **fonts;
+	unsigned long numFonts = 0, i = 0;
+
+	/* Check that user is only able to set a proper font */
+	fonts = (char **) MagickQueryFonts( "*", &numFonts );
+
+	for( i = 0 ; i < numFonts ; i++ )
+	{
+		/* Let's see if the font is among configured fonts */
+		if ( strncmp( fonts[i], font, fontLen ) == 0 )
+		{
+			retval = 1;
+			break;
+		}
+	}
+
+	IMAGICK_FREE_MEMORY( char **, fonts );
+	return retval;
+}
+
 /* {{{ proto bool ImagickDraw::setFont(string font_name)
 	Sets the fully-sepecified font to use when annotating with text.
 */
 PHP_METHOD(imagickdraw, setfont)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
-	char *font;
-	int fontLen;
+	char *font, *absolute;
+	int fontLen, configured = 0, error = 0;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
@@ -13598,16 +13644,50 @@ PHP_METHOD(imagickdraw, setfont)
 		return;
 	}
 
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
+	/* Check that no empty string is passed */
+	if ( fontLen == 0 )
+	{
+		throwExceptionWithMessage( 2, "Can not set empty font", 2 TSRMLS_CC );
+		return;
+	}
 
-	status = DrawSetFont( internd->drawing_wand, font );
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	/* And if it wasn't */
+	if ( !checkIfFontIsConfigured( font, fontLen TSRMLS_CC ) )
+	{
+		if ( !(absolute = expand_filepath( font, NULL TSRMLS_CC)) )
+		{
+			throwExceptionWithMessage( 2, "Unable to set font", 2 TSRMLS_CC );
+			return;
+		}
+
+		/* Do a safe-mode check for the font */
+		IMAGICK_SAFE_MODE_CHECK( absolute, error );
+		IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR( internd, absolute, error, 1 );
+
+		if ( access(absolute, 0) != 0 )
+		{
+			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 2 TSRMLS_CC,
+				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute );
+
+			efree( absolute );
+			return;
+		}
+
+		status = DrawSetFont( internd->drawing_wand, absolute );
+		efree( absolute );
+	}
+	else
+	{
+		status = DrawSetFont( internd->drawing_wand, font );
+	}
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickDrawException( internd->drawing_wand, "Unable to set font", 1 TSRMLS_CC);
-		RETURN_FALSE;
+		throwImagickDrawException( internd->drawing_wand, "Unable to set font", 1 TSRMLS_CC );
+		return;
 	}
 
 	RETURN_TRUE;
@@ -13619,7 +13699,6 @@ PHP_METHOD(imagickdraw, setfont)
 */
 PHP_METHOD(imagickdraw, setfontfamily)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	char *fontFamily;
 	int fontFamilyLen;
@@ -13636,9 +13715,20 @@ PHP_METHOD(imagickdraw, setfontfamily)
 		return;
 	}
 
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
+	/* Check that no empty string is passed */
+	if ( fontFamilyLen == 0 )
+	{
+		throwExceptionWithMessage( 2, "Can not set empty font family", 2 TSRMLS_CC );
+		return;
+	}
 
+	if ( !checkIfFontIsConfigured( fontFamily, fontFamilyLen TSRMLS_CC ) )
+	{
+		throwExceptionWithMessage( 2, "Unable to set font family; parameter not found in the list of configured fonts", 2 TSRMLS_CC );
+		return;
+	}
+
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = DrawSetFontFamily( internd->drawing_wand, fontFamily );
 
 	/* No magick is going to happen */
