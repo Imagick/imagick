@@ -5869,6 +5869,12 @@ PHP_METHOD(imagick, newpseudoimage)
 		return;
 	}
 
+	if ( pseudoStringLen == 0 )
+	{
+		throwExceptionWithMessage( 1, "Invalid pseudo format string", 1 TSRMLS_CC );
+		RETURN_FALSE;
+	}
+
 	/* Allow only pseudo formats in this method */
 	if ( count_occurences_of( ':', pseudoString TSRMLS_CC ) < 1 )
 	{
@@ -5905,6 +5911,13 @@ PHP_METHOD(imagick, newpseudoimage)
 		if ( filename == NULL )
 		{
 			throwExceptionWithMessage( 1, "Filename exceeds the MAXPATHLEN length", 1 TSRMLS_CC );
+			RETURN_FALSE;
+		}
+
+		if ( strlen( filename ) == 0 )
+		{
+			efree( filename );
+			throwExceptionWithMessage( 1, "Can not process empty filename", 1 TSRMLS_CC );
 			RETURN_FALSE;
 		}
 
