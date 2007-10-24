@@ -21,23 +21,21 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-10-17</date>
+	<date>2007-10-25</date>
 	<version>
-		<release>2.0.1RC1</release>
-		<api>2.0.1RC1</api>
+		<release>2.0.1</release>
+		<api>2.0.1</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ Added Imagick::distortImage and Imagick::setlastiterator
-+ Added optional fourth parameter to newImage to set the format when creating a new canvas
-+ Fixed fitting to zero size image in Imagick::thumbnailImage
-+ Fixed the destroy methods.
-+ Most of the operations that read / add images to the stack move the iterator position to the last element
-+ Fixed memleaks in methods that replace the internal MagickWand* pointer
++ ImagickDraw::setFont and ImagickDraw::setFontFamily now allow only valid fonts
++ Added IMAGICK_EXTVER and IMAGICK_EXTNUM constants
++ Added check for empty or invalid pseudo format string in Imagick::newPseudoImage
++ Fixed incorrect arg hinting for Imagick::compareImageChannels
 </notes>
 	<contents>
 		<dir name="/">
