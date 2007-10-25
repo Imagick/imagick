@@ -177,6 +177,32 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand( intern->drawing_wand );\
 		intern->drawing_wand = new_wand;\
 	}
+
+#define IMAGICK_STRING_OR_OBJECT_PARAMETER( object, param, pixel_wand, internp, caller ) \
+	switch ( Z_TYPE_P( param ) ) \
+	{ \
+		case IS_STRING: \
+			pixel_wand = NewPixelWand(); \
+			if ( !PixelSetColor( pixel_wand, Z_STRVAL_P( param ) ) ) \
+			{ \
+				throwImagickPixelException( pixel_wand, "Unrecognized color string", 3 TSRMLS_CC ); \
+				return; \
+			} \
+			MAKE_STD_ZVAL( object ); \
+			object_init_ex( object, php_imagickpixel_sc_entry ); \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object( object TSRMLS_CC ); \
+			internp->initialized_via_iterator = 0; \
+			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, pixel_wand ); \
+		break; \
+		case IS_OBJECT: \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object( param TSRMLS_CC ); \
+		break; \
+		default: \
+			throwExceptionWithMessage( (long)caller, "Only a string parameter can be casted to ImagickPixel", (long)caller TSRMLS_CC ); \
+			return; \
+		break; \
+	}
+
 /* Forward declarations (Imagick) */
 
 /* The conditional methods */
@@ -640,7 +666,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfillcolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -650,7 +676,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokecolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -815,7 +841,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextundercolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1276,7 +1302,8 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_issimilar_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, imagickpixel, imagickpixel, 0)
+		ZEND_ARG_INFO(0, color)
+		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1678,12 +1705,12 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_blackthresholdimage_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_whitethresholdimage_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1750,7 +1777,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_rotateimage_args, 0, 0, 2)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, degrees)
 	ZEND_END_ARG_INFO()
 
@@ -1786,7 +1813,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebackgroundcolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1821,7 +1848,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagemattecolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1873,7 +1900,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_shearimage_args, 0, 0, 3)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, xShear)
 		ZEND_ARG_INFO(0, yShear)
 	ZEND_END_ARG_INFO()
@@ -1964,7 +1991,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_borderimage_args, 0, 0, 3)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 	ZEND_END_ARG_INFO()
@@ -1986,17 +2013,17 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colorfloodfillimage_args, 0, 0, 5)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, fill_color)
 		ZEND_ARG_INFO(0, fuzz)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, border_color)
 		ZEND_ARG_INFO(0, y)
 		ZEND_ARG_INFO(0, x)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colorizeimage_args, 0, 0, 2)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, colorize_color)
+		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2048,7 +2075,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_frameimage_args, 0, 0, 5)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 		ZEND_ARG_INFO(0, innerBevel)
@@ -2149,7 +2176,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_mattefloodfillimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, fuzz)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
@@ -2167,15 +2194,15 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_paintopaqueimage_args, 0, 0, 3)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, target_color)
+		ZEND_ARG_INFO(0, fill_color)
 		ZEND_ARG_INFO(0, fuzz)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_painttransparentimage_args, 0, 0, 3)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, target_color)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
@@ -2242,7 +2269,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebordercolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2254,7 +2281,7 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecolormapcolor_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, index)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2332,8 +2359,8 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_tintimage_args, 0, 0, 2)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, tint_color)
+		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2359,7 +2386,7 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_newimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, background_color)
 		ZEND_ARG_INFO(0, format)
 	ZEND_END_ARG_INFO()
 
@@ -2387,7 +2414,7 @@ static
 
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setbackgroundcolor_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, ImagickPixel, ImagickPixel, 0)
+		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
 static
@@ -5555,9 +5582,10 @@ PHP_METHOD(imagick, coalesceimages)
 */
 PHP_METHOD(imagick, colorfloodfillimage)
 {
+	PixelWand *fill_wand, *border_wand;
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_fill, *intern_border;
-	zval *object, *fillObj, *borderObj;
+	zval *fillParam, *borderParam, *fillObj, *borderObj;
 	long x, y;
 	double fuzz;
 	MagickBooleanType status;
@@ -5570,19 +5598,17 @@ PHP_METHOD(imagick, colorfloodfillimage)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "OdOll", &fillObj, php_imagickpixel_sc_entry, &fuzz,
-																   &borderObj, php_imagickpixel_sc_entry, &x, &y ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zdzll", &fillParam, &fuzz, &borderParam, &x, &y ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	intern_fill = (php_imagickpixel_object *)zend_object_store_get_object(fillObj TSRMLS_CC);
-	intern_border = (php_imagickpixel_object *)zend_object_store_get_object(borderObj TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( fillObj, fillParam, fill_wand, intern_fill, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( borderObj, borderParam, border_wand, intern_border, 1 );
 
 	status = MagickColorFloodfillImage( intern->magick_wand, intern_fill->pixel_wand, fuzz, intern_border->pixel_wand, x, y );
 
@@ -5748,25 +5774,26 @@ PHP_METHOD(imagick, addimage)
 */
 PHP_METHOD(imagick, newimage)
 {
+	PixelWand *pixel_wand;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internbg;
-	zval *object, *bgObj;
+	php_imagickpixel_object *internp;
+	zval *objvar, *param;
 	MagickBooleanType status;
 	long columns, rows;
 	char *format = NULL;
 	int formatLen = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llO|s", &columns, &rows, &bgObj, php_imagickpixel_sc_entry, &format, &formatLen ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llz|s", &columns, &rows, &param, &format, &formatLen ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	internbg = (php_imagickpixel_object *)zend_object_store_get_object(bgObj TSRMLS_CC);
-	status = MagickNewImage( intern->magick_wand, columns, rows, internbg->pixel_wand );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+
+	status = MagickNewImage( intern->magick_wand, columns, rows, internp->pixel_wand );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -5838,7 +5865,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	long columns, rows;
 	char *pseudoString, *filename;
 	int pseudoStringLen;
-	char *pch, *absolute = NULL;
+	char *absolute = NULL;
 	int i, match = 1, error = 0;
 
 #ifdef PHP_WIN32
@@ -6110,13 +6137,14 @@ PHP_METHOD(imagick, mapimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::matteFloodfillImage( float alpha,float fuzz,ImagickPixel bordercolor, int x, int y)
-	Changes the transparency value of any pixel that matches target and is an immediate neighbor.  If the method FillToBorderMethod is specified, the transparency value is changed for any neighbor pixel that does not match the bordercolor member of image.
+	Changes the transparency value of any pixel that matches target and is an immediate neighbor
 */
 PHP_METHOD(imagick, mattefloodfillimage)
 {
+	PixelWand *pixel_wand;
 	php_imagick_object *intern;
-	php_imagickpixel_object *intern_border;
-	zval *object, *borderObj;
+	php_imagickpixel_object *internp;
+	zval *objvar, *param;
 	long x, y;
 	double alpha, fuzz;
 	MagickBooleanType status;
@@ -6129,17 +6157,16 @@ PHP_METHOD(imagick, mattefloodfillimage)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddOll", &alpha, &fuzz, &borderObj, php_imagickpixel_sc_entry, &x, &y ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddzll", &alpha, &fuzz, &param, &x, &y ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	intern_border = (php_imagickpixel_object *)zend_object_store_get_object(borderObj TSRMLS_CC);
-	status = MagickMatteFloodfillImage( intern->magick_wand, alpha, fuzz, intern_border->pixel_wand, x, y );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	status = MagickMatteFloodfillImage( intern->magick_wand, alpha, fuzz, internp->pixel_wand, x, y );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -6226,26 +6253,26 @@ PHP_METHOD(imagick, negateimage)
 */
 PHP_METHOD(imagick, paintopaqueimage)
 {
+	PixelWand *target_wand, *fill_wand;
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_fill, *intern_target;
-	zval *object, *targetObj, *fillObj;
+	zval *targetParam, *fillParam, *targetObj, *fillObj;
 	double fuzz;
 	MagickBooleanType status;
 	long channel = AllChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "OOd|l", &targetObj, php_imagickpixel_sc_entry, &fillObj, php_imagickpixel_sc_entry, &fuzz, &channel ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zzd|l", &targetParam, &fillParam, &fuzz, &channel ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	intern_target = (php_imagickpixel_object *)zend_object_store_get_object(targetObj TSRMLS_CC);
-	intern_fill = (php_imagickpixel_object *)zend_object_store_get_object(fillObj TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( targetObj, targetParam, target_wand, intern_target, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( fillObj, fillParam, fill_wand, intern_fill, 1 );
 
 #if MagickLibVersion > 0x628
 	status = MagickPaintOpaqueImageChannel( intern->magick_wand, channel, intern_target->pixel_wand, intern_fill->pixel_wand, fuzz );
@@ -6297,9 +6324,10 @@ PHP_METHOD(imagick, optimizeimagelayers)
 */
 PHP_METHOD(imagick, painttransparentimage)
 {
+	PixelWand *pixel_wand;
 	php_imagick_object *intern;
-	php_imagickpixel_object *intern_target;
-	zval *object, *targetObj;
+	php_imagickpixel_object *internp;
+	zval *param, *objvar;
 	double alpha, fuzz;
 	MagickBooleanType status;
 
@@ -6309,17 +6337,16 @@ PHP_METHOD(imagick, painttransparentimage)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Odd", &targetObj, php_imagickpixel_sc_entry, &alpha, &fuzz ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &param, &alpha, &fuzz ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	intern_target = (php_imagickpixel_object *)zend_object_store_get_object(targetObj TSRMLS_CC);
-	status = MagickPaintTransparentImage( intern->magick_wand, intern_target->pixel_wand, alpha, fuzz );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	status = MagickPaintTransparentImage( intern->magick_wand, internp->pixel_wand, alpha, fuzz );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -6721,7 +6748,8 @@ PHP_METHOD(imagick, setimageblueprimary)
 */
 PHP_METHOD(imagick, setimagebordercolor)
 {
-	zval *object, *objvar;
+	PixelWand *pixel_wand;
+	zval *param, *objvar;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
@@ -6731,15 +6759,16 @@ PHP_METHOD(imagick, setimagebordercolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+
 	status = MagickSetImageBorderColor( intern->magick_wand, internp->pixel_wand );
 
 	/* No magick is going to happen */
@@ -6792,11 +6821,12 @@ PHP_METHOD(imagick, setimagechanneldepth)
 /* {{{ proto bool Imagick::setImageColormapColor(int index, ImagickPixel color)
 	Sets the color of the specified colormap index.
 */
-PHP_METHOD(imagick, setimagecolormapcolor) // TODO: not sure if the implementation is correct
+PHP_METHOD(imagick, setimagecolormapcolor)
 {
+	PixelWand *pixel_wand;
 	php_imagick_object *intern;
-	php_imagickpixel_object *color;
-	zval *object;
+	php_imagickpixel_object *internp;
+	zval *objvar, *param;
 	long index;
 	MagickBooleanType status;
 
@@ -6806,21 +6836,22 @@ PHP_METHOD(imagick, setimagecolormapcolor) // TODO: not sure if the implementati
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lO", &index, &color, php_imagickpixel_sc_entry ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lz", &index, &param ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = MagickSetImageColormapColor( intern->magick_wand, index, color->pixel_wand );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+
+	status = MagickSetImageColormapColor( intern->magick_wand, index, internp->pixel_wand );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, "Unable to set image color map", 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set image color map color", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -7313,13 +7344,14 @@ PHP_METHOD(imagick, textureimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::tintImage(ImagickPixel tint, ImagickPixel opacity)
-	Applies a color vector to each pixel in the image.  The length of the vector is 0 for black and white and at its maximum for the midtones.  The vector weighting function is f(x)=(1-(4.0*((x-0.5)*(x-0.5)))).
+	Applies a color vector to each pixel in the image
 */
 PHP_METHOD(imagick, tintimage)
 {
+	PixelWand *tint_wand, *opacity_wand;
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_tint, *intern_opacity;
-	zval *object, *tintObj, *opacityObj;
+	zval *tintObj, *opacityObj, *tintParam, *opacityParam;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 2 )
@@ -7328,17 +7360,16 @@ PHP_METHOD(imagick, tintimage)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "OO", &tintObj, php_imagickpixel_sc_entry, &opacityObj, php_imagickpixel_sc_entry ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zz", &tintParam, &opacityParam ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	intern_tint = (php_imagickpixel_object *)zend_object_store_get_object(tintObj TSRMLS_CC);
-	intern_opacity = (php_imagickpixel_object *)zend_object_store_get_object(opacityObj TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( tintObj, tintParam, tint_wand, intern_tint, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
 
 	status = MagickTintImage( intern->magick_wand, intern_tint->pixel_wand, intern_opacity->pixel_wand );
 
@@ -9647,8 +9678,8 @@ PHP_METHOD(imagick, setimageattribute)
 */
 PHP_METHOD(imagick, setimagebackgroundcolor)
 {
-	zval *object;
-	zval *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
@@ -9658,17 +9689,16 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	status = MagickSetImageBackgroundColor( intern->magick_wand, internp->pixel_wand );
 
 	/* No magick is going to happen */
@@ -9804,9 +9834,10 @@ PHP_METHOD(imagick, setimagedelay)
 */
 PHP_METHOD(imagick, colorizeimage)
 {
+	PixelWand *color_wand, *opacity_wand;
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_color, *intern_opacity;
-	zval *object, *colorObj, *opacityObj;
+	zval *colorObj, *opacityObj, *colorParam, *opacityParam;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 2 )
@@ -9815,17 +9846,16 @@ PHP_METHOD(imagick, colorizeimage)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "OO", &colorObj, php_imagickpixel_sc_entry, &opacityObj, php_imagickpixel_sc_entry ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zz", &colorParam, &opacityParam ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	intern_color = (php_imagickpixel_object *)zend_object_store_get_object(colorObj TSRMLS_CC);
-	intern_opacity = (php_imagickpixel_object *)zend_object_store_get_object(opacityObj TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( colorObj, colorParam, color_wand, intern_color, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
 
 	status = MagickColorizeImage( intern->magick_wand, intern_color->pixel_wand, intern_opacity->pixel_wand );
 
@@ -10008,11 +10038,12 @@ PHP_METHOD(imagick, flopimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::frameImage(ImagickPixel matte_color, int width, int height, int inner_bevel, int outer_bevel)
-	Adds a simulated three-dimensional border around the image.  The width and height specify the border width of the vertical and horizontal sides of the frame.  The inner and outer bevels indicate the width of the inner and outer shadows of the frame.
+	Adds a simulated three-dimensional border around the image
 */
 PHP_METHOD(imagick, frameimage)
 {
-	zval *object, *objvar;
+	PixelWand *pixel_wand;
+	zval *param, *objvar;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
@@ -10023,17 +10054,16 @@ PHP_METHOD(imagick, frameimage)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ollll", &objvar, php_imagickpixel_sc_entry, &width, &height, &innerBevel, &outerBevel ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zllll", &param, &width, &height, &innerBevel, &outerBevel ) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	status = MagickFrameImage( intern->magick_wand, internp->pixel_wand, width, height, innerBevel, outerBevel );
 
 	/* No magick is going to happen */
@@ -10360,7 +10390,8 @@ PHP_METHOD(imagick, setimageiterations)
 */
 PHP_METHOD(imagick, setimagemattecolor)
 {
-	zval *object, *objvar;
+	PixelWand *pixel_wand;
+	zval *param, *objvar;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
@@ -10370,17 +10401,16 @@ PHP_METHOD(imagick, setimagemattecolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	status = MagickSetImageMatteColor( intern->magick_wand, internp->pixel_wand );
 
 	/* No magick is going to happen */
@@ -11258,7 +11288,8 @@ PHP_METHOD(imagick, averageimages)
 */
 PHP_METHOD(imagick, borderimage)
 {
-	zval *object, *objvar;
+	PixelWand *pixel_wand;
+	zval *param, *objvar;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
@@ -11269,17 +11300,16 @@ PHP_METHOD(imagick, borderimage)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagickpixel_sc_entry, &width, &height ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll", &param, &width, &height ) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	status = MagickBorderImage( intern->magick_wand, internp->pixel_wand, width, height );
 
 	/* No magick is going to happen */
@@ -11438,12 +11468,12 @@ PHP_METHOD(imagick, shaveimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::shearImage(ImagickPixel background, float x_shear, float y_shear)
-	Slides one edge of an image along the X or Y axis, creating a parallelogram.  An X direction shear slides an edge along the X axis, while a Y direction shear slides an edge along the Y axis.  The amount of the shear is controlled by a shear angle.  For X direction shears, x_shear is measured relative to the Y axis, and similarly, for Y direction shears y_shear is measured relative to the X axis.  Empty triangles left over from shearing the image are filled with the background color.
+	Slides one edge of an image along the X or Y axis
 */
 PHP_METHOD(imagick, shearimage)
 {
-	zval *object;
-	zval *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	double xShear, yShear;
@@ -11454,17 +11484,16 @@ PHP_METHOD(imagick, shearimage)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Odd", &objvar, php_imagickpixel_sc_entry, &xShear, &yShear) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &param, &xShear, &yShear) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickShearImage( intern->magick_wand, internp->pixel_wand, xShear, yShear );
 
@@ -11591,8 +11620,8 @@ PHP_METHOD(imagick, clone)
 */
 PHP_METHOD(imagick, rotateimage)
 {
-	zval *object;
-	zval *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	double degrees;
@@ -11603,17 +11632,17 @@ PHP_METHOD(imagick, rotateimage)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Od", &objvar, php_imagickpixel_sc_entry, &degrees) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &degrees) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+
 	status = MagickRotateImage( intern->magick_wand, internp->pixel_wand, degrees );
 
 	/* No magick is going to happen */
@@ -11993,9 +12022,10 @@ PHP_METHOD(imagick, raiseimage)
 */
 PHP_METHOD(imagick, blackthresholdimage)
 {
+	PixelWand *pixel_wand;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
-	zval *object, *objvar;
+	zval *param, *objvar;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
@@ -12003,16 +12033,16 @@ PHP_METHOD(imagick, blackthresholdimage)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+
 	status = MagickBlackThresholdImage( intern->magick_wand, internp->pixel_wand );
 
 	/* No magick is going to happen */
@@ -12181,24 +12211,24 @@ PHP_METHOD(imagick, whitethresholdimage)
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
-	zval *object, *objvar;
+	zval *param, *objvar;
 	MagickBooleanType status;
+	PixelWand *pixel_wand;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 	status = MagickWhiteThresholdImage( intern->magick_wand, internp->pixel_wand );
 
 	/* No magick is going to happen */
@@ -12699,8 +12729,8 @@ PHP_METHOD(imagick, getversion)
 */
 PHP_METHOD(imagick, setbackgroundcolor)
 {
-	zval *object;
-	zval *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
@@ -12710,14 +12740,13 @@ PHP_METHOD(imagick, setbackgroundcolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickSetBackgroundColor( intern->magick_wand, internp->pixel_wand );
 
@@ -13417,8 +13446,8 @@ PHP_METHOD(imagickdraw, translate)
 */
 PHP_METHOD(imagickdraw, setfillcolor)
 {
-	zval *object;
-	zval *objvar;
+	zval *param, *objvar;
+	PixelWand *pixel_wand;
 	php_imagickdraw_object *internd;
 	php_imagickpixel_object *internp;
 
@@ -13427,15 +13456,14 @@ PHP_METHOD(imagickdraw, setfillcolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 2 );
 	DrawSetFillColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -13447,8 +13475,8 @@ PHP_METHOD(imagickdraw, setfillcolor)
 */
 PHP_METHOD(imagickdraw, setstrokecolor)
 {
-	zval *object;
-	zval *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	php_imagickdraw_object *internd;
 	php_imagickpixel_object *internp;
 
@@ -13457,15 +13485,14 @@ PHP_METHOD(imagickdraw, setstrokecolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 2 );
 	DrawSetStrokeColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -13643,7 +13670,7 @@ PHP_METHOD(imagickdraw, setfont)
 {
 	php_imagickdraw_object *internd;
 	char *font, *absolute;
-	int fontLen, configured = 0, error = 0;
+	int fontLen, error = 0;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
@@ -13967,8 +13994,8 @@ PHP_METHOD(imagickdraw, settextdecoration)
 */
 PHP_METHOD(imagickdraw, settextundercolor)
 {
-	zval *object;
-	zval *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	php_imagickdraw_object *internd;
 	php_imagickpixel_object *internp;
 
@@ -13977,15 +14004,14 @@ PHP_METHOD(imagickdraw, settextundercolor)
 		ZEND_WRONG_PARAM_COUNT();
 	}
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 2 );
 	DrawSetTextUnderColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -17221,7 +17247,8 @@ PHP_METHOD(imagickpixel, destroy)
 */
 PHP_METHOD(imagickpixel, issimilar)
 {
-	zval *object, *objvar;
+	PixelWand *pixel_wand;
+	zval *objvar, *param;
 	double fuzz;
 	php_imagickpixel_object *internp, *internp_second;
 	MagickBooleanType status;
@@ -17232,14 +17259,13 @@ PHP_METHOD(imagickpixel, issimilar)
 	}
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Od", &objvar, php_imagickpixel_sc_entry, &fuzz ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &fuzz ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
-	internp_second = (php_imagickpixel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp_second, 4 );
 
 	status = IsPixelWandSimilar( internp->pixel_wand, internp_second->pixel_wand, fuzz );
 
