@@ -161,10 +161,10 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	}
 
 #define IMAGICKPIXEL_REPLACE_PIXELWAND( intern, new_wand )\
-	if( intern->pixel_wand != NULL )\
+	if( intern->pixel_wand != NULL && intern->initialized_via_iterator != 1 )\
 	{\
-	intern->pixel_wand = (PixelWand *)DestroyPixelWand( intern->pixel_wand );\
-	intern->pixel_wand = new_wand;\
+		intern->pixel_wand = (PixelWand *)DestroyPixelWand( intern->pixel_wand );\
+		intern->pixel_wand = new_wand;\
 	}\
 	else\
 	{\
