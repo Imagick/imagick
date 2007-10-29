@@ -9014,7 +9014,7 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	if ( cropWidth == imageWidth && cropHeight == imageHeight )
 	{
 		/* Execute thumbnail to strip profiles and reduce the quality a little */
-		status = MagickThumbnailImage( intern->magick_wand, imageWidth, imageHeight );		
+		status = MagickThumbnailImage( intern->magick_wand, imageWidth, imageHeight );
 
 		/* The world collapses.. */
         	if ( status == MagickFalse )
@@ -17499,7 +17499,7 @@ PHP_METHOD(imagickpixel, getcolor)
 		add_assoc_long( return_value, "r", (int)(red > 0.0 ? red + 0.5 : red - 0.5) );
 		add_assoc_long( return_value, "g", (int)(green > 0.0 ? green + 0.5 : green - 0.5) );
 		add_assoc_long( return_value, "b", (int)(blue > 0.0 ? blue + 0.5 : blue - 0.5) );
-		add_assoc_long( return_value, "a", php_imagick_round( alpha ) );	
+		add_assoc_long( return_value, "a", alpha );
 	}
 
 	return;
@@ -17519,7 +17519,7 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 
 	colorString = PixelGetColorAsString( internp->pixel_wand );
 	ZVAL_STRING( return_value, colorString, 1 );
-	
+
 	IMAGICK_FREE_MEMORY( char *, colorString );
 	return;
 }
@@ -17870,6 +17870,19 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_NONE", NoneDispose );
 	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_BACKGROUND", BackgroundDispose );
 	IMAGICK_REGISTER_CONST_LONG( "DISPOSE_PREVIOUS", PreviousDispose );
+#if MagickLibVersion > 0x631
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_UNDEFINED", UndefinedInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_AVERAGE", AverageInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_BICUBIC", BicubicInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_BILINEAR", BilinearInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_FILTER", FilterInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_INTEGER", IntegerInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_MESH", MeshInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_NEAREST", NearestNeighborInterpolatePixel );
+#endif
+#if MagickLibVersion > 0x634
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_SPLINE", SplineInterpolatePixel );
+#endif
 #if MagickLibVersion > 0x632
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_UNDEFINED", UndefinedLayer );
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_COALESCE", CoalesceLayer );
