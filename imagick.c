@@ -178,7 +178,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		intern->drawing_wand = new_wand;\
 	}
 
-#define IMAGICK_STRING_OR_OBJECT_PARAMETER( object, param, pixel_wand, internp, caller ) \
+#define IMAGICK_CAST_PARAMETER( object, param, pixel_wand, internp, caller ) \
 	switch ( Z_TYPE_P( param ) ) \
 	{ \
 		case IS_STRING: \
@@ -194,14 +194,76 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 			internp->initialized_via_iterator = 0; \
 			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, pixel_wand ); \
 		break; \
+		case IS_LONG: \
+		case IS_DOUBLE: \
+			pixel_wand = NewPixelWand(); \	
+			PixelSetOpacity( pixel_wand, Z_DVAL_P( param ) ); \
+			MAKE_STD_ZVAL( object ); \
+			object_init_ex( object, php_imagickpixel_sc_entry ); \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object( object TSRMLS_CC ); \
+			internp->initialized_via_iterator = 0; \
+			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, pixel_wand ); \
+		break; \
 		case IS_OBJECT: \
 			internp = (php_imagickpixel_object *)zend_object_store_get_object( param TSRMLS_CC ); \
 		break; \
 		default: \
-			throwExceptionWithMessage( (long)caller, "Only a string parameter can be casted to ImagickPixel", (long)caller TSRMLS_CC ); \
+			throwExceptionWithMessage( (long)caller, "Invalid parameter provided", (long)caller TSRMLS_CC ); \
 			return; \
 		break; \
 	}
+
+#define IMAGICK_CALCULATE_THUMBNAIL_SIDES( magick_wand, desired_width, desired_height, fit ) \
+	long orig_width = MagickGetImageWidth( magick_wand );\
+	long orig_height = MagickGetImageHeight( magick_wand );\
+	double ratio;\
+	if ( fit ) \
+	{ \
+		if ( ( desired_width <= 0 ) || ( desired_height <= 0 ) ) \
+		{ \
+			throwExceptionWithMessage( 1, "Invalid image geometry", 1 TSRMLS_CC ); \
+			return; \
+		} \
+		if ( ( orig_width <= desired_width ) && ( orig_height <= desired_height ) ) \
+		{ \
+			RETURN_TRUE; \
+		} \
+		if ( (orig_width / desired_width) > (orig_height / desired_height) ) \
+		{ \
+			ratio = (double)orig_width / (double)desired_width; \
+			desired_height = (double)orig_height / ratio; \
+		} \
+		else \
+		{ \
+			ratio = (double)orig_height / (double)desired_height; \
+			desired_width = (double)orig_width / ratio; \
+		} \
+		if ( desired_width < 1 ) \
+		{ \
+			desired_width = 1; \
+		} \
+		if ( desired_height < 1 ) \
+		{ \
+			desired_height = 1; \
+		} \
+	} \
+	else \
+	{ \
+		if ( ( desired_width <= 0 ) && ( desired_height <= 0 ) ) \
+		{ \
+			throwExceptionWithMessage( 1, "Invalid image geometry", 1 TSRMLS_CC); \
+			RETURN_FALSE;\
+		} \
+		ratio = (double)orig_width / (double)desired_width; \
+		if ( desired_width <= 0 ) \
+		{ \
+			desired_width = orig_width / ratio; \
+		} \
+		else if ( desired_height <= 0 ) \
+		{ \
+			desired_height = orig_height / ratio; \
+		} \
+	}\
 
 /* Forward declarations (Imagick) */
 
@@ -3489,30 +3551,28 @@ PHP_METHOD(imagick, setimagematte)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::adaptiveResizeImage(float radius, float sigma)
+/* {{{ proto bool Imagick::adaptiveResizeImage(float radius, float sigma[, bool fit])
 	Adaptively resize image with data dependent triangulation.
 */
 PHP_METHOD(imagick, adaptiveresizeimage)
 {
-	zval *object;
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long columns, rows;
+	zend_bool fit = 0;
 
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &columns, &rows ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &columns, &rows, &fit ) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	
+	{
+		IMAGICK_CALCULATE_THUMBNAIL_SIDES( intern->magick_wand, columns, rows, fit );
+	}
 
 	status = MagickAdaptiveResizeImage( intern->magick_wand, columns, rows );
 
@@ -5197,7 +5257,7 @@ PHP_METHOD(imagick, destroy)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::scaleImage( int cols, int rows )
+/* {{{ proto bool Imagick::scaleImage( int cols, int rows[, bool fit] )
 	Scales the size of an image to the given dimensions. Passing zero as either of
 	the arguments will preserve dimension while scaling.
 */
@@ -5205,49 +5265,21 @@ PHP_METHOD(imagick, scaleimage)
 {
 	long x, y;
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
-	unsigned long imageY, imageX;
-	double tmp;
-
-	if ( ZEND_NUM_ARGS() != 2 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
+	zend_bool fit = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll", &x, &y ) == FAILURE )
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &x, &y, &fit ) == FAILURE )
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	if ( ( x == 0 ) && ( y == 0 ) )
+	
 	{
-		throwExceptionWithMessage( 1, "Can't scale image to zero size", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	if ( ( x == 0 ) || ( y == 0 ) )
-	{
-		imageX = MagickGetImageWidth( intern->magick_wand );
-		imageY = MagickGetImageHeight( intern->magick_wand );
-
-		if( x == 0 )
-		{
-			tmp = (double)imageX / (double)imageY;
-			x = tmp * (double)y;
-		}
-
-		if ( y == 0 )
-		{
-			tmp = (double)imageY / (double)imageX;
-			y = tmp * (double)x;
-		}
+		IMAGICK_CALCULATE_THUMBNAIL_SIDES( intern->magick_wand, x, y, fit );
 	}
 
 	status = MagickScaleImage( intern->magick_wand, x, y );
@@ -5609,8 +5641,8 @@ PHP_METHOD(imagick, colorfloodfillimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( fillObj, fillParam, fill_wand, intern_fill, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( borderObj, borderParam, border_wand, intern_border, 1 );
+	IMAGICK_CAST_PARAMETER( fillObj, fillParam, fill_wand, intern_fill, 1 );
+	IMAGICK_CAST_PARAMETER( borderObj, borderParam, border_wand, intern_border, 1 );
 
 	status = MagickColorFloodfillImage( intern->magick_wand, intern_fill->pixel_wand, fuzz, intern_border->pixel_wand, x, y );
 
@@ -5793,7 +5825,7 @@ PHP_METHOD(imagick, newimage)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickNewImage( intern->magick_wand, columns, rows, internp->pixel_wand );
 
@@ -6167,7 +6199,7 @@ PHP_METHOD(imagick, mattefloodfillimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 	status = MagickMatteFloodfillImage( intern->magick_wand, alpha, fuzz, internp->pixel_wand, x, y );
 
 	/* No magick is going to happen */
@@ -6273,8 +6305,8 @@ PHP_METHOD(imagick, paintopaqueimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( targetObj, targetParam, target_wand, intern_target, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( fillObj, fillParam, fill_wand, intern_fill, 1 );
+	IMAGICK_CAST_PARAMETER( targetObj, targetParam, target_wand, intern_target, 1 );
+	IMAGICK_CAST_PARAMETER( fillObj, fillParam, fill_wand, intern_fill, 1 );
 
 #if MagickLibVersion > 0x628
 	status = MagickPaintOpaqueImageChannel( intern->magick_wand, channel, intern_target->pixel_wand, intern_fill->pixel_wand, fuzz );
@@ -6347,7 +6379,7 @@ PHP_METHOD(imagick, painttransparentimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 	status = MagickPaintTransparentImage( intern->magick_wand, internp->pixel_wand, alpha, fuzz );
 
 	/* No magick is going to happen */
@@ -6769,7 +6801,7 @@ PHP_METHOD(imagick, setimagebordercolor)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickSetImageBorderColor( intern->magick_wand, internp->pixel_wand );
 
@@ -6846,7 +6878,7 @@ PHP_METHOD(imagick, setimagecolormapcolor)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickSetImageColormapColor( intern->magick_wand, index, internp->pixel_wand );
 
@@ -7370,8 +7402,8 @@ PHP_METHOD(imagick, tintimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( tintObj, tintParam, tint_wand, intern_tint, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
+	IMAGICK_CAST_PARAMETER( tintObj, tintParam, tint_wand, intern_tint, 1 );
+	IMAGICK_CAST_PARAMETER( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
 
 	status = MagickTintImage( intern->magick_wand, intern_tint->pixel_wand, intern_opacity->pixel_wand );
 
@@ -8858,10 +8890,9 @@ PHP_METHOD(imagick, getnumberimages)
 */
 PHP_METHOD(imagick, thumbnailimage)
 {
-	long x, y, imageY, imageX;
+	long x, y;
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	double tmp;
 	zend_bool fit = 0;
 
 	/* Parse parameters given to function */
@@ -8873,70 +8904,8 @@ PHP_METHOD(imagick, thumbnailimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	if ( ( x == 0 ) && ( y == 0 ) )
 	{
-		throwExceptionWithMessage( 1, "Can't thumbnail image to zero size", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	imageX = MagickGetImageWidth( intern->magick_wand );
-	imageY = MagickGetImageHeight( intern->magick_wand );
-
-	/* If fit parameter is set we check which side has higher
-		scaling ratio and scale by that side */
-	if ( fit )
-	{
-		if ( ( x <= 0 ) || ( y <= 0 ) )
-		{
-			throwExceptionWithMessage( 1, "Can not fit thumbnail to zero size", 1 TSRMLS_CC );
-			return;
-		}
-
-		/* Both sides are smaller
-			than the desired size */
-		if ( imageX <= x && imageY <= y )
-		{
-			RETURN_TRUE;
-		}
-
-		/* Width has higher scaling ratio */
-		if ( (imageX / x) > (imageY / y) )
-		{
-			tmp = (double)imageX / (double)x;
-			y = (double)imageY / tmp;
-		}
-		else
-		{
-			tmp = (double)imageY / (double)y;
-			x = (double)imageX / tmp;
-		}
-
-		if ( x < 1 )
-		{
-			x = 1;
-		}
-
-		if ( y < 1 )
-		{
-			y = 1;
-		}
-	}
-	else
-	{
-		if ( ( x == 0 ) || ( y == 0 ) )
-		{
-			if( x == 0 )
-			{
-				tmp = (double)imageX / (double)imageY;
-				x = tmp * (double)y;
-			}
-
-			if ( y == 0 )
-			{
-				tmp = (double)imageY / (double)imageX;
-				y = tmp * (double)x;
-			}
-		}
+		IMAGICK_CALCULATE_THUMBNAIL_SIDES( intern->magick_wand, x, y, fit );
 	}
 
 	status = MagickThumbnailImage( intern->magick_wand, x, y );
@@ -9017,11 +8986,11 @@ PHP_METHOD(imagick, cropthumbnailimage)
 		status = MagickThumbnailImage( intern->magick_wand, imageWidth, imageHeight );
 
 		/* The world collapses.. */
-        	if ( status == MagickFalse )
-        	{
-        	        throwExceptionWithMessage( 1, "Failed to thumbnail the image", 1 TSRMLS_CC);
-	                RETURN_FALSE;
-        	}
+		if ( status == MagickFalse )
+		{
+				throwExceptionWithMessage( 1, "Failed to thumbnail the image", 1 TSRMLS_CC);
+				RETURN_FALSE;
+		}
 		RETURN_TRUE;
 	}
 
@@ -9716,7 +9685,7 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickSetImageBackgroundColor( intern->magick_wand, internp->pixel_wand );
 
@@ -9873,8 +9842,8 @@ PHP_METHOD(imagick, colorizeimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( colorObj, colorParam, color_wand, intern_color, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
+	IMAGICK_CAST_PARAMETER( colorObj, colorParam, color_wand, intern_color, 1 );
+	IMAGICK_CAST_PARAMETER( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
 
 	status = MagickColorizeImage( intern->magick_wand, intern_color->pixel_wand, intern_opacity->pixel_wand );
 
@@ -10081,7 +10050,7 @@ PHP_METHOD(imagick, frameimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickFrameImage( intern->magick_wand, internp->pixel_wand, width, height, innerBevel, outerBevel );
 
@@ -10428,7 +10397,7 @@ PHP_METHOD(imagick, setimagemattecolor)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickSetImageMatteColor( intern->magick_wand, internp->pixel_wand );
 
@@ -11327,7 +11296,7 @@ PHP_METHOD(imagick, borderimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickBorderImage( intern->magick_wand, internp->pixel_wand, width, height );
 
@@ -11512,7 +11481,7 @@ PHP_METHOD(imagick, shearimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickShearImage( intern->magick_wand, internp->pixel_wand, xShear, yShear );
 
@@ -11660,7 +11629,7 @@ PHP_METHOD(imagick, rotateimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickRotateImage( intern->magick_wand, internp->pixel_wand, degrees );
 
@@ -12060,7 +12029,7 @@ PHP_METHOD(imagick, blackthresholdimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickBlackThresholdImage( intern->magick_wand, internp->pixel_wand );
 
@@ -12112,7 +12081,7 @@ PHP_METHOD(imagick, resampleimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::resizeImage(int columns, int rows, int filter, float blur)
+/* {{{ proto bool Imagick::resizeImage(int columns, int rows, int filter, float blur[, bool fit])
 	Scales an image to the desired dimensions with one of these filters:
 */
 PHP_METHOD(imagick, resizeimage)
@@ -12120,22 +12089,22 @@ PHP_METHOD(imagick, resizeimage)
 	double blur;
 	long columns, rows, filter = 0;
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
+	zend_bool fit = 0;
 
-	if ( ZEND_NUM_ARGS() !=4 )
-	{
-		ZEND_WRONG_PARAM_COUNT();
-	}
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld", &columns, &rows, &filter, &blur ) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld|b", &columns, &rows, &filter, &blur, &fit ) == FAILURE)
 	{
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	
+	{
+		IMAGICK_CALCULATE_THUMBNAIL_SIDES( intern->magick_wand, columns, rows, fit );
+	}
+
 	status = MagickResizeImage( intern->magick_wand, columns, rows, filter, blur );
 
 	/* No magick is going to happen */
@@ -12247,7 +12216,7 @@ PHP_METHOD(imagick, whitethresholdimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 	status = MagickWhiteThresholdImage( intern->magick_wand, internp->pixel_wand );
 
 	/* No magick is going to happen */
@@ -12765,7 +12734,7 @@ PHP_METHOD(imagick, setbackgroundcolor)
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 1 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 1 );
 
 	status = MagickSetBackgroundColor( intern->magick_wand, internp->pixel_wand );
 
@@ -13482,7 +13451,7 @@ PHP_METHOD(imagickdraw, setfillcolor)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 2 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 2 );
 	DrawSetFillColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -13511,7 +13480,7 @@ PHP_METHOD(imagickdraw, setstrokecolor)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 2 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 2 );
 	DrawSetStrokeColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -14030,7 +13999,7 @@ PHP_METHOD(imagickdraw, settextundercolor)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp, 2 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp, 2 );
 	DrawSetTextUnderColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -17284,7 +17253,7 @@ PHP_METHOD(imagickpixel, issimilar)
 	}
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	IMAGICK_STRING_OR_OBJECT_PARAMETER( objvar, param, pixel_wand, internp_second, 4 );
+	IMAGICK_CAST_PARAMETER( objvar, param, pixel_wand, internp_second, 4 );
 
 	status = IsPixelWandSimilar( internp->pixel_wand, internp_second->pixel_wand, fuzz );
 
@@ -17456,16 +17425,9 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 */
 PHP_METHOD(imagickpixel, getcolor)
 {
-	zval *object;
 	php_imagickpixel_object *internp;
 	zend_bool normalized = 0;
-	char *colorString;
-	double red, green, blue;
-#if MagickLibVersion > 0x628
-	double normalizedRed, normalizedGreen, normalizedBlue;
-#endif
-	double alpha;
-	int setAlpha = 0;
+	double red, green, blue, alpha;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "|b", &normalized ) == FAILURE )
