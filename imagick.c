@@ -25,6 +25,16 @@ static MUTEX_T imagick_mutex;
 static THREAD_T imagick_thread_id;
 #endif
 
+#ifdef HAVE_LOCALE_H
+
+#if defined(PHP_WIN32)
+#define IMAGICK_LC_NUMERIC_LOCALE "English"
+#else
+#define IMAGICK_LC_NUMERIC_LOCALE "C"
+#endif
+
+#endif
+
 /* Class names */
 #define PHP_IMAGICK_SC_NAME "Imagick"
 #define PHP_IMAGICK_EXCEPTION_SC_NAME "ImagickException"
@@ -276,6 +286,33 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 			desired_height = orig_height / ratio; \
 		} \
 	}\
+
+#ifdef HAVE_LOCALE_H
+#define IMAGICK_SET_LOCALE( old_locale, tmp, restore ) \
+	if (( INI_BOOL( "imagick.locale_fix" ) ) && \
+		( tmp = setlocale( LC_NUMERIC, NULL ) ) != NULL && \
+		( strcmp( tmp, IMAGICK_LC_NUMERIC_LOCALE ) != 0 )) \
+	{ \
+		old_locale = estrdup( tmp ); \
+		setlocale( LC_NUMERIC, IMAGICK_LC_NUMERIC_LOCALE ); \
+		restore = 1; \
+	}\
+	else \
+	{ \
+		restore = 0; \
+	} \
+
+#define IMAGICK_RESTORE_LOCALE( old_locale, restore ) \
+	if ( restore && old_locale != NULL && ( strcmp( old_locale, IMAGICK_LC_NUMERIC_LOCALE ) != 0 )) \
+	{ \
+ 		setlocale( LC_NUMERIC, old_locale ); \
+		efree( old_locale ); \
+	} \
+
+#else
+#define IMAGICK_SET_LOCALE( old_locale, tmp, restore )
+#define IMAGICK_RESTORE_LOCALE( old_locale, restore )
+#endif
 
 /* Forward declarations (Imagick) */
 
@@ -3832,7 +3869,8 @@ PHP_METHOD(imagick, roundcorners)
 	long imageWidth, imageHeight;
 	MagickBooleanType status;
 	double strokeWidth = 10, displace = 5, correction = -6;
-
+	char *old_locale = NULL, *buffer = NULL;
+	zend_bool restore = 0;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd|ddd", &xRounding, &yRounding, &strokeWidth, &displace, &correction ) == FAILURE )
@@ -3903,7 +3941,9 @@ PHP_METHOD(imagick, roundcorners)
 	DrawSetStrokeWidth( draw, strokeWidth );
 	DrawRoundRectangle( draw, displace, displace, imageWidth + correction, imageHeight + correction, xRounding, yRounding );
 
+	IMAGICK_SET_LOCALE( old_locale, buffer, restore );
 	status = MagickDrawImage( maskImage, draw );
+	IMAGICK_RESTORE_LOCALE( old_locale, restore );
 
 	if ( status == MagickFalse )
 	{
@@ -10932,6 +10972,8 @@ PHP_METHOD(imagick, drawimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	php_imagickdraw_object *internd;
+	char *old_locale = NULL, *buffer = NULL;
+	zend_bool restore = 0;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -10949,7 +10991,10 @@ PHP_METHOD(imagick, drawimage)
 	}
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+
+	IMAGICK_SET_LOCALE( old_locale, buffer, restore );
 	status = MagickDrawImage( intern->magick_wand, internd->drawing_wand );
+	IMAGICK_RESTORE_LOCALE( old_locale, restore );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -13213,8 +13258,8 @@ PHP_METHOD(imagick, settype)
 
 #if MagickLibVersion > 0x628
 
-/* {{{ proto bool ImagickDraw::render()
-	Renders all preceding drawing commands onto the image.
+/* {{{ proto bool ImagickDraw::resetvectorgraphics()
+	Resets the vector graphics
 */
 PHP_METHOD(imagickdraw, resetvectorgraphics)
 {
@@ -13272,7 +13317,6 @@ PHP_METHOD(imagickdraw, circle)
 */
 PHP_METHOD(imagickdraw, rectangle)
 {
-	zval *object;
 	double x1, y1, x2, y2;
 	php_imagickdraw_object *internd;
 
@@ -13287,10 +13331,9 @@ PHP_METHOD(imagickdraw, rectangle)
 		return;
 	}
 
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
-
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	DrawRectangle( internd->drawing_wand, x1, y1, x2, y2 );
+
 	RETURN_TRUE;
 }
 /* }}} */
@@ -15951,9 +15994,14 @@ PHP_METHOD(imagickdraw, render)
 	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
+	char *old_locale = NULL, *buffer = NULL;
+	zend_bool restore = 0;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+
+	IMAGICK_SET_LOCALE( old_locale, buffer, restore );
 	status = DrawRender( internd->drawing_wand );
+	IMAGICK_RESTORE_LOCALE( old_locale, restore );
 
 	if ( status == MagickFalse )
 	{
@@ -18087,6 +18135,9 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	return retval;
 }
 
+PHP_INI_BEGIN()
+	STD_PHP_INI_ENTRY( "imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals )
+PHP_INI_END()
 
 PHP_MINIT_FUNCTION(imagick)
 {
@@ -18174,6 +18225,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagick_mutex = tsrm_mutex_alloc();
 #endif
 
+	REGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
 
@@ -18233,6 +18285,7 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 #if defined(ZTS) && defined(PHP_WIN32)
 	tsrm_mutex_free(imagick_mutex);
 #endif
+	UNREGISTER_INI_ENTRIES();
 	return( SUCCESS );
 }
 

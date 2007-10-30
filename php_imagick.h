@@ -37,8 +37,14 @@
 #include "TSRM.h"
 #endif
 
-/* Include PHP Standard Header */
+/* Include PHP Standard Headers */
 #include "php.h"
+#include "php_ini.h"
+
+/* Include locale header */
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 
 /* Include magic wand header */
 #include <wand/magick-wand.h>
@@ -108,6 +114,14 @@ int checkIfFontIsConfigured( char *font, int fontLen TSRMLS_DC );
 #define IMAGICKCOLOROPACITY 18
 #define IMAGICKCOLORALPHA 19
 #define IMAGICKCOLORFUZZ 20
+
+
+/* Globals */
+ZEND_BEGIN_MODULE_GLOBALS(imagick)
+        zend_bool locale_fix;
+ZEND_END_MODULE_GLOBALS(imagick)
+
+zend_imagick_globals imagick_globals;
 
 /* Define the entry point symbol
  * Zend will use when loading this module
