@@ -18399,6 +18399,8 @@ PHP_MINFO_FUNCTION(imagick)
 
 	php_info_print_table_end();
 	IMAGICK_FREE_MEMORY( char **, supportedFormats );
+
+	DISPLAY_INI_ENTRIES();
 }
 
 
