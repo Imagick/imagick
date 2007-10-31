@@ -13,7 +13,7 @@
    | obtain it through the world-wide-web, please send a note to          |
    | license@php.net so we can mail you a copy immediately.               |
    +----------------------------------------------------------------------+
-   | Author: Mikko Kopppanen <mkoppanen@php.net>                          |
+   | Author: Mikko Kopppanen <mkoppanen@php.net>         IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR                 |
    |         Scott MacVicar <scottmac@php.net>                            |
    +----------------------------------------------------------------------+
 */
@@ -78,10 +78,9 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	if( getImageCount( magick_wand TSRMLS_CC) == 0 )\
 	{ throwExceptionWithMessage( (long)type, "Can not process empty wand", (long)code TSRMLS_CC); RETURN_FALSE; }
 
-#define IMAGICK_INITIALIZE_ZERO_ARGS( object, wandType, intern )\
+#define IMAGICK_INITIALIZE_ZERO_ARGS( wandType, intern )\
 	if ( ZEND_NUM_ARGS() != 0 ) { ZEND_WRONG_PARAM_COUNT(); }\
-	object = getThis();\
-	intern = (wandType)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (wandType)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 #define IMAGICK_FREE_MEMORY( type, value )\
 	if ( value != (type) NULL ) { value = (type) MagickRelinquishMemory( value ); value = (type)NULL; }
@@ -369,6 +368,12 @@ PHP_METHOD(imagick, getimageprofiles);
 #endif
 #if MagickLibVersion > 0x635
 PHP_METHOD(imagick, distortimage);
+#endif
+#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+PHP_METHOD(imagick, setfont);
+PHP_METHOD(imagick, getfont);
+PHP_METHOD(imagick, setpointsize);
+PHP_METHOD(imagick, getpointsize);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
@@ -748,6 +753,7 @@ PHP_METHOD(imagickpixeliterator, resetiterator);
 PHP_METHOD(imagickpixeliterator, synciterator);
 PHP_METHOD(imagickpixeliterator, destroy);
 PHP_METHOD(imagickpixeliterator, clear);
+PHP_METHOD(imagickpixeliterator, valid);
 #endif
 
 /* ImagickPixel */
@@ -1385,6 +1391,14 @@ static function_entry php_imagickpixeliterator_class_methods[] =
 	PHP_ME(imagickpixeliterator, synciterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixeliterator, destroy, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixeliterator, clear, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+
+	/* Iterator interface */
+	PHP_MALIAS(imagickpixeliterator, key, getiteratorrow, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+	PHP_MALIAS(imagickpixeliterator, next, getnextiteratorrow, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+	PHP_MALIAS(imagickpixeliterator, rewind, resetiterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+	PHP_MALIAS(imagickpixeliterator, current, getcurrentiteratorrow, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+
+	PHP_ME(imagickpixeliterator, valid, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 #endif
@@ -1656,6 +1670,18 @@ static
 		ZEND_ARG_INFO(0, method)
 		ZEND_ARG_INFO(0, arguments)
 		ZEND_ARG_INFO(0, bestfit)
+	ZEND_END_ARG_INFO()
+#endif
+
+#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setfont_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, font)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setpointsize_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, pointsize)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -2597,6 +2623,8 @@ static
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
 
+
+
 static function_entry php_imagick_class_methods[] =
 {
 #if MagickLibVersion > 0x628
@@ -2651,6 +2679,12 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x635
 	PHP_ME(imagick, distortimage, imagick_distortimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+	PHP_ME(imagick, setfont, imagick_setfont_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getfont, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setpointsize, imagick_setpointsize_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getpointsize, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -3404,10 +3438,9 @@ PHP_METHOD(imagick, vignetteimage)
 PHP_METHOD(imagick, transposeimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -3430,10 +3463,9 @@ PHP_METHOD(imagick, transposeimage)
 PHP_METHOD(imagick, transverseimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -3490,11 +3522,10 @@ PHP_METHOD(imagick, adaptiveblurimage)
 */
 PHP_METHOD(imagick, uniqueimagecolors)
 {
-	zval *object;
 	php_imagick_object *intern;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickUniqueImageColors( intern->magick_wand );
@@ -3551,10 +3582,9 @@ PHP_METHOD(imagick, contraststretchimage)
 PHP_METHOD(imagick, getimagematte)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long matte;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	matte = MagickGetImageMatte( intern->magick_wand );
@@ -3716,11 +3746,10 @@ PHP_METHOD(imagick, shadeimage)
 PHP_METHOD(imagick, getsizeoffset)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long offset;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	status = MagickGetSizeOffset( intern->magick_wand, &offset );
 
 	if ( status == MagickFalse )
@@ -4021,11 +4050,10 @@ PHP_METHOD(imagick, roundcorners)
 */
 PHP_METHOD(imagick, getiteratorindex)
 {
-	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	status = MagickGetIteratorIndex( intern->magick_wand );
 	ZVAL_LONG( return_value, (long)status );
@@ -4231,10 +4259,9 @@ PHP_METHOD(imagick, setimageproperty)
 PHP_METHOD(imagick, getimageinterpolatemethod)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long interpolate;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	interpolate = MagickGetImageInterpolateMethod( intern->magick_wand );
@@ -4323,11 +4350,10 @@ PHP_METHOD(imagick, linearstretchimage)
 PHP_METHOD(imagick, getimagelength)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickSizeType length;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageLength( intern->magick_wand, &length );
@@ -4384,10 +4410,9 @@ PHP_METHOD(imagick, extentimage)
 */
 PHP_METHOD(imagick, getimageorientation)
 {
-	zval *object;
 	php_imagick_object *intern;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	RETVAL_LONG( MagickGetImageOrientation( intern->magick_wand ) );
@@ -4607,6 +4632,132 @@ PHP_METHOD(imagick, distortimage)
 /* }}} */
 #endif
 
+#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+
+PHP_METHOD(imagick, setfont)
+{
+	php_imagick_object *internd;
+	char *font, *absolute;
+	int fontLen, error = 0;
+	MagickBooleanType status;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &font, &fontLen ) == FAILURE )
+	{
+		return;
+	}
+
+	/* Check that no empty string is passed */
+	if ( fontLen == 0 )
+	{
+		throwExceptionWithMessage( 1, "Can not set empty font", 1 TSRMLS_CC );
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	/* And if it wasn't */
+	if ( !checkIfFontIsConfigured( font, fontLen TSRMLS_CC ) )
+	{
+		if ( !(absolute = expand_filepath( font, NULL TSRMLS_CC)) )
+		{
+			throwExceptionWithMessage( 1, "Unable to set font", 1 TSRMLS_CC );
+			return;
+		}
+
+		/* Do a safe-mode check for the font */
+		IMAGICK_SAFE_MODE_CHECK( absolute, error );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
+
+		if ( access(absolute, 0) != 0 )
+		{
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 2 TSRMLS_CC,
+				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute );
+
+			efree( absolute );
+			return;
+		}
+
+		status = MagickSetFont( internd->drawing_wand, absolute );
+		efree( absolute );
+	}
+	else
+	{
+		status = MagickSetFont( internd->drawing_wand, font );
+	}
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set font", 1 TSRMLS_CC );
+		return;
+	}
+
+	RETURN_TRUE;
+}
+
+PHP_METHOD(imagick, getfont)
+{
+	char *font;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
+
+	if ( ( font = MagickGetFont( intern->magick_wand ) ) != NULL )
+	{
+		ZVAL_STRING( return_value, font, 1 );
+		IMAGICK_FREE_MEMORY( char *, font );
+		return;
+	}
+	RETURN_FALSE;
+}
+
+PHP_METHOD(imagick, setpointsize)
+{
+	php_imagick_object *intern;
+	double pointSize;
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &pointSize ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	status = MagickSetPointSize( internd->drawing_wand, pointSize );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set font", 1 TSRMLS_CC );
+		return;
+	}
+
+	RETURN_TRUE;
+}
+
+PHP_METHOD(imagick, getpointsize)
+{
+	php_imagick_object *intern;
+	double pointSize;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
+	RETVAL_DOUBLE( MagickGetPointSize( intern->magick_wand ) );
+}
+
+#endif
+
 /* {{{ proto Imagick Imagick::__construct( [mixed files] )
    The Imagick constructor
 */
@@ -4689,12 +4840,11 @@ PHP_METHOD(imagick, __construct)
 PHP_METHOD(imagick, __tostring)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned char *image;
 	char *buffer;
 	size_t imageSize;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	if( getImageCount( intern->magick_wand TSRMLS_CC ) == 0 )
 	{
@@ -5264,10 +5414,9 @@ PHP_METHOD(imagick, waveimage)
 PHP_METHOD(imagick, clear)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	status = IsMagickWand( intern->magick_wand );
 
@@ -5286,11 +5435,17 @@ PHP_METHOD(imagick, clear)
 */
 PHP_METHOD(imagick, destroy)
 {
-	php_imagick_object *intern;
 	zval *object;
+	php_imagick_object *intern;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	if ( ZEND_NUM_ARGS() != 0 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	object = getThis();
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	status = IsMagickWand( intern->magick_wand );
 
@@ -5471,10 +5626,9 @@ PHP_METHOD(imagick, swirlimage)
 PHP_METHOD(imagick, stripimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickStripImage( intern->magick_wand );
@@ -5575,10 +5729,9 @@ PHP_METHOD(imagick, chopimage)
 PHP_METHOD(imagick, clipimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 	status = MagickClipImage( intern->magick_wand );
@@ -5641,10 +5794,9 @@ PHP_METHOD(imagick, clippathimage)
 PHP_METHOD(imagick, coalesceimages)
 {
 	MagickWand *tmpWand;
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = MagickCoalesceImages( intern->magick_wand );
@@ -5794,10 +5946,9 @@ PHP_METHOD(imagick, setimage)
 PHP_METHOD(imagick, getimage)
 {
 	MagickWand *tmpWand;
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = MagickGetImage( intern->magick_wand );
@@ -6079,11 +6230,10 @@ PHP_METHOD(imagick, newpseudoimage)
 */
 PHP_METHOD(imagick, getimagetotalinkdensity)
 {
-	zval *object;
 	php_imagick_object *intern;
 	double inkDensity;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	inkDensity = MagickGetImageTotalInkDensity( intern->magick_wand );
@@ -6166,11 +6316,10 @@ PHP_METHOD(imagick, levelimage)
 */
 PHP_METHOD(imagick, magnifyimage)
 {
-	zval *object;
 	php_imagick_object *intern;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickMagnifyImage( intern->magick_wand );
@@ -6382,10 +6531,9 @@ PHP_METHOD(imagick, paintopaqueimage)
 PHP_METHOD(imagick, optimizeimagelayers)
 {
 	MagickWand *tmpWand;
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = (MagickWand *)MagickOptimizeImageLayers( intern->magick_wand );
@@ -7591,10 +7739,9 @@ PHP_METHOD(imagick, cyclecolormapimage)
 PHP_METHOD(imagick, deconstructimages)
 {
 	MagickWand *tmpWand;
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = MagickDeconstructImages( intern->magick_wand );
@@ -7661,10 +7808,9 @@ PHP_METHOD(imagick, getimageregion)
 PHP_METHOD(imagick, despeckleimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickDespeckleImage( intern->magick_wand );
@@ -7763,10 +7909,9 @@ PHP_METHOD(imagick, embossimage)
 PHP_METHOD(imagick, enhanceimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickEnhanceImage( intern->magick_wand );
@@ -7788,10 +7933,9 @@ PHP_METHOD(imagick, enhanceimage)
 PHP_METHOD(imagick, equalizeimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickEqualizeImage( intern->magick_wand );
@@ -7847,12 +7991,10 @@ PHP_METHOD(imagick, evaluateimage)
 */
 PHP_METHOD(imagick, getimagegeometry)
 {
-
 	long width,height;
 	php_imagick_object *intern;
-	zval *object;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -7911,11 +8053,10 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
-	zval *object;
 	MagickBooleanType status;
 	PixelWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = NewPixelWand();
@@ -7947,11 +8088,10 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 PHP_METHOD(imagick, getimageblueprimary)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	double x, y;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageBluePrimary( intern->magick_wand, &x, &y );
@@ -7977,11 +8117,10 @@ PHP_METHOD(imagick, getimagebordercolor)
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
-	zval *object;
 	MagickBooleanType status;
 	PixelWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = NewPixelWand();
@@ -8167,7 +8306,7 @@ PHP_METHOD(imagick, getimagechannelmean)
 */
 PHP_METHOD(imagick, getimagechannelstatistics)
 {
-	zval *object, *tmp;
+	zval *tmp;
 
 	const long channels[] = { UndefinedChannel, RedChannel, CyanChannel,
 							  GreenChannel, MagentaChannel, BlueChannel,
@@ -8177,7 +8316,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	ChannelStatistics *statistics;
 	int elements = 10, i;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	statistics = MagickGetImageChannelStatistics( intern->magick_wand );
@@ -8257,10 +8396,9 @@ PHP_METHOD(imagick, getimagecolormapcolor)
 PHP_METHOD(imagick, getimagecolorspace)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long colorSpace;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	colorSpace = MagickGetImageColorspace( intern->magick_wand );
@@ -8274,10 +8412,9 @@ PHP_METHOD(imagick, getimagecolorspace)
 PHP_METHOD(imagick, getimagecompose)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long composite;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	composite = MagickGetImageCompose( intern->magick_wand );
@@ -8291,10 +8428,9 @@ PHP_METHOD(imagick, getimagecompose)
 PHP_METHOD(imagick, getimagedelay)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long delay;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	delay = MagickGetImageDelay( intern->magick_wand );
@@ -8308,10 +8444,9 @@ PHP_METHOD(imagick, getimagedelay)
 PHP_METHOD(imagick, getimagedepth)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long depth;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	depth = MagickGetImageDepth( intern->magick_wand );
@@ -8364,12 +8499,11 @@ PHP_METHOD(imagick, getimagedistortion)
 */
 PHP_METHOD(imagick, getimageextrema)
 {
-	zval *object;
 	php_imagick_object *intern;
 	unsigned long min, max;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageExtrema( intern->magick_wand, &min, &max );
@@ -8393,11 +8527,10 @@ PHP_METHOD(imagick, getimageextrema)
 */
 PHP_METHOD(imagick, getimagedispose)
 {
-	zval *object;
 	php_imagick_object *intern;
 	long dispose;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	dispose = MagickGetImageDispose( intern->magick_wand );
@@ -8410,11 +8543,10 @@ PHP_METHOD(imagick, getimagedispose)
 */
 PHP_METHOD(imagick, getimagegamma)
 {
-	zval *object;
 	php_imagick_object *intern;
 	double gamma;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	gamma = MagickGetImageGamma( intern->magick_wand );
@@ -8428,11 +8560,10 @@ PHP_METHOD(imagick, getimagegamma)
 PHP_METHOD(imagick, getimagegreenprimary)
 {
 	php_imagick_object *intern;
-	zval *object;
 	double x, y;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageGreenPrimary( intern->magick_wand, &x, &y );
@@ -8457,10 +8588,9 @@ PHP_METHOD(imagick, getimagegreenprimary)
 PHP_METHOD(imagick, getimageheight)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long height;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	height = MagickGetImageHeight( intern->magick_wand );
@@ -8475,13 +8605,12 @@ PHP_METHOD(imagick, getimagehistogram) // TODO: this might leak small amounts of
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
-	zval *object;
 	PixelWand **wandArray;
 	unsigned long colors = 0;
 	unsigned long i;
 	zval *tmpPixelWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	wandArray = MagickGetImageHistogram( intern->magick_wand, &colors );
@@ -8509,10 +8638,9 @@ PHP_METHOD(imagick, getimagehistogram) // TODO: this might leak small amounts of
 PHP_METHOD(imagick, getimageinterlacescheme)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long interlace;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	interlace = MagickGetImageInterlaceScheme( intern->magick_wand );
@@ -8526,10 +8654,9 @@ PHP_METHOD(imagick, getimageinterlacescheme)
 PHP_METHOD(imagick, getimageiterations)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long iterations;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	iterations = MagickGetImageIterations( intern->magick_wand );
@@ -8546,11 +8673,10 @@ PHP_METHOD(imagick, getimagemattecolor)
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
-	zval *object;
 	MagickBooleanType status;
 	PixelWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = NewPixelWand();
@@ -8582,12 +8708,11 @@ PHP_METHOD(imagick, getimagemattecolor)
 PHP_METHOD(imagick, getimagepage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	unsigned long width, height;
 	long x, y;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImagePage( intern->magick_wand, &width, &height, &x, &y );
@@ -8701,11 +8826,10 @@ PHP_METHOD(imagick, getimageprofile)
 PHP_METHOD(imagick, getimageredprimary)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	double x, y;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageRedPrimary( intern->magick_wand, &x, &y );
@@ -8730,10 +8854,9 @@ PHP_METHOD(imagick, getimageredprimary)
 PHP_METHOD(imagick, getimagerenderingintent)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long renderingIntent;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	renderingIntent = MagickGetImageRenderingIntent( intern->magick_wand );
@@ -8747,11 +8870,10 @@ PHP_METHOD(imagick, getimagerenderingintent)
 PHP_METHOD(imagick, getimageresolution)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	double x, y;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageResolution( intern->magick_wand, &x, &y );
@@ -8776,10 +8898,9 @@ PHP_METHOD(imagick, getimageresolution)
 PHP_METHOD(imagick, getimagescene)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned long scene;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	scene = MagickGetImageScene( intern->magick_wand );
@@ -8793,10 +8914,9 @@ PHP_METHOD(imagick, getimagescene)
 PHP_METHOD(imagick, getimagesignature)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *signature;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	signature = MagickGetImageSignature( intern->magick_wand );
@@ -8812,10 +8932,9 @@ PHP_METHOD(imagick, getimagesignature)
 PHP_METHOD(imagick, getimagetickspersecond)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned long ticks;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	ticks = MagickGetImageTicksPerSecond( intern->magick_wand );
@@ -8829,10 +8948,9 @@ PHP_METHOD(imagick, getimagetickspersecond)
 PHP_METHOD(imagick, getimagetype)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long imageType;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	imageType = MagickGetImageType( intern->magick_wand );
@@ -8846,10 +8964,9 @@ PHP_METHOD(imagick, getimagetype)
 PHP_METHOD(imagick, getimageunits)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long resolutionType;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	resolutionType = MagickGetImageUnits( intern->magick_wand );
@@ -8863,10 +8980,9 @@ PHP_METHOD(imagick, getimageunits)
 PHP_METHOD(imagick, getimagevirtualpixelmethod)
 {
 	php_imagick_object *intern;
-	zval *object;
 	long pixelMethod;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	pixelMethod = MagickGetImageVirtualPixelMethod( intern->magick_wand );
@@ -8880,11 +8996,10 @@ PHP_METHOD(imagick, getimagevirtualpixelmethod)
 PHP_METHOD(imagick, getimagewhitepoint)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	double x, y;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickGetImageWhitePoint( intern->magick_wand, &x, &y );
@@ -8909,10 +9024,9 @@ PHP_METHOD(imagick, getimagewhitepoint)
 PHP_METHOD(imagick, getimagewidth)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned long width;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	width = MagickGetImageWidth( intern->magick_wand );
@@ -8926,10 +9040,9 @@ PHP_METHOD(imagick, getimagewidth)
 PHP_METHOD(imagick, getnumberimages)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned long numImages;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	numImages = MagickGetNumberImages( intern->magick_wand );
@@ -9243,7 +9356,6 @@ PHP_METHOD(imagick, hasnextimage)
 */
 PHP_METHOD(imagick, getimageindex)
 {
-	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
@@ -9251,7 +9363,7 @@ PHP_METHOD(imagick, getimageindex)
 	IMAGICK_METHOD_DEPRECATED( "Imagick", "getImageindex" );
 #endif
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	status = MagickGetImageIndex( intern->magick_wand );
 	ZVAL_LONG( return_value, (long)status );
@@ -9306,11 +9418,10 @@ PHP_METHOD(imagick, setimageindex)
 */
 PHP_METHOD(imagick, removeimage)
 {
-	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -9334,10 +9445,9 @@ PHP_METHOD(imagick, removeimage)
 PHP_METHOD(imagick, getimagefilename)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *fileName;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -9354,11 +9464,10 @@ PHP_METHOD(imagick, getimagefilename)
 PHP_METHOD(imagick, getimagesize)
 {
 	php_imagick_object *intern;
-	zval *object;
 
 	IMAGICK_METHOD_DEPRECATED( "Imagick", "getImageSize" );
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -9373,12 +9482,11 @@ PHP_METHOD(imagick, getimagesize)
 PHP_METHOD(imagick, getimageblob)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned char *imageContents;
 	size_t imageSize;
 	char *buffer;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -9397,14 +9505,13 @@ PHP_METHOD(imagick, getimageblob)
 PHP_METHOD(imagick, getimagesblob)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned char *imageContents;
 	size_t imageSize;
 	char *buffer;
 	int current;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -9452,11 +9559,10 @@ PHP_METHOD(imagick, getimagesblob)
 PHP_METHOD(imagick, getimageformat)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *format;
 	char *buffer;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -9577,9 +9683,8 @@ PHP_METHOD(imagick, identifyimage)
 PHP_METHOD(imagick, getimagecolors)
 {
 	php_imagick_object *intern;
-	zval *object;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -10007,10 +10112,9 @@ PHP_METHOD(imagick, compareimagelayers)
 PHP_METHOD(imagick, flattenimages)
 {
 	php_imagick_object *intern, *intern_return;
-	zval *object;
 	MagickWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = MagickFlattenImages( intern->magick_wand );
@@ -10035,10 +10139,9 @@ PHP_METHOD(imagick, flattenimages)
 PHP_METHOD(imagick, flipimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickFlipImage( intern->magick_wand );
@@ -10059,10 +10162,9 @@ PHP_METHOD(imagick, flipimage)
 PHP_METHOD(imagick, flopimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickFlopImage( intern->magick_wand );
@@ -11307,10 +11409,9 @@ PHP_METHOD(imagick, affinetransformimage)
 PHP_METHOD(imagick, averageimages)
 {
 	MagickWand *tmpWand;
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	tmpWand = MagickAverageImages( intern->magick_wand );
@@ -11640,11 +11741,10 @@ PHP_METHOD(imagick, steganoimage)
 */
 PHP_METHOD(imagick, clone)
 {
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 	MagickWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	tmpWand = CloneMagickWand( intern->magick_wand );
 
 	if ( !IsMagickWand( tmpWand ) )
@@ -11861,10 +11961,9 @@ PHP_METHOD(imagick, motionblurimage)
 PHP_METHOD(imagick, mosaicimages)
 {
 	MagickWand *tmpWand = NULL;
-	zval *object;
 	php_imagick_object *intern, *intern_return;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	MagickSetFirstIterator( intern->magick_wand );
@@ -11932,10 +12031,9 @@ PHP_METHOD(imagick, morphimages)
 PHP_METHOD(imagick, minifyimage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	status = MagickMinifyImage( intern->magick_wand );
@@ -12294,12 +12392,11 @@ PHP_METHOD(imagick, whitethresholdimage)
 PHP_METHOD(imagick, getpixeliterator)
 {
 	php_imagick_object *intern;
-	zval *object;
 	zval retval, *methodArray;
 	zval *args[1];
 	zval *tmpObject;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
@@ -12313,7 +12410,7 @@ PHP_METHOD(imagick, getpixeliterator)
 	add_next_index_zval( methodArray, tmpObject );
 	add_next_index_string( methodArray, "newpixeliterator", 1 );
 
-	args[0] = object;
+	args[0] = getThis();
 	call_user_function( EG(function_table), NULL, methodArray, &retval, 1, args TSRMLS_CC);
 
 	*return_value = *tmpObject;
@@ -12387,9 +12484,8 @@ PHP_METHOD(imagick, getpixelregioniterator)
 PHP_METHOD(imagick, getcompression)
 {
 	php_imagick_object *intern;
-	zval *object;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	RETVAL_LONG( MagickGetCompression( intern->magick_wand ) );
 }
 /* }}} */
@@ -12400,9 +12496,8 @@ PHP_METHOD(imagick, getcompression)
 PHP_METHOD(imagick, getcompressionquality)
 {
 	php_imagick_object *intern;
-	zval *object;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	RETVAL_LONG( MagickGetCompressionQuality( intern->magick_wand ) );
 }
 /* }}} */
@@ -12413,10 +12508,9 @@ PHP_METHOD(imagick, getcompressionquality)
 PHP_METHOD(imagick, getcopyright)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *copyright;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	copyright = (char *)MagickGetCopyright();
 	ZVAL_STRING( return_value, copyright, 1 );
@@ -12432,10 +12526,9 @@ PHP_METHOD(imagick, getcopyright)
 PHP_METHOD(imagick, getfilename)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *filename;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	filename = (char *)MagickGetFilename( intern->magick_wand );
 	ZVAL_STRING( return_value, filename, 1 );
@@ -12451,10 +12544,9 @@ PHP_METHOD(imagick, getfilename)
 PHP_METHOD(imagick, getformat)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *format;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	format = (char *)MagickGetFormat( intern->magick_wand );
 	ZVAL_STRING( return_value, format, 1 );
@@ -12470,10 +12562,9 @@ PHP_METHOD(imagick, getformat)
 PHP_METHOD(imagick, gethomeurl)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *homeURL;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	homeURL = (char *)MagickGetHomeURL();
 	ZVAL_STRING( return_value, homeURL, 1 );
@@ -12489,9 +12580,8 @@ PHP_METHOD(imagick, gethomeurl)
 PHP_METHOD(imagick, getinterlacescheme)
 {
 	php_imagick_object *intern;
-	zval *object;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	RETVAL_LONG( MagickGetInterlaceScheme( intern->magick_wand ) );
 }
 /* }}} */
@@ -12534,10 +12624,9 @@ PHP_METHOD(imagick, getoption)
 PHP_METHOD(imagick, getpackagename)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *packageName;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	packageName = (char *)MagickGetPackageName();
 	ZVAL_STRING( return_value, packageName, 1 );
@@ -12553,11 +12642,10 @@ PHP_METHOD(imagick, getpackagename)
 PHP_METHOD(imagick, getpage)
 {
 	php_imagick_object *intern;
-	zval *object;
 	MagickBooleanType status;
 	long width, height, x, y;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	status = MagickGetPage( intern->magick_wand, &width, &height, &x, &y );
 
@@ -12583,11 +12671,10 @@ PHP_METHOD(imagick, getpage)
 PHP_METHOD(imagick, getquantumdepth)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *quantumDepth;
 	long depth;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	quantumDepth = (char *)MagickGetQuantumDepth( &depth );
 	array_init( return_value );
@@ -12606,11 +12693,10 @@ PHP_METHOD(imagick, getquantumdepth)
 PHP_METHOD(imagick, getquantumrange)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *quantumRange;
 	long range;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	quantumRange = (char *)MagickGetQuantumRange( &range );
 	array_init( return_value );
@@ -12629,10 +12715,9 @@ PHP_METHOD(imagick, getquantumrange)
 PHP_METHOD(imagick, getreleasedate)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *releaseDate;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	releaseDate = (char *)MagickGetReleaseDate();
 	ZVAL_STRING( return_value, releaseDate, 1 );
@@ -12700,11 +12785,10 @@ PHP_METHOD(imagick, getresourcelimit)
 PHP_METHOD(imagick, getsamplingfactors)
 {
 	php_imagick_object *intern;
-	zval *object;
 	double *samplingFactors;
 	long numberFactors, i;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	samplingFactors = (double *)MagickGetSamplingFactors( intern->magick_wand, &numberFactors );
 
@@ -12725,11 +12809,10 @@ PHP_METHOD(imagick, getsamplingfactors)
 PHP_METHOD(imagick, getsize)
 {
 	php_imagick_object *intern;
-	zval *object;
 	unsigned long columns, rows;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	status = MagickGetSize( intern->magick_wand, &columns, &rows );
 
 	if ( status == MagickFalse )
@@ -12752,11 +12835,10 @@ PHP_METHOD(imagick, getsize)
 PHP_METHOD(imagick, getversion)
 {
 	php_imagick_object *intern;
-	zval *object;
 	char *versionString;
 	long versionNumber;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagick_object *, intern );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
 	versionString = (char *)MagickGetVersion( &versionNumber );
 	array_init( return_value );
@@ -13263,10 +13345,9 @@ PHP_METHOD(imagick, settype)
 */
 PHP_METHOD(imagickdraw, resetvectorgraphics)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawResetVectorGraphics( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -14094,11 +14175,10 @@ PHP_METHOD(imagickdraw, setviewbox)
 */
 PHP_METHOD(imagickdraw, getfont)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	char *font;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	font = DrawGetFont( internd->drawing_wand );
 	if( font == (char *)NULL || *font == '\0' )
@@ -14119,11 +14199,10 @@ PHP_METHOD(imagickdraw, getfont)
 */
 PHP_METHOD(imagickdraw, getfontfamily)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	char *fontFamily;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	fontFamily = DrawGetFontFamily( internd->drawing_wand );
 	if( fontFamily == (char *)NULL || *fontFamily == '\0' )
@@ -14144,11 +14223,10 @@ PHP_METHOD(imagickdraw, getfontfamily)
 */
 PHP_METHOD(imagickdraw, getfontsize)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	double fontSize;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	fontSize = DrawGetFontSize( internd->drawing_wand );
 	ZVAL_DOUBLE( return_value, fontSize );
@@ -14161,11 +14239,10 @@ PHP_METHOD(imagickdraw, getfontsize)
 */
 PHP_METHOD(imagickdraw, getfontstyle)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long fontStyle;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	fontStyle = DrawGetFontStyle( internd->drawing_wand );
 	ZVAL_LONG( return_value, fontStyle );
@@ -14178,11 +14255,10 @@ PHP_METHOD(imagickdraw, getfontstyle)
 */
 PHP_METHOD(imagickdraw, getfontweight)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long weight;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	weight = DrawGetFontWeight( internd->drawing_wand );
 	ZVAL_LONG( return_value, weight );
@@ -14195,11 +14271,10 @@ PHP_METHOD(imagickdraw, getfontweight)
 */
 PHP_METHOD(imagickdraw, clear)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	status = IsDrawingWand( internd->drawing_wand );
 
@@ -14219,11 +14294,10 @@ PHP_METHOD(imagickdraw, clear)
 */
 PHP_METHOD(imagickdraw, gettextdecoration)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long decoration;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	decoration = DrawGetTextDecoration( internd->drawing_wand );
 	ZVAL_LONG( return_value, decoration );
@@ -14237,11 +14311,10 @@ PHP_METHOD(imagickdraw, gettextdecoration)
 */
 PHP_METHOD(imagickdraw, gettextencoding)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	char *encoding;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	encoding = DrawGetTextEncoding( internd->drawing_wand );
 
@@ -14633,11 +14706,10 @@ PHP_METHOD(imagickdraw, line)
 */
 PHP_METHOD(imagickdraw, clone)
 {
-	zval *object;
 	php_imagickdraw_object *internd, *intern_return;
 	DrawingWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	tmpWand = CloneDrawingWand( internd->drawing_wand );
 
 	object_init_ex( return_value, php_imagickdraw_sc_entry );
@@ -14852,11 +14924,10 @@ PHP_METHOD(imagickdraw, comment)
 */
 PHP_METHOD(imagickdraw, getclippath)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	char *clipPath;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	clipPath = DrawGetClipPath( internd->drawing_wand );
 	if( clipPath == (char *)NULL || *clipPath == '\0' )
 	{
@@ -14876,11 +14947,10 @@ PHP_METHOD(imagickdraw, getclippath)
 */
 PHP_METHOD(imagickdraw, getcliprule)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long clipRule;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	clipRule = DrawGetClipRule( internd->drawing_wand );
 
 	RETVAL_LONG( clipRule );
@@ -14892,11 +14962,10 @@ PHP_METHOD(imagickdraw, getcliprule)
 */
 PHP_METHOD(imagickdraw, getclipunits)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long units;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	units = DrawGetClipUnits( internd->drawing_wand );
 
 	RETVAL_LONG( units );
@@ -14910,10 +14979,9 @@ PHP_METHOD(imagickdraw, getfillcolor)
 {
 	php_imagickpixel_object *internp;
 	php_imagickdraw_object *internd;
-	zval *object;
 	PixelWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	tmpWand = NewPixelWand();
 	DrawGetFillColor( internd->drawing_wand, tmpWand );
@@ -14931,11 +14999,10 @@ PHP_METHOD(imagickdraw, getfillcolor)
 */
 PHP_METHOD(imagickdraw, getfillopacity)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	double opacity;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	opacity = DrawGetFillOpacity( internd->drawing_wand );
 
 	RETVAL_DOUBLE( opacity );
@@ -14947,11 +15014,10 @@ PHP_METHOD(imagickdraw, getfillopacity)
 */
 PHP_METHOD(imagickdraw, getfillrule)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long fillRule;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	fillRule = DrawGetFillRule( internd->drawing_wand );
 
 	RETVAL_LONG( fillRule );
@@ -14963,11 +15029,10 @@ PHP_METHOD(imagickdraw, getfillrule)
 */
 PHP_METHOD(imagickdraw, getgravity)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long gravity;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	gravity = DrawGetGravity( internd->drawing_wand );
 
 	RETVAL_LONG( gravity );
@@ -14979,11 +15044,10 @@ PHP_METHOD(imagickdraw, getgravity)
 */
 PHP_METHOD(imagickdraw, getstrokeantialias)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	status = DrawGetStrokeAntialias( internd->drawing_wand );
 
 	if ( status == MagickFalse )
@@ -15004,10 +15068,9 @@ PHP_METHOD(imagickdraw, getstrokecolor)
 {
 	php_imagickpixel_object *internp;
 	php_imagickdraw_object *internd;
-	zval *object;
 	PixelWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	tmpWand = NewPixelWand();
 	DrawGetStrokeColor( internd->drawing_wand, tmpWand );
@@ -15025,12 +15088,11 @@ PHP_METHOD(imagickdraw, getstrokecolor)
 */
 PHP_METHOD(imagickdraw, getstrokedasharray)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	double *strokeArray;
 	unsigned long numElements, i;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	strokeArray = DrawGetStrokeDashArray( internd->drawing_wand, &numElements );
 	array_init( return_value );
@@ -15091,11 +15153,10 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 */
 PHP_METHOD(imagickdraw, getstrokedashoffset)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	double offset;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	offset = DrawGetStrokeDashOffset( internd->drawing_wand );
 
 	RETVAL_DOUBLE( offset );
@@ -15107,11 +15168,10 @@ PHP_METHOD(imagickdraw, getstrokedashoffset)
 */
 PHP_METHOD(imagickdraw, getstrokelinecap)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long lineCap;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	lineCap = DrawGetStrokeLineCap( internd->drawing_wand );
 
 	RETVAL_LONG( lineCap );
@@ -15123,11 +15183,10 @@ PHP_METHOD(imagickdraw, getstrokelinecap)
 */
 PHP_METHOD(imagickdraw, getstrokelinejoin)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long lineJoin;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	lineJoin = DrawGetStrokeLineJoin( internd->drawing_wand );
 
 	RETVAL_LONG( lineJoin );
@@ -15139,11 +15198,10 @@ PHP_METHOD(imagickdraw, getstrokelinejoin)
 */
 PHP_METHOD(imagickdraw, getstrokemiterlimit)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	unsigned long miterLimit;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	miterLimit = DrawGetStrokeMiterLimit( internd->drawing_wand );
 
 	RETVAL_LONG( miterLimit );
@@ -15155,11 +15213,10 @@ PHP_METHOD(imagickdraw, getstrokemiterlimit)
 */
 PHP_METHOD(imagickdraw, getstrokeopacity)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	double opacity;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	opacity = DrawGetStrokeOpacity( internd->drawing_wand );
 
 	RETVAL_DOUBLE( opacity );
@@ -15171,11 +15228,10 @@ PHP_METHOD(imagickdraw, getstrokeopacity)
 */
 PHP_METHOD(imagickdraw, getstrokewidth)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	double width;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	width = DrawGetStrokeWidth( internd->drawing_wand );
 
 	RETVAL_DOUBLE( width );
@@ -15187,11 +15243,10 @@ PHP_METHOD(imagickdraw, getstrokewidth)
 */
 PHP_METHOD(imagickdraw, gettextalignment)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	long alignType;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	alignType = DrawGetTextAlignment( internd->drawing_wand );
 
 	RETVAL_LONG( alignType );
@@ -15203,11 +15258,10 @@ PHP_METHOD(imagickdraw, gettextalignment)
 */
 PHP_METHOD(imagickdraw, gettextantialias)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	status = DrawGetTextAntialias( internd->drawing_wand );
 
 	if ( status == MagickFalse )
@@ -15226,11 +15280,10 @@ PHP_METHOD(imagickdraw, gettextantialias)
 */
 PHP_METHOD(imagickdraw, getvectorgraphics)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	char *vector;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	vector = DrawGetVectorGraphics( internd->drawing_wand );
 
 	ZVAL_STRING( return_value, vector, 1 );
@@ -15247,10 +15300,9 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 {
 	php_imagickpixel_object *internp;
 	php_imagickdraw_object *internd;
-	zval *object;
 	PixelWand *tmpWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	tmpWand = NewPixelWand();
 	DrawGetTextUnderColor( internd->drawing_wand, tmpWand );
@@ -15268,10 +15320,9 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 */
 PHP_METHOD(imagickdraw, pathclose)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawPathClose( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -15571,10 +15622,9 @@ PHP_METHOD(imagickdraw, pathellipticarcrelative)
 */
 PHP_METHOD(imagickdraw, pathfinish)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawPathFinish( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -15810,10 +15860,9 @@ PHP_METHOD(imagickdraw, pathmovetorelative)
 */
 PHP_METHOD(imagickdraw, pathstart)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawPathStart( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -15865,10 +15914,9 @@ PHP_METHOD(imagickdraw, polyline)
 */
 PHP_METHOD(imagickdraw, popclippath)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawPopClipPath( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -15879,10 +15927,9 @@ PHP_METHOD(imagickdraw, popclippath)
 */
 PHP_METHOD(imagickdraw, popdefs)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawPopDefs( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -15893,11 +15940,10 @@ PHP_METHOD(imagickdraw, popdefs)
 */
 PHP_METHOD(imagickdraw, poppattern)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	status = DrawPopPattern( internd->drawing_wand );
 
 	if ( status == MagickFalse )
@@ -15946,10 +15992,9 @@ PHP_METHOD(imagickdraw, pushclippath)
 */
 PHP_METHOD(imagickdraw, pushdefs)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	DrawPushDefs( internd->drawing_wand );
 	RETURN_TRUE;
 }
@@ -15991,13 +16036,12 @@ PHP_METHOD(imagickdraw, pushpattern)
 */
 PHP_METHOD(imagickdraw, render)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 	char *old_locale = NULL, *buffer = NULL;
 	zend_bool restore = 0;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
 	IMAGICK_SET_LOCALE( old_locale, buffer, restore );
 	status = DrawRender( internd->drawing_wand );
@@ -16513,11 +16557,10 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 */
 PHP_METHOD(imagickdraw, pop)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	status = PopDrawingWand( internd->drawing_wand );
 
 	if ( status == MagickFalse )
@@ -16536,11 +16579,10 @@ PHP_METHOD(imagickdraw, pop)
 */
 PHP_METHOD(imagickdraw, push)
 {
-	zval *object;
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickdraw_object *, internd );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 	status = PushDrawingWand( internd->drawing_wand );
 
 	if ( status == MagickFalse )
@@ -16613,10 +16655,9 @@ PHP_METHOD(imagickpixeliterator, __construct)
 */
 PHP_METHOD(imagickpixeliterator, resetiterator)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -16641,10 +16682,9 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 */
 PHP_METHOD(imagickpixeliterator, synciterator)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -16669,10 +16709,9 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 */
 PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -16697,10 +16736,9 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 */
 PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly != 1 )
 	{
@@ -16835,11 +16873,10 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 */
 PHP_METHOD(imagickpixeliterator, getiteratorrow)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	MagickBooleanType status;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -16915,14 +16952,13 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 */
 PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagickpixel_object *internp;
 	PixelWand **wandArray;
 	unsigned long numWands, i;
 	zval *tmpPixelWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -16961,7 +16997,6 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 */
 PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagickpixel_object *internp;
 	PixelWand **wandArray;
@@ -16969,7 +17004,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	int i;
 	zval *tmpPixelWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -17007,14 +17042,13 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 */
 PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagickpixel_object *internp;
 	PixelWand **wandArray;
 	unsigned long numWands, i;
 	zval *tmpPixelWand;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -17056,7 +17090,13 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	zval *object;
 	php_imagickpixeliterator_object *internpix;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	if ( ZEND_NUM_ARGS() != 0 )
+	{
+
+	}
+
+	object = getThis();
+	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -17085,10 +17125,9 @@ PHP_METHOD(imagickpixeliterator, destroy)
 */
 PHP_METHOD(imagickpixeliterator, clear)
 {
-	zval *object;
 	php_imagickpixeliterator_object *internpix;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixeliterator_object *, internpix );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
 	if ( internpix->instanciated_correctly < 1 )
 	{
@@ -17107,6 +17146,38 @@ PHP_METHOD(imagickpixeliterator, clear)
 }
 /* }}} */
 
+/* {{{ proto bool ImagickPixelIterator::clear()
+	Clear resources associated with a PixelIterator.
+*/
+PHP_METHOD(imagickpixeliterator, valid)
+{
+	php_imagickpixeliterator_object *internpix;
+
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
+
+	if ( internpix->instanciated_correctly < 1 )
+	{
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	{
+		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	/* Test if the current row is valid */
+
+	if ( PixelSetIteratorRow( internpix->pixel_iterator, PixelGetIteratorRow( internpix->pixel_iterator ) ) )
+	{
+		 RETURN_TRUE;
+	}
+
+	RETURN_FALSE;
+}
+/* }}} */
+
 /* END OF PIXELITERATOR */
 #endif
 
@@ -17116,11 +17187,10 @@ PHP_METHOD(imagickpixeliterator, clear)
 */
 PHP_METHOD(imagickpixel, gethsl)
 {
-	zval *object;
 	php_imagickpixel_object *internp;
 	double hue, saturation, luminosity;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixel_object *, internp );
 
 	PixelGetHSL( internp->pixel_wand, &hue, &saturation, &luminosity );
 
@@ -17531,11 +17601,10 @@ PHP_METHOD(imagickpixel, getcolor)
 */
 PHP_METHOD(imagickpixel, getcolorasstring)
 {
-	zval *object;
-        php_imagickpixel_object *internp;
-        char *colorString;
+	php_imagickpixel_object *internp;
+	char *colorString;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixel_object *, internp );
 
 	colorString = PixelGetColorAsString( internp->pixel_wand );
 	ZVAL_STRING( return_value, colorString, 1 );
@@ -17551,11 +17620,10 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 */
 PHP_METHOD(imagickpixel, getcolorcount)
 {
-	zval *object;
 	php_imagickpixel_object *internp;
 	long colorCount;
 
-	IMAGICK_INITIALIZE_ZERO_ARGS( object, php_imagickpixel_object *, internp );
+	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixel_object *, internp );
 
 	colorCount = PixelGetColorCount( internp->pixel_wand );
 	RETVAL_LONG( colorCount );
@@ -18210,6 +18278,7 @@ PHP_MINIT_FUNCTION(imagick)
 	ce.create_object = php_imagickpixeliterator_object_new;
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+	zend_class_implements(php_imagickpixeliterator_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
 #endif
 	/*
 		Initialize the class (ImagickPixel)
