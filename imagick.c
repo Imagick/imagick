@@ -3327,12 +3327,12 @@ PHP_METHOD(imagick, pingimagefile)
 
 	php_stream_from_zval( stream, &zstream );
 
-	if( php_stream_can_cast( stream, PHP_STREAM_AS_STDIO ) == FAILURE )
+	if( php_stream_can_cast( stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL ) == FAILURE )
 	{
 		RETURN_FALSE;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&fp, 0) == FAILURE)
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE)
 	{
 		RETURN_FALSE;
 	}
@@ -5194,12 +5194,12 @@ PHP_METHOD(imagick, readimagefile)
 
 	php_stream_from_zval( stream, &zstream );
 
-	if( php_stream_can_cast( stream, PHP_STREAM_AS_STDIO ) == FAILURE )
+	if( php_stream_can_cast( stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL ) == FAILURE )
 	{
 		RETURN_FALSE;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void*)&fp, 0) == FAILURE)
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE)
 	{
 		RETURN_FALSE;
 	}
