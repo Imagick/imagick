@@ -4636,7 +4636,7 @@ PHP_METHOD(imagick, distortimage)
 
 PHP_METHOD(imagick, setfont)
 {
-	php_imagick_object *internd;
+	php_imagick_object *intern;
 	char *font, *absolute;
 	int fontLen, error = 0;
 	MagickBooleanType status;
@@ -4683,12 +4683,12 @@ PHP_METHOD(imagick, setfont)
 			return;
 		}
 
-		status = MagickSetFont( internd->drawing_wand, absolute );
+		status = MagickSetFont( intern->magick_wand, absolute );
 		efree( absolute );
 	}
 	else
 	{
-		status = MagickSetFont( internd->drawing_wand, font );
+		status = MagickSetFont( intern->magick_wand, font );
 	}
 
 	/* No magick is going to happen */
@@ -4722,6 +4722,7 @@ PHP_METHOD(imagick, setpointsize)
 {
 	php_imagick_object *intern;
 	double pointSize;
+	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -4735,7 +4736,7 @@ PHP_METHOD(imagick, setpointsize)
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = MagickSetPointSize( internd->drawing_wand, pointSize );
+	status = MagickSetPointSize( intern->magick_wand, pointSize );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )

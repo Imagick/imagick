@@ -90,7 +90,11 @@ if test $PHP_IMAGICK != "no"; then
 							AC_DEFINE(HAVE_IMAGEMAGICK6359ORLATER, 1, [ ])
 							],,-L$WAND_DIR/lib)
 
-		
+		dnl ImageMagick 6.3.6-4 provides set/get(font|pointsize)
+		PHP_CHECK_LIBRARY(Wand, MagickSetFont,[
+							AC_DEFINE(HAVE_IMAGEMAGICK6364ORLATER, 1, [ ])
+							],,-L$WAND_DIR/lib)
+
 		PHP_ADD_LIBRARY_WITH_PATH(Magick, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 		PHP_ADD_LIBRARY_WITH_PATH(Wand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 		PHP_ADD_INCLUDE($WAND_DIR/include)
