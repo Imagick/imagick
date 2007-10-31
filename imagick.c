@@ -4736,7 +4736,7 @@ PHP_METHOD(imagick, setpointsize)
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = MagickSetPointSize( intern->magick_wand, pointSize );
+	status = MagickSetPointsize( intern->magick_wand, pointSize );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
@@ -4754,7 +4754,7 @@ PHP_METHOD(imagick, getpointsize)
 	double pointSize;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
-	RETVAL_DOUBLE( MagickGetPointSize( intern->magick_wand ) );
+	RETVAL_DOUBLE( MagickGetPointsize( intern->magick_wand ) );
 }
 
 #endif
