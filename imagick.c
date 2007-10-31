@@ -360,6 +360,7 @@ PHP_METHOD(imagick, extentimage);
 #if MagickLibVersion > 0x633
 PHP_METHOD(imagick, getimageorientation);
 PHP_METHOD(imagick, setimageorientation);
+PHP_METHOD(imagick, paintfloodfillimage);
 #endif
 #ifdef HAVE_IMAGEMAGICK6359ORLATER
 PHP_METHOD(imagick, clutimage);
@@ -1635,6 +1636,16 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageorientation_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ORIENTATION)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_paintfloodfillimage_args, 0, 0, 6)
+		ZEND_ARG_INFO(0, CHANNEL)
+		ZEND_ARG_INFO(0, fill)
+		ZEND_ARG_INFO(0, fuzz)
+		ZEND_ARG_INFO(0, bordercolor)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x630
@@ -2671,6 +2682,7 @@ static function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x633
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageorientation, imagick_setimageorientation_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, paintfloodfillimage, imagick_paintfloodfillimage_args, ZEND_ACC_PUBLIC)
 #endif
 #ifdef HAVE_IMAGEMAGICK6359ORLATER
 	PHP_ME(imagick, clutimage, imagick_clutimage_args, ZEND_ACC_PUBLIC)
@@ -4448,6 +4460,44 @@ PHP_METHOD(imagick, setimageorientation)
 	if ( status == MagickFalse )
 	{
 		throwImagickException( intern->magick_wand, "Unable to set image orientation", 1 TSRMLS_CC);
+		RETURN_FALSE;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto Imagick Imagick::paintFloodfillImage(mixed fill, float fuzz, mixed bordercolor, int x, int y[, int channel])
+   Sets the image orientation
+*/
+PHP_METHOD(imagick, paintfloodfillimage)
+{
+	PixelWand *fill_wand, *border_wand;
+	php_imagick_object *intern;
+	php_imagickpixel_object *intern_fill, *intern_border;
+	zval *fillParam, *borderParam, *fillObj, *borderObj;
+	long x, y, channel = AllChannels;;
+	double fuzz;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "zdzll|l", &fillParam, &fuzz, &borderParam, &x, &y, &channel ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	IMAGICK_CAST_PARAMETER_TO_COLOR( fillObj, fillParam, fill_wand, intern_fill, 1 );
+	IMAGICK_CAST_PARAMETER_TO_COLOR( borderObj, borderParam, border_wand, intern_border, 1 );
+
+	status = MagickPaintFloodfillImage( intern->magick_wand, channel, intern_fill->pixel_wand, fuzz, intern_border->pixel_wand, x, y );
+
+	/* No magick is going to happen */
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to paint floodfill image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -9980,7 +10030,7 @@ PHP_METHOD(imagick, setimagedelay)
 */
 PHP_METHOD(imagick, colorizeimage)
 {
-	PixelWand *color_wand, *opacity_wand;
+	PixelWand *color_wand, *opacity_wand, *final_wand;
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_color, *intern_opacity;
 	zval *colorObj, *opacityObj, *colorParam, *opacityParam;
@@ -10003,7 +10053,11 @@ PHP_METHOD(imagick, colorizeimage)
 	IMAGICK_CAST_PARAMETER_TO_COLOR( colorObj, colorParam, color_wand, intern_color, 1 );
 	IMAGICK_CAST_PARAMETER_TO_OPACITY( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
 
-	status = MagickColorizeImage( intern->magick_wand, intern_color->pixel_wand, intern_opacity->pixel_wand );
+	final_wand = ClonePixelWand( intern_color->pixel_wand );
+	PixelSetOpacity( final_wand, PixelGetOpacity( intern_opacity->pixel_wand ) );
+
+	status = MagickColorizeImage( intern->magick_wand, final_wand, final_wand );
+	final_wand = (PixelWand *)DestroyPixelWand( final_wand );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
