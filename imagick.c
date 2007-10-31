@@ -9148,14 +9148,14 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	/* No need to do any calcs if image is already at the given dimensions */
 	if ( cropWidth == imageWidth && cropHeight == imageHeight )
 	{
-		/* Execute thumbnail to strip profiles and reduce the quality a little */
-		status = MagickThumbnailImage( intern->magick_wand, imageWidth, imageHeight );
+		/* Execute MagickStripImage to strip the profiles */
+		status = MagickStripImage( intern->magick_wand );
 
 		/* The world collapses.. */
 		if ( status == MagickFalse )
 		{
-				throwExceptionWithMessage( 1, "Failed to thumbnail the image", 1 TSRMLS_CC);
-				RETURN_FALSE;
+			throwExceptionWithMessage( 1, "Failed to thumbnail the image", 1 TSRMLS_CC);
+			RETURN_FALSE;
 		}
 		RETURN_TRUE;
 	}
