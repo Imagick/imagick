@@ -46,6 +46,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<tasks:replace from="@PACKAGE_VERSION@" to="version" type="package-info" />
 			</file>
 			<file name="php_imagick.h" role="src" />
+			<file name="php_imagick_defs.h" role="src" />
+			<file name="php_imagick_lic.h" role="src" />
 			<file name="TODO" role="doc" />
 			<file name="INSTALL" role="doc" />
 			<dir name="examples">
