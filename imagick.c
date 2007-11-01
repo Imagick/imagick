@@ -18400,7 +18400,6 @@ PHP_MINFO_FUNCTION(imagick)
 	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel" );
 #endif
 	php_info_print_table_row( 2, "ImageMagick version", imageMagickVersion );
-	php_info_print_table_row( 2, "ImageMagick license", "http://www.imagemagick.org/script/license.php" );
 	php_info_print_table_row( 2, "ImageMagick copyright", MagickGetCopyright() );
 	php_info_print_table_row( 2, "ImageMagick release date", imageMagickReleaseDate );
 	php_info_print_table_row( 2, "ImageMagick Number of supported formats: ", buffer );
