@@ -379,7 +379,6 @@ PHP_METHOD(imagick, setpointsize);
 PHP_METHOD(imagick, getpointsize);
 #endif
 PHP_METHOD(imagick, __construct);
-PHP_METHOD(imagick, getimagemagicklicense);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, readimage);
 PHP_METHOD(imagick, readimages);
@@ -2702,7 +2701,6 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getpointsize, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(imagick, getimagemagicklicense, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimages, imagick_readimages_args, ZEND_ACC_PUBLIC)
@@ -12573,26 +12571,6 @@ PHP_METHOD(imagick, getcopyright)
 	ZVAL_STRING( return_value, copyright, 1 );
 
 	/* IMAGICK_FREE_MEMORY( char *, copyright ); */
-	return;
-}
-/* }}} */
-
-/* {{{ proto string Imagick::getImageMagickLicense()
-	Returns the ImageMagick license as a string
-*/
-PHP_METHOD(imagick, getimagemagicklicense)
-{
-	int ret_len;
-	unsigned char *result;
-	
-	result = (unsigned char *)php_base64_decode( (unsigned char *)IMAGICK_IMAGEMAGICK_LICENSE, strlen( IMAGICK_IMAGEMAGICK_LICENSE ), &ret_len ); 	 
-
-	if ( result == NULL ) 	 
-	{ 	 
-		 RETURN_FALSE; 	 
-	} 	 
-
-	RETVAL_STRINGL(result, ret_len, 0); 	 
 	return;
 }
 /* }}} */

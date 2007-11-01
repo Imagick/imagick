@@ -47,7 +47,6 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			</file>
 			<file name="php_imagick.h" role="src" />
 			<file name="php_imagick_defs.h" role="src" />
-			<file name="php_imagick_lic.h" role="src" />
 			<file name="TODO" role="doc" />
 			<file name="INSTALL" role="doc" />
 			<dir name="examples">
