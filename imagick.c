@@ -20,7 +20,6 @@
 
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
-#include "php_imagick_lic.h"
 
 #if defined(ZTS) && defined(PHP_WIN32)
 static MUTEX_T imagick_mutex;
@@ -4492,9 +4491,16 @@ PHP_METHOD(imagick, paintfloodfillimage)
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	IMAGICK_CAST_PARAMETER_TO_COLOR( fillObj, fillParam, fill_wand, intern_fill, 1 );
-	IMAGICK_CAST_PARAMETER_TO_COLOR( borderObj, borderParam, border_wand, intern_border, 1 );
 
-	status = MagickPaintFloodfillImage( intern->magick_wand, channel, intern_fill->pixel_wand, fuzz, intern_border->pixel_wand, x, y );
+	if ( Z_TYPE_P( borderParam ) == IS_NULL )
+	{
+		status = MagickPaintFloodfillImage( intern->magick_wand, channel, intern_fill->pixel_wand, fuzz, NULL, x, y );
+	}
+	else
+	{
+		IMAGICK_CAST_PARAMETER_TO_COLOR( borderObj, borderParam, border_wand, intern_border, 1 );
+		status = MagickPaintFloodfillImage( intern->magick_wand, channel, intern_fill->pixel_wand, fuzz, intern_border->pixel_wand, x, y );
+	}
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
