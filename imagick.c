@@ -1244,7 +1244,7 @@ static function_entry php_imagickdraw_class_methods[] =
 #if MagickLibVersion > 0x628
 	PHP_ME(imagickdraw, resetvectorgraphics, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
 #endif
-	PHP_ME(imagickdraw, __construct, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, __construct, imagickdraw_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickdraw, setfillcolor, imagickdraw_setfillcolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setfillalpha, imagickdraw_setfillalpha_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setstrokecolor, imagickdraw_setstrokecolor_args, ZEND_ACC_PUBLIC)
@@ -4957,7 +4957,7 @@ PHP_METHOD(imagick, queryformats)
 /* }}} */
 
 /* {{{ proto array Imagick::queryFonts( [string pattern] )
-   Returns formats supported by ImageMagick
+   Returns fonts supported by ImageMagick
 */
 PHP_METHOD(imagick, queryfonts)
 {
@@ -6235,6 +6235,7 @@ PHP_METHOD(imagick, newpseudoimage)
 			RETURN_FALSE;
 		}
 
+		/* rose:, granite:, netscape: and logo: can be read trough magick: */
 		if ( strlen( filename ) == 0 )
 		{
 			efree( filename );
@@ -13422,7 +13423,7 @@ PHP_METHOD(imagickdraw, resetvectorgraphics)
 */
 PHP_METHOD(imagickdraw, __construct)
 {
-
+	/* Empty constructor for possible future uses */
 }
 /* }}} */
 
@@ -18399,6 +18400,7 @@ PHP_MINFO_FUNCTION(imagick)
 			{
 				strcat( formats, ", " );
 			}
+			IMAGICK_FREE_MEMORY( char *, supportedFormats[i] );
 		}
 		php_info_print_table_row( 2, "ImageMagick Supported formats", formats );
 	}
