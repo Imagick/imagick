@@ -18399,7 +18399,6 @@ PHP_MINFO_FUNCTION(imagick)
 			{
 				strcat( formats, ", " );
 			}
-			IMAGICK_FREE_MEMORY( char *, supportedFormats[i] );
 		}
 		php_info_print_table_row( 2, "ImageMagick Supported formats", formats );
 	}
