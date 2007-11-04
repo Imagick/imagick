@@ -8659,7 +8659,7 @@ PHP_METHOD(imagick, getimageheight)
 /* {{{ proto array Imagick::getImageHistogram()
 	Returns the image histogram as an array of ImagickPixel objects.
 */
-PHP_METHOD(imagick, getimagehistogram) // TODO: this might leak small amounts of memory
+PHP_METHOD(imagick, getimagehistogram)
 {
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
@@ -8686,6 +8686,7 @@ PHP_METHOD(imagick, getimagehistogram) // TODO: this might leak small amounts of
 		}
 	}
 
+	IMAGICK_FREE_MEMORY( PixelWand **, wandArray );
 	return;
 }
 /* }}} */
