@@ -10043,6 +10043,7 @@ PHP_METHOD(imagick, colorizeimage)
 	php_imagickpixel_object *intern_color, *intern_opacity;
 	zval *colorObj, *opacityObj, *colorParam, *opacityParam;
 	MagickBooleanType status;
+	char *color;
 
 	if ( ZEND_NUM_ARGS() != 2 )
 	{
@@ -10061,9 +10062,16 @@ PHP_METHOD(imagick, colorizeimage)
 	IMAGICK_CAST_PARAMETER_TO_COLOR( colorObj, colorParam, color_wand, intern_color, 1 );
 	IMAGICK_CAST_PARAMETER_TO_OPACITY( opacityObj, opacityParam, opacity_wand, intern_opacity, 1 );
 
+#if MagickLibVersion >= 0x635
 	final_wand = ClonePixelWand( intern_color->pixel_wand );
-	PixelSetOpacity( final_wand, PixelGetOpacity( intern_opacity->pixel_wand ) );
+#else
+	final_wand = NewPixelWand();
+	color = PixelGetColorAsString( intern_color->pixel_wand );
+	PixelSetColor( final_wand, color );
+	IMAGICK_FREE_MEMORY( char *, color );
+#endif
 
+	PixelSetOpacity( final_wand, PixelGetOpacity( intern_opacity->pixel_wand ) );
 	status = MagickColorizeImage( intern->magick_wand, final_wand, final_wand );
 	final_wand = (PixelWand *)DestroyPixelWand( final_wand );
 
