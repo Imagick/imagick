@@ -112,7 +112,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 #define IMAGICK_METHOD_DEPRECATED( className, methodName )\
 	php_error( E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName );
 
-#define IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, free)\
+#define IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, free, message)\
 	switch ( error )\
 	{\
 		default:\
@@ -130,7 +130,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 			RETURN_NULL();\
 		break;\
 		case 3:\
-			throwImagickException( intern->magick_wand, "Unable to read image", 1 TSRMLS_CC);\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, message, filename);\
 			if ( free == 1 ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
@@ -3210,6 +3210,11 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 	MagickBooleanType status;
 	char *absolute = expand_filepath( filename, NULL TSRMLS_CC);
 
+	if ( strlen( filename ) > MAXPATHLEN )
+	{
+		return 3;
+	}
+
 	IMAGICK_SAFE_MODE_CHECK( absolute, error );
 
 	if ( error != 0 )
@@ -3240,7 +3245,7 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 {
 	int error = 0, occurences = 0;
 	MagickBooleanType status;
-	char *absolute, *buffer, *format, *tmp;
+	char *absolute, *buffer, *format, *tmp, *dup;
 
 #if defined(PHP_WIN32)
 	if ( count_occurences_of( ':', filename TSRMLS_CC ) == 2 )
@@ -3258,6 +3263,11 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 	{
 		case 0:
 
+			if ( strlen( filename ) > MAXPATHLEN )
+			{
+				return 3;
+			}
+
 			absolute = expand_filepath( filename, NULL TSRMLS_CC );
 			IMAGICK_SAFE_MODE_CHECK( absolute, error );
 
@@ -3270,8 +3280,15 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 		break;
 
 		case 1:
-			format = strtok( filename, ":" );
+			/* Duplicate the filename */
+			dup = estrdup( filename );
+			format = strtok( dup, ":" );
 			buffer = strtok( NULL, ":" );
+
+			if ( strlen( buffer ) > MAXPATHLEN )
+			{
+				return 3;
+			}
 
 			/* Safe mode checking */
 			tmp = expand_filepath( buffer, NULL TSRMLS_CC );
@@ -3279,6 +3296,7 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 			if ( error != 0 )
 			{
+				efree(dup);
 				efree(tmp);
 				return error;
 			}
@@ -3292,6 +3310,7 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 			strncat( absolute, ":", 1 );
 			strncat( absolute, tmp, strlen( tmp ) );
 
+			efree( dup );
 			/* absolute now contains the path */
 		break;
 
@@ -4730,7 +4749,7 @@ PHP_METHOD(imagick, setfont)
 
 		/* Do a safe-mode check for the font */
 		IMAGICK_SAFE_MODE_CHECK( absolute, error );
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1, "Unable to read the file: %s" );
 
 		if ( access(absolute, 0) != 0 )
 		{
@@ -4847,7 +4866,7 @@ PHP_METHOD(imagick, __construct)
 
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 		status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0 );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0, "Unable to read the file: %s" );
 
 		RETURN_TRUE;
 	}
@@ -4884,7 +4903,7 @@ PHP_METHOD(imagick, __construct)
 			}
 		}
 
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0 );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0, "Unable to read the file: %s" );
 		RETURN_TRUE;
 	}
 
@@ -5137,7 +5156,7 @@ PHP_METHOD(imagick, readimage)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = readImageIntoMagickWand( intern, fileName, 1 TSRMLS_CC );
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, fileName, status, 0 );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, fileName, status, 0, "Unable to read the file: %s" );
 
 	RETURN_TRUE;
 }
@@ -5194,7 +5213,7 @@ PHP_METHOD(imagick, readimages)
 			break;
 		}
 	}
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0 );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0, "Unable to read the file: %s" );
 	RETURN_TRUE;
 }
 
@@ -5223,7 +5242,7 @@ PHP_METHOD(imagick, pingimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	status = readImageIntoMagickWand( intern, fileName, 2 TSRMLS_CC );
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, fileName, status, 0 );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, fileName, status, 0, "Unable to read the file: %s" );
 
 	RETURN_TRUE;
 }
@@ -6251,7 +6270,7 @@ PHP_METHOD(imagick, newpseudoimage)
 
 	if ( match == 1 )
 	{
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1 );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, 1, "Unable to read the file: %s" );
 
 		if ( absolute != NULL )
 		{
@@ -11089,7 +11108,7 @@ PHP_METHOD(imagick, writeimage)
 	}
 
 	error = writeImageFromFilename( intern, filename, 0, 1 TSRMLS_CC );
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, error, 0 );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, error, 0, "Unable to write the file: %s" );
 
 	RETURN_TRUE;
 
@@ -11128,7 +11147,7 @@ PHP_METHOD(imagick, writeimages)
 	}
 
 	error = writeImageFromFilename( intern, filename, adjoin, 2 TSRMLS_CC );
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, error, 0 );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, error, 0, "Unable to write the file: %s" );
 
 	RETURN_TRUE;
 
