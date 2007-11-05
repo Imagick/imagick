@@ -3226,6 +3226,7 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 		efree(absolute);
 		return error;
 	}
+
 	if ( type == 1 )
 	{
 		status = MagickReadImage( intern->magick_wand, absolute );
@@ -4845,7 +4846,7 @@ PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
 	zval *files = NULL;
-	char *filename = "";
+	char *filename;
 	HashPosition pos;
 	HashTable *hash_table;
 	int status = 0;
@@ -4866,11 +4867,14 @@ PHP_METHOD(imagick, __construct)
 	if (Z_TYPE_P(files) == IS_STRING)
 	{
 		/* get the filename */
-		filename = Z_STRVAL_P( files );
+		filename = estrdup( Z_STRVAL_P( files ) );
 
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 		status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0, "Unable to read the file: %s" );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 1, "Unable to read the file: %s" );
+
+		/* Free filename on successfull */
+		efree( filename );
 
 		RETURN_TRUE;
 	}
@@ -4896,7 +4900,8 @@ PHP_METHOD(imagick, __construct)
 			INIT_PZVAL(&tmpcopy);
 			convert_to_string(&tmpcopy);
 
-			filename = Z_STRVAL(tmpcopy);
+			/* Dup the filename */
+			filename = estrdup( Z_STRVAL( tmpcopy ) );
 
 			status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
 			zval_dtor(&tmpcopy);
@@ -4905,9 +4910,12 @@ PHP_METHOD(imagick, __construct)
 			{
 				break;
 			}
+
+			/* Free the filename */
+			efree( filename );
 		}
 
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0, "Unable to read the file: %s" );
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 1, "Unable to read the file: %s" );
 		RETURN_TRUE;
 	}
 
@@ -5172,7 +5180,7 @@ PHP_METHOD(imagick, readimage)
 PHP_METHOD(imagick, readimages)
 {
 	zval *files;
-	char *filename = "";
+	char *filename;
 	int status = 0;
 	php_imagick_object *intern;
 	HashPosition pos;
@@ -5207,7 +5215,7 @@ PHP_METHOD(imagick, readimages)
 		INIT_PZVAL(&tmpcopy);
 		convert_to_string(&tmpcopy);
 
-		filename = Z_STRVAL(tmpcopy);
+		filename = estrdup( Z_STRVAL( tmpcopy ) );
 		status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
 
 		zval_dtor(&tmpcopy);
@@ -5216,8 +5224,10 @@ PHP_METHOD(imagick, readimages)
 		{
 			break;
 		}
+
+		efree( filename );
 	}
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 0, "Unable to read the file: %s" );
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, filename, status, 1, "Unable to read the file: %s" );
 	RETURN_TRUE;
 }
 
