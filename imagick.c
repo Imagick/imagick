@@ -87,6 +87,10 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 	if ( value != (type) NULL ) { value = (type) MagickRelinquishMemory( value ); value = (type)NULL; }
 
 #define IMAGICK_SAFE_MODE_CHECK( filename, status )\
+	if ( strlen( filename ) > MAXPATHLEN ) \
+	{ \
+		status = 3; \
+	} \
 	if ( PG(safe_mode) ) \
 	{ \
 		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ||  \
@@ -101,7 +105,7 @@ zend_class_entry *php_imagickpixel_exception_class_entry;
 		{ \
 			status = 2; \
 		} \
-	}
+	} \
 
 #define IMAGICK_HAS_FORMAT( buffer, magick_wand )\
 	buffer = MagickGetImageFormat( magick_wand );\
