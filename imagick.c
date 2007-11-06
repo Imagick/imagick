@@ -365,6 +365,8 @@ PHP_METHOD(imagick, extentimage);
 #if MagickLibVersion > 0x633
 PHP_METHOD(imagick, getimageorientation);
 PHP_METHOD(imagick, setimageorientation);
+#endif
+#if MagickLibVersion > 0x634
 PHP_METHOD(imagick, paintfloodfillimage);
 #endif
 #ifdef HAVE_IMAGEMAGICK6359ORLATER
@@ -1641,7 +1643,9 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageorientation_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ORIENTATION)
 	ZEND_END_ARG_INFO()
+#endif
 
+#if MagickLibVersion > 0x634
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_paintfloodfillimage_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, CHANNEL)
@@ -2687,6 +2691,8 @@ static function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x633
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageorientation, imagick_setimageorientation_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x634
 	PHP_ME(imagick, paintfloodfillimage, imagick_paintfloodfillimage_args, ZEND_ACC_PUBLIC)
 #endif
 #ifdef HAVE_IMAGEMAGICK6359ORLATER
@@ -4490,7 +4496,9 @@ PHP_METHOD(imagick, setimageorientation)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
+#if MagickLibVersion > 0x634
 /* {{{ proto Imagick Imagick::paintFloodfillImage(mixed fill, float fuzz, mixed bordercolor, int x, int y[, int channel])
    Sets the image orientation
 */
