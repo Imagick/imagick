@@ -16774,7 +16774,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
-		throwExceptionWithMessage( 3, "Invalid arguments passed to ImagickPixelIterator::__construct()", 3 TSRMLS_CC);
+		ZEND_WRONG_PARAM_COUNT();
 	}
 
 	/* Parse parameters given to function */
@@ -16933,7 +16933,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
-		throwExceptionWithMessage( 3, "Invalid arguments passed to ImagickPixelIterator::newPixelIterator()", 3 TSRMLS_CC);
+		ZEND_WRONG_PARAM_COUNT();
 	}
 
 	/* Parse parameters given to function */
@@ -16984,7 +16984,7 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 
 	if ( ZEND_NUM_ARGS() != 5 )
 	{
-		throwExceptionWithMessage( 3, "Invalid arguments passed to ImagickPixelIterator::newPixelRegionIterator()", 3 TSRMLS_CC);
+		ZEND_WRONG_PARAM_COUNT();
 	}
 
 	/* Parse parameters given to function */
@@ -17053,6 +17053,7 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 
 	ZVAL_LONG( return_value, (long) status );
 
+	return;
 }
 /* }}} */
 
@@ -17253,7 +17254,7 @@ PHP_METHOD(imagickpixeliterator, destroy)
 
 	if ( ZEND_NUM_ARGS() != 0 )
 	{
-
+		ZEND_WRONG_PARAM_COUNT();
 	}
 
 	object = getThis();
@@ -18187,9 +18188,7 @@ static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 
 	if ( intern->magick_wand != (MagickWand *)NULL && IsMagickWand( intern->magick_wand ) )
 	{
-		ClearMagickWand( intern->magick_wand );
 		intern->magick_wand = DestroyMagickWand( intern->magick_wand );
-		intern->magick_wand = (MagickWand *)NULL;
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
@@ -18208,9 +18207,7 @@ static void php_imagickdraw_object_free_storage(void *object TSRMLS_DC)
 
 	if ( intern->drawing_wand != (DrawingWand *)NULL && IsDrawingWand( intern->drawing_wand ) )
 	{
-		ClearDrawingWand( intern->drawing_wand );
 		intern->drawing_wand = DestroyDrawingWand( intern->drawing_wand );
-		intern->drawing_wand = (DrawingWand *)NULL;
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
@@ -18229,9 +18226,7 @@ static void php_imagickpixeliterator_object_free_storage(void *object TSRMLS_DC)
 
 	if ( intern->pixel_iterator != (PixelIterator *)NULL && IsPixelIterator( intern->pixel_iterator ))
 	{
-		ClearPixelIterator( intern->pixel_iterator );
 		intern->pixel_iterator = DestroyPixelIterator( intern->pixel_iterator );
-		intern->pixel_iterator = (PixelIterator *)NULL;
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
@@ -18252,9 +18247,7 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 	{
 		if( intern->pixel_wand != (PixelWand *)NULL && IsPixelWand( intern->pixel_wand ) )
 		{
-			ClearPixelWand( intern->pixel_wand );
 			intern->pixel_wand = DestroyPixelWand( intern->pixel_wand );
-			intern->pixel_wand = (PixelWand *)NULL;
 		}
 	}
 
