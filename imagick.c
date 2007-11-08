@@ -382,6 +382,7 @@ PHP_METHOD(imagick, setfont);
 PHP_METHOD(imagick, getfont);
 PHP_METHOD(imagick, setpointsize);
 PHP_METHOD(imagick, getpointsize);
+PHP_METHOD(imagick, mergeimagelayers);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
@@ -1703,6 +1704,11 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setpointsize_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, pointsize)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_mergeimagelayers_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, LAYERMETHOD)
+	ZEND_END_ARG_INFO()
 #endif
 
 static
@@ -2708,6 +2714,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getfont, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setpointsize, imagick_setpointsize_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpointsize, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, mergeimagelayers, imagick_mergeimagelayers_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -4845,6 +4852,48 @@ PHP_METHOD(imagick, getpointsize)
 	RETVAL_DOUBLE( MagickGetPointsize( intern->magick_wand ) );
 }
 
+PHP_METHOD(imagick, mergeimagelayers)
+{
+	php_imagick_object *intern, *intern_return;
+	long layerMethod;
+	MagickBooleanType status;
+	MagickWand *merged;
+
+
+	if ( ZEND_NUM_ARGS() != 1 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &layerMethod ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	/* Reset the iterator */
+	(void)MagickSetFirstIterator( intern->magick_wand );
+
+	merged = MagickMergeImageLayers( intern->magick_wand, layerMethod );
+
+	/* No magick is going to happen */
+	if ( merged == (MagickWand *)NULL )
+	{
+		throwImagickException( intern->magick_wand, "Unable to merge image layers", 1 TSRMLS_CC );
+		return;
+	}
+
+	object_init_ex( return_value, php_imagick_sc_entry ); \
+	intern_return = (php_imagick_object *)zend_object_store_get_object( return_value TSRMLS_CC ); \
+
+	IMAGICK_REPLACE_MAGICKWAND( intern_return, merged );
+
+	return;
+}
 #endif
 
 /* {{{ proto Imagick Imagick::__construct( [mixed files] )
@@ -18119,6 +18168,12 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_PERSPECTIVEPROJECTION", PerspectiveProjectionDistortion );
 	IMAGICK_REGISTER_CONST_LONG( "DISTORTION_SCALEROTATETRANSLATE", ScaleRotateTranslateDistortion );
 #endif
+#ifdef HAVE_IMAGEMAGICK6364ORLATER
+	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_MERGE", MergeLayer );
+	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_FLATTEN", FlattenLayer );
+	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_MOSAIC", MosaicLayer );
+#endif
+
 }
 
 static void php_imagick_object_free_storage(void *object TSRMLS_DC)
