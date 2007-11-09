@@ -3044,11 +3044,11 @@ void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, char *fa
 
 	if ( strlen( description ) == 0 )
 	{
-		zend_throw_exception( php_imagickpixeliterator_sc_entry, fallback, (long)code TSRMLS_CC);
+		zend_throw_exception( php_imagickpixel_exception_class_entry, fallback, (long)code TSRMLS_CC);
 	}
 	else
 	{
-		zend_throw_exception( php_imagickpixeliterator_sc_entry, description, (long)code TSRMLS_CC);
+		zend_throw_exception( php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC);
 		IMAGICK_FREE_MEMORY( char *, description );
 		PixelClearIteratorException( pixel_iterator );
 		description = (char *)NULL;
@@ -17108,11 +17108,13 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-
+	
+	/* No idea why this was here.
 	if ( internpix->iterator_type == 2 )
 	{
 		throwExceptionWithMessage( 3, "Unable to set RegionPixelIterator row", 3 TSRMLS_CC);
 	}
+	*/
 
 	status = PixelSetIteratorRow( internpix->pixel_iterator, row );
 
