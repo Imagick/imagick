@@ -46,19 +46,14 @@ static THREAD_T imagick_thread_id;
 #define PHP_IMAGICKPIXEL_SC_NAME "ImagickPixel"
 #define PHP_IMAGICKPIXEL_EXCEPTION_SC_NAME "ImagickPixelException"
 
-#if MagickLibVersion > 0x628
 #define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
 #define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
-
-static zend_object_handlers imagickpixeliterator_object_handlers;
-zend_class_entry *php_imagickpixeliterator_sc_entry;
-zend_class_entry *php_imagickpixeliterator_exception_class_entry;
-#endif
 
 /* Handlers */
 static zend_object_handlers imagick_object_handlers;
 static zend_object_handlers imagickdraw_object_handlers;
 static zend_object_handlers imagickpixel_object_handlers;
+static zend_object_handlers imagickpixeliterator_object_handlers;
 
 /* Class entries */
 zend_class_entry *php_imagick_sc_entry;
@@ -67,6 +62,8 @@ zend_class_entry *php_imagickdraw_sc_entry;
 zend_class_entry *php_imagickdraw_exception_class_entry;
 zend_class_entry *php_imagickpixel_sc_entry;
 zend_class_entry *php_imagickpixel_exception_class_entry;
+zend_class_entry *php_imagickpixeliterator_sc_entry;
+zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 
 /* Borrowed from zip extension */
 #define IMAGICK_REGISTER_CONST_LONG(const_name, value)\
@@ -329,8 +326,6 @@ PHP_METHOD(imagick, transverseimage);
 PHP_METHOD(imagick, trimimage);
 PHP_METHOD(imagick, waveimage);
 PHP_METHOD(imagick, vignetteimage);
-PHP_METHOD(imagick, getpixeliterator);
-PHP_METHOD(imagick, getpixelregioniterator);
 PHP_METHOD(imagick, compareimagelayers);
 PHP_METHOD(imagick, optimizeimagelayers);
 PHP_METHOD(imagick, uniqueimagecolors);
@@ -386,6 +381,8 @@ PHP_METHOD(imagick, mergeimagelayers);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
+PHP_METHOD(imagick, getpixeliterator);
+PHP_METHOD(imagick, getpixelregioniterator);
 PHP_METHOD(imagick, readimage);
 PHP_METHOD(imagick, readimages);
 PHP_METHOD(imagick, pingimage);
@@ -746,7 +743,6 @@ PHP_METHOD(imagickdraw, setvectorgraphics);
 PHP_METHOD(imagickdraw, pop);
 PHP_METHOD(imagickdraw, push);
 
-#if MagickLibVersion > 0x628
 /* Imagick Pixel iterator */
 PHP_METHOD(imagickpixeliterator, __construct);
 PHP_METHOD(imagickpixeliterator, newpixeliterator);
@@ -763,7 +759,6 @@ PHP_METHOD(imagickpixeliterator, synciterator);
 PHP_METHOD(imagickpixeliterator, destroy);
 PHP_METHOD(imagickpixeliterator, clear);
 PHP_METHOD(imagickpixeliterator, valid);
-#endif
 
 /* ImagickPixel */
 #if MagickLibVersion > 0x628
@@ -1369,7 +1364,6 @@ static function_entry php_imagickdraw_class_methods[] =
 	{ NULL, NULL, NULL }
 };
 
-#if MagickLibVersion > 0x628
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -1410,7 +1404,6 @@ static function_entry php_imagickpixeliterator_class_methods[] =
 	PHP_ME(imagickpixeliterator, valid, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
-#endif
 
 #if MagickLibVersion > 0x628
 static
@@ -1515,15 +1508,6 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_trimimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fuzz)
-	ZEND_END_ARG_INFO()
-
-static
-	ZEND_BEGIN_ARG_INFO_EX(imagick_getpixelregioniterator_args, 0, 0, 5)
-		ZEND_ARG_INFO(0, x)
-		ZEND_ARG_INFO(0, y)
-		ZEND_ARG_INFO(0, columns)
-		ZEND_ARG_INFO(0, rows)
-		ZEND_ARG_INFO(0, modify)
 	ZEND_END_ARG_INFO()
 
 static
@@ -1718,6 +1702,15 @@ static
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_construct_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, files)
+	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getpixelregioniterator_args, 0, 0, 5)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+		ZEND_ARG_INFO(0, columns)
+		ZEND_ARG_INFO(0, rows)
+		ZEND_ARG_INFO(0, modify)
 	ZEND_END_ARG_INFO()
 
 static
@@ -2655,8 +2648,6 @@ static function_entry php_imagick_class_methods[] =
 {
 #if MagickLibVersion > 0x628
 	PHP_ME(imagick, optimizeimagelayers, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, getpixelregioniterator, imagick_getpixelregioniterator_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, compareimagelayers, imagick_compareimagelayers_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, pingimageblob, imagick_pingimageblob_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, pingimagefile, imagick_pingimagefile_args, ZEND_ACC_PUBLIC)
@@ -2718,6 +2709,8 @@ static function_entry php_imagick_class_methods[] =
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getpixelregioniterator, imagick_getpixelregioniterator_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimages, imagick_readimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimageblob, imagick_readimageblob_args, ZEND_ACC_PUBLIC)
@@ -2991,11 +2984,11 @@ void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC
 		case 2:
 			zend_throw_exception( php_imagickdraw_exception_class_entry, description, (long)code TSRMLS_CC);
 			break;
-#if MagickLibVersion > 0x628
+
 		case 3:
 			zend_throw_exception( php_imagickpixeliterator_exception_class_entry, description, (long)code TSRMLS_CC);
 			break;
-#endif
+
 		case 4:
 			zend_throw_exception( php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC);
 			break;
@@ -3043,7 +3036,6 @@ void throwImagickDrawException( DrawingWand *drawing_wand, char *fallback, long 
 	}
 }
 
-#if MagickLibVersion > 0x628
 void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, char *fallback, long code TSRMLS_DC)
 {
 	ExceptionType severity;
@@ -3062,7 +3054,6 @@ void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, char *fa
 		description = (char *)NULL;
 	}
 }
-#endif
 
 void throwImagickPixelException( PixelWand *pixel_wand, char *fallback, long code TSRMLS_DC)
 {
@@ -12546,7 +12537,6 @@ PHP_METHOD(imagick, whitethresholdimage)
 }
 /* }}} */
 
-#if MagickLibVersion > 0x628
 /* {{{ proto ImagickPixelIterator Imagick::getPixelIterator()
 	Returns a MagickPixelIterator.
 */
@@ -12584,9 +12574,7 @@ PHP_METHOD(imagick, getpixeliterator)
 
 }
 /* }}} */
-#endif
 
-#if MagickLibVersion > 0x628
 /* {{{ proto ImagickPixelIterator Imagick::getPixelRegionIterator(long x, long y, long columns, long rows)
 	Returns a subset of pixels in a MagickPixelIterator object.
 */
@@ -12637,7 +12625,6 @@ PHP_METHOD(imagick, getpixelregioniterator)
 
 }
 /* }}} */
-#endif
 
 /* {{{ proto int Imagick::getCompression()
 	Gets the wand compression type.
@@ -16758,8 +16745,25 @@ PHP_METHOD(imagickdraw, push)
 /* }}} */
 
 /* END OF DRAWINGWAND METHODS */
+#if MagickLibVersion <= 0x628
+void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS_DC )
+{
+	long rows = 0, tmp;
+	PixelWand **row;
+	(void) PixelResetIterator( internpix->pixel_iterator );
 
-#if MagickLibVersion > 0x628
+	while ( ( row = (PixelWand **)PixelGetNextIteratorRow( internpix->pixel_iterator, &tmp ) ) )
+	{
+		if ( row == (PixelWand **)NULL )
+		{
+			break;
+		}
+
+		rows++;
+	}
+	internpix->rows = rows;
+}
+#endif
 /* {{{ proto ImagickPixelIterator ImagickPixelIterator::__construct( Imagick source )
    The ImagickPixelIterator constructor
 */
@@ -16799,6 +16803,10 @@ PHP_METHOD(imagickpixeliterator, __construct)
 	internpix->pixel_iterator = NewPixelIterator( intern->magick_wand );
 	internpix->iterator_type = 1;
 
+#if MagickLibVersion <= 0x628
+	count_pixeliterator_rows( internpix TSRMLS_CC );
+#endif
+
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
@@ -16833,7 +16841,9 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 	}
 
 	PixelResetIterator( internpix->pixel_iterator );
-
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position = 0;
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -16887,7 +16897,9 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 	}
 
 	PixelSetFirstIteratorRow( internpix->pixel_iterator );
-
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position = 0;
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -16914,7 +16926,9 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 	}
 
 	PixelSetLastIteratorRow( internpix->pixel_iterator );
-
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position = (internpix->rows - 1);
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -16957,7 +16971,9 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	internpix->pixel_iterator = NewPixelIterator( intern->magick_wand );
 	internpix->iterator_type = 1;
-
+#if MagickLibVersion <= 0x628
+	count_pixeliterator_rows( internpix TSRMLS_CC );
+#endif
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
@@ -17016,7 +17032,9 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 
 	internpix->pixel_iterator = NewPixelRegionIterator( intern->magick_wand, Z_LVAL_P( x ), Z_LVAL_P(y), Z_LVAL_P(columns), Z_LVAL_P(rows) );
 	internpix->iterator_type = 2;
-
+#if MagickLibVersion <= 0x628
+	count_pixeliterator_rows( internpix TSRMLS_CC );
+#endif
 	if ( !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( 3, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
@@ -17035,7 +17053,6 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 PHP_METHOD(imagickpixeliterator, getiteratorrow)
 {
 	php_imagickpixeliterator_object *internpix;
-	MagickBooleanType status;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickpixeliterator_object *, internpix );
 
@@ -17048,11 +17065,11 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 	{
 		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 	}
-
-	status = PixelGetIteratorRow( internpix->pixel_iterator );
-
-	ZVAL_LONG( return_value, (long) status );
-
+#if MagickLibVersion <= 0x628
+	ZVAL_LONG( return_value, internpix->iterator_position );
+#else
+	ZVAL_LONG( return_value, (long) PixelGetIteratorRow( internpix->pixel_iterator ) );
+#endif
 	return;
 }
 /* }}} */
@@ -17104,7 +17121,9 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 		throwImagickPixelIteratorException( internpix->pixel_iterator, "Unable to set iterator row", 3 TSRMLS_CC );
 		RETURN_FALSE;
 	}
-
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position = row;
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -17135,6 +17154,19 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	}
 
 	wandArray = PixelGetPreviousIteratorRow( internpix->pixel_iterator, &numWands );
+
+#if MagickLibVersion <= 0x628
+	if ( internpix->iterator_position != 0 )
+	{
+		internpix->iterator_position--;
+	}
+#endif
+
+	if ( wandArray == (PixelWand **)NULL )
+	{
+		RETURN_NULL();
+	}
+
 	array_init( return_value );
 
 	for (i = 0; i < numWands; i++ )
@@ -17153,6 +17185,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	return;
 }
 /* }}} */
+
 
 /* {{{ proto array ImagickPixelIterator::getCurrentIteratorRow()
 	Returns the current row as an array of pixel wands from the pixel iterator.
@@ -17179,8 +17212,26 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 		throwExceptionWithMessage( 3, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-
+#if MagickLibVersion <= 0x628
+	if ( internpix->iterator_position >= internpix->rows )
+	{
+		RETURN_NULL();
+	}
+	else if ( internpix->iterator_position != 0 )
+	{
+		long tmp;
+		(void)PixelGetPreviousIteratorRow( internpix->pixel_iterator, &tmp );
+	}
+	wandArray = (PixelWand **)PixelGetNextIteratorRow( internpix->pixel_iterator, &numWands );
+#else
 	wandArray = (PixelWand **)PixelGetCurrentIteratorRow( internpix->pixel_iterator, &numWands );
+#endif
+
+	if ( wandArray == (PixelWand **)NULL )
+	{
+		RETURN_NULL();
+	}
+
 	array_init( return_value );
 
 	for (i = 0; i < numWands; i++ )
@@ -17195,6 +17246,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 			add_next_index_zval( return_value, tmpPixelWand );
 		}
 	}
+
 	return;
 }
 /* }}} */
@@ -17225,6 +17277,16 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	}
 
 	wandArray = PixelGetNextIteratorRow( internpix->pixel_iterator, &numWands );
+
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position++;
+#endif
+
+	if ( wandArray == (PixelWand **)NULL )
+	{
+		RETURN_NULL();
+	}
+
 	array_init( return_value );
 
 	for (i = 0; i < numWands; i++ )
@@ -17239,7 +17301,6 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 			add_next_index_zval( return_value, tmpPixelWand );
 		}
 	}
-
 	return;
 }
 /* }}} */
@@ -17272,7 +17333,10 @@ PHP_METHOD(imagickpixeliterator, destroy)
 		RETURN_FALSE;
 	}
 
+#if MagickLibVersion >= 0x628
 	ClearPixelIterator( internpix->pixel_iterator );
+#endif
+
 #ifdef Z_SET_REFCOUNT_P
 	Z_SET_REFCOUNT_P( object, 0 );
 #else
@@ -17302,9 +17366,13 @@ PHP_METHOD(imagickpixeliterator, clear)
 		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-
+/* Assertion failure with earlier versions */
+#if MagickLibVersion <= 0x628
+	RETURN_TRUE;
+#else
 	ClearPixelIterator( internpix->pixel_iterator );
 	RETURN_TRUE;
+#endif
 }
 /* }}} */
 
@@ -17328,20 +17396,23 @@ PHP_METHOD(imagickpixeliterator, valid)
 		throwExceptionWithMessage( 3, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
-
+#if MagickLibVersion <= 0x628
+	if ( internpix->iterator_position < internpix->rows )
+	{
+		RETURN_TRUE;
+	}
+#else
 	/* Test if the current row is valid */
-
 	if ( PixelSetIteratorRow( internpix->pixel_iterator, PixelGetIteratorRow( internpix->pixel_iterator ) ) )
 	{
 		 RETURN_TRUE;
 	}
-
+#endif
 	RETURN_FALSE;
 }
 /* }}} */
 
 /* END OF PIXELITERATOR */
-#endif
 
 #if MagickLibVersion > 0x628
 /* {{{ proto array ImagickPixel::getHSL()
@@ -18214,7 +18285,6 @@ static void php_imagickdraw_object_free_storage(void *object TSRMLS_DC)
 	efree( intern );
 }
 
-#if MagickLibVersion > 0x628
 static void php_imagickpixeliterator_object_free_storage(void *object TSRMLS_DC)
 {
 	php_imagickpixeliterator_object *intern = (php_imagickpixeliterator_object *)object;
@@ -18233,7 +18303,6 @@ static void php_imagickpixeliterator_object_free_storage(void *object TSRMLS_DC)
 	efree( intern );
 
 }
-#endif
 
 static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 {
@@ -18313,7 +18382,6 @@ static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type
 	return retval;
 }
 
-#if MagickLibVersion > 0x628
 static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	zval *tmp;
@@ -18328,6 +18396,11 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	intern->pixel_iterator = NULL;
 	intern->instanciated_correctly = 0;
 
+#if MagickLibVersion <= 0x628
+	intern->rows = 0;
+	intern->iterator_position = 0;
+#endif
+
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
@@ -18337,7 +18410,6 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	retval.handlers = (zend_object_handlers *) &imagickpixeliterator_object_handlers;
 	return retval;
 }
-#endif
 
 static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
@@ -18376,9 +18448,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	memcpy( &imagick_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
 	memcpy( &imagickdraw_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
-#if MagickLibVersion > 0x628
 	memcpy( &imagickpixeliterator_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
-#endif
 	memcpy( &imagickpixel_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
 
 	/* Setup magickwand env */
@@ -18398,14 +18468,13 @@ PHP_MINIT_FUNCTION(imagick)
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 	php_imagickdraw_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
-#if MagickLibVersion > 0x628
 	/*
 	Initialize exceptions (ImagickPixelIterator exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME, NULL);
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 	php_imagickpixeliterator_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
-#endif
+
 	/*
 	Initialize exceptions (ImagickPixel exception)
 	*/
@@ -18430,7 +18499,6 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickdraw_object_handlers.clone_obj = NULL;
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
-#if MagickLibVersion > 0x628
 	/*
 		Initialize the class (ImagickPixelIterator)
 	*/
@@ -18439,7 +18507,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_imagickpixeliterator_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
-#endif
+
 	/*
 		Initialize the class (ImagickPixel)
 	*/
@@ -18477,11 +18545,7 @@ PHP_MINFO_FUNCTION(imagick)
 	php_info_print_table_start();
 	php_info_print_table_row( 2, "imagick module", "enabled" );
 	php_info_print_table_row( 2, "imagick module version", PHP_IMAGICK_EXTVER );
-#if MagickLibVersion > 0x628
 	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator" );
-#else
-	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel" );
-#endif
 	php_info_print_table_row( 2, "ImageMagick version", imageMagickVersion );
 	php_info_print_table_row( 2, "ImageMagick copyright", MagickGetCopyright() );
 	php_info_print_table_row( 2, "ImageMagick release date", imageMagickReleaseDate );

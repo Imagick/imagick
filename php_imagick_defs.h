@@ -47,15 +47,17 @@ typedef struct _php_imagickdraw_object  {
 	DrawingWand *drawing_wand;
 } php_imagickdraw_object;
 
-#if MagickLibVersion > 0x628
 /* Structure for ImagickPixelIterator object. */
 typedef struct _php_imagickpixeliterator_object  {
 	zend_object zo;
 	PixelIterator *pixel_iterator;
 	long instanciated_correctly;
 	int iterator_type;
-} php_imagickpixeliterator_object;
+#if MagickLibVersion <= 0x628
+	long rows;
+	long iterator_position;
 #endif
+} php_imagickpixeliterator_object;
 
 /* Structure for ImagickPixel object. */
 typedef struct _php_imagickpixel_object  {
@@ -79,6 +81,9 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC );
 char *getPseudoFilename( char *pseudoString TSRMLS_DC );
 int checkIfFontIsConfigured( char *font, int fontLen TSRMLS_DC );
+#if MagickLibVersion <= 0x628
+void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS_DC );
+#endif
 
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11
