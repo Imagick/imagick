@@ -18224,7 +18224,7 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_FILTER", FilterInterpolatePixel );
 	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_INTEGER", IntegerInterpolatePixel );
 	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_MESH", MeshInterpolatePixel );
-	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_NEAREST", NearestNeighborInterpolatePixel );
+	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_NEARESTNEIGHBOR", NearestNeighborInterpolatePixel );
 #endif
 #if MagickLibVersion > 0x634
 	IMAGICK_REGISTER_CONST_LONG( "INTERPOLATE_SPLINE", SplineInterpolatePixel );
