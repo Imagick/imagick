@@ -97,4 +97,14 @@ void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS
 #define IMAGICKCOLORALPHA 19
 #define IMAGICKCOLORFUZZ 20
 
+/* Class enum */
+#define IMAGICK_CLASS 1
+#define IMAGICKDRAW_CLASS 2
+#define IMAGICKPIXELITERATOR_CLASS 3
+#define IMAGICKPIXEL_CLASS 4
+
+/* Free filename constants */
+#define IMAGICK_DONT_FREE_FILENAME 0
+#define IMAGICK_FREE_FILENAME 1
+
 #endif /* PHP_IMAGICK_DEFS_H */
