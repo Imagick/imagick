@@ -7,3 +7,7 @@ Imagick TODO
 - package.xml (DONE)
 - Create build-test scripts
 - Add more examples of the most common use cases
+- Documentation
+  + ImagickPixel::clone()
+  + Imagick::mergeImageLayers()
+  + Add information about conditional methods required ImageMagick versions
