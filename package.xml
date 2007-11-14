@@ -21,10 +21,10 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2007-10-25</date>
+	<date>2007-11-14</date>
 	<version>
-		<release>2.0.1</release>
-		<api>2.0.1</api>
+		<release>2.1.0RC1</release>
+		<api>2.1.0</api>
 	</version>
 	<stability>
 		<release>stable</release>
@@ -32,10 +32,32 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ ImagickDraw::setFont and ImagickDraw::setFontFamily now allow only valid fonts
-+ Added IMAGICK_EXTVER and IMAGICK_EXTNUM constants
-+ Added check for empty or invalid pseudo format string in Imagick::newPseudoImage
-+ Fixed incorrect arg hinting for Imagick::compareImageChannels
++ All methods that expect ImagickPixel now allow a string representing the color
++ Added support for pixeliterator in all supported ImageMagick versions.
++ ImagickPixelIterator now implements the iterator interface
++ It is now possible to set the row with region iterator
++ Added MAXPATHLEN checks for image reads/writes
++ Added a fix to Imagick::cropThumbnailImage() to check if images are already at the desired size
++ Fixed a memory leak in Imagick::getImageHistogram()
++ Speed improvements to Imagick::cropThumbnailImage()
++ Added interpolate constants
++ Fixed ImagickPixel::getColor()
++ Marked ImagickDraw::__construct() with ZEND_ACC_CTOR
++ Added fit parameter and proportional scaling to:
+  - Imagick::adaptiveResizeImage() 
+  - Imagick::scaleImage()
+  - Imagick::resizeImage()
++ Added imagick.locale_fix ini setting to fix drawing bug on some locale
++ Suppressed warnings in readImageFile and pingImageFile (PECL Bug #12367)
++ Added methods: 
+  - ImagickPixel::clone()
+  - ImagickPixel::getColorAsString()
+  - Imagick::mergeImageLayers()
+  - Imagick::paintFloodfillImage()
+  - Imagick::setFont()
+  - Imagick::getFont()
+  - Imagick::setPointsize()
+  - Imagick::getPointsize()
 </notes>
 	<contents>
 		<dir name="/">
