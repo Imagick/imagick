@@ -18460,6 +18460,8 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	return retval;
 }
 
+ZEND_DECLARE_MODULE_GLOBALS(imagick)
+
 PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY( "imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals )
 PHP_INI_END()
