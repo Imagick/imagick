@@ -9196,7 +9196,10 @@ PHP_METHOD(imagick, getnumberimages)
 	unsigned long numImages;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
+	/*
+	This should return 0 if there is no images.
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	*/
 
 	numImages = MagickGetNumberImages( intern->magick_wand );
 	RETVAL_LONG( numImages );
