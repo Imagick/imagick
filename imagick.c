@@ -14868,7 +14868,7 @@ PHP_METHOD(imagickdraw, clone)
 
 	object_init_ex( return_value, php_imagickdraw_sc_entry );
 	intern_return = (php_imagickdraw_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKDRAW_REPLACE_DRAWINGWAND( internd, tmpWand );
+	IMAGICKDRAW_REPLACE_DRAWINGWAND( intern_return, tmpWand );
 
 	return;
 }
