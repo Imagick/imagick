@@ -12830,13 +12830,16 @@ PHP_METHOD(imagick, getquantumdepth)
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
+#if MagickLibVersion < 0x637
 	quantumDepth = (char *)MagickGetQuantumDepth( &depth );
-	array_init( return_value );
+#else
+	quantumDepth = (char *)MagickGetMAGICKCORE_QUANTUM_DEPTH( &depth );
+#endif
 
+	array_init( return_value );
 	add_assoc_long( return_value, "quantumDepthLong", depth );
 	add_assoc_string( return_value, "quantumDepthString", quantumDepth, 1 );
 
-	/* IMAGICK_FREE_MEMORY( char *, quantumDepth ); */
 	return;
 }
 /* }}} */
