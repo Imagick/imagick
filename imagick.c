@@ -10260,11 +10260,10 @@ PHP_METHOD(imagick, compareimagelayers)
 	IMAGICK_REPLACE_MAGICKWAND( intern_return, tmpWand );
 
 	return;
-
 }
 /* }}} */
 #endif
-/* {{{ proto bool Imagick::flattenImages()
+/* {{{ proto Imagick Imagick::flattenImages()
 	Merges a sequence of images.  This is useful for combining Photoshop layers into a single image.
 */
 PHP_METHOD(imagick, flattenimages)
@@ -10274,6 +10273,8 @@ PHP_METHOD(imagick, flattenimages)
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	MagickSetFirstIterator( intern->magick_wand );
 
 	tmpWand = MagickFlattenImages( intern->magick_wand );
 
@@ -10287,7 +10288,7 @@ PHP_METHOD(imagick, flattenimages)
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	IMAGICK_REPLACE_MAGICKWAND( intern_return, tmpWand );
 
-	RETURN_TRUE;
+	return;
 }
 /* }}} */
 
@@ -10410,7 +10411,7 @@ PHP_METHOD(imagick, fximage)
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 	IMAGICK_REPLACE_MAGICKWAND( intern_return, tmpWand );
 
-	RETURN_TRUE;
+	return;
 }
 /* }}} */
 
