@@ -277,13 +277,14 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 			throwExceptionWithMessage( IMAGICK_CLASS, "Invalid image geometry", 1 TSRMLS_CC); \
 			RETURN_FALSE;\
 		} \
-		ratio = (double)orig_width / (double)desired_width; \
 		if ( desired_width <= 0 ) \
 		{ \
+			ratio = (double)orig_height / (double)desired_height; \
 			desired_width = orig_width / ratio; \
 		} \
 		else if ( desired_height <= 0 ) \
 		{ \
+			ratio = (double)orig_width / (double)desired_width; \
 			desired_height = orig_height / ratio; \
 		} \
 	}\
