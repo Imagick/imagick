@@ -2980,7 +2980,7 @@ long getImageCount( MagickWand *magick_wand TSRMLS_DC)
 {
 	long images;
 
-	if( !IsMagickWand( magick_wand ) || magick_wand == (MagickWand *)NULL )
+	if ( magick_wand == (MagickWand *)NULL || !IsMagickWand( magick_wand ) )
 	{
 		return 0;
 	}
@@ -3364,7 +3364,7 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 #if MagickLibVersion > 0x628
 /* {{{ proto bool Imagick::pingImageFile( resource filehandle )
-    This method can be used to query image width, height, size, and format without reading the whole image to memory.
+    Query image information without reading the whole image to memory
 */
 PHP_METHOD(imagick, pingimagefile)
 {
@@ -3412,7 +3412,7 @@ PHP_METHOD(imagick, pingimagefile)
 
 
 /* {{{ proto bool Imagick::pingImageBlob( string image )
-	This method can be used to query image width, height, size, and format without reading the whole image to memory.
+	Query image information without reading the whole image to memory
 */
 PHP_METHOD(imagick, pingimageblob)
 {
@@ -3490,7 +3490,7 @@ PHP_METHOD(imagick, vignetteimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::transposeImage()
-	Creates a vertical mirror image by reflecting the pixels around the central x-axis while rotating them 90-degrees.
+	Creates a vertical mirror image
 */
 PHP_METHOD(imagick, transposeimage)
 {
@@ -3515,7 +3515,7 @@ PHP_METHOD(imagick, transposeimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::transverseImage()
-	Creates a horizontal mirror image by reflecting the pixels around the central y-axis while rotating them 270-degrees.
+	Creates a horizontal mirror image
 */
 PHP_METHOD(imagick, transverseimage)
 {
@@ -3540,7 +3540,7 @@ PHP_METHOD(imagick, transverseimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::adaptiveBlurImage( float radius, float sigma[, int channel] )
-	Adds adaptive blur filter to image.
+	Adds adaptive blur filter to image
 */
 PHP_METHOD(imagick, adaptiveblurimage)
 {
@@ -3575,7 +3575,7 @@ PHP_METHOD(imagick, adaptiveblurimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::uniqueImageColors()
-	Discards all but one of any pixel color.
+	Discards all but one of any pixel color
 */
 PHP_METHOD(imagick, uniqueimagecolors)
 {
@@ -3598,7 +3598,7 @@ PHP_METHOD(imagick, uniqueimagecolors)
 /* }}} */
 
 /* {{{ proto bool Imagick::contrastStretchImage(float black_point, float white_point[, int channel])
-	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available.
+	Enhances the contrast of a color image
 */
 PHP_METHOD(imagick, contraststretchimage)
 {
@@ -3634,7 +3634,7 @@ PHP_METHOD(imagick, contraststretchimage)
 
 
 /* {{{ proto int Imagick::getImageMatte()
-	Returns true if the image has a matte channel otherwise false.
+	Returns true if the image has a matte channel otherwise false
 */
 PHP_METHOD(imagick, getimagematte)
 {
@@ -3650,7 +3650,7 @@ PHP_METHOD(imagick, getimagematte)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageMatte(bool matte)
-	Sets the image matte channel.
+	Sets the image matte channel
 */
 PHP_METHOD(imagick, setimagematte)
 {
@@ -3687,8 +3687,8 @@ PHP_METHOD(imagick, setimagematte)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::adaptiveResizeImage(float radius, float sigma[, bool fit])
-	Adaptively resize image with data dependent triangulation.
+/* {{{ proto bool Imagick::adaptiveResizeImage(int columns, int rows[, bool fit])
+	Adaptively resize image with data dependent triangulation
 */
 PHP_METHOD(imagick, adaptiveresizeimage)
 {
@@ -3722,7 +3722,7 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 }
 /* }}} */
 /* {{{ proto bool Imagick::sketchImage(float radius, float sigma, float angle)
-	Simulates a pencil sketch.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and SketchImage() selects a suitable radius for you. Angle gives the angle of the blurring motion.
+	Simulates a pencil sketch
 */
 PHP_METHOD(imagick, sketchimage)
 {
@@ -3760,7 +3760,7 @@ PHP_METHOD(imagick, sketchimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::shadeImage(bool gray, float azimuth, float elevation)
-	Shines a distant light on an image to create a three-dimensional effect. You control the positioning of the light with azimuth and elevation; azimuth is measured in degrees off the x axis and elevation is measured in pixels above the Z axis.
+	Shines a distant light on an image
 */
 PHP_METHOD(imagick, shadeimage)
 {
@@ -3798,7 +3798,7 @@ PHP_METHOD(imagick, shadeimage)
 /* }}} */
 
 /* {{{ proto int Imagick::getSizeOffset()
-	Returns the size offset associated with the Imagick object.
+	Returns the size offset associated with the Imagick object
 */
 PHP_METHOD(imagick, getsizeoffset)
 {
@@ -3820,7 +3820,7 @@ PHP_METHOD(imagick, getsizeoffset)
 /* }}} */
 
 /* {{{ proto bool Imagick::setSizeOffset(int columns, int rows, int offset)
-	Sets the size and offset of the Imagick object.  Set it before you read a raw image format such as RGB, GRAY, or CMYK.
+	Sets the size and offset of the Imagick object
 */
 PHP_METHOD(imagick, setsizeoffset)
 {
@@ -3856,7 +3856,7 @@ PHP_METHOD(imagick, setsizeoffset)
 /* }}} */
 
 /* {{{ proto bool Imagick::adaptiveSharpenImage(float radius, float sigma[, int channel])
-	Adaptively resize image with data dependent triangulation.
+	Adaptively sharpen image with data dependent triangulation
 */
 PHP_METHOD(imagick, adaptivesharpenimage)
 {
@@ -3890,7 +3890,7 @@ PHP_METHOD(imagick, adaptivesharpenimage)
 
 
 /* {{{ proto bool Imagick::randomThresholdImage(float low, float high[, int channel])
-	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
+	Changes the value of individual pixels
 */
 PHP_METHOD(imagick, randomthresholdimage)
 {
@@ -3925,17 +3925,17 @@ PHP_METHOD(imagick, randomthresholdimage)
 
 void unallocateWands( MagickWand *magick, DrawingWand *draw, PixelWand *pixel TSRMLS_DC )
 {
-	if ( magick != (MagickWand *)NULL && IsMagickWand( magick ))
+	if ( magick != (MagickWand *)NULL && IsMagickWand( magick ) )
 	{
 		magick = (MagickWand *)DestroyMagickWand( magick );
 	}
 
-	if ( draw != (DrawingWand *)NULL && IsDrawingWand( draw ))
+	if ( draw != (DrawingWand *)NULL && IsDrawingWand( draw ) )
 	{
 		draw = (DrawingWand *)DestroyDrawingWand( draw );
 	}
 
-	if ( pixel != (PixelWand *)NULL && IsPixelWand( pixel ))
+	if ( pixel != (PixelWand *)NULL && IsPixelWand( pixel ) )
 	{
 		pixel = (PixelWand *)DestroyPixelWand( pixel );
 	}
@@ -4103,7 +4103,7 @@ PHP_METHOD(imagick, roundcorners)
 /* }}} */
 
 /* {{{ proto int Imagick::getIteratorIndex()
-	Returns the index of the current active image, within the Imagick object.
+	Returns the index of the current active image
 */
 PHP_METHOD(imagick, getiteratorindex)
 {
@@ -4119,7 +4119,7 @@ PHP_METHOD(imagick, getiteratorindex)
 /* }}} */
 
 /* {{{ proto bool Imagick::setIteratorIndex(int index)
-	Sets the index of the Imagick object.
+	Sets the index of the Imagick object
 */
 PHP_METHOD(imagick, setiteratorindex)
 {
@@ -4196,7 +4196,7 @@ PHP_METHOD(imagick, setimageopacity)
 
 #if MagickLibVersion > 0x631
 /* {{{ proto bool Imagick::polaroidImage( ImagickDraw properties, double angle )
-	Simulates a Polaroid picture.
+	Simulates a Polaroid picture
 */
 PHP_METHOD(imagick, polaroidimage)
 {
@@ -4237,7 +4237,7 @@ PHP_METHOD(imagick, polaroidimage)
 /* }}} */
 
 /* {{{ proto string Imagick::getImageProperty( string name )
-	returns a value associated with the specified property
+	Eeturns a value associated with the specified property
 */
 PHP_METHOD(imagick, getimageproperty)
 {
@@ -4329,7 +4329,7 @@ PHP_METHOD(imagick, getimageinterpolatemethod)
 /* {{{ proto bool Imagick::setImageInterpolateMethod(int method)
 	Sets the image interpolate pixel method.
 */
-PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
+PHP_METHOD(imagick, setimageinterpolatemethod)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -4356,7 +4356,7 @@ PHP_METHOD(imagick, setimageinterpolatemethod) // TODO FIX THIS!
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
 	{
-		throwImagickException( intern->magick_wand, "Unable to set image interpolate method", 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to set the image interpolate method", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 	RETURN_TRUE;
@@ -5565,13 +5565,10 @@ PHP_METHOD(imagick, waveimage)
 PHP_METHOD(imagick, clear)
 {
 	php_imagick_object *intern;
-	MagickBooleanType status;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 
-	status = IsMagickWand( intern->magick_wand );
-
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		RETURN_FALSE;
 	}
@@ -5596,11 +5593,9 @@ PHP_METHOD(imagick, destroy)
 	}
 
 	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	status = IsMagickWand( intern->magick_wand );
-
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		RETURN_FALSE;
 	}
@@ -5952,7 +5947,7 @@ PHP_METHOD(imagick, coalesceimages)
 
 	tmpWand = MagickCoalesceImages( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Coalesce image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -6038,7 +6033,7 @@ PHP_METHOD(imagick, combineimages)
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 	tmpWand = MagickCombineImages( intern->magick_wand, channelType );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Combine images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -6104,7 +6099,7 @@ PHP_METHOD(imagick, getimage)
 
 	tmpWand = MagickGetImage( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Get image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -6690,7 +6685,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 
 	tmpWand = (MagickWand *)MagickOptimizeImageLayers( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Optimize image layers failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -6771,7 +6766,7 @@ PHP_METHOD(imagick, previewimages)
 
 	tmpWand = MagickPreviewImages( intern->magick_wand, preview );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Preview image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -6825,7 +6820,7 @@ PHP_METHOD(imagick, profileimage)
 
 /* {{{ proto bool Imagick::quantizeImage( int numberColors, int colorspace, int treedepth, bool dither,
     bool measureError)
-	Analyzes the colors within a reference image and chooses a fixed number of colors to represent the image.  The goal of the algorithm is to minimize the color difference between the input and output image while minimizing the processing time.
+	Analyzes the colors within a reference image
 */
 PHP_METHOD(imagick, quantizeimage)
 {
@@ -6864,7 +6859,7 @@ PHP_METHOD(imagick, quantizeimage)
 
 /* {{{ proto bool Imagick::quantizeImages(int number_colors, int colorspace, int treedepth, bool dither,
     bool measure_error)
-	Analyzes the colors within a sequence of images and chooses a fixed number of colors to represent the image.  The goal of the algorithm is to minimize the color difference between the input and output image while minimizing the processing time.
+	Analyzes the colors within a sequence of images
 */
 PHP_METHOD(imagick, quantizeimages)
 {
@@ -6902,7 +6897,7 @@ PHP_METHOD(imagick, quantizeimages)
 /* }}} */
 
 /* {{{ proto bool Imagick::reduceNoiseImage(float radius)
-	Smooths the contours of an image while still preserving edge information.  The algorithm works by replacing each pixel with its neighbor closest in value.  A neighbor is defined by radius.  Use a radius of 0 and Imagick::reduceNoiseImage() selects a suitable radius for you.
+	Smooths the contours of an image
 */
 PHP_METHOD(imagick, reducenoiseimage)
 {
@@ -6939,7 +6934,7 @@ PHP_METHOD(imagick, reducenoiseimage)
 /* }}} */
 
 /* {{{ proto string Imagick::removeImageProfile(string name)
-	Removes the named image profile and returns it.
+	Removes the named image profile and returns it
 */
 PHP_METHOD(imagick, removeimageprofile)
 {
@@ -6953,7 +6948,6 @@ PHP_METHOD(imagick, removeimageprofile)
 #else
 	size_t profileLen;
 #endif
-
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -6979,7 +6973,7 @@ PHP_METHOD(imagick, removeimageprofile)
 /* }}} */
 
 /* {{{ proto bool Imagick::separateImageChannel(int channel)
-	Separates a channel from the image and returns a grayscale image.  A channel is a particular color component of each pixel in the image.
+	Separates a channel from the image
 */
 PHP_METHOD(imagick, separateimagechannel)
 {
@@ -7016,7 +7010,7 @@ PHP_METHOD(imagick, separateimagechannel)
 /* }}} */
 
 /* {{{ proto bool Imagick::sepiaToneImage(float threshold)
-	Applies a special effect to the image, similar to the effect achieved in a photo darkroom by sepia toning.  Threshold ranges from 0 to QuantumRange and is a measure of the extent of the sepia toning.  A threshold of 80 is a good starting point for a reasonable tone.
+	Applies a special effect to the image
 */
 PHP_METHOD(imagick, sepiatoneimage)
 {
@@ -7056,7 +7050,7 @@ PHP_METHOD(imagick, sepiatoneimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageBias(float bias)
-	Sets the image bias for any method that convolves an image (e.g. Imagick::ConvolveImage()).
+	Sets the image bias
 */
 PHP_METHOD(imagick, setimagebias)
 {
@@ -7093,7 +7087,7 @@ PHP_METHOD(imagick, setimagebias)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
-	Sets the image chromaticity blue primary point.
+	Sets the image chromaticity blue primary point
 */
 PHP_METHOD(imagick, setimageblueprimary)
 {
@@ -7130,7 +7124,7 @@ PHP_METHOD(imagick, setimageblueprimary)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageBorderColor(ImagickPixel border)
-	Sets the image border color.
+	Sets the image border color
 */
 PHP_METHOD(imagick, setimagebordercolor)
 {
@@ -7168,7 +7162,7 @@ PHP_METHOD(imagick, setimagebordercolor)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageChannelDepth(int channel, int depth)
-	Sets the depth of a particular image channel.
+	Sets the depth of a particular image channel
 */
 PHP_METHOD(imagick, setimagechanneldepth)
 {
@@ -7205,7 +7199,7 @@ PHP_METHOD(imagick, setimagechanneldepth)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageColormapColor(int index, ImagickPixel color)
-	Sets the color of the specified colormap index.
+	Sets the color of the specified colormap index
 */
 PHP_METHOD(imagick, setimagecolormapcolor)
 {
@@ -7246,7 +7240,7 @@ PHP_METHOD(imagick, setimagecolormapcolor)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageColorspace(int colorspace)
-	Sets the image colorspace.
+	Sets the image colorspace
 */
 PHP_METHOD(imagick, setimagecolorspace)
 {
@@ -7283,7 +7277,7 @@ PHP_METHOD(imagick, setimagecolorspace)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageDispose(int dispose)
-	Sets the image disposal method.
+	Sets the image disposal method
 */
 PHP_METHOD(imagick, setimagedispose)
 {
@@ -7320,7 +7314,7 @@ PHP_METHOD(imagick, setimagedispose)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageExtent(int columns, int rows)
-	Sets the image size (i.e. columns & rows).
+	Sets the image size
 */
 PHP_METHOD(imagick, setimageextent)
 {
@@ -7357,7 +7351,7 @@ PHP_METHOD(imagick, setimageextent)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageGreenPrimary(float x, float y)
-	Sets the image chromaticity green primary point.
+	Sets the image chromaticity green primary point
 */
 PHP_METHOD(imagick, setimagegreenprimary)
 {
@@ -7394,9 +7388,9 @@ PHP_METHOD(imagick, setimagegreenprimary)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageInterlaceScheme(int interlace_scheme)
-	Sets the image compression.
+	Sets the image interlace scheme
 */
-PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
+PHP_METHOD(imagick, setimageinterlacescheme)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -7431,9 +7425,9 @@ PHP_METHOD(imagick, setimageinterlacescheme) // TODO FIX THIS!
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageProfile(string name, string profile)
-	Adds a named profile to the Imagick object.  If a profile with the same name already exists, it is replaced.  This method differs from the Imagick::ProfileImage() method in that it does not apply any CMS color profiles.
+	Adds a named profile to the Imagick object
 */
-PHP_METHOD(imagick, setimageprofile) // TODO FIX THIS!
+PHP_METHOD(imagick, setimageprofile)
 {
 	php_imagick_object *intern;
 	zval *object;
@@ -7672,7 +7666,7 @@ PHP_METHOD(imagick, stereoimage)
 
 	tmpWand = MagickStereoImage( intern->magick_wand, intern_second->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Stereo image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -7715,7 +7709,7 @@ PHP_METHOD(imagick, textureimage)
 
 	tmpWand = MagickTextureImage( intern->magick_wand, intern_second->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Texture image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -7898,7 +7892,7 @@ PHP_METHOD(imagick, deconstructimages)
 
 	tmpWand = MagickDeconstructImages( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Deconstruct image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -7939,7 +7933,7 @@ PHP_METHOD(imagick, getimageregion)
 
 	tmpWand = MagickGetImageRegion( intern->magick_wand, width, height, x, y );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Get image region failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -9350,14 +9344,12 @@ PHP_METHOD(imagick, resetiterator)
 {
 	php_imagick_object *intern;
 	zval *object;
-	MagickBooleanType status;
 
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	status = IsMagickWand( intern->magick_wand );
 
 	/* No magick is going to happen */
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		RETURN_FALSE;
 	}
@@ -9374,14 +9366,12 @@ PHP_METHOD(imagick, setfirstiterator)
 {
 	php_imagick_object *intern;
 	zval *object;
-	MagickBooleanType status;
 
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	status = IsMagickWand( intern->magick_wand );
 
 	/* No magick is going to happen */
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		RETURN_FALSE;
 	}
@@ -9397,13 +9387,10 @@ PHP_METHOD(imagick, setfirstiterator)
 PHP_METHOD(imagick, setlastiterator)
 {
 	php_imagick_object *intern;
-	MagickBooleanType status;
-
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = IsMagickWand( intern->magick_wand );
 
 	/* No magick is going to happen */
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		RETURN_FALSE;
 	}
@@ -10204,7 +10191,7 @@ PHP_METHOD(imagick, compareimagechannels)
 
 	tmpWand = MagickCompareImageChannels( intern->magick_wand, intern_second->magick_wand, channelType, metricType, &distortion );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Compare image channels failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -10249,7 +10236,7 @@ PHP_METHOD(imagick, compareimagelayers)
 
 	tmpWand = (MagickWand *)MagickCompareImageLayers( intern->magick_wand, compareMethod );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Compare image layers failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -10278,7 +10265,7 @@ PHP_METHOD(imagick, flattenimages)
 
 	tmpWand = MagickFlattenImages( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Flatten images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -10401,7 +10388,7 @@ PHP_METHOD(imagick, fximage)
 
 	tmpWand = MagickFxImageChannel( intern->magick_wand, channel, expression );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Fx image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -10515,7 +10502,7 @@ PHP_METHOD(imagick, compareimages)
 
 	tmpWand = MagickCompareImages( intern->magick_wand, intern_second->magick_wand, metricType, &distortion );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Compare images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -11509,7 +11496,7 @@ PHP_METHOD(imagick, montageimage)
 
 	tmpWand = MagickMontageImage( intern->magick_wand, internd->drawing_wand, tileGeom, thumbnailGeom, montageMode, frame );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Montage image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -11575,7 +11562,7 @@ PHP_METHOD(imagick, averageimages)
 
 	tmpWand = MagickAverageImages( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "AffineTransform image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -11882,7 +11869,7 @@ PHP_METHOD(imagick, steganoimage)
 
 	tmpWand = MagickSteganoImage( intern->magick_wand, intern_second->magick_wand, offset );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Stegano image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -11906,7 +11893,7 @@ PHP_METHOD(imagick, clone)
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
 	tmpWand = CloneMagickWand( intern->magick_wand );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Cloning Imagick object failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -12128,7 +12115,7 @@ PHP_METHOD(imagick, mosaicimages)
 	MagickSetFirstIterator( intern->magick_wand );
 	tmpWand = MagickMosaicImages( intern->magick_wand );
 
-	if ( tmpWand == NULL || !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwExceptionWithMessage( IMAGICK_CLASS, "Mosaic image failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -12169,9 +12156,9 @@ PHP_METHOD(imagick, morphimages)
 
 	tmpWand = MagickMorphImages( intern->magick_wand, frames );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
-		throwExceptionWithMessage( IMAGICK_CLASS, "Morph image failed", 1 TSRMLS_CC);
+		throwExceptionWithMessage( IMAGICK_CLASS, "Morphing images failed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -12493,7 +12480,7 @@ PHP_METHOD(imagick, appendimages)
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 	tmpWand = MagickAppendImages( intern->magick_wand, stack );
 
-	if ( !IsMagickWand( tmpWand ) )
+	if ( tmpWand == (MagickWand *)NULL || !IsMagickWand( tmpWand ) )
 	{
 		throwImagickException( intern->magick_wand, "Unable to append images", 1 TSRMLS_CC);
 		RETURN_FALSE;
@@ -14430,15 +14417,12 @@ PHP_METHOD(imagickdraw, getfontweight)
 PHP_METHOD(imagickdraw, clear)
 {
 	php_imagickdraw_object *internd;
-	MagickBooleanType status;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagickdraw_object *, internd );
 
-	status = IsDrawingWand( internd->drawing_wand );
-
-	if ( status == MagickFalse )
+	if ( internd->drawing_wand == (DrawingWand *)NULL || !IsDrawingWand( internd->drawing_wand ) )
 	{
-		throwExceptionWithMessage( IMAGICKDRAW_CLASS, "ImagickDraw is not allocated", 2 TSRMLS_CC);
+		throwExceptionWithMessage( IMAGICKDRAW_CLASS, "ImagickDraw object is not allocated properly", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -14494,19 +14478,15 @@ PHP_METHOD(imagickdraw, gettextencoding)
 */
 PHP_METHOD(imagickdraw, destroy)
 {
-
 	zval *object;
 	php_imagickdraw_object *internd;
-	MagickBooleanType status;
 
 	object = getThis();
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	status = IsDrawingWand( internd->drawing_wand );
-
-	if ( status == MagickFalse )
+	if ( internd->drawing_wand == (DrawingWand *)NULL || !IsDrawingWand( internd->drawing_wand ) )
 	{
-		throwExceptionWithMessage( IMAGICKDRAW_CLASS, "ImagickDraw is not allocated", 2 TSRMLS_CC);
+		throwExceptionWithMessage( IMAGICKDRAW_CLASS, "ImagickDraw object is not allocated properly", 2 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -16779,12 +16759,10 @@ void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS
 */
 PHP_METHOD(imagickpixeliterator, __construct)
 {
-
 	zval *magickObject;
 	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagick_object *intern;
-	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -16802,9 +16780,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 	intern = (php_imagick_object *)zend_object_store_get_object(magickObject TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = IsMagickWand( intern->magick_wand );
-
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16817,7 +16793,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 	count_pixeliterator_rows( internpix TSRMLS_CC );
 #endif
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16844,7 +16820,7 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16873,7 +16849,7 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16900,7 +16876,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16929,7 +16905,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16948,12 +16924,10 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 */
 PHP_METHOD(imagickpixeliterator, newpixeliterator)
 {
-
 	zval *magickObject;
 	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagick_object *intern;
-	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 1 )
 	{
@@ -16971,9 +16945,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 	intern = (php_imagick_object *)zend_object_store_get_object(magickObject TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = IsMagickWand( intern->magick_wand );
-
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -16984,7 +16956,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 #if MagickLibVersion <= 0x628
 	count_pixeliterator_rows( internpix TSRMLS_CC );
 #endif
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17022,7 +16994,7 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 	if ( Z_TYPE_P( x ) != IS_LONG || Z_TYPE_P( y ) != IS_LONG ||
 		 Z_TYPE_P( columns ) != IS_LONG || Z_TYPE_P( rows ) != IS_LONG )
 	{
-		throwExceptionWithMessage( IMAGICKPIXEL_CLASS, "ImagickPixelIterator::newPixelRegionIterator() parameters should be ints", 4 TSRMLS_CC );
+		throwExceptionWithMessage( IMAGICKPIXEL_CLASS, "ImagickPixelIterator::newPixelRegionIterator() parameters should be integers", 4 TSRMLS_CC );
 		return;
 	}
 
@@ -17030,22 +17002,20 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(object TSRMLS_CC);
 	intern = (php_imagick_object *)zend_object_store_get_object(magickObject TSRMLS_CC);
 
-	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
-
-	status = IsMagickWand( intern->magick_wand );
-
-	if ( status == MagickFalse )
+	if ( intern->magick_wand == (MagickWand *)NULL || !IsMagickWand( intern->magick_wand ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed", 3 TSRMLS_CC);
 		RETURN_FALSE;
 	}
+
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	internpix->pixel_iterator = NewPixelRegionIterator( intern->magick_wand, Z_LVAL_P( x ), Z_LVAL_P(y), Z_LVAL_P(columns), Z_LVAL_P(rows) );
 	internpix->iterator_type = 2;
 #if MagickLibVersion <= 0x628
 	count_pixeliterator_rows( internpix TSRMLS_CC );
 #endif
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17071,7 +17041,7 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 	}
@@ -17113,7 +17083,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17159,7 +17129,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17219,7 +17189,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "PixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17282,7 +17252,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17339,7 +17309,7 @@ PHP_METHOD(imagickpixeliterator, destroy)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17373,7 +17343,7 @@ PHP_METHOD(imagickpixeliterator, clear)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
@@ -17403,7 +17373,7 @@ PHP_METHOD(imagickpixeliterator, valid)
 		RETURN_FALSE;
 	}
 
-	if ( !IsPixelIterator( internpix->pixel_iterator ) )
+	if ( internpix->pixel_iterator == (PixelIterator *)NULL || !IsPixelIterator( internpix->pixel_iterator ) )
 	{
 		throwExceptionWithMessage( IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly", 3 TSRMLS_CC);
 		RETURN_FALSE;
