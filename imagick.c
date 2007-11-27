@@ -12818,12 +12818,7 @@ PHP_METHOD(imagick, getquantumdepth)
 	long depth;
 
 	IMAGICK_INITIALIZE_ZERO_ARGS( php_imagick_object *, intern );
-
-#if MagickLibVersion < 0x637
 	quantumDepth = (char *)MagickGetQuantumDepth( &depth );
-#else
-	quantumDepth = (char *)MagickGetMAGICKCORE_QUANTUM_DEPTH( &depth );
-#endif
 
 	array_init( return_value );
 	add_assoc_long( return_value, "quantumDepthLong", depth );
