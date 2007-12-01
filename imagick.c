@@ -9313,7 +9313,7 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
 	/* The world collapses.. */
-	if ( !crop_thumbnail_image( intern->magick_wand, cropWidth, cropHeight ) )
+	if ( !crop_thumbnail_image( intern->magick_wand, cropWidth, cropHeight TSRMLS_CC ) )
 	{
 		throwImagickException( intern->magick_wand, "Unable to crop-thumbnail image", 1 TSRMLS_CC);
 		RETURN_FALSE;
