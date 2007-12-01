@@ -9294,7 +9294,6 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	php_imagick_object *intern;
 	zval *object;
 	MagickBooleanType status;
-	long imageWidth, imageHeight, cropX, cropY, thumbWidth, thumbHeight;
 
 	if ( ZEND_NUM_ARGS() != 2 )
 	{
