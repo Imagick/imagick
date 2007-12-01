@@ -9237,26 +9237,52 @@ PHP_METHOD(imagick, thumbnailimage)
 }
 /* }}} */
 
-void calculateCropThumbnailDimensions( long *width, long *height, long *cropX, long *cropY, long cropWidth, long cropHeight, long imageWidth, long imageHeight TSRMLS_DC)
+zend_bool crop_thumbnail_image( MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC)
 {
-	double tmp;
-
-	if ( imageWidth < imageHeight )
+	double ratio;
+	long crop_x = 0, crop_y = 0, image_width, image_height;
+	
+	long orig_width = MagickGetImageWidth( magick_wand );
+	long orig_height = MagickGetImageHeight( magick_wand );
+	
+	/* Already at the size, just strip profiles */
+	if ( ( orig_width == desired_width ) && ( orig_height == desired_height ) )
 	{
-		tmp = (double)imageHeight / (double)imageWidth;
-		(*((long*)height)) =  tmp * (*((long*)width));
-
-		(*((long*)cropY)) = ( (*((long*)height)) - cropHeight ) / 2;
-		(*((long*)cropX)) = 0;
+		if ( !MagickStripImage( magick_wand ) )
+		{
+			return 0;
+		}
+		return 1;
+	}
+	
+	if ( ( (double)orig_width / (double)desired_width ) > ( (double)orig_height / (double)desired_height ) )
+	{
+		ratio = (double)orig_height / (double)desired_height;
+		image_width = (double)orig_width / (double)ratio;
+		image_height = (double)orig_height / (double)ratio;
+		
+		crop_x = ( (double)image_width - (double)desired_width ) / 2;
 	}
 	else
 	{
-		tmp = (double)imageWidth / (double)imageHeight;
-		(*((long*)width)) = tmp * (*((long*)height));
-
-		(*((long*)cropX)) = ( (*((long*)width)) - cropWidth ) / 2;
-		(*((long*)cropY)) = 0;
+		ratio = (double)orig_width / (double)desired_width;
+		image_height = (double)orig_height / (double)ratio;
+		image_width = (double)orig_width / (double)ratio;
+		
+		crop_y = ( (double)image_height - (double)desired_height ) / 2;
 	}
+	
+	if ( !MagickThumbnailImage( magick_wand, image_width, image_height ) )
+	{
+		return 0;
+	}
+	
+	if ( !MagickCropImage( magick_wand, desired_width, desired_height, crop_x, crop_y ) )
+	{
+		return 0;
+	}
+	
+	return 1;
 }
 
 /* {{{ proto bool Imagick::cropthumbnailImage(int columns, int rows)
@@ -9286,51 +9312,10 @@ PHP_METHOD(imagick, cropthumbnailimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	if ( ( cropWidth == 0 ) || ( cropHeight == 0 ) )
-	{
-		throwExceptionWithMessage( IMAGICK_CLASS, "Can't cropthumbnail image to zero size", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	imageWidth = MagickGetImageWidth( intern->magick_wand );
-	imageHeight = MagickGetImageHeight( intern->magick_wand );
-
-	/* No need to do any calcs if image is already at the given dimensions */
-	if ( cropWidth == imageWidth && cropHeight == imageHeight )
-	{
-		/* Execute MagickStripImage to strip the profiles */
-		status = MagickStripImage( intern->magick_wand );
-
-		/* The world collapses.. */
-		if ( status == MagickFalse )
-		{
-			throwExceptionWithMessage( IMAGICK_CLASS, "Failed to thumbnail the image", 1 TSRMLS_CC);
-			RETURN_FALSE;
-		}
-		RETURN_TRUE;
-	}
-
-	/* If image size did not match */
-	thumbWidth = cropWidth;
-	thumbHeight = cropHeight;
-
-	calculateCropThumbnailDimensions( &thumbWidth, &thumbHeight, &cropX, &cropY, cropWidth, cropHeight, imageWidth, imageHeight TSRMLS_CC );
-
-	status = MagickThumbnailImage( intern->magick_wand, thumbWidth, thumbHeight );
-
 	/* The world collapses.. */
-	if ( status == MagickFalse )
+	if ( !crop_thumbnail_image( intern->magick_wand, cropWidth, cropHeight ) )
 	{
-		throwExceptionWithMessage( IMAGICK_CLASS, "Failed to thumbnail the image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	status = MagickCropImage( intern->magick_wand, cropWidth, cropHeight, cropX, cropY );
-
-	/* The world collapses.. */
-	if ( status == MagickFalse )
-	{
-		throwExceptionWithMessage( IMAGICK_CLASS, "Failed to crop the image", 1 TSRMLS_CC);
+		throwImagickException( intern->magick_wand, "Unable to crop-thumbnail image", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 

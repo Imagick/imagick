@@ -76,7 +76,7 @@ void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC
 long getImageCount( MagickWand *magick_wand TSRMLS_DC);
 char *getHashValue( HashTable *hashTable TSRMLS_DC );
 int count_occurences_of( char needle, char *hayStack TSRMLS_DC);
-void calculateCropThumbnailDimensions( long *width, long *height, long *cropX, long *cropY, long cropWidth, long cropHeight, long imageWidth, long imageHeight TSRMLS_DC);
+zend_bool crop_thumbnail_image( MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int type TSRMLS_DC );
 int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC );
 char *getPseudoFilename( char *pseudoString TSRMLS_DC );
