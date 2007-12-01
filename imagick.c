@@ -4523,7 +4523,7 @@ PHP_METHOD(imagick, paintfloodfillimage)
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_fill, *intern_border;
 	zval *fillParam, *borderParam, *fillObj, *borderObj;
-	long x, y, channel = AllChannels;;
+	long x, y, channel = AllChannels;
 	double fuzz;
 	MagickBooleanType status;
 
