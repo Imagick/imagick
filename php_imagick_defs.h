@@ -31,7 +31,12 @@ ZEND_BEGIN_MODULE_GLOBALS(imagick)
         zend_bool locale_fix;
 ZEND_END_MODULE_GLOBALS(imagick)
 
-zend_imagick_globals imagick_globals;
+#ifdef ZTS
+#define IMAGICK_G(v) TSRMG(imagick_globals_id, zend_imagick_globals *, v)
+#else
+#define IMAGICK_G(v) (imagick_globals.v)
+#endif
+
 
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {

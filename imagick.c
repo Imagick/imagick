@@ -21,6 +21,8 @@
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
 
+ZEND_DECLARE_MODULE_GLOBALS(imagick)
+
 #if defined(ZTS) && defined(PHP_WIN32)
 static MUTEX_T imagick_mutex;
 static THREAD_T imagick_thread_id;
@@ -291,7 +293,7 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 
 #ifdef HAVE_LOCALE_H
 #define IMAGICK_SET_LOCALE( old_locale, tmp, restore ) \
-	if (( INI_BOOL( "imagick.locale_fix" ) ) && \
+	if (( IMAGICK_G( locale_fix ) ) && \
 		( tmp = setlocale( LC_NUMERIC, NULL ) ) != NULL && \
 		( strcmp( tmp, IMAGICK_LC_NUMERIC_LOCALE ) != 0 )) \
 	{ \
@@ -18420,11 +18422,15 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	return retval;
 }
 
-ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY( "imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals )
 PHP_INI_END()
+
+PHP_GINIT_FUNCTION(imagick)
+{
+	imagick_globals->locale_fix = 0;
+}
 
 PHP_MINIT_FUNCTION(imagick)
 {
@@ -18589,24 +18595,33 @@ PHP_RSHUTDOWN_FUNCTION(imagick)
 zend_module_entry imagick_module_entry =
 {
 #if ZEND_MODULE_API_NO >= 20010901
-	STANDARD_MODULE_HEADER,
+        STANDARD_MODULE_HEADER,
 #endif
-	PHP_IMAGICK_EXTNAME,
-	php_imagick_functions,			/* Functions */
-	PHP_MINIT(imagick),			/* MINIT */
-	PHP_MSHUTDOWN(imagick),		/* MSHUTDOWN */
-	NULL,						    /* RINIT */
+        PHP_IMAGICK_EXTNAME,
+        php_imagick_functions,                  /* Functions */
+        PHP_MINIT(imagick),                     /* MINIT */
+        PHP_MSHUTDOWN(imagick),         /* MSHUTDOWN */
+        NULL,                                               /* RINIT */
 #if defined(ZTS) && defined(PHP_WIN32)
-	PHP_RSHUTDOWN(imagick),
+        PHP_RSHUTDOWN(imagick),
 #else
-	NULL,						    /* RSHUTDOWN */
+        NULL,                                               /* RSHUTDOWN */
 #endif
-	PHP_MINFO(imagick),			/* MINFO */
+        PHP_MINFO(imagick),                     /* MINFO */
 #if ZEND_MODULE_API_NO >= 20010901
-	PHP_IMAGICK_EXTVER,
+        PHP_IMAGICK_EXTVER,
 #endif
-	STANDARD_MODULE_PROPERTIES
+#if ZEND_MODULE_API_NO >= 20060613
+        PHP_MODULE_GLOBALS(imagick),
+        PHP_GINIT(imagick),
+        NULL,
+        NULL,
+        STANDARD_MODULE_PROPERTIES_EX
+#else
+        STANDARD_MODULE_PROPERTIES
+#endif
 };
+
 
 #ifdef COMPILE_DL_IMAGICK
 ZEND_GET_MODULE(imagick)
