@@ -18430,7 +18430,6 @@ PHP_INI_END()
 PHP_GINIT_FUNCTION(imagick)
 {
 	imagick_globals->locale_fix = 0;
-	return SUCCESS;
 }
 
 PHP_MINIT_FUNCTION(imagick)
