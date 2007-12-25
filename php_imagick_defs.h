@@ -23,7 +23,7 @@
 
 /* Define Extension Properties */
 #define PHP_IMAGICK_EXTNAME    "imagick"
-#define PHP_IMAGICK_EXTVER     "2.1.0-rc1"
+#define PHP_IMAGICK_EXTVER     "2.1.0-rc2"
 #define PHP_IMAGICK_EXTNUM     20100
 
 /* Globals, needed for the ini settings */
