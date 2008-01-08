@@ -3420,7 +3420,7 @@ PHP_METHOD(imagick, pingimagefile)
 PHP_METHOD(imagick, pingimageblob)
 {
 	char *imageString;
-	size_t imageStringLen;
+	int imageStringLen;
 	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
@@ -5451,7 +5451,7 @@ PHP_METHOD(imagick, readimageblob)
 	char *imageString;
 	char *fileName = NULL;
 	long fileNameLen;
-	size_t imageStringLen;
+	int imageStringLen;
 	zval *object;
 	MagickBooleanType status;
 	php_imagick_object *intern;
@@ -6791,7 +6791,7 @@ PHP_METHOD(imagick, profileimage)
 	zval *object;
 	char *name, *profile;
 	int nameLen;
-	size_t profileLen;
+	int profileLen;
 	MagickBooleanType status;
 
 	if ( ZEND_NUM_ARGS() != 2 )
@@ -7435,7 +7435,7 @@ PHP_METHOD(imagick, setimageprofile)
 	php_imagick_object *intern;
 	zval *object;
 	char *name, *profile;
-	size_t profileLen;
+	int profileLen;
 	int nameLen;
 	MagickBooleanType status;
 
