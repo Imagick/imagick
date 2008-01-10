@@ -4796,7 +4796,7 @@ PHP_METHOD(imagick, setfont)
 		IMAGICK_SAFE_MODE_CHECK( absolute, error );
 		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, IMAGICK_FREE_FILENAME, "Unable to read the file: %s" );
 
-		if ( access(absolute, 0) != 0 )
+		if ( VCWD_ACCESS(absolute, F_OK) != 0 )
 		{
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 2 TSRMLS_CC,
 				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute );
@@ -13972,7 +13972,7 @@ PHP_METHOD(imagickdraw, setfont)
 		IMAGICK_SAFE_MODE_CHECK( absolute, error );
 		IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR( internd, absolute, error, 1 );
 
-		if ( access(absolute, 0) != 0 )
+		if ( VCWD_ACCESS(absolute, F_OK) != 0 )
 		{
 			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 2 TSRMLS_CC,
 				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute );
