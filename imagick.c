@@ -3310,9 +3310,9 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 			}
 			
 			if (access( absolute, W_OK ))
-      {
-        return 4;
-      }
+			{
+				return 4;
+			}
 
 		break;
 
@@ -3351,10 +3351,10 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 			/* absolute now contains the path */
 			
 			if (access( absolute, W_OK ))
-      {
-        return 4;
-      }
-			
+			{
+				return 4;
+			}
+
 		break;
 
 		default:
