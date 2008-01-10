@@ -136,6 +136,10 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, message, filename);\
 			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
+		case 4:\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Unable to write file: %s. Permission denied", filename);\
+			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
+			RETURN_NULL();\
 		break;\
 	}
 
@@ -3304,6 +3308,11 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 				efree(absolute);
 				return error;
 			}
+			
+			if (access( absolute, W_OK ))
+      {
+        return 4;
+      }
 
 		break;
 
@@ -3340,6 +3349,12 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 			efree( dup );
 			/* absolute now contains the path */
+			
+			if (access( absolute, W_OK ))
+      {
+        return 4;
+      }
+			
 		break;
 
 		default:
