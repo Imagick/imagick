@@ -3309,9 +3309,14 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 				return error;
 			}
 			
-			if (VCWD_ACCESS( absolute, W_OK ))
+			/* Check if file exists */
+			if (!(VCWD_ACCESS( absolute, F_OK )))
 			{
-				return 4;
+				/* Check that it is writable */
+				if (VCWD_ACCESS( absolute, W_OK ))
+				{
+					return 4;
+				}
 			}
 
 		break;
@@ -3350,9 +3355,14 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 			efree( dup );
 			/* absolute now contains the path */
 			
-			if (VCWD_ACCESS( absolute, W_OK ))
+			/* Check if file exists */
+			if (!(VCWD_ACCESS( absolute, F_OK )))
 			{
-				return 4;
+				/* Check that it is writable */
+				if (VCWD_ACCESS( absolute, W_OK ))
+				{
+					return 4;
+				}
 			}
 
 		break;
