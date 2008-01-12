@@ -89,6 +89,7 @@ int checkIfFontIsConfigured( char *font, int fontLen TSRMLS_DC );
 #if MagickLibVersion <= 0x628
 void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS_DC );
 #endif
+int checkWriteAccess( char *absolute TSRMLS_DC );
 
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11
@@ -111,5 +112,14 @@ void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS
 /* Free filename constants */
 #define IMAGICK_DONT_FREE_FILENAME 0
 #define IMAGICK_FREE_FILENAME 1
+
+/* Read / write constants */
+#define IMAGICK_READ_WRITE_NO_ERROR 0
+#define IMAGICK_READ_WRITE_SAFE_MODE_ERROR 1
+#define IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR 2
+#define IMAGICK_READ_WRITE_UNDERLYING_LIBRARY 3
+#define IMAGICK_READ_WRITE_PERMISSION_DENIED 4
+#define IMAGICK_READ_WRITE_FILENAME_TOO_LONG 5
+#define IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST 6
 
 #endif /* PHP_IMAGICK_DEFS_H */

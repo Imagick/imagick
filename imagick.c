@@ -88,21 +88,21 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 #define IMAGICK_SAFE_MODE_CHECK( filename, status )\
 	if ( strlen( filename ) > MAXPATHLEN ) \
 	{ \
-		status = 3; \
+		status = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
 	} \
 	if ( PG(safe_mode) ) \
 	{ \
 		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ||  \
 				php_checkuid_ex( filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) ) \
 		{ \
-			status = 1; \
+			status = IMAGICK_READ_WRITE_SAFE_MODE_ERROR; \
 		} \
 	} \
 	else \
 	{ \
 		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ) \
 		{ \
-			status = 2; \
+			status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
 		} \
 	} \
 
@@ -118,26 +118,50 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 #define IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, free, message)\
 	switch ( error )\
 	{\
-		default:\
-		case 0:\
+		case IMAGICK_READ_WRITE_NO_ERROR:\
 			/* No error */\
 		break;\
-		case 1:\
+		case IMAGICK_READ_WRITE_SAFE_MODE_ERROR:\
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read image: %s", filename );\
 			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
-		case 2:\
+		case IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR:\
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
 			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
-		case 3:\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, message, filename);\
+		default:\
+		case IMAGICK_READ_WRITE_UNDERLYING_LIBRARY:\
+			{\
+				ExceptionType severity;\
+				char *description = MagickGetException( intern->magick_wand, &severity );\
+				if ( strlen( description ) == 0 )\
+				{\
+					zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, message, filename);\
+				}\
+				else\
+				{\
+					zend_throw_exception( php_imagick_exception_class_entry, description, 1 TSRMLS_CC);\
+					IMAGICK_FREE_MEMORY( char *, description );\
+					MagickClearException( intern->magick_wand );\
+					description = (char *)NULL;\
+				}\
+			}\
 			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
-		case 4:\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Unable to write file: %s. Permission denied", filename);\
+		case IMAGICK_READ_WRITE_PERMISSION_DENIED:\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Permission denied to: %s", filename);\
+			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
+			RETURN_NULL();\
+		break;\
+		case IMAGICK_READ_WRITE_FILENAME_TOO_LONG:\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Filename too long: %s", filename);\
+			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
+			RETURN_NULL();\
+		break;\
+		case IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST:\
+			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);\
 			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
@@ -152,17 +176,17 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 		break;\
 		case 1:\
 			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read file: %s", filename );\
-			if ( free == 1 ) { efree( filename ); }\
+			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
 		case 2:\
 			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
-			if ( free == 1 ) { efree( filename ); }\
+			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
 		case 3:\
 			throwImagickDrawException( internd->drawing_wand, "Unable to read file", 1 TSRMLS_CC);\
-			if ( free == 1 ) { efree( filename ); }\
+			if ( free == IMAGICK_FREE_FILENAME ) { efree( filename ); }\
 			RETURN_NULL();\
 		break;\
 	}
@@ -3237,18 +3261,18 @@ double *getDoublesFromZval( zval *zArray, long *numElements TSRMLS_DC )
 
 int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int type TSRMLS_DC )
 {
-	int error = 0;
+	int error = IMAGICK_READ_WRITE_NO_ERROR;
 	MagickBooleanType status;
 	char *absolute = expand_filepath( filename, NULL TSRMLS_CC);
 
 	if ( strlen( filename ) > MAXPATHLEN )
 	{
-		return 3;
+		return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 	}
 
 	IMAGICK_SAFE_MODE_CHECK( absolute, error );
 
-	if ( error != 0 )
+	if ( error != IMAGICK_READ_WRITE_NO_ERROR )
 	{
 		efree(absolute);
 		return error;
@@ -3266,16 +3290,75 @@ int readImageIntoMagickWand( php_imagick_object *intern, char *filename, int typ
 
 	if ( status == MagickFalse )
 	{
-		return 3;
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 	}
+	
 	IMAGICK_CORRECT_ITERATOR_POSITION( intern );
-	return 0;
+	return IMAGICK_READ_WRITE_NO_ERROR;
 }
+
+int checkWriteAccess( char *absolute TSRMLS_DC )
+{
+	/* Check if file exists */
+	if (VCWD_ACCESS( absolute, F_OK ))
+	{
+		if (!VCWD_ACCESS( absolute, W_OK ))
+		{
+			efree(absolute);
+			return IMAGICK_READ_WRITE_PERMISSION_DENIED;
+		}
+		else
+		{
+			/* File is not there. Check that dir exists and that its writable */
+			char path[MAXPATHLEN];
+			size_t len, pathLen;
+			memset( path, '\0', MAXPATHLEN );
+			memcpy( path, absolute, strlen(absolute) );
+			pathLen = php_dirname(path, strlen(absolute));
+	
+			/* Path does not exist */
+			if (!VCWD_ACCESS( path, F_OK ))
+			{
+				zval *ret;
+				MAKE_STD_ZVAL(ret);
+				
+				/* stat to make sure the path is actually a directory */
+				php_stat( path, pathLen, FS_IS_DIR, ret TSRMLS_CC );
+	
+				/* It is not a dir */
+				if ( Z_TYPE_P(ret) == IS_BOOL && Z_BVAL_P(ret) == 0 )
+				{
+					FREE_ZVAL(ret);
+					return IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST;
+				}
+				FREE_ZVAL(ret);
+				
+				if (VCWD_ACCESS( path, W_OK ))
+				{
+					return IMAGICK_READ_WRITE_PERMISSION_DENIED;
+				}
+					
+			}
+			else
+			{
+				return IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST;
+			}
+								
+			/* Can't write the file */
+			if (VCWD_ACCESS( path, W_OK ))
+			{
+				return IMAGICK_READ_WRITE_PERMISSION_DENIED;
+			}
+		}
+	}
+	return IMAGICK_READ_WRITE_NO_ERROR;
+}
+
 
 /* type 1 = writeimage, type 2 = writeimages */
 int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC )
 {
-	int error = 0, occurences = 0;
+	int error = IMAGICK_READ_WRITE_NO_ERROR, occurences = 0;
 	MagickBooleanType status;
 	char *absolute, *buffer, *format, *tmp, *dup;
 
@@ -3297,28 +3380,26 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 			if ( strlen( filename ) > MAXPATHLEN )
 			{
-				return 3;
+				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 			}
 
 			absolute = expand_filepath( filename, NULL TSRMLS_CC );
 			IMAGICK_SAFE_MODE_CHECK( absolute, error );
 
-			if ( error != 0 )
+			if ( error != IMAGICK_READ_WRITE_NO_ERROR )
 			{
 				efree(absolute);
 				return error;
 			}
 			
-			/* Check if file exists */
-			if (!(VCWD_ACCESS( absolute, F_OK )))
+			error = checkWriteAccess( absolute TSRMLS_CC );
+			
+			if ( error != IMAGICK_READ_WRITE_NO_ERROR )
 			{
-				/* Check that it is writable */
-				if (VCWD_ACCESS( absolute, W_OK ))
-				{
-					return 4;
-				}
-			}
-
+				efree(absolute);
+				return error;
+			}	
+	
 		break;
 
 		case 1:
@@ -3329,14 +3410,14 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 			if ( strlen( buffer ) > MAXPATHLEN )
 			{
-				return 3;
+				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 			}
 
 			/* Safe mode checking */
 			tmp = expand_filepath( buffer, NULL TSRMLS_CC );
 			IMAGICK_SAFE_MODE_CHECK( tmp, error );
 
-			if ( error != 0 )
+			if ( error != IMAGICK_READ_WRITE_NO_ERROR )
 			{
 				efree(dup);
 				efree(tmp);
@@ -3355,20 +3436,18 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 			efree( dup );
 			/* absolute now contains the path */
 			
-			/* Check if file exists */
-			if (!(VCWD_ACCESS( absolute, F_OK )))
+			error = checkWriteAccess( absolute TSRMLS_CC );
+			
+			if ( error != IMAGICK_READ_WRITE_NO_ERROR )
 			{
-				/* Check that it is writable */
-				if (VCWD_ACCESS( absolute, W_OK ))
-				{
-					return 4;
-				}
+				efree(absolute);
+				return error;
 			}
 
 		break;
 
 		default:
-			return 3;
+			return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 		break;
 	}
 
@@ -3384,9 +3463,9 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 
 	if ( status == MagickFalse )
 	{
-		return 3;
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 	}
-	return 0;
+	return IMAGICK_READ_WRITE_NO_ERROR;
 }
 
 
@@ -3458,7 +3537,7 @@ PHP_METHOD(imagick, pingimageblob)
 
 	if ( strlen( imageString ) == 0 )
 	{
-		throwExceptionWithMessage( IMAGICK_CLASS, "Zero size image string passed", 1 TSRMLS_CC);
+		throwExceptionWithMessage( IMAGICK_CLASS, "Empty image string passed", 1 TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
@@ -4806,7 +4885,7 @@ PHP_METHOD(imagick, setfont)
 		IMAGICK_SAFE_MODE_CHECK( absolute, error );
 		IMAGICK_CHECK_READ_OR_WRITE_ERROR( intern, absolute, error, IMAGICK_FREE_FILENAME, "Unable to read the file: %s" );
 
-		if ( VCWD_ACCESS(absolute, F_OK) != 0 )
+		if ( VCWD_ACCESS( absolute, F_OK|R_OK ) )
 		{
 			zend_throw_exception_ex( php_imagick_exception_class_entry, 2 TSRMLS_CC,
 				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute );
@@ -4995,7 +5074,7 @@ PHP_METHOD(imagick, __construct)
 			status = readImageIntoMagickWand( intern, filename, 1 TSRMLS_CC );
 			zval_dtor(&tmpcopy);
 
-			if ( status != 0 )
+			if ( status != IMAGICK_READ_WRITE_NO_ERROR )
 			{
 				break;
 			}
@@ -5309,7 +5388,7 @@ PHP_METHOD(imagick, readimages)
 
 		zval_dtor(&tmpcopy);
 
-		if ( status != 0 )
+		if ( status != IMAGICK_READ_WRITE_NO_ERROR )
 		{
 			break;
 		}
@@ -13980,9 +14059,9 @@ PHP_METHOD(imagickdraw, setfont)
 
 		/* Do a safe-mode check for the font */
 		IMAGICK_SAFE_MODE_CHECK( absolute, error );
-		IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR( internd, absolute, error, 1 );
+		IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR( internd, absolute, error, IMAGICK_FREE_FILENAME );
 
-		if ( VCWD_ACCESS(absolute, F_OK) != 0 )
+		if ( VCWD_ACCESS( absolute, F_OK|R_OK ) )
 		{
 			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 2 TSRMLS_CC,
 				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute );

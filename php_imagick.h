@@ -48,7 +48,7 @@
 #include "Zend/zend_interfaces.h"
 #include "ext/standard/php_string.h"
 #include "ext/standard/info.h"
-#include "ext/standard/base64.h"
+#include "ext/standard/php_filestat.h"
 #include "php_ini.h"
 
 /* Define the entry point symbol
