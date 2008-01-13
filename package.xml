@@ -33,6 +33,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Fixes PECL Bug #12851
+- Some major housekeeping changing numeral values to constants
 </notes>
 	<contents>
 		<dir name="/">
