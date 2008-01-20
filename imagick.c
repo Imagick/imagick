@@ -18579,7 +18579,7 @@ PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY( "imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals )
 PHP_INI_END()
 
-PHP_GINIT_FUNCTION(imagick)
+static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 {
 	imagick_globals->locale_fix = 0;
 }
@@ -18587,6 +18587,9 @@ PHP_GINIT_FUNCTION(imagick)
 PHP_MINIT_FUNCTION(imagick)
 {
 	zend_class_entry ce;
+
+	/* Initialize globals */
+	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
 
 	/*
 		Allocate some memory
@@ -18760,18 +18763,8 @@ zend_module_entry imagick_module_entry =
         NULL,                                               /* RSHUTDOWN */
 #endif
         PHP_MINFO(imagick),                     /* MINFO */
-#if ZEND_MODULE_API_NO >= 20010901
         PHP_IMAGICK_EXTVER,
-#endif
-#if ZEND_MODULE_API_NO >= 20060613
-        PHP_MODULE_GLOBALS(imagick),
-        PHP_GINIT(imagick),
-        NULL,
-        NULL,
-        STANDARD_MODULE_PROPERTIES_EX
-#else
         STANDARD_MODULE_PROPERTIES
-#endif
 };
 
 
