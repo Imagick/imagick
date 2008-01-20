@@ -424,6 +424,9 @@ PHP_METHOD(imagick, setpointsize);
 PHP_METHOD(imagick, getpointsize);
 PHP_METHOD(imagick, mergeimagelayers);
 #endif
+#if MagickLibVersion > 0x637
+PHP_METHOD(imagick, setimagealphachannel);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, getpixeliterator);
@@ -1742,6 +1745,13 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x637
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagealphachannel_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, ALPHACHANNELTYPE)
+	ZEND_END_ARG_INFO()
+#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2753,6 +2763,9 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setpointsize, imagick_setpointsize_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpointsize, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, mergeimagelayers, imagick_mergeimagelayers_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x637
+	PHP_ME(imagick, setimagealphachannel, imagick_setimagealphachannel_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -5004,6 +5017,36 @@ PHP_METHOD(imagick, mergeimagelayers)
 
 	IMAGICK_REPLACE_MAGICKWAND( intern_return, merged );
 	return;
+}
+#endif
+
+#if MagickLibVersion > 0x637
+/* {{{ proto Imagick Imagick::setImageAlphaChannel( int ALPHACHANNEL )
+   Activates, deactivates, resets, or sets the alpha channel
+*/
+PHP_METHOD(imagick, setimagealphachannel)
+{
+	php_imagick_object *intern;
+	long alphaChannel;
+	MagickBooleanType status;
+	
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &alphaChannel ) == FAILURE )
+	{
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	
+	status = MagickSetImageAlphaChannel( intern->magick_wand, alphaChannel );
+	
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to set image alpha channel", 1 TSRMLS_CC );
+		return;
+	}
+	
+	RETURN_TRUE;
 }
 #endif
 
@@ -18336,7 +18379,12 @@ void initializeMagickConstants()
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_FLATTEN", FlattenLayer );
 	IMAGICK_REGISTER_CONST_LONG( "LAYERMETHOD_MOSAIC", MosaicLayer );
 #endif
-
+#if MagickLibVersion > 0x637
+	IMAGICK_REGISTER_CONST_LONG( "ALPHACHANNEL_ACTIVATE", ActivateAlphaChannel );
+	IMAGICK_REGISTER_CONST_LONG( "ALPHACHANNEL_DEACTIVATE", DeactivateAlphaChannel );
+	IMAGICK_REGISTER_CONST_LONG( "ALPHACHANNEL_RESET", ResetAlphaChannel );
+	IMAGICK_REGISTER_CONST_LONG( "ALPHACHANNEL_SET", SetAlphaChannel );
+#endif
 }
 
 static void php_imagick_object_free_storage(void *object TSRMLS_DC)
