@@ -9852,7 +9852,7 @@ PHP_METHOD(imagick, getimageformat)
 }
 /* }}} */
 
-/* {{{ proto string Imagick::identifyImage( [bool appendRawOutput] )
+/* {{{ proto array Imagick::identifyImage( [bool appendRawOutput] )
 	Identifies an image and returns the attributes.  Attributes include the image width, height, size, and others.
 	If true is passed as argument, then the raw output is appended to the array.
 */
