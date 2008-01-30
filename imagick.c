@@ -11843,7 +11843,7 @@ PHP_METHOD(imagick, sharpenimage)
 
 	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
 
-	status = MagickSharpenImageChannel( intern->magick_wand, channel, sigma, radius );
+	status = MagickSharpenImageChannel( intern->magick_wand, channel, radius, sigma );
 
 	/* No magick is going to happen */
 	if ( status == MagickFalse )
