@@ -21,19 +21,20 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-01-13</date>
+	<date>2008-02-08</date>
 	<version>
-		<release>2.1.0RC3</release>
+		<release>2.1.0</release>
 		<api>2.1.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes PECL Bug #12851
-- Some major housekeeping changing numeral values to constants
+- Addded setImageAlphaChannel method
+- Fixed sharpenImage parameters being reversed
+- Fixed building with pre 5.2 versions
 </notes>
 	<contents>
 		<dir name="/">
