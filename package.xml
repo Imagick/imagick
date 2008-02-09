@@ -21,7 +21,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-02-08</date>
+	<date>2008-02-09</date>
 	<version>
 		<release>2.1.0</release>
 		<api>2.1.0</api>
