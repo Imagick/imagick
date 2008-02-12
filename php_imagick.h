@@ -41,7 +41,12 @@
 #endif
 
 /* Include magic wand header */
+#ifdef IMAGICK_USE_NEW_HEADER
+#include <wand/MagickWand.h>
+#else
 #include <wand/magick-wand.h>
+#endif
+
 
 /* Some extra headers */
 #include "Zend/zend_exceptions.h"
