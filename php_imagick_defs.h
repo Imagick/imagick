@@ -23,8 +23,8 @@
 
 /* Define Extension Properties */
 #define PHP_IMAGICK_EXTNAME    "imagick"
-#define PHP_IMAGICK_EXTVER     "2.1.0"
-#define PHP_IMAGICK_EXTNUM     20100
+#define PHP_IMAGICK_EXTVER     "2.1.1-b1"
+#define PHP_IMAGICK_EXTNUM     20101
 
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)

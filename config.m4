@@ -98,6 +98,11 @@ if test $PHP_IMAGICK != "no"; then
 		
 		if test -z "$IMAGICK_AFTER_BWC_BREAK"; then
 		
+      dnl Do we have seam carving?
+      PHP_CHECK_LIBRARY(Wand, MagickLiquidRescaleImage,[
+															AC_DEFINE(HAVE_LIQUIDRESCALEIMAGE, 1, [ ])
+															],,-L$WAND_DIR/lib)      		
+		
 			dnl ImageMagick 6.3.5-9 provides a few useful functions to get some image properties and profiles
 			dnl That is why this version is tested separately
 			PHP_CHECK_LIBRARY(Wand, MagickGetImageProperties,[
@@ -114,6 +119,11 @@ if test $PHP_IMAGICK != "no"; then
 			PHP_ADD_INCLUDE($WAND_DIR/include)
 		
 		else
+		
+      dnl Do we have seam carving?
+      PHP_CHECK_LIBRARY(MagickWand, MagickLiquidRescaleImage,[
+                                    AC_DEFINE(HAVE_LIQUIDRESCALEIMAGE, 1, [ ])
+                                    ],,-L$WAND_DIR/lib)		
 		
 			AC_DEFINE(HAVE_IMAGEMAGICK6359ORLATER, 1, [ ])
 			AC_DEFINE(HAVE_IMAGEMAGICK6364ORLATER, 1, [ ])

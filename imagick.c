@@ -427,6 +427,9 @@ PHP_METHOD(imagick, mergeimagelayers);
 #if MagickLibVersion > 0x637
 PHP_METHOD(imagick, setimagealphachannel);
 #endif
+#ifdef HAVE_LIQUIDRESCALEIMAGE
+PHP_METHOD(imagick, liquidrescaleimage);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, getpixeliterator);
@@ -1752,6 +1755,16 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#ifdef HAVE_LIQUIDRESCALEIMAGE
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_liquidrescaleimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, columns)
+		ZEND_ARG_INFO(0, rows)
+		ZEND_ARG_INFO(0, delta_x)
+		ZEND_ARG_INFO(0, rigidity)
+	ZEND_END_ARG_INFO()
+#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2766,6 +2779,9 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x637
 	PHP_ME(imagick, setimagealphachannel, imagick_setimagealphachannel_args, ZEND_ACC_PUBLIC)
+#endif
+#ifdef HAVE_LIQUIDRESCALEIMAGE
+	PHP_ME(imagick, liquidrescaleimage, imagick_liquidrescaleimage_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -5043,6 +5059,37 @@ PHP_METHOD(imagick, setimagealphachannel)
 	if ( status == MagickFalse )
 	{
 		throwImagickException( intern->magick_wand, "Unable to set image alpha channel", 1 TSRMLS_CC );
+		return;
+	}
+	
+	RETURN_TRUE;
+}
+#endif
+
+#ifdef HAVE_LIQUIDRESCALEIMAGE
+/* {{{ proto Imagick Imagick::liquidRescaleImage( int cols, int rows, float delta_x, float rigidity )
+   Rescales image with seam carving
+*/
+PHP_METHOD(imagick, liquidrescaleimage)
+{
+	php_imagick_object *intern;
+	long cols, rows;
+	double delta_x, rigidity;
+	MagickBooleanType status;
+	
+	if ( zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lldd", &cols, &rows, &delta_x, &rigidity ) == FAILURE )
+	{
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+	
+	status = MagickLiquidRescaleImage( intern->magick_wand, cols, rows, delta_x, rigidity );
+	
+	if ( status == MagickFalse )
+	{
+		throwImagickException( intern->magick_wand, "Unable to liquid rescale image", 1 TSRMLS_CC );
 		return;
 	}
 	
