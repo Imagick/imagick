@@ -120,7 +120,7 @@ if test $PHP_IMAGICK != "no"; then
 		
 			PHP_ADD_LIBRARY_WITH_PATH(MagickCore, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_LIBRARY_WITH_PATH(MagickWand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
-			PHP_ADD_INCLUDE($WAND_DIR/include)    
+			PHP_ADD_INCLUDE($WAND_DIR/include/ImageMagick)    
 			
 		fi
 		
