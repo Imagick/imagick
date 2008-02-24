@@ -3328,7 +3328,7 @@ int checkWriteAccess( char *absolute TSRMLS_DC )
 			memset( path, '\0', MAXPATHLEN );
 			memcpy( path, absolute, strlen(absolute) );
 			pathLen = php_dirname(path, strlen(absolute));
-	
+
 			/* Path does not exist */
 			if (!VCWD_ACCESS( path, F_OK ))
 			{
@@ -3436,6 +3436,15 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 				efree(tmp);
 				return error;
 			}
+      
+      error = checkWriteAccess( tmp TSRMLS_CC );
+      
+      if ( error != IMAGICK_READ_WRITE_NO_ERROR )
+      {
+        efree(dup);
+        efree(tmp);
+        return error;
+      }      
 
 			/* Allocate space */
 			absolute = emalloc( strlen( format ) + strlen( tmp ) + 2 );
@@ -3447,10 +3456,9 @@ int writeImageFromFilename( php_imagick_object *intern, char *filename, zend_boo
 			strncat( absolute, tmp, strlen( tmp ) );
 
 			efree( dup );
+      efree( tmp );   
 			/* absolute now contains the path */
-			
-			error = checkWriteAccess( absolute TSRMLS_CC );
-			
+
 			if ( error != IMAGICK_READ_WRITE_NO_ERROR )
 			{
 				efree(absolute);
