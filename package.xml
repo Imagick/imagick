@@ -21,10 +21,10 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-02-09</date>
+	<date>2008-02-24</date>
 	<version>
-		<release>2.1.0</release>
-		<api>2.1.0</api>
+		<release>2.1.1RC1</release>
+		<api>2.1.1</api>
 	</version>
 	<stability>
 		<release>stable</release>
@@ -32,9 +32,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Addded setImageAlphaChannel method
-- Fixed sharpenImage parameters being reversed
-- Fixed building with pre 5.2 versions
+Fixed building against ImageMagick 6.3.8-x
 </notes>
 	<contents>
 		<dir name="/">
