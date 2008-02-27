@@ -286,10 +286,31 @@ zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 			ratio = (double)orig_width / (double)desired_width; \
 			desired_height = (double)orig_height / ratio; \
 		} \
-		else \
+		else if ( (orig_height / desired_height) > (orig_width / desired_width) ) \
 		{ \
 			ratio = (double)orig_height / (double)desired_height; \
 			desired_width = (double)orig_width / ratio; \
+		} \
+		else \
+		{ \
+			if ( orig_height > orig_width ) \
+			{ \
+				desired_width = 0; \
+			} \
+			else \
+			{ \
+				desired_height = 0; \
+			} \
+			if ( desired_width <= 0 ) \
+			{ \
+				ratio = (double)orig_height / (double)desired_height; \
+				desired_width = orig_width / ratio; \
+			} \
+			else if ( desired_height <= 0 ) \
+			{ \
+				ratio = (double)orig_width / (double)desired_width; \
+				desired_height = orig_height / ratio; \
+			} \
 		} \
 		if ( desired_width < 1 ) \
 		{ \
