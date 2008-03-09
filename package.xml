@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-02-24</date>
+	<date>2008-03-05</date>
 	<version>
-		<release>2.1.1RC1</release>
+		<release>2.1.1</release>
 		<api>2.1.1</api>
 	</version>
 	<stability>
@@ -32,7 +32,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-Fixed building against ImageMagick 6.3.8-x
+- Fixed a bug with fit parameter when scaling images with scaling ratio 1:1
+  * This is a minor BWC break. Scripts relying on incorrect behavior might need revisiting.
 </notes>
 	<contents>
 		<dir name="/">
