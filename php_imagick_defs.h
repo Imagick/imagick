@@ -23,8 +23,8 @@
 
 /* Define Extension Properties */
 #define PHP_IMAGICK_EXTNAME    "imagick"
-#define PHP_IMAGICK_EXTVER     "2.1.1"
-#define PHP_IMAGICK_EXTNUM     20101
+#define PHP_IMAGICK_EXTVER     "2.2.0-b1"
+#define PHP_IMAGICK_EXTNUM     20201
 
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
@@ -73,11 +73,6 @@ typedef struct _php_imagickpixel_object  {
 
 void initializeMagickConstants();
 void add_assoc_string_helper( zval *retvalue, char *name, char *key, char *hashValue TSRMLS_DC );
-void throwImagickPixelException( PixelWand *pixel_wand, char *fallback, long code TSRMLS_DC );
-void throwImagickPixelIteratorException( PixelIterator *pixel_iterator, char *fallback, long code TSRMLS_DC );
-void throwImagickDrawException( DrawingWand *drawing_wand, char *fallback, long code TSRMLS_DC );
-void throwImagickException( MagickWand *magick_wand, char *fallback, long code TSRMLS_DC );
-void throwExceptionWithMessage( int type, char *description, long code TSRMLS_DC );
 long getImageCount( MagickWand *magick_wand TSRMLS_DC);
 char *getHashValue( HashTable *hashTable TSRMLS_DC );
 int count_occurences_of( char needle, char *hayStack TSRMLS_DC);
