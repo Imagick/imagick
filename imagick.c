@@ -508,6 +508,7 @@ PHP_METHOD(imagick, randomthresholdimage);
 PHP_METHOD(imagick, roundcorners);
 PHP_METHOD(imagick, setiteratorindex);
 PHP_METHOD(imagick, getiteratorindex);
+PHP_METHOD(imagick, transformimage);
 #endif
 #if MagickLibVersion > 0x630
 PHP_METHOD(imagick, setimageopacity);
@@ -1756,6 +1757,12 @@ static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setiteratorindex_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
+
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_transformimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, crop)
+		ZEND_ARG_INFO(0, geometry)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x631
@@ -2861,6 +2868,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, roundcorners, imagick_roundcorners_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setiteratorindex, imagick_setiteratorindex_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getiteratorindex, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, transformimage, imagick_transformimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x630
 	PHP_ME(imagick, setimageopacity, imagick_setimageopacity_args, ZEND_ACC_PUBLIC)
@@ -4264,6 +4272,46 @@ PHP_METHOD(imagick, setiteratorindex)
 
 }
 /* }}} */
+
+/* {{{ proto bool Imagick::transformimage( string crop, string geometry )
+	Comfortability method for crop and resize
+*/
+PHP_METHOD(imagick, transformimage)
+{
+	char *crop, *geometry;
+	int crop_len, geometry_len;
+	MagickWand *transformed;
+	php_imagick_object *intern, *intern_return;
+	
+
+	if ( ZEND_NUM_ARGS() != 2 )
+	{
+		ZEND_WRONG_PARAM_COUNT();
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ss", &crop, &crop_len, &geometry, &geometry_len ) == FAILURE )
+	{
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY( intern->magick_wand, 1, 1 );
+
+	transformed = MagickTransformImage( intern->magick_wand, crop, geometry );
+
+	if ( transformed == (MagickWand *)NULL || !IsMagickWand( transformed ) )
+	{
+		IMAGICK_THROW_IMAGICK_EXCEPTION( intern->magick_wand, "Transforming image failed", 1 );
+	}
+
+	object_init_ex( return_value, php_imagick_sc_entry );
+	intern_return = (php_imagick_object *)zend_object_store_get_object( return_value TSRMLS_CC );
+
+	IMAGICK_REPLACE_MAGICKWAND( intern_return, transformed );
+	return;
+}
+/* }}} */
 #endif
 
 #if MagickLibVersion > 0x630
@@ -4973,8 +5021,8 @@ PHP_METHOD(imagick, mergeimagelayers)
 		IMAGICK_THROW_IMAGICK_EXCEPTION( intern->magick_wand, "Unable to merge image layers", 1 );
 	}
 
-	object_init_ex( return_value, php_imagick_sc_entry ); \
-	intern_return = (php_imagick_object *)zend_object_store_get_object( return_value TSRMLS_CC ); \
+	object_init_ex( return_value, php_imagick_sc_entry );
+	intern_return = (php_imagick_object *)zend_object_store_get_object( return_value TSRMLS_CC );
 
 	IMAGICK_REPLACE_MAGICKWAND( intern_return, merged );
 	return;
