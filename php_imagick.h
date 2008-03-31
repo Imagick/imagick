@@ -21,6 +21,11 @@
 /* Prevent double inclusion */
 #define PHP_IMAGICK_H
 
+/* Define Extension Properties */
+#define PHP_IMAGICK_EXTNAME    "imagick"
+#define PHP_IMAGICK_VERSION    "2.2.0b1-dev"
+#define PHP_IMAGICK_EXTNUM     20201
+
 /* Import configure options
    when building outside of
    the PHP source tree */

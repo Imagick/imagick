@@ -21,11 +21,6 @@
 /* Prevent double inclusion */
 #define PHP_IMAGICK_DEFS_H
 
-/* Define Extension Properties */
-#define PHP_IMAGICK_EXTNAME    "imagick"
-#define PHP_IMAGICK_EXTVER     "2.2.0-b1"
-#define PHP_IMAGICK_EXTNUM     20201
-
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
         zend_bool locale_fix;

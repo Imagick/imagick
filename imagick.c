@@ -17499,7 +17499,7 @@ void initializeMagickConstants()
 
 	/* Returning the version as a constant string */
 	IMAGICK_REGISTER_CONST_LONG( "IMAGICK_EXTNUM", PHP_IMAGICK_EXTNUM );
-	IMAGICK_REGISTER_CONST_STRING( "IMAGICK_EXTVER", PHP_IMAGICK_EXTVER );
+	IMAGICK_REGISTER_CONST_STRING( "IMAGICK_EXTVER", PHP_IMAGICK_VERSION );
 
 	/* ImageMagick defined constants */
 	IMAGICK_REGISTER_CONST_LONG( "COMPOSITE_DEFAULT", OverCompositeOp );
@@ -18148,8 +18148,8 @@ PHP_MINFO_FUNCTION(imagick)
 	sprintf( buffer, "%ld", numFormats );
 
 	php_info_print_table_start();
-	php_info_print_table_row( 2, "imagick module", "enabled" );
-	php_info_print_table_row( 2, "imagick module version", PHP_IMAGICK_EXTVER );
+	php_info_print_table_header( 2, "imagick module", "enabled" );
+	php_info_print_table_row( 2, "imagick module version", PHP_IMAGICK_VERSION );
 	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator" );
 	php_info_print_table_row( 2, "ImageMagick version", imageMagickVersion );
 	php_info_print_table_row( 2, "ImageMagick copyright", MagickGetCopyright() );
@@ -18220,7 +18220,7 @@ zend_module_entry imagick_module_entry =
         NULL,                                               /* RSHUTDOWN */
 #endif
         PHP_MINFO(imagick),                     /* MINFO */
-        PHP_IMAGICK_EXTVER,
+        PHP_IMAGICK_VERSION,
         STANDARD_MODULE_PROPERTIES
 };
 
