@@ -28,29 +28,6 @@ static MUTEX_T imagick_mutex;
 static THREAD_T imagick_thread_id;
 #endif
 
-#ifdef HAVE_LOCALE_H
-
-#if defined(PHP_WIN32)
-#define IMAGICK_LC_NUMERIC_LOCALE "English"
-#else
-#define IMAGICK_LC_NUMERIC_LOCALE "C"
-#endif
-
-#endif
-
-/* Class names */
-#define PHP_IMAGICK_SC_NAME "Imagick"
-#define PHP_IMAGICK_EXCEPTION_SC_NAME "ImagickException"
-
-#define PHP_IMAGICKDRAW_SC_NAME "ImagickDraw"
-#define PHP_IMAGICKDRAW_EXCEPTION_SC_NAME "ImagickDrawException"
-
-#define PHP_IMAGICKPIXEL_SC_NAME "ImagickPixel"
-#define PHP_IMAGICKPIXEL_EXCEPTION_SC_NAME "ImagickPixelException"
-
-#define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
-#define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
-
 /* Handlers */
 static zend_object_handlers imagick_object_handlers;
 static zend_object_handlers imagickdraw_object_handlers;

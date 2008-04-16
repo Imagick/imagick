@@ -32,6 +32,28 @@ ZEND_END_MODULE_GLOBALS(imagick)
 #define IMAGICK_G(v) (imagick_globals.v)
 #endif
 
+#ifdef HAVE_LOCALE_H
+
+#if defined(PHP_WIN32)
+#define IMAGICK_LC_NUMERIC_LOCALE "English"
+#else
+#define IMAGICK_LC_NUMERIC_LOCALE "C"
+#endif
+
+#endif
+
+/* Class names */
+#define PHP_IMAGICK_SC_NAME "Imagick"
+#define PHP_IMAGICK_EXCEPTION_SC_NAME "ImagickException"
+
+#define PHP_IMAGICKDRAW_SC_NAME "ImagickDraw"
+#define PHP_IMAGICKDRAW_EXCEPTION_SC_NAME "ImagickDrawException"
+
+#define PHP_IMAGICKPIXEL_SC_NAME "ImagickPixel"
+#define PHP_IMAGICKPIXEL_EXCEPTION_SC_NAME "ImagickPixelException"
+
+#define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
+#define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
 
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
