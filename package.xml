@@ -23,17 +23,16 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</lead>
 	<date>2008-03-09</date>
 	<version>
-		<release>2.1.1</release>
-		<api>2.1.1</api>
+		<release>2.2.0b1</release>
+		<api>2.2.0</api>
 	</version>
 	<stability>
-		<release>stable</release>
-		<api>stable</api>
+		<release>beta</release>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed a bug with fit parameter when scaling images with scaling ratio 1:1
-  * This is a minor BWC break. Scripts relying on incorrect behavior might need revisiting.
+- Major refactoring of the internal file structure
 </notes>
 	<contents>
 		<dir name="/">
@@ -43,8 +42,14 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="imagick.c" role="src">
 				<tasks:replace from="@PACKAGE_VERSION@" to="version" type="package-info" />
 			</file>
+			<file name="imagick_class.c" role="src" />
+			<file name="imagickdraw_class.c" role="src" />
+			<file name="imagickpixel_class.c" role="src" />
+			<file name="imagickpixeliterator_class.c" role="src" />
+			<file name="imagick_helpers.c" role="src" />
 			<file name="php_imagick.h" role="src" />
 			<file name="php_imagick_defs.h" role="src" />
+			<file name="php_imagick_macros.h" role="src" />
 			<file name="TODO" role="doc" />
 			<file name="INSTALL" role="doc" />
 			<dir name="examples">
