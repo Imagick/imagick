@@ -113,7 +113,7 @@
 	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value TSRMLS_CC);
 
 #define IMAGICK_CHECK_NOT_EMPTY( magick_wand, type, code )\
-	if( MagickGetNumberImages( magick_wand TSRMLS_CC) == 0 ) { \
+	if( MagickGetNumberImages( magick_wand ) == 0 ) { \
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Can not process empty wand", (long)code ); \
 	} \
 
