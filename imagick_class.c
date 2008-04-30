@@ -1193,7 +1193,7 @@ PHP_METHOD(imagick, setfont)
 
 	/* Check that no empty string is passed */
 	if ( font_len == 0 ) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Can not set empty font", 1 TSRMLS_CC );
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Can not set empty font", 1 );
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
@@ -1202,7 +1202,7 @@ PHP_METHOD(imagick, setfont)
 	if ( !check_configured_font( font, font_len TSRMLS_CC ) ) {
 
 		if ( !(absolute = expand_filepath( font, NULL TSRMLS_CC)) ) {
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Unable to set font", 1 TSRMLS_CC );
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Unable to set font", 1 );
 		}
 
 		/* Do a safe-mode check for the font */
@@ -1453,7 +1453,7 @@ PHP_METHOD(imagick, __tostring)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if( MagickGetNumberImages( intern->magick_wand TSRMLS_CC ) == 0 ) {
+	if( MagickGetNumberImages( intern->magick_wand ) == 0 ) {
 		ZVAL_STRING( return_value, "", 1 );
 		return;
 	}
@@ -1562,7 +1562,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		if (Z_TYPE_P(multiline) == IS_BOOL) {
 			query_multiline = Z_BVAL_P(multiline) ? 1 : 0;
 		} else {
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "The third parameter must be a null or a boolean", 1 TSRMLS_CC );
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "The third parameter must be a null or a boolean", 1 );
 		}
 
 	}
