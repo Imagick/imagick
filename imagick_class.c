@@ -6576,7 +6576,7 @@ PHP_METHOD(imagick, compositeimage)
 #if MagickLibVersion > 0x628
 	MagickCompositeImageChannel( intern->magick_wand, channel, intern_second->magick_wand, composite_id, x, y );
 #else
-	MagickCompositeImage( intern->magick_wand, intern_second->magick_wand, compositeId, x, y );
+	MagickCompositeImage( intern->magick_wand, intern_second->magick_wand, composite_id, x, y );
 #endif
 
 	RETURN_TRUE;
