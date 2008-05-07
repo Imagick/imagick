@@ -409,28 +409,14 @@ void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS
 
 char *get_pseudo_filename( char *pseudo_string, int pseudo_string_len TSRMLS_DC )
 {
-	char c, *filename = NULL;
-	int begin = 0, i = 0, j = 0, file_len = 0;
+	char *filename = NULL;
+	char *ptr = strchr(pseudo_string, ':');
 	
-	while (*pseudo_string != '\0') {
-		c = *(pseudo_string++);
-		if (begin == 1) {
-			if (i >= MAXPATHLEN) {
-				efree(filename);
-				return NULL;
-			}
-			filename[i] = c;
-			i++;
-		} else {
-			j++;
-		}
-
-		if ((c == ':') && (begin != 1)) {
-			begin = 1;
-			file_len = pseudo_string_len - j + 1;
-			filename = (char *)emalloc(file_len);
-			memset(filename, '\0', file_len);
-		}
+	/* No colon */
+	if(ptr == NULL) {
+		return NULL;
+	} else {
+		filename = estrdup(ptr);
 	}
 	return filename;
 }
