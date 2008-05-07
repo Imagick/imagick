@@ -2512,7 +2512,7 @@ PHP_METHOD(imagick, newpseudoimage)
 
 	/* These formats potentially read images */
 	if ( match == 1 ) {
-		filename = get_pseudo_filename( pseudo_string TSRMLS_CC );
+		filename = get_pseudo_filename( pseudo_string, pseudo_string_len TSRMLS_CC );
 
 		if ( filename == NULL ) {
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Filename exceeds the MAXPATHLEN length", 1 );
