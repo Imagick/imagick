@@ -407,7 +407,7 @@ void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS
 }
 #endif
 
-char *get_pseudo_filename( char *pseudo_string, int pseudo_string_len TSRMLS_DC )
+char *get_pseudo_filename( char *pseudo_string TSRMLS_DC )
 {
 	char *filename = NULL;
 	char *ptr = strchr(pseudo_string, ':');

@@ -104,7 +104,7 @@ int check_configured_font( char *font, int font_len TSRMLS_DC );
 int check_write_access( char *absolute TSRMLS_DC );
 
 zend_bool crop_thumbnail_image( MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
-char *get_pseudo_filename(char* pseudo_string, int pseudo_string_len TSRMLS_DC );
+char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);
 double *get_double_array_from_zval( zval *param_array, long *num_elements TSRMLS_DC );
 
 /* Define some color constants */
