@@ -416,6 +416,7 @@ char *get_pseudo_filename( char *pseudo_string TSRMLS_DC )
 	if(ptr == NULL) {
 		return NULL;
 	} else {
+		++ptr; /* Move one position, removing colon from filename */
 		filename = estrdup(ptr);
 	}
 	return filename;
@@ -465,10 +466,21 @@ int write_image_from_filename( php_imagick_object *intern, char *filename, zend_
 		case 1:
 			/* Duplicate the filename */
 			dup = estrdup( filename );
+
+			if(!dup) {
+				return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+			}
+
 			format = strtok( dup, ":" );
 			buffer = strtok( NULL, ":" );
 
-			if ( strlen( buffer ) > MAXPATHLEN ) {
+			if(buffer == NULL) {
+				efree(dup);
+				return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+			}
+
+			if (strlen(buffer) > MAXPATHLEN) {
+				efree(dup);
 				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 			}
 
