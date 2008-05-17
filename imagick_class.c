@@ -1362,6 +1362,43 @@ PHP_METHOD(imagick, liquidrescaleimage)
 	
 	RETURN_TRUE;
 }
+/* }}} */
+#endif
+
+#if MagickLibVersion >= 0x640
+/* {{ proto Imagick Imagick::setGravity(int GRAVITY)
+		Sets the gravity value
+*/
+PHP_METHOD(imagick, setgravity)
+{
+	php_imagick_object *intern;
+	long gravity;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	if (MagickSetGravity(intern->magick_wand, gravity) == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set gravity", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{ proto Imagick Imagick::getGravity()
+		Gets the gravity value
+*/
+PHP_METHOD(imagick, getgravity)
+{
+	php_imagick_object *intern;
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	
+	RETVAL_LONG(MagickGetGravity(intern->magick_wand));
+}
+/* }}} */
 #endif
 
 /* {{{ proto Imagick Imagick::__construct( [mixed files] )
@@ -2514,14 +2551,13 @@ PHP_METHOD(imagick, newpseudoimage)
 	if ( match == 1 ) {
 		filename = get_pseudo_filename( pseudo_string TSRMLS_CC );
 
-		if ( filename == NULL ) {
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Filename exceeds the MAXPATHLEN length", 1 );
+		if ( filename == NULL || strlen( filename ) == 0 ) {
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Unable to read the filename", 1 );
 		}
-
-		/* rose:, granite:, netscape: and logo: can be read trough magick: */
-		if ( strlen( filename ) == 0 ) {
-			efree( filename );
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Can not process empty filename", 1 );
+		
+		if (strlen(filename) >= MAXPATHLEN) {
+			efree(filename);
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "The filename is longer than the allowed size", 1 );
 		}
 
 		absolute = expand_filepath( filename, NULL TSRMLS_CC);
@@ -4915,7 +4951,7 @@ PHP_METHOD(imagick, thumbnailimage)
 	RETURN_TRUE;
 }
 /* }}} */
-
+// 
 /* {{{ proto bool Imagick::cropthumbnailImage(int columns, int rows)
 	 Creates a crop thumbnail
 */

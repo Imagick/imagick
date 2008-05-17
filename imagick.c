@@ -277,6 +277,13 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion >= 0x640
+static
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setgravity_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, GRAVITY)
+	ZEND_END_ARG_INFO()
+#endif
+
 static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2000,6 +2007,10 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x638
 	PHP_ME(imagick, liquidrescaleimage, imagick_liquidrescaleimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion >= 0x640
+	PHP_ME(imagick, setgravity, imagick_setgravity_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getgravity, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)

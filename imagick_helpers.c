@@ -107,8 +107,7 @@ double *get_double_array_from_zval( zval *param_array, long *num_elements TSRMLS
 			return double_array;
 		}
 
-		if( Z_TYPE_PP( ppzval ) == IS_LONG )
-		{
+		if( Z_TYPE_PP( ppzval ) == IS_LONG ) {
 			double_array[i] = (double)Z_LVAL_PP( ppzval );
 
 		} else if ( Z_TYPE_PP( ppzval ) == IS_DOUBLE ) {

@@ -130,15 +130,11 @@
 	if ( strlen( filename ) > MAXPATHLEN ) { \
 		status = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
 	} \
-	if ( PG(safe_mode) ) { \
-		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ||  \
-				php_checkuid_ex( filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ) ) { \
+	if ( PG(safe_mode) && (!php_checkuid_ex( filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ))) { \
 			status = IMAGICK_READ_WRITE_SAFE_MODE_ERROR; \
-		} \
-	} else { \
-		if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ) { \
-			status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
-		} \
+	} \
+	if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ) { \
+		status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
 	} \
 
 #define IMAGICK_HAS_FORMAT( buffer, magick_wand )\

@@ -219,6 +219,10 @@ PHP_METHOD(imagick, setimagealphachannel);
 #if MagickLibVersion > 0x638
 PHP_METHOD(imagick, liquidrescaleimage);
 #endif
+#if MagickLibVersion >= 0x640
+PHP_METHOD(imagick, setgravity);
+PHP_METHOD(imagick, getgravity);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, getpixeliterator);
