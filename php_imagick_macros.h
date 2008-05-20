@@ -18,6 +18,9 @@
    +----------------------------------------------------------------------+
 */
 
+#ifndef PHP_IMAGICK_MACROS_H
+# define PHP_IMAGICK_MACROS_H
+
 /* Define a set of macros to throw exceptions */
 #define IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( type, description, code ) \
 { \
@@ -390,3 +393,5 @@
 	PixelSetOpacity( target, PixelGetOpacity( source ) ); \
 	PixelSetAlpha( target, PixelGetAlpha( source ) );
 #endif
+
+#endif /* PHP_IMAGICK_MACROS_H */
