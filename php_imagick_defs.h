@@ -23,7 +23,7 @@
 
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
-        zend_bool locale_fix;
+	zend_bool locale_fix;
 ZEND_END_MODULE_GLOBALS(imagick)
 
 #ifdef ZTS
@@ -32,7 +32,7 @@ ZEND_END_MODULE_GLOBALS(imagick)
 # define IMAGICK_G(v) (imagick_globals.v)
 #endif
 
-ZEND_DECLARE_MODULE_GLOBALS(imagick)
+ZEND_EXTERN_MODULE_GLOBALS(imagick)
 
 #ifdef HAVE_LOCALE_H
 # if defined(PHP_WIN32)
@@ -139,14 +139,14 @@ double *get_double_array_from_zval( zval *param_array, long *num_elements TSRMLS
 #define IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST 6
 
 /* Class entries */
-zend_class_entry *php_imagick_sc_entry;
-zend_class_entry *php_imagick_exception_class_entry;
-zend_class_entry *php_imagickdraw_sc_entry;
-zend_class_entry *php_imagickdraw_exception_class_entry;
-zend_class_entry *php_imagickpixel_sc_entry;
-zend_class_entry *php_imagickpixel_exception_class_entry;
-zend_class_entry *php_imagickpixeliterator_sc_entry;
-zend_class_entry *php_imagickpixeliterator_exception_class_entry;
+extern zend_class_entry *php_imagick_sc_entry;
+extern zend_class_entry *php_imagick_exception_class_entry;
+extern zend_class_entry *php_imagickdraw_sc_entry;
+extern zend_class_entry *php_imagickdraw_exception_class_entry;
+extern zend_class_entry *php_imagickpixel_sc_entry;
+extern zend_class_entry *php_imagickpixel_exception_class_entry;
+extern zend_class_entry *php_imagickpixeliterator_sc_entry;
+extern zend_class_entry *php_imagickpixeliterator_exception_class_entry;
 
 /* Forward declarations (Imagick) */
 

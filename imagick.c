@@ -22,6 +22,17 @@
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
 
+ZEND_DECLARE_MODULE_GLOBALS(imagick)
+
+zend_class_entry *php_imagick_sc_entry;
+zend_class_entry *php_imagick_exception_class_entry;
+zend_class_entry *php_imagickdraw_sc_entry;
+zend_class_entry *php_imagickdraw_exception_class_entry;
+zend_class_entry *php_imagickpixel_sc_entry;
+zend_class_entry *php_imagickpixel_exception_class_entry;
+zend_class_entry *php_imagickpixeliterator_sc_entry;
+zend_class_entry *php_imagickpixeliterator_exception_class_entry;
+
 #if defined(ZTS) && defined(PHP_WIN32)
 static MUTEX_T imagick_mutex;
 static THREAD_T imagick_thread_id;
