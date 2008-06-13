@@ -28,7 +28,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</version>
 	<stability>
 		<release>beta</release>
-		<api>sbeta</api>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
