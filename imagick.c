@@ -2344,7 +2344,7 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 }
 
 
-static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr TSRMLS_DC)
 {
 	zval *tmp;
 	zend_object_value retval;
@@ -2361,6 +2361,10 @@ static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSR
 		imagick_thread_id = tsrm_thread_id();
 	}
 #endif
+	
+	if (ptr) {
+		*ptr = intern;
+	}
 
 	/* Set the magickwand */
 	intern->magick_wand = NewMagickWand();
@@ -2377,7 +2381,12 @@ static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSR
 	return retval;
 }
 
-static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	return php_imagick_object_new_ex(class_type, NULL TSRMLS_DC);
+}
+
+static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr TSRMLS_DC)
 {
 	zval *tmp;
 	zend_object_value retval;
@@ -2387,6 +2396,10 @@ static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type
 	intern = (php_imagickdraw_object *) emalloc( sizeof( php_imagickdraw_object ) );
 	memset( &intern->zo, 0, sizeof( php_imagickdraw_object ) );
 
+	if (ptr) {
+		*ptr = intern;
+	}	
+	
 	/* Set the DrawingWand */
 	intern->drawing_wand = NewDrawingWand();
 
@@ -2398,6 +2411,11 @@ static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickdraw_object_free_storage, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &imagickdraw_object_handlers;
 	return retval;
+}
+
+static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	return php_imagickdraw_object_new_ex(class_type, NULL TSRMLS_DC);
 }
 
 static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -2429,7 +2447,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	return retval;
 }
 
-static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_type, php_imagickpixel_object **ptr TSRMLS_DC)
 {
 	zval *tmp;
 	zend_object_value retval;
@@ -2439,6 +2457,10 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	intern = (php_imagickpixel_object *) emalloc( sizeof( php_imagickpixel_object ) );
 	memset( &intern->zo, 0, sizeof( php_imagickpixel_object ) );
 
+	if (ptr) {
+		*ptr = intern;
+	}	
+	
 	/* Set the pixeliterator */
 	intern->pixel_wand = NULL;
 	intern->initialized_via_iterator = 0;
@@ -2453,6 +2475,11 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	return retval;
 }
 
+static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
+{
+	return php_imagickpixel_object_new_ex(class_type, NULL TSRMLS_CC);
+}
+
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY( "imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals )
@@ -2461,6 +2488,44 @@ PHP_INI_END()
 static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 {
 	imagick_globals->locale_fix = 0;
+}
+
+static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
+{
+	php_imagick_object *new_obj = NULL;
+	php_imagick_object *old_obj = (php_imagick_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
+	zend_object_value new_ov    = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	 
+	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	
+	IMAGICK_REPLACE_MAGICKWAND(new_obj, old_obj->magick_wand);
+	new_obj->numImages = old_obj->numImages;
+	new_obj->next_out_of_bound = old_obj->next_out_of_bound;
+	
+	return new_ov;
+}
+
+static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSRMLS_DC)
+{
+	php_imagickdraw_object *new_obj = NULL;
+	php_imagickdraw_object *old_obj = (php_imagickdraw_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
+	zend_object_value new_ov    = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	
+	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	IMAGICKDRAW_REPLACE_DRAWINGWAND(new_obj, old_obj->drawing_wand);
+	return new_ov;
+}
+
+static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TSRMLS_DC)
+{
+	php_imagickpixel_object *new_obj = NULL;
+	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
+	zend_object_value new_ov    = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	
+	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+
+	IMAGICKPIXEL_REPLACE_PIXELWAND(new_obj, old_obj->pixel_wand);	
+	return new_ov;
 }
 
 PHP_MINIT_FUNCTION(imagick)
@@ -2514,7 +2579,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICK_SC_NAME, php_imagick_class_methods);
 	ce.create_object = php_imagick_object_new;
-	imagick_object_handlers.clone_obj = NULL;
+	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
 
@@ -2523,7 +2588,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_SC_NAME, php_imagickdraw_class_methods);
 	ce.create_object = php_imagickdraw_object_new;
-	imagickdraw_object_handlers.clone_obj = NULL;
+	imagickdraw_object_handlers.clone_obj = php_imagick_clone_imagickdraw_object;
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
 	/*
@@ -2540,7 +2605,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXEL_SC_NAME, php_imagickpixel_class_methods);
 	ce.create_object = php_imagickpixel_object_new;
-	imagickpixel_object_handlers.clone_obj = NULL;
+	imagickpixel_object_handlers.clone_obj = php_imagick_clone_imagickpixel_object;
 	php_imagickpixel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
 	initialize_imagick_constants();
