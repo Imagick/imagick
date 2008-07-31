@@ -95,7 +95,7 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX( imagick_adaptiveresizeimage_args, 0, 0, 2)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptiveresizeimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 	ZEND_END_ARG_INFO()
@@ -725,7 +725,7 @@ static
 	ZEND_END_ARG_INFO()
 
 static
-	ZEND_BEGIN_ARG_INFO_EX( imagick_addnoiseimage_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_addnoiseimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, NOISE)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
@@ -2284,12 +2284,12 @@ static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 
-	if ( intern->magick_wand != (MagickWand *)NULL && IsMagickWand( intern->magick_wand ) ) {
-		intern->magick_wand = DestroyMagickWand( intern->magick_wand );
+	if (intern->magick_wand != (MagickWand *)NULL && IsMagickWand(intern->magick_wand)) {
+		intern->magick_wand = DestroyMagickWand(intern->magick_wand);
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree( intern );
+	efree(intern);
 }
 
 
@@ -2301,12 +2301,12 @@ static void php_imagickdraw_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 
-	if ( intern->drawing_wand != (DrawingWand *)NULL && IsDrawingWand( intern->drawing_wand ) ) {
-		intern->drawing_wand = DestroyDrawingWand( intern->drawing_wand );
+	if (intern->drawing_wand != (DrawingWand *)NULL && IsDrawingWand(intern->drawing_wand)) {
+		intern->drawing_wand = DestroyDrawingWand(intern->drawing_wand);
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree( intern );
+	efree(intern);
 }
 
 static void php_imagickpixeliterator_object_free_storage(void *object TSRMLS_DC)
@@ -2317,12 +2317,12 @@ static void php_imagickpixeliterator_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 
-	if ( intern->pixel_iterator != (PixelIterator *)NULL && IsPixelIterator( intern->pixel_iterator )) {
-		intern->pixel_iterator = DestroyPixelIterator( intern->pixel_iterator );
+	if (intern->pixel_iterator != (PixelIterator *)NULL && IsPixelIterator(intern->pixel_iterator)) {
+		intern->pixel_iterator = DestroyPixelIterator(intern->pixel_iterator);
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree( intern );
+	efree(intern);
 
 }
 
@@ -2333,14 +2333,14 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 	if (!intern) {
 		return;
 	}
-	if ( intern->initialized_via_iterator < 1 ) {
-		if( intern->pixel_wand != (PixelWand *)NULL && IsPixelWand( intern->pixel_wand ) ) {
-			intern->pixel_wand = DestroyPixelWand( intern->pixel_wand );
+	if (intern->initialized_via_iterator < 1) {
+		if(intern->pixel_wand != (PixelWand *)NULL && IsPixelWand(intern->pixel_wand)) {
+			intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);
 		}
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	efree( intern );
+	efree(intern);
 }
 
 
@@ -2351,8 +2351,8 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	php_imagick_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagick_object *) emalloc( sizeof( php_imagick_object ) );
-	memset( &intern->zo, 0, sizeof( php_imagick_object ) );
+	intern = (php_imagick_object *) emalloc(sizeof(php_imagick_object));
+	memset(&intern->zo, 0, sizeof(php_imagick_object));
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* If its our thread then we already have the lock so no need to lock again */
@@ -2368,7 +2368,6 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 
 	/* Set the magickwand */
 	intern->magick_wand = NewMagickWand();
-	intern->numImages = 0;
 	intern->next_out_of_bound = 0;
 
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
@@ -2393,8 +2392,8 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	php_imagickdraw_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagickdraw_object *) emalloc( sizeof( php_imagickdraw_object ) );
-	memset( &intern->zo, 0, sizeof( php_imagickdraw_object ) );
+	intern = (php_imagickdraw_object *) emalloc(sizeof(php_imagickdraw_object));
+	memset(&intern->zo, 0, sizeof(php_imagickdraw_object));
 
 	if (ptr) {
 		*ptr = intern;
@@ -2425,8 +2424,8 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	php_imagickpixeliterator_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagickpixeliterator_object *) emalloc( sizeof( php_imagickpixeliterator_object ) );
-	memset( &intern->zo, 0, sizeof( php_imagickpixeliterator_object ) );
+	intern = (php_imagickpixeliterator_object *) emalloc(sizeof(php_imagickpixeliterator_object));
+	memset(&intern->zo, 0, sizeof(php_imagickpixeliterator_object));
 
 	/* We cant initialize yet */
 	intern->pixel_iterator = NULL;
@@ -2454,8 +2453,8 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 	php_imagickpixel_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagickpixel_object *) emalloc( sizeof( php_imagickpixel_object ) );
-	memset( &intern->zo, 0, sizeof( php_imagickpixel_object ) );
+	intern = (php_imagickpixel_object *) emalloc(sizeof(php_imagickpixel_object));
+	memset(&intern->zo, 0, sizeof(php_imagickpixel_object));
 
 	if (ptr) {
 		*ptr = intern;
@@ -2482,7 +2481,7 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 
 
 PHP_INI_BEGIN()
-	STD_PHP_INI_ENTRY( "imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals )
+	STD_PHP_INI_ENTRY("imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals)
 PHP_INI_END()
 
 static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
@@ -2494,12 +2493,11 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 {
 	php_imagick_object *new_obj = NULL;
 	php_imagick_object *old_obj = (php_imagick_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov    = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_object_value new_ov = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	 
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	
 	IMAGICK_REPLACE_MAGICKWAND(new_obj, old_obj->magick_wand);
-	new_obj->numImages = old_obj->numImages;
 	new_obj->next_out_of_bound = old_obj->next_out_of_bound;
 	
 	return new_ov;
@@ -2509,7 +2507,7 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 {
 	php_imagickdraw_object *new_obj = NULL;
 	php_imagickdraw_object *old_obj = (php_imagickdraw_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov    = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_object_value new_ov = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	IMAGICKDRAW_REPLACE_DRAWINGWAND(new_obj, old_obj->drawing_wand);
@@ -2520,11 +2518,12 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 {
 	php_imagickpixel_object *new_obj = NULL;
 	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov    = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_object_value new_ov = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 
-	IMAGICKPIXEL_REPLACE_PIXELWAND(new_obj, old_obj->pixel_wand);	
+	IMAGICKPIXEL_REPLACE_PIXELWAND(new_obj, old_obj->pixel_wand);
+	new_obj->initialized_via_iterator = 0;
 	return new_ov;
 }
 
@@ -2538,10 +2537,10 @@ PHP_MINIT_FUNCTION(imagick)
 	/*
 		Allocate some memory
 	*/
-	memcpy( &imagick_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
-	memcpy( &imagickdraw_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
-	memcpy( &imagickpixeliterator_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
-	memcpy( &imagickpixel_object_handlers, zend_get_std_object_handlers(), sizeof( zend_object_handlers ) );
+	memcpy(&imagick_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	memcpy(&imagickdraw_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	memcpy(&imagickpixeliterator_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	memcpy(&imagickpixel_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	/* Setup magickwand env */
 	MagickWandGenesis();
@@ -2626,39 +2625,40 @@ PHP_MINFO_FUNCTION(imagick)
 	char *pattern = "*";
 	char formats[2056];
 	char buffer[4];
-
 	unsigned long version_number;
 	const char *imagemagick_release_date = MagickGetReleaseDate();
-	const char *imagemagick_version = MagickGetVersion( &version_number );
+	const char *imagemagick_version = MagickGetVersion(&version_number);
 
-	supported_formats = (char **) MagickQueryFormats( pattern, &num_formats );
-	sprintf( buffer, "%ld", num_formats );
+	memset(buffer, '\0', 4);
+
+	supported_formats = (char **) MagickQueryFormats(pattern, &num_formats);
+	sprintf(buffer, "%ld", num_formats);
 
 	php_info_print_table_start();
-	php_info_print_table_header( 2, "imagick module", "enabled" );
-	php_info_print_table_row( 2, "imagick module version", PHP_IMAGICK_VERSION );
-	php_info_print_table_row( 2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator" );
-	php_info_print_table_row( 2, "ImageMagick version", imagemagick_version );
-	php_info_print_table_row( 2, "ImageMagick copyright", MagickGetCopyright() );
-	php_info_print_table_row( 2, "ImageMagick release date", imagemagick_release_date );
-	php_info_print_table_row( 2, "ImageMagick Number of supported formats: ", buffer );
+	php_info_print_table_header(2, "imagick module", "enabled");
+	php_info_print_table_row(2, "imagick module version", PHP_IMAGICK_VERSION);
+	php_info_print_table_row(2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator");
+	php_info_print_table_row(2, "ImageMagick version", imagemagick_version);
+	php_info_print_table_row(2, "ImageMagick copyright", MagickGetCopyright());
+	php_info_print_table_row(2, "ImageMagick release date", imagemagick_release_date);
+	php_info_print_table_row(2, "ImageMagick Number of supported formats: ", buffer);
 
-	memset( formats, '\0', sizeof( formats ) );
+	memset(formats, '\0', 2056);
 
-	if ( ( num_formats > 0 ) && supported_formats != (char **)NULL ) {
+	if ((num_formats > 0) && supported_formats != (char **)NULL) {
 
-		for( i = 0 ; i < num_formats ; i++ ) {
-			strcat( formats, supported_formats[i] );
-			if ( i != ( num_formats - 1 ) ) {
-				strcat( formats, ", " );
+		for(i = 0 ; i < num_formats ; i++) {
+			strcat(formats, supported_formats[i]);
+			if (i != (num_formats - 1)) {
+				strcat(formats, ", ");
 			}
-			IMAGICK_FREE_MEMORY( char *, supported_formats[i] );
+			IMAGICK_FREE_MEMORY(char *, supported_formats[i]);
 		}
-		php_info_print_table_row( 2, "ImageMagick Supported formats", formats );
+		php_info_print_table_row(2, "ImageMagick Supported formats", formats);
 	}
 
 	php_info_print_table_end();
-	IMAGICK_FREE_MEMORY( char **, supported_formats );
+	IMAGICK_FREE_MEMORY(char **, supported_formats);
 
 	DISPLAY_INI_ENTRIES();
 }
@@ -2672,7 +2672,7 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 	tsrm_mutex_free(imagick_mutex);
 #endif
 	UNREGISTER_INI_ENTRIES();
-	return( SUCCESS );
+	return(SUCCESS);
 }
 
 #if defined(ZTS) && defined(PHP_WIN32)

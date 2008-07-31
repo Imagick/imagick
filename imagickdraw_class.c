@@ -194,8 +194,7 @@ PHP_METHOD(imagickdraw, translate)
 */
 PHP_METHOD(imagickdraw, setfillcolor)
 {
-	zval *param, *objvar;
-	PixelWand *pixel_wand;
+	zval *param;
 	php_imagickdraw_object *internd;
 	php_imagickpixel_object *internp;
 
@@ -205,7 +204,7 @@ PHP_METHOD(imagickdraw, setfillcolor)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_CAST_PARAMETER_TO_COLOR( objvar, param, pixel_wand, internp, 2 );
+	IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp, 2);
 	DrawSetFillColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -217,8 +216,7 @@ PHP_METHOD(imagickdraw, setfillcolor)
 */
 PHP_METHOD(imagickdraw, setstrokecolor)
 {
-	PixelWand *pixel_wand;
-	zval *objvar, *param;
+	zval *param;
 	php_imagickdraw_object *internd;
 	php_imagickpixel_object *internp;
 
@@ -228,7 +226,7 @@ PHP_METHOD(imagickdraw, setstrokecolor)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_CAST_PARAMETER_TO_COLOR( objvar, param, pixel_wand, internp, 2 );
+	IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp, 2 );
 	DrawSetStrokeColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;
@@ -582,8 +580,7 @@ PHP_METHOD(imagickdraw, settextdecoration)
 */
 PHP_METHOD(imagickdraw, settextundercolor)
 {
-	PixelWand *pixel_wand;
-	zval *objvar, *param;
+	zval *param;
 	php_imagickdraw_object *internd;
 	php_imagickpixel_object *internp;
 
@@ -593,7 +590,7 @@ PHP_METHOD(imagickdraw, settextundercolor)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_CAST_PARAMETER_TO_COLOR( objvar, param, pixel_wand, internp, 2 );
+	IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp, 2 );
 	DrawSetTextUnderColor( internd->drawing_wand, internp->pixel_wand );
 
 	RETURN_TRUE;

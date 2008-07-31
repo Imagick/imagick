@@ -59,7 +59,6 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 typedef struct _php_imagick_object  {
 	zend_object zo;
 	MagickWand *magick_wand;
-	long numImages;
 	int next_out_of_bound;
 } php_imagick_object;
 
@@ -90,22 +89,22 @@ typedef struct _php_imagickpixel_object  {
 
 
 void initialize_imagick_constants();
-void add_assoc_string_helper( zval *retvalue, char *name, char *key, char *hash_value TSRMLS_DC );
-void deallocate_wands( MagickWand *magick, DrawingWand *draw, PixelWand *pixel TSRMLS_DC );
-void *get_pointinfo_array( zval *coordinate_array, int *num_elements TSRMLS_DC);
+void add_assoc_string_helper(zval *retvalue, char *name, char *key, char *hash_value TSRMLS_DC );
+void deallocate_wands(MagickWand *magick, DrawingWand *draw, PixelWand *pixel TSRMLS_DC );
+void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC);
 #if MagickLibVersion <= 0x628
-void count_pixeliterator_rows( php_imagickpixeliterator_object *internpix TSRMLS_DC );
+void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_DC );
 #endif
 
-int count_occurences_of( char needle, char *haystack TSRMLS_DC );
-int read_image_into_magickwand( php_imagick_object *intern, char *filename, int type TSRMLS_DC );
-int write_image_from_filename( php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC );
-int check_configured_font( char *font, int font_len TSRMLS_DC );
-int check_write_access( char *absolute TSRMLS_DC );
+int count_occurences_of(char needle, char *haystack TSRMLS_DC );
+int read_image_into_magickwand(php_imagick_object *intern, char *filename, int type TSRMLS_DC );
+int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC );
+int check_configured_font(char *font, int font_len TSRMLS_DC );
+int check_write_access(char *absolute TSRMLS_DC );
 
-zend_bool crop_thumbnail_image( MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
+zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);
-double *get_double_array_from_zval( zval *param_array, long *num_elements TSRMLS_DC );
+double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC );
 
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11

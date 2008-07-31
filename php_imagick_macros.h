@@ -22,88 +22,88 @@
 # define PHP_IMAGICK_MACROS_H
 
 /* Define a set of macros to throw exceptions */
-#define IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( type, description, code ) \
+#define IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(type, description, code) \
 { \
-	switch( type ) { \
+	switch(type) { \
 		case 1: \
-			zend_throw_exception( php_imagick_exception_class_entry, description, (long)code TSRMLS_CC ); \
+			zend_throw_exception(php_imagick_exception_class_entry, description, (long)code TSRMLS_CC); \
 			RETURN_NULL(); \
 		break; \
 		case 2: \
-			zend_throw_exception( php_imagickdraw_exception_class_entry, description, (long)code TSRMLS_CC ); \
+			zend_throw_exception(php_imagickdraw_exception_class_entry, description, (long)code TSRMLS_CC); \
 			RETURN_NULL(); \
 		break; \
 		case 3: \
-			zend_throw_exception( php_imagickpixeliterator_exception_class_entry, description, (long)code TSRMLS_CC ); \
+			zend_throw_exception(php_imagickpixeliterator_exception_class_entry, description, (long)code TSRMLS_CC); \
 			RETURN_NULL(); \
 		break; \
 		case 4: \
-			zend_throw_exception( php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC ); \
+			zend_throw_exception(php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC); \
 			RETURN_NULL(); \
 		break; \
 	} \
 } \
 
-#define IMAGICK_THROW_IMAGICK_EXCEPTION( magick_wand, fallback, code ) \
+#define IMAGICK_THROW_IMAGICK_EXCEPTION(magick_wand, fallback, code) \
 { \
 	ExceptionType severity; \
 	char *description; \
-	description = MagickGetException( magick_wand, &severity ); \
-	if ( !description ) { \
-		zend_throw_exception( php_imagick_exception_class_entry, fallback, (long)code TSRMLS_CC); \
+	description = MagickGetException(magick_wand, &severity); \
+	if (!description) { \
+		zend_throw_exception(php_imagick_exception_class_entry, fallback, (long)code TSRMLS_CC); \
 		RETURN_NULL(); \
 	} else { \
-		zend_throw_exception( php_imagick_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY( char *, description ); \
-		MagickClearException( magick_wand ); \
+		zend_throw_exception(php_imagick_exception_class_entry, description, (long)severity TSRMLS_CC); \
+		IMAGICK_FREE_MEMORY(char *, description); \
+		MagickClearException(magick_wand); \
 		RETURN_NULL(); \
 	} \
 } \
 
-#define IMAGICK_THROW_IMAGICKDRAW_EXCEPTION( drawing_wand, fallback, code ) \
+#define IMAGICK_THROW_IMAGICKDRAW_EXCEPTION(drawing_wand, fallback, code) \
 { \
 	ExceptionType severity; \
 	char *description; \
-	description = DrawGetException( drawing_wand, &severity ); \
-	if ( !description ) { \
-		zend_throw_exception( php_imagickdraw_exception_class_entry, fallback, (long)code TSRMLS_CC); \
+	description = DrawGetException(drawing_wand, &severity); \
+	if (!description) { \
+		zend_throw_exception(php_imagickdraw_exception_class_entry, fallback, (long)code TSRMLS_CC); \
 		RETURN_NULL(); \
 	} else { \
-		zend_throw_exception( php_imagickdraw_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY( char *, description ); \
-		DrawClearException( drawing_wand ); \
+		zend_throw_exception(php_imagickdraw_exception_class_entry, description, (long)severity TSRMLS_CC); \
+		IMAGICK_FREE_MEMORY(char *, description); \
+		DrawClearException(drawing_wand); \
 		RETURN_NULL(); \
 	} \
 } \
 
-#define IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION( pixel_wand, fallback, code ) \
+#define IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(pixel_wand, fallback, code) \
 { \
 	ExceptionType severity; \
 	char *description; \
-	description = PixelGetException( pixel_wand, &severity ); \
-	if ( !description ) { \
-		zend_throw_exception( php_imagickpixel_exception_class_entry, fallback, (long)code TSRMLS_CC); \
+	description = PixelGetException(pixel_wand, &severity); \
+	if (!description) { \
+		zend_throw_exception(php_imagickpixel_exception_class_entry, fallback, (long)code TSRMLS_CC); \
 		RETURN_NULL(); \
 	} else { \
-		zend_throw_exception( php_imagickpixel_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY( char *, description ); \
-		PixelClearException( pixel_wand ); \
+		zend_throw_exception(php_imagickpixel_exception_class_entry, description, (long)severity TSRMLS_CC); \
+		IMAGICK_FREE_MEMORY(char *, description); \
+		PixelClearException(pixel_wand); \
 		RETURN_NULL(); \
 	} \
 } \
 
-#define IMAGICK_THROW_IMAGICKPIXELITERATOR_EXCEPTION( pixel_iterator, fallback, code ) \
+#define IMAGICK_THROW_IMAGICKPIXELITERATOR_EXCEPTION(pixel_iterator, fallback, code) \
 { \
 	ExceptionType severity; \
 	char *description; \
-	description = PixelGetIteratorException( pixel_iterator, &severity ); \
-	if ( !description ) { \
-		zend_throw_exception( php_imagickpixeliterator_exception_class_entry, fallback, (long)code TSRMLS_CC); \
+	description = PixelGetIteratorException(pixel_iterator, &severity); \
+	if (!description) { \
+		zend_throw_exception(php_imagickpixeliterator_exception_class_entry, fallback, (long)code TSRMLS_CC); \
 		RETURN_NULL(); \
 	} else { \
-		zend_throw_exception( php_imagickpixeliterator_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY( char *, description ); \
-		PixelClearIteratorException( pixel_iterator ); \
+		zend_throw_exception(php_imagickpixeliterator_exception_class_entry, description, (long)severity TSRMLS_CC); \
+		IMAGICK_FREE_MEMORY(char *, description); \
+		PixelClearIteratorException(pixel_iterator); \
 		RETURN_NULL(); \
 	} \
 } \
@@ -115,58 +115,58 @@
 #define IMAGICK_REGISTER_CONST_STRING(const_name, value)\
 	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value TSRMLS_CC);
 
-#define IMAGICK_CHECK_NOT_EMPTY( magick_wand, type, code )\
-	if( MagickGetNumberImages( magick_wand ) == 0 ) { \
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Can not process empty wand", (long)code ); \
+#define IMAGICK_CHECK_NOT_EMPTY(magick_wand, type, code)\
+	if(MagickGetNumberImages(magick_wand) == 0) { \
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not process empty wand", (long)code); \
 	} \
 
-#define IMAGICK_INITIALIZE_ZERO_ARGS( wand_type, intern )\
+#define IMAGICK_INITIALIZE_ZERO_ARGS(wand_type, intern)\
 	intern = (wand_type)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-#define IMAGICK_FREE_MEMORY( type, value )\
-	if ( value != (type) NULL ) { \
-		value = (type) MagickRelinquishMemory( value ); \
+#define IMAGICK_FREE_MEMORY(type, value)\
+	if (value != (type) NULL) { \
+		value = (type) MagickRelinquishMemory(value); \
 		value = (type)NULL; \
 	} \
 
-#define IMAGICK_SAFE_MODE_CHECK( filename, status )\
-	if ( strlen( filename ) > MAXPATHLEN ) { \
+#define IMAGICK_SAFE_MODE_CHECK(filename, status)\
+	if (strlen(filename) > MAXPATHLEN) { \
 		status = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
 	} \
-	if ( PG(safe_mode) && (!php_checkuid_ex( filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS ))) { \
+	if (PG(safe_mode) && (!php_checkuid_ex(filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS))) { \
 			status = IMAGICK_READ_WRITE_SAFE_MODE_ERROR; \
 	} \
-	if ( php_check_open_basedir_ex( filename, 0 TSRMLS_CC ) ) { \
+	if (php_check_open_basedir_ex(filename, 0 TSRMLS_CC)) { \
 		status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
 	} \
 
-#define IMAGICK_HAS_FORMAT( buffer, magick_wand )\
-	buffer = MagickGetImageFormat( magick_wand );\
-	if( buffer == (char *)NULL || *buffer == '\0' ) {\
-		IMAGICK_FREE_MEMORY( char *, buffer ); IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Image has no format", 1 ); \
+#define IMAGICK_HAS_FORMAT(buffer, magick_wand)\
+	buffer = MagickGetImageFormat(magick_wand);\
+	if(buffer == (char *)NULL || *buffer == '\0') {\
+		IMAGICK_FREE_MEMORY(char *, buffer); IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Image has no format", 1); \
 	} else { \
-		IMAGICK_FREE_MEMORY( char *, buffer ); \
+		IMAGICK_FREE_MEMORY(char *, buffer); \
 	} \
 
-#define IMAGICK_METHOD_DEPRECATED( className, methodName )\
-	php_error( E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName );
+#define IMAGICK_METHOD_DEPRECATED(className, methodName)\
+	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName);
 
 #define IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, free, message) \
-	switch ( error ) { \
+	switch (error) { \
 		case IMAGICK_READ_WRITE_NO_ERROR: \
 			/* No error */ \
 		break; \
 		case IMAGICK_READ_WRITE_SAFE_MODE_ERROR:\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read image: %s", filename ); \
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read image: %s", filename); \
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			} \
 			RETURN_NULL();\
 		break; \
 		case IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR: \
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename); \
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename); \
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			} \
 			RETURN_NULL(); \
 		break; \
@@ -174,183 +174,191 @@
 		case IMAGICK_READ_WRITE_UNDERLYING_LIBRARY: \
 			{ \
 				ExceptionType severity; \
-				char *description = MagickGetException( intern->magick_wand, &severity ); \
-				if ( strlen( description ) == 0 ) { \
-					zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, message, filename);\
+				char *description = MagickGetException(intern->magick_wand, &severity); \
+				if (strlen(description) == 0) { \
+					zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, message, filename);\
 				} else {\
-					zend_throw_exception( php_imagick_exception_class_entry, description, 1 TSRMLS_CC);\
-					IMAGICK_FREE_MEMORY( char *, description );\
-					MagickClearException( intern->magick_wand );\
+					zend_throw_exception(php_imagick_exception_class_entry, description, 1 TSRMLS_CC);\
+					IMAGICK_FREE_MEMORY(char *, description);\
+					MagickClearException(intern->magick_wand);\
 					description = (char *)NULL;\
 				}\
 			}\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			} \
 			RETURN_NULL();\
 		case IMAGICK_READ_WRITE_PERMISSION_DENIED:\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Permission denied to: %s", filename);\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Permission denied to: %s", filename);\
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case IMAGICK_READ_WRITE_FILENAME_TOO_LONG:\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "Filename too long: %s", filename);\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Filename too long: %s", filename);\
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST:\
-			zend_throw_exception_ex( php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);\
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 	} \
 
 #define IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR(internd, filename, error, free)\
-	switch ( error ) {\
+	switch (error) {\
 		default:\
 		case 0:\
 			/* No error */\
 		break;\
 		case 1:\
-			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read file: %s", filename );\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read file: %s", filename);\
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case 2:\
-			zend_throw_exception_ex( php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			zend_throw_exception_ex(php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case 3:\
-			IMAGICK_THROW_IMAGICKDRAW_EXCEPTION( internd->drawing_wand, "Unable to read file", 1 );\
-			if ( free == IMAGICK_FREE_FILENAME ) { \
-				 efree( filename ); \
+			IMAGICK_THROW_IMAGICKDRAW_EXCEPTION(internd->drawing_wand, "Unable to read file", 1);\
+			if (free == IMAGICK_FREE_FILENAME) { \
+				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 	} \
 
-#define IMAGICK_CORRECT_ITERATOR_POSITION( intern )\
-	MagickSetLastIterator( intern->magick_wand );
+#define IMAGICK_CORRECT_ITERATOR_POSITION(intern)\
+	MagickSetLastIterator(intern->magick_wand);
 
-#define IMAGICK_REPLACE_MAGICKWAND( intern, new_wand )\
-	if ( intern->magick_wand != (MagickWand *)NULL ) {\
-		intern->magick_wand = (MagickWand *)DestroyMagickWand( intern->magick_wand );\
+#define IMAGICK_REPLACE_MAGICKWAND(intern, new_wand)\
+	if (intern->magick_wand != (MagickWand *)NULL) {\
+		intern->magick_wand = (MagickWand *)DestroyMagickWand(intern->magick_wand);\
 		intern->magick_wand = new_wand;\
 	} \
 
-#define IMAGICKPIXEL_REPLACE_PIXELWAND( intern, new_wand )\
-	if( intern->pixel_wand != (PixelWand *)NULL && intern->initialized_via_iterator != 1 ) {\
-		intern->pixel_wand = (PixelWand *)DestroyPixelWand( intern->pixel_wand );\
+#define IMAGICKPIXEL_REPLACE_PIXELWAND(intern, new_wand)\
+	if(intern->pixel_wand != (PixelWand *)NULL && intern->initialized_via_iterator != 1) {\
+		intern->pixel_wand = (PixelWand *)DestroyPixelWand(intern->pixel_wand);\
 		intern->pixel_wand = new_wand;\
 	} else {\
 		intern->pixel_wand = new_wand;\
 	} \
 
-#define IMAGICKDRAW_REPLACE_DRAWINGWAND( intern, new_wand )\
-	if ( intern->drawing_wand != (DrawingWand *)NULL ) {\
-		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand( intern->drawing_wand );\
+#define IMAGICKDRAW_REPLACE_DRAWINGWAND(intern, new_wand)\
+	if (intern->drawing_wand != (DrawingWand *)NULL) {\
+		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand(intern->drawing_wand);\
 		intern->drawing_wand = new_wand;\
 	} \
 
-#define IMAGICK_CAST_PARAMETER_TO_COLOR( object, param, pixel_wand, internp, caller ) \
-	switch ( Z_TYPE_P( param ) ) { \
+#define IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp, caller) \
+	switch (Z_TYPE_P(param)) { \
 		case IS_STRING: \
-			pixel_wand = NewPixelWand(); \
-			if ( !PixelSetColor( pixel_wand, Z_STRVAL_P( param ) ) ) { \
-				IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION( pixel_wand, "Unrecognized color string", 3 ); \
+		{ \
+			zval *object; \
+			PixelWand *pixel_wand = NewPixelWand(); \
+			if (!PixelSetColor(pixel_wand, Z_STRVAL_P(param))) { \
+				IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(pixel_wand, "Unrecognized color string", 3); \
 				return; \
 			} \
-			MAKE_STD_ZVAL( object ); \
-			object_init_ex( object, php_imagickpixel_sc_entry ); \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object( object TSRMLS_CC ); \
+			MAKE_STD_ZVAL(object); \
+			object_init_ex(object, php_imagickpixel_sc_entry); \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC); \
 			internp->initialized_via_iterator = 0; \
-			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, pixel_wand ); \
+			efree(object); \
+			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, pixel_wand); \
+		} \
 		break; \
 		case IS_OBJECT: \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object( param TSRMLS_CC ); \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
 		break; \
 		default: \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( caller, "Invalid parameter provided", (long)caller ); \
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
 		break; \
 	} \
 
-#define IMAGICK_CAST_PARAMETER_TO_OPACITY( object, param, pixel_wand, internp, caller ) \
-	switch ( Z_TYPE_P( param ) ) { \
+#define IMAGICK_CAST_PARAMETER_TO_OPACITY(param, internp, caller) \
+	switch (Z_TYPE_P(param)) { \
 		case IS_LONG: \
 		case IS_DOUBLE: \
-			pixel_wand = NewPixelWand(); \
-			PixelSetOpacity( pixel_wand, Z_DVAL_P( param ) ); \
-			MAKE_STD_ZVAL( object ); \
-			object_init_ex( object, php_imagickpixel_sc_entry ); \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object( object TSRMLS_CC ); \
+		{ \
+			zval *object; \
+			PixelWand *pixel_wand = NewPixelWand(); \
+			PixelSetOpacity(pixel_wand, Z_DVAL_P(param)); \
+			MAKE_STD_ZVAL(object); \
+			object_init_ex(object, php_imagickpixel_sc_entry); \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC); \
 			internp->initialized_via_iterator = 0; \
-			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, pixel_wand ); \
+			efree(object); \
+			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, pixel_wand); \
+		} \
 		break; \
 		case IS_OBJECT: \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object( param TSRMLS_CC ); \
+			internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
 		break; \
 		default: \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( caller, "Invalid parameter provided", (long)caller ); \
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
 		break; \
 	} \
 
-#define IMAGICK_CALCULATE_THUMBNAIL_SIDES( magick_wand, desired_width, desired_height, fit ) \
+#define IMAGICK_CALCULATE_THUMBNAIL_SIDES(magick_wand, desired_width, desired_height, fit) \
 { \
-	long orig_width = MagickGetImageWidth( magick_wand );\
-	long orig_height = MagickGetImageHeight( magick_wand );\
+	long orig_width = MagickGetImageWidth(magick_wand);\
+	long orig_height = MagickGetImageHeight(magick_wand);\
 	double ratio;\
-	if ( fit ) { \
-		if ( ( desired_width <= 0 ) || ( desired_height <= 0 ) ) { \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Invalid image geometry", 1 ); \
+	if (fit) { \
+		if ((desired_width <= 0) || (desired_height <= 0)) { \
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1); \
 		} \
-		if ( ( orig_width <= desired_width ) && ( orig_height <= desired_height ) ) { \
+		if ((orig_width <= desired_width) && (orig_height <= desired_height)) { \
 			RETURN_TRUE; \
 		} \
-		if ( (orig_width / desired_width) > (orig_height / desired_height) ) { \
+		if ((orig_width / desired_width) > (orig_height / desired_height)) { \
 			ratio = (double)orig_width / (double)desired_width; \
 			desired_height = (double)orig_height / ratio; \
-		} else if ( (orig_height / desired_height) > (orig_width / desired_width) ) { \
+		} else if ((orig_height / desired_height) > (orig_width / desired_width)) { \
 			ratio = (double)orig_height / (double)desired_height; \
 			desired_width = (double)orig_width / ratio; \
 		} else { \
-			if ( orig_height > orig_width ) { \
+			if (orig_height > orig_width) { \
 				desired_width = 0; \
 			} else { \
 				desired_height = 0; \
 			} \
-			if ( desired_width <= 0 ) { \
+			if (desired_width <= 0) { \
 				ratio = (double)orig_height / (double)desired_height; \
 				desired_width = orig_width / ratio; \
-			} else if ( desired_height <= 0 ) { \
+			} else if (desired_height <= 0) { \
 				ratio = (double)orig_width / (double)desired_width; \
 				desired_height = orig_height / ratio; \
 			} \
 		} \
-		if ( desired_width < 1 ) { \
+		if (desired_width < 1) { \
 			desired_width = 1; \
 		} \
-		if ( desired_height < 1 ) { \
+		if (desired_height < 1) { \
 			desired_height = 1; \
 		} \
 	} else { \
-		if ( ( desired_width <= 0 ) && ( desired_height <= 0 ) ) { \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICK_CLASS, "Invalid image geometry", 1 ); \
+		if ((desired_width <= 0) && (desired_height <= 0)) { \
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1); \
 		} \
-		if ( desired_width <= 0 ) { \
+		if (desired_width <= 0) { \
 			ratio = (double)orig_height / (double)desired_height; \
 			desired_width = orig_width / ratio; \
-		} else if ( desired_height <= 0 ) { \
+		} else if (desired_height <= 0) { \
 			ratio = (double)orig_width / (double)desired_width; \
 			desired_height = orig_height / ratio; \
 		} \
@@ -358,40 +366,40 @@
 } \
 
 #ifdef HAVE_LOCALE_H
-#define IMAGICK_SET_LOCALE( old_locale, tmp, restore ) \
-	if (( IMAGICK_G( locale_fix ) ) && \
-		( tmp = setlocale( LC_NUMERIC, NULL ) ) != NULL && \
-		( strcmp( tmp, IMAGICK_LC_NUMERIC_LOCALE ) != 0 )) { \
-		old_locale = estrdup( tmp ); \
-		setlocale( LC_NUMERIC, IMAGICK_LC_NUMERIC_LOCALE ); \
+#define IMAGICK_SET_LOCALE(old_locale, tmp, restore) \
+	if ((IMAGICK_G(locale_fix)) && \
+		(tmp = setlocale(LC_NUMERIC, NULL)) != NULL && \
+		(strcmp(tmp, IMAGICK_LC_NUMERIC_LOCALE) != 0)) { \
+		old_locale = estrdup(tmp); \
+		setlocale(LC_NUMERIC, IMAGICK_LC_NUMERIC_LOCALE); \
 		restore = 1; \
 	} else { \
 		restore = 0; \
 	} \
 
-#define IMAGICK_RESTORE_LOCALE( old_locale, restore ) \
-	if ( restore && old_locale != NULL && ( strcmp( old_locale, IMAGICK_LC_NUMERIC_LOCALE ) != 0 )) { \
- 		setlocale( LC_NUMERIC, old_locale ); \
-		efree( old_locale ); \
+#define IMAGICK_RESTORE_LOCALE(old_locale, restore) \
+	if (restore && old_locale != NULL && (strcmp(old_locale, IMAGICK_LC_NUMERIC_LOCALE) != 0)) { \
+ 		setlocale(LC_NUMERIC, old_locale); \
+		efree(old_locale); \
 	} \
 
 #else
-#define IMAGICK_SET_LOCALE( old_locale, tmp, restore )
-#define IMAGICK_RESTORE_LOCALE( old_locale, restore )
+#define IMAGICK_SET_LOCALE(old_locale, tmp, restore)
+#define IMAGICK_RESTORE_LOCALE(old_locale, restore)
 #endif
 
 #if MagickLibVersion >= 0x635
-#define IMAGICK_CLONE_PIXELWAND( source, target ) \
-	target = ClonePixelWand( source );
+#define IMAGICK_CLONE_PIXELWAND(source, target) \
+	target = ClonePixelWand(source);
 #else
-#define IMAGICK_CLONE_PIXELWAND( source, target ) \
+#define IMAGICK_CLONE_PIXELWAND(source, target) \
 	target = (PixelWand *)NewPixelWand(); \
-	PixelSetColorCount( target, PixelGetColorCount( source ) ); \
-	PixelSetRed( target, PixelGetRed( source ) ); \
-	PixelSetGreen( target, PixelGetGreen( source ) ); \
-	PixelSetBlue( target, PixelGetBlue( source ) ); \
-	PixelSetOpacity( target, PixelGetOpacity( source ) ); \
-	PixelSetAlpha( target, PixelGetAlpha( source ) );
+	PixelSetColorCount(target, PixelGetColorCount(source)); \
+	PixelSetRed(target, PixelGetRed(source)); \
+	PixelSetGreen(target, PixelGetGreen(source)); \
+	PixelSetBlue(target, PixelGetBlue(source)); \
+	PixelSetOpacity(target, PixelGetOpacity(source)); \
+	PixelSetAlpha(target, PixelGetAlpha(source));
 #endif
 
 #endif /* PHP_IMAGICK_MACROS_H */
