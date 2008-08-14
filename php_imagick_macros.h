@@ -117,7 +117,7 @@
 
 #define IMAGICK_CHECK_NOT_EMPTY(magick_wand, type, code)\
 	if(MagickGetNumberImages(magick_wand) == 0) { \
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not process empty wand", (long)code); \
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not process empty Imagick object", (long)code); \
 	} \
 
 #define IMAGICK_INITIALIZE_ZERO_ARGS(wand_type, intern)\
