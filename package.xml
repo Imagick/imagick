@@ -21,20 +21,21 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-07-09</date>
+	<date>2008-08-22</date>
 	<version>
-		<release>2.2.0</release>
-		<api>2.2.0</api>
+		<release>2.2.1RC1</release>
+		<api>2.2.1</api>
 	</version>
 	<stability>
-		<release>stable</release>
+		<release>beta</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Changes since 2.1.1: 
-  * Major refactoring of the file structure
-  * Fixes bugs related to the refactoring
+- Fixes a small memory leak when casting a string to ImagickPixel object
+- Added new constants
+- Added getImageChannelRange method
+- Some cleaning up on the syntax
 </notes>
 	<contents>
 		<dir name="/">
