@@ -2388,7 +2388,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 
 static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	return php_imagick_object_new_ex(class_type, NULL TSRMLS_DC);
+	return php_imagick_object_new_ex(class_type, NULL TSRMLS_CC);
 }
 
 static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr TSRMLS_DC)
@@ -2420,7 +2420,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 
 static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	return php_imagickdraw_object_new_ex(class_type, NULL TSRMLS_DC);
+	return php_imagickdraw_object_new_ex(class_type, NULL TSRMLS_CC);
 }
 
 static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
