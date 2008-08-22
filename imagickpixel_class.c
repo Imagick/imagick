@@ -52,7 +52,7 @@ PHP_METHOD(imagickpixel, sethsl)
 	double hue, saturation, luminosity;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &hue, &saturation, &luminosity ) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &hue, &saturation, &luminosity) == FAILURE) {
 		return;
 	}
 
@@ -75,7 +75,7 @@ PHP_METHOD(imagickpixel, __construct)
 	char *color_name = (char *)0;
 	int color_name_len = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len ) == FAILURE )
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len) == FAILURE )
 	{
 		return;
 	}
@@ -107,7 +107,7 @@ PHP_METHOD(imagickpixel, setcolor)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_name, &color_name_len ) == FAILURE )
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_name, &color_name_len) == FAILURE )
 	{
 		return;
 	}
@@ -182,7 +182,7 @@ PHP_METHOD(imagickpixel, issimilar)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &fuzz ) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &fuzz) == FAILURE) {
 		return;
 	}
 
@@ -209,7 +209,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 	double color_value = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color ) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color) == FAILURE) {
 		return;
 	}
 
@@ -277,7 +277,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 	double color_value;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value ) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value) == FAILURE) {
 		return;
 	}
 	
@@ -345,7 +345,7 @@ PHP_METHOD(imagickpixel, getcolor)
 	double red, green, blue, alpha;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|b", &normalized ) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|b", &normalized) == FAILURE) {
 		return;
 	}
 
@@ -444,7 +444,7 @@ PHP_METHOD(imagickpixel, setcolorcount)
 	long color_count;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color_count ) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color_count) == FAILURE) {
 		return;
 	}
 

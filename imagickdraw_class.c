@@ -55,7 +55,7 @@ PHP_METHOD(imagickdraw, circle)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &ox, &oy, &px, &py ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &ox, &oy, &px, &py) == FAILURE ) {
 		return;
 	}
 
@@ -75,7 +75,7 @@ PHP_METHOD(imagickdraw, rectangle)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x2, &y2 ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x2, &y2) == FAILURE ) {
 		return;
 	}
 
@@ -95,7 +95,7 @@ PHP_METHOD(imagickdraw, roundrectangle)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &x1, &y1, &x2, &y2, &rx, &ry ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &x1, &y1, &x2, &y2, &rx, &ry) == FAILURE ) {
 		return;
 	}
 
@@ -115,7 +115,7 @@ PHP_METHOD(imagickdraw, ellipse)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &ox, &oy, &rx, &ry, &start, &end ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &ox, &oy, &rx, &ry, &start, &end) == FAILURE ) {
 		return;
 	}
 
@@ -135,7 +135,7 @@ PHP_METHOD(imagickdraw, skewx)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees) == FAILURE ) {
 		return;
 	}
 
@@ -156,7 +156,7 @@ PHP_METHOD(imagickdraw, skewy)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees) == FAILURE ) {
 		return;
 	}
 
@@ -177,7 +177,7 @@ PHP_METHOD(imagickdraw, translate)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -345,7 +345,7 @@ PHP_METHOD(imagickdraw, setfont)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &font, &font_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &font, &font_len) == FAILURE ) {
 		return;
 	}
 
@@ -402,7 +402,7 @@ PHP_METHOD(imagickdraw, setfontfamily)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &font_family, &font_family_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &font_family, &font_family_len) == FAILURE ) {
 		return;
 	}
 
@@ -436,7 +436,7 @@ PHP_METHOD(imagickdraw, setfontsize)
 	double font_size;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &font_size ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &font_size) == FAILURE ) {
 		return;
 	}
 
@@ -456,7 +456,7 @@ PHP_METHOD(imagickdraw, setfontstyle)
 	long style_id = AnyStyle;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &style_id ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &style_id) == FAILURE ) {
 		return;
 	}
 
@@ -476,7 +476,7 @@ PHP_METHOD(imagickdraw, setfontweight)
 	long weight;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &weight ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &weight) == FAILURE ) {
 		return;
 	}
 
@@ -502,7 +502,7 @@ PHP_METHOD(imagickdraw, setfontstretch)
 	long stretch;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &stretch ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &stretch) == FAILURE ) {
 		return;
 	}
 
@@ -522,7 +522,7 @@ PHP_METHOD(imagickdraw, setstrokeantialias)
 	zend_bool antialias;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias) == FAILURE ) {
 		return;
 	}
 
@@ -543,7 +543,7 @@ PHP_METHOD(imagickdraw, settextalignment)
 	long align;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &align ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &align) == FAILURE ) {
 		return;
 	}
 
@@ -564,7 +564,7 @@ PHP_METHOD(imagickdraw, settextdecoration)
 	long decoration;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &decoration ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &decoration) == FAILURE ) {
 		return;
 	}
 
@@ -606,7 +606,7 @@ PHP_METHOD(imagickdraw, setviewbox)
 	long x1, y1, x2, y2;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x1, &y1, &x2, &y2 ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x1, &y1, &x2, &y2) == FAILURE ) {
 		return;
 	}
 
@@ -800,7 +800,7 @@ PHP_METHOD(imagickdraw, annotation)
 #endif
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dds", &x, &y, &text, &text_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dds", &x, &y, &text, &text_len) == FAILURE ) {
 		return;
 	}
 
@@ -828,7 +828,7 @@ PHP_METHOD(imagickdraw, arc)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &sx, &sy, &ex, &ey, &sd, &ed ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &sx, &sy, &ex, &ey, &sd, &ed) == FAILURE ) {
 		return;
 	}
 
@@ -849,7 +849,7 @@ PHP_METHOD(imagickdraw, matte)
 	long paint_method;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method) == FAILURE ) {
 		return;
 	}
 
@@ -871,7 +871,7 @@ PHP_METHOD(imagickdraw, polygon)
 	int num_elements = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &coordinate_array ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &coordinate_array) == FAILURE ) {
 		return;
 	}
 
@@ -902,7 +902,7 @@ PHP_METHOD(imagickdraw, bezier)
 	int num_elements = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &coordinate_array ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &coordinate_array) == FAILURE ) {
 		return;
 	}
 
@@ -950,7 +950,7 @@ PHP_METHOD(imagickdraw, line)
 	double sx, sy, ex, ey;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &sx, &sy, &ex, &ey ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &sx, &sy, &ex, &ey) == FAILURE ) {
 		return;
 	}
 
@@ -995,7 +995,7 @@ PHP_METHOD(imagickdraw, affine)
 	AffineMatrix *pmatrix;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &affine_matrix ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &affine_matrix) == FAILURE ) {
 		return;
 	}
 
@@ -1007,7 +1007,7 @@ PHP_METHOD(imagickdraw, affine)
 
 	for ( i = 0; i < 6 ; i++ ) {
 
-		if ( zend_hash_find( affine, matrix_elements[i], 3, (void**)&ppzval ) == FAILURE ) {
+		if ( zend_hash_find( affine, matrix_elements[i], 3, (void**)&ppzval) == FAILURE ) {
 
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICKDRAW_CLASS, "AffineMatrix should contain keys: sx, rx, ry, sy, tx and ty", 2 );
 
@@ -1017,23 +1017,23 @@ PHP_METHOD(imagickdraw, affine)
 		
 		} else {
 
-			if( Z_TYPE_PP( ppzval ) == IS_LONG ) {
+			if( Z_TYPE_PP( ppzval) == IS_LONG ) {
 				value = (double) Z_LVAL_PP( ppzval );
 			} else {
 				value = Z_DVAL_PP( ppzval );
 			}
 
-			if ( strcmp( matrix_elements[i], "sx" ) == 0 ) {
+			if ( strcmp( matrix_elements[i], "sx") == 0 ) {
 				pmatrix->sx = value;
-			} else if ( strcmp( matrix_elements[i], "rx" ) == 0 ) {
+			} else if ( strcmp( matrix_elements[i], "rx") == 0 ) {
 				pmatrix->rx = value;
-			} else if ( strcmp( matrix_elements[i], "ry" ) == 0 ) {
+			} else if ( strcmp( matrix_elements[i], "ry") == 0 ) {
 				pmatrix->ry = value;
-			} else if ( strcmp( matrix_elements[i], "sy" ) == 0 ) {
+			} else if ( strcmp( matrix_elements[i], "sy") == 0 ) {
 				pmatrix->sy = value;
-			} else if ( strcmp( matrix_elements[i], "tx" ) == 0 ) {
+			} else if ( strcmp( matrix_elements[i], "tx") == 0 ) {
 				pmatrix->tx = value;
-			} else if ( strcmp( matrix_elements[i], "ty" ) == 0 ) {
+			} else if ( strcmp( matrix_elements[i], "ty") == 0 ) {
 				pmatrix->ty = value;
 			} else {
 				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE( IMAGICKDRAW_CLASS, "Unkown key in AffineMatrix", 2 );
@@ -1063,7 +1063,7 @@ PHP_METHOD(imagickdraw, composite)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lddddO", &compose, &x, &y, &width, &height, &magick_obj, php_imagick_sc_entry ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "lddddO", &compose, &x, &y, &width, &height, &magick_obj, php_imagick_sc_entry) == FAILURE ) {
 		return;
 	}
 
@@ -1091,7 +1091,7 @@ PHP_METHOD(imagickdraw, color)
 	long paint_method;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method) == FAILURE ) {
 		return;
 	}
 
@@ -1112,7 +1112,7 @@ PHP_METHOD(imagickdraw, comment)
 	int comment_len;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &comment, &comment_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &comment, &comment_len) == FAILURE ) {
 		return;
 	}
 	
@@ -1316,7 +1316,7 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &param_array ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &param_array) == FAILURE ) {
 		return;
 	}
 
@@ -1521,7 +1521,7 @@ PHP_METHOD(imagickdraw, pathcurvetoabsolute)
 	double x1, y1, x2, y2, x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &x1, &y1, &x2, &y2, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &x1, &y1, &x2, &y2, &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1541,7 +1541,7 @@ PHP_METHOD(imagickdraw, pathcurvetorelative)
 	double x1, y1, x2, y2, x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &x1, &y1, &x2, &y2, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddddd", &x1, &y1, &x2, &y2, &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1561,7 +1561,7 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbezierabsolute)
 	double x1, y1, x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1581,7 +1581,7 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbezierrelative)
 	double x1, y1, x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1601,7 +1601,7 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbeziersmoothabsolute)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1621,7 +1621,7 @@ PHP_METHOD(imagickdraw, pathcurvetoquadraticbeziersmoothrelative)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1641,7 +1641,7 @@ PHP_METHOD(imagickdraw, pathcurvetosmoothabsolute)
 	double x1, y1, x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1661,7 +1661,7 @@ PHP_METHOD(imagickdraw, pathcurvetosmoothrelative)
 	double x1, y1, x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &x1, &y1, &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1682,7 +1682,7 @@ PHP_METHOD(imagickdraw, pathellipticarcabsolute)
 	zend_bool large_arc, sweep;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddbbdd", &rx, &ry, &x_axis_rotation, &large_arc, &sweep, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddbbdd", &rx, &ry, &x_axis_rotation, &large_arc, &sweep, &x, &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1703,7 +1703,7 @@ PHP_METHOD(imagickdraw, pathellipticarcrelative)
 	zend_bool large_arc, sweep;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddbbdd", &rx, &ry, &x_axis_rotation, &large_arc, &sweep, &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dddbbdd", &rx, &ry, &x_axis_rotation, &large_arc, &sweep, &x, &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1736,7 +1736,7 @@ PHP_METHOD(imagickdraw, pathlinetoabsolute)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1756,7 +1756,7 @@ PHP_METHOD(imagickdraw, pathlinetorelative)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1776,7 +1776,7 @@ PHP_METHOD(imagickdraw, pathlinetohorizontalabsolute)
 	double y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d",  &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d",  &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1796,7 +1796,7 @@ PHP_METHOD(imagickdraw, pathlinetohorizontalrelative)
 	double x;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &x ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &x) == FAILURE ) {
 		return;
 	}
 	
@@ -1816,7 +1816,7 @@ PHP_METHOD(imagickdraw, pathlinetoverticalabsolute)
 	double y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &y) == FAILURE ) {
 		return;
 	}
 
@@ -1836,7 +1836,7 @@ PHP_METHOD(imagickdraw, pathlinetoverticalrelative)
 	double y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &y) == FAILURE ) {
 		return;
 	}
 	
@@ -1856,7 +1856,7 @@ PHP_METHOD(imagickdraw, pathmovetoabsolute)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1876,7 +1876,7 @@ PHP_METHOD(imagickdraw, pathmovetorelative)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -1911,7 +1911,7 @@ PHP_METHOD(imagickdraw, polyline)
 	int num_elements = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &coordinate_array ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "a", &coordinate_array) == FAILURE ) {
 		return;
 	}
 
@@ -1986,7 +1986,7 @@ PHP_METHOD(imagickdraw, pushclippath)
 	int clip_mask_len;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &clip_mask, &clip_mask_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &clip_mask, &clip_mask_len) == FAILURE ) {
 		return;
 	}
 
@@ -2021,7 +2021,7 @@ PHP_METHOD(imagickdraw, pushpattern)
 	double x, y, width, height;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "sdddd", &pattern_id, &pattern_id_len, &x, &y, &width, &height ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "sdddd", &pattern_id, &pattern_id_len, &x, &y, &width, &height) == FAILURE ) {
 		return;
 	}
 
@@ -2065,7 +2065,7 @@ PHP_METHOD(imagickdraw, rotate)
 	double degrees;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees) == FAILURE ) {
 		return;
 	}
 	
@@ -2085,7 +2085,7 @@ PHP_METHOD(imagickdraw, scale)
 	double x, y;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE ) {
 		return;
 	}
 
@@ -2107,7 +2107,7 @@ PHP_METHOD(imagickdraw, setclippath)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &clip_mask, &clip_mask_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &clip_mask, &clip_mask_len) == FAILURE ) {
 		return;
 	}
 
@@ -2131,7 +2131,7 @@ PHP_METHOD(imagickdraw, setcliprule)
 	long fill_rule;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &fill_rule ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &fill_rule) == FAILURE ) {
 		return;
 	}
 	
@@ -2151,7 +2151,7 @@ PHP_METHOD(imagickdraw, setclipunits)
 	long units;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &units ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &units) == FAILURE ) {
 		return;
 	}
 
@@ -2171,7 +2171,7 @@ PHP_METHOD(imagickdraw, setfillopacity)
 	double fillOpacity;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &fillOpacity ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &fillOpacity) == FAILURE ) {
 		return;
 	}
 
@@ -2193,7 +2193,7 @@ PHP_METHOD(imagickdraw, setfillpatternurl)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &url, &url_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &url, &url_len) == FAILURE ) {
 		return;
 	}
 	
@@ -2217,7 +2217,7 @@ PHP_METHOD(imagickdraw, setfillrule)
 	long fill_rule;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &fill_rule ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &fill_rule) == FAILURE ) {
 		return;
 	}
 	
@@ -2237,7 +2237,7 @@ PHP_METHOD(imagickdraw, setgravity)
 	long gravity;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity) == FAILURE ) {
 		return;
 	}
 	
@@ -2259,7 +2259,7 @@ PHP_METHOD(imagickdraw, setstrokepatternurl)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &url, &url_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &url, &url_len) == FAILURE ) {
 		return;
 	}
 	
@@ -2283,7 +2283,7 @@ PHP_METHOD(imagickdraw, setstrokedashoffset)
 	double offset;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &offset ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &offset) == FAILURE ) {
 		return;
 	}
 
@@ -2303,7 +2303,7 @@ PHP_METHOD(imagickdraw, setstrokelinecap)
 	long line_cap;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &line_cap ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &line_cap) == FAILURE ) {
 		return;
 	}
 	
@@ -2323,7 +2323,7 @@ PHP_METHOD(imagickdraw, setstrokelinejoin)
 	long line_join;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &line_join ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &line_join) == FAILURE ) {
 		return;
 	}
 	
@@ -2343,7 +2343,7 @@ PHP_METHOD(imagickdraw, setstrokemiterlimit)
 	long miter_limit;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &miter_limit ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &miter_limit) == FAILURE ) {
 		return;
 	}
 	
@@ -2363,7 +2363,7 @@ PHP_METHOD(imagickdraw, setstrokeopacity)
 	double opacity;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &opacity ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "d", &opacity) == FAILURE ) {
 		return;
 	}
 
@@ -2385,7 +2385,7 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &vector, &vector_len ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "s", &vector, &vector_len) == FAILURE ) {
 		return;
 	}
 

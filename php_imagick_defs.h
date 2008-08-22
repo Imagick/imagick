@@ -221,6 +221,7 @@ PHP_METHOD(imagick, liquidrescaleimage);
 #if MagickLibVersion >= 0x640
 PHP_METHOD(imagick, setgravity);
 PHP_METHOD(imagick, getgravity);
+PHP_METHOD(imagick, getimagechannelrange);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);

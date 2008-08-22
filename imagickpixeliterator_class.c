@@ -32,7 +32,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry) == FAILURE ) {
 		return;
 	}
 	
@@ -164,7 +164,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry) == FAILURE ) {
 		return;
 	}
 
@@ -201,7 +201,7 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 	zval *x, *y, *columns, *rows;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Ozzzz", &magick_object, php_imagick_sc_entry, &x, &y, &columns, &rows ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "Ozzzz", &magick_object, php_imagick_sc_entry, &x, &y, &columns, &rows) == FAILURE ) {
 		return;
 	}
 
@@ -269,7 +269,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 	long row;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &row ) == FAILURE ) {
+	if (zend_parse_parameters( ZEND_NUM_ARGS() TSRMLS_CC, "l", &row) == FAILURE ) {
 		return;
 	}
 	
