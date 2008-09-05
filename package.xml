@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-08-22</date>
+	<date>2008-09-05</date>
 	<version>
-		<release>2.2.1RC1</release>
+		<release>2.2.1RC2</release>
 		<api>2.2.1</api>
 	</version>
 	<stability>
@@ -32,10 +32,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes a small memory leak when casting a string to ImagickPixel object
-- Added new constants
-- Added getImageChannelRange method
-- Some cleaning up on the syntax
+- Fixed ZTS build
 </notes>
 	<contents>
 		<dir name="/">
