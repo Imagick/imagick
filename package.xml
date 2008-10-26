@@ -21,18 +21,18 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-09-05</date>
+	<date>2008-10-26</date>
 	<version>
-		<release>2.2.1RC2</release>
+		<release>2.2.1</release>
 		<api>2.2.1</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed ZTS build
+- No bugs reported against RC2 so releasing it as is
 </notes>
 	<contents>
 		<dir name="/">
