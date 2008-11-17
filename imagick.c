@@ -46,47 +46,39 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 
 /* Imagick */
 #if MagickLibVersion > 0x628
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_shadeimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, gray)
 		ZEND_ARG_INFO(0, azimuth)
 		ZEND_ARG_INFO(0, elevation)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagematte_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, enable)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sketchimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, angle)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_pingimageblob_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, imageContents)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_pingimagefile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fp)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_trimimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_waveimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, amplitude)
 		ZEND_ARG_INFO(0, waveLenght)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_vignetteimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, whitePoint)
@@ -94,53 +86,45 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptiveresizeimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_contraststretchimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, whitePoint)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptiveblurimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptivesharpenimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setsizeoffset_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 		ZEND_ARG_INFO(0, offset)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_randomthresholdimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, low)
 		ZEND_ARG_INFO(0, high)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimagelayers_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, LAYER)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_roundcorners_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xRounding)
 		ZEND_ARG_INFO(0, yRounding)
@@ -149,12 +133,10 @@ static
 		ZEND_ARG_INFO(0, sizeCorrection)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setiteratorindex_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_transformimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, crop)
 		ZEND_ARG_INFO(0, geometry)
@@ -162,35 +144,29 @@ static
 #endif
 
 #if MagickLibVersion > 0x631
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_polaroidimage_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
 		ZEND_ARG_INFO(0, angle)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageproperty_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, name)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageproperty_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, name)
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageinterpolatemethod_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, INTERPOLATE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_linearstretchimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, whitePoint)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_extentimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -200,14 +176,12 @@ static
 #endif
 
 #if MagickLibVersion > 0x633
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageorientation_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ORIENTATION)
 	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x634
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_paintfloodfillimage_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, CHANNEL)
 		ZEND_ARG_INFO(0, fill)
@@ -219,26 +193,22 @@ static
 #endif
 
 #if MagickLibVersion > 0x630
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
 #endif
 
 #ifdef HAVE_IMAGEMAGICK6359ORLATER
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_clutimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageproperties_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, pattern)
 		ZEND_ARG_INFO(0, values)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageprofiles_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, pattern)
 		ZEND_ARG_INFO(0, values)
@@ -246,7 +216,6 @@ static
 #endif
 
 #if MagickLibVersion > 0x635
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_distortimage_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, method)
 		ZEND_ARG_INFO(0, arguments)
@@ -255,31 +224,26 @@ static
 #endif
 
 #if defined(HAVE_IMAGEMAGICK6364ORLATER)
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setfont_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, font)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setpointsize_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, pointsize)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_mergeimagelayers_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, LAYERMETHOD)
 	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x637
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagealphachannel_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ALPHACHANNELTYPE)
 	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x638
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_liquidrescaleimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
@@ -289,27 +253,22 @@ static
 #endif
 
 #if MagickLibVersion >= 0x640
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setgravity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, GRAVITY)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelrange_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()	
 #endif
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_construct_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, files)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getpixelregioniterator_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
@@ -318,80 +277,66 @@ static
 		ZEND_ARG_INFO(0, modify)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_readimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_readimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filenames)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_readimageblob_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, imageContents)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageformat_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, imageFormat)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_scaleimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimage_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimages_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, filename)
 		ZEND_ARG_INFO(0, adjoin)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_blurimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thumbnailimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 		ZEND_ARG_INFO(0, fit)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_cropthumbnailimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagefilename_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageindex_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_commentimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, comment)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_cropimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -399,22 +344,18 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_labelimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, label)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_drawimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecompressionquality_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, quality)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_annotateimage_args, 0, 0, 5)
 		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
 		ZEND_ARG_INFO(0, x)
@@ -423,7 +364,6 @@ static
 		ZEND_ARG_INFO(0, text)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_compositeimage_args, 0, 0, 4)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, COMPOSITE)
@@ -432,14 +372,12 @@ static
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_modulateimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, brightness)
 		ZEND_ARG_INFO(0, saturation)
 		ZEND_ARG_INFO(0, hue)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_montageimage_args, 0, 0, 5)
 		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
 		ZEND_ARG_INFO(0, tileGeometry)
@@ -448,68 +386,56 @@ static
 		ZEND_ARG_INFO(0, frame)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_identifyimage_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, appendRawOutput)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_thresholdimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_adaptivethresholdimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 		ZEND_ARG_INFO(0, offset)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_blackthresholdimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_whitethresholdimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_appendimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, stack)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_charcoalimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_normalizeimage_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_oilpaintimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_posterizeimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, levels)
 		ZEND_ARG_INFO(0, dither)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_radialblurimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, angle)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_raiseimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -518,7 +444,6 @@ static
 		ZEND_ARG_INFO(0, raise)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_resampleimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, xResolution)
 		ZEND_ARG_INFO(0, yResolution)
@@ -526,36 +451,30 @@ static
 		ZEND_ARG_INFO(0, blur)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_resizeimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_rollimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_rotateimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, degrees)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sampleimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_solarizeimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_shadowimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, opacity)
 		ZEND_ARG_INFO(0, sigma)
@@ -563,58 +482,47 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageattribute_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, key)
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageattribute_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebackgroundcolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecompose_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, COMPOSITE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecompression_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, COMPRESSION)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagedelay_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, delay)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagedepth_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, depth)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagegamma_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, gamma)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageiterations_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, iterations)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagemattecolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagepage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -622,53 +530,44 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageresolution_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xResolution)
 		ZEND_ARG_INFO(0, yResolution)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagescene_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, scene)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagetickspersecond_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ticksPerSecond)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagetype_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageunits_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, RESOLUTION)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sharpenimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_shaveimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_shearimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, xShear)
 		ZEND_ARG_INFO(0, yShear)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_spliceimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -676,91 +575,74 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_pingimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_readimagefile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fp)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_displayimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, serverName)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_displayimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, serverName)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_spreadimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_swirlimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, degrees)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_queryformats_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, pattern)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_queryfonts_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, pattern)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_queryfontmetrics_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
 		ZEND_ARG_INFO(0, text)
 		ZEND_ARG_INFO(0, multiline)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_steganoimage_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, offset)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_addnoiseimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, NOISE)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_motionblurimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, angle)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_morphimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, frames)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_affinetransformimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, ImagickDraw, ImagickDraw, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_borderimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
 	ZEND_END_ARG_INFO()
 
-
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_chopimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -768,13 +650,11 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_clippathimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, pathname)
 		ZEND_ARG_INFO(0, inside)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colorfloodfillimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, fill_color)
 		ZEND_ARG_INFO(0, fuzz)
@@ -783,60 +663,50 @@ static
 		ZEND_ARG_INFO(0, x)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colorizeimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, colorize_color)
 		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimagechannels_args, 0, 0, 3)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 		ZEND_ARG_INFO(0, METRIC)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_compareimages_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, METRIC)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_contrastimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, sharpen)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_convolveimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, kernel)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_cyclecolormapimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, displace)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_edgeimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_embossimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_evaluateimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, EVALUATE)
 		ZEND_ARG_INFO(0, constant)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_frameimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, width)
@@ -845,75 +715,62 @@ static
 		ZEND_ARG_INFO(0, outerBevel)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_fximage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, expression)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_gammaimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, gamma)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_gaussianblurimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechanneldepth_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechanneldistortion_args, 0, 0, 3)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 		ZEND_ARG_INFO(0, METRIC)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelextrema_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelmean_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagecolormapcolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagedistortion_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, METRIC)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagepixelcolor_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageprofile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, name)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagetotalinkdensity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageregion_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -921,7 +778,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_levelimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, blackPoint)
 		ZEND_ARG_INFO(0, gamma)
@@ -929,13 +785,11 @@ static
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_mapimage_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, dither)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_mattefloodfillimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, fuzz)
@@ -944,18 +798,15 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_medianfilterimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_negateimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, gray)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_paintopaqueimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, target_color)
 		ZEND_ARG_INFO(0, fill_color)
@@ -963,25 +814,21 @@ static
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_painttransparentimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, target_color)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_previewimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, PREVIEW)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_profileimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, name)
 		ZEND_ARG_INFO(0, profile)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_quantizeimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, numColors)
 		ZEND_ARG_INFO(0, COLORSPACE)
@@ -990,7 +837,6 @@ static
 		ZEND_ARG_INFO(0, measureError)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_quantizeimages_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, numColors)
 		ZEND_ARG_INFO(0, COLORSPACE)
@@ -999,110 +845,90 @@ static
 		ZEND_ARG_INFO(0, measureError)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_reducenoiseimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_removeimageprofile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, name)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_separateimagechannel_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sepiatoneimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebias_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, bias)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageblueprimary_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebordercolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagechanneldepth_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, CHANNEL)
 		ZEND_ARG_INFO(0, depth)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecolormapcolor_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, index)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecolorspace_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, COLORSPACE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagedispose_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, DISPOSETYPE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageextent_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagegreenprimary_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageinterlacescheme_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, INTERLACE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageprofile_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, name)
 		ZEND_ARG_INFO(0, profile)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageredprimary_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagerenderingintent_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, RENDERINGINTENT)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagevirtualpixelmethod_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, VIRTUALPIXELMETHOD)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagewhitepoint_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sigmoidalcontrastimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, sharpen)
 		ZEND_ARG_INFO(0, alpha)
@@ -1110,23 +936,19 @@ static
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_stereoimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_textureimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_tintimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, tint_color)
 		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_unsharpmaskimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
@@ -1135,17 +957,14 @@ static
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_addimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_newimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
@@ -1153,65 +972,53 @@ static
 		ZEND_ARG_INFO(0, format)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_newpseudoimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 		ZEND_ARG_INFO(0, pseudoString)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getoption_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getresource_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, resource_type)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getresourcelimit_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, resource_type)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setbackgroundcolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setcompression_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, compression)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setcompressionquality_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, compressionquality)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setfilename_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setformat_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, format)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setinterlacescheme_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, INTERLACE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setoption_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, key)
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setpage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
@@ -1219,30 +1026,25 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setresourcelimit_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, RESOURCETYPE)
 		ZEND_ARG_INFO(0, limit)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setresolution_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xResolution)
 		ZEND_ARG_INFO(0, yResolution)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setsamplingfactors_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, factors)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setsize_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagick_settype_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
@@ -1250,36 +1052,29 @@ static
 
 /* ImagickDraw */
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfillcolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfillalpha_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, alpha)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokecolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokealpha_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, alpha)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokewidth_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, width)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_circle_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, ox)
 		ZEND_ARG_INFO(0, oy)
@@ -1287,49 +1082,40 @@ static
 		ZEND_ARG_INFO(0, py)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_annotation_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 		ZEND_ARG_INFO(0, text)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextantialias_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, antialias)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextencoding_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, encoding)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfont_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, font)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontfamily_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fontfamily)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontsize_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, pointsize)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontstyle_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, STYLE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontweight_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, weight)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_rectangle_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1337,7 +1123,6 @@ static
 		ZEND_ARG_INFO(0, y2)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_roundrectangle_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1347,7 +1132,6 @@ static
 		ZEND_ARG_INFO(0, ry)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_ellipse_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, ox)
 		ZEND_ARG_INFO(0, oy)
@@ -1357,23 +1141,19 @@ static
 		ZEND_ARG_INFO(0, end)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_skewx_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, degrees)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_skewy_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, degrees)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_translate_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_line_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, sx)
 		ZEND_ARG_INFO(0, sy)
@@ -1381,7 +1161,6 @@ static
 		ZEND_ARG_INFO(0, ey)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_arc_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, sx)
 		ZEND_ARG_INFO(0, sy)
@@ -1391,50 +1170,41 @@ static
 		ZEND_ARG_INFO(0, ed)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_matte_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 		ZEND_ARG_INFO(0, METHOD)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_polygon_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, coordinates)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_point_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontstretch_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, STRETCH)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokeantialias_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, antialias)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontalignment_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ALIGN)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextdecoration_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, DECORATION)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextundercolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setviewbox_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, sx)
 		ZEND_ARG_INFO(0, sy)
@@ -1442,17 +1212,14 @@ static
 		ZEND_ARG_INFO(0, ey)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_affine_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, affineMatrix)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_bezier_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, coordinateArray)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_composite_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, COMPOSE)
 		ZEND_ARG_INFO(0, x)
@@ -1462,19 +1229,16 @@ static
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_color_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 		ZEND_ARG_INFO(0, PAINTMETHOD)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_comment_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, comment)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetoabsolute_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1484,7 +1248,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetorelative_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1494,7 +1257,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetoquadraticbezierabsolute_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1502,7 +1264,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetoquadraticbezierrelative_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1510,19 +1271,16 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetoquadraticbeziersmoothabsolute_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetoquadraticbeziersmoothrelative_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetosmoothabsolute_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1530,7 +1288,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathcurvetosmoothrelative_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, x1)
 		ZEND_ARG_INFO(0, y1)
@@ -1538,7 +1295,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathellipticarcabsolute_args, 0, 0, 7)
 		ZEND_ARG_INFO(0, rx)
 		ZEND_ARG_INFO(0, ry)
@@ -1549,7 +1305,6 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathellipticarcrelative_args, 0, 0, 7)
 		ZEND_ARG_INFO(0, rx)
 		ZEND_ARG_INFO(0, ry)
@@ -1560,61 +1315,50 @@ static
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathlinetoabsolute_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathlinetorelative_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathlinetohorizontalabsolute_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathlinetohorizontalrelative_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, x)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathlinetoverticalabsolute_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathlinetoverticalrelative_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, x)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathmovetoabsolute_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pathmovetorelative_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_polyline_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, coordinateArray)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pushclippath_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, clipMask)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_pushpattern_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, pattern_id)
 		ZEND_ARG_INFO(0, x)
@@ -1623,88 +1367,71 @@ static
 		ZEND_ARG_INFO(0, height)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_rotate_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, degrees)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_scale_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setclippath_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, clipMask)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setcliprule_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, FILLRULE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setclipunits_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, PATHUNITS)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfillopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, fillOpacity)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfillpatternurl_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, url)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfillrule_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, FILLRULE)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setgravity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, GRAVITY)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokepatternurl_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, url)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokedashoffset_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, offset)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokelinecap_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, LINECAP)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokelinejoin_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, LINEJOIN)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokemiterlimit_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, miterLimit)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokeopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, strokeOpacity)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setvectorgraphics_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, xml)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setstrokedasharray_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, dashArray)
 	ZEND_END_ARG_INFO()
@@ -1712,7 +1439,6 @@ static
 /* ImagickPixel */
 
 #if MagickLibVersion > 0x628
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_sethsl_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, hue)
 		ZEND_ARG_INFO(0, saturation)
@@ -1720,59 +1446,48 @@ static
 	ZEND_END_ARG_INFO()
 #endif
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_construct_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_issimilar_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorvalue_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_getcolorvalue_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorcount_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, colorCount)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_getcolor_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, normalized)
 	ZEND_END_ARG_INFO()
 
 /* ImagickPixelIterator */
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_construct_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
 
-static
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_setiteratorrow_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, row)
 	ZEND_END_ARG_INFO()
