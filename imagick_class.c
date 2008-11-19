@@ -6576,8 +6576,20 @@ PHP_METHOD(imagick, annotateimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::setImageCompression(int compression)
-	Sets the image compression.
+/* {{{ proto bool Imagick::getImageCompressionQuality(int quality)
+        Gets the image compression quality 
+*/
+PHP_METHOD(imagick, getimagecompressionquality)
+{
+	php_imagick_object *intern;
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETVAL_LONG(MagickGetImageCompressionQuality(intern->magick_wand));
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setImageCompressionQuality(int quality)
+	Sets the image compression quality
 */
 PHP_METHOD(imagick, setimagecompressionquality)
 {
@@ -6602,6 +6614,10 @@ PHP_METHOD(imagick, setimagecompressionquality)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+
+
 
 /* {{{ proto bool Imagick::compositeImage(Imagick composite_wand, int compose, int x, int y[, int channel] )
 	Composite one image onto another at the specified offset. Channel parameter is ignored in ImageMagick below 6.2.8

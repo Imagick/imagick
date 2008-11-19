@@ -269,6 +269,7 @@ PHP_METHOD(imagick, drawimage);
 PHP_METHOD(imagick, getimageblob);
 PHP_METHOD(imagick, getimagesblob);
 PHP_METHOD(imagick, setimagecompressionquality);
+PHP_METHOD(imagick, getimagecompressionquality);
 PHP_METHOD(imagick, annotateimage);
 PHP_METHOD(imagick, compositeimage);
 PHP_METHOD(imagick, modulateimage);
