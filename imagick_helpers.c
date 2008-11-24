@@ -152,9 +152,20 @@ int read_image_into_magickwand(php_imagick_object *intern, char *filename, int t
 {
 	int error = IMAGICK_READ_WRITE_NO_ERROR;
 	MagickBooleanType status;
-	char *absolute = expand_filepath(filename, NULL TSRMLS_CC);
+	char *absolute;
 
-	if (strlen(filename) > MAXPATHLEN) {
+	if (!filename) {
+		return IMAGICK_READ_WRITE_NO_ERROR;
+	}
+
+	absolute = expand_filepath(filename, NULL TSRMLS_CC);
+
+	if (!absolute) {
+		return IMAGICK_READ_WRITE_NO_ERROR;
+	}
+
+	if (strlen(absolute) > MAXPATHLEN) {
+		efree(absolute);
 		return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 	}
 
