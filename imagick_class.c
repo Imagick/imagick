@@ -1456,10 +1456,6 @@ PHP_METHOD(imagick, __construct)
 		/* get the filename */
 		filename = estrdup(Z_STRVAL_P(files));
 
-		if (!filename) {
-			return;
-		}
-
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 		status = read_image_into_magickwand(intern, filename, 1 TSRMLS_CC);
 		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
