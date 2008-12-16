@@ -5677,7 +5677,7 @@ PHP_METHOD(imagick, colorizeimage)
 	IMAGICK_CAST_PARAMETER_TO_COLOR(color_param, intern_color, 1);
 	IMAGICK_CAST_PARAMETER_TO_OPACITY(opacity_param, intern_opacity, 1);
 
-	IMAGICK_CLONE_PIXELWAND(intern_color->pixel_wand, final_wand);
+	IMAGICK_CLONE_PIXELWAND(intern_opacity->pixel_wand, final_wand);
 
 	status = MagickColorizeImage(intern->magick_wand, final_wand, final_wand);
 	final_wand = (PixelWand *)DestroyPixelWand(final_wand);
