@@ -179,6 +179,7 @@ PHP_METHOD(imagick, transformimage);
 #endif
 #if MagickLibVersion > 0x630
 PHP_METHOD(imagick, setimageopacity);
+PHP_METHOD(imagick, orderedposterizeimage);
 #endif
 #if MagickLibVersion > 0x631
 PHP_METHOD(imagick, polaroidimage);

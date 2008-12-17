@@ -725,6 +725,34 @@ PHP_METHOD(imagick, setimageopacity)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto bool Imagick::orderedposterizeImage(string threshold_map[, int CHANNEL])
+	Performs an ordered dither
+*/
+PHP_METHOD(imagick, orderedposterizeimage)
+{
+	char *map;
+	int map_len;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+	long channel = AllChannels;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &map, &map_len, &channel) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickOrderedPosterizeImageChannel(intern->magick_wand, channel, map);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to posterize image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 #if MagickLibVersion > 0x631

@@ -196,6 +196,11 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_orderedposterizeimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, threshold_map)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()	
 #endif
 
 #ifdef HAVE_IMAGEMAGICK6359ORLATER
@@ -1700,6 +1705,7 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x630
 	PHP_ME(imagick, setimageopacity, imagick_setimageopacity_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, orderedposterizeimage, imagick_orderedposterizeimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x631
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
