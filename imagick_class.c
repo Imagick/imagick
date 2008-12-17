@@ -3737,14 +3737,14 @@ PHP_METHOD(imagick, convolveimage)
 		return;
 	}
 
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
 	kernel = get_double_array_from_zval(kernel_array, &order TSRMLS_CC);
 
 	if(kernel == (double *)NULL) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to read matrix array", 1);
 	}
-
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	status = MagickConvolveImageChannel(intern->magick_wand, channel, order, kernel);
 	efree(kernel);
