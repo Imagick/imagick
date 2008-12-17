@@ -21,18 +21,20 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-10-26</date>
+	<date>2008-12-17</date>
 	<version>
-		<release>2.2.1</release>
-		<api>2.2.1</api>
+		<release>2.2.2RC1</release>
+		<api>2.2.2</api>
 	</version>
 	<stability>
-		<release>stable</release>
+		<release>beta</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- No bugs reported against RC2 so releasing it as is
+- Fixes Pecl bug #15321 
+- Added getImageCompressionQuality
+- Fixes building against PHP 5.3
 </notes>
 	<contents>
 		<dir name="/">
