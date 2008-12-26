@@ -2080,7 +2080,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 
 	/* Allocate memory for it */
 	intern = (php_imagick_object *) emalloc(sizeof(php_imagick_object));
-	memset(&intern->zo, 0, sizeof(php_imagick_object));
+	memset(&intern->zo, 0, sizeof(zend_object));
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* If its our thread then we already have the lock so no need to lock again */
@@ -2121,7 +2121,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 
 	/* Allocate memory for it */
 	intern = (php_imagickdraw_object *) emalloc(sizeof(php_imagickdraw_object));
-	memset(&intern->zo, 0, sizeof(php_imagickdraw_object));
+	memset(&intern->zo, 0, sizeof(zend_object));
 
 	if (ptr) {
 		*ptr = intern;
@@ -2153,7 +2153,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 
 	/* Allocate memory for it */
 	intern = (php_imagickpixeliterator_object *) emalloc(sizeof(php_imagickpixeliterator_object));
-	memset(&intern->zo, 0, sizeof(php_imagickpixeliterator_object));
+	memset(&intern->zo, 0, sizeof(zend_object));
 
 	/* We cant initialize yet */
 	intern->pixel_iterator = NULL;
@@ -2182,7 +2182,7 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 
 	/* Allocate memory for it */
 	intern = (php_imagickpixel_object *) emalloc(sizeof(php_imagickpixel_object));
-	memset(&intern->zo, 0, sizeof(php_imagickpixel_object));
+	memset(&intern->zo, 0, sizeof(zend_object));
 
 	if (ptr) {
 		*ptr = intern;
