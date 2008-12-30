@@ -8205,6 +8205,36 @@ PHP_METHOD(imagick, setpage)
 }
 /* }}} */
 
+PHP_METHOD(imagick, setimageprogressmonitor)
+{
+	int status = IMAGICK_READ_WRITE_NO_ERROR;
+	char *filename;
+	int filename_len;
+	php_imagick_object *intern;
+	
+	if (!IMAGICK_G(progress_monitor)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(1, "Progress monitoring is disabled in ini-settings", 1);
+	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
+		return;
+	}
+	
+	IMAGICK_SAFE_MODE_CHECK(filename, status);
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);	
+	
+	if (intern->progress_monitor_name) {
+		efree(intern->progress_monitor_name);
+	}
+	
+	intern->progress_monitor_name = estrdup(filename);
+	MagickSetImageProgressMonitor(intern->magick_wand, php_imagick_progress_monitor, intern);
+	RETURN_TRUE;
+}
+
 /* {{{ proto bool Imagick::setResourceLimit(RESOURCETYPE type, int limit)
 	Sets the limit for a particular resource in megabytes.
 */

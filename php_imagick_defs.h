@@ -24,6 +24,7 @@
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
 	zend_bool locale_fix;
+	zend_bool progress_monitor;
 ZEND_END_MODULE_GLOBALS(imagick)
 
 #ifdef ZTS
@@ -59,6 +60,7 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 typedef struct _php_imagick_object  {
 	zend_object zo;
 	MagickWand *magick_wand;
+	char *progress_monitor_name;
 	int next_out_of_bound;
 } php_imagick_object;
 
@@ -105,6 +107,9 @@ int check_write_access(char *absolute TSRMLS_DC );
 zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);
 double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC );
+
+MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
+
 
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11
@@ -304,6 +309,7 @@ PHP_METHOD(imagick, setimagegamma);
 PHP_METHOD(imagick, setimageiterations);
 PHP_METHOD(imagick, setimagemattecolor);
 PHP_METHOD(imagick, setimagepage);
+PHP_METHOD(imagick, setimageprogressmonitor);
 PHP_METHOD(imagick, setimageresolution);
 PHP_METHOD(imagick, setimagescene);
 PHP_METHOD(imagick, setimagetickspersecond);

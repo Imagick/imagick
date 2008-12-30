@@ -22,6 +22,31 @@
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
 
+MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data)
+{
+	FILE *fp;
+	php_imagick_object *intern = (php_imagick_object *)client_data;
+	
+	if (!intern) {
+		return MagickFalse;
+	}
+	
+	if (!intern->progress_monitor_name) {
+		return MagickFalse;
+	}
+
+	fp = fopen(intern->progress_monitor_name, "a+");
+	
+	if (!fp) {
+		return MagickFalse;
+	}
+
+	fprintf(fp, "text: %s, offset: %ld, span: %ld\n", text, offset, span);
+	fclose(fp);
+	return MagickTrue;	
+}
+
+
 int count_occurences_of(char needle, char *haystack TSRMLS_DC)
 {
 	int occurances = 0;

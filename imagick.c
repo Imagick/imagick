@@ -535,6 +535,10 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageprogressmonitor_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, filename)
+	ZEND_END_ARG_INFO()
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageresolution_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xResolution)
 		ZEND_ARG_INFO(0, yResolution)
@@ -1824,6 +1828,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageiterations, imagick_setimageiterations_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagemattecolor, imagick_setimagemattecolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagepage, imagick_setimagepage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageprogressmonitor, imagick_setimageprogressmonitor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageresolution, imagick_setimageresolution_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagescene, imagick_setimagescene_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagetickspersecond, imagick_setimagetickspersecond_args, ZEND_ACC_PUBLIC)
@@ -2011,6 +2016,10 @@ static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 	if (!intern) {
 		return;
 	}
+	
+	if (intern->progress_monitor_name) {
+		efree(intern->progress_monitor_name);
+	}
 
 	if (intern->magick_wand != (MagickWand *)NULL && IsMagickWand(intern->magick_wand)) {
 		intern->magick_wand = DestroyMagickWand(intern->magick_wand);
@@ -2097,6 +2106,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	/* Set the magickwand */
 	intern->magick_wand = NewMagickWand();
 	intern->next_out_of_bound = 0;
+	intern->progress_monitor_name = NULL;
 
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
@@ -2207,14 +2217,15 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	return php_imagickpixel_object_new_ex(class_type, NULL TSRMLS_CC);
 }
 
-
 PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY("imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals)
+	STD_PHP_INI_ENTRY("imagick.progress_monitor", "0", PHP_INI_SYSTEM, OnUpdateBool, progress_monitor, zend_imagick_globals, imagick_globals)
 PHP_INI_END()
 
 static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 {
 	imagick_globals->locale_fix = 0;
+	imagick_globals->progress_monitor = 0;
 }
 
 static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
