@@ -810,6 +810,7 @@ PHP_METHOD(imagick, getimageproperty)
 		return;
 	}
 
+	/* FIXME: Needs to throw an exception for consistency. Fix in next major version */
 	RETURN_FALSE;
 }
 /* }}} */
@@ -1099,6 +1100,11 @@ PHP_METHOD(imagick, getimageproperties)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	properties = MagickGetImageProperties(intern->magick_wand, pattern, &properties_count);
+
+	if (!properties) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to get image properties", 1);
+	}
+
 	array_init(return_value);
 
 	if (values) {
@@ -1142,6 +1148,11 @@ PHP_METHOD(imagick, getimageprofiles)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	profiles = MagickGetImageProfiles(intern->magick_wand, pattern, &profiles_count);
+
+	if (!profiles) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to get image profiles", 1);
+	}
+
 	array_init(return_value);
 
 	if (values) {
@@ -4743,9 +4754,13 @@ PHP_METHOD(imagick, getimageprofile)
 
 	profile = (char *)MagickGetImageProfile(intern->magick_wand, name, &length);
 
-	ZVAL_STRING(return_value, profile, 1);
-	IMAGICK_FREE_MEMORY(char *, profile);
-	return;
+	if (profile != (char *)NULL && profile[0] != '\0') {
+		ZVAL_STRING(return_value, profile, 1);
+		IMAGICK_FREE_MEMORY(char *, profile);
+		return;
+	}
+
+	IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not get image profile", 1);
 }
 /* }}} */
 
