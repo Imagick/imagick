@@ -1277,7 +1277,7 @@ PHP_METHOD(imagick, getfont)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if ((font = MagickGetFont(intern->magick_wand ) ) != NULL) {
+	if ((font = MagickGetFont(intern->magick_wand)) != (char *)NULL) {
 		ZVAL_STRING(return_value, font, 1);
 		IMAGICK_FREE_MEMORY(char *, font);
 		return;
@@ -1567,10 +1567,8 @@ PHP_METHOD(imagick, __tostring)
 	buffer = MagickGetImageFormat(intern->magick_wand);
 
 	if(buffer == (char *)NULL || *buffer == '\0') {
-
 		ZVAL_STRING(return_value, "", 1);
 		return;
-
 	} else {
 		IMAGICK_FREE_MEMORY(char *, buffer);
 	}
@@ -3130,6 +3128,10 @@ PHP_METHOD(imagick, removeimageprofile)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	profile = MagickRemoveImageProfile(intern->magick_wand, name, &profile_len);
+
+	if (profile == (unsigned char *)NULL) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The image profile does not exist", 1 TSRMLS_CC);
+	}
 
 	ZVAL_STRING(return_value, (char *)profile, 1);
 	IMAGICK_FREE_MEMORY(unsigned char *, profile);
@@ -4754,7 +4756,7 @@ PHP_METHOD(imagick, getimageprofile)
 
 	profile = (char *)MagickGetImageProfile(intern->magick_wand, name, &length);
 
-	if (profile != (char *)NULL && profile[0] != '\0') {
+	if (profile != (char *)NULL) {
 		ZVAL_STRING(return_value, profile, 1);
 		IMAGICK_FREE_MEMORY(char *, profile);
 		return;
@@ -5263,6 +5265,11 @@ PHP_METHOD(imagick, getimagefilename)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	filename = MagickGetImageFilename(intern->magick_wand);
+
+	if (filename == (char *)NULL) {
+		return;
+	}
+
 	ZVAL_STRING(return_value, filename, 1);
 	IMAGICK_FREE_MEMORY(char *, filename);
 	return;
@@ -5302,6 +5309,10 @@ PHP_METHOD(imagick, getimageblob)
 	IMAGICK_HAS_FORMAT(buffer, intern->magick_wand);
 
 	image_contents = MagickGetImageBlob(intern->magick_wand, &image_size);
+	if (!image_contents) {
+		return;
+	}
+
 	ZVAL_STRINGL(return_value, (char *)image_contents, image_size, 1);
 	IMAGICK_FREE_MEMORY(unsigned char *, image_contents);
 	return;
@@ -5352,6 +5363,10 @@ PHP_METHOD(imagick, getimagesblob)
 	}
 
 	image_contents = MagickGetImagesBlob(intern->magick_wand, &image_size);
+	if (!image_contents) {
+		return;
+	}
+
 	ZVAL_STRINGL(return_value, (char *)image_contents, image_size, 1);
 	IMAGICK_FREE_MEMORY(unsigned char *, image_contents);
 	return;
@@ -5372,6 +5387,10 @@ PHP_METHOD(imagick, getimageformat)
 	IMAGICK_HAS_FORMAT(buffer, intern->magick_wand);
 
 	format = MagickGetImageFormat(intern->magick_wand);
+	if (!format) {
+		return;
+	}
+
 	ZVAL_STRING(return_value, format, 1);
 	IMAGICK_FREE_MEMORY(char *, format);
 	return;
@@ -7725,11 +7744,12 @@ PHP_METHOD(imagick, getfilename)
 	char *filename;
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
 	filename = (char *)MagickGetFilename(intern->magick_wand);
-	ZVAL_STRING(return_value, filename, 1);
-
-	IMAGICK_FREE_MEMORY(char *, filename);
+	
+	if (filename) {
+		ZVAL_STRING(return_value, filename, 1);
+		IMAGICK_FREE_MEMORY(char *, filename);
+	}
 	return;
 }
 /* }}} */
@@ -7743,11 +7763,12 @@ PHP_METHOD(imagick, getformat)
 	char *format;
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
 	format = (char *)MagickGetFormat(intern->magick_wand);
-	ZVAL_STRING(return_value, format, 1);
-
-	IMAGICK_FREE_MEMORY(char *, format);
+	
+	if (format) {
+		ZVAL_STRING(return_value, format, 1);
+		IMAGICK_FREE_MEMORY(char *, format);
+	}
 	return;
 }
 /* }}} */
@@ -7763,9 +7784,10 @@ PHP_METHOD(imagick, gethomeurl)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	home_url = (char *)MagickGetHomeURL();
-	ZVAL_STRING(return_value, home_url, 1);
-
-	IMAGICK_FREE_MEMORY(char *, home_url);
+	if (home_url) {
+		ZVAL_STRING(return_value, home_url, 1);
+		IMAGICK_FREE_MEMORY(char *, home_url);
+	}
 	return;
 }
 /* }}} */
@@ -7798,9 +7820,11 @@ PHP_METHOD(imagick, getoption)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	value = MagickGetOption(intern->magick_wand, key);
-	ZVAL_STRING(return_value, value, 1);
 
-	IMAGICK_FREE_MEMORY(char *, value);
+	if (value) {	
+		ZVAL_STRING(return_value, value, 1);
+		IMAGICK_FREE_MEMORY(char *, value);
+	}
 	return;
 }
 /* }}} */
