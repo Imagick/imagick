@@ -4757,7 +4757,7 @@ PHP_METHOD(imagick, getimageprofile)
 	profile = (char *)MagickGetImageProfile(intern->magick_wand, name, &length);
 
 	if (profile != (char *)NULL) {
-		ZVAL_STRING(return_value, profile, 1);
+		ZVAL_STRINGL(return_value, profile, length, 1);
 		IMAGICK_FREE_MEMORY(char *, profile);
 		return;
 	}
