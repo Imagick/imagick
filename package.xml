@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2008-12-17</date>
+	<date>2009-01-11</date>
 	<version>
-		<release>2.2.2RC1</release>
+		<release>2.2.2RC2</release>
 		<api>2.2.2</api>
 	</version>
 	<stability>
@@ -32,9 +32,11 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes Pecl bug #15321 
-- Added getImageCompressionQuality
-- Fixes building against PHP 5.3
++ Added Imagick::setImageProgressmonitor and Imagick::orderedPosterizeImage
+- Fixes http://imagemagick.org/discourse-server/viewtopic.php?f=18&t=12828
+- Fixes error with empty exception messages
+- Fixes PECL Bug #15332
+- Fixed a possible memory leak in Imagick::convolveImage
 </notes>
 	<contents>
 		<dir name="/">
