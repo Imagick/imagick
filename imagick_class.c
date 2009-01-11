@@ -3130,7 +3130,7 @@ PHP_METHOD(imagick, removeimageprofile)
 	profile = MagickRemoveImageProfile(intern->magick_wand, name, &profile_len);
 
 	if (profile == (unsigned char *)NULL) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The image profile does not exist", 1 TSRMLS_CC);
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The image profile does not exist", 1);
 	}
 
 	ZVAL_STRING(return_value, (char *)profile, 1);
