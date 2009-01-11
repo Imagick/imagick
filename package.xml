@@ -33,7 +33,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 + Added Imagick::setImageProgressmonitor and Imagick::orderedPosterizeImage
-- Fixes http://imagemagick.org/discourse-server/viewtopic.php?f=18&t=12828
+- Fixes http://imagemagick.org/discourse-server/viewtopic.php?f=18&amp;t=12828
 - Fixes error with empty exception messages
 - Fixes PECL Bug #15332
 - Fixed a possible memory leak in Imagick::convolveImage
