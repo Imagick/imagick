@@ -2230,38 +2230,50 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 
 static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
 {
+	MagickWand *wand_copy = NULL;
 	php_imagick_object *new_obj = NULL;
 	php_imagick_object *old_obj = (php_imagick_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_ov = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	 
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	
-	IMAGICK_REPLACE_MAGICKWAND(new_obj, old_obj->magick_wand);
+	wand_copy = CloneMagickWand(old_obj->magick_wand);
+	IMAGICK_REPLACE_MAGICKWAND(new_obj, wand_copy);
 	new_obj->next_out_of_bound = old_obj->next_out_of_bound;
 	
+	if (old_obj->progress_monitor_name) {
+		new_obj->progress_monitor_name = estrdup(old_obj->progress_monitor_name);
+	}
+
 	return new_ov;
 }
 
 static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSRMLS_DC)
 {
+	DrawingWand *wand_copy = NULL;
 	php_imagickdraw_object *new_obj = NULL;
 	php_imagickdraw_object *old_obj = (php_imagickdraw_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_ov = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
-	IMAGICKDRAW_REPLACE_DRAWINGWAND(new_obj, old_obj->drawing_wand);
+	wand_copy = CloneDrawingWand(old_obj->drawing_wand);
+
+	IMAGICKDRAW_REPLACE_DRAWINGWAND(new_obj, wand_copy);
 	return new_ov;
 }
 
 static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TSRMLS_DC)
 {
+	PixelWand *wand_copy = NULL;
 	php_imagickpixel_object *new_obj = NULL;
 	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_ov = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 
-	IMAGICKPIXEL_REPLACE_PIXELWAND(new_obj, old_obj->pixel_wand);
+	wand_copy = ClonePixelWand(old_obj->pixel_wand);
+	IMAGICKPIXEL_REPLACE_PIXELWAND(new_obj, wand_copy);
+
 	new_obj->initialized_via_iterator = 0;
 	return new_ov;
 }
