@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2009-01-11</date>
+	<date>2009-01-17</date>
 	<version>
-		<release>2.2.2RC2</release>
+		<release>2.2.2RC3</release>
 		<api>2.2.2</api>
 	</version>
 	<stability>
@@ -32,11 +32,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-+ Added Imagick::setImageProgressmonitor and Imagick::orderedPosterizeImage
-- Fixes http://imagemagick.org/discourse-server/viewtopic.php?f=18&amp;t=12828
-- Fixes error with empty exception messages
-- Fixes PECL Bug #15332
-- Fixed a possible memory leak in Imagick::convolveImage
+- Fixed clone keyword to actually clone the wand ptr
+- Imagick progress monitor name is now correctly cloned
+- Fixes PECL Bug #15614
 </notes>
 	<contents>
 		<dir name="/">
