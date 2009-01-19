@@ -127,7 +127,7 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 	for (i = 0 ; i < elements ; i++) {
 
 		if (zend_hash_get_current_data(ht, (void**)&ppzval) == FAILURE) {
-			efree(ht);
+			efree(double_array);
 			double_array = (double *)NULL;
 			return double_array;
 		}
@@ -140,8 +140,7 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 			double_array[i] = Z_DVAL_PP(ppzval);
 		
 		} else {
-
-			efree(ht);
+			efree(double_array);
 			double_array = (double *)NULL;
 			return double_array;
 		}
