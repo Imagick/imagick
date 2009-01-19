@@ -508,6 +508,11 @@ int write_image_from_filename(php_imagick_object *intern, char *filename, zend_b
 			buffer = filename;
 			while (((c = *(buffer++)) != '\0') && c != ':') { pos++; };
 			
+			if (*buffer == '\0') {
+				return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+			}
+
+			
 			if (strlen(buffer) > MAXPATHLEN) {
 				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 			}			
