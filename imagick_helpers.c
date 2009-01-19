@@ -328,7 +328,7 @@ void deallocate_wands(MagickWand *magick, DrawingWand *draw, PixelWand *pixel TS
 
 void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 {
-    PointInfo *coordinates;
+	PointInfo *coordinates;
 	long elements, sub_elements, i;
 	HashTable *coords;
 	zval **ppzval, **ppz_x, **ppz_y;
@@ -353,6 +353,7 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 		/* Get the sub array */
 		if (zend_hash_get_current_data(coords, (void**)&ppzval) == FAILURE) {
 			coordinates = (PointInfo *)NULL;
+			efree(coordinates);
 			*num_elements = 0;
 			return coordinates;
 		}
@@ -360,6 +361,7 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 		/* If its something than array lets error here */
 		if(Z_TYPE_PP(ppzval) != IS_ARRAY) {
 			coordinates = (PointInfo *)NULL;
+			efree(coordinates);
 			*num_elements = 0;
 			return coordinates;
 		}
@@ -370,6 +372,7 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 		/* Exactly two elements */
 		if (sub_elements != 2) {
 			*num_elements = 0;
+			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			return coordinates;
 		}
@@ -379,12 +382,14 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 
 		/* Get X */
 		if (zend_hash_find(sub_array, "x", sizeof("x"), (void**)&ppz_x) == FAILURE) {
+			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			*num_elements = 0;
 			return coordinates;
 		}
 
 		if(Z_TYPE_PP(ppz_x) != IS_DOUBLE && Z_TYPE_PP(ppz_x) != IS_LONG) {
+			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			*num_elements = 0;
 			return coordinates;
@@ -392,12 +397,14 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 
 		/* Get Y */
 		if (zend_hash_find(sub_array, "y", sizeof("y"), (void**)&ppz_y) == FAILURE) {
+			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			*num_elements = 0;
 			return coordinates;
 		}
 
 		if(Z_TYPE_PP(ppz_y) != IS_DOUBLE && Z_TYPE_PP(ppz_y) != IS_LONG) {
+			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			*num_elements = 0;
 			return coordinates;
