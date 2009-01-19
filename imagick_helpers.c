@@ -466,9 +466,9 @@ char *get_pseudo_filename(char *pseudo_string TSRMLS_DC)
 /* type 1 = writeimage, type 2 = writeimages */
 int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC)
 {
-	int error = IMAGICK_READ_WRITE_NO_ERROR, occurences = 0;
+	int error = IMAGICK_READ_WRITE_NO_ERROR, occurences = 0, pos = 0;
 	MagickBooleanType status;
-	char *absolute, *buffer, *format, *tmp, *dup;
+	char *absolute, *buffer, *format, *tmp, c;
 
 #if defined(PHP_WIN32)
 	if (count_occurences_of(':', filename TSRMLS_CC) == 2) {
@@ -482,7 +482,6 @@ int write_image_from_filename(php_imagick_object *intern, char *filename, zend_b
 	switch (occurences) {
 		
 		case 0:
-
 			if (strlen(filename) > MAXPATHLEN) {
 				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
 			}
@@ -506,31 +505,18 @@ int write_image_from_filename(php_imagick_object *intern, char *filename, zend_b
 
 		case 1:
 			/* Duplicate the filename */
-			dup = estrdup(filename);
-
-			if(!dup) {
-				return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
-			}
-
-			format = strtok(dup, ":");
-			buffer = strtok(NULL, ":");
-
-			if(buffer == NULL) {
-				efree(dup);
-				return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
-			}
-
+			buffer = filename;
+			while (((c = *(buffer++)) != '\0') && c != ':') { pos++; };
+			
 			if (strlen(buffer) > MAXPATHLEN) {
-				efree(dup);
 				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
-			}
-
+			}			
+			
 			/* Safe mode checking */
 			tmp = expand_filepath(buffer, NULL TSRMLS_CC);
 			IMAGICK_SAFE_MODE_CHECK(tmp, error);
 
 			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(dup);
 				efree(tmp);
 				return error;
 			}
@@ -538,29 +524,18 @@ int write_image_from_filename(php_imagick_object *intern, char *filename, zend_b
 			error = check_write_access(tmp TSRMLS_CC);
 			
 			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(dup);
 				efree(tmp);
 				return error;
-			}      
+			}
+			
+			format = emalloc(pos+1);
+			format[0] = '\0';
+			strncat(format, filename, pos);			
 
 			/* Allocate space */
-			absolute = (char *)emalloc(strlen(format) + strlen(tmp) + 2);
-			memset(absolute, '\0', strlen(format) + strlen(tmp) + 2);
-
-			/* The final filename */
-			strncat(absolute, format, strlen(format));
-			strncat(absolute, ":", 1);
-			strncat(absolute, tmp, strlen(tmp));
-
-			efree(dup);
-			efree(tmp);   
-			/* absolute now contains the path */
-
-			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(absolute);
-				return error;
-			}
-
+			spprintf(&absolute, 0, "%s:%s", format, tmp);
+			efree(format);
+			efree(tmp);
 		break;
 
 		default:
