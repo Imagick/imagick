@@ -134,11 +134,8 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 
 		if(Z_TYPE_PP(ppzval) == IS_LONG) {
 			double_array[i] = (double)Z_LVAL_PP(ppzval);
-
 		} else if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
-
 			double_array[i] = Z_DVAL_PP(ppzval);
-		
 		} else {
 			efree(double_array);
 			double_array = (double *)NULL;
@@ -284,15 +281,12 @@ zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long
 	}
 	
 	if (((double)orig_width / (double)desired_width) > ((double)orig_height / (double)desired_height)) {
-
 		ratio = (double)orig_height / (double)desired_height;
 		image_width = (double)orig_width / (double)ratio;
 		image_height = desired_height;
 		
 		crop_x = ((double)image_width - (double)desired_width) / 2;
-
 	} else {
-
 		ratio = (double)orig_width / (double)desired_width;
 		image_height = (double)orig_height / (double)ratio;
 		image_width = desired_width;
@@ -437,11 +431,9 @@ void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_
 	(void) PixelResetIterator(internpix->pixel_iterator);
 
 	while ((row = (PixelWand **)PixelGetNextIteratorRow(internpix->pixel_iterator, &tmp))) {
-		
 		if (row == (PixelWand **)NULL) {
 			break;
 		}
-
 		rows++;
 	}
 	internpix->rows = rows;
@@ -922,6 +914,15 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_PERSPECTIVEPROJECTION", PerspectiveProjectionDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SCALEROTATETRANSLATE", ScaleRotateTranslateDistortion);
 #endif
+#if MagickLibVersion > 0x645
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_POLYNOMIAL", PolynomialDistortion);
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_POLAR", PolarDistortion);
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_DEPOLAR", DePolarDistortion);
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARREL", BarrelDistortion);
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARRELINVERSE", BarrelInverseDistortion);
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SHEPARDS", ShepardsDistortion);
+	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SENTINEL", SentinelDistortion);
+#endif
 #ifdef HAVE_IMAGEMAGICK6364ORLATER
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_MERGE", MergeLayer);
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_FLATTEN", FlattenLayer);
@@ -932,5 +933,14 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DEACTIVATE", DeactivateAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_RESET", ResetAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_SET", SetAlphaChannel);
+#endif
+#if MagickLibVersion > 0x645
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_UNDEFINED", UndefinedAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_COPY", CopyAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DEACTIVATE", DeactivateAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_EXTRACT", ExtractAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OPAQUE", OpaqueAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_SHAPE", ShapeAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_TRANSPARENT", TransparentAlphaChannel);	
 #endif
 }
