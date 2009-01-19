@@ -466,98 +466,88 @@ char *get_pseudo_filename(char *pseudo_string TSRMLS_DC)
 /* type 1 = writeimage, type 2 = writeimages */
 int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC)
 {
-	int error = IMAGICK_READ_WRITE_NO_ERROR, occurences = 0, pos = 0;
+	int pos = 0, occurances = 0, add_format = 0, error = IMAGICK_READ_WRITE_NO_ERROR;
+	char *buffer, *filepath, *final_filename, c;
 	MagickBooleanType status;
-	char *absolute, *buffer, *format, *tmp, c;
+
+	occurances = count_occurences_of(':', filename TSRMLS_CC);
 
 #if defined(PHP_WIN32)
-	if (count_occurences_of(':', filename TSRMLS_CC) == 2) {
-		occurences = 1;
-	} else {
-		occurences = 0;
+	/* windows can have things like png:C:\test.png */
+	if (occurances > 0) {
+		occurances -= 1;
 	}
-#else
-	occurences = count_occurences_of(':', filename TSRMLS_CC);
 #endif
-	switch (occurences) {
+
+	if (strlen(filename) > MAXPATHLEN) {
+		return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
+	}
+
+	/* Assume format in the filename. For example: png:hello.jpg */
+	if (occurances > 0) {
+		buffer = filename;
 		
-		case 0:
-			if (strlen(filename) > MAXPATHLEN) {
-				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
-			}
-
-			absolute = expand_filepath(filename, NULL TSRMLS_CC);
-			IMAGICK_SAFE_MODE_CHECK(absolute, error);
-
-			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(absolute);
-				return error;
-			}
-			
-			error = check_write_access(absolute TSRMLS_CC);
-			
-			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(absolute);
-				return error;
-			}	
-	
-		break;
-
-		case 1:
-			/* Duplicate the filename */
-			buffer = filename;
-			while (((c = *(buffer++)) != '\0') && c != ':') { pos++; };
-			
-			if (*buffer == '\0') {
-				return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
-			}
-
-			
-			if (strlen(buffer) > MAXPATHLEN) {
-				return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
-			}			
-			
-			/* Safe mode checking */
-			tmp = expand_filepath(buffer, NULL TSRMLS_CC);
-			IMAGICK_SAFE_MODE_CHECK(tmp, error);
-
-			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(tmp);
-				return error;
-			}
-      
-			error = check_write_access(tmp TSRMLS_CC);
-			
-			if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-				efree(tmp);
-				return error;
-			}
-			
-			format = emalloc(pos+1);
-			format[0] = '\0';
-			strncat(format, filename, pos);			
-
-			/* Allocate space */
-			spprintf(&absolute, 0, "%s:%s", format, tmp);
-			efree(format);
-			efree(tmp);
-		break;
-
-		default:
+		/* Strip everything before the first : */
+		while (((c = *(buffer++)) != '\0') && c != ':') { pos++; };
+		
+		/* This can happen with filename like "png:" */
+		if (buffer == '\0' || strlen(buffer) == 0) {
 			return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
-		break;
-	}
-
-	if (type == 1) {
-		status = MagickWriteImage(intern->magick_wand, absolute);
+		}
+		
+		/* Absolute path to the file */
+		filepath = expand_filepath(buffer, NULL TSRMLS_CC);
+	
+		/* Indicate that the final format string will need the format */
+		add_format = 1;
 	} else {
-		status = MagickWriteImages(intern->magick_wand, absolute, adjoin);
+		filepath = expand_filepath(filename, NULL TSRMLS_CC);
+		add_format = 0;
 	}
-	efree(absolute);
+	
+	/* Check safe mode and open basedir */
+	IMAGICK_SAFE_MODE_CHECK(filepath, error);
+	if (error != IMAGICK_READ_WRITE_NO_ERROR) {
+		efree(filepath);
+		return error;
+	}
 
+	/* Bypass a bug in imagemagick. write failure causes a segfault*/
+	error = check_write_access(filepath TSRMLS_CC);
+	if (error != IMAGICK_READ_WRITE_NO_ERROR) {
+		efree(filepath);
+		return error;
+	}
+
+	/* Add the format to the string ? */
+	if (add_format) {
+		char *format = NULL, *tmp_filepath = estrdup(filepath);
+		efree(filepath);
+		filepath = NULL;
+		
+		format = emalloc(pos+1);
+		format[0] = '\0';
+		strncat(format, filename, pos);
+		
+		spprintf(&filepath, 0, "%s:%s", format, tmp_filepath);
+		efree(tmp_filepath);
+		efree(format);
+	}
+
+	/* Write image or write images */
+	if (type == 1) {
+		status = MagickWriteImage(intern->magick_wand, filepath);
+	} else {
+		status = MagickWriteImages(intern->magick_wand, filepath, adjoin);
+	}
+	efree(filepath);
+
+	/* Write succeded ? */
 	if (status == MagickFalse) {
 		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 	}
+	
+	/* All went well it seems */
 	return IMAGICK_READ_WRITE_NO_ERROR;
 }
 
