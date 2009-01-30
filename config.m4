@@ -31,6 +31,16 @@ if test $PHP_IMAGICK != "no"; then
 		
 		AC_MSG_RESULT(found in $WAND_BINARY)
 	
+		IMAGEMAGICK_VERSION_ORIG=`$WAND_BINARY --version`
+		IMAGEMAGICK_VERSION_MASK=`echo ${IMAGEMAGICK_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+		
+		AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
+		if test "$IMAGEMAGICK_VERSION_MASK" -ge 6002004; then
+			AC_MSG_RESULT(found version $IMAGEMAGICK_VERSION_ORIG)
+		else
+			AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
+		fi
+		
 		WAND_DIR=`$WAND_BINARY --prefix` 
 		
 		if test -z "$IMAGICK_AFTER_BWC_BREAK"; then
@@ -54,16 +64,6 @@ if test $PHP_IMAGICK != "no"; then
 			fi            
 			
 			AC_DEFINE(IMAGICK_USE_NEW_HEADER,1,[ ])	
-		fi
-		
-		IMAGEMAGICK_VERSION_ORIG=`$WAND_BINARY --version`
-		IMAGEMAGICK_VERSION_MASK=`echo ${IMAGEMAGICK_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
-		
-		AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
-		if test "$IMAGEMAGICK_VERSION_MASK" -ge 6002004; then
-			AC_MSG_RESULT(found version $IMAGEMAGICK_VERSION_ORIG)
-		else
-			AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
 		fi
 		
 		dnl Thanks to Antony Dovgal for pointing out that the
