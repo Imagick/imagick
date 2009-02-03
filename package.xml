@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2009-01-17</date>
+	<date>2009-02-03</date>
 	<version>
-		<release>2.2.2RC3</release>
+		<release>2.2.2RC4</release>
 		<api>2.2.2</api>
 	</version>
 	<stability>
@@ -32,9 +32,12 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed clone keyword to actually clone the wand ptr
-- Imagick progress monitor name is now correctly cloned
-- Fixes PECL Bug #15614
+- Check for ImageMagick version in config.m4 before trying to search for headers
+- Fixed memory leak where pointinfo is used
+- Fixed incorrect memory handling of array where php array is converted to array of doubles
+- Cleaned up image writing routines
+- Added missing semicolon on constant registration
+- Added distortion and alphachannel constants
 </notes>
 	<contents>
 		<dir name="/">
