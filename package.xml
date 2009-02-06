@@ -21,23 +21,18 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2009-02-03</date>
+	<date>2009-02-06</date>
 	<version>
-		<release>2.2.2RC4</release>
+		<release>2.2.2</release>
 		<api>2.2.2</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Check for ImageMagick version in config.m4 before trying to search for headers
-- Fixed memory leak where pointinfo is used
-- Fixed incorrect memory handling of array where php array is converted to array of doubles
-- Cleaned up image writing routines
-- Added missing semicolon on constant registration
-- Added distortion and alphachannel constants
+- No bugs reported against RC4 so releasing it as is
 </notes>
 	<contents>
 		<dir name="/">
