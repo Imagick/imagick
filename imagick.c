@@ -267,6 +267,35 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_END_ARG_INFO()	
 #endif
 
+#if MagickLibVersion >= 0x645
+	ZEND_BEGIN_ARG_INFO_EX(imagick_importimagepixels_args, 0, 0, 7)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
+		ZEND_ARG_INFO(0, map)
+		ZEND_ARG_INFO(0, storage)
+		ZEND_ARG_INFO(0, PIXEL)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_deskewimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, threshold)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_segmentimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, COLORSPACE)
+		ZEND_ARG_INFO(0, cluster_threshold)
+		ZEND_ARG_INFO(0, smooth_threshold)
+		ZEND_ARG_INFO(0, verbose)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_sparsecolorimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, SPARSE_METHOD)
+		ZEND_ARG_INFO(0, arguments)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()			
+#endif
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
@@ -1753,6 +1782,12 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setgravity, imagick_setgravity_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getgravity, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagechannelrange, imagick_getimagechannelrange_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x645
+	PHP_ME(imagick, importimagepixels, imagick_importimagepixels_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, deskewimage, imagick_deskewimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, segmentimage, imagick_segmentimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, sparsecolorimage, imagick_sparsecolorimage_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)

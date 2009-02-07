@@ -1467,6 +1467,189 @@ PHP_METHOD(imagick, getimagechannelrange)
 /* }}} */
 #endif
 
+#if MagickLibVersion > 0x645
+/* {{ proto Imagick Imagick::importImagePixels(int x, int y, int width, int height, string map, array pixels)
+	Accepts pixel data and stores it in the image at the location you specify
+ */
+PHP_METHOD(imagick, importimagepixels) 
+{
+	double        *double_array;
+	long          *long_array;
+	unsigned char *char_array;
+	
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	long storage, num_elements;
+	zend_bool match;
+	int x, y, width, height, map_len;
+	char *map;
+	zval *pixels;
+	HashTable *array;
+	char allow_map[] = { 'R', 'G', 'B', 
+						 'A', 'O', 'C', 
+						 'Y', 'M', 'K', 
+						 'I', 'P' };
+	
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsla", &x, &y, &width, &height, &map, &map_len, &storage, &pixels) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);	
+	
+	if ((x < 0) || (y < 0)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The coordinates must be non-negative", 1);
+	}
+	
+	if (width <= 0 || height <= 0) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The width and height must be greater than zero", 1);
+	}
+	
+	array = Z_ARRVAL_P(pixels);
+	
+	if (zend_hash_num_elements(array) != ((width * height) * map_len)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains incorrect number of elements", 1);
+	} else {
+		char *p = map;
+        while (*p != '\0') {
+			char *it = allow_map;
+			match = 0;
+			while(*it != '\0') {
+				if (*(it++) == *p) {
+					match = 1;
+				}
+			}
+			if (!match) {
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
+			}
+			*(p++);
+		}
+	}
+	
+	switch (storage) {	
+		case FloatPixel:
+		case DoublePixel:
+			/* Use doubles */
+			storage = DoublePixel;
+			double_array = (double *)get_double_array_from_zval(pixels, &num_elements TSRMLS_CC);
+			if (!double_array) {
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map must contain only numeric values", 1);
+			}
+			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, double_array);
+			efree(double_array);
+		break;
+		
+		case ShortPixel:
+		case IntegerPixel:
+		case LongPixel:
+			/* Use longs */
+			storage = LongPixel;
+			long_array = (long *)get_long_array_from_zval(pixels, &num_elements TSRMLS_CC);
+			if (!long_array) {
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map must contain only numeric values", 1);
+			}
+			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, long_array);
+			efree(long_array);
+		break;
+		
+		case CharPixel:
+			char_array = (unsigned char *)get_char_array_from_zval(pixels, &num_elements TSRMLS_CC);
+			if (!char_array) {
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The character array contains incorrect values", 1);
+			}
+			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, char_array);
+			efree(char_array);
+		break;
+		
+		default:
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unknown storage format", 1);
+		break;
+	}
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to import image pixels", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+PHP_METHOD(imagick, deskewimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double threshold;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &threshold) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickDeskewImage(intern->magick_wand, threshold);
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to deskew image", 1);
+	}
+	RETURN_TRUE;
+}
+
+PHP_METHOD(imagick, segmentimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long colorspace;
+	zend_bool verbose = 0;
+	double cluster_threshold, smooth_threshold;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd|b", &colorspace, &cluster_threshold, &smooth_threshold, &verbose) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickSegmentImage(intern->magick_wand, colorspace, verbose, cluster_threshold, smooth_threshold);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to segment image", 1);
+	}
+	RETURN_TRUE;
+}
+
+PHP_METHOD(imagick, sparsecolorimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long num_elements, sparse_method, channel = DefaultChannels;
+	zval *arguments;
+	double *double_array;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|l", &sparse_method, &arguments, &channel) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	double_array = (double *)get_double_array_from_zval(arguments, &num_elements TSRMLS_CC);
+	
+	if (!double_array) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map must contain only numeric values", 1);
+	}
+	
+	status = MagickSparseColorImage(intern->magick_wand, channel, sparse_method, num_elements, double_array);
+	efree(double_array);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to sparse color image", 1);
+	}
+	RETURN_TRUE;	
+}
+
+#endif
+
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
    The Imagick constructor
 */
@@ -1566,7 +1749,7 @@ PHP_METHOD(imagick, __tostring)
 
 	buffer = MagickGetImageFormat(intern->magick_wand);
 
-	if(buffer == (char *)NULL || *buffer == '\0') {
+	if(buffer == (char *)NULL) {
 		ZVAL_STRING(return_value, "", 1);
 		return;
 	} else {

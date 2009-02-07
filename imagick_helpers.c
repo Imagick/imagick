@@ -148,6 +148,92 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 	return double_array;
 }
 
+long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
+{
+	zval **ppzval;
+	HashTable *ht;
+	long *long_array = NULL;
+	long elements, i;
+
+	*num_elements = 0;
+	elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+
+	if (elements == 0) {
+		return long_array;
+	}
+
+	long_array = emalloc(sizeof(long) * elements);
+	ht = Z_ARRVAL_P(param_array);
+
+	zend_hash_internal_pointer_reset(ht);
+
+	for (i = 0 ; i < elements ; i++) {
+		if (zend_hash_get_current_data(ht, (void**)&ppzval) == FAILURE) {
+			efree(long_array);
+			long_array = NULL;
+			return long_array;
+		}
+		
+		if ((Z_TYPE_PP(ppzval) == IS_LONG) || (Z_TYPE_PP(ppzval) == IS_DOUBLE)) {
+			long_array[i] = Z_LVAL_PP(ppzval);
+		} else {
+			efree(long_array);
+			long_array = NULL;
+			return long_array;
+		}
+		zend_hash_move_forward(ht);
+	}
+	*num_elements = elements;
+	return long_array;
+}
+
+unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
+{
+	zval **ppzval;
+	HashTable *ht;
+	unsigned char *char_array = NULL;
+	long elements, i;
+
+	*num_elements = 0;
+	elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+
+	if (elements == 0) {
+		return char_array;
+	}
+
+	char_array = emalloc(sizeof(char) * elements);
+	ht = Z_ARRVAL_P(param_array);
+
+	zend_hash_internal_pointer_reset(ht);
+
+	for (i = 0 ; i < elements ; i++) {
+
+		if (zend_hash_get_current_data(ht, (void**)&ppzval) == FAILURE) {
+			efree(char_array);
+			char_array = NULL;
+			return char_array;
+		}
+		
+		if ((Z_TYPE_PP(ppzval) == IS_LONG) || (Z_TYPE_PP(ppzval) == IS_DOUBLE)) {
+			if (Z_LVAL_PP(ppzval) >= 0 && Z_LVAL_PP(ppzval) <= 255) {
+				char_array[i] = (char)Z_LVAL_PP(ppzval);
+			} else {
+				efree(char_array);
+				char_array = NULL;
+				return char_array;
+			}	
+		} else {
+			efree(char_array);
+			char_array = NULL;
+			return char_array;
+		}
+
+		zend_hash_move_forward(ht);
+	}
+	*num_elements = elements;
+	return char_array;
+}
+
 int check_configured_font(char *font, int font_len TSRMLS_DC)
 {
 	int retval = 0;
@@ -875,6 +961,9 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_MESH", MeshInterpolatePixel);
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_NEARESTNEIGHBOR", NearestNeighborInterpolatePixel);
 #endif
+
+
+
 #if MagickLibVersion > 0x634
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_SPLINE", SplineInterpolatePixel);
 #endif
@@ -941,6 +1030,18 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_EXTRACT", ExtractAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OPAQUE", OpaqueAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_SHAPE", ShapeAlphaChannel);
-	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_TRANSPARENT", TransparentAlphaChannel);	
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_TRANSPARENT", TransparentAlphaChannel);
+	IMAGICK_REGISTER_CONST_LONG("PIXEL_FLOAT", FloatPixel);
+	IMAGICK_REGISTER_CONST_LONG("PIXEL_DOUBLE", DoublePixel);
+	IMAGICK_REGISTER_CONST_LONG("PIXEL_SHORT", ShortPixel);
+	IMAGICK_REGISTER_CONST_LONG("PIXEL_INTEGER", IntegerPixel);
+	IMAGICK_REGISTER_CONST_LONG("PIXEL_LONG", LongPixel);
+	IMAGICK_REGISTER_CONST_LONG("PIXEL_CHAR", CharPixel);
+	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_UNDEFINED", UndefinedColorInterpolate);
+	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_BARYCENTRIC", BarycentricColorInterpolate);
+	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_BILINEAR", BilinearColorInterpolate);
+	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_POLYNOMIAL", PolynomialColorInterpolate);
+	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_SPEPARDS", ShepardsColorInterpolate);
+	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_VORONOI", VoronoiColorInterpolate);
 #endif
 }

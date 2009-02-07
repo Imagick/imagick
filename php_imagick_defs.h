@@ -106,7 +106,8 @@ int check_write_access(char *absolute TSRMLS_DC );
 
 zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);
-double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC );
+double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
+long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
 
@@ -228,6 +229,12 @@ PHP_METHOD(imagick, liquidrescaleimage);
 PHP_METHOD(imagick, setgravity);
 PHP_METHOD(imagick, getgravity);
 PHP_METHOD(imagick, getimagechannelrange);
+#endif
+#if MagickLibVersion > 0x645
+PHP_METHOD(imagick, importimagepixels);
+PHP_METHOD(imagick, deskewimage);
+PHP_METHOD(imagick, segmentimage);
+PHP_METHOD(imagick, sparsecolorimage);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
