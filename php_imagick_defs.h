@@ -99,7 +99,7 @@ void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_
 #endif
 
 int count_occurences_of(char needle, char *haystack TSRMLS_DC );
-int read_image_into_magickwand(php_imagick_object *intern, char *filename, int type TSRMLS_DC );
+int read_image_into_magickwand(php_imagick_object *intern, char *filename, int type TSRMLS_DC);
 int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC );
 int check_configured_font(char *font, int font_len TSRMLS_DC );
 int check_write_access(char *absolute TSRMLS_DC );

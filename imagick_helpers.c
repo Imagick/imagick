@@ -257,39 +257,52 @@ int check_configured_font(char *font, int font_len TSRMLS_DC)
 
 int read_image_into_magickwand(php_imagick_object *intern, char *filename, int type TSRMLS_DC)
 {
-	int error = IMAGICK_READ_WRITE_NO_ERROR;
+	php_stream *stream;
 	MagickBooleanType status;
-	char *absolute;
+	FILE *fp;
 
 	if (!filename) {
 		return IMAGICK_READ_WRITE_NO_ERROR;
 	}
+	
+	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
+	stream = php_stream_open_wrapper(filename, "rb", (ENFORCE_SAFE_MODE|IGNORE_PATH) & ~REPORT_ERRORS, NULL);
 
-	absolute = expand_filepath(filename, NULL TSRMLS_CC);
-
-	if (!absolute) {
-		return IMAGICK_READ_WRITE_NO_ERROR;
+	if (!stream) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+	}
+	
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL) == FAILURE) {
+	    php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+		php_stream_close(stream);
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 	}
 
-	if (strlen(absolute) > MAXPATHLEN) {
-		efree(absolute);
-		return IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+	    php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+		php_stream_close(stream);
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 	}
-
-	IMAGICK_SAFE_MODE_CHECK(absolute, error);
-
-	if (error != IMAGICK_READ_WRITE_NO_ERROR) {
-		efree(absolute);
-		return error;
-	}
+	
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 
 	if (type == 1) {
-		status = MagickReadImage(intern->magick_wand, absolute);
+		status = MagickReadImageFile(intern->magick_wand, fp);
 	} else {
-		status = MagickPingImage(intern->magick_wand, absolute);
+		status = MagickPingImageFile(intern->magick_wand, fp);
 	}
+	
+	if (php_stream_is(stream, PHP_STREAM_IS_STDIO)) {
+		char *absolute = expand_filepath(filename, NULL TSRMLS_CC);
 
-	efree(absolute);
+		MagickSetImageFilename(intern->magick_wand, absolute);
+		efree(absolute);
+	} else {
+		/* Set to empty filename, otherwise it will point to MAGICK_TEMP/magick-XXXXX */
+		MagickSetImageFilename(intern->magick_wand, "");
+	}
+	php_stream_close(stream);
 
 	if (status == MagickFalse) {
 		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
