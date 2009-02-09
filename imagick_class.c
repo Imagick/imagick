@@ -1213,6 +1213,210 @@ PHP_METHOD(imagick, distortimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto bool Imagick::writeImageFile(resource $handle)
+	Writes image to an open filehandle
+*/
+PHP_METHOD(imagick, writeimagefile)
+{
+	php_imagick_object *intern;
+	zval *zstream;
+	php_stream *stream;
+	int result;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zstream) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	php_stream_from_zval(stream, &zstream);
+	result = php_imagick_write_to_filehandle(intern->magick_wand, stream, 1 TSRMLS_CC);
+	
+	if (result == 1) {
+		return;
+	} else if (result == 2) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write images to the filehandle", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::writeImagesFile(resource $handle)
+	Writes images to an open filehandle
+*/
+PHP_METHOD(imagick, writeimagesfile)
+{
+	php_imagick_object *intern;
+	zval *zstream;
+	php_stream *stream;
+	int result;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zstream) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	php_stream_from_zval(stream, &zstream);
+	result = php_imagick_write_to_filehandle(intern->magick_wand, stream, 2 TSRMLS_CC);
+	
+	if (result == 1) {
+		return;
+	} else if (result == 2) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write images to the filehandle", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::resetImagePage(string page)
+	Resets the page canvas and position
+*/
+PHP_METHOD(imagick, resetimagepage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *page;
+	int page_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &page, &page_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickResetImagePage(intern->magick_wand, page);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to reset image page", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto Imagick Imagick::getImageClipMask()
+	Gets image clip mask
+*/
+PHP_METHOD(imagick, getimageclipmask)
+{
+	MagickWand *tmp_wand;
+
+	php_imagick_object *intern;
+	php_imagick_object *intern_return;
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	tmp_wand = MagickGetImageClipMask(intern->magick_wand);
+	
+	/* No magick is going to happen */
+	if (tmp_wand == NULL) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image clip mask", 1);
+	}	
+	
+	object_init_ex(return_value, php_imagick_sc_entry);
+	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+
+	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	return;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setImageClipMask(Imagick clip_mask)
+	Sets the image clip mask
+*/
+PHP_METHOD(imagick, setimageclipmask)
+{
+	php_imagick_object *intern;
+	php_imagick_object *clip_mask;
+	MagickBooleanType status;
+	zval *objvar;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagick_sc_entry) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	clip_mask = (php_imagick_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(clip_mask->magick_wand, 1, 1);
+	
+	status = MagickSetImageClipMask(intern->magick_wand, clip_mask->magick_wand);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set image clip mask", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::animateImages(string server_name)
+	Animates an image or image sequence
+*/
+PHP_METHOD(imagick, animateimages)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *server_name;
+	int server_name_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	(void)MagickSetFirstIterator(intern->magick_wand);
+	status = MagickAnimateImages(intern->magick_wand, server_name);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to animate images", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::recolorImage(array matrix)
+	Translate, scale, shear, or rotate image colors
+*/
+PHP_METHOD(imagick, recolorimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long num_elements;
+	zval *matrix;
+	double *array;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &matrix) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	array = get_double_array_from_zval(matrix, &num_elements TSRMLS_CC);
+	
+	if (!array) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
+	}
+	
+	status = MagickRecolorImage(intern->magick_wand, num_elements, array);
+	efree(array);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to recolor image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 #if defined(HAVE_IMAGEMAGICK6364ORLATER)
@@ -1348,6 +1552,104 @@ PHP_METHOD(imagick, mergeimagelayers)
 #endif
 
 #if MagickLibVersion > 0x637
+/* {{{ proto bool Imagick::floodfillPaintImage(mixed fill, float fuzz, mixed bordercolor, int x, int y, bool invert[, int CHANNEL])
+	Changes the color value of any pixel that matches target
+*/
+PHP_METHOD(imagick, floodfillpaintimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	zval *fill_param, *border_param;
+	long x, y, channel = DefaultChannels;
+	zend_bool invert;
+	php_imagickpixel_object *fill_obj, *border_obj;
+	double fuzz;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdzllb|l", 
+		&fill_param, &fuzz, &border_param, &x, &y, &invert, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	IMAGICK_CAST_PARAMETER_TO_COLOR(fill_param, fill_obj, 1);
+	IMAGICK_CAST_PARAMETER_TO_COLOR(border_param, border_obj, 1);
+
+	status = MagickFloodfillPaintImage(intern->magick_wand, channel, fill_obj->pixel_wand, fuzz, border_obj->pixel_wand, x, y, invert);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to floodfill paint image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::opaquePaintImage(mixed target, mixed fill, float fuzz, bool invert[, int CHANNEL])
+	Changes any pixel that matches color with the color defined by fill.
+*/
+PHP_METHOD(imagick, opaquepaintimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	zval *fill_param, *target_param;
+	php_imagickpixel_object *fill_obj, *target_obj;
+	zend_bool invert;
+	double fuzz;
+	long channel = DefaultChannels;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzdb|l", &fill_param, &target_param, &fuzz, &invert, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	IMAGICK_CAST_PARAMETER_TO_COLOR(fill_param, fill_obj, 1);
+	IMAGICK_CAST_PARAMETER_TO_COLOR(target_param, target_obj, 1);	
+	
+	status = MagickOpaquePaintImageChannel(intern->magick_wand, channel, fill_obj->pixel_wand, target_obj->pixel_wand, fuzz, invert);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to opaque paint image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::transparentPaintImage(mixed target, float alpha, float fuzz, bool invert)
+	Changes any pixel that matches color with the color defined by fill
+*/
+PHP_METHOD(imagick, transparentpaintimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	zval *target_param;
+	php_imagickpixel_object *target_obj;
+	zend_bool invert;
+	double fuzz, alpha;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zddb", &target_param, &alpha, &fuzz, &invert) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	IMAGICK_CAST_PARAMETER_TO_COLOR(target_param, target_obj, 1);
+	
+	status = MagickTransparentPaintImage(intern->magick_wand, target_obj->pixel_wand, alpha, fuzz, invert);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to paint transparent image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
 /* {{{ proto Imagick Imagick::setImageAlphaChannel(int ALPHACHANNEL )
    Activates, deactivates, resets, or sets the alpha channel
 */
@@ -1401,9 +1703,61 @@ PHP_METHOD(imagick, liquidrescaleimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto bool Imagick::decipherImage(string passphrase)
+	Converts cipher pixels to plain pixels
+*/
+PHP_METHOD(imagick, decipherimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *passphrase;
+	int passphrase_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &passphrase, &passphrase_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickDecipherImage(intern->magick_wand, passphrase);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to decipher image", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::encipherImage(string passphrase)
+	Converts plain pixels to cipher pixels
+*/
+PHP_METHOD(imagick, encipherimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *passphrase;
+	int passphrase_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &passphrase, &passphrase_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickEncipherImage(intern->magick_wand, passphrase);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to encipher image", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
-#if MagickLibVersion >= 0x640
+#if MagickLibVersion > 0x639
 /* {{ proto bool Imagick::setGravity(int GRAVITY)
 		Sets the gravity value
 */
@@ -1465,10 +1819,100 @@ PHP_METHOD(imagick, getimagechannelrange)
 	return;
 }
 /* }}} */
+
+/* {{{ proto int Imagick::getImageAlphaChannel()
+	Gets the image alpha channel value
+*/
+PHP_METHOD(imagick, getimagealphachannel)
+{
+	php_imagick_object *intern;
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	RETVAL_LONG(MagickGetImageAlphaChannel(intern->magick_wand));
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x642
+/* {{{ proto float Imagick::getImageChannelDistortions(Imagick reference, int METRICTYPE[, int CHANNEL])
+	Compares one or more image channels of an image to a reconstructed image and returns the specified distortion metrics
+*/
+PHP_METHOD(imagick, getimagechanneldistortions)
+{
+	php_imagick_object *intern;
+	php_imagick_object *intern_reference;
+	zval *reference_param;
+	double distortion;
+	long metric, channel = DefaultChannels;
+	MagickBooleanType status;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol|l", &reference_param, php_imagick_sc_entry, &metric, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	intern_reference = (php_imagick_object *)zend_object_store_get_object(reference_param TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern_reference->magick_wand, 1, 1);
+	
+	status = MagickGetImageChannelDistortion(intern->magick_wand, intern_reference->magick_wand, channel, metric, &distortion);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image channel distortion metrics", 1);
+	}
+	
+	RETVAL_DOUBLE(distortion);
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x643
+/* {{{ proto int Imagick::getImageGravity()
+	Gets the image gravity
+*/
+PHP_METHOD(imagick, getimagegravity)
+{
+	php_imagick_object *intern;
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	RETVAL_LONG(MagickGetImageGravity(intern->magick_wand));
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::setImageGravity(int GRAVITY)
+	Sets the image gravity
+*/
+PHP_METHOD(imagick, setimagegravity)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long gravity;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickSetImageGravity(intern->magick_wand, gravity);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set image gravity", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 #if MagickLibVersion > 0x645
-/* {{ proto Imagick Imagick::importImagePixels(int x, int y, int width, int height, string map, array pixels)
+/* {{ proto Imagick Imagick::importImagePixels(int x, int y, int width, int height, string map, int STORAGE, array pixels)
 	Accepts pixel data and stores it in the image at the location you specify
  */
 PHP_METHOD(imagick, importimagepixels) 
@@ -1481,16 +1925,10 @@ PHP_METHOD(imagick, importimagepixels)
 	MagickBooleanType status;
 
 	long storage, num_elements;
-	zend_bool match;
 	int x, y, width, height, map_len;
 	char *map;
 	zval *pixels;
 	HashTable *array;
-	char allow_map[] = { 'R', 'G', 'B', 
-						 'A', 'O', 'C', 
-						 'Y', 'M', 'K', 
-						 'I', 'P' };
-	
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsla", &x, &y, &width, &height, &map, &map_len, &storage, &pixels) == FAILURE) {
 		return;
@@ -1512,19 +1950,8 @@ PHP_METHOD(imagick, importimagepixels)
 	if (zend_hash_num_elements(array) != ((width * height) * map_len)) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains incorrect number of elements", 1);
 	} else {
-		char *p = map;
-        while (*p != '\0') {
-			char *it = allow_map;
-			match = 0;
-			while(*it != '\0') {
-				if (*(it++) == *p) {
-					match = 1;
-				}
-			}
-			if (!match) {
-				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
-			}
-			*(p++);
+		if (!php_imagick_validate_map(map TSRMLS_CC)) {
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
 		}
 	}
 	
@@ -1648,6 +2075,198 @@ PHP_METHOD(imagick, sparsecolorimage)
 	RETURN_TRUE;	
 }
 
+/* {{{ proto bool Imagick::remapImage(Imagick remap, int DITHERMETHOD)
+	replaces the colors of an image with the closest color from a reference image
+*/
+PHP_METHOD(imagick, remapimage)
+{
+	php_imagick_object *intern;
+	php_imagick_object *intern_remap;
+	MagickBooleanType status;
+	long dither_method;
+	zval *remap_param;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &remap_param, php_imagick_sc_entry, &dither_method) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	intern_remap = (php_imagick_object *)zend_object_store_get_object(remap_param TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern_remap->magick_wand, 1, 1);	
+	
+	status = MagickRemapImage(intern->magick_wand, intern_remap->magick_wand, dither_method);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to remap image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x646
+/* {{{ proto bool Imagick::exportImagePixels(int x, int y, int width, int height, string map, INT STORAGE)
+	TODO: IMPLEMENTATION
+*/
+PHP_METHOD(imagick, exportimagepixels)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long x, y, width, height, storage;
+	char *map;
+	int map_len, i = 0;
+	double *double_array;
+	long *long_array;
+	char *char_array;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsl", &x, &y, &width, &height, &map, &map_len, &storage) == FAILURE) {
+		return;
+	}
+		
+	if ((x < 0) || (y < 0)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The coordinates must be non-negative", 1);
+	}
+	
+	if (width <= 0 || height <= 0) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The width and height must be greater than zero", 1);
+	}	
+	
+	if (!php_imagick_validate_map(map TSRMLS_CC)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	int map_size = (map_len * width * height);
+	
+	switch (storage) {	
+		case FloatPixel:
+		case DoublePixel:
+			double_array = emalloc(map_size * sizeof(double));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, DoublePixel, (void *)double_array);
+			
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+					add_next_index_double(return_value, double_array[i]);
+				}
+				efree(double_array);
+				return;
+			}
+		break;
+		
+		case ShortPixel:
+		case IntegerPixel:
+		case LongPixel:
+			long_array = emalloc(map_size * sizeof(long));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, LongPixel, (void *)long_array);
+		
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+					add_next_index_long(return_value, long_array[i]);
+				}
+				efree(long_array);
+				return;
+			}
+		break;
+		
+		case CharPixel:
+			char_array = emalloc(map_size * sizeof(char));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, CharPixel, (void *)char_array);
+	
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+					 add_next_index_long(return_value, (int)char_array[i]);
+				}
+				efree(char_array);
+				return;
+			}
+		break;
+		
+		default:
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unknown storage format", 1);
+		break;
+	}
+
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to export image pixels", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x648
+/* {{{ proto array Imagick::getImageChannelKurtosis([int CHANNEL])
+	Gets the kurtosis and skewness of one or more image channels
+*/
+PHP_METHOD(imagick, getimagechannelkurtosis)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double kurtosis, skewness;
+	long channel = DefaultChannels;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickGetImageChannelKurtosis(intern->magick_wand, channel, &kurtosis, &skewness);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image channel kurtosis", 1);
+	}
+
+	array_init(return_value);
+	add_assoc_double(return_value, "kurtosis", kurtosis);
+	add_assoc_double(return_value, "skewness", skewness);
+	return;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::functionImage(int FUNCTION, array arguments[, int CHANNEL])
+	Applies an arithmetic, relational, or logical expression to an image
+*/
+PHP_METHOD(imagick, functionimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	zval *arguments;
+	long func, num_elements, channel = DefaultChannels;
+	double *array;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|l", &func, &arguments, &channel) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	array = get_double_array_from_zval(arguments, &num_elements TSRMLS_CC);
+
+	if (!array) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The arguments array contains disallowed characters", 1);
+	}
+
+	status = MagickFunctionImageChannel(intern->magick_wand, channel, func, num_elements, array);
+	efree(array);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to execute function on the image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
@@ -2498,8 +3117,11 @@ PHP_METHOD(imagick, clippathimage)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-
+#if MagickLibVersion > 0x636
+	status = MagickClipImagePath(intern->magick_wand, clip_path, inside);
+#else
 	status = MagickClipPathImage(intern->magick_wand, clip_path, inside);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -8433,7 +9055,7 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 	char *filename;
 	int filename_len;
 	php_imagick_object *intern;
-	
+
 	if (!IMAGICK_G(progress_monitor)) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(1, "Progress monitoring is disabled in ini-settings", 1);
 	}
@@ -8443,11 +9065,11 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 		return;
 	}
 	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	
 	IMAGICK_SAFE_MODE_CHECK(filename, status);
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);	
-	
 	if (intern->progress_monitor_name) {
 		efree(intern->progress_monitor_name);
 	}

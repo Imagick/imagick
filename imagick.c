@@ -221,10 +221,34 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 #endif
 
 #if MagickLibVersion > 0x635
-	ZEND_BEGIN_ARG_INFO_EX(imagick_distortimage_args, 0, 0, 0)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_distortimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, method)
 		ZEND_ARG_INFO(0, arguments)
 		ZEND_ARG_INFO(0, bestfit)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimagefile_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, handle)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimagesfile_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, handle)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_resetimagepage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, page)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageclipmask_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+	ZEND_END_ARG_INFO()	
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_animateimages_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, server_name)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_recolorimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, matrix)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -246,25 +270,72 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagealphachannel_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ALPHACHANNELTYPE)
 	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_floodfillpaintimage_args, 0, 0, 6)
+		ZEND_ARG_INFO(0, fill)
+		ZEND_ARG_INFO(0, fuzz)
+		ZEND_ARG_INFO(0, bordercolor)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+		ZEND_ARG_INFO(0, invert)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_opaquepaintimage_args, 0, 0, 4)
+		ZEND_ARG_INFO(0, target)
+		ZEND_ARG_INFO(0, fill)
+		ZEND_ARG_INFO(0, fuzz)
+		ZEND_ARG_INFO(0, invert)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_transparentpaintimage_args, 0, 0, 4)
+		ZEND_ARG_INFO(0, target)
+		ZEND_ARG_INFO(0, alpha)
+		ZEND_ARG_INFO(0, fuzz)
+		ZEND_ARG_INFO(0, invert)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x638
-	ZEND_BEGIN_ARG_INFO_EX(imagick_liquidrescaleimage_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_liquidrescaleimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, columns)
 		ZEND_ARG_INFO(0, rows)
 		ZEND_ARG_INFO(0, delta_x)
 		ZEND_ARG_INFO(0, rigidity)
 	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_encipherimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, passphrase)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_decipherimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, passphrase)
+	ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion >= 0x640
+#if MagickLibVersion > 0x639
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setgravity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, GRAVITY)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelrange_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
-	ZEND_END_ARG_INFO()	
+	ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x642
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechanneldistortions_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+		ZEND_ARG_INFO(0, METRICTYPE)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x643
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagegravity_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, GRAVITY)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion >= 0x645
@@ -293,8 +364,35 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 		ZEND_ARG_INFO(0, SPARSE_METHOD)
 		ZEND_ARG_INFO(0, arguments)
 		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_remapimage_args, 0, 0, 2)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+		ZEND_ARG_INFO(0, DITHER)
 	ZEND_END_ARG_INFO()			
 #endif
+
+#if MagickLibVersion > 0x646
+	ZEND_BEGIN_ARG_INFO_EX(imagick_exportimagepixels_args, 0, 0, 6)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
+		ZEND_ARG_INFO(0, map)
+		ZEND_ARG_INFO(0, STORAGE)
+	ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x648
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelkurtosis_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_functionimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, FUNCTION)
+		ZEND_ARG_INFO(0, arguments)
+	ZEND_END_ARG_INFO()
+#endif 
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -1764,6 +1862,13 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x635
 	PHP_ME(imagick, distortimage, imagick_distortimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, writeimagefile, imagick_writeimagefile_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, writeimagesfile, imagick_writeimagesfile_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, resetimagepage, imagick_resetimagepage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageclipmask, imagick_setimageclipmask_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimageclipmask, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, animateimages, imagick_animateimages_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, recolorimage, imagick_recolorimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if defined(HAVE_IMAGEMAGICK6364ORLATER)
 	PHP_ME(imagick, setfont, imagick_setfont_args, ZEND_ACC_PUBLIC)
@@ -1774,20 +1879,41 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x637
 	PHP_ME(imagick, setimagealphachannel, imagick_setimagealphachannel_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, floodfillpaintimage, imagick_floodfillpaintimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, opaquepaintimage, imagick_opaquepaintimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, transparentpaintimage, imagick_transparentpaintimage_args, ZEND_ACC_PUBLIC)	
 #endif
 #if MagickLibVersion > 0x638
 	PHP_ME(imagick, liquidrescaleimage, imagick_liquidrescaleimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, encipherimage, imagick_encipherimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, decipherimage, imagick_decipherimage_args, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion >= 0x640
+#if MagickLibVersion > 0x639
 	PHP_ME(imagick, setgravity, imagick_setgravity_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getgravity, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagechannelrange, imagick_getimagechannelrange_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimagealphachannel, imagick_zero_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x642
+	PHP_ME(imagick, getimagechanneldistortions, imagick_getimagechanneldistortions_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x643
+	PHP_ME(imagick, setimagegravity, imagick_setimagegravity_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimagegravity, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x645
 	PHP_ME(imagick, importimagepixels, imagick_importimagepixels_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, deskewimage, imagick_deskewimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, segmentimage, imagick_segmentimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, sparsecolorimage, imagick_sparsecolorimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, remapimage, imagick_remapimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x646
+	PHP_ME(imagick, exportimagepixels, imagick_exportimagepixels_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x648
+	PHP_ME(imagick, getimagechannelkurtosis, imagick_getimagechannelkurtosis_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, functionimage, imagick_functionimage_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
@@ -1895,6 +2021,8 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, chopimage, imagick_chopimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, clipimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, clippathimage, imagick_clippathimage_args, ZEND_ACC_PUBLIC)
+	/* clippathimage has been deprecated. Create alias here and use the newer API function if present */
+	PHP_MALIAS(imagick, clipimagepath, clippathimage, imagick_clippathimage_args, ZEND_ACC_PUBLIC)	
 	PHP_ME(imagick, coalesceimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colorfloodfillimage, imagick_colorfloodfillimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colorizeimage, imagick_colorizeimage_args, ZEND_ACC_PUBLIC)

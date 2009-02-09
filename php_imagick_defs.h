@@ -108,9 +108,11 @@ zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);
 double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
+unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
-
+int php_imagick_write_to_filehandle(MagickWand *wand, php_stream *stream, int type TSRMLS_DC);
+zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
 
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11
@@ -211,6 +213,13 @@ PHP_METHOD(imagick, getimageprofiles);
 #endif
 #if MagickLibVersion > 0x635
 PHP_METHOD(imagick, distortimage);
+PHP_METHOD(imagick, writeimagefile);
+PHP_METHOD(imagick, writeimagesfile);
+PHP_METHOD(imagick, resetimagepage);
+PHP_METHOD(imagick, setimageclipmask);
+PHP_METHOD(imagick, getimageclipmask);
+PHP_METHOD(imagick, animateimages);
+PHP_METHOD(imagick, recolorimage);
 #endif
 #if defined(HAVE_IMAGEMAGICK6364ORLATER)
 PHP_METHOD(imagick, setfont);
@@ -220,21 +229,42 @@ PHP_METHOD(imagick, getpointsize);
 PHP_METHOD(imagick, mergeimagelayers);
 #endif
 #if MagickLibVersion > 0x637
+PHP_METHOD(imagick, floodfillpaintimage);
+PHP_METHOD(imagick, opaquepaintimage);
+PHP_METHOD(imagick, transparentpaintimage);
 PHP_METHOD(imagick, setimagealphachannel);
 #endif
 #if MagickLibVersion > 0x638
 PHP_METHOD(imagick, liquidrescaleimage);
+PHP_METHOD(imagick, decipherimage);
+PHP_METHOD(imagick, encipherimage);
 #endif
-#if MagickLibVersion >= 0x640
+#if MagickLibVersion > 0x639
 PHP_METHOD(imagick, setgravity);
 PHP_METHOD(imagick, getgravity);
 PHP_METHOD(imagick, getimagechannelrange);
+PHP_METHOD(imagick, getimagealphachannel);
+#endif
+#if MagickLibVersion > 0x642
+PHP_METHOD(imagick, getimagechanneldistortions);
+#endif
+#if MagickLibVersion > 0x643
+PHP_METHOD(imagick, getimagegravity);
+PHP_METHOD(imagick, setimagegravity);
 #endif
 #if MagickLibVersion > 0x645
 PHP_METHOD(imagick, importimagepixels);
 PHP_METHOD(imagick, deskewimage);
 PHP_METHOD(imagick, segmentimage);
 PHP_METHOD(imagick, sparsecolorimage);
+PHP_METHOD(imagick, remapimage);
+#endif
+#if MagickLibVersion > 0x646
+PHP_METHOD(imagick, exportimagepixels);
+#endif
+#if MagickLibVersion > 0x648
+PHP_METHOD(imagick, getimagechannelkurtosis);
+PHP_METHOD(imagick, functionimage);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);

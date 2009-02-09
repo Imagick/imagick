@@ -46,6 +46,68 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;	
 }
 
+/*
+	type 1 = MagickWriteImageFile
+	type 2 = MagickWriteImagesFile
+
+	return values:
+		0 - no error
+		1 - error but exception is thrown already
+		2 - error but exception needs to be thrown
+*/
+int php_imagick_write_to_filehandle(MagickWand *wand, php_stream *stream, int type TSRMLS_DC)
+{
+	FILE *fp;
+	MagickBooleanType status;	
+	
+	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+		return 1;
+	}
+
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+		return 1;
+	}
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+
+	if (type == 1) {
+		status = MagickWriteImageFile(wand, fp);
+	} else {
+		status = MagickWriteImagesFile(wand, fp);
+	}
+	
+	if (status == MagickFalse) {
+		return 2;
+	}
+	return 0;
+}
+
+zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
+{
+	zend_bool match;
+	char *p = map;
+	char allow_map[] = { 'R', 'G', 'B', 
+						 'A', 'O', 'C', 
+						 'Y', 'M', 'K', 
+						 'I', 'P' };
+
+	while (*p != '\0') {
+		char *it = allow_map;
+		match = 0;
+		while(*it != '\0') {
+			if (*(it++) == *p) {
+				match = 1;
+			}
+		}
+		if (!match) {
+			return 0;
+		}
+		*(p++);
+	}
+	return 1;
+}
 
 int count_occurences_of(char needle, char *haystack TSRMLS_DC)
 {
@@ -215,19 +277,12 @@ unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TS
 		}
 		
 		if ((Z_TYPE_PP(ppzval) == IS_LONG) || (Z_TYPE_PP(ppzval) == IS_DOUBLE)) {
-			if (Z_LVAL_PP(ppzval) >= 0 && Z_LVAL_PP(ppzval) <= 255) {
-				char_array[i] = (char)Z_LVAL_PP(ppzval);
-			} else {
-				efree(char_array);
-				char_array = NULL;
-				return char_array;
-			}	
+			char_array[i] = (unsigned char)Z_LVAL_PP(ppzval);
 		} else {
 			efree(char_array);
 			char_array = NULL;
 			return char_array;
 		}
-
 		zend_hash_move_forward(ht);
 	}
 	*num_elements = elements;
@@ -558,7 +613,7 @@ char *get_pseudo_filename(char *pseudo_string TSRMLS_DC)
 int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC)
 {
 	int pos = 0, occurances = 0, add_format = 0, error = IMAGICK_READ_WRITE_NO_ERROR;
-	char *buffer, *filepath, *final_filename, c;
+	char *buffer, *filepath, c;
 	MagickBooleanType status;
 
 	occurances = count_occurences_of(':', filename TSRMLS_CC);
@@ -853,6 +908,22 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_SET", SetEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_SUBTRACT", SubtractEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_XOR", XorEvaluateOperator);
+#if MagickLibVersion > 0x642
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_POW", PowEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_LOG", LogEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_THRESHOLD", ThresholdEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_THRESHOLDBLACK", ThresholdBlackEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_THRESHOLDWHITE", ThresholdWhiteEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_GAUSSIANNOISE", GaussianNoiseEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_IMPULSENOISE", ImpulseNoiseEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_LAPLACIANNOISE", LaplacianNoiseEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_MULTIPLICATIVENOISE", MultiplicativeNoiseEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_POISSONNOISE", PoissonNoiseEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_UNIFORMNOISE", UniformNoiseEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_COSINE", CosineEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_SINE", SineEvaluateOperator);
+	IMAGICK_REGISTER_CONST_LONG("EVALUATE_ADDMODULUS", AddModulusEvaluateOperator);
+#endif	
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_UNDEFINED", UndefinedColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_RGB", RGBColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_GRAY", GRAYColorspace);
@@ -974,9 +1045,6 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_MESH", MeshInterpolatePixel);
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_NEARESTNEIGHBOR", NearestNeighborInterpolatePixel);
 #endif
-
-
-
 #if MagickLibVersion > 0x634
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_SPLINE", SplineInterpolatePixel);
 #endif
@@ -1044,17 +1112,20 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OPAQUE", OpaqueAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_SHAPE", ShapeAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_TRANSPARENT", TransparentAlphaChannel);
-	IMAGICK_REGISTER_CONST_LONG("PIXEL_FLOAT", FloatPixel);
-	IMAGICK_REGISTER_CONST_LONG("PIXEL_DOUBLE", DoublePixel);
-	IMAGICK_REGISTER_CONST_LONG("PIXEL_SHORT", ShortPixel);
-	IMAGICK_REGISTER_CONST_LONG("PIXEL_INTEGER", IntegerPixel);
-	IMAGICK_REGISTER_CONST_LONG("PIXEL_LONG", LongPixel);
-	IMAGICK_REGISTER_CONST_LONG("PIXEL_CHAR", CharPixel);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_UNDEFINED", UndefinedColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_BARYCENTRIC", BarycentricColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_BILINEAR", BilinearColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_POLYNOMIAL", PolynomialColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_SPEPARDS", ShepardsColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_VORONOI", VoronoiColorInterpolate);
+	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_UNDEFINED", UndefinedDitherMethod);
+	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_NO", NoDitherMethod);
+	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_RIEMERSMA", RiemersmaDitherMethod);
+	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_FLOYDSTEINBERG", FloydSteinbergDitherMethod);
+#endif
+#if MagickLibVersion > 0x648
+	IMAGICK_REGISTER_CONST_LONG("FUNCTION_UNDEFINED", UndefinedFunction);
+	IMAGICK_REGISTER_CONST_LONG("FUNCTION_POLYNOMIAL", PolynomialFunction);
+	IMAGICK_REGISTER_CONST_LONG("FUNCTION_SINUSOID", SinusoidFunction);
 #endif
 }
