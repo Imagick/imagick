@@ -83,7 +83,7 @@ int php_imagick_out_stream_handler(php_imagick_object *intern, php_stream *strea
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
 #endif	
 
 	/* php_stream_cast returns warning on some streams but still does not return FAILURE */
@@ -118,7 +118,7 @@ return_on_error:
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
 #endif
 	if (EG(exception)) {
 		return 1;
@@ -389,7 +389,7 @@ int read_image_into_magickwand(php_imagick_object *intern, char *filename, int t
 #if ZEND_MODULE_API_NO > 20060613 
 		zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+		php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
 #endif
 
 	if (type == 1) {
@@ -419,7 +419,7 @@ return_error:
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
 #endif
 	if (stream) php_stream_close(stream);
 	return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
