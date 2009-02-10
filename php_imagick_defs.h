@@ -555,6 +555,7 @@ PHP_METHOD(imagickdraw, polygon);
 PHP_METHOD(imagickdraw, arc);
 PHP_METHOD(imagickdraw, matte);
 PHP_METHOD(imagickdraw, point);
+PHP_METHOD(imagickdraw, getfontstretch);
 PHP_METHOD(imagickdraw, setfontstretch);
 PHP_METHOD(imagickdraw, settextalignment);
 PHP_METHOD(imagickdraw, settextdecoration);
