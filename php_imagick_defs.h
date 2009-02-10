@@ -659,6 +659,10 @@ PHP_METHOD(imagickpixeliterator, valid);
 #if MagickLibVersion > 0x628
 PHP_METHOD(imagickpixel, gethsl);
 PHP_METHOD(imagickpixel, sethsl);
+PHP_METHOD(imagickpixel, getcolorvaluequantum);
+PHP_METHOD(imagickpixel, setcolorvaluequantum);
+PHP_METHOD(imagickpixel, getindex);
+PHP_METHOD(imagickpixel, setindex);
 #endif
 PHP_METHOD(imagickpixel, __construct);
 PHP_METHOD(imagickpixel, setcolor);

@@ -1574,12 +1574,19 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_END_ARG_INFO()
 
 /* ImagickPixel */
-
 #if MagickLibVersion > 0x628
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_sethsl_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, hue)
 		ZEND_ARG_INFO(0, saturation)
 		ZEND_ARG_INFO(0, luminosity)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorvaluequantum_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, color_value)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setindex_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -1790,6 +1797,10 @@ static function_entry php_imagickpixel_class_methods[] =
 #if MagickLibVersion > 0x628
 	PHP_ME(imagickpixel, gethsl, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, sethsl, imagickpixel_sethsl_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getcolorvaluequantum, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, setcolorvaluequantum, imagickpixel_setcolorvaluequantum_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getindex, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, setindex, imagickpixel_setindex_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagickpixel, __construct, imagickpixel_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixel, setcolor, imagickpixel_setcolor_args, ZEND_ACC_PUBLIC)

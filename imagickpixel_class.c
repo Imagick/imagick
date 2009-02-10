@@ -63,6 +63,158 @@ PHP_METHOD(imagickpixel, sethsl)
 }
 /* }}} */
 
+/* {{{ proto int ImagickPixel::getColorValueQuantum(int color)
+	Gets the quantum color of the ImagickPixel
+*/
+PHP_METHOD(imagickpixel, getcolorvaluequantum)
+{
+	php_imagickpixel_object *internp;
+	long color, color_value;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color) == FAILURE) {
+		return;
+	}
+	
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	
+	switch (color) {
+
+		case IMAGICKCOLORBLACK:
+			color_value = PixelGetBlackQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORBLUE:
+			color_value = PixelGetBlueQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORCYAN:
+			color_value = PixelGetCyanQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORGREEN:
+			color_value = PixelGetGreenQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORRED:
+			color_value = PixelGetRedQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORYELLOW:
+			color_value = PixelGetYellowQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORMAGENTA:
+			color_value = PixelGetMagentaQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLOROPACITY:
+			color_value = PixelGetOpacityQuantum(internp->pixel_wand);
+		break;
+
+		case IMAGICKCOLORALPHA:
+			color_value = PixelGetAlphaQuantum(internp->pixel_wand);
+		break;
+
+		default:
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+		break;
+	}
+	RETVAL_LONG(color_value);		
+}
+/* }}} */
+
+/* {{{ proto bool ImagickPixel::setColorValueQuantum(int color, float value)
+	Sets the quantum color of the ImagickPixel.
+*/
+PHP_METHOD(imagickpixel, setcolorvaluequantum)
+{
+	php_imagickpixel_object *internp;
+	long color, color_value;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &color, &color_value) == FAILURE) {
+		return;
+	}
+	
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	switch (color) {
+
+		case IMAGICKCOLORBLACK:
+			PixelSetBlackQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORBLUE:
+			PixelSetBlueQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORCYAN:
+			PixelSetCyanQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORGREEN:
+			PixelSetGreenQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORRED:
+			PixelSetRedQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORYELLOW:
+			PixelSetYellowQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORMAGENTA:
+			PixelSetMagentaQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLOROPACITY:
+			PixelSetOpacityQuantum(internp->pixel_wand, color_value);
+		break;
+
+		case IMAGICKCOLORALPHA:
+			PixelSetAlphaQuantum(internp->pixel_wand, color_value);
+		break;
+
+		default:
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+		break;
+	}
+	RETVAL_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool ImagickPixel::getIndex()
+	Gets the colormap index of the pixel wand 
+*/
+PHP_METHOD(imagickpixel, getindex)
+{
+	php_imagickpixel_object *internp;
+
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETVAL_LONG(PixelGetIndex(internp->pixel_wand));
+}
+/* }}} */
+
+/* {{{ proto bool ImagickPixel::setIndex(int pixel_packet)
+	Sets the colormap index of the pixel wand 
+*/
+PHP_METHOD(imagickpixel, setindex)
+{
+	php_imagickpixel_object *internp;
+	long index;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
+		return;
+	}
+	
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	PixelSetIndex(internp->pixel_wand, index);
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 /* {{{ proto ImagickPixel ImagickPixel::__construct([string color] )
@@ -199,7 +351,7 @@ PHP_METHOD(imagickpixel, issimilar)
 }
 /* }}} */
 
-/* {{{ proto float ImagickPixel::getColorValue(int color )
+/* {{{ proto float ImagickPixel::getColorValue(int color)
 	Gets the normalized color of the ImagickPixel.
 */
 PHP_METHOD(imagickpixel, getcolorvalue)
