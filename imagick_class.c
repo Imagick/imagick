@@ -28,41 +28,27 @@
 */
 PHP_METHOD(imagick, pingimagefile)
 {
-	FILE *fp;
 	char *filename = NULL;
 	int filename_len;
-	MagickBooleanType status;
 	php_imagick_object *intern;
 	zval *zstream;
 	php_stream *stream;
+	int result;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
 		return;
 	}
 	
-	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
-	php_stream_from_zval(stream, &zstream);
-
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS) == FAILURE) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS, (void*)&fp, 0) == FAILURE) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = MagickPingImageFile(intern->magick_wand, fp);
 
-	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to ping image file", 1);
+	php_stream_from_zval(stream, &zstream);
+	result = php_imagick_out_stream_handler(intern, stream, filename, IMAGICK_PING_IMAGE_FILE TSRMLS_CC);
+	
+	if (result == 1) {
+		RETURN_FALSE;
+	} else if (result == 2) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to ping image from the filehandle", 1);
 	}
-
-	MagickSetImageFilename(intern->magick_wand, filename);
-
 	RETURN_TRUE;
 }
 /* }}} */
@@ -1236,12 +1222,12 @@ PHP_METHOD(imagick, writeimagefile)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	php_stream_from_zval(stream, &zstream);
-	result = php_imagick_write_to_filehandle(intern->magick_wand, stream, 1 TSRMLS_CC);
+	result = php_imagick_out_stream_handler(intern, stream, NULL, IMAGICK_WRITE_IMAGE_FILE TSRMLS_CC);
 	
 	if (result == 1) {
-		return;
+		RETURN_FALSE;
 	} else if (result == 2) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write images to the filehandle", 1);
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write image to the filehandle", 1);
 	}
 	RETURN_TRUE;
 }
@@ -1265,10 +1251,10 @@ PHP_METHOD(imagick, writeimagesfile)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	php_stream_from_zval(stream, &zstream);
-	result = php_imagick_write_to_filehandle(intern->magick_wand, stream, 2 TSRMLS_CC);
+	result = php_imagick_out_stream_handler(intern, stream, NULL, IMAGICK_WRITE_IMAGE_FILE TSRMLS_CC);
 	
 	if (result == 1) {
-		return;
+		RETURN_FALSE;
 	} else if (result == 2) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write images to the filehandle", 1);
 	}
@@ -2658,42 +2644,27 @@ PHP_METHOD(imagick, pingimage)
 */
 PHP_METHOD(imagick, readimagefile)
 {
-	FILE *fp;
 	char *filename = NULL;
 	int filename_len;
-	MagickBooleanType status;
 	php_imagick_object *intern;
 	zval *zstream;
+	int result;
 	php_stream *stream;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
 		return;
 	}
 	
-	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
-	php_stream_from_zval(stream, &zstream);
-
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS) == FAILURE) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS, (void*)&fp, 0) == FAILURE) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		RETURN_FALSE;
-	}
-	
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = MagickReadImageFile(intern->magick_wand, fp);
 
-	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to read image from filepointer", 1);
+	php_stream_from_zval(stream, &zstream);
+	result = php_imagick_out_stream_handler(intern, stream, filename, IMAGICK_READ_IMAGE_FILE TSRMLS_CC);
+	
+	if (result == 1) {
+		RETURN_FALSE;
+	} else if (result == 2) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to read image from the filehandle", 1);
 	}
-
-	MagickSetImageFilename(intern->magick_wand, filename);
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
 	RETURN_TRUE;
 }
 /* }}} */

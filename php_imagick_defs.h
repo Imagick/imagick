@@ -111,7 +111,7 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
-int php_imagick_write_to_filehandle(MagickWand *wand, php_stream *stream, int type TSRMLS_DC);
+int php_imagick_out_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC);
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
 
 /* Define some color constants */
@@ -144,6 +144,12 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
 #define IMAGICK_READ_WRITE_PERMISSION_DENIED 4
 #define IMAGICK_READ_WRITE_FILENAME_TOO_LONG 5
 #define IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST 6
+
+/* Filehandle handling */
+#define IMAGICK_WRITE_IMAGE_FILE 1
+#define IMAGICK_WRITE_IMAGES_FILE 2
+#define IMAGICK_READ_IMAGE_FILE 3
+#define IMAGICK_PING_IMAGE_FILE 4
 
 /* Class entries */
 extern zend_class_entry *php_imagick_sc_entry;

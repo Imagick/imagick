@@ -49,39 +49,82 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 /*
 	type 1 = MagickWriteImageFile
 	type 2 = MagickWriteImagesFile
+	
+	type 3 = MagickReadImageFile
+	type 4 = MagickPingImageFile
 
 	return values:
 		0 - no error
-		1 - error but exception is thrown already
+		1 - error and exception has been thrown
 		2 - error but exception needs to be thrown
 */
-int php_imagick_write_to_filehandle(MagickWand *wand, php_stream *stream, int type TSRMLS_DC)
+int php_imagick_out_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC)
 {
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_error_handling error_handling;
+#endif
 	FILE *fp;
-	MagickBooleanType status;	
-	
+	MagickBooleanType status = MagickFalse;
+
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC);
+#else
 	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS) == FAILURE) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		return 1;
+#endif	
+
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE) {
+		goto return_on_error;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS, (void*)&fp, 0) == FAILURE) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		return 1;
-	}
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-
-	if (type == 1) {
-		status = MagickWriteImageFile(wand, fp);
-	} else {
-		status = MagickWriteImagesFile(wand, fp);
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+		goto return_on_error;
 	}
 	
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+#else
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+#endif	
+
+	/* php_stream_cast returns warning on some streams but still does not return FAILURE */
+	if (EG(exception)) {
+		return 1;
+	} else {
+		return 2;
+	}
+
+	if (type == IMAGICK_WRITE_IMAGE_FILE) {
+		status = MagickWriteImageFile(intern->magick_wand, fp);
+	} else if (type == IMAGICK_WRITE_IMAGES_FILE) {
+		status = MagickWriteImagesFile(intern->magick_wand, fp);
+	} else if (type == IMAGICK_READ_IMAGE_FILE) { 		
+		status = MagickReadImageFile(intern->magick_wand, fp);
+	} else if (type == IMAGICK_PING_IMAGE_FILE) {
+		status = MagickPingImageFile(intern->magick_wand, fp);
+	} 
+
 	if (status == MagickFalse) {
 		return 2;
 	}
+	
+	if (filename) {
+		MagickSetImageFilename(intern->magick_wand, filename);
+		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	}	
+	
 	return 0;
+	
+return_on_error:
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+#else
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+#endif
+	if (EG(exception)) {
+		return 1;
+	} else {
+		return 2;
+	}
 }
 
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
@@ -315,32 +358,39 @@ int read_image_into_magickwand(php_imagick_object *intern, char *filename, int t
 	php_stream *stream;
 	MagickBooleanType status;
 	FILE *fp;
-
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_error_handling error_handling;
+#endif
+	
 	if (!filename) {
 		return IMAGICK_READ_WRITE_NO_ERROR;
 	}
 	
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC);
+#else
 	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
+#endif
+	
 	stream = php_stream_open_wrapper(filename, "rb", (ENFORCE_SAFE_MODE|IGNORE_PATH) & ~REPORT_ERRORS, NULL);
 
 	if (!stream) {
-		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+		goto return_error;
 	}
 	
 	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL) == FAILURE) {
-	    php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		php_stream_close(stream);
-		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+		goto return_error;
 	}
 
 	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
-	    php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
-		php_stream_close(stream);
-		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+		goto return_error;
 	}
 	
-	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+#if ZEND_MODULE_API_NO > 20060613 
+		zend_restore_error_handling(&error_handling TSRMLS_CC);
+#else
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+#endif
 
 	if (type == 1) {
 		status = MagickReadImageFile(intern->magick_wand, fp);
@@ -350,7 +400,6 @@ int read_image_into_magickwand(php_imagick_object *intern, char *filename, int t
 	
 	if (php_stream_is(stream, PHP_STREAM_IS_STDIO)) {
 		char *absolute = expand_filepath(filename, NULL TSRMLS_CC);
-
 		MagickSetImageFilename(intern->magick_wand, absolute);
 		efree(absolute);
 	} else {
@@ -365,6 +414,15 @@ int read_image_into_magickwand(php_imagick_object *intern, char *filename, int t
 	
 	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
 	return IMAGICK_READ_WRITE_NO_ERROR;
+	
+return_error:
+#if ZEND_MODULE_API_NO > 20060613 
+	zend_restore_error_handling(&error_handling TSRMLS_CC);
+#else
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
+#endif
+	if (stream) php_stream_close(stream);
+	return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 }
 
 int check_write_access(char *absolute TSRMLS_DC)
