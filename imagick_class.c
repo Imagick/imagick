@@ -8044,7 +8044,7 @@ PHP_METHOD(imagick, shadowimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::motionBlurImage(float radius, float sigma, float angle)
+/* {{{ proto bool Imagick::motionBlurImage(float radius, float sigma, float angle[, int CHANNEL])
 	Simulates motion blur.  We convolve the image with a Gaussian operator of the given radius and standard deviation (sigma). For reasonable results, radius should be larger than sigma.  Use a radius of 0 and MotionBlurImage() selects a suitable radius for you. Angle gives the angle of the blurring motion.
 */
 PHP_METHOD(imagick, motionblurimage)
@@ -8052,15 +8052,20 @@ PHP_METHOD(imagick, motionblurimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double radius, sigma, angle;
+	long channel = DefaultChannels;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &radius, &sigma, &angle) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &radius, &sigma, &angle, &channel) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
+#if MagickLibVersion > 0x643
+	status = MagickMotionBlurImage(intern->magick_wand, channel, radius, sigma, angle);
+#else
 	status = MagickMotionBlurImage(intern->magick_wand, radius, sigma, angle);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
