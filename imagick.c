@@ -763,6 +763,7 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, angle)
+		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_morphimages_args, 0, 0, 1)

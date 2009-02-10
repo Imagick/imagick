@@ -61,12 +61,12 @@ int php_imagick_write_to_filehandle(MagickWand *wand, php_stream *stream, int ty
 	MagickBooleanType status;	
 	
 	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE) {
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS) == FAILURE) {
 		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 		return 1;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS, (void*)&fp, 0) == FAILURE) {
 		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 		return 1;
 	}

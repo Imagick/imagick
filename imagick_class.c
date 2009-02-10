@@ -23,7 +23,7 @@
 #include "php_imagick_macros.h"
 
 #if MagickLibVersion > 0x628
-/* {{{ proto bool Imagick::pingImageFile(resource filehandle )
+/* {{{ proto bool Imagick::pingImageFile(resource filehandle)
     Query image information without reading the whole image to memory
 */
 PHP_METHOD(imagick, pingimagefile)
@@ -39,16 +39,20 @@ PHP_METHOD(imagick, pingimagefile)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
 		return;
 	}
-
+	
+	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
 	php_stream_from_zval(stream, &zstream);
 
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE) {
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS) == FAILURE) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS, (void*)&fp, 0) == FAILURE) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 		RETURN_FALSE;
 	}
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = MagickPingImageFile(intern->magick_wand, fp);
@@ -2665,16 +2669,21 @@ PHP_METHOD(imagick, readimagefile)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
 		return;
 	}
-
+	
+	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
 	php_stream_from_zval(stream, &zstream);
 
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE) {
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS) == FAILURE) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 		RETURN_FALSE;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL | REPORT_ERRORS, (void*)&fp, 0) == FAILURE) {
+		php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 		RETURN_FALSE;
 	}
+	
+	php_set_error_handling(EH_NORMAL, php_imagick_exception_class_entry TSRMLS_CC);
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = MagickReadImageFile(intern->magick_wand, fp);
@@ -8062,7 +8071,7 @@ PHP_METHOD(imagick, motionblurimage)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 #if MagickLibVersion > 0x643
-	status = MagickMotionBlurImage(intern->magick_wand, channel, radius, sigma, angle);
+	status = MagickMotionBlurImageChannel(intern->magick_wand, channel, radius, sigma, angle);
 #else
 	status = MagickMotionBlurImage(intern->magick_wand, radius, sigma, angle);
 #endif
