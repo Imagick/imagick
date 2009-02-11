@@ -296,7 +296,11 @@
 		} \
 		break; \
 		case IS_OBJECT: \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
+			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) { \
+				internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
+			} else { \
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "The parameter must be an instance of ImagickPixel or a string", (long)caller); \
+			} \
 		break; \
 		default: \
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
@@ -320,7 +324,11 @@
 		} \
 		break; \
 		case IS_OBJECT: \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
+			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) { \
+				internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
+			} else { \
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "The parameter must be an instance of ImagickPixel or a string", (long)caller); \
+			} \
 		break; \
 		default: \
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
