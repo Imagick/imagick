@@ -1106,7 +1106,7 @@ void initialize_imagick_constants()
 #if MagickLibVersion > 0x634
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_SPLINE", SplineInterpolatePixel);
 #endif
-#if MagickLibVersion > 0x632
+#if MagickLibVersion > 0x628
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_UNDEFINED", UndefinedLayer);
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_COALESCE", CoalesceLayer);
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_COMPAREANY", CompareAnyLayer);
