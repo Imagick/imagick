@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 5 / Imagick	                                          |
    +----------------------------------------------------------------------+
-   | Copyright (c) 2006-2008 Mikko Koppanen, Scott MacVicar               |
+   | Copyright (c) 2006-2009 Mikko Koppanen, Scott MacVicar               |
    | Imagemagick (c) ImageMagick Studio LLC                               |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
@@ -31,6 +31,10 @@ PHP_METHOD(imagickpixel, gethsl)
 	php_imagickpixel_object *internp;
 	double hue, saturation, luminosity;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	PixelGetHSL(internp->pixel_wand, &hue, &saturation, &luminosity);
@@ -192,6 +196,10 @@ PHP_METHOD(imagickpixel, getindex)
 {
 	php_imagickpixel_object *internp;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	RETVAL_LONG(PixelGetIndex(internp->pixel_wand));
 }
@@ -283,6 +291,10 @@ PHP_METHOD(imagickpixel, clear)
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = IsPixelWand(internp->pixel_wand);
 
@@ -304,6 +316,10 @@ PHP_METHOD(imagickpixel, destroy)
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	object = getThis();
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 
@@ -541,6 +557,10 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 	php_imagickpixel_object *internp;
 	char *color_string;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	color_string = PixelGetColorAsString(internp->pixel_wand);
@@ -560,6 +580,10 @@ PHP_METHOD(imagickpixel, clone)
 	php_imagickpixel_object *intern_return;
 	PixelWand *pixel_wand;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CLONE_PIXELWAND(internp->pixel_wand, pixel_wand);
@@ -580,6 +604,10 @@ PHP_METHOD(imagickpixel, getcolorcount)
 	php_imagickpixel_object *internp;
 	long color_count;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	color_count = PixelGetColorCount(internp->pixel_wand);

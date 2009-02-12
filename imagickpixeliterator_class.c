@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 5 / Imagick	                                          |
    +----------------------------------------------------------------------+
-   | Copyright (c) 2006-2008 Mikko Koppanen, Scott MacVicar               |
+   | Copyright (c) 2006-2009 Mikko Koppanen, Scott MacVicar               |
    | Imagemagick (c) ImageMagick Studio LLC                               |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
@@ -67,6 +67,11 @@ PHP_METHOD(imagickpixeliterator, __construct)
 PHP_METHOD(imagickpixeliterator, resetiterator)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -91,6 +96,11 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 PHP_METHOD(imagickpixeliterator, synciterator)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -112,6 +122,11 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -136,6 +151,11 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly != 1 ) {
@@ -240,6 +260,11 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 PHP_METHOD(imagickpixeliterator, getiteratorrow)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -306,6 +331,10 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	unsigned long num_wands, i;
 	zval *tmp_pixelwand;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -359,6 +388,10 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	int i;
 	zval *tmp_pixelwand;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -413,6 +446,10 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	unsigned long num_wands, i;
 	zval *tmp_pixelwand;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -459,6 +496,11 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	object = getThis();
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -488,6 +530,11 @@ PHP_METHOD(imagickpixeliterator, destroy)
 PHP_METHOD(imagickpixeliterator, clear)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
@@ -513,6 +560,11 @@ PHP_METHOD(imagickpixeliterator, clear)
 PHP_METHOD(imagickpixeliterator, valid)
 {
 	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if ( internpix->instanciated_correctly < 1 ) {
