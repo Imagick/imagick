@@ -1945,6 +1945,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimagefilename, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagefilename, imagick_setimagefilename_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageformat, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimagemimetype, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, removeimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, destroy, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, clear, imagick_zero_args, ZEND_ACC_PUBLIC)

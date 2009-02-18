@@ -154,12 +154,12 @@
 		} \
 	} \
 
-#define IMAGICK_HAS_FORMAT(buffer, magick_wand)\
+#define IMAGICK_HAS_FORMAT(buffer, magick_wand, free_buffer)\
 	buffer = MagickGetImageFormat(magick_wand);\
 	if(buffer == (char *)NULL || *buffer == '\0') {\
 		IMAGICK_FREE_MEMORY(char *, buffer); IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Image has no format", 1); \
 	} else { \
-		IMAGICK_FREE_MEMORY(char *, buffer); \
+		if (free_buffer) IMAGICK_FREE_MEMORY(char *, buffer); \
 	} \
 
 #define IMAGICK_METHOD_DEPRECATED(className, methodName)\

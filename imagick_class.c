@@ -6384,7 +6384,7 @@ PHP_METHOD(imagick, getimageblob)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	IMAGICK_HAS_FORMAT(buffer, intern->magick_wand);
+	IMAGICK_HAS_FORMAT(buffer, intern->magick_wand, 1);
 
 	image_contents = MagickGetImageBlob(intern->magick_wand, &image_size);
 	if (!image_contents) {
@@ -6429,7 +6429,7 @@ PHP_METHOD(imagick, getimagesblob)
 
 	/* Loop all images to make sure they have a format */
 	while (MagickNextImage(intern->magick_wand)) {
-		IMAGICK_HAS_FORMAT(buffer, intern->magick_wand);
+		IMAGICK_HAS_FORMAT(buffer, intern->magick_wand, 1);
 	}
 
 #if MagickLibVersion > 0x628
@@ -6461,7 +6461,7 @@ PHP_METHOD(imagick, getimagesblob)
 PHP_METHOD(imagick, getimageformat)
 {
 	php_imagick_object *intern;
-	char *format, *buffer;
+	char *format;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -6470,15 +6470,40 @@ PHP_METHOD(imagick, getimageformat)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-	IMAGICK_HAS_FORMAT(buffer, intern->magick_wand);
-
-	format = MagickGetImageFormat(intern->magick_wand);
-	if (!format) {
-		return;
-	}
+	IMAGICK_HAS_FORMAT(format, intern->magick_wand, 0);
 
 	ZVAL_STRING(return_value, format, 1);
 	IMAGICK_FREE_MEMORY(char *, format);
+	return;
+}
+/* }}} */
+
+/* {{{ proto string Imagick::getImageMimeType()
+	Returns the image mime-type
+*/
+PHP_METHOD(imagick, getimagemimetype)
+{
+	php_imagick_object *intern;
+	char *format = NULL, *mime_type = NULL;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	IMAGICK_HAS_FORMAT(format, intern->magick_wand, 0);
+
+	mime_type = (char *) MagickToMime(format);
+	IMAGICK_FREE_MEMORY(char *, format);
+	
+	if (!mime_type) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to get image mime-type", 1);
+	}
+	
+	ZVAL_STRING(return_value, mime_type, 1);
+	IMAGICK_FREE_MEMORY(char *, mime_type);
 	return;
 }
 /* }}} */

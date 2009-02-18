@@ -302,6 +302,7 @@ PHP_METHOD(imagick, setimageformat);
 PHP_METHOD(imagick, setimagefilename);
 PHP_METHOD(imagick, getimagefilename);
 PHP_METHOD(imagick, getimageformat);
+PHP_METHOD(imagick, getimagemimetype);
 PHP_METHOD(imagick, getimagesize);
 PHP_METHOD(imagick, getimagegeometry);
 PHP_METHOD(imagick, getimagecolors);
