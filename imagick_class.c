@@ -6357,7 +6357,7 @@ PHP_METHOD(imagick, getimagesize)
 {
 	php_imagick_object *intern;
 
-	IMAGICK_METHOD_DEPRECATED("Imagick", "getImageSize");
+	IMAGICK_METHOD_DEPRECATED_USE_INSTEAD("Imagick", "getImageSize", "Imagick", "getImageLength");
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);

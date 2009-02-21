@@ -162,8 +162,11 @@
 		if (free_buffer) IMAGICK_FREE_MEMORY(char *, buffer); \
 	} \
 
-#define IMAGICK_METHOD_DEPRECATED(className, methodName)\
-	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", className, methodName);
+#define IMAGICK_METHOD_DEPRECATED(class_name, method_name) \
+	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", class_name, method_name);
+
+#define IMAGICK_METHOD_DEPRECATED_USE_INSTEAD(class_name, method_name, new_class, new_method) \
+	php_error(E_STRICT, "%s::%s is deprecated. %s::%s should be used instead", class_name, method_name, new_class, new_method);
 
 #define IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, free, message) \
 	switch (error) { \
