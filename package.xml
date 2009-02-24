@@ -32,7 +32,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- No bugs reported against RC4 so releasing it as is
+- Fixed compilation against older ImageMagick versions (Patch by Tim Herzog)
 </notes>
 	<contents>
 		<dir name="/">
