@@ -2448,7 +2448,7 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 
-	wand_copy = ClonePixelWand(old_obj->pixel_wand);
+	IMAGICK_CLONE_PIXELWAND(old_obj->pixel_wand, wand_copy);
 	IMAGICKPIXEL_REPLACE_PIXELWAND(new_obj, wand_copy);
 
 	new_obj->initialized_via_iterator = 0;
