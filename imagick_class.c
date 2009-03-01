@@ -42,7 +42,7 @@ PHP_METHOD(imagick, pingimagefile)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	php_stream_from_zval(stream, &zstream);
-	result = php_imagick_out_stream_handler(intern, stream, filename, IMAGICK_PING_IMAGE_FILE TSRMLS_CC);
+	result = php_imagick_stream_handler(intern, stream, filename, IMAGICK_PING_IMAGE_FILE TSRMLS_CC);
 	
 	if (result == 1) {
 		RETURN_FALSE;
@@ -1258,7 +1258,7 @@ PHP_METHOD(imagick, writeimagefile)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	php_stream_from_zval(stream, &zstream);
-	result = php_imagick_out_stream_handler(intern, stream, NULL, IMAGICK_WRITE_IMAGE_FILE TSRMLS_CC);
+	result = php_imagick_stream_handler(intern, stream, NULL, IMAGICK_WRITE_IMAGE_FILE TSRMLS_CC);
 	
 	if (result == 1) {
 		RETURN_FALSE;
@@ -1287,7 +1287,7 @@ PHP_METHOD(imagick, writeimagesfile)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	php_stream_from_zval(stream, &zstream);
-	result = php_imagick_out_stream_handler(intern, stream, NULL, IMAGICK_WRITE_IMAGE_FILE TSRMLS_CC);
+	result = php_imagick_stream_handler(intern, stream, NULL, IMAGICK_WRITE_IMAGE_FILE TSRMLS_CC);
 	
 	if (result == 1) {
 		RETURN_FALSE;
@@ -2731,7 +2731,7 @@ PHP_METHOD(imagick, readimagefile)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	php_stream_from_zval(stream, &zstream);
-	result = php_imagick_out_stream_handler(intern, stream, filename, IMAGICK_READ_IMAGE_FILE TSRMLS_CC);
+	result = php_imagick_stream_handler(intern, stream, filename, IMAGICK_READ_IMAGE_FILE TSRMLS_CC);
 	
 	if (result == 1) {
 		RETURN_FALSE;

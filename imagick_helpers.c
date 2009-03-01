@@ -58,7 +58,7 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 		1 - error and exception has been thrown
 		2 - error but exception needs to be thrown
 */
-int php_imagick_out_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC)
+int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC)
 {
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_error_handling error_handling;

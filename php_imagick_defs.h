@@ -111,7 +111,7 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC);
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
-int php_imagick_out_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC);
+int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC);
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
 
 /* Define some color constants */
