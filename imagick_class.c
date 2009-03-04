@@ -256,7 +256,7 @@ PHP_METHOD(imagick, contraststretchimage)
 PHP_METHOD(imagick, getimagematte)
 {
 	php_imagick_object *intern;
-	long matte;
+	MagickBooleanType matte;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -266,7 +266,12 @@ PHP_METHOD(imagick, getimagematte)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	matte = MagickGetImageMatte(intern->magick_wand);
-	RETVAL_LONG(matte);
+
+	if (matte == MagickTrue) {
+		RETURN_TRUE;
+	} else {
+		RETURN_FALSE;
+	}
 }
 /* }}} */
 
