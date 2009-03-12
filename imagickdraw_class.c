@@ -41,6 +41,76 @@ PHP_METHOD(imagickdraw, resetvectorgraphics)
 /* }}} */
 #endif
 
+#if MagickLibVersion > 0x649
+/* {{{ proto bool ImagickDraw::getTextKerning()
+	Gets the text kerning
+*/
+PHP_METHOD(imagickdraw, gettextkerning) 
+{
+	php_imagickdraw_object *internd;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETURN_DOUBLE(DrawGetTextKerning(internd->drawing_wand));
+}
+/* }}} */
+
+/* {{{ proto bool ImagickDraw::setTextKerning(float kerning)
+	Sets the text kerning
+*/
+PHP_METHOD(imagickdraw, settextkerning) 
+{
+	php_imagickdraw_object *internd;
+	double kerning;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &kerning) == FAILURE) {
+		return;
+	}
+	
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	DrawSetTextKerning(internd->drawing_wand, kerning);
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool ImagickDraw::getTextInterwordSpacing()
+	Gets the text interword spacing
+*/
+PHP_METHOD(imagickdraw, gettextinterwordspacing) 
+{
+	php_imagickdraw_object *internd;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETURN_DOUBLE(DrawGetTextInterwordSpacing(internd->drawing_wand));
+}
+/* }}} */
+
+/* {{{ proto bool ImagickDraw::setTextInterwordSpacing(float spacing)
+	Sets the text interword spacing
+*/
+PHP_METHOD(imagickdraw, settextinterwordspacing) 
+{
+	php_imagickdraw_object *internd;
+	double spacing;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &spacing) == FAILURE) {
+		return;
+	}
+	
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	DrawSetTextInterwordSpacing(internd->drawing_wand, spacing);
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 /* {{{ proto ImagickDraw ImagickDraw::__construct()
    The ImagickDraw constructor
 */

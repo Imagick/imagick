@@ -1188,6 +1188,15 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 
 
 /* ImagickDraw */
+#if MagickLibVersion > 0x649
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, kerning)
+	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextinterwordspacing_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, spacing)
+	ZEND_END_ARG_INFO()	
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -1645,6 +1654,12 @@ static function_entry php_imagickdraw_class_methods[] =
 {
 #if MagickLibVersion > 0x628
 	PHP_ME(imagickdraw, resetvectorgraphics, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x649
+	PHP_ME(imagickdraw, gettextkerning, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, settextkerning, imagickdraw_settextkerning_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, gettextinterwordspacing, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, settextinterwordspacing, imagickdraw_settextinterwordspacing_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagickdraw, __construct, imagickdraw_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickdraw, setfillcolor, imagickdraw_setfillcolor_args, ZEND_ACC_PUBLIC)

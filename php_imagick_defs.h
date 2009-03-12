@@ -523,6 +523,12 @@ PHP_METHOD(imagick, settype);
 #if MagickLibVersion > 0x628
 PHP_METHOD(imagickdraw, resetvectorgraphics);
 #endif
+#if MagickLibVersion > 0x649
+PHP_METHOD(imagickdraw, gettextkerning);
+PHP_METHOD(imagickdraw, settextkerning);
+PHP_METHOD(imagickdraw, gettextinterwordspacing);
+PHP_METHOD(imagickdraw, settextinterwordspacing);
+#endif
 PHP_METHOD(imagickdraw, __construct);
 PHP_METHOD(imagickdraw, setfillcolor);
 PHP_METHOD(imagickdraw, setfillalpha);
