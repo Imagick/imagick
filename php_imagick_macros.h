@@ -287,7 +287,8 @@
 			zval *object; \
 			PixelWand *pixel_wand = NewPixelWand(); \
 			if (!PixelSetColor(pixel_wand, Z_STRVAL_P(param))) { \
-				IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(pixel_wand, "Unrecognized color string", 3); \
+				DestroyPixelWand(pixel_wand);
+				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Unrecognized color string", caller);
 				return; \
 			} \
 			MAKE_STD_ZVAL(object); \
