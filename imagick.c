@@ -2273,7 +2273,7 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 }
 
 
-static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr TSRMLS_DC)
+static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr, zend_bool init_wand TSRMLS_DC)
 {
 	zval *tmp;
 	zend_object_value retval;
@@ -2296,7 +2296,11 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	}
 
 	/* Set the magickwand */
-	intern->magick_wand = NewMagickWand();
+	if (init_wand) {
+		intern->magick_wand = NewMagickWand();
+	} else {
+		intern->magick_wand = NULL;
+	}
 	intern->next_out_of_bound = 0;
 	intern->progress_monitor_name = NULL;
 
@@ -2312,10 +2316,10 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 
 static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	return php_imagick_object_new_ex(class_type, NULL TSRMLS_CC);
+	return php_imagick_object_new_ex(class_type, NULL, 1 TSRMLS_CC);
 }
 
-static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr TSRMLS_DC)
+static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr, zend_bool init_wand TSRMLS_DC)
 {
 	zval *tmp;
 	zend_object_value retval;
@@ -2330,8 +2334,11 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	}	
 	
 	/* Set the DrawingWand */
-	intern->drawing_wand = NewDrawingWand();
-
+	if (init_wand) {
+		intern->drawing_wand = NewDrawingWand();
+	} else {
+		intern->drawing_wand = NULL;
+	}
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
@@ -2344,7 +2351,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 
 static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	return php_imagickdraw_object_new_ex(class_type, NULL TSRMLS_CC);
+	return php_imagickdraw_object_new_ex(class_type, NULL, 1 TSRMLS_CC);
 }
 
 static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -2425,7 +2432,7 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 	MagickWand *wand_copy = NULL;
 	php_imagick_object *new_obj = NULL;
 	php_imagick_object *old_obj = (php_imagick_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_object_value new_ov = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
 	 
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	
@@ -2445,7 +2452,7 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 	DrawingWand *wand_copy = NULL;
 	php_imagickdraw_object *new_obj = NULL;
 	php_imagickdraw_object *old_obj = (php_imagickdraw_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_object_value new_ov = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
 	
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	wand_copy = CloneDrawingWand(old_obj->drawing_wand);
