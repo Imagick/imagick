@@ -261,10 +261,12 @@
 	MagickSetLastIterator(intern->magick_wand);
 
 #define IMAGICK_REPLACE_MAGICKWAND(intern, new_wand)\
-	if (intern->magick_wand != (MagickWand *)NULL) {\
-		intern->magick_wand = (MagickWand *)DestroyMagickWand(intern->magick_wand);\
-		intern->magick_wand = new_wand;\
-	} \
+	if (intern->magick_wand == (MagickWand *)NULL) {\
+		intern->magick_wand = new_wand; \
+	} else { \
+		intern->magick_wand = (MagickWand *)DestroyMagickWand(intern->magick_wand); \
+		intern->magick_wand = new_wand; \
+	}
 
 #define IMAGICKPIXEL_REPLACE_PIXELWAND(intern, new_wand)\
 	if(intern->pixel_wand != (PixelWand *)NULL && intern->initialized_via_iterator != 1) {\
@@ -274,10 +276,12 @@
 		intern->pixel_wand = new_wand;\
 	} \
 
-#define IMAGICKDRAW_REPLACE_DRAWINGWAND(intern, new_wand)\
-	if (intern->drawing_wand != (DrawingWand *)NULL) {\
-		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand(intern->drawing_wand);\
-		intern->drawing_wand = new_wand;\
+#define IMAGICKDRAW_REPLACE_DRAWINGWAND(intern, new_wand) \
+	if (intern->drawing_wand == (DrawingWand *)NULL) { \
+		intern->drawing_wand = new_wand; \
+	} else { \
+		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand(intern->drawing_wand); \
+		intern->drawing_wand = new_wand; \
 	} \
 
 #define IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp, caller) \
