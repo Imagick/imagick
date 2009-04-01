@@ -491,29 +491,32 @@ zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long
 		}
 		return 1;
 	}
-	
+
 	if (((double)orig_width / (double)desired_width) > ((double)orig_height / (double)desired_height)) {
 		ratio = (double)orig_height / (double)desired_height;
 		image_width = (double)orig_width / (double)ratio;
 		image_height = desired_height;
-		
+
 		crop_x = ((double)image_width - (double)desired_width) / 2;
 	} else {
 		ratio = (double)orig_width / (double)desired_width;
 		image_height = (double)orig_height / (double)ratio;
 		image_width = desired_width;
-		
+
 		crop_y = ((double)image_height - (double)desired_height) / 2;
 	}
-
-	if (!MagickThumbnailImage(magick_wand, image_width, image_height)) {
-		return 0;
-	}
 	
+	if (desired_width != orig_width && desired_height != orig_height) {
+		if (!MagickThumbnailImage(magick_wand, image_width, image_height)) {
+			return 0;
+		}
+	}
+
 	if (!MagickCropImage(magick_wand, desired_width, desired_height, crop_x, crop_y)) {
 		return 0;
 	}
 	
+	MagickSetImagePage(magick_wand, desired_width, desired_height, 0, 0);
 	return 1;
 }
 
