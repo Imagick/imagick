@@ -1078,7 +1078,7 @@ PHP_METHOD(imagick, paintfloodfillimage)
 /* }}} */
 #endif
 
-#ifdef HAVE_IMAGEMAGICK6359ORLATER
+#if MagickLibVersion > 0x635
 /* {{{ proto Imagick Imagick::clutImage(Imagick lookup[, int channel] )
    Replaces colors in the image from a color lookup table
 */
@@ -1453,8 +1453,7 @@ PHP_METHOD(imagick, recolorimage)
 /* }}} */
 #endif
 
-#if defined(HAVE_IMAGEMAGICK6364ORLATER)
-
+#if MagickLibVersion > 0x636
 PHP_METHOD(imagick, setfont)
 {
 	php_imagick_object *intern;

@@ -203,7 +203,7 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_END_ARG_INFO()	
 #endif
 
-#ifdef HAVE_IMAGEMAGICK6359ORLATER
+#if MagickLibVersion > 0x635
 	ZEND_BEGIN_ARG_INFO_EX(imagick_clutimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, CHANNELTYPE)
@@ -252,7 +252,7 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_END_ARG_INFO()
 #endif
 
-#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+#if MagickLibVersion > 0x636
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setfont_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, font)
 	ZEND_END_ARG_INFO()
@@ -1883,12 +1883,10 @@ static function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x634
 	PHP_ME(imagick, paintfloodfillimage, imagick_paintfloodfillimage_args, ZEND_ACC_PUBLIC)
 #endif
-#ifdef HAVE_IMAGEMAGICK6359ORLATER
+#if MagickLibVersion > 0x635
 	PHP_ME(imagick, clutimage, imagick_clutimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageproperties, imagick_getimageproperties_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageprofiles, imagick_getimageprofiles_args, ZEND_ACC_PUBLIC)
-#endif
-#if MagickLibVersion > 0x635
 	PHP_ME(imagick, distortimage, imagick_distortimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, writeimagefile, imagick_writeimagefile_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, writeimagesfile, imagick_writeimagesfile_args, ZEND_ACC_PUBLIC)
@@ -1898,7 +1896,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, animateimages, imagick_animateimages_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, recolorimage, imagick_recolorimage_args, ZEND_ACC_PUBLIC)
 #endif
-#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+#if MagickLibVersion > 0x636
 	PHP_ME(imagick, setfont, imagick_setfont_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getfont, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setpointsize, imagick_setpointsize_args, ZEND_ACC_PUBLIC)

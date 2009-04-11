@@ -97,27 +97,13 @@ if test $PHP_IMAGICK != "no"; then
 		AC_DEFINE(HAVE_IMAGICK,1,[ ])
 		
 		if test -z "$IMAGICK_AFTER_BWC_BREAK"; then	
-		
-			dnl ImageMagick 6.3.5-9 provides a few useful functions to get some image properties and profiles
-			dnl That is why this version is tested separately
-			PHP_CHECK_LIBRARY(Wand, MagickGetImageProperties,[
-															AC_DEFINE(HAVE_IMAGEMAGICK6359ORLATER, 1, [ ])
-															],,-L$WAND_DIR/lib)
-		
-			dnl ImageMagick 6.3.6-4 provides set/get(font|pointsize)
-			PHP_CHECK_LIBRARY(Wand, MagickSetFont,[
-															AC_DEFINE(HAVE_IMAGEMAGICK6364ORLATER, 1, [ ])
-															],,-L$WAND_DIR/lib)    
-		
+
 			PHP_ADD_LIBRARY_WITH_PATH(Magick, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_LIBRARY_WITH_PATH(Wand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_INCLUDE($WAND_DIR/include)
 		
 		else
-    
-			AC_DEFINE(HAVE_IMAGEMAGICK6359ORLATER, 1, [ ])
-			AC_DEFINE(HAVE_IMAGEMAGICK6364ORLATER, 1, [ ])
-		
+
 			PHP_ADD_LIBRARY_WITH_PATH(MagickCore, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_LIBRARY_WITH_PATH(MagickWand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_INCLUDE($WAND_DIR/include/ImageMagick)    

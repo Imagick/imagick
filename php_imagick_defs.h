@@ -212,12 +212,10 @@ PHP_METHOD(imagick, setimageorientation);
 #if MagickLibVersion > 0x634
 PHP_METHOD(imagick, paintfloodfillimage);
 #endif
-#ifdef HAVE_IMAGEMAGICK6359ORLATER
+#if MagickLibVersion > 0x635
 PHP_METHOD(imagick, clutimage);
 PHP_METHOD(imagick, getimageproperties);
 PHP_METHOD(imagick, getimageprofiles);
-#endif
-#if MagickLibVersion > 0x635
 PHP_METHOD(imagick, distortimage);
 PHP_METHOD(imagick, writeimagefile);
 PHP_METHOD(imagick, writeimagesfile);
@@ -227,7 +225,7 @@ PHP_METHOD(imagick, getimageclipmask);
 PHP_METHOD(imagick, animateimages);
 PHP_METHOD(imagick, recolorimage);
 #endif
-#if defined(HAVE_IMAGEMAGICK6364ORLATER)
+#if MagickLibVersion > 0x636
 PHP_METHOD(imagick, setfont);
 PHP_METHOD(imagick, getfont);
 PHP_METHOD(imagick, setpointsize);
