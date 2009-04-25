@@ -335,15 +335,15 @@ PHP_METHOD(imagickdraw, setfillalpha)
 PHP_METHOD(imagickdraw, settextantialias)
 {
 	php_imagickdraw_object *internd;
-	zend_bool antiAlias;
+	zend_bool antialias;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &antiAlias) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias) == FAILURE) {
 		return;
 	}
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	DrawSetTextAntialias(internd->drawing_wand, antiAlias);
+	DrawSetTextAntialias(internd->drawing_wand, antialias);
 	RETURN_TRUE;
 }
 /* }}} */
