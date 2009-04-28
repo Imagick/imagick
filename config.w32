@@ -2,17 +2,12 @@ ARG_WITH("imagick", "ImageMagick support", "no");
 
 if (PHP_IMAGICK != "no") {
 
-	if (CHECK_HEADER_ADD_INCLUDE("wand/magick-wand.h", "CFLAGS_IMAGICK",
-PHP_PHP_BUILD + "\\include\\imagemagick;" + PHP_IMAGICK)
-			&& CHECK_LIB("CORE_RL_wand_.lib", "imagick", PHP_PHP_BUILD +
-"\\lib\\imagemagick;" + PHP_IMAGICK)
+	if (CHECK_HEADER_ADD_INCLUDE("wand/magick-wand.h", "CFLAGS_IMAGICK", PHP_PHP_BUILD + "\\include\\imagemagick;" + PHP_IMAGICK)
+			&& CHECK_LIB("CORE_RL_wand_.lib", "imagick", PHP_PHP_BUILD + "\\lib\\imagemagick;" + PHP_IMAGICK)
 			)
 	{
-		ADD_FLAG("CFLAGS_IMAGICK", "/D _VISUALC_ /D NeedFunctionPrototypes /D
-_LIB");
-		EXTENSION('imagick', 'imagick_class.c imagickdraw_class.c
-imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c
-imagick.c');
+		ADD_FLAG("CFLAGS_IMAGICK", "/D _VISUALC_ /D NeedFunctionPrototypes /D _LIB");
+		EXTENSION('imagick', 'imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c');
 		AC_DEFINE('HAVE_IMAGICK', 1);
 	} else {
 		WARNING("imagick not enabled; libraries and headers not found");
