@@ -825,7 +825,7 @@ PHP_METHOD(imagickdraw, clear)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internd->drawing_wand == (DrawingWand *)NULL || !IsDrawingWand(internd->drawing_wand )) {
+	if (internd->drawing_wand == (DrawingWand *)NULL) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "ImagickDraw object is not allocated properly", 2);
 	}
 
@@ -894,7 +894,7 @@ PHP_METHOD(imagickdraw, destroy)
 	object = getThis();
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	if (internd->drawing_wand == (DrawingWand *)NULL || !IsDrawingWand(internd->drawing_wand )) {
+	if (internd->drawing_wand == (DrawingWand *)NULL) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "ImagickDraw object is not allocated properly", 2);
 	}
 

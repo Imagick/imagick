@@ -703,7 +703,7 @@ PHP_METHOD(imagick, transformimage)
 
 	transformed = MagickTransformImage(intern->magick_wand, crop, geometry);
 
-	if (transformed == (MagickWand *)NULL || !IsMagickWand(transformed)) {
+	if (transformed == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Transforming image failed", 1);
 	}
 
@@ -2910,7 +2910,7 @@ PHP_METHOD(imagick, clear)
 		return;
 	}
 	
-	if (intern->magick_wand == (MagickWand *)NULL || !IsMagickWand(intern->magick_wand)) {
+	if (intern->magick_wand == (MagickWand *)NULL) {
 		RETURN_FALSE;
 	}
 
@@ -2934,7 +2934,7 @@ PHP_METHOD(imagick, destroy)
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	if (intern->magick_wand == (MagickWand *)NULL || !IsMagickWand(intern->magick_wand)) {
+	if (intern->magick_wand == (MagickWand *)NULL) {
 		RETURN_FALSE;
 	}
 
@@ -3223,7 +3223,7 @@ PHP_METHOD(imagick, coalesceimages)
 
 	tmp_wand = MagickCoalesceImages(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Coalesce image failed", 1);
 	}
 
@@ -3290,7 +3290,7 @@ PHP_METHOD(imagick, combineimages)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 	tmp_wand = MagickCombineImages(intern->magick_wand, channel_type);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Combine images failed", 1);
 	}
 
@@ -3350,7 +3350,7 @@ PHP_METHOD(imagick, getimage)
 
 	tmp_wand = MagickGetImage(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Get image failed", 1);
 	}
 
@@ -3816,7 +3816,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 
 	tmp_wand = (MagickWand *)MagickOptimizeImageLayers(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Optimize image layers failed", 1);
 	}
 
@@ -3878,7 +3878,7 @@ PHP_METHOD(imagick, previewimages)
 
 	tmp_wand = MagickPreviewImages(intern->magick_wand, preview);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Preview images failed", 1);
 	}
 
@@ -4554,7 +4554,7 @@ PHP_METHOD(imagick, stereoimage)
 
 	tmp_wand = MagickStereoImage(intern->magick_wand, intern_second->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Stereo image failed", 1);
 	}
 
@@ -4588,7 +4588,7 @@ PHP_METHOD(imagick, textureimage)
 
 	tmp_wand = MagickTextureImage(intern->magick_wand, intern_second->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Texture image failed", 1);
 	}
 
@@ -4742,7 +4742,7 @@ PHP_METHOD(imagick, deconstructimages)
 
 	tmp_wand = MagickDeconstructImages(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Deconstruct image failed", 1);
 	}
 
@@ -4773,7 +4773,7 @@ PHP_METHOD(imagick, getimageregion)
 
 	tmp_wand = MagickGetImageRegion(intern->magick_wand, width, height, x, y);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Get image region failed", 1);
 	}
 
@@ -5028,7 +5028,7 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageBackgroundColor(intern->magick_wand, tmp_wand);
 
-	if (tmp_wand == (PixelWand *)NULL || !IsPixelWand(tmp_wand)) {
+	if (tmp_wand == (PixelWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image background color", 1);
 	}
 
@@ -5094,7 +5094,7 @@ PHP_METHOD(imagick, getimagebordercolor)
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageBorderColor(intern->magick_wand, tmp_wand);
 
-	if (tmp_wand == (PixelWand *)NULL || !IsPixelWand(tmp_wand)) {
+	if (tmp_wand == (PixelWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image border color", 1);
 	}
 
@@ -5290,7 +5290,7 @@ PHP_METHOD(imagick, getimagecolormapcolor)
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageColormapColor(intern->magick_wand, index , tmp_wand);
 
-	if (tmp_wand == (PixelWand *)NULL || !IsPixelWand(tmp_wand)) {
+	if (tmp_wand == (PixelWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image colormap color", 1);
 	}
 
@@ -5560,9 +5560,7 @@ PHP_METHOD(imagick, getimagehistogram)
 	array_init(return_value);
 
 	for (i = 0; i < colors; i++) {
-
-		if (IsPixelWand (wand_array[i])) {
-
+		if (wand_array[i]) {
 			MAKE_STD_ZVAL(tmp_pixelwand);
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
@@ -5636,7 +5634,7 @@ PHP_METHOD(imagick, getimagemattecolor)
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageMatteColor(intern->magick_wand, tmp_wand);
 
-	if (tmp_wand == (PixelWand *)NULL || !IsPixelWand(tmp_wand)) {
+	if (tmp_wand == (PixelWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image matte color", 1);
 	}
 
@@ -5707,7 +5705,7 @@ PHP_METHOD(imagick, getimagepixelcolor)
 	tmp_wand = NewPixelWand();
 	status = MagickGetImagePixelColor(intern->magick_wand, x, y , tmp_wand);
 
-	if (tmp_wand == (PixelWand *)NULL || !IsPixelWand(tmp_wand)) {
+	if (tmp_wand == (PixelWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image pixel color", 1);
 	}
 
@@ -6095,7 +6093,7 @@ PHP_METHOD(imagick, resetiterator)
 	}
 	
 	/* No magick is going to happen */
-	if (intern->magick_wand == (MagickWand *)NULL || !IsMagickWand(intern->magick_wand)) {
+	if (intern->magick_wand == (MagickWand *)NULL) {
 		RETURN_FALSE;
 	}
 	intern->next_out_of_bound = 0;
@@ -6117,7 +6115,7 @@ PHP_METHOD(imagick, setfirstiterator)
 	}
 	
 	/* No magick is going to happen */
-	if (intern->magick_wand == (MagickWand *)NULL || !IsMagickWand(intern->magick_wand)) {
+	if (intern->magick_wand == (MagickWand *)NULL) {
 		RETURN_FALSE;
 	}
 	intern->next_out_of_bound = 0;
@@ -6139,7 +6137,7 @@ PHP_METHOD(imagick, setlastiterator)
 	}
 	
 	/* No magick is going to happen */
-	if (intern->magick_wand == (MagickWand *)NULL || !IsMagickWand(intern->magick_wand)) {
+	if (intern->magick_wand == (MagickWand *)NULL) {
 		RETURN_FALSE;
 	}
 	intern->next_out_of_bound = 0;
@@ -6895,7 +6893,7 @@ PHP_METHOD(imagick, compareimagechannels)
 
 	tmp_wand = MagickCompareImageChannels(intern->magick_wand, intern_second->magick_wand, channel_type, metric_type, &distortion);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Compare image channels failed", 1);
 	}
 
@@ -6930,7 +6928,7 @@ PHP_METHOD(imagick, compareimagelayers)
 
 	tmp_wand = (MagickWand *)MagickCompareImageLayers(intern->magick_wand, compare_method);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Compare image layers failed", 1);
 	}
 
@@ -6961,7 +6959,7 @@ PHP_METHOD(imagick, flattenimages)
 
 	tmp_wand = MagickFlattenImages(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Flatten images failed", 1);
 	}
 
@@ -7074,7 +7072,7 @@ PHP_METHOD(imagick, fximage)
 
 	tmp_wand = MagickFxImageChannel(intern->magick_wand, channel, expression);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Fx image failed", 1);
 	}
 
@@ -7169,7 +7167,7 @@ PHP_METHOD(imagick, compareimages)
 
 	tmp_wand = MagickCompareImages(intern->magick_wand, intern_second->magick_wand, metric_type, &distortion);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Compare images failed", 1);
 	}
 
@@ -7939,7 +7937,7 @@ PHP_METHOD(imagick, montageimage)
 
 	tmp_wand = MagickMontageImage(intern->magick_wand, internd->drawing_wand, tile_geometry, thumbnail_geometry, montage_mode, frame);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Montage image failed", 1);
 	}
 
@@ -7997,7 +7995,7 @@ PHP_METHOD(imagick, averageimages)
 
 	tmp_wand = MagickAverageImages(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Averaging images failed", 1);
 	}
 
@@ -8231,7 +8229,7 @@ PHP_METHOD(imagick, steganoimage)
 
 	tmp_wand = MagickSteganoImage(intern->magick_wand, intern_second->magick_wand, offset);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Stegano image failed", 1);
 	}
 
@@ -8257,7 +8255,7 @@ PHP_METHOD(imagick, clone)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	tmp_wand = CloneMagickWand(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Cloning Imagick object failed", 1);
 	}
 
@@ -8434,7 +8432,7 @@ PHP_METHOD(imagick, mosaicimages)
 	MagickSetFirstIterator(intern->magick_wand);
 	tmp_wand = MagickMosaicImages(intern->magick_wand);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Mosaic image failed", 1);
 	}
 
@@ -8465,7 +8463,7 @@ PHP_METHOD(imagick, morphimages)
 
 	tmp_wand = MagickMorphImages(intern->magick_wand, frames);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Morphing images failed", 1);
 	}
 
@@ -8722,7 +8720,7 @@ PHP_METHOD(imagick, appendimages)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 	tmp_wand = MagickAppendImages(intern->magick_wand, stack);
 
-	if (tmp_wand == (MagickWand *)NULL || !IsMagickWand(tmp_wand)) {
+	if (tmp_wand == (MagickWand *)NULL) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to append images", 1);
 	}
 

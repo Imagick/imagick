@@ -289,16 +289,14 @@ PHP_METHOD(imagickpixel, setcolor)
 PHP_METHOD(imagickpixel, clear)
 {
 	php_imagickpixel_object *internp;
-	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
 	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = IsPixelWand(internp->pixel_wand);
 
-	if (status == MagickFalse) {
+	if (!internp->pixel_wand) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "ImagickPixel is not allocated", 4);
 	}
 
@@ -314,7 +312,6 @@ PHP_METHOD(imagickpixel, destroy)
 {
 	zval *object;
 	php_imagickpixel_object *internp;
-	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -323,9 +320,7 @@ PHP_METHOD(imagickpixel, destroy)
 	object = getThis();
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	status = IsPixelWand(internp->pixel_wand);
-
-	if (status == MagickFalse) {
+	if (!internp->pixel_wand) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "ImagickPixel is not allocated properly", 4);
 	}
 

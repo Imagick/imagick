@@ -522,15 +522,15 @@ zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long
 
 void deallocate_wands(MagickWand *magick, DrawingWand *draw, PixelWand *pixel TSRMLS_DC)
 {
-	if (magick != (MagickWand *)NULL && IsMagickWand(magick)) {
+	if (magick != (MagickWand *)NULL) {
 		magick = (MagickWand *)DestroyMagickWand(magick);
 	}
 
-	if (draw != (DrawingWand *)NULL && IsDrawingWand(draw)) {
+	if (draw != (DrawingWand *)NULL) {
 		draw = (DrawingWand *)DestroyDrawingWand(draw);
 	}
 
-	if (pixel != (PixelWand *)NULL && IsPixelWand(pixel)) {
+	if (pixel != (PixelWand *)NULL) {
 		pixel = (PixelWand *)DestroyPixelWand(pixel);
 	}
 }

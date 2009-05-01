@@ -2211,7 +2211,7 @@ static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 		efree(intern->progress_monitor_name);
 	}
 
-	if (intern->magick_wand != (MagickWand *)NULL && IsMagickWand(intern->magick_wand)) {
+	if (intern->magick_wand != (MagickWand *)NULL) {
 		intern->magick_wand = DestroyMagickWand(intern->magick_wand);
 	}
 
@@ -2228,7 +2228,7 @@ static void php_imagickdraw_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 
-	if (intern->drawing_wand != (DrawingWand *)NULL && IsDrawingWand(intern->drawing_wand)) {
+	if (intern->drawing_wand != (DrawingWand *)NULL) {
 		intern->drawing_wand = DestroyDrawingWand(intern->drawing_wand);
 	}
 
@@ -2244,7 +2244,7 @@ static void php_imagickpixeliterator_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 
-	if (intern->pixel_iterator != (PixelIterator *)NULL && IsPixelIterator(intern->pixel_iterator)) {
+	if (intern->pixel_iterator != (PixelIterator *)NULL) {
 		intern->pixel_iterator = DestroyPixelIterator(intern->pixel_iterator);
 	}
 
@@ -2261,7 +2261,7 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 	if (intern->initialized_via_iterator < 1) {
-		if(intern->pixel_wand != (PixelWand *)NULL && IsPixelWand(intern->pixel_wand)) {
+		if(intern->pixel_wand != (PixelWand *)NULL) {
 			intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);
 		}
 	}
