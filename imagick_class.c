@@ -2620,24 +2620,23 @@ PHP_METHOD(imagick, current)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::readImage(string filename )
+/* {{{ proto bool Imagick::readImage(string filename)
     Reads image from filename
 */
 PHP_METHOD(imagick, readimage)
 {
-	char *filename;
-	int filename_len, status;
+	char *filename, *format = NULL;
+	int filename_len, format_len, status;
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|s", &filename, &filename_len, &format, &format_len) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = read_image_into_magickwand(intern, filename, 1 TSRMLS_CC);
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
-
 	RETURN_TRUE;
 }
 /* }}} */
@@ -6839,9 +6838,8 @@ PHP_METHOD(imagick, setimagedelay)
 */
 PHP_METHOD(imagick, colorizeimage)
 {
-	PixelWand *final_wand;
 	php_imagick_object *intern;
-	php_imagickpixel_object *intern_color, *intern_opacity;
+	php_imagickpixel_object *intern_color = NULL, *intern_opacity = NULL;
 	zval *color_param, *opacity_param;
 	MagickBooleanType status;
 
@@ -6856,10 +6854,7 @@ PHP_METHOD(imagick, colorizeimage)
 	IMAGICK_CAST_PARAMETER_TO_COLOR(color_param, intern_color, 1);
 	IMAGICK_CAST_PARAMETER_TO_OPACITY(opacity_param, intern_opacity, 1);
 
-	IMAGICK_CLONE_PIXELWAND(intern_opacity->pixel_wand, final_wand);
-
-	status = MagickColorizeImage(intern->magick_wand, final_wand, final_wand);
-	final_wand = (PixelWand *)DestroyPixelWand(final_wand);
+	status = MagickColorizeImage(intern->magick_wand, intern_color->pixel_wand, intern_opacity->pixel_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
