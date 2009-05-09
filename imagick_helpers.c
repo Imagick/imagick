@@ -969,7 +969,7 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_SET", SetEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_SUBTRACT", SubtractEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_XOR", XorEvaluateOperator);
-#if MagickLibVersion > 0x642
+#if MagickLibVersion > 0x643
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_POW", PowEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_LOG", LogEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_THRESHOLD", ThresholdEvaluateOperator);
