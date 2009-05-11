@@ -2625,12 +2625,12 @@ PHP_METHOD(imagick, current)
 */
 PHP_METHOD(imagick, readimage)
 {
-	char *filename, *format = NULL;
-	int filename_len, format_len, status;
+	char *filename;
+	int filename_len, status;
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|s", &filename, &filename_len, &format, &format_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
 		return;
 	}
 
