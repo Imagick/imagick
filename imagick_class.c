@@ -6838,11 +6838,12 @@ PHP_METHOD(imagick, setimagedelay)
 */
 PHP_METHOD(imagick, colorizeimage)
 {
+	PixelWand *param_wand = NULL;
 	php_imagick_object *intern;
 	php_imagickpixel_object *intern_color = NULL, *intern_opacity = NULL;
 	zval *color_param, *opacity_param;
-	MagickBooleanType status;
-
+	MagickBooleanType status;  
+          
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &color_param, &opacity_param) == FAILURE) {
 		return;
@@ -6853,10 +6854,16 @@ PHP_METHOD(imagick, colorizeimage)
 
 	IMAGICK_CAST_PARAMETER_TO_COLOR(color_param, intern_color, 1);
 	IMAGICK_CAST_PARAMETER_TO_OPACITY(opacity_param, intern_opacity, 1);
+	
+	/* Colorize wants both wand to be of same instance */
+	IMAGICK_CLONE_PIXELWAND(intern_color->pixel_wand, param_wand);
+	PixelSetOpacity(param_wand, PixelGetOpacity(intern_opacity->pixel_wand));
+	PixelSetAlpha(param_wand, PixelGetAlpha(intern_opacity->pixel_wand));
 
-	status = MagickColorizeImage(intern->magick_wand, intern_color->pixel_wand, intern_opacity->pixel_wand);
+	status = MagickColorizeImage(intern->magick_wand, param_wand, param_wand);
+	param_wand = DestroyPixelWand(param_wand);
 
-	/* No magick is going to happen */
+	/* No magick is going to happen */ 
 	if (status == MagickFalse) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to colorize image", 1);
 	}
@@ -6892,7 +6899,7 @@ PHP_METHOD(imagick, compareimagechannels)
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Compare image channels failed", 1);
 	}
 
-	MAKE_STD_ZVAL(new_wand);
+	MAKE_STD_ZVAL(new_wand); 
 	array_init(return_value);
 	object_init_ex(new_wand, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(new_wand TSRMLS_CC);
