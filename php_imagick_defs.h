@@ -99,10 +99,14 @@ void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_
 #endif
 
 int count_occurences_of(char needle, char *haystack TSRMLS_DC );
-int read_image_into_magickwand(php_imagick_object *intern, char *filename, int type TSRMLS_DC);
-int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC );
-int check_configured_font(char *font, int font_len TSRMLS_DC );
-int check_write_access(char *absolute TSRMLS_DC );
+int read_image_into_magickwand(php_imagick_object *intern, int type, char *filename, int filename_len TSRMLS_DC);
+int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC);
+int check_configured_font(char *font, int font_len TSRMLS_DC);
+int check_write_access(char *absolute TSRMLS_DC);
+
+MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *intern, int type, char *filename, int filename_len TSRMLS_DC);
+
+
 
 zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);

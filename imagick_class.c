@@ -2352,7 +2352,7 @@ PHP_METHOD(imagick, __construct)
 		filename = estrdup(Z_STRVAL_P(files));
 
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-		status = read_image_into_magickwand(intern, filename, 1 TSRMLS_CC);
+		status = read_image_into_magickwand(intern, 1, filename, strlen(filename) TSRMLS_CC);
 		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
 
 		/* Free filename on successfull */
@@ -2386,7 +2386,7 @@ PHP_METHOD(imagick, __construct)
 				continue;
 			}
 
-			status = read_image_into_magickwand(intern, filename, 1 TSRMLS_CC);
+			status = read_image_into_magickwand(intern, 1, filename, strlen(filename) TSRMLS_CC);
 			zval_dtor(&tmpcopy);
 
 			if (status != IMAGICK_READ_WRITE_NO_ERROR) {
@@ -2635,7 +2635,7 @@ PHP_METHOD(imagick, readimage)
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	status = read_image_into_magickwand(intern, filename, 1 TSRMLS_CC);
+	status = read_image_into_magickwand(intern, 1, filename, filename_len TSRMLS_CC);
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
 	RETURN_TRUE;
 }
@@ -2676,7 +2676,7 @@ PHP_METHOD(imagick, readimages)
 		convert_to_string(&tmpcopy);
 
 		filename = estrdup(Z_STRVAL(tmpcopy));
-		status = read_image_into_magickwand(intern, filename, 1 TSRMLS_CC);
+		status = read_image_into_magickwand(intern, 1, filename, strlen(filename) TSRMLS_CC);
 
 		zval_dtor(&tmpcopy);
 
@@ -2708,7 +2708,7 @@ PHP_METHOD(imagick, pingimage)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	status = read_image_into_magickwand(intern, filename, 2 TSRMLS_CC);
+	status = read_image_into_magickwand(intern, 2, filename, filename_len TSRMLS_CC);
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
 
 	RETURN_TRUE;

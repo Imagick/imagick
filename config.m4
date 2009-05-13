@@ -111,6 +111,6 @@ if test $PHP_IMAGICK != "no"; then
 		fi
 		
 		PHP_SUBST(IMAGICK_SHARED_LIBADD)
-		PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c, $ext_shared)
+		PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_read.c imagick.c, $ext_shared)
 
 fi
