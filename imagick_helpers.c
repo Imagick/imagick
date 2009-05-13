@@ -22,6 +22,162 @@
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
 
+
+zend_bool php_imagick_has_page(char *filename, int filename_len TSRMLS_DC) {
+	/* Too short */
+	if (filename_len < 3) {
+		return 0;
+	}
+	/* If these conditions match it's safe to assume the filename contains a page */
+	if ((filename[filename_len - 1] == ']') && 
+		(filename[filename_len - 2] >= 48) && 
+		(filename[filename_len - 2] <= 57)) {
+		return 1;
+	}
+	return 0;
+}
+
+zend_bool php_imagick_has_format_indicator(char *filename, int filename_len TSRMLS_DC) {
+	int occurances = count_occurences_of(':', filename);
+#ifdef PHP_WIN32
+	return (occurances >= 2);
+#else
+	return (occurances >= 1);
+#endif
+}
+
+zend_bool php_imagick_is_safe_format(char *filename, int filename_len TSRMLS_DC) {
+#ifdef PHP_WIN32
+	const int elements = 18;
+	int i = 0;
+	const char *no_basedir_fmt[] = { "CAPTION:", "CLIPBOARD:", "FRACTAL:", "GRADIENT:", "LABEL:", "MATTE:",
+									"NULL:", "PLASMA:", "PRINT:", "SCAN:", "RADIAL_GRADIENT:", "SCANX:",
+									"WIN:", "XC:", "MAGICK:", "GRANITE:", "LOGO:", "NETSCAPE:", "ROSE:" };
+#else
+	const int elements = 19;
+	int i = 0;
+	const char *no_basedir_fmt[] = { "CAPTION:", "CLIPBOARD:", "FRACTAL:", "GRADIENT:", "LABEL:", "MATTE:",
+									"NULL:", "PLASMA:", "PRINT:", "SCAN:", "RADIAL_GRADIENT:", "SCANX:",
+									"WIN:", "X:", "XC:", "MAGICK:", "GRANITE:", "LOGO:", "NETSCAPE:", "ROSE:" };
+#endif
+	for (i = 0; i < elements; i++) {
+		if (strncasecmp(filename, no_basedir_fmt[i], strlen(no_basedir_fmt[i])) == 0) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+char *php_imagick_get_filename(char *filename, int filename_len TSRMLS_DC)
+{
+	char *pch;
+	pch = strchr(filename, ':');
+	
+	if (!pch) {
+		return NULL;
+	}
+#ifdef PHP_WIN32
+	pch = strchr(pch + 1, ':');
+	if (!pch) {
+		return NULL;
+	}
+#endif
+	/* Returns a copy */
+	return estrdup(pch + 1);
+}
+
+int php_imagick_safety_check(char *filename, int filename_len TSRMLS_DC) 
+{
+	int status = IMAGICK_READ_WRITE_NO_ERROR;
+
+	if (PG(open_basedir) || PG(safe_mode)) {
+		/* Something like png:/tmp/test.jpg */
+		if (php_imagick_has_format_indicator(filename, filename_len TSRMLS_CC)) {
+			/* Is this format safe to read. i.e virtual format */
+			if (!php_imagick_is_safe_format(filename, filename_len TSRMLS_CC)) {
+				/* Get the filename */
+				char *filename_no_fmt = php_imagick_get_filename(filename, filename_len TSRMLS_CC);
+
+				if (filename_no_fmt) {
+					if (strlen(filename_no_fmt) >= MAXPATHLEN) {
+						status = IMAGICK_READ_WRITE_FILENAME_TOO_LONG;
+					}
+					if (PG(safe_mode) && (!php_checkuid_ex(filename_no_fmt, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS))) {
+						status = IMAGICK_READ_WRITE_SAFE_MODE_ERROR;
+					}
+					if (PG(open_basedir) && php_check_open_basedir_ex(filename_no_fmt, 0 TSRMLS_CC)) {
+						status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR;
+					}
+					efree(filename_no_fmt);
+				}
+			}
+		}
+	}
+	return status;
+}
+
+zend_bool php_imagick_is_url(char *filename, int filename_len TSRMLS_DC)
+{
+	if (strncasecmp(filename, "http://", 7) == 0 ||
+		strncasecmp(filename, "https://", 8) == 0 || 
+		strncasecmp(filename, "ftp://", 6) == 0 ||
+		strncasecmp(filename, "ftps://", 7) == 0) {
+		return 1;	
+	}
+	return 0;
+}
+
+zend_bool php_imagick_read_using_php_streams(char *filename, int filename_len TSRMLS_DC)
+{
+	/* Read urls using php */
+	if (php_imagick_is_url(filename, filename_len TSRMLS_CC)) {
+		return 1;
+	}
+	
+	/* Format indicator means that we are going to use imagemagick */
+	if (php_imagick_has_format_indicator(filename, filename_len TSRMLS_CC)) {
+		return 0;
+	}
+	
+	/* Page (test.png[0]) goes to imagemagick */
+	if (php_imagick_has_page(filename, filename_len TSRMLS_CC)) {
+		return 0;
+	}
+	
+	/* The rest using streams */
+	return 1;
+}
+
+MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *intern, char *filename, int filename_len TSRMLS_DC) 
+{
+	int status;
+	char *absolute;
+	
+	status = php_imagick_safety_check(filename, filename_len TSRMLS_CC);
+	if (status != IMAGICK_READ_WRITE_NO_ERROR) { 
+		return status;
+	}
+	
+	if (MagickReadImage(intern->magick_wand, filename) == MagickFalse) {
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+	}
+	
+	if (php_imagick_has_format_indicator(filename, filename_len TSRMLS_CC)) {
+		char *no_fmt = php_imagick_get_filename(filename, filename_len TSRMLS_CC);
+		absolute = expand_filepath(no_fmt, NULL TSRMLS_CC);
+		efree(no_fmt);
+	} else {
+		absolute = expand_filepath(filename, NULL TSRMLS_CC);
+	}
+	
+	MagickSetImageFilename(intern->magick_wand, absolute);
+	efree(absolute);
+
+	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	return 0;
+}
+
+
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data)
 {
 	FILE *fp;
@@ -364,6 +520,11 @@ int read_image_into_magickwand(php_imagick_object *intern, char *filename, int t
 	
 	if (!filename) {
 		return IMAGICK_READ_WRITE_NO_ERROR;
+	}
+	
+	/* Use traditional imagemagick method (?) */
+	if (!php_imagick_read_using_php_streams(filename, strlen(filename) TSRMLS_CC)) {
+		 return php_imagick_read_image_using_imagemagick(intern, filename, strlen(filename) TSRMLS_CC);
 	}
 	
 #if ZEND_MODULE_API_NO > 20060613 
@@ -757,6 +918,7 @@ int write_image_from_filename(php_imagick_object *intern, char *filename, zend_b
 	/* All went well it seems */
 	return IMAGICK_READ_WRITE_NO_ERROR;
 }
+
 
 void initialize_imagick_constants()
 {
