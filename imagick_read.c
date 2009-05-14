@@ -91,7 +91,7 @@ int php_imagick_recognized_format(char *filename, int filename_len TSRMLS_DC)
 		Returns format length if found, -1 on fail */
 int php_imagick_format_indicator(char *filename, int filename_len TSRMLS_DC) 
 {
-	if (count_occurences_of(':', filename) == 0) {
+	if (count_occurences_of(':', filename TSRMLS_CC) == 0) {
 		return -1;
 	}
 	return php_imagick_recognized_format(filename, filename_len TSRMLS_CC);
