@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2009-05-20</date>
+	<date>2009-07-02</date>
 	<version>
-		<release>2.3.0RC2</release>
+		<release>2.3.0RC3</release>
 		<api>2.3.0</api>
 	</version>
 	<stability>
@@ -32,8 +32,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed image reading routines. Page defitions (test.pdf[0]) were broken on RC1
-- Fixed imagick::colorizeImage, it had no effect on images
+- Closed bug reports and pushing out RC just in case before stable.
 </notes>
 	<contents>
 		<dir name="/">
