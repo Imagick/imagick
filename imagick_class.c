@@ -2171,7 +2171,7 @@ PHP_METHOD(imagick, exportimagepixels)
 	MagickBooleanType status;
 	long x, y, width, height, storage;
 	char *map;
-	int map_len, i = 0;
+	int map_size, map_len, i = 0;
 	double *double_array;
 	long *long_array;
 	char *char_array;
@@ -2195,7 +2195,7 @@ PHP_METHOD(imagick, exportimagepixels)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 	
-	int map_size = (map_len * width * height);
+	map_size = (map_len * width * height);
 	
 	switch (storage) {	
 		case FloatPixel:
