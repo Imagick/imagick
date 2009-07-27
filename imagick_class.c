@@ -4460,8 +4460,6 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 	php_imagick_object *intern;
 	long virtual_pixel;
 
-	IMAGICK_METHOD_DEPRECATED("Imagick", "setImageVirtualPixelMethod");
-
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &virtual_pixel) == FAILURE) {
 		return;
