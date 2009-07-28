@@ -21,18 +21,19 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2009-07-02</date>
+	<date>2009-07-28</date>
 	<version>
-		<release>2.3.0RC3</release>
+		<release>2.3.0</release>
 		<api>2.3.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Closed bug reports and pushing out RC just in case before stable.
+- imagick::setImageVirtualPixelMethod not deprecated anymore
+- fixed windows build
 </notes>
 	<contents>
 		<dir name="/">
