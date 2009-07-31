@@ -236,16 +236,10 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 			return double_array;
 		}
 
-		if(Z_TYPE_PP(ppzval) == IS_LONG) {
-			double_array[i] = (double)Z_LVAL_PP(ppzval);
-		} else if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
-			double_array[i] = Z_DVAL_PP(ppzval);
-		} else {
-			efree(double_array);
-			double_array = (double *)NULL;
-			return double_array;
-		}
-
+		if(Z_TYPE_PP(ppzval) != IS_DOUBLE) {
+			convert_to_double_ex(ppzval);
+		} 
+		double_array[i] = Z_DVAL_PP(ppzval);
 		zend_hash_move_forward(ht);
 	}
 	*num_elements = elements;
@@ -278,13 +272,10 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 			return long_array;
 		}
 		
-		if ((Z_TYPE_PP(ppzval) == IS_LONG) || (Z_TYPE_PP(ppzval) == IS_DOUBLE)) {
-			long_array[i] = Z_LVAL_PP(ppzval);
-		} else {
-			efree(long_array);
-			long_array = NULL;
-			return long_array;
+		if (Z_TYPE_PP(ppzval) != IS_LONG) {
+			convert_to_long_ex(ppzval);
 		}
+		long_array[i] = Z_LVAL_PP(ppzval);
 		zend_hash_move_forward(ht);
 	}
 	*num_elements = elements;
@@ -318,13 +309,10 @@ unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TS
 			return char_array;
 		}
 		
-		if ((Z_TYPE_PP(ppzval) == IS_LONG) || (Z_TYPE_PP(ppzval) == IS_DOUBLE)) {
-			char_array[i] = (unsigned char)Z_LVAL_PP(ppzval);
-		} else {
-			efree(char_array);
-			char_array = NULL;
-			return char_array;
+		if (Z_TYPE_PP(ppzval) != IS_LONG) {
+			convert_to_long_ex(ppzval);
 		}
+		char_array[i] = (unsigned char)Z_LVAL_PP(ppzval);
 		zend_hash_move_forward(ht);
 	}
 	*num_elements = elements;
@@ -521,42 +509,27 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 			*num_elements = 0;
 			return coordinates;
 		}
-
-		if(Z_TYPE_PP(ppz_x) != IS_DOUBLE && Z_TYPE_PP(ppz_x) != IS_LONG) {
-			efree(coordinates);
-			coordinates = (PointInfo *)NULL;
-			*num_elements = 0;
-			return coordinates;
-		}
-
+		
 		/* Get Y */
 		if (zend_hash_find(sub_array, "y", sizeof("y"), (void**)&ppz_y) == FAILURE) {
 			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			*num_elements = 0;
 			return coordinates;
+		}		
+		
+		if (Z_TYPE_PP(ppz_x) != IS_DOUBLE) {
+			convert_to_double_ex(ppz_x);
 		}
-
-		if(Z_TYPE_PP(ppz_y) != IS_DOUBLE && Z_TYPE_PP(ppz_y) != IS_LONG) {
-			efree(coordinates);
-			coordinates = (PointInfo *)NULL;
-			*num_elements = 0;
-			return coordinates;
+		
+		if (Z_TYPE_PP(ppz_y) != IS_DOUBLE) {
+			convert_to_double_ex(ppz_y);
 		}
-
+		
 		/* Assign X and Y */
+		coordinates[i].x = Z_DVAL_PP(ppz_x);
+		coordinates[i].y = Z_DVAL_PP(ppz_y);
 
-		if (Z_TYPE_PP(ppz_x) == IS_LONG) {
-			coordinates[i].x = (double)Z_LVAL_PP(ppz_x);
-		} else {
-			coordinates[i].x = Z_DVAL_PP(ppz_x);
-		}
-
-		if (Z_TYPE_PP(ppz_y) == IS_LONG) {
-			coordinates[i].y = (double)Z_LVAL_PP(ppz_y);
-		} else {
-			coordinates[i].y = Z_DVAL_PP(ppz_y);
-		}
 		zend_hash_move_forward(coords);
 	}
 
