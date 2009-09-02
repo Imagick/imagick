@@ -274,6 +274,9 @@ PHP_METHOD(imagick, exportimagepixels);
 PHP_METHOD(imagick, getimagechannelkurtosis);
 PHP_METHOD(imagick, functionimage);
 #endif
+#if MagickLibVersion > 0x652
+PHP_METHOD(imagick, haldclutimage);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, getpixeliterator);

@@ -394,6 +394,13 @@ static zend_object_handlers imagickpixeliterator_object_handlers;
 	ZEND_END_ARG_INFO()
 #endif 
 
+#if MagickLibVersion > 0x652
+	ZEND_BEGIN_ARG_INFO_EX(imagick_haldclutimage_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, clut)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+#endif
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
@@ -1940,6 +1947,9 @@ static function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x648
 	PHP_ME(imagick, getimagechannelkurtosis, imagick_getimagechannelkurtosis_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, functionimage, imagick_functionimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x652
+	PHP_ME(imagick, haldclutimage, imagick_haldclutimage_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)

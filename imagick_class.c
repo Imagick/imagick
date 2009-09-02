@@ -2323,6 +2323,39 @@ PHP_METHOD(imagick, functionimage)
 /* }}} */
 #endif
 
+#if MagickLibVersion > 0x652
+/* {{{ proto Imagick Imagick::haldClutImage(Imagick hald[, int CHANNEL])
+   Replaces colors in the image from a Hald color lookup table
+*/
+PHP_METHOD(imagick, haldclutimage)
+{
+	zval *objvar;
+	MagickBooleanType status;
+	php_imagick_object *intern, *hald;
+	long channel = DefaultChannels;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	hald = (php_imagick_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(hald->magick_wand, 1, 1);
+
+	status = MagickHaldClutImageChannel(intern->magick_wand, channel, hald->magick_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to hald clut image", 1);
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
    The Imagick constructor
 */
