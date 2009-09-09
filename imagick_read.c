@@ -41,12 +41,31 @@ zend_bool php_imagick_has_page(char *filename, int filename_len TSRMLS_DC) {
 /* {{{ url format? */
 zend_bool php_imagick_is_url(char *filename, int filename_len TSRMLS_DC)
 {
-	if (strncasecmp(filename, "http://", 7) == 0 ||
-		strncasecmp(filename, "https://", 8) == 0 || 
-		strncasecmp(filename, "ftp://", 6) == 0 ||
-		strncasecmp(filename, "ftps://", 7) == 0) {
-		return 1;	
-	}
+	HashTable *wrappers;
+	char *stream_protocol;
+	int key_flags, stream_protocol_len = 0;
+	ulong num_key;
+	
+	if ((wrappers = php_stream_get_url_stream_wrappers_hash())) {
+		HashPosition pos;
+    
+		for (zend_hash_internal_pointer_reset_ex(wrappers, &pos);
+			(key_flags = zend_hash_get_current_key_ex(wrappers, &stream_protocol, &stream_protocol_len, &num_key, 0, &pos)) != HASH_KEY_NON_EXISTANT;
+			zend_hash_move_forward_ex(wrappers, &pos)) {
+				
+			if (key_flags == HASH_KEY_IS_STRING) {
+				if (strncmp(filename, stream_protocol, stream_protocol_len - 1) == 0) {
+					if (filename_len > (stream_protocol_len + 1)) {
+						int start_pos = stream_protocol_len - 1;
+						
+						if (filename[start_pos] == ':' && filename[start_pos+1] == '/' && filename[start_pos+2] == '/') {
+							return 1;
+						}
+					}
+				}
+			}	
+		}
+    } 
 	return 0;
 }
 /* }}} */
