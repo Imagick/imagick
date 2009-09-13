@@ -97,20 +97,18 @@ if test $PHP_IMAGICK != "no"; then
 		AC_DEFINE(HAVE_IMAGICK,1,[ ])
 		
 		if test -z "$IMAGICK_AFTER_BWC_BREAK"; then	
-
 			PHP_ADD_LIBRARY_WITH_PATH(Magick, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_LIBRARY_WITH_PATH(Wand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_INCLUDE($WAND_DIR/include)
-		
 		else
-
 			PHP_ADD_LIBRARY_WITH_PATH(MagickCore, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
 			PHP_ADD_LIBRARY_WITH_PATH(MagickWand, $WAND_DIR/lib, IMAGICK_SHARED_LIBADD)
-			PHP_ADD_INCLUDE($WAND_DIR/include/ImageMagick)    
-			
+			PHP_ADD_INCLUDE($WAND_DIR/include/ImageMagick)
 		fi
 		
 		PHP_SUBST(IMAGICK_SHARED_LIBADD)
 		PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_read.c imagick.c, $ext_shared)
 
+		dnl share headers
+		PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h config.h php_imagick_shared.h])
 fi

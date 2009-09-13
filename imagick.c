@@ -44,6 +44,22 @@ static zend_object_handlers imagickdraw_object_handlers;
 static zend_object_handlers imagickpixel_object_handlers;
 static zend_object_handlers imagickpixeliterator_object_handlers;
 
+/* External API */
+PHPAPI zend_class_entry *php_imagick_get_class_entry()
+{
+	return php_imagick_sc_entry;
+}
+
+PHPAPI zend_class_entry *php_imagickdraw_get_class_entry()
+{
+	return php_imagickdraw_sc_entry;
+}
+
+PHPAPI zend_class_entry *php_imagickpixel_get_class_entry()
+{
+	return php_imagickdraw_sc_entry;
+}
+
 /* Imagick */
 #if MagickLibVersion > 0x628
 	ZEND_BEGIN_ARG_INFO_EX(imagick_shadeimage_args, 0, 0, 3)
