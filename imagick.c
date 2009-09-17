@@ -45,17 +45,17 @@ static zend_object_handlers imagickpixel_object_handlers;
 static zend_object_handlers imagickpixeliterator_object_handlers;
 
 /* External API */
-PHPAPI zend_class_entry *php_imagick_get_class_entry()
+IMAGICK_EXPORTS zend_class_entry *php_imagick_get_class_entry()
 {
 	return php_imagick_sc_entry;
 }
 
-PHPAPI zend_class_entry *php_imagickdraw_get_class_entry()
+IMAGICK_EXPORTS zend_class_entry *php_imagickdraw_get_class_entry()
 {
 	return php_imagickdraw_sc_entry;
 }
 
-PHPAPI zend_class_entry *php_imagickpixel_get_class_entry()
+IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 {
 	return php_imagickdraw_sc_entry;
 }

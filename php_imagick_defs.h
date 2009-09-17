@@ -691,10 +691,19 @@ PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
 
 /*
+	API exports
+*/
+#ifndef PHP_WIN32
+# define IMAGICK_EXPORTS PHPAPI
+#else
+# define IMAGICK_EXPORTS __declspec(dllexport)
+#endif
+
+/*
 	Allow extensions to use the class entries
 */
-PHPAPI zend_class_entry *php_imagick_get_class_entry();
-PHPAPI zend_class_entry *php_imagickdraw_get_class_entry();
-PHPAPI zend_class_entry *php_imagickpixel_get_class_entry();
+IMAGICK_EXPORTS zend_class_entry *php_imagick_get_class_entry();
+IMAGICK_EXPORTS zend_class_entry *php_imagickdraw_get_class_entry();
+IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry();
 
 #endif /* PHP_IMAGICK_DEFS_H */
