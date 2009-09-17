@@ -693,10 +693,12 @@ PHP_METHOD(imagickpixel, clone);
 /*
 	API exports
 */
-#ifndef PHP_WIN32
-# define IMAGICK_EXPORTS PHPAPI
-#else
-# define IMAGICK_EXPORTS __declspec(dllexport)
+#ifndef IMAGICK_EXPORTS
+# ifdef PHP_WIN32
+#  define IMAGICK_EXPORTS __declspec(dllexport)
+# else
+#  define IMAGICK_EXPORTS PHPAPI
+# endif
 #endif
 
 /*
