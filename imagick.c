@@ -21,6 +21,7 @@
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
+#include "php_imagick_shared.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
