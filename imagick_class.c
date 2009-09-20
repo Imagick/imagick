@@ -1979,7 +1979,8 @@ PHP_METHOD(imagick, importimagepixels)
 	MagickBooleanType status;
 
 	long storage, num_elements;
-	int x, y, width, height, map_len;
+	long x, y, width, height;
+	int map_len;
 	char *map;
 	zval *pixels;
 	HashTable *array;
