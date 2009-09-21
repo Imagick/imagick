@@ -18,8 +18,16 @@
    +----------------------------------------------------------------------+
 */
 #ifndef PHP_IMAGICK_DEFS_H /* PHP_IMAGICK_DEFS_H */
-/* Prevent double inclusion */
-#define PHP_IMAGICK_DEFS_H
+# define PHP_IMAGICK_DEFS_H
+
+/*
+	API exports
+*/
+#ifdef PHP_WIN32
+#  define IMAGICK_EXPORTS __declspec(dllexport)
+#else
+#  define IMAGICK_EXPORTS PHPAPI
+#endif
 
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)

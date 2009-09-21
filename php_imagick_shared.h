@@ -21,21 +21,9 @@
 #ifndef _PHP_IMAGICK_SHARED_H_
 # define _PHP_IMAGICK_SHARED_H_
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
+#include "php_imagick_config.h"
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
-
-/*
-	API exports
-*/
-#ifdef PHP_WIN32
-#  define IMAGICK_EXPORTS __declspec(dllexport)
-#else
-#  define IMAGICK_EXPORTS PHPAPI
-#endif
 
 /*
 	Allow extensions to use the class entries

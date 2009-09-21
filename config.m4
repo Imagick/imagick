@@ -9,7 +9,7 @@ if test $PHP_IMAGICK_GM != "no"; then
 fi
 
 if test $PHP_IMAGICK != "no"; then
-    
+
 		AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 		
 		for i in $PHP_IMAGICK /usr/local /usr;
@@ -63,7 +63,8 @@ if test $PHP_IMAGICK != "no"; then
 				AC_MSG_ERROR(Cannot locate header file MagickWand.h)
 			fi            
 			
-			AC_DEFINE(IMAGICK_USE_NEW_HEADER,1,[ ])	
+			AC_DEFINE(IMAGICK_USE_NEW_HEADER,1,[ ])
+			PHP_IMAGICK_USE_NEW_HEADER=1
 		fi
 		
 		dnl Thanks to Antony Dovgal for pointing out that the
@@ -109,6 +110,16 @@ if test $PHP_IMAGICK != "no"; then
 		PHP_SUBST(IMAGICK_SHARED_LIBADD)
 		PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_read.c imagick.c, $ext_shared)
 
-		dnl share headers
-		PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h config.h php_imagick_shared.h])
+		dnl Generate configuration header
+		if test ! -z "${PHP_IMAGICK_USE_NEW_HEADER}"; then
+			echo "#ifndef _PHP_IMAGICK_CONFIG_H_"        > php_imagick_config.h
+			echo "#  ifndef IMAGICK_USE_NEW_HEADER"     >> php_imagick_config.h
+			echo "#    define IMAGICK_USE_NEW_HEADER 1" >> php_imagick_config.h
+			echo "#  endif"                             >> php_imagick_config.h
+			echo "#endif"                               >> php_imagick_config.h
+		else 
+			echo "" > php_imagick_config.h
+		fi
+
+		PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h php_imagick_config.h])
 fi

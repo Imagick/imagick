@@ -26,15 +26,14 @@
 #define PHP_IMAGICK_VERSION    "2.3.1-dev"
 #define PHP_IMAGICK_EXTNUM     20301
 
-/* Import configure options
-   when building outside of
-   the PHP source tree */
+/* Import configure options when building 
+   outside of the PHP source tree */
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"
 #endif
 
 #ifdef ZTS
-#include "TSRM.h"
+# include "TSRM.h"
 #endif
 
 /* Include PHP Standard Headers */
@@ -42,14 +41,14 @@
 
 /* Include locale header */
 #ifdef HAVE_LOCALE_H
-#include <locale.h>
+# include <locale.h>
 #endif
 
 /* Include magic wand header */
 #ifdef IMAGICK_USE_NEW_HEADER
-#include <wand/MagickWand.h>
+#  include <wand/MagickWand.h>
 #else
-#include <wand/magick-wand.h>
+#  include <wand/magick-wand.h>
 #endif
 
 #ifndef DefaultChannels
