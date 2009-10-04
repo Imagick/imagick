@@ -989,6 +989,32 @@ PHP_METHOD(imagick, extentimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto bool Imagick::boxResizeImage(int box_width, int box_height[, bool fill = true])
+	Scale image into a bounding box
+*/
+PHP_METHOD(imagick, boxresizeimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long box_width, box_height;
+	zend_bool fill = 1;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &box_width, &box_height, &fill) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	if (!php_resize_bounding_box(intern->magick_wand, box_width, box_height, fill)) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to box resize image", 1);
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 #if MagickLibVersion > 0x633

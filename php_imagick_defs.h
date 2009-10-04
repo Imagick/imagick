@@ -114,7 +114,7 @@ int check_write_access(char *absolute TSRMLS_DC);
 
 MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *intern, int type, char *filename, int filename_len TSRMLS_DC);
 
-
+zend_bool php_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill);
 
 zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);
@@ -216,6 +216,7 @@ PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, getimagelength);
 PHP_METHOD(imagick, extentimage);
+PHP_METHOD(imagick, boxresizeimage);
 #endif
 #if MagickLibVersion > 0x633
 PHP_METHOD(imagick, getimageorientation);

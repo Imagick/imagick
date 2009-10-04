@@ -189,6 +189,12 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_boxresizeimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, box_width)
+		ZEND_ARG_INFO(0, box_height)
+		ZEND_ARG_INFO(0, fill)
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x633
@@ -1898,6 +1904,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagelength, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, extentimage, imagick_extentimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, boxresizeimage, imagick_boxresizeimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x633
 	PHP_ME(imagick, getimageorientation, imagick_zero_args, ZEND_ACC_PUBLIC)

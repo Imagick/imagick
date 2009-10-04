@@ -46,6 +46,93 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;	
 }
 
+zend_bool php_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
+{
+	long orig_width, orig_height;
+	
+	orig_width  = MagickGetImageWidth(magick_wand); 
+	orig_height = MagickGetImageHeight(magick_wand);
+	
+	if ((orig_width == desired_width) && (orig_height == desired_height)) { 
+		*new_width  = desired_width; 
+		*new_height = desired_height;
+		return 1;
+	}
+	
+	if (bestfit) { 
+		double ratio_x, ratio_y; 
+		
+		if (desired_width <= 0 || desired_height <= 0) {
+			return 0;
+		}
+
+		ratio_x = (double)desired_width / (double)orig_width; 
+		ratio_y = (double)desired_height / (double)orig_height; 
+		
+		if (ratio_x < ratio_y) { 
+			*new_width  = desired_width; 
+			*new_height = ratio_x * (double)orig_height; 
+		} else { 
+			*new_height = desired_height; 
+			*new_width  = ratio_y * (double)orig_width; 
+		} 
+		
+		*new_width  = (*new_width < 1)  ? 1 : *new_width; 
+		*new_height = (*new_height < 1) ? 1 : *new_height; 
+ 
+	} else { 
+		double ratio; 
+		
+		if (desired_width <= 0 && desired_height <= 0) { 
+			return 0;
+		}
+		 
+		if (desired_width <= 0) { 
+			ratio = (double)orig_height / (double)desired_height; 
+			*new_width = orig_width / ratio;
+			*new_height = desired_height;
+		} else { 
+			ratio = (double)orig_width / (double)desired_width; 
+			*new_height = orig_height / ratio;
+			*new_width  = desired_width;
+		} 
+	}
+	return 1;
+}
+
+#if MagickLibVersion > 0x631
+/*
+	Resizes an image so that it is 'bestfit' for the bounding box
+	If the image does not fill the box completely the box is filled with
+	image's background color. The background color can be set using MagickSetImageBackgroundColor
+*/
+zend_bool php_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill)
+{
+	long new_width, new_height;
+	long extent_x, extent_y;
+	
+	if (!php_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
+		return 0;
+	}
+
+	if (MagickResizeImage(magick_wand, new_width, new_height, CubicFilter, 0.5) == MagickFalse) {
+		return 0;
+	}
+
+	if (!fill) {
+		return 1;
+	}
+	
+	extent_x = (box_width > new_width)   ? ((box_width - new_width) / 2)   : 0;
+	extent_y = (box_height > new_height) ? ((box_height - new_height) / 2) : 0;
+
+	if (MagickExtentImage(magick_wand, box_width, box_height, extent_x, extent_y) == MagickFalse) {
+		return 0;
+	}
+	return 1;
+}
+#endif
+
 /*
 	type 1 = MagickWriteImageFile
 	type 2 = MagickWriteImagesFile

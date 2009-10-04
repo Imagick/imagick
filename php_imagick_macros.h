@@ -343,6 +343,7 @@
 		break; \
 	} \
 
+
 #define IMAGICK_CALCULATE_THUMBNAIL_SIDES(magick_wand, desired_width, desired_height, fit) \
 { \
 	long orig_width = MagickGetImageWidth(magick_wand);\
@@ -380,7 +381,7 @@
 			desired_height = orig_height / ratio; \
 		} \
 	}\
-} \
+}
 
 #ifdef HAVE_LOCALE_H
 #define IMAGICK_SET_LOCALE(old_locale, tmp, restore) \
