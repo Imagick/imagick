@@ -114,7 +114,8 @@ int check_write_access(char *absolute TSRMLS_DC);
 
 MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *intern, int type, char *filename, int filename_len TSRMLS_DC);
 
-zend_bool php_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill);
+zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height);
+zend_bool php_imagick_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill);
 
 zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC);
 char *get_pseudo_filename(char* pseudo_string TSRMLS_DC);

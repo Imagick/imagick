@@ -303,26 +303,28 @@ PHP_METHOD(imagick, setimagematte)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::adaptiveResizeImage(int columns, int rows[, bool fit])
+/* {{{ proto bool Imagick::adaptiveResizeImage(int width, int height[, bool bestfit])
 	Adaptively resize image with data dependent triangulation
 */
 PHP_METHOD(imagick, adaptiveresizeimage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long columns, rows;
-	zend_bool fit = 0;
+	long width, height, new_width, new_height;
+	zend_bool bestfit = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &columns, &rows, &fit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &width, &height, &bestfit) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-	IMAGICK_CALCULATE_THUMBNAIL_SIDES(intern->magick_wand, columns, rows, fit);
+	
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
+	}
 
-	status = MagickAdaptiveResizeImage(intern->magick_wand, columns, rows);
+	status = MagickAdaptiveResizeImage(intern->magick_wand, new_width, new_height);
 
 	if (status == MagickFalse) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to adaptive resize image", 1);
@@ -1008,7 +1010,7 @@ PHP_METHOD(imagick, boxresizeimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	if (!php_resize_bounding_box(intern->magick_wand, box_width, box_height, fill)) {
+	if (!php_imagick_resize_bounding_box(intern->magick_wand, box_width, box_height, fill)) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to box resize image", 1);
 	}
 
@@ -3007,28 +3009,30 @@ PHP_METHOD(imagick, destroy)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::scaleImage(int cols, int rows[, bool fit] )
+/* {{{ proto bool Imagick::scaleImage(int width, int height[, bool bestfit] )
 	Scales the size of an image to the given dimensions. Passing zero as either of
 	the arguments will preserve dimension while scaling.
 */
 PHP_METHOD(imagick, scaleimage)
 {
-	long x, y;
+	long width, height, new_width, new_height;
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	zend_bool fit = 0;
+	zend_bool bestfit = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &x, &y, &fit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &width, &height, &bestfit) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-	IMAGICK_CALCULATE_THUMBNAIL_SIDES(intern->magick_wand, x, y, fit);
 	
-	status = MagickScaleImage(intern->magick_wand, x, y);
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
+	}
+
+	status = MagickScaleImage(intern->magick_wand, new_width, new_height);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -6082,26 +6086,29 @@ PHP_METHOD(imagick, getnumberimages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool fit])
+/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false])
 	 Changes the size of an image to the given dimensions and removes any associated profiles
 */
 PHP_METHOD(imagick, thumbnailimage)
 {
-	long x, y;
+	long width, height, new_width, new_height;
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	zend_bool fit = 0;
+	zend_bool bestfit = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &x, &y, &fit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &width, &height, &bestfit) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-	IMAGICK_CALCULATE_THUMBNAIL_SIDES(intern->magick_wand, x, y, fit);
+	
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
+	}
 
-	status = MagickThumbnailImage(intern->magick_wand, x, y);
+	status = MagickThumbnailImage(intern->magick_wand, new_width, new_height);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -8705,27 +8712,29 @@ PHP_METHOD(imagick, resampleimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::resizeImage(int columns, int rows, int filter, float blur[, bool fit])
+/* {{{ proto bool Imagick::resizeImage(int width, int height, int filter, float blur[, bool bestfit = false])
 	Scales an image to the desired dimensions with one of these filters:
 */
 PHP_METHOD(imagick, resizeimage)
 {
 	double blur;
-	long columns, rows, filter = 0;
+	long width, height, new_width, new_height, filter = 0;
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	zend_bool fit = 0;
+	zend_bool bestfit = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld|b", &columns, &rows, &filter, &blur, &fit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld|b", &width, &height, &filter, &blur, &bestfit) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-	IMAGICK_CALCULATE_THUMBNAIL_SIDES(intern->magick_wand, columns, rows, fit);
+	
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
+	}
 
-	status = MagickResizeImage(intern->magick_wand, columns, rows, filter, blur);
+	status = MagickResizeImage(intern->magick_wand, new_width, new_height, filter, blur);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {

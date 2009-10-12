@@ -46,7 +46,7 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;	
 }
 
-zend_bool php_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
+zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
 {
 	long orig_width, orig_height;
 	
@@ -86,16 +86,21 @@ zend_bool php_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, l
 		if (desired_width <= 0 && desired_height <= 0) { 
 			return 0;
 		}
-		 
-		if (desired_width <= 0) { 
-			ratio = (double)orig_height / (double)desired_height; 
-			*new_width = orig_width / ratio;
+		
+		if (desired_width <= 0 || desired_height <= 0) {		 
+			if (desired_width <= 0) { 
+				ratio = (double)orig_height / (double)desired_height; 
+				*new_width  = orig_width / ratio;
+				*new_height = desired_height;
+			} else { 
+				ratio = (double)orig_width / (double)desired_width; 
+				*new_height = orig_height / ratio;
+				*new_width  = desired_width;
+			}
+		} else {
+			*new_width  = desired_width; 
 			*new_height = desired_height;
-		} else { 
-			ratio = (double)orig_width / (double)desired_width; 
-			*new_height = orig_height / ratio;
-			*new_width  = desired_width;
-		} 
+		}
 	}
 	return 1;
 }
@@ -106,23 +111,27 @@ zend_bool php_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, l
 	If the image does not fill the box completely the box is filled with
 	image's background color. The background color can be set using MagickSetImageBackgroundColor
 */
-zend_bool php_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill)
+zend_bool php_imagick_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill)
 {
 	long new_width, new_height;
 	long extent_x, extent_y;
 	
-	if (!php_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
+	/* Calculate dimensions */
+	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
 		return 0;
 	}
 
+	/* Resize the image to the new size */
 	if (MagickResizeImage(magick_wand, new_width, new_height, CubicFilter, 0.5) == MagickFalse) {
 		return 0;
 	}
 
+	/* If user does not want to fill we are all done here */
 	if (!fill) {
 		return 1;
 	}
 	
+	/* In case user wants to fill use extent for it rather than creating a new canvas */
 	extent_x = (box_width > new_width)   ? ((box_width - new_width) / 2)   : 0;
 	extent_y = (box_height > new_height) ? ((box_height - new_height) / 2) : 0;
 

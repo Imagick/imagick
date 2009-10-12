@@ -229,11 +229,11 @@ MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *i
 	absolute = php_imagick_get_absolute_filename(filename, filename_len TSRMLS_CC);
 	
 	if (!absolute) {
-		absolute = estrdup("");
+		MagickSetImageFilename(intern->magick_wand, "");
+	} else {
+		MagickSetImageFilename(intern->magick_wand, absolute);
+		efree(absolute);
 	}
-
-	MagickSetImageFilename(intern->magick_wand, absolute);
-	efree(absolute);
 
 	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
 	return IMAGICK_READ_WRITE_NO_ERROR;

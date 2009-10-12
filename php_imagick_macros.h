@@ -341,47 +341,8 @@
 		default: \
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
 		break; \
-	} \
+	}
 
-
-#define IMAGICK_CALCULATE_THUMBNAIL_SIDES(magick_wand, desired_width, desired_height, fit) \
-{ \
-	long orig_width = MagickGetImageWidth(magick_wand);\
-	long orig_height = MagickGetImageHeight(magick_wand);\
-	double ratio;\
-	if (fit) { \
-		if ((desired_width <= 0) || (desired_height <= 0)) { \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1); \
-		} \
-		if ((orig_width <= desired_width) && (orig_height <= desired_height)) { \
-			RETURN_TRUE; \
-		} \
-		if ((orig_width - desired_width) > (orig_height - desired_height)) { \
-			ratio = (double)orig_width / (double)desired_width; \
-			desired_height = (double)orig_height / ratio; \
-		} else { \
-			ratio = (double)orig_height / (double)desired_height; \
-			desired_width = (double)orig_width / ratio; \
-		} \
-		if (desired_width < 1) { \
-			desired_width = 1; \
-		} \
-		if (desired_height < 1) { \
-			desired_height = 1; \
-		} \
-	} else { \
-		if ((desired_width <= 0) && (desired_height <= 0)) { \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1); \
-		} \
-		if (desired_width <= 0) { \
-			ratio = (double)orig_height / (double)desired_height; \
-			desired_width = orig_width / ratio; \
-		} else if (desired_height <= 0) { \
-			ratio = (double)orig_width / (double)desired_width; \
-			desired_height = orig_height / ratio; \
-		} \
-	}\
-}
 
 #ifdef HAVE_LOCALE_H
 #define IMAGICK_SET_LOCALE(old_locale, tmp, restore) \
