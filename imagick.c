@@ -417,9 +417,24 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 #endif 
 
 #if MagickLibVersion > 0x652
-	ZEND_BEGIN_ARG_INFO_EX(imagick_haldclutimage_args, 0, 0, 0)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_haldclutimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, clut)
 		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x656
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageartifact_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, artifact)
+		ZEND_ARG_INFO(0, value)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageartifact_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, artifact)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_deleteimageartifact_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, artifact)
 	ZEND_END_ARG_INFO()
 #endif
 
@@ -1973,6 +1988,11 @@ static function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x652
 	PHP_ME(imagick, haldclutimage, imagick_haldclutimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x656
+	PHP_ME(imagick, getimageartifact, imagick_getimageartifact_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimageartifact, imagick_setimageartifact_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, deleteimageartifact, imagick_deleteimageartifact_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)

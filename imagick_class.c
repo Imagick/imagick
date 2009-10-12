@@ -2385,6 +2385,77 @@ PHP_METHOD(imagick, haldclutimage)
 /* }}} */
 #endif
 
+#if MagickLibVersion > 0x656
+PHP_METHOD(imagick, setimageartifact)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *artifact, *value;
+	int artifact_len, value_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickSetImageArtifact(intern->magick_wand, artifact, value);
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set image artifact", 1);
+	}
+	RETURN_TRUE;	
+}
+
+
+PHP_METHOD(imagick, getimageartifact) 
+{
+	php_imagick_object *intern;
+	char *artifact, *value;
+	int artifact_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &artifact, &artifact_len) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	value = MagickGetImageArtifact(intern->magick_wand, artifact);
+	
+	if (!value) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image artifact", 1);
+	}
+	
+	RETVAL_STRING(value, 1);
+	IMAGICK_FREE_MEMORY(char *, value);
+	return;
+}
+
+PHP_METHOD(imagick, deleteimageartifact) 
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *artifact;
+	int artifact_len;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &artifact, &artifact_len) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+	
+	status = MagickDeleteImageArtifact(intern->magick_wand, artifact);
+	
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to delete image artifact", 1);
+	}
+	
+	RETURN_TRUE;
+}
+#endif
+
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
    The Imagick constructor
 */

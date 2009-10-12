@@ -287,6 +287,11 @@ PHP_METHOD(imagick, functionimage);
 #if MagickLibVersion > 0x652
 PHP_METHOD(imagick, haldclutimage);
 #endif
+#if MagickLibVersion > 0x656
+PHP_METHOD(imagick, setimageartifact);
+PHP_METHOD(imagick, getimageartifact);
+PHP_METHOD(imagick, deleteimageartifact);
+#endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
 PHP_METHOD(imagick, getpixeliterator);
