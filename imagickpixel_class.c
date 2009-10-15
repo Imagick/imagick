@@ -231,23 +231,23 @@ PHP_METHOD(imagickpixel, setindex)
 PHP_METHOD(imagickpixel, __construct)
 {
 	php_imagickpixel_object *internp;
-	MagickBooleanType status;
-	char *color_name = (char *)0;
+	char *color_name = NULL;
 	int color_name_len = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len) == FAILURE )
-	{
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len) == FAILURE) {
 		return;
 	}
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	internp->pixel_wand = NewPixelWand();
+	
+	if (!internp->pixel_wand) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure", 4);
+	}
 
 	/* If color was given as parameter, set it here.*/
-	if (color_name_len != 0 && color_name != (char *)0 )
-	{
-		status = PixelSetColor(internp->pixel_wand, color_name);
-		if(status == MagickFalse) {
+	if (color_name && color_name_len) {
+		if (PixelSetColor(internp->pixel_wand, color_name) == MagickFalse) {
 			IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(internp->pixel_wand, "Unable to construct ImagickPixel", 4);
 		}
 	}
@@ -267,15 +267,14 @@ PHP_METHOD(imagickpixel, setcolor)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_name, &color_name_len) == FAILURE )
-	{
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_name, &color_name_len) == FAILURE) {
 		return;
 	}
 	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = PixelSetColor(internp->pixel_wand, color_name);
 
-	if(status == MagickFalse) {
+	if (status == MagickFalse) {
 		IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(internp->pixel_wand, "Unable to set ImagickPixel color", 4);
 	}
 
@@ -498,7 +497,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 }
 /* }}} */
 
-/* {{{ proto array ImagickPixel::getColor([bool normalized] )
+/* {{{ proto array ImagickPixel::getColor([bool normalized])
 	Returns the color of the pixel in an array
 */
 PHP_METHOD(imagickpixel, getcolor)
@@ -517,9 +516,9 @@ PHP_METHOD(imagickpixel, getcolor)
 
 	if (normalized == 1) {
 
-		red = PixelGetRed(internp->pixel_wand);
+		red   = PixelGetRed(internp->pixel_wand);
 		green = PixelGetGreen(internp->pixel_wand);
-		blue = PixelGetBlue(internp->pixel_wand);
+		blue  = PixelGetBlue(internp->pixel_wand);
 		alpha = PixelGetAlpha(internp->pixel_wand);
 
 		add_assoc_double(return_value, "r", red);
@@ -529,9 +528,10 @@ PHP_METHOD(imagickpixel, getcolor)
 	
 	} else {
 
-		red = PixelGetRed(internp->pixel_wand ) * 255;
+		/* TODO: should this be quantum range instead of hardcoded 255.. */
+		red   = PixelGetRed(internp->pixel_wand ) * 255;
 		green = PixelGetGreen(internp->pixel_wand ) * 255;
-		blue = PixelGetBlue(internp->pixel_wand ) * 255;
+		blue  = PixelGetBlue(internp->pixel_wand ) * 255;
 		alpha = PixelGetAlpha(internp->pixel_wand);
 
 		add_assoc_long(return_value, "r", (int)(red > 0.0 ? red + 0.5 : red - 0.5));
@@ -566,7 +566,7 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 }
 /* }}} */
 
-/* {{{ proto array ImagickPixel::clone(void )
+/* {{{ proto array ImagickPixel::clone(void)
         Clones the ImagickPixel
 */
 PHP_METHOD(imagickpixel, clone)
@@ -597,7 +597,6 @@ PHP_METHOD(imagickpixel, clone)
 PHP_METHOD(imagickpixel, getcolorcount)
 {
 	php_imagickpixel_object *internp;
-	long color_count;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -605,12 +604,11 @@ PHP_METHOD(imagickpixel, getcolorcount)
 	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	color_count = PixelGetColorCount(internp->pixel_wand);
-	RETVAL_LONG(color_count);
+	RETVAL_LONG(PixelGetColorCount(internp->pixel_wand));
 }
 /* }}} */
 
-/* {{{ proto int ImagickPixel::setColorCount(int colorCount )
+/* {{{ proto int ImagickPixel::setColorCount(int colorCount)
 	Sets the color count associated with this color.
 */
 PHP_METHOD(imagickpixel, setcolorcount)

@@ -9,10 +9,10 @@ $imagick = new Imagick();
 try {
 	$imagick->readImage('foo.jpg');
 } catch (ImagickException $e) {
-	echo $e->getMessage() , "\n";
+	echo "got exception";
 }
 
 ?>
 --EXPECTF--
 --- Catch exception with try/catch
-unable to open image `%s': No such file or directory
+got exception

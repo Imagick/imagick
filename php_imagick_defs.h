@@ -199,7 +199,7 @@ PHP_METHOD(imagick, adaptiveblurimage);
 PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
 PHP_METHOD(imagick, randomthresholdimage);
-PHP_METHOD(imagick, roundcorners);
+PHP_METHOD(imagick, roundcornersimage);
 PHP_METHOD(imagick, setiteratorindex);
 PHP_METHOD(imagick, getiteratorindex);
 PHP_METHOD(imagick, transformimage);
@@ -217,7 +217,6 @@ PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, getimagelength);
 PHP_METHOD(imagick, extentimage);
-PHP_METHOD(imagick, boxresizeimage);
 #endif
 #if MagickLibVersion > 0x633
 PHP_METHOD(imagick, getimageorientation);

@@ -122,7 +122,7 @@ zend_bool php_imagick_resize_bounding_box(MagickWand *magick_wand, long box_widt
 	}
 
 	/* Resize the image to the new size */
-	if (MagickResizeImage(magick_wand, new_width, new_height, CubicFilter, 0.5) == MagickFalse) {
+	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
 		return 0;
 	}
 
@@ -489,10 +489,10 @@ int check_write_access(char *absolute TSRMLS_DC)
 
 zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC)
 {
-	double ratio;
-	long crop_x = 0, crop_y = 0, image_width, image_height;
+	double ratio_x, ratio_y;
+	long crop_x = 0, crop_y = 0, new_width, new_height;
 	
-	long orig_width = MagickGetImageWidth(magick_wand);
+	long orig_width  = MagickGetImageWidth(magick_wand);
 	long orig_height = MagickGetImageHeight(magick_wand);
 	
 	/* Already at the size, just strip profiles */
@@ -502,26 +502,31 @@ zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long
 		}
 		return 1;
 	}
-
-	if (((double)orig_width - (double)desired_width) > ((double)orig_height - (double)desired_height)) {
-		ratio		 = (double)orig_height / (double)desired_height;
-		image_width	 = (double)orig_width / (double)ratio;
-		image_height = desired_height;
-		crop_x		 = ((double)image_width - (double)desired_width) / 2;
-	} else {
-		ratio		 = (double)orig_width / (double)desired_width;
-		image_height = (double)orig_height / (double)ratio;
-		image_width	 = desired_width;
-		crop_y		 = ((double)image_height - (double)desired_height) / 2;
+	
+	ratio_x = (double)desired_width / (double)orig_width; 
+	ratio_y = (double)desired_height / (double)orig_height; 
+	
+	if (ratio_x > ratio_y) { 
+		new_width  = desired_width; 
+		new_height = ratio_x * (double)orig_height; 
+	} else { 
+		new_height = desired_height; 
+		new_width  = ratio_y * (double)orig_width; 
 	}
 	
-	if (desired_width != orig_width && desired_height != orig_height) {
-		if (!MagickThumbnailImage(magick_wand, image_width, image_height)) {
-			return 0;
-		}
+	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
+		return 0;
 	}
+	
+	/* all done here */
+	if ((new_width == desired_width) && (new_height == desired_height)) {
+		return 1;
+	}
+	
+	crop_x = (new_width - desired_width) / 2;
+	crop_y = (new_height - desired_height) / 2;
 
-	if (!MagickCropImage(magick_wand, desired_width, desired_height, crop_x, crop_y)) {
+	if (MagickCropImage(magick_wand, desired_width, desired_height, crop_x, crop_y) == MagickFalse) {
 		return 0;
 	}
 	

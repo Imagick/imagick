@@ -494,10 +494,10 @@ PHP_METHOD(imagick, randomthresholdimage)
 }
 /* }}} */
 
-/* {{{ proto string Imagick::roundCorners(float x_rounding, float y_rounding[, float stroke_width, float displace, float size_correction] )
+/* {{{ proto string Imagick::roundCornersImage(float x_rounding, float y_rounding[, float stroke_width, float displace, float size_correction] )
    Rounds image corners
 */
-PHP_METHOD(imagick, roundcorners)
+PHP_METHOD(imagick, roundcornersimage)
 {
 	double x_rounding, y_rounding;
 	DrawingWand *draw;
@@ -583,57 +583,7 @@ PHP_METHOD(imagick, roundcorners)
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to composite image", 1);
 	}
 
-	/* Everything below this seems to be useless
-
-
-	ClearMagickWand(mask_image);
-	ClearDrawingWand(draw);
-	ClearPixelWand(color);
-
-	status = PixelSetColor(color, "transparent");
-
-	if (status == MagickFalse)
-	{
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
-		throwExceptionWithMessage(IMAGICK_CLASS, "Unable to set pixel color", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	status = MagickNewImage(mask_image, imageWidth, imageHeight, color);
-
-	if (status == MagickFalse)
-	{
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
-		throwExceptionWithMessage(IMAGICK_CLASS, "Unable to allocate mask image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	DrawSetFillColor(draw, color);
-	DrawSetStrokeColor(draw, color);
-	DrawSetStrokeWidth(draw, 2);
-
-	DrawRoundRectangle(draw, 0, 0, imageWidth, imageHeight, xRounding, yRounding);
-	MagickSetImageBackgroundColor(mask_image, color);
-	status = MagickDrawImage(mask_image, draw);
-
-	if (status == MagickFalse)
-	{
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
-		throwExceptionWithMessage(IMAGICK_CLASS, "Unable to draw on image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	}
-
-	status = MagickCompositeImage(intern->magick_wand, mask_image, OverCompositeOp, 0, 0);
-
-	if (status == MagickFalse)
-	{
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
-		throwExceptionWithMessage(IMAGICK_CLASS, "Unable to composite image", 1 TSRMLS_CC);
-		RETURN_FALSE;
-	} */
-
 	deallocate_wands(mask_image, draw, color TSRMLS_CC);
-
 	RETURN_TRUE;
 }
 /* }}} */
@@ -986,32 +936,6 @@ PHP_METHOD(imagick, extentimage)
 
 	if (status == MagickFalse) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to extent image", 1);
-	}
-
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::boxResizeImage(int box_width, int box_height[, bool fill = true])
-	Scale image into a bounding box
-*/
-PHP_METHOD(imagick, boxresizeimage)
-{
-	php_imagick_object *intern;
-	MagickBooleanType status;
-	long box_width, box_height;
-	zend_bool fill = 1;
-
-	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &box_width, &box_height, &fill) == FAILURE) {
-		return;
-	}
-
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-
-	if (!php_imagick_resize_bounding_box(intern->magick_wand, box_width, box_height, fill)) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to box resize image", 1);
 	}
 
 	RETURN_TRUE;
@@ -3080,7 +3004,7 @@ PHP_METHOD(imagick, destroy)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::scaleImage(int width, int height[, bool bestfit] )
+/* {{{ proto bool Imagick::scaleImage(int width, int height[, bool bestfit = false] )
 	Scales the size of an image to the given dimensions. Passing zero as either of
 	the arguments will preserve dimension while scaling.
 */
@@ -6157,7 +6081,7 @@ PHP_METHOD(imagick, getnumberimages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false])
+/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false, bool fill = false])
 	 Changes the size of an image to the given dimensions and removes any associated profiles
 */
 PHP_METHOD(imagick, thumbnailimage)
@@ -6165,27 +6089,34 @@ PHP_METHOD(imagick, thumbnailimage)
 	long width, height, new_width, new_height;
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	zend_bool bestfit = 0;
+	zend_bool bestfit = 0, fill = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &width, &height, &bestfit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bb", &width, &height, &bestfit, &fill) == FAILURE) {
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 	
-	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
+	if (bestfit && fill) {	
+#if MagickLibVersion > 0x631
+		if (!php_imagick_resize_bounding_box(intern->magick_wand, width, height, fill)) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to resize and fill image", 1);
+		}
+#else 
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Fill parameter is only supported with ImageMagick 6.3.2+", 1);
+#endif
+	} else {
+		if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
+		}
+		
+		/* No magick is going to happen */
+		if (MagickThumbnailImage(intern->magick_wand, new_width, new_height) == MagickFalse) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to thumbnail image", 1);
+		}
 	}
-
-	status = MagickThumbnailImage(intern->magick_wand, new_width, new_height);
-
-	/* No magick is going to happen */
-	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to thumbnail image", 1);
-	}
-
 	RETURN_TRUE;
 }
 /* }}} */
@@ -9028,19 +8959,14 @@ PHP_METHOD(imagick, getcompressionquality)
 */
 PHP_METHOD(imagick, getcopyright)
 {
-	php_imagick_object *intern;
 	char *copyright;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	copyright = (char *)MagickGetCopyright();
 	ZVAL_STRING(return_value, copyright, 1);
-
-	/* IMAGICK_FREE_MEMORY(char *, copyright); */
 	return;
 }
 /* }}} */
@@ -9096,14 +9022,11 @@ PHP_METHOD(imagick, getformat)
 */
 PHP_METHOD(imagick, gethomeurl)
 {
-	php_imagick_object *intern;
 	char *home_url;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	home_url = (char *)MagickGetHomeURL();
 	if (home_url) {
@@ -9160,19 +9083,14 @@ PHP_METHOD(imagick, getoption)
 */
 PHP_METHOD(imagick, getpackagename)
 {
-	php_imagick_object *intern;
 	char *package_name;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	package_name = (char *)MagickGetPackageName();
 	ZVAL_STRING(return_value, package_name, 1);
-
-	/* IMAGICK_FREE_MEMORY(char *, packageName); */
 	return;
 }
 /* }}} */
@@ -9212,7 +9130,6 @@ PHP_METHOD(imagick, getpage)
 */
 PHP_METHOD(imagick, getquantumdepth)
 {
-	php_imagick_object *intern;
 	char *quantum_depth;
 	long depth;
 
@@ -9220,7 +9137,6 @@ PHP_METHOD(imagick, getquantumdepth)
 		return;
 	}
 	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	quantum_depth = (char *)MagickGetQuantumDepth(&depth);
 
 	array_init(return_value);
@@ -9236,23 +9152,18 @@ PHP_METHOD(imagick, getquantumdepth)
 */
 PHP_METHOD(imagick, getquantumrange)
 {
-	php_imagick_object *intern;
 	char *quantum_range;
 	long range;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	quantum_range = (char *)MagickGetQuantumRange(&range);
 	array_init(return_value);
 
 	add_assoc_long(return_value, "quantumRangeLong", range);
 	add_assoc_string(return_value, "quantumRangeString", quantum_range, 1);
-
-	/* IMAGICK_FREE_MEMORY(char *, quantumRange); */
 	return;
 }
 /* }}} */
@@ -9262,19 +9173,14 @@ PHP_METHOD(imagick, getquantumrange)
 */
 PHP_METHOD(imagick, getreleasedate)
 {
-	php_imagick_object *intern;
 	char *release_date;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	release_date = (char *)MagickGetReleaseDate();
 	ZVAL_STRING(return_value, release_date, 1);
-
-	/* IMAGICK_FREE_MEMORY(char *, releaseDate); */
 	return;
 }
 /* }}} */
@@ -9284,14 +9190,12 @@ PHP_METHOD(imagick, getreleasedate)
 */
 PHP_METHOD(imagick, getresource)
 {
-	php_imagick_object *intern;
 	long resource_type;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &resource_type) == FAILURE) {
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	RETVAL_LONG(MagickGetResource(resource_type));
 }
 /* }}} */
@@ -9301,14 +9205,12 @@ PHP_METHOD(imagick, getresource)
 */
 PHP_METHOD(imagick, getresourcelimit)
 {
-	php_imagick_object *intern;
 	long resource_type;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &resource_type) == FAILURE) {
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	RETVAL_LONG(MagickGetResourceLimit(resource_type));
 }
 /* }}} */
@@ -9373,23 +9275,18 @@ PHP_METHOD(imagick, getsize)
 */
 PHP_METHOD(imagick, getversion)
 {
-	php_imagick_object *intern;
 	char *version_string;
 	long version_number;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	version_string = (char *)MagickGetVersion(&version_number);
 	array_init(return_value);
 
 	add_assoc_long(return_value, "versionNumber", version_number);
 	add_assoc_string(return_value, "versionString", version_string, 1);
-
-	/* IMAGICK_FREE_MEMORY(char *, versionString); */
 	return;
 }
 /* }}} */
