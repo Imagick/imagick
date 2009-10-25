@@ -654,21 +654,6 @@ void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_
 }
 #endif
 
-char *get_pseudo_filename(char *pseudo_string TSRMLS_DC)
-{
-	char *filename = NULL;
-	char *ptr = strchr(pseudo_string, ':');
-	
-	/* No colon */
-	if(ptr == NULL) {
-		return NULL;
-	} else {
-		++ptr; /* Move one position, removing colon from filename */
-		filename = estrdup(ptr);
-	}
-	return filename;
-}
-
 /* type 1 = writeimage, type 2 = writeimages */
 int write_image_from_filename(php_imagick_object *intern, char *filename, zend_bool adjoin, int type TSRMLS_DC)
 {
@@ -733,7 +718,7 @@ int write_image_from_filename(php_imagick_object *intern, char *filename, zend_b
 		
 		format = emalloc(pos+1);
 		format[0] = '\0';
-		strncat(format, filename, pos);
+		strncpy(format, filename, pos);
 		
 		spprintf(&filepath, 0, "%s:%s", format, tmp_filepath);
 		efree(tmp_filepath);

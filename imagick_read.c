@@ -70,42 +70,6 @@ zend_bool php_imagick_is_url(char *filename, int filename_len TSRMLS_DC)
 }
 /* }}} */
 
-/* {{{ check if recognised format */
-int php_imagick_recognized_format(char *filename, int filename_len TSRMLS_DC)
-{
-	char **formats, *format, *pch;
-	unsigned long chr_pos, i, num_formats = 0;
-	
-	pch = strchr(filename, ':');
-	
-	if (pch == NULL) {
-		return -1;
-	} 
-	
-	chr_pos = pch - filename;
-	format = estrndup(filename, chr_pos);
-
-	if (strcasecmp(format, "MAGICK") == 0) {
-		efree(format);
-		return chr_pos;
-	}
-
-	formats = MagickQueryFormats(php_strtoupper(format, chr_pos), &num_formats);
-	efree(format);
-
-	if (num_formats == 0) {
-		chr_pos = -1;
-	}
-	
-	for (i = 0 ; i < num_formats ; i++) {
-		IMAGICK_FREE_MEMORY(char *, formats[i]);
-	}
-	
-	IMAGICK_FREE_MEMORY(char **, formats);
-	return chr_pos;
-}
-/* }}} */
-
 /* {{{ Does the filename have a format indicator? 
 		Returns format length if found, -1 on fail */
 int php_imagick_format_indicator(char *filename, int filename_len TSRMLS_DC) 
@@ -132,12 +96,47 @@ zend_bool php_imagick_is_virtual_format(char *filename, int filename_len TSRMLS_
 									"NULL:", "PLASMA:", "PRINT:", "SCAN:", "RADIAL_GRADIENT:", "SCANX:",
 									"WIN:", "X:", "XC:", "MAGICK:", "GRANITE:", "LOGO:", "NETSCAPE:", "ROSE:" };
 #endif
-	for (i = 0; i < elements; i++) {
+	for (i = 0; i <= elements; i++) {
 		if (strncasecmp(filename, no_basedir_fmt[i], strlen(no_basedir_fmt[i])) == 0) {
 			return 1;
 		}
 	}
 	return 0;
+}
+/* }}} */
+
+/* {{{ check if recognised format */
+int php_imagick_recognized_format(char *filename, int filename_len TSRMLS_DC)
+{
+	char **formats, *format, *pch;
+	unsigned long chr_pos, i, num_formats = 0;
+
+	if ((pch = strchr(filename, ':')) == NULL) {
+		return -1;
+	}
+
+	chr_pos = pch - filename;
+	format = estrndup(filename, chr_pos);
+
+	/* I know this! */
+	if (php_imagick_is_virtual_format(filename, filename_len TSRMLS_CC)) {
+		efree(format);
+		return chr_pos;
+	}
+
+	formats = MagickQueryFormats(php_strtoupper(format, chr_pos), &num_formats);
+	efree(format);
+
+	if (num_formats == 0) {
+		chr_pos = -1;
+	}
+	
+	for (i = 0 ; i < num_formats ; i++) {
+		IMAGICK_FREE_MEMORY(char *, formats[i]);
+	}
+	
+	IMAGICK_FREE_MEMORY(char **, formats);
+	return chr_pos;
 }
 /* }}} */
 
@@ -171,7 +170,7 @@ zend_bool php_imagick_use_stream(char *filename, int filename_len TSRMLS_DC)
 		return 1;
 	}
 	
-	if ((php_imagick_format_indicator(filename, filename_len TSRMLS_CC) != -1) ||
+	if ((php_imagick_format_indicator(filename, filename_len TSRMLS_CC) > 0) ||
 		(php_imagick_has_page(filename, filename_len TSRMLS_CC))) {
 		return 0;
 	}
@@ -207,26 +206,29 @@ int php_imagick_safety_check(char *filename, int filename_len TSRMLS_DC)
 /* {{{ }}} */
 MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *intern, int type, char *filename, int filename_len TSRMLS_DC)
 {
-	int status;
-	char *absolute;
+	int pos = 0;
+	char *absolute = NULL;
 	
-	status = php_imagick_safety_check(filename, filename_len TSRMLS_CC);
+	absolute = php_imagick_get_absolute_filename(filename, filename_len TSRMLS_CC);
 	
-	if (status != IMAGICK_READ_WRITE_NO_ERROR) { 
-		return status;
+	if (absolute) {
+		int status = php_imagick_safety_check(absolute, strlen(absolute) TSRMLS_CC);
+	
+		if (status != IMAGICK_READ_WRITE_NO_ERROR) { 
+			efree(absolute);
+			return status;
+		}
 	}
 
 	if (type == 1) {
 		if (MagickReadImage(intern->magick_wand, filename) == MagickFalse) {
-			return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+			goto general_error;
 		}	
 	} else {
 		if (MagickPingImage(intern->magick_wand, filename) == MagickFalse) {
-			return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+			goto general_error;
 		}
 	}
-
-	absolute = php_imagick_get_absolute_filename(filename, filename_len TSRMLS_CC);
 	
 	if (!absolute) {
 		MagickSetImageFilename(intern->magick_wand, "");
@@ -237,6 +239,10 @@ MagickBooleanType php_imagick_read_image_using_imagemagick(php_imagick_object *i
 
 	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
 	return IMAGICK_READ_WRITE_NO_ERROR;
+	
+general_error:	
+	if (absolute) efree(absolute);
+	return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
 }
 
 
@@ -310,13 +316,13 @@ return_error:
 
 int read_image_into_magickwand(php_imagick_object *intern, int type, char *filename, int filename_len TSRMLS_DC)
 {	
-	if (!filename) {
+	if (!filename || filename_len == 0) {
 		return IMAGICK_READ_WRITE_NO_ERROR;
 	}
 
 	/* Use traditional imagemagick method or php streams (?) */
 	if (php_imagick_use_stream(filename, filename_len TSRMLS_CC)) {
-		 return php_imagick_read_image_using_php_streams(intern, type, filename, filename_len TSRMLS_CC);
+		return php_imagick_read_image_using_php_streams(intern, type, filename, filename_len TSRMLS_CC);
 	} else {	
 		return php_imagick_read_image_using_imagemagick(intern, type, filename, filename_len TSRMLS_CC);
 	}	

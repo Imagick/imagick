@@ -2637,10 +2637,10 @@ PHP_METHOD(imagick, queryfontmetrics)
 		MAKE_STD_ZVAL(bounding);
 		array_init(bounding);
 
-		add_assoc_double(tmp_array, "x1", metrics[7]);
-		add_assoc_double(tmp_array, "y1", metrics[8]);
-		add_assoc_double(tmp_array, "x2", metrics[9]);
-		add_assoc_double(tmp_array, "y2", metrics[10]);
+		add_assoc_double(bounding, "x1", metrics[7]);
+		add_assoc_double(bounding, "y1", metrics[8]);
+		add_assoc_double(bounding, "x2", metrics[9]);
+		add_assoc_double(bounding, "y2", metrics[10]);
 		add_assoc_zval(return_value, "boundingBox", bounding);
 
 		add_assoc_double(return_value, "originX", metrics[11]);
@@ -3515,82 +3515,21 @@ PHP_METHOD(imagick, newpseudoimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long columns, rows;
-	char *pseudo_string, *filename;
+	char *pseudo_string;
 	int pseudo_string_len;
-	char *absolute = NULL;
-	int i, match = 1, error = 0;
-
-#ifdef PHP_WIN32
-	int formats = 20;
-	char *no_basedir_check[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
-									"histogram:", "label:", "map:", "matte:",
-									"null:", "plasma:", "preview:", "print:",
-									"scan:", "stegano:", "unique:", "win:",
-								    "xc:", "magick:", "pattern:", "http:", "ftp:" };
-#else
-	int formats = 21;
-	char *no_basedir_check[] = {    "caption:", "clipboard:", "fractal:", "gradient:",
-									"histogram:", "label:", "map:", "matte:",
-									"null:", "plasma:", "preview:", "print:",
-									"scan:", "stegano:", "unique:", "win:",
-									"x:", "xc:", "magick:", "pattern:", "http:", "ftp:" };
-#endif
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lls", &columns, &rows, &pseudo_string, &pseudo_string_len) == FAILURE) {
 		return;
 	}
-
-	if (pseudo_string_len == 0) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid pseudo format string", 1);
-	}
-
+	
 	/* Allow only pseudo formats in this method */
 	if (count_occurences_of(':', pseudo_string TSRMLS_CC ) < 1) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid pseudo format string", 1);
 	}
-
-	if (!PG(allow_url_fopen)) {
-		if ((strncasecmp(pseudo_string, "http:", 5) == 0 ) || (strncasecmp(pseudo_string, "ftp:", 4) == 0)) {
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Trying to open from an url and allow_url_fopen is off", 1 );
-		}
-	}
-
-	for (i = 0; i < formats; i++) {
-		/* No open_basedir check needed */
-		if (strncasecmp(pseudo_string, no_basedir_check[i], strlen(no_basedir_check[i] )) == 0) {
-			match = 0;
-			break;
-		}
-	}
-
+	
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
-	/* These formats potentially read images */
-	if (match == 1) {
-		filename = get_pseudo_filename(pseudo_string TSRMLS_CC);
-
-		if (filename == NULL || strlen(filename) == 0) {
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to read the filename", 1);
-		}
-		
-		if (strlen(filename) >= MAXPATHLEN) {
-			efree(filename);
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The filename is longer than the allowed size", 1);
-		}
-
-		absolute = expand_filepath(filename, NULL TSRMLS_CC);
-		IMAGICK_SAFE_MODE_CHECK(absolute, error);
-
-		efree(filename);
-
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, absolute, error, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
-
-		if (absolute != NULL) {
-			efree(absolute);
-		}
-	}
-
+	
 	/* Pseudo image needs a size set manually */
 	status = MagickSetSize(intern->magick_wand, columns, rows);
 
@@ -3598,16 +3537,9 @@ PHP_METHOD(imagick, newpseudoimage)
 	if (status == MagickFalse) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to create new pseudo image", 1);
 	}
-
-	/* Read image from the pseudo string */
-	status = MagickReadImage(intern->magick_wand, pseudo_string);
-
-	/* No magick is going to happen */
-	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to create new pseudo image", 1);
-	}
-
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	
+	status = read_image_into_magickwand(intern, 1, pseudo_string, pseudo_string_len TSRMLS_CC);
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, pseudo_string, status, IMAGICK_DONT_FREE_FILENAME, "Unable to create new pseudo image: %s");
 	RETURN_TRUE;
 }
 /* }}} */
