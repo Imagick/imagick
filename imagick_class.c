@@ -2556,11 +2556,10 @@ PHP_METHOD(imagick, queryfonts)
 */
 PHP_METHOD(imagick, queryfontmetrics)
 {
-	zval *objvar, *tmp_array, *multiline = NULL;
-	zend_bool dealloc = 0, query_multiline;
+	zval *objvar, *multiline = NULL;
+	zend_bool remove_canvas = 0, query_multiline;
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
-	PixelWand *tmp_pixelwand = NULL;
 	char *text;
 	int text_len;
 	double *metrics;
@@ -2579,24 +2578,34 @@ PHP_METHOD(imagick, queryfontmetrics)
 		}
 
 	} else {
-
-		if (Z_TYPE_P(multiline) == IS_BOOL) {
-			query_multiline = Z_BVAL_P(multiline) ? 1 : 0;
-		} else {
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The third parameter must be a null or a boolean", 1);
-		}
-
+		convert_to_boolean(multiline);
+		query_multiline = Z_BVAL_P(multiline);
 	}
 
 	/* fetch the objects */
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern  = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 
 	/* If wand is empty, create a 1x1 pixel image to use as a temporary canvas */
-	if (MagickGetNumberImages(intern->magick_wand) == 0) {
-		tmp_pixelwand = (PixelWand *)NewPixelWand();
-		MagickNewImage(intern->magick_wand, 1, 1, tmp_pixelwand);
-		dealloc = 1;
+	if (MagickGetNumberImages(intern->magick_wand) < 1) {
+		PixelWand *pixel_wand;
+		MagickBooleanType status;
+		
+		/* Empty bg color */
+		pixel_wand = NewPixelWand();
+		
+		if (!pixel_wand) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to allocate background color for the temporary canvas", 1);
+		}
+		
+		/* 1x1 should be enough to get the metrics */
+		status     = MagickNewImage(intern->magick_wand, 1, 1, pixel_wand);
+		pixel_wand = DestroyPixelWand(pixel_wand);
+		
+		if (status == MagickFalse) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to allocate temporary canvas", 1);
+		}
+		remove_canvas = 1;
 	}
 
 	/* Multiline testing */
@@ -2606,13 +2615,15 @@ PHP_METHOD(imagick, queryfontmetrics)
 		metrics = MagickQueryFontMetrics(intern->magick_wand, internd->drawing_wand, text);
 	}
 
-	/* Deallocate the image and pixelwand */
-	if (dealloc) {
+	/* Remove the image from the stack*/
+	if (remove_canvas) {
 		MagickRemoveImage(intern->magick_wand);
-		tmp_pixelwand = (PixelWand *)DestroyPixelWand(tmp_pixelwand);
 	}
-
-	if (metrics != (double *)NULL) {
+	
+	if (!metrics) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Failed to query the font metrics", 1);
+	} else {
+		zval *bounding;
 
 		array_init(return_value);
 		add_assoc_double(return_value, "characterWidth", metrics[0]);
@@ -2623,14 +2634,14 @@ PHP_METHOD(imagick, queryfontmetrics)
 		add_assoc_double(return_value, "textHeight", metrics[5]);
 		add_assoc_double(return_value, "maxHorizontalAdvance", metrics[6]);
 
-		MAKE_STD_ZVAL(tmp_array);
-		array_init(tmp_array);
+		MAKE_STD_ZVAL(bounding);
+		array_init(bounding);
 
 		add_assoc_double(tmp_array, "x1", metrics[7]);
 		add_assoc_double(tmp_array, "y1", metrics[8]);
 		add_assoc_double(tmp_array, "x2", metrics[9]);
 		add_assoc_double(tmp_array, "y2", metrics[10]);
-		add_assoc_zval(return_value, "boundingBox", tmp_array);
+		add_assoc_zval(return_value, "boundingBox", bounding);
 
 		add_assoc_double(return_value, "originX", metrics[11]);
 		add_assoc_double(return_value, "originY", metrics[12]);
@@ -2638,7 +2649,6 @@ PHP_METHOD(imagick, queryfontmetrics)
 		IMAGICK_FREE_MEMORY(double *, metrics);
 		return;
 	}
-	RETURN_FALSE;
 }
 /* }}} */
 
