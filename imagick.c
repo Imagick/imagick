@@ -45,17 +45,17 @@ static zend_object_handlers imagickpixel_object_handlers;
 static zend_object_handlers imagickpixeliterator_object_handlers;
 
 /* External API */
-IMAGICK_EXPORTS zend_class_entry *php_imagick_get_class_entry()
+MY_IMAGICK_EXPORTS zend_class_entry *php_imagick_get_class_entry()
 {
 	return php_imagick_sc_entry;
 }
 
-IMAGICK_EXPORTS zend_class_entry *php_imagickdraw_get_class_entry()
+MY_IMAGICK_EXPORTS zend_class_entry *php_imagickdraw_get_class_entry()
 {
 	return php_imagickdraw_sc_entry;
 }
 
-IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
+MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 {
 	return php_imagickdraw_sc_entry;
 }
@@ -213,11 +213,11 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_orderedposterizeimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold_map)
 		ZEND_ARG_INFO(0, CHANNEL)
-	ZEND_END_ARG_INFO()	
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x635
@@ -243,27 +243,27 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, arguments)
 		ZEND_ARG_INFO(0, bestfit)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimagefile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, handle)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimagesfile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, handle)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_resetimagepage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, page)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageclipmask_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
-	ZEND_END_ARG_INFO()	
-	
+	ZEND_END_ARG_INFO()
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_animateimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, server_name)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_recolorimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, matrix)
 	ZEND_END_ARG_INFO()
@@ -287,7 +287,7 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagealphachannel_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, ALPHACHANNELTYPE)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_floodfillpaintimage_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, fill)
 		ZEND_ARG_INFO(0, fuzz)
@@ -297,7 +297,7 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, invert)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_opaquepaintimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, target)
 		ZEND_ARG_INFO(0, fill)
@@ -305,7 +305,7 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, invert)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_transparentpaintimage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, target)
 		ZEND_ARG_INFO(0, alpha)
@@ -321,11 +321,11 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, delta_x)
 		ZEND_ARG_INFO(0, rigidity)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_encipherimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, passphrase)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_decipherimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, passphrase)
 	ZEND_END_ARG_INFO()
@@ -365,18 +365,18 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, storage)
 		ZEND_ARG_INFO(0, PIXEL)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_deskewimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_segmentimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, COLORSPACE)
 		ZEND_ARG_INFO(0, cluster_threshold)
 		ZEND_ARG_INFO(0, smooth_threshold)
 		ZEND_ARG_INFO(0, verbose)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sparsecolorimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, SPARSE_METHOD)
 		ZEND_ARG_INFO(0, arguments)
@@ -386,7 +386,7 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_remapimage_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, DITHER)
-	ZEND_END_ARG_INFO()			
+	ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x646
@@ -404,12 +404,12 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelkurtosis_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_functionimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, FUNCTION)
 		ZEND_ARG_INFO(0, arguments)
 	ZEND_END_ARG_INFO()
-#endif 
+#endif
 
 #if MagickLibVersion > 0x652
 	ZEND_BEGIN_ARG_INFO_EX(imagick_haldclutimage_args, 0, 0, 1)
@@ -468,7 +468,7 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_scaleimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)
-		ZEND_ARG_INFO(0, bestfit)	
+		ZEND_ARG_INFO(0, bestfit)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimage_args, 0, 0, 0)
@@ -1236,10 +1236,10 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, kerning)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextinterwordspacing_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, spacing)
-	ZEND_END_ARG_INFO()	
+	ZEND_END_ARG_INFO()
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_zero_args, 0, 0, 0)
@@ -1633,11 +1633,11 @@ IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, saturation)
 		ZEND_ARG_INFO(0, luminosity)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorvaluequantum_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color_value)
 	ZEND_END_ARG_INFO()
-	
+
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setindex_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
@@ -1953,7 +1953,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimagealphachannel, imagick_setimagealphachannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, floodfillpaintimage, imagick_floodfillpaintimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, opaquepaintimage, imagick_opaquepaintimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, transparentpaintimage, imagick_transparentpaintimage_args, ZEND_ACC_PUBLIC)	
+	PHP_ME(imagick, transparentpaintimage, imagick_transparentpaintimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x638
 	PHP_ME(imagick, liquidrescaleimage, imagick_liquidrescaleimage_args, ZEND_ACC_PUBLIC)
@@ -2103,7 +2103,7 @@ static function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, clipimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, clippathimage, imagick_clippathimage_args, ZEND_ACC_PUBLIC)
 	/* clippathimage has been deprecated. Create alias here and use the newer API function if present */
-	PHP_MALIAS(imagick, clipimagepath, clippathimage, imagick_clippathimage_args, ZEND_ACC_PUBLIC)	
+	PHP_MALIAS(imagick, clipimagepath, clippathimage, imagick_clippathimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, coalesceimages, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colorfloodfillimage, imagick_colorfloodfillimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colorizeimage, imagick_colorizeimage_args, ZEND_ACC_PUBLIC)
@@ -2260,7 +2260,7 @@ static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 	if (!intern) {
 		return;
 	}
-	
+
 	if (intern->progress_monitor_name) {
 		efree(intern->progress_monitor_name);
 	}
@@ -2342,7 +2342,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 		imagick_thread_id = tsrm_thread_id();
 	}
 #endif
-	
+
 	if (ptr) {
 		*ptr = intern;
 	}
@@ -2383,8 +2383,8 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 
 	if (ptr) {
 		*ptr = intern;
-	}	
-	
+	}
+
 	/* Set the DrawingWand */
 	if (init_wand) {
 		intern->drawing_wand = NewDrawingWand();
@@ -2447,8 +2447,8 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 
 	if (ptr) {
 		*ptr = intern;
-	}	
-	
+	}
+
 	/* Set the pixeliterator */
 	intern->pixel_wand = NULL;
 	intern->initialized_via_iterator = 0;
@@ -2485,13 +2485,13 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 	php_imagick_object *new_obj = NULL;
 	php_imagick_object *old_obj = (php_imagick_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_ov = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
-	 
+
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
-	
+
 	wand_copy = CloneMagickWand(old_obj->magick_wand);
 	IMAGICK_REPLACE_MAGICKWAND(new_obj, wand_copy);
 	new_obj->next_out_of_bound = old_obj->next_out_of_bound;
-	
+
 	if (old_obj->progress_monitor_name) {
 		new_obj->progress_monitor_name = estrdup(old_obj->progress_monitor_name);
 	}
@@ -2505,7 +2505,7 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 	php_imagickdraw_object *new_obj = NULL;
 	php_imagickdraw_object *old_obj = (php_imagickdraw_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_ov = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
-	
+
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	wand_copy = CloneDrawingWand(old_obj->drawing_wand);
 
@@ -2519,7 +2519,7 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	php_imagickpixel_object *new_obj = NULL;
 	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_ov = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
-	
+
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 
 	IMAGICK_CLONE_PIXELWAND(old_obj->pixel_wand, wand_copy);

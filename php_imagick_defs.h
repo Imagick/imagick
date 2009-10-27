@@ -23,10 +23,12 @@
 /*
 	API exports
 */
-#ifdef PHP_WIN32
-#  define IMAGICK_EXPORTS __declspec(dllexport)
-#else
-#  define IMAGICK_EXPORTS PHPAPI
+#ifndef MY_IMAGICK_EXPORTS
+#  ifdef PHP_WIN32
+#    define MY_IMAGICK_EXPORTS __declspec(dllexport)
+#  else
+#    define MY_IMAGICK_EXPORTS PHPAPI
+#  endif
 #endif
 
 /* Globals, needed for the ini settings */
