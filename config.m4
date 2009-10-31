@@ -109,17 +109,5 @@ if test $PHP_IMAGICK != "no"; then
 		
 		PHP_SUBST(IMAGICK_SHARED_LIBADD)
 		PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_read.c imagick.c, $ext_shared)
-
-		dnl Generate configuration header
-		if test ! -z "${PHP_IMAGICK_USE_NEW_HEADER}"; then
-			echo "#ifndef _PHP_IMAGICK_CONFIG_H_"        > php_imagick_config.h
-			echo "#  ifndef IMAGICK_USE_NEW_HEADER"     >> php_imagick_config.h
-			echo "#    define IMAGICK_USE_NEW_HEADER 1" >> php_imagick_config.h
-			echo "#  endif"                             >> php_imagick_config.h
-			echo "#endif"                               >> php_imagick_config.h
-		else 
-			echo "" > php_imagick_config.h
-		fi
-
 		PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h php_imagick_config.h])
 fi

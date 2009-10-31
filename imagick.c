@@ -439,7 +439,7 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_construct_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, files)
 	ZEND_END_ARG_INFO()
-
+	
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getpixelregioniterator_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
@@ -2479,6 +2479,41 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->progress_monitor = 0;
 }
 
+static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC) 
+{
+	php_imagick_object *intern;
+	zval *retval;
+	MAKE_STD_ZVAL(retval);
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	
+	if (Z_TYPE_P(member) != IS_STRING || MagickGetNumberImages(intern->magick_wand) == 0) {
+		ZVAL_NULL(retval);
+	} else {	
+		char *property   = Z_STRVAL_P(member);
+		int property_len = Z_STRLEN_P(member);
+
+		if ((property_len == 5) && (memcmp(property, "width", 5) == 0)) {
+			ZVAL_LONG(retval, MagickGetImageWidth(intern->magick_wand));
+		} else if ((property_len == 6) && (memcmp(property, "height", 6) == 0)) {
+			ZVAL_LONG(retval, MagickGetImageHeight(intern->magick_wand));
+		} else if ((property_len == 6) && (memcmp(property, "format", 6) == 0)) {
+			char *format = MagickGetImageFormat(intern->magick_wand);
+			if (format) {
+				ZVAL_STRING(retval, format, 1);
+				IMAGICK_FREE_MEMORY(char *, format);
+			} else {
+				ZVAL_STRING(retval, "", 1);
+			}
+		} else {
+			ZVAL_NULL(retval);
+		}
+	}
+	Z_SET_REFCOUNT_P(retval, 0);
+	return retval;
+}
+
+
 static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
 {
 	MagickWand *wand_copy = NULL;
@@ -2581,6 +2616,7 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICK_SC_NAME, php_imagick_class_methods);
 	ce.create_object = php_imagick_object_new;
 	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
+	imagick_object_handlers.read_property = php_imagick_read_property;
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
 

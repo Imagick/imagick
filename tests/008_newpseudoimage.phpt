@@ -18,9 +18,6 @@ var_dump($im->getImageGeometry());
 $im->newPseudoImage(0, 0, "rose:");
 var_dump($im->getImageGeometry());
 
-$im->newPseudoImage(0, 0, "png:test.png");
-var_dump($im->getImageGeometry());
-
 try { 
 $im->newPseudoImage(0, 0, "png:");
 var_dump($im->getImageGeometry());
@@ -53,11 +50,5 @@ array(2) {
   int(70)
   ["height"]=>
   int(46)
-}
-array(2) {
-  ["width"]=>
-  int(640)
-  ["height"]=>
-  int(480)
 }
 fail

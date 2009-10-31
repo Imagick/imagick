@@ -21,6 +21,11 @@
 #ifndef _PHP_IMAGICK_SHARED_H_
 # define _PHP_IMAGICK_SHARED_H_
 
+/* Only works with newer Imagick */
+#ifndef IMAGICK_USE_NEW_HEADER
+# define IMAGICK_USE_NEW_HEADER 1
+#endif
+
 #include "php_imagick_config.h"
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
