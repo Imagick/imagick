@@ -287,6 +287,11 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, int typ
 		status = MagickPingImageFile(intern->magick_wand, fp);
 	}
 	
+	if (status == MagickFalse) {
+		php_stream_close(stream);
+		return IMAGICK_READ_WRITE_UNDERLYING_LIBRARY;
+	}
+	
 	if (php_stream_is(stream, PHP_STREAM_IS_STDIO)) {
 		char *absolute = expand_filepath(filename, NULL TSRMLS_CC);
 		MagickSetImageFilename(intern->magick_wand, absolute);

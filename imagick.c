@@ -2513,7 +2513,6 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type TSRM
 	return retval;
 }
 
-
 static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
 {
 	MagickWand *wand_copy = NULL;
