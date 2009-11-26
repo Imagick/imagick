@@ -22,6 +22,10 @@
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
 
+#ifdef PHP_WIN32
+# include "TSRM/tsrm_virtual_cwd.h"
+#endif
+
 /* {{{ Indicates whether image filename has a page. For example test.pdf[0] */
 zend_bool php_imagick_has_page(char *filename, int filename_len TSRMLS_DC) {
 	/* Too short */
@@ -55,7 +59,7 @@ zend_bool php_imagick_is_url(char *filename, int filename_len TSRMLS_DC)
 int php_imagick_format_indicator(char *filename, int filename_len TSRMLS_DC) 
 {
 #ifdef PHP_WIN32
-	if (IS_ABSOLUTE_PATH(filename)) {
+	if (IS_ABSOLUTE_PATH(filename, filename_len)) {
 		if (count_occurences_of(':', filename TSRMLS_CC) == 1) {
 			return -1;
 		}
