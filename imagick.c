@@ -413,7 +413,7 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 
 #if MagickLibVersion > 0x652
 	ZEND_BEGIN_ARG_INFO_EX(imagick_haldclutimage_args, 0, 0, 1)
-		ZEND_ARG_INFO(0, clut)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 #endif

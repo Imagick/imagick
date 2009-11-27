@@ -161,6 +161,7 @@ zend_bool php_imagick_use_stream(char *filename, int filename_len TSRMLS_DC)
 		return 1;
 	}
 	
+	/* Explicit format or page indicator -> use imagemagick */
 	if ((php_imagick_format_indicator(filename, filename_len TSRMLS_CC) > 0) ||
 		(php_imagick_has_page(filename, filename_len TSRMLS_CC))) {
 		return 0;

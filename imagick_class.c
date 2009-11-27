@@ -2277,7 +2277,7 @@ PHP_METHOD(imagick, functionimage)
 #endif
 
 #if MagickLibVersion > 0x652
-/* {{{ proto Imagick Imagick::haldClutImage(Imagick hald[, int CHANNEL])
+/* {{{ proto boolean Imagick::haldClutImage(Imagick hald[, int CHANNEL])
    Replaces colors in the image from a Hald color lookup table
 */
 PHP_METHOD(imagick, haldclutimage)

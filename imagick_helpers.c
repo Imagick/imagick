@@ -359,20 +359,19 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 	long_array = emalloc(sizeof(long) * elements);
 	ht = Z_ARRVAL_P(param_array);
 
-	zend_hash_internal_pointer_reset(ht);
-
-	for (i = 0 ; i < elements ; i++) {
-		if (zend_hash_get_current_data(ht, (void**)&ppzval) == FAILURE) {
-			efree(long_array);
-			long_array = NULL;
-			return long_array;
-		}
+	for (zend_hash_internal_pointer_reset(ht);
+			zend_hash_get_current_data(ht, (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(ht)
+	) {
+		zval tmp_zval, *tmp_pzval;
 		
-		if (Z_TYPE_PP(ppzval) != IS_LONG) {
-			convert_to_long_ex(ppzval);
-		}
-		long_array[i] = Z_LVAL_PP(ppzval);
-		zend_hash_move_forward(ht);
+		tmp_zval = **ppzval;
+		zval_copy_ctor(&tmp_zval);
+		tmp_pzval = &tmp_zval;
+		convert_to_long(tmp_pzval);
+		
+		long_array[i] = Z_LVAL(tmp_pzval);
+		tmp_pzval = NULL;
 	}
 	*num_elements = elements;
 	return long_array;
@@ -395,21 +394,19 @@ unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TS
 	char_array = emalloc(sizeof(char) * elements);
 	ht = Z_ARRVAL_P(param_array);
 
-	zend_hash_internal_pointer_reset(ht);
-
-	for (i = 0 ; i < elements ; i++) {
-
-		if (zend_hash_get_current_data(ht, (void**)&ppzval) == FAILURE) {
-			efree(char_array);
-			char_array = NULL;
-			return char_array;
-		}
+	for (zend_hash_internal_pointer_reset(ht);
+			zend_hash_get_current_data(ht, (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(ht)
+	) {
+		zval tmp_zval, *tmp_pzval;
 		
-		if (Z_TYPE_PP(ppzval) != IS_LONG) {
-			convert_to_long_ex(ppzval);
-		}
-		char_array[i] = (unsigned char)Z_LVAL_PP(ppzval);
-		zend_hash_move_forward(ht);
+		tmp_zval = **ppzval;
+		zval_copy_ctor(&tmp_zval);
+		tmp_pzval = &tmp_zval;
+		convert_to_long(tmp_pzval);
+		
+		long_array[i] = Z_LVAL(tmp_pzval);
+		tmp_pzval = NULL;
 	}
 	*num_elements = elements;
 	return char_array;
@@ -554,7 +551,7 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 	PointInfo *coordinates;
 	long elements, sub_elements, i;
 	HashTable *coords;
-	zval **ppzval, **ppz_x, **ppz_y;
+	zval **ppzval;
 	HashTable *sub_array;
 
 	elements = zend_hash_num_elements(Z_ARRVAL_P(coordinate_array));
@@ -571,15 +568,12 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 	coords = Z_ARRVAL_P(coordinate_array);
 	zend_hash_internal_pointer_reset_ex(coords, (HashPosition *) 0);
 
-	for (i = 0 ; i < elements ; i++) {
-
-		/* Get the sub array */
-		if (zend_hash_get_current_data(coords, (void**)&ppzval) == FAILURE) {
-			coordinates = (PointInfo *)NULL;
-			efree(coordinates);
-			*num_elements = 0;
-			return coordinates;
-		}
+	for (zend_hash_internal_pointer_reset(coords);
+			zend_hash_get_current_data(coords, (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(coords)
+	) {
+		zval **ppz_x, **ppz_y;
+		zval tmp_zx, *tmp_pzx, tmp_zy, *tmp_pzy;
 
 		/* If its something than array lets error here */
 		if(Z_TYPE_PP(ppzval) != IS_ARRAY) {
@@ -611,27 +605,27 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 			return coordinates;
 		}
 		
+		tmp_zx = **ppz_x;
+		zval_copy_ctor(&tmp_zx);
+		tmp_pzx = &tmp_zx;
+		convert_to_double(tmp_pzx);
+		
 		/* Get Y */
 		if (zend_hash_find(sub_array, "y", sizeof("y"), (void**)&ppz_y) == FAILURE) {
 			efree(coordinates);
 			coordinates = (PointInfo *)NULL;
 			*num_elements = 0;
 			return coordinates;
-		}		
+		}	
 		
-		if (Z_TYPE_PP(ppz_x) != IS_DOUBLE) {
-			convert_to_double_ex(ppz_x);
-		}
-		
-		if (Z_TYPE_PP(ppz_y) != IS_DOUBLE) {
-			convert_to_double_ex(ppz_y);
-		}
-		
-		/* Assign X and Y */
-		coordinates[i].x = Z_DVAL_PP(ppz_x);
-		coordinates[i].y = Z_DVAL_PP(ppz_y);
+		tmp_zy = **ppz_y;
+		zval_copy_ctor(&tmp_zy);
+		tmp_pzy = &tmp_zy;
+		convert_to_double(tmp_pzy);
 
-		zend_hash_move_forward(coords);
+		/* Assign X and Y */
+		coordinates[i].x = Z_DVAL(tmp_zx);
+		coordinates[i].y = Z_DVAL(tmp_zy);
 	}
 
 	return coordinates;

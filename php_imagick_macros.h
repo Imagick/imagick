@@ -49,8 +49,9 @@
 	ExceptionType severity; \
 	char *description; \
 	description = MagickGetException(magick_wand, &severity); \
-	if (strlen(description) == 0) { \
+	if (description && strlen(description) == 0) { \
 		IMAGICK_FREE_MEMORY(char *, description); \
+		description = NULL; \
 	} \
 	if (!description) { \
 		zend_throw_exception(php_imagick_exception_class_entry, fallback, (long)code TSRMLS_CC); \
@@ -68,8 +69,9 @@
 	ExceptionType severity; \
 	char *description; \
 	description = DrawGetException(drawing_wand, &severity); \
-	if (strlen(description) == 0) { \
+	if (description && strlen(description) == 0) { \
 		IMAGICK_FREE_MEMORY(char *, description); \
+		description = NULL; \
 	} \
 	if (!description) { \
 		zend_throw_exception(php_imagickdraw_exception_class_entry, fallback, (long)code TSRMLS_CC); \
@@ -87,8 +89,9 @@
 	ExceptionType severity; \
 	char *description; \
 	description = PixelGetException(pixel_wand, &severity); \
-	if (strlen(description) == 0) { \
+	if (description && strlen(description) == 0) { \
 		IMAGICK_FREE_MEMORY(char *, description); \
+		description = NULL; \
 	} \
 	if (!description) { \
 		zend_throw_exception(php_imagickpixel_exception_class_entry, fallback, (long)code TSRMLS_CC); \
@@ -106,8 +109,9 @@
 	ExceptionType severity; \
 	char *description; \
 	description = PixelGetIteratorException(pixel_iterator, &severity); \
-	if (strlen(description) == 0) { \
+	if (description && strlen(description) == 0) { \
 		IMAGICK_FREE_MEMORY(char *, description); \
+		description = NULL; \
 	} \
 	if (!description) { \
 		zend_throw_exception(php_imagickpixeliterator_exception_class_entry, fallback, (long)code TSRMLS_CC); \
