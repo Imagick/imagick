@@ -10,96 +10,86 @@ fi
 
 if test $PHP_IMAGICK != "no"; then
 
-		AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
+  AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 		
-		for i in $PHP_IMAGICK /usr/local /usr;
-		do
-			test -r $i/bin/MagickWand-config && IMAGICK_AFTER_BWC_BREAK=true && WAND_BINARY=$i/bin/MagickWand-config && break
-		done
+  for i in $PHP_IMAGICK /usr/local /usr;
+  do
+    test -r $i/bin/MagickWand-config && IMAGICK_AFTER_BWC_BREAK=true && WAND_BINARY=$i/bin/MagickWand-config && break
+  done
 		
-		if test -z "$WAND_BINARY"; then
-
-			for i in $PHP_IMAGICK /usr/local /usr;
-			do
-				test -r $i/bin/Wand-config && WAND_BINARY=$i/bin/Wand-config && break
-			done
-		fi
-		
-		if test -z "$WAND_BINARY"; then
-			AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
-		fi
-		
-		AC_MSG_RESULT(found in $WAND_BINARY)
-	
-		IMAGEMAGICK_VERSION_ORIG=`$WAND_BINARY --version`
-		IMAGEMAGICK_VERSION_MASK=`echo ${IMAGEMAGICK_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
-		
-		AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
-		if test "$IMAGEMAGICK_VERSION_MASK" -ge 6002004; then
-			AC_MSG_RESULT(found version $IMAGEMAGICK_VERSION_ORIG)
-		else
-			AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
-		fi
-		
-		WAND_DIR=`$WAND_BINARY --prefix` 
-		
-		if test -z "$IMAGICK_AFTER_BWC_BREAK"; then
-			AC_MSG_CHECKING(for magick-wand.h header file)
-			if test -r $WAND_DIR/include/wand/magick-wand.h; then
-				AC_MSG_RESULT(found in $WAND_DIR/include/wand/magick-wand.h)
-			else
-				AC_MSG_ERROR(Cannot locate header file magick-wand.h)
-			fi	
-		else	
-			AC_MSG_CHECKING(for MagickWand.h header file)
-		
-			if test -r $WAND_DIR/include/ImageMagick/wand/MagickWand.h; then
-				AC_MSG_RESULT(found in $WAND_DIR/include/ImageMagick/wand/MagickWand.h)
-			else
-				AC_MSG_ERROR(Cannot locate header file MagickWand.h)
-			fi
-			AC_DEFINE(IMAGICK_USE_NEW_HEADER,1,[ ])
-			PHP_IMAGICK_USE_NEW_HEADER=1
-		fi
-
-dnl Get PHP version depending on shared/static build
-AC_DEFUN([PHP_VERSION_ATLEAST], [
-  if test -z "$1"; then
-    AC_MSG_ERROR(missing parameter)
+	if test -z "$WAND_BINARY"; then
+    for i in $PHP_IMAGICK /usr/local /usr;
+    do
+      test -r $i/bin/Wand-config && WAND_BINARY=$i/bin/Wand-config && break
+    done
   fi
-  AC_MSG_CHECKING([PHP version is at least $1])
-  
-	if test -z "${PHP_VERSION_ID}"; then
-		if test -z "${PHP_CONFIG}"; then
-			AC_MSG_ERROR([php-config not found])
-		fi
-		PHP_FOUND_VERNUM=`${PHP_CONFIG} --vernum`;
-		PHP_FOUND_VERSION=`${PHP_CONFIG} --version`
-	else
-		PHP_FOUND_VERNUM="${PHP_VERSION_ID}"
-		PHP_FOUND_VERSION="${PHP_VERSION}"
-	fi
-	
-	PHP_COMPARE_VERNUM=`echo $1 | $AWK 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 100 + [$]2) * 100 + [$]3;}'`
-  
-  if test "$PHP_FOUND_VERNUM" -ge "$PHP_COMPARE_VERNUM"; then
-    AC_MSG_RESULT(yes. found $PHP_FOUND_VERSION)
+		
+  if test -z "$WAND_BINARY"; then
+    AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
+  fi
+		
+  AC_MSG_RESULT(found in $WAND_BINARY)
+
+  IMAGEMAGICK_VERSION_ORIG=`$WAND_BINARY --version`
+  IMAGEMAGICK_VERSION_MASK=`echo ${IMAGEMAGICK_VERSION_ORIG} | awk 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+
+  AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
+  if test "$IMAGEMAGICK_VERSION_MASK" -ge 6002004; then
+    AC_MSG_RESULT(found version $IMAGEMAGICK_VERSION_ORIG)
+  else
+    AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
+  fi
+		
+  WAND_DIR=`$WAND_BINARY --prefix` 
+		
+  if test -z "$IMAGICK_AFTER_BWC_BREAK"; then
+    AC_MSG_CHECKING(for magick-wand.h header file)
+    if test -r $WAND_DIR/include/wand/magick-wand.h; then
+      AC_MSG_RESULT(found in $WAND_DIR/include/wand/magick-wand.h)
+  	else
+  		AC_MSG_ERROR(Cannot locate header file magick-wand.h)
+    fi	
+  else	
+    AC_MSG_CHECKING(for MagickWand.h header file)
+
+    if test -r $WAND_DIR/include/ImageMagick/wand/MagickWand.h; then
+      AC_MSG_RESULT(found in $WAND_DIR/include/ImageMagick/wand/MagickWand.h)
+    else
+      AC_MSG_ERROR(Cannot locate header file MagickWand.h)
+    fi
+    AC_DEFINE(IMAGICK_USE_NEW_HEADER,1,[ ])
+    PHP_IMAGICK_USE_NEW_HEADER=1
+  fi
+
+  AC_MSG_CHECKING([PHP version is at least 5.1.3])
+
+  if test -z "${PHP_VERSION_ID}"; then
+    if test -z "${PHP_CONFIG}"; then
+      AC_MSG_ERROR([php-config not found])
+    fi
+    PHP_IMAGICK_FOUND_VERNUM=`${PHP_CONFIG} --vernum`;
+    PHP_IMAGICK_FOUND_VERSION=`${PHP_CONFIG} --version`
+  else
+    PHP_IMAGICK_FOUND_VERNUM="${PHP_VERSION_ID}"
+    PHP_IMAGICK_FOUND_VERSION="${PHP_VERSION}"
+  fi
+
+  if test "$PHP_IMAGICK_FOUND_VERNUM" -ge "50103"; then
+    AC_MSG_RESULT(yes. found $PHP_IMAGICK_FOUND_VERSION)
   else 
-    AC_MSG_ERROR(no. found $PHP_FOUND_VERSION)
+    AC_MSG_ERROR(no. found $PHP_IMAGICK_FOUND_VERSION)
   fi
-])
 
-    PHP_VERSION_ATLEAST([5.1.3])
-		AC_DEFINE(HAVE_IMAGICK,1,[ ])
+  AC_DEFINE(HAVE_IMAGICK,1,[ ])
 
-    IMAGICK_LIBS=`$WAND_BINARY --libs`
-    IMAGICK_INCS=`$WAND_BINARY --cflags`
+  IMAGICK_LIBS=`$WAND_BINARY --libs`
+  IMAGICK_INCS=`$WAND_BINARY --cflags`
       
-	  PHP_EVAL_LIBLINE($IMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
-	  PHP_EVAL_INCLINE($IMAGICK_INCS)
+  PHP_EVAL_LIBLINE($IMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  PHP_EVAL_INCLINE($IMAGICK_INCS)
 
-		PHP_SUBST(IMAGICK_SHARED_LIBADD)
+  PHP_SUBST(IMAGICK_SHARED_LIBADD)
 		
-		PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_read.c imagick.c, $ext_shared)
-		PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h php_imagick_config.h])
+  PHP_NEW_EXTENSION(imagick, imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_read.c imagick.c, $ext_shared)
+  PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h php_imagick_config.h])
 fi

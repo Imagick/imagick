@@ -309,34 +309,29 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 	zval **ppzval;
 	HashTable *ht;
 	double *double_array;
-	long elements, i;
+	long elements, i = 0;
 
-	*num_elements = 0;
-	elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+	*num_elements = elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
 	if (elements == 0) {
-		double_array = (double *)NULL;
-		return double_array;
+		return NULL;
 	}
 
 	double_array = (double *)emalloc(sizeof(double) * elements);
-	ht = Z_ARRVAL_P(param_array);
 
-	zend_hash_internal_pointer_reset(ht);
-
-	for (i = 0 ; i < elements ; i++) {
-
-		if (zend_hash_get_current_data(ht, (void**)&ppzval) == FAILURE) {
-			efree(double_array);
-			double_array = (double *)NULL;
-			return double_array;
-		}
-
-		if(Z_TYPE_PP(ppzval) != IS_DOUBLE) {
-			convert_to_double_ex(ppzval);
-		} 
-		double_array[i] = Z_DVAL_PP(ppzval);
-		zend_hash_move_forward(ht);
+	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
+			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
+	) {
+		zval tmp_zval, *tmp_pzval;
+		
+		tmp_zval = **ppzval;
+		zval_copy_ctor(&tmp_zval);
+		tmp_pzval = &tmp_zval;
+		convert_to_double(tmp_pzval);
+		
+		double_array[i] = Z_DVAL_P(tmp_pzval);
+		tmp_pzval = NULL;
 	}
 	*num_elements = elements;
 	return double_array;
@@ -345,23 +340,20 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;
-	HashTable *ht;
-	long *long_array = NULL;
-	long elements, i;
+	long *long_array;
+	long elements, i = 0;
 
-	*num_elements = 0;
-	elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+	*num_elements = elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
 	if (elements == 0) {
-		return long_array;
+		return NULL;
 	}
 
 	long_array = emalloc(sizeof(long) * elements);
-	ht = Z_ARRVAL_P(param_array);
 
-	for (zend_hash_internal_pointer_reset(ht);
-			zend_hash_get_current_data(ht, (void **) &ppzval) == SUCCESS;
-			zend_hash_move_forward(ht)
+	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
+			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
 	) {
 		zval tmp_zval, *tmp_pzval;
 		
@@ -370,7 +362,7 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 		tmp_pzval = &tmp_zval;
 		convert_to_long(tmp_pzval);
 		
-		long_array[i] = Z_LVAL(tmp_pzval);
+		long_array[i] = Z_LVAL_P(tmp_pzval);
 		tmp_pzval = NULL;
 	}
 	*num_elements = elements;
@@ -380,23 +372,20 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;
-	HashTable *ht;
-	unsigned char *char_array = NULL;
-	long elements, i;
+	unsigned char *char_array;
+	long elements, i = 0;
 
-	*num_elements = 0;
-	elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+	*num_elements = elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
 	if (elements == 0) {
-		return char_array;
+		return NULL;
 	}
 
-	char_array = emalloc(sizeof(char) * elements);
-	ht = Z_ARRVAL_P(param_array);
+	char_array = emalloc(sizeof(unsigned char) * elements);
 
-	for (zend_hash_internal_pointer_reset(ht);
-			zend_hash_get_current_data(ht, (void **) &ppzval) == SUCCESS;
-			zend_hash_move_forward(ht)
+	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
+			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
 	) {
 		zval tmp_zval, *tmp_pzval;
 		
@@ -405,7 +394,7 @@ unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TS
 		tmp_pzval = &tmp_zval;
 		convert_to_long(tmp_pzval);
 		
-		long_array[i] = Z_LVAL(tmp_pzval);
+		char_array[i] = Z_LVAL_P(tmp_pzval);
 		tmp_pzval = NULL;
 	}
 	*num_elements = elements;
