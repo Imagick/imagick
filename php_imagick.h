@@ -23,7 +23,7 @@
 
 /* Define Extension Properties */
 #define PHP_IMAGICK_EXTNAME    "imagick"
-#define PHP_IMAGICK_VERSION    "3.0.0-dev"
+#define PHP_IMAGICK_VERSION    "@PACKAGE_VERSION@"
 #define PHP_IMAGICK_EXTNUM     30000
 
 /* Import configure options when building 
