@@ -23,17 +23,20 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</lead>
 	<date>2009-07-28</date>
 	<version>
-		<release>2.3.0</release>
-		<api>2.3.0</api>
+		<release>3.0.0</release>
+		<api>3.0.0</api>
 	</version>
 	<stability>
-		<release>stable</release>
-		<api>stable</api>
+		<release>beta</release>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- imagick::setImageVirtualPixelMethod not deprecated anymore
-- fixed windows build
+- Fixes incorrect error message "wand contains no images"
+- Change cropthumbnailimage behavior to actually do what it is supposed to do
+- setimageartifact, getimageartifact, deleteimageartifact
+- added fill param to thumbnailImage
+- Added support for using imagick objects in other extensions
 </notes>
 	<contents>
 		<dir name="/">
