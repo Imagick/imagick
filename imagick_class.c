@@ -1526,6 +1526,9 @@ PHP_METHOD(imagick, mergeimagelayers)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
+	/* Reset the iterator */
+	(void)MagickSetFirstIterator(intern->magick_wand);
+
 	merged = MagickMergeImageLayers(intern->magick_wand, layer_method);
 
 	/* No magick is going to happen */
