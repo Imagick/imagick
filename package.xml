@@ -21,10 +21,10 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2009-12-12</date>
+	<date>2010-01-22</date>
 	<version>
-		<release>3.0.0b1</release>
-		<api>3.0.0b1</api>
+		<release>3.0.0b2</release>
+		<api>3.0.0b2</api>
 	</version>
 	<stability>
 		<release>beta</release>
@@ -32,11 +32,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes incorrect error message "wand contains no images"
-- Change cropthumbnailimage behavior to actually do what it is supposed to do
-- setimageartifact, getimageartifact, deleteimageartifact
-- added fill param to thumbnailImage
-- Added support for using imagick objects in other extensions
+- Fixes building against PHP 5.2.x
 </notes>
 	<contents>
 		<dir name="/">
