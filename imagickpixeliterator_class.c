@@ -516,7 +516,7 @@ PHP_METHOD(imagickpixeliterator, destroy)
 #endif
 
 #ifdef Z_SET_REFCOUNT_P
-	Z_SET_REFCOUNT_P( object, 0 );
+	Z_SET_REFCOUNT_P(object, 0);
 #else
 	object->refcount = 0;
 #endif

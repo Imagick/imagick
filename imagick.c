@@ -2509,7 +2509,11 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type TSRM
 			ZVAL_NULL(retval);
 		}
 	}
+#ifdef Z_SET_REFCOUNT_P
 	Z_SET_REFCOUNT_P(retval, 0);
+#else
+	retval->refcount = 0;
+#endif
 	return retval;
 }
 
