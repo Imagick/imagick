@@ -557,9 +557,9 @@ void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 	coords = Z_ARRVAL_P(coordinate_array);
 	zend_hash_internal_pointer_reset_ex(coords, (HashPosition *) 0);
 
-	for (zend_hash_internal_pointer_reset(coords);
+	for (i = 0, zend_hash_internal_pointer_reset(coords);
 			zend_hash_get_current_data(coords, (void **) &ppzval) == SUCCESS;
-			zend_hash_move_forward(coords)
+			zend_hash_move_forward(coords), i++
 	) {
 		zval **ppz_x, **ppz_y;
 		zval tmp_zx, *tmp_pzx, tmp_zy, *tmp_pzy;
