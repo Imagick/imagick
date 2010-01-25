@@ -775,13 +775,11 @@ PHP_METHOD(imagick, getimageproperty)
 
 	value = MagickGetImageProperty(intern->magick_wand, name);
 
-	if (value != (char *)NULL && *value != '\0') {
+	if (value) {
 		ZVAL_STRING(return_value, (char *)value, 1);
 		IMAGICK_FREE_MEMORY(char *, value);
 		return;
 	}
-
-	/* FIXME: Needs to throw an exception for consistency. Fix in next major version */
 	RETURN_FALSE;
 }
 /* }}} */
@@ -810,7 +808,7 @@ PHP_METHOD(imagick, setimageproperty)
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set image property", 1);
 	}
 
-	RETURN_FALSE;
+	RETURN_TRUE;
 }
 /* }}} */
 
@@ -1181,7 +1179,7 @@ PHP_METHOD(imagick, distortimage)
 
 	arguments = get_double_array_from_zval(arg_array, &elements TSRMLS_CC);
 
-	if (arguments == (double *)NULL) {
+	if (!arguments) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can't read argument array", 1);
 	}
 
@@ -1469,8 +1467,9 @@ PHP_METHOD(imagick, getfont)
 	}
 	
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	font   = MagickGetFont(intern->magick_wand);
 
-	if ((font = MagickGetFont(intern->magick_wand)) != (char *)NULL) {
+	if (font) {
 		ZVAL_STRING(return_value, font, 1);
 		IMAGICK_FREE_MEMORY(char *, font);
 		return;
@@ -1532,7 +1531,7 @@ PHP_METHOD(imagick, mergeimagelayers)
 	merged = MagickMergeImageLayers(intern->magick_wand, layer_method);
 
 	/* No magick is going to happen */
-	if (merged == (MagickWand *)NULL) {
+	if (!merged) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to merge image layers", 1);
 	}
 
@@ -1944,7 +1943,7 @@ PHP_METHOD(imagick, importimagepixels)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);	
 	
-	if ((x < 0) || (y < 0)) {
+	if (x < 0 || y < 0) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The coordinates must be non-negative", 1);
 	}
 	
@@ -2387,7 +2386,6 @@ PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
 	zval *files = NULL;
-	char *filename = NULL;
 	HashPosition pos;
 	HashTable *hash_table;
 	int status = 0;
@@ -2398,27 +2396,22 @@ PHP_METHOD(imagick, __construct)
 	}
 
 	/* No files given.. or null passed */
-	if (files == NULL) {
+	if (!files) {
 		return;
 	}
 
 	/* A single file was given */
 	if (Z_TYPE_P(files) == IS_STRING) {
-
-		/* get the filename */
-		filename = estrdup(Z_STRVAL_P(files));
-
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-		status = read_image_into_magickwand(intern, 1, filename, strlen(filename) TSRMLS_CC);
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
-
-		/* Free filename on successfull */
-		efree(filename);
+		status = read_image_into_magickwand(intern, 1, Z_STRVAL_P(files), Z_STRLEN_P(files) TSRMLS_CC);
+		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, Z_STRVAL_P(files), status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
 		return;
 	}
 
 	/* an array of filenames was given */
 	if (Z_TYPE_P(files) == IS_ARRAY) {
+		
+		char *filename = NULL;
 
 		hash_table = Z_ARRVAL_P(files);
 		intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
@@ -2438,10 +2431,6 @@ PHP_METHOD(imagick, __construct)
 
 			/* Dup the filename */
 			filename = estrdup(Z_STRVAL(tmpcopy));
-
-			if (!filename) {
-				continue;
-			}
 
 			status = read_image_into_magickwand(intern, 1, filename, strlen(filename) TSRMLS_CC);
 			zval_dtor(&tmpcopy);
@@ -2476,14 +2465,14 @@ PHP_METHOD(imagick, __tostring)
 	
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if(MagickGetNumberImages(intern->magick_wand) == 0) {
+	if (MagickGetNumberImages(intern->magick_wand) == 0) {
 		ZVAL_STRING(return_value, "", 1);
 		return;
 	}
 
 	buffer = MagickGetImageFormat(intern->magick_wand);
 
-	if(buffer == (char *)NULL) {
+	if (!buffer) {
 		ZVAL_STRING(return_value, "", 1);
 		return;
 	} else {
@@ -2569,14 +2558,12 @@ PHP_METHOD(imagick, queryfontmetrics)
 	}
 
 	/* No parameter passed, this means we should autodetect */
-	if (multiline == NULL) {
-
+	if (!multiline) {
 		if (count_occurences_of('\n', text TSRMLS_CC ) > 0) {
 			query_multiline = 1;
 		} else {
 			query_multiline = 0;
 		}
-
 	} else {
 		convert_to_boolean(multiline);
 		query_multiline = Z_BVAL_P(multiline);
@@ -2665,7 +2652,7 @@ PHP_METHOD(imagick, valid)
 	
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if(intern->next_out_of_bound > 0) {
+	if (intern->next_out_of_bound > 0) {
 		RETURN_FALSE;
 	}
 
@@ -4995,7 +4982,7 @@ PHP_METHOD(imagick, getimageattribute)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	attribute = MagickGetImageAttribute(intern->magick_wand, key);
 
-	if (attribute == NULL || *attribute == '\0') {
+	if (!attribute) {
 		RETURN_FALSE;
 	}
 
@@ -7644,7 +7631,7 @@ PHP_METHOD(imagick, writeimage)
 {
 	char *filename = NULL;
 	int error = 0;
-	int filename_len;
+	int filename_len = 0;
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s!", &filename, &filename_len) == FAILURE) {
@@ -7658,15 +7645,18 @@ PHP_METHOD(imagick, writeimage)
 		filename = MagickGetImageFilename(intern->magick_wand);
 	}
 
-	if (filename == NULL || strlen(filename) == 0) {
+	if (filename == NULL) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "No image filename specified", 1);
+	}
+	
+	if (filename_len == 0) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not use empty string as a filename", 1);
 	}
 
 	error = write_image_from_filename(intern, filename, 0, 1 TSRMLS_CC);
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, error, IMAGICK_DONT_FREE_FILENAME, "Unable to write the file: %s");
 
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -7690,7 +7680,7 @@ PHP_METHOD(imagick, writeimages)
 
 
 	if (filename_len == 0) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "No image filename specified", 1);
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Can not use empty string as a filename", 1);
 	}
 
 	error = write_image_from_filename(intern, filename, adjoin, 2 TSRMLS_CC);
@@ -7765,7 +7755,7 @@ PHP_METHOD(imagick, annotateimage)
 	font = DrawGetFont(internd->drawing_wand);
 
 	/* Fixes PECL Bug #11328 */
-	if(font == (char *)NULL || *font == '\0') {
+	if (!font) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Font needs to be set before annotating an image", 1);
 	}
 #endif
@@ -7823,10 +7813,6 @@ PHP_METHOD(imagick, setimagecompressionquality)
 	RETURN_TRUE;
 }
 /* }}} */
-
-
-
-
 
 /* {{{ proto bool Imagick::compositeImage(Imagick composite_wand, int compose, int x, int y[, int channel] )
 	Composite one image onto another at the specified offset. Channel parameter is ignored in ImageMagick below 6.2.8
