@@ -179,14 +179,14 @@
 		break; \
 		case IMAGICK_READ_WRITE_SAFE_MODE_ERROR:\
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read image: %s", filename); \
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			} \
 			RETURN_NULL();\
 		break; \
 		case IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR: \
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename); \
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			} \
 			RETURN_NULL(); \
@@ -205,27 +205,27 @@
 					description = (char *)NULL;\
 				}\
 			}\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			} \
 			RETURN_NULL();\
 		case IMAGICK_READ_WRITE_PERMISSION_DENIED:\
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Permission denied to: %s", filename);\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case IMAGICK_READ_WRITE_FILENAME_TOO_LONG:\
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Filename too long: %s", filename);\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST:\
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			}\
 			RETURN_NULL();\
@@ -240,21 +240,21 @@
 		break;\
 		case 1:\
 			zend_throw_exception_ex(php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read file: %s", filename);\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case 2:\
 			zend_throw_exception_ex(php_imagickdraw_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			}\
 			RETURN_NULL();\
 		break;\
 		case 3:\
 			IMAGICK_THROW_IMAGICKDRAW_EXCEPTION(internd->drawing_wand, "Unable to read file", 1);\
-			if (free == IMAGICK_FREE_FILENAME) { \
+			if (free == IMAGICK_FREE_FILENAME && filename) { \
 				 efree(filename); \
 			}\
 			RETURN_NULL();\
