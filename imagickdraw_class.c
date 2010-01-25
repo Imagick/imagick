@@ -217,7 +217,6 @@ PHP_METHOD(imagickdraw, skewx)
 
 	DrawSkewX(internd->drawing_wand, degrees);
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -238,7 +237,6 @@ PHP_METHOD(imagickdraw, skewy)
 
 	DrawSkewY(internd->drawing_wand, degrees);
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -259,7 +257,6 @@ PHP_METHOD(imagickdraw, translate)
 
 	DrawTranslate(internd->drawing_wand, x, y);
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -304,7 +301,6 @@ PHP_METHOD(imagickdraw, setstrokecolor)
 	DrawSetStrokeColor(internd->drawing_wand, internp->pixel_wand);
 
 	RETURN_TRUE;
-
 }
 /* }}} */
 
@@ -703,7 +699,7 @@ PHP_METHOD(imagickdraw, setviewbox)
 }
 
 /* {{{ proto string ImagickDraw::getFont()
-	Returns a null-terminaged string specifying the font used when annotating with text. The value returned must be freed by the user when no longer needed.
+	Returns a string specifying the font used when annotating with text
 */
 PHP_METHOD(imagickdraw, getfont)
 {
@@ -717,7 +713,8 @@ PHP_METHOD(imagickdraw, getfont)
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	font = DrawGetFont(internd->drawing_wand);
-	if(font == (char *)NULL || *font == '\0') {
+	
+	if (!font) {
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, font, 1);
@@ -742,7 +739,7 @@ PHP_METHOD(imagickdraw, getfontfamily)
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	font_family = DrawGetFontFamily(internd->drawing_wand);
-	if(font_family == (char *)NULL || *font_family == '\0') {
+	if (!font_family) {
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, font_family, 1);
@@ -825,7 +822,7 @@ PHP_METHOD(imagickdraw, clear)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internd->drawing_wand == (DrawingWand *)NULL) {
+	if (!internd->drawing_wand) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "ImagickDraw object is not allocated properly", 2);
 	}
 
@@ -869,7 +866,7 @@ PHP_METHOD(imagickdraw, gettextencoding)
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	encoding = DrawGetTextEncoding(internd->drawing_wand);
 
-	if(encoding == (char *)NULL || *encoding == '\0') {
+	if (!encoding) {
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, encoding, 1);
@@ -894,7 +891,7 @@ PHP_METHOD(imagickdraw, destroy)
 	object = getThis();
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
 
-	if (internd->drawing_wand == (DrawingWand *)NULL) {
+	if (!internd->drawing_wand) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "ImagickDraw object is not allocated properly", 2);
 	}
 
@@ -931,7 +928,7 @@ PHP_METHOD(imagickdraw, annotation)
 	font = DrawGetFont(internd->drawing_wand);
 
 	/* Fixes PECL Bug #11328 */
-	if(font == (char *)NULL || *font == '\0') {
+	if (!font) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Font needs to be set before annotating an image", 2);
 	}
 #endif
@@ -999,8 +996,7 @@ PHP_METHOD(imagickdraw, polygon)
 
 	coordinates = get_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
-	if (coordinates == (PointInfo *)NULL) {
-		efree(coordinates);
+	if (!coordinates) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
 	}
 
@@ -1030,8 +1026,7 @@ PHP_METHOD(imagickdraw, bezier)
 
 	coordinates = get_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
-	if (coordinates == (PointInfo *)NULL) {
-		efree(coordinates);
+	if (!coordinates) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
 	}
 
@@ -1126,7 +1121,7 @@ PHP_METHOD(imagickdraw, affine)
 	}
 
 	/* Allocate space to build matrix */
-	pmatrix = (AffineMatrix *)emalloc(sizeof(AffineMatrix ));
+	pmatrix = emalloc(sizeof(AffineMatrix));
 
 	affine = Z_ARRVAL_P(affine_matrix);
 	zend_hash_internal_pointer_reset_ex(affine, (HashPosition *) 0);
@@ -1134,20 +1129,14 @@ PHP_METHOD(imagickdraw, affine)
 	for (i = 0; i < 6 ; i++) {
 
 		if (zend_hash_find(affine, matrix_elements[i], 3, (void**)&ppzval) == FAILURE) {
-
+			efree(pmatrix);
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "AffineMatrix should contain keys: sx, rx, ry, sy, tx and ty", 2);
-
-		} else if ((Z_TYPE_PP(ppzval ) != IS_DOUBLE ) && (Z_TYPE_PP(ppzval ) != IS_LONG )) {
-
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "AffineMatrix values should be ints or floats", 2);
-		
 		} else {
-
-			if(Z_TYPE_PP(ppzval) == IS_LONG) {
-				value = (double) Z_LVAL_PP(ppzval);
-			} else {
-				value = Z_DVAL_PP(ppzval);
+			
+			if (Z_TYPE_PP(ppzval) != IS_DOUBLE) {
+				convert_to_double(&ppzval);
 			}
+			value = Z_DVAL_PP(ppzval);
 
 			if (strcmp(matrix_elements[i], "sx") == 0) {
 				pmatrix->sx = value;
@@ -1161,8 +1150,6 @@ PHP_METHOD(imagickdraw, affine)
 				pmatrix->tx = value;
 			} else if (strcmp(matrix_elements[i], "ty") == 0) {
 				pmatrix->ty = value;
-			} else {
-				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unkown key in AffineMatrix", 2);
 			}
 		}
 	}
@@ -1264,7 +1251,7 @@ PHP_METHOD(imagickdraw, getclippath)
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	clip_path = DrawGetClipPath(internd->drawing_wand);
 
-	if(clip_path == (char *)NULL || *clip_path == '\0') {
+	if (!clip_path) {
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, clip_path, 1);
@@ -1488,7 +1475,7 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 
 	double_array = get_double_array_from_zval(param_array, &elements TSRMLS_CC);
 
-	if (double_array == (double *)NULL) {
+	if (!double_array) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Can't read array", 2);
 	}
 
@@ -1695,6 +1682,11 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	tmp_wand = NewPixelWand();
+	
+	if (!tmp_wand) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Failed to allocate memory", 2);
+	}
+	
 	DrawGetTextUnderColor(internd->drawing_wand, tmp_wand);
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
@@ -2135,8 +2127,7 @@ PHP_METHOD(imagickdraw, polyline)
 
 	coordinates = get_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
-	if (coordinates == (PointInfo *)NULL) {
-		efree(coordinates);
+	if (!coordinates) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
 	}
 
