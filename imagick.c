@@ -22,6 +22,8 @@
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
 
+#include "ext/standard/php_smart_str.h"
+
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
 zend_class_entry *php_imagick_sc_entry;
@@ -2661,46 +2663,38 @@ PHP_MINIT_FUNCTION(imagick)
 
 PHP_MINFO_FUNCTION(imagick)
 {
-	char **supported_formats;
-	unsigned long num_formats = 0, i;
-	char *pattern = "*";
-	char formats[2056];
-	char buffer[4];
-	unsigned long version_number;
-	const char *imagemagick_release_date = MagickGetReleaseDate();
-	const char *imagemagick_version = MagickGetVersion(&version_number);
+	smart_str formats = {0};
+	
+	char **supported_formats, buffer[52];
+	unsigned long version_number, num_formats = 0, i;
 
-	memset(buffer, '\0', 4);
-
-	supported_formats = (char **) MagickQueryFormats(pattern, &num_formats);
-	sprintf(buffer, "%ld", num_formats);
+	supported_formats = MagickQueryFormats("*", &num_formats);
+	snprintf(buffer, 52, "%ld", num_formats);
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, "imagick module", "enabled");
 	php_info_print_table_row(2, "imagick module version", PHP_IMAGICK_VERSION);
 	php_info_print_table_row(2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator");
-	php_info_print_table_row(2, "ImageMagick version", imagemagick_version);
+	php_info_print_table_row(2, "ImageMagick version", MagickGetVersion(&version_number));
 	php_info_print_table_row(2, "ImageMagick copyright", MagickGetCopyright());
-	php_info_print_table_row(2, "ImageMagick release date", imagemagick_release_date);
-	php_info_print_table_row(2, "ImageMagick Number of supported formats: ", buffer);
+	php_info_print_table_row(2, "ImageMagick release date", MagickGetReleaseDate());
+	php_info_print_table_row(2, "ImageMagick number of supported formats: ", buffer);
 
-	memset(formats, '\0', 2056);
-
-	if ((num_formats > 0) && supported_formats != (char **)NULL) {
-
-		for(i = 0 ; i < num_formats ; i++) {
-			strcat(formats, supported_formats[i]);
+	if (supported_formats) {
+		for (i = 0; i < num_formats; i++) {
+			smart_str_appends(&formats, supported_formats[i]);
 			if (i != (num_formats - 1)) {
-				strcat(formats, ", ");
+ 				smart_str_appends(&formats, ", ");
 			}
 			IMAGICK_FREE_MEMORY(char *, supported_formats[i]);
 		}
-		php_info_print_table_row(2, "ImageMagick Supported formats", formats);
+		smart_str_0(&formats);
+		php_info_print_table_row(2, "ImageMagick supported formats", formats.c);
+		smart_str_free(&formats);
+		IMAGICK_FREE_MEMORY(char **, supported_formats);
 	}
 
 	php_info_print_table_end();
-	IMAGICK_FREE_MEMORY(char **, supported_formats);
-
 	DISPLAY_INI_ENTRIES();
 }
 
