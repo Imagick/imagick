@@ -180,13 +180,11 @@ int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, c
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
 	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-#endif	
+#endif
 
 	/* php_stream_cast returns warning on some streams but still does not return FAILURE */
 	if (EG(exception)) {
 		return 1;
-	} else {
-		return 2;
 	}
 
 	if (type == IMAGICK_WRITE_IMAGE_FILE) {
