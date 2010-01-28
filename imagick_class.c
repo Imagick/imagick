@@ -9462,7 +9462,6 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 */
 PHP_METHOD(imagick, setresourcelimit)
 {
-	php_imagick_object *intern;
 	MagickBooleanType status;
 	long type, limit;
 
@@ -9470,13 +9469,12 @@ PHP_METHOD(imagick, setresourcelimit)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &type, &limit) == FAILURE) {
 		return;
 	}
-
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	
 	status = MagickSetResourceLimit(type, limit);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set resource limit", 1);
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to set resource limit", 1);
 	}
 	RETURN_TRUE;
 }
