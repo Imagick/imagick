@@ -13,5 +13,6 @@ $imagick->setResourceLimit(Imagick::RESOURCETYPE_MEMORY, 64);
 echo 'success';
 
 ?>
---EXPECT--
+--EXPECTF--
+Strict Standards: Non-static method Imagick::setresourcelimit() should not be called statically in %s on line %d
 success
