@@ -21,10 +21,10 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2010-01-22</date>
+	<date>2010-02-28</date>
 	<version>
-		<release>3.0.0b2</release>
-		<api>3.0.0b2</api>
+		<release>3.0.0RC1</release>
+		<api>3.0.0RC1</api>
 	</version>
 	<stability>
 		<release>beta</release>
@@ -32,7 +32,15 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes building against PHP 5.2.x
+- Fixes a crash when setResourceLimit is called statically
+- Fixes PECL bug #16932 Unable to read image from the filehandle
+- Return empty string if original value is empty in: 
+  * ImagickDraw::getClipPath
+  * ImagickDraw::getEncoding
+  * ImagickDraw::getFont
+  * ImagickDraw::getFontFamily
+- More relaxed validation on affinematrices
+- Initialize the counter properly in polygons. Thanks to Etienne Kneus
 </notes>
 	<contents>
 		<dir name="/">
