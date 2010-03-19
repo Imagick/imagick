@@ -1,0 +1,600 @@
+3.0.0RC1  	
+- Fixes a crash when setResourceLimit is called statically
+- Fixes PECL bug #16932 Unable to read image from the filehandle
+- Return empty string if original value is empty in:
+  * ImagickDraw::getClipPath
+  * ImagickDraw::getEncoding
+  * ImagickDraw::getFont
+  * ImagickDraw::getFontFamily
+- More relaxed validation on affinematrices
+- Initialize the counter properly in polygons. Thanks to Etienne Kneus
+
+3.0.0b2 	
+- Fixes building against PHP 5.2.x
+
+3.0.0b1 	
+- Fixes incorrect error message "wand contains no images"
+- Change cropthumbnailimage behavior to actually do what it is supposed to do
+- setimageartifact, getimageartifact, deleteimageartifact
+- added fill param to thumbnailImage
+- Added support for using imagick objects in other extensions
+
+2.3.0 	
+- imagick::setImageVirtualPixelMethod not deprecated anymore
+- fixed windows build
+
+2.3.0RC3 	
+- Closed bug reports and pushing out RC just in case before stable.
+
+2.3.0RC2 	
+- Fixed image reading routines. Page defitions (test.pdf[0]) were broken on RC1
+- Fixed imagick::colorizeImage, it had no effect on images
+
+2.3.0RC1 	
+- Fixes PECL bug #16085 (Twice crop returns invalid result)
+- Removed unnecessary checks
+
+2.3.0b1 	
+- Fixed compilation against older ImageMagick versions (Patch by Tim Herzog)
+- Fixed getImageMatte to actually return boolean instead of int
+
+- Added methods:
+* Imagick::getImageMimeType
+* Imagick::writeimagefile
+* Imagick::writeimagesfile
+* Imagick::resetimagepage
+* Imagick::setimageclipmask
+* Imagick::getimageclipmask
+* Imagick::animateimages
+* Imagick::recolorimage
+* Imagick::floodfillpaintimage
+* Imagick::opaquepaintimage
+* Imagick::transparentpaintimage
+* Imagick::decipherimage
+* Imagick::encipherimage
+* Imagick::getimagealphachannel
+* Imagick::getimagechanneldistortions
+* Imagick::getimagegravity
+* Imagick::setimagegravity
+* Imagick::remapimage
+* Imagick::exportimagepixels
+* Imagick::getimagechannelkurtosis
+* Imagick::functionimage
+* Imagick::importImagePixels
+* Imagick::sparseColorImage
+* Imagick::deskewImage
+* Imagick::segmentImage
+
+* Imagickdraw::gettextkerning
+* Imagickdraw::settextkerning
+* Imagickdraw::gettextinterwordspacing
+* Imagickdraw::gettextinterwordspacing
+
+* ImagickPixel::getColorValueQuantum
+* ImagickPixel::setColorValueQuamtum
+* ImagickPixel::getIndex
+* ImagickPixel::setIndex
+
+2.2.2 	
+- No bugs reported against RC4 so releasing it as is
+
+2.2.2RC4 	
+- Check for ImageMagick version in config.m4 before trying to search for headers
+- Fixed memory leak where pointinfo is used
+- Fixed incorrect memory handling of array where php array is converted to array of doubles
+- Cleaned up image writing routines
+- Added missing semicolon on constant registration
+- Added distortion and alphachannel constants
+
+2.2.2RC3 	
+- Fixed clone keyword to actually clone the wand ptr
+- Imagick progress monitor name is now correctly cloned
+- Fixes PECL Bug #15614
+
+2.2.2RC2 
++ Added Imagick::setImageProgressmonitor and Imagick::orderedPosterizeImage
+- Fixes http://imagemagick.org/discourse-server/viewtopic.php?f=18&t=12828
+- Fixes error with empty exception messages
+- Fixes PECL Bug #15332
+- Fixed a possible memory leak in Imagick::convolveImage
+
+2.2.2RC1 	
+- Fixes Pecl bug #15321
+- Added getImageCompressionQuality
+- Fixes building against PHP 5.3
+
+2.2.1 	
+- No bugs reported against RC2 so releasing it as is
+
+2.2.1RC2 	
+- Fixed ZTS build
+
+2.2.1RC1 	
+- Fixes a small memory leak when casting a string to ImagickPixel object
+- Added new constants
+- Added getImageChannelRange method
+- Some cleaning up on the syntax
+
+2.2.0 
+- Changes since 2.1.1:
+* Major refactoring of the file structure
+* Fixes bugs related to the refactoring
+
+2.2.0RC1 	
+- Fix build on Mac related to duplicate symbols
+
+2.2.0b2 	
+- Closes PECL Bugs #13841 and #13787
+
+2.2.0b1 	
+- Major refactoring of the internal file structure
+
+2.1.1 	
+- Fixed a bug with fit parameter when scaling images with scaling ratio 1:1
+  * This is a minor BWC break. Scripts relying on incorrect behavior might need revisiting.
+
+2.1.1RC1 	
+- Fixed building against ImageMagick 6.3.8-x
+
+2.1.0 	
+- Addded setImageAlphaChannel method
+- Fixed sharpenImage parameters being reversed
+- Fixed building with pre 5.2 versions
+
+2.1.0RC3 	
+- Fixes PECL Bug #12851
+- Some major housekeeping changing numeral values to constants
+
+2.1.0RC2 	
+- Closes PECL Bugs #12463 and #12479
+- Fixes the behavior of flattenImages and fximage
+- Fixes incorrect thumbnail behavior
+- Fixes a bug in Imagick::cropThumbnailImage
+- Added new constant Imagick::NOISE_RANDOM
+
+2.1.0RC1 	
++ All methods that expect ImagickPixel now allow a string representing the color
++ Added support for pixeliterator in all supported ImageMagick versions.
++ ImagickPixelIterator now implements the iterator interface
++ It is now possible to set the row with region iterator
++ Added MAXPATHLEN checks for image reads/writes
++ Added a fix to Imagick::cropThumbnailImage() to check if images are already at the desired size
++ Fixed a memory leak in Imagick::getImageHistogram()
++ Speed improvements to Imagick::cropThumbnailImage()
++ Added interpolate constants
++ Fixed ImagickPixel::getColor()
++ Marked ImagickDraw::__construct() with ZEND_ACC_CTOR
++ Added fit parameter and proportional scaling to:
+- Imagick::adaptiveResizeImage()
+- Imagick::scaleImage()
+- Imagick::resizeImage()
++ Added imagick.locale_fix ini setting to fix drawing bug on some locale
++ Suppressed warnings in readImageFile and pingImageFile (PECL Bug #12367)
++ Added methods:
+- ImagickPixel::clone()
+- ImagickPixel::getColorAsString()
+- Imagick::mergeImageLayers()
+- Imagick::paintFloodfillImage()
+- Imagick::setFont()
+- Imagick::getFont()
+- Imagick::setPointsize()
+- Imagick::getPointsize()
+
+2.0.1 	
++ ImagickDraw::setFont and ImagickDraw::setFontFamily now allow only valid fonts
++ Added IMAGICK_EXTVER and IMAGICK_EXTNUM constants
++ Added check for empty or invalid pseudo format string in Imagick::newPseudoImage
++ Fixed incorrect arg hinting for Imagick::compareImageChannels
+
+2.0.1RC1 	
++ Added Imagick::distortImage and Imagick::setlastiterator
++ Added optional fourth parameter to newImage to set the format when creating a new canvas
++ Fixed fitting to zero size image in Imagick::thumbnailImage
++ Fixed the destroy methods.
++ Most of the operations that read / add images to the stack move the iterator position to the last element
++ Fixed memleaks in methods that replace the internal MagickWand* pointer
+
+2.0.0 	
++ Added Imagick::extentImage
++ Added Imagick::IMAGICK_VERSION_NUMBER and Imagick::IMAGICK_VERSION_STRING constants
++ Fixed a possible crash in Imagick::newPseudoImage
+
+2.0.0RC4 	
++ Moved getimagelength into #if block
++ Added optional third parameter to thumbnailImage
++ Added second optional parameter to getImageProperties and getImageProfiles to return just the available properties.
++ Closes PECL Bug #12006
+
+2.0.0RC3 	
++ Closes PECL Bug #12006
++ Fixes a possible crash in queryFontMetrics
++ New methods:
++ Imagick::clutImage
++ Imagick::setImage
++ Imagick::getImageLength
++ Imagick::getImageOrientation
++ Imagick::setImageOrientation
++ Imagick::getImageProperties
++ Imagick::getImageProfiles
+
+2.0.0RC2 	
++ Added support for forcing image format during write operations.
++ Added more interlace constants. They are present if imagick is compiled against ImagickMagick 6.3.4 or newer.
++ Added Imagick::getImageAttribute.
++ Added LAYERMETHOD constants. Available if compiled against ImageMagick 6.2.8 or later.
++ Closes PECL Bug #11934 - setImageVirtualPixelMethod triggers exception
++ Fixed safe_mode and open_basedir bypass for __construct, readImage, readImages and pingImage
+
+2.0.0RC1 	
++ Suppress error when reading image from a stream.
++ Fixed allow_url_fopen bypass in Imagick::newPseudoImage().
++ Fixed imagick::__tostring to return empty string if the object doesnt contain images.
++ Fixed a problem with Imagick::getImagesBlob() when an older version of ImageMagick is used.
++ Fixed a crash on Windows when no arguments are passed to the Imagick constructor.
++ Fixed a crash when using a threaded SAPI under Windows.
++ Fixed a bug in ImagickDraw::affine().
++ Added Imagick::getIteratorIndex() and Imagick::setIteratorIndex().
++ Added Imagick::readImages()
+
+2.0.0b3 	
++ Closes PECL Request #11513
++ Fixes ImagickPixel bug reported by Imran Nazar.
++ Fixed Imagick::setImageDispose and Imagick::setImageUnits.
++ Fixed Imagick::queryFontMetrics to autodetect multiline text if multiline argument is not passed or is null.
++ Fixed open_basedir bypasses in Imagick::newPseudoImage
++ Fixed "Undefined Exception" error messages
+
+NOTE: Using threaded SAPI in Windows is not currently recommended.
+
+2.0.0b2 	
++ Fixed open_basedir bypasses.
++ Fixed PECL Bug #11328
++ Added methods:
+- Imagick::queryFonts()
+- Imagick::queryFontMetrics()
+
+NOTE: Using threaded SAPI in Windows is not currently recommended.
+
+2.0.0b1 	
+- fix PECL bug #10967 - supplied path fails to compile
+- Added new methods
++ Imagick::displayImage()
++ Imagick::displayImages()
++ Imagick::cropThumbnailImage()
++ Imagick::roundCorners()
++ Imagick::polaroidImage()
++ Imagick::getImageProperty()
++ Imagick::setImageProperty()
++ Imagick::newPseudoImage()
++ Imagick::__toString()
++ ImagickPixel::setColorCount()
+- Added missing DisposeType constants.
+- Merged ImagickPixel::getColorAsString and ImagickPixel::getColorAsNormalizedString into ImagickPixel::getColor( [bool normalized] )
+- Fixed wrong exception type in Imagick::setSamplingFactors
+- Removed useless check from ImagickPixelIterator::syncIterator
+- Renamed ImagickDraw::pushDrawingWand to ImagickDraw::push
+- Renamed ImagickDraw::popDrawingWand to ImagickDraw::pop
+
+2.0.0a3 	
+- Removed support for ImagickPixelIterator if compiled against older version of ImageMagick (below 6.2.8)
+- Fixed a lot of functions which were not present in older ImageMagick versions. (below 6.2.8)
+- Added support for passing color name as parameter for ImagickPixel constructor
+- Added support for passing a filename or an array of filenames to Imagick constructor
+- Fixed anomalies with ImagickPixelIterator exceptions
+- Fixed a possible segfault in Imagick::appendImages
+- Fixed double-free errors in some Imagick methods
+- Added composite operator constants.
+- Fixed ImagickPixelIterator::__construct to accept Imagick object as parameter.
+
++ Some of the changes are a bit experimental so please report bugs.
+
+2.0.0a2 	
+- Fixed segfaults in ImagickDraw::getFont(), ImagickDraw::getFontFamily(), 
+  ImagickDraw::getTextEncoding() and ImagickDraw::getClipPath()
+- Added a PHP version check to config.m4
+
+2.0.0a1 	
+- Initial Release
+
+0.9.13 	
+- Fixed compile error with newer versions of GraphicsMagick and ImageMagick
+- Fixed assertion when using imagick_setfillcolor
+- Fixed segfault when an empty blob is loaded
+- Use new API for fetching support image formats / fonts
+
+0.9.11 	
+- Fix some segfaults on errors (by Andrei Nigmatulin)
+- EXPERIMENTAL support for ImageMagick >= 6.0.0 (hint by Stanislav Yadykin). Please report successes or failures.
+
+0.9.10 	
+- A ./configure change release only.
+- Changed config.m4 for checking for correct ImageMagick Version.
+  ImageMagick >= 5.5.3 and < 6.6.0 or GraphicsMagick >= 1.0.0 are needed.
+- ImageMagick >= 6.0.0 does not work currently. Patches are welcome ;)
+
+0.9.9 	
+- added function imagick_set_image_comment() for setting the comment attribute
+of an image.
+- function imagick_setcompressiontype() was not setting the correct structure.
+This was identified and tested by Sergio Salvatore (sergio@cucinalogica.com).
+- added function imagick_transparent() for setting a particular color to be
+transparent within an image.
+- changed how certain errors are handled in _php_imagick_is_error() to be
+less restrictive. This apparently helps fix issues with certain types
+of images that otherwise appear corrupt. Thanks to Hien Duy Nguyenxi
+(hdn@umich.edu) for finding this, recommending the change and testing it.
+- added imagick_set_image_quality() for manipulating the quality of the
+resultant image.
+- added examples/set_image_quality.php for testing the
+imagick_set_image_quality() function. Thanks to Derrick DeLoreno Threatt
+(dthreatt@digitalcreations.net) for bringing up the need for this function
+and testing it.
+
+0.9.8 	
+- fixed critical error in call to strlen() in _php_imagick_set_last_error().
+I strongly recommend you upgrade.
+
+0.9.7 	
+- fixed bug in imagick_free() that would cause it to SEGFAULT everytime
+it's called.
+- fixed to work with versions of ImageMagick >= 5.5.7 - special thanks to
+James Huston (hustonjs@itadevelopment.com) for helping make this happen.
+- test compiled against ImageMagick 5.5.3, 5.5.6 and 5.5.7 with success.
+- test compiled against GraphicsMagick 1.0.1 with success.
+
+0.9.6 	
+- functions added:
+imagick_getcolorspace()
+imagick_error()
+- added a new example called transparent_1x1.html and some explanatory text.
+I can think of many uses for this code.
+- thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
+imagick_getcolorspace() and testing it out.
+- added GraphicsMagick (http://www.graphicsmagick.org) support to configure
+script (enable it with --with-imagick-gm)
+- imagick_readimage() now returns false if ImageMagick ReadImage() fails.
+- imagick_error() returns 1 string representing any errors that have occurred
+on an operation. IT IS LARGELY UNTESTED! Beware! However, you can now
+do things like:
+$handle = imagick_readimage( "image.jpg" ) or die( imagick_error() ) ;
+- fixed configure script. It honours now values returned by Magick-config.
+
+0.9.5 	
+- functions added:
+imagick_newimagelist()
+imagick_pushlist()
+imagick_poplist()
+imagick_mosaic()
+imagick_setcompressiontype()
+imagick_setcompressionquality()
+- modified how all functions check to see if ImageMagick has been initialized.
+- added a number of new examples for demonstrating how to use image lists.
+- fixed bugs in _php_imagick_alloc_handle() and _php_imagick_clear_errors()
+causing core dump when working with image lists. I wasn't checking to make
+sure the structures I was examining were allocated.
+- thanks to James Huston (hustonjs@itadevelopment.com) for suggesting
+imagick_setcompressiontype() and imagick_setcompressionquality() and
+testing them.
+- added supporting IMAGICK_COMPRESSION_* constants for use with
+imagick_setcompressiontype().
+- renamed imagick_setcompression() to imagick_setcompressiontype().
+(note: this was done before the new version was released so no users should
+be impacted.)
+
+0.9.4 	
+- functions added:
+imagick_flatten()
+imagick_getmagick()
+imagick_setfillopacity()
+- fixed bad code in these functions:
+imagick_despeckle()
+imagick_edge()
+imagick_emboss()
+imagick_enhance()
+imagick_gaussianblur()
+imagick_medianfilter()
+imagick_motionblur()
+imagick_reducenoise()
+imagick_shade()
+imagick_sharpen()
+imagick_spread()
+imagick_unsharpmask()
+- for the above functions, if call to corresponding ImageMagick
+function the module would probably core dump. If it didn't the
+results would be really buddy and weird.
+- setfillopacity() thanks to Allen Condit, condit@isri.unlv.edu.
+
+0.9.3 	
+- functions added:
+imagick_zoom()
+- the difference between imagick_zoom() and imagick_resize() is
+that zoom applies the blur and filter that are defined by
+the image. It is a much simpler way of resizing an image.
+- added imagick.dsp and modifications for compiling under Windows.
+- changed all instances of le_handle to le_imagick_handle to avoid
+future conflicts.
+
+0.9.2 	
+- functions added:
+imagick_profile()
+- created IMAGICK_PROFILE_* to support imagick_profile().
+- this release is significant because of the issue with Microsoft IE
+where the image's profile causes the browser to not properly render
+images (you only get red X's). See this posting:
+http://studio.imagemagick.org/pipermail/magick-users/2002-September/005072.html
+- added this filter IMAGICK_FILTER_UNKNOWN. If the user specifies
+this filter to imagick_resize(), the resize function will take
+whatever filter is defined by the image.
+- modified imagick_resize() to take 6th optional parameter that is
+the modifier to the geometry to facility building geometries such
+as 800x600+200+200! or 450x230>.
+- modified imagick_scale() to take 4th optional parameter that is
+the modifier to the geometry to facility building geometries such
+as 800x600+200+200! or 450x230>.
+- modified imagick_sample() to take 4th optional parameter that is
+the modifier to the geometry to facility building geometries such
+as 800x600+200+200! or 450x230>.
+
+0.9.1 	
+- functions added:
+imagick_chop()
+imagick_crop()
+imagick_flip()
+imagick_flop()
+imagick_roll()
+imagick_getimagedepth()
+imagick_getnumbercolors()
+imagick_isgrayimage()
+imagick_ismonochromeimage()
+imagick_isopaqueimage()
+imagick_ispaletteimage()
+imagick_ordereddither()
+imagick_composite()
+- Added IMAGICK_COMPOSITE_OP_* for use with imagick_composite().
+
+0.9.0.1 	
+IMPORTANT!!!
+This release breaks Backwards Compatibility with the 0.1.x series of ext/imagick. read the examples for more information (in $doc_dir/imagick/examples).
+
+Big Credits go to Michael C. Montero, who wrote the whole extension from scratch. Without him, we would still be at 0.1.x. He will be the future lead for this package (as soon as he has an account on pear).
+
+0.2-0.5 were never released within PEAR.
+
+version 0.9.0.1:
+- more appropriate changelog/notes, no changes in code.
+
+version 0.9:
+- functions added:
+imagick_next()
+imagick_prev()
+imagick_first()
+imagick_goto()
+imagick_getlistsize()
+imagick_getlistindex()
+imagick_getimagefromlist()
+imagick_blob2image()
+imagick_reducenoise()
+imagick_shade()
+imagick_sharpen()
+imagick_spread()
+imagick_threshold()
+imagick_unsharpmask()
+- cut over deprecation reporting to a more standized and easier to use method
+- cut over all php_error calls to standard method
+- added Christian's code to info function for displaying a list of supported image formats
+- rewrote all code to use proper parameter parsing function
+- fixed minor issue with a number of example files; was nothing critical
+
+version: 0.5a
+- functions added:
+imagick_getcanvas()
+imagick_blur()
+imagick_despeckle()
+imagick_edge()
+imagick_emboss()
+imagick_enhance()
+imagick_gaussianblur()
+imagick_medianfilter()
+imagick_motionblur()
+- one major change - renamed everything to imagick*; I've joined my efforts with Christian Stocker who had a previously written but smaller extension
+- magick_getcanvas() allows you to create a blank image to draw on
+- changed comment header in imagick.h to match the one in imagick.c
+- added Christian Stocker to credits
+- moved over to Christian Stocker's config.m4, removed the need for gen_configm4
+- rewrote INSTALL to reflect new config.m4
+- slight modifications to config.m4 to get it to work properly
+- added package.xml
+- removed ChangeLog, everything is now in package.xml
+- removed imagick_free_reason() and imagick_free_description() since they are no longer necessary
+- preceded all internal functions with _php_
+- created imagick_read() for backward compatibility with old extension
+- created imagick_write() for backward compatibility with old extension
+
+version 0.4a
+- functions added:
+magick_writeimages()
+magick_destroyhandle()
+magick_image2blob()
+magick_drawarc()
+magick_drawcircle()
+magick_drawpoint()
+magick_border()
+magick_frame()
+magick_raise()
+magick_getwidth()
+magick_getheight()
+magick_getmimetype()
+magick_setfillcolor()
+magick_setfontface()
+magick_charcoal()
+magick_implode()
+magick_oilpaint()
+magick_solarize()
+magick_swirl()
+magick_wave()
+- more preparation for image lists
+- fixed incorrect comments in some examples
+- fixed incorrect calls to magick_failedreason() and magick_faileddescription() in most examples
+- a number of examples weren't exiting properly on errors, that's been fixed
+- phpinfo() now displays available font family and font names
+- coolest function so far: magick_oilpaint(). The output is awesome!
+- added MaxRGB to phpinfo() section
+
+version 0.2a
+- functions added:
+magick_rotate()
+magick_shear()
+magick_contrast()
+magick_equalize()
+magick_gamma()
+magick_level()
+magick_modulate()
+magick_negate()
+magick_normalize()
+magick_drawellipse()
+- slight changes to output of gen_configm4
+- fixed comments in all examples after the initial magick_readimage(), they were wrong
+- fixed all examples so they exit properly on errors
+- fixed all examples so they work as either standalone script or web page; they do better output as well
+- fixed output of magick info. when calling phpinfo()
+- more commenting
+- significantly better error handling
+
+0.9 	
+IMPORTANT!!!
+This release breaks BC with the 0.1.x series of ext/imagick.
+read the examples for more information (in $doc_dir/imagick/examples)
+
+0.2-0.5 were never released within PEAR.
+
+- functions added:
+imagick_next()
+imagick_prev()
+imagick_first()
+imagick_goto()
+imagick_getlistsize()
+imagick_getlistindex()
+imagick_getimagefromlist()
+imagick_blob2image()
+imagick_reducenoise()
+imagick_shade()
+imagick_sharpen()
+imagick_spread()
+imagick_threshold()
+imagick_unsharpmask()
+- cut over deprecation reporting to a more standized and easier
+to use method
+- cut over all php_error calls to standard method
+- added Christian's code to info function for displaying a list of
+supported image formats
+- rewrote all code to use proper parameter parsing function
+- fixed minor issue with a number of example files; was nothing
+critical
+
+0.1.2 	
+- Added imagick_border(). (pierre-alain joye)
+- Fixed return of annotate and rotate (true on success). (pierre-alain joye)
+
+0.1.1 	
+- Make it compatible with ImageMagick 5.4.5 (and this is also the needed version now)
+- adjust package.xml to the new "pear build" command

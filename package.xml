@@ -62,6 +62,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="php_imagick_shared.h" role="src" />
 			<file name="TODO" role="doc" />
 			<file name="INSTALL" role="doc" />
+			<file name="ChangeLog" role="doc" />
 			<dir name="examples">
 				<file name="polygon.php" role="doc" />
 				<file name="captcha.php" role="doc" />
