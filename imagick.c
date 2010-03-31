@@ -1691,12 +1691,12 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, row)
 	ZEND_END_ARG_INFO()
 
-static function_entry php_imagick_functions[] =
+static zend_function_entry php_imagick_functions[] =
 {
 	{ NULL, NULL, NULL }
 };
 
-static function_entry php_imagickdraw_class_methods[] =
+static zend_function_entry php_imagickdraw_class_methods[] =
 {
 #if MagickLibVersion > 0x628
 	PHP_ME(imagickdraw, resetvectorgraphics, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
@@ -1826,7 +1826,7 @@ static function_entry php_imagickdraw_class_methods[] =
 	{ NULL, NULL, NULL }
 };
 
-static function_entry php_imagickpixeliterator_class_methods[] =
+static zend_function_entry php_imagickpixeliterator_class_methods[] =
 {
 	PHP_ME(imagickpixeliterator, __construct, imagickpixeliterator_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixeliterator, newpixeliterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
@@ -1854,7 +1854,7 @@ static function_entry php_imagickpixeliterator_class_methods[] =
 };
 
 
-static function_entry php_imagickpixel_class_methods[] =
+static zend_function_entry php_imagickpixel_class_methods[] =
 {
 #if MagickLibVersion > 0x628
 	PHP_ME(imagickpixel, gethsl, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
@@ -1879,7 +1879,7 @@ static function_entry php_imagickpixel_class_methods[] =
 	{ NULL, NULL, NULL }
 };
 
-static function_entry php_imagick_class_methods[] =
+static zend_function_entry php_imagick_class_methods[] =
 {
 #if MagickLibVersion > 0x628
 	PHP_ME(imagick, optimizeimagelayers, imagick_zero_args, ZEND_ACC_PUBLIC)
