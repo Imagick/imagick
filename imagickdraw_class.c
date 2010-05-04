@@ -1133,10 +1133,14 @@ PHP_METHOD(imagickdraw, affine)
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "AffineMatrix should contain keys: sx, rx, ry, sy, tx and ty", 2);
 		} else {
 			
-			if (Z_TYPE_PP(ppzval) != IS_DOUBLE) {
-				convert_to_double(&ppzval);
-			}
-			value = Z_DVAL_PP(ppzval);
+			zval tmp_zval, *tmp_pzval;
+
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
+
+			value = Z_DVAL(tmp_zval);
 
 			if (strcmp(matrix_elements[i], "sx") == 0) {
 				pmatrix->sx = value;

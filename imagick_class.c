@@ -7641,15 +7641,16 @@ PHP_METHOD(imagick, writeimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	if (filename == NULL) {
+	if (!filename) {
 		filename = MagickGetImageFilename(intern->magick_wand);
+		
+		if (!filename) {
+			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "No image filename specified", 1);
+		}
+		filename_len = strlen(filename);
 	}
 
-	if (filename == NULL) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "No image filename specified", 1);
-	}
-	
-	if (filename_len == 0) {
+	if (!filename_len) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not use empty string as a filename", 1);
 	}
 
