@@ -285,6 +285,9 @@ PHP_METHOD(imagick, exportimagepixels);
 PHP_METHOD(imagick, getimagechannelkurtosis);
 PHP_METHOD(imagick, functionimage);
 #endif
+#if MagickLibVersion > 0x651
+PHP_METHOD(imagick, transformimagecolorspace);
+#endif
 #if MagickLibVersion > 0x652
 PHP_METHOD(imagick, haldclutimage);
 #endif
@@ -292,6 +295,8 @@ PHP_METHOD(imagick, haldclutimage);
 PHP_METHOD(imagick, setimageartifact);
 PHP_METHOD(imagick, getimageartifact);
 PHP_METHOD(imagick, deleteimageartifact);
+PHP_METHOD(imagick, setcolorspace);
+PHP_METHOD(imagick, getcolorspace);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);

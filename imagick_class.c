@@ -2275,6 +2275,35 @@ PHP_METHOD(imagick, functionimage)
 /* }}} */
 #endif
 
+#if MagickLibVersion > 0x651
+/* {{{ proto boolean Imagick::transformImageColorspace()
+	Transform image colorspace
+*/
+PHP_METHOD(imagick, transformimagecolorspace)
+{
+	php_imagick_object *intern;
+	long colorspace;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &colorspace) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
+
+	status = MagickTransformImageColorspace(intern->magick_wand, colorspace);
+
+    /* No magick is going to happen */
+	if (status == MagickFalse) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to transform image colorspace", 1);
+	}
+    RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 #if MagickLibVersion > 0x652
 /* {{{ proto boolean Imagick::haldClutImage(Imagick hald[, int CHANNEL])
    Replaces colors in the image from a Hald color lookup table
@@ -2355,6 +2384,9 @@ PHP_METHOD(imagick, getimageartifact)
 	return;
 }
 
+/* {{{ proto boolean Imagick::deleteImageArtifact(string $artifact)
+   Delete image artifact
+*/
 PHP_METHOD(imagick, deleteimageartifact) 
 {
 	php_imagick_object *intern;
@@ -2377,6 +2409,43 @@ PHP_METHOD(imagick, deleteimageartifact)
 	
 	RETURN_TRUE;
 }
+/* }}} */
+
+/* {{{ proto integer Imagick::getColorspace()
+   Get the object colorspace property
+*/
+PHP_METHOD(imagick, getcolorspace) 
+{
+	php_imagick_object *intern;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETURN_LONG(MagickGetColorspace(intern->magick_wand));
+}
+/* }}} */
+
+/* {{{ proto boolean Imagick::setColorspace([int COLORSPACE])
+   Set the object colorspace property
+*/
+PHP_METHOD(imagick, setcolorspace) 
+{
+	php_imagick_object *intern;
+	long colorspace;
+	MagickBooleanType status;
+	
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &colorspace) == FAILURE) {
+		return;
+	}
+	
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	status = MagickSetColorspace(intern->magick_wand, colorspace);
+	
+	RETURN_BOOL(status == MagickTrue);
+}
+/* }}} */
 #endif
 
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
