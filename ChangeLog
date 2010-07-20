@@ -1,3 +1,6 @@
+3.0.0
+- No bugs reported against RC2 so releasing as stable
+
 3.0.0RC2
 - Added set/getColorspace
 - Added transformImageColorspace (Patrick Durold)

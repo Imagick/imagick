@@ -21,22 +21,18 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2010-07-12</date>
+	<date>2010-07-20</date>
 	<version>
-		<release>3.0.0RC2</release>
-		<api>3.0.0RC2</api>
+		<release>3.0.0</release>
+		<api>3.0.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
-		<api>beta</api>
+		<release>stable</release>
+		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Added set/getColorspace
-- Added transformImageColorspace (Patrick Durold)
-- Fix writeImage logic error in filename_len checking. 
-- Fix conversion to double in affine matrices
-- s,function_entry,zend_function_entry, (Johannes)
+- No bugs reported against RC2 so releasing as stable
 </notes>
 	<contents>
 		<dir name="/">
