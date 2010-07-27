@@ -67,8 +67,11 @@ if test $PHP_IMAGICK != "no"; then
     if test -z "${PHP_CONFIG}"; then
       AC_MSG_ERROR([php-config not found])
     fi
-    PHP_IMAGICK_FOUND_VERNUM=`${PHP_CONFIG} --vernum`;
+    if test -z "${AWK}"; then
+      AC_MSG_ERROR([awk not found])
+    fi
     PHP_IMAGICK_FOUND_VERSION=`${PHP_CONFIG} --version`
+    PHP_IMAGICK_FOUND_VERNUM=`echo "${PHP_IMAGICK_FOUND_VERSION}" | $AWK 'BEGIN { FS = "."; } { printf "%d", ([$]1 * 100 + [$]2) * 100 + [$]3;}'`
   else
     PHP_IMAGICK_FOUND_VERNUM="${PHP_VERSION_ID}"
     PHP_IMAGICK_FOUND_VERSION="${PHP_VERSION}"
