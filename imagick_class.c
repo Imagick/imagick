@@ -1377,6 +1377,7 @@ PHP_METHOD(imagick, recolorimage)
 	long num_elements;
 	zval *matrix;
 	double *array;
+	unsigned long order;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &matrix) == FAILURE) {
 		return;
@@ -1391,7 +1392,14 @@ PHP_METHOD(imagick, recolorimage)
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
 	}
 	
-	status = MagickRecolorImage(intern->magick_wand, num_elements, array);
+	order = (unsigned long)sqrt(num_elements);
+	
+	if (pow((double)order, 2) != num_elements) {
+		efree(array);
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The color matrix must contain a square number of elements", 1);
+	}
+
+	status = MagickRecolorImage(intern->magick_wand, order, array);
 	efree(array);
 	
 	if (status == MagickFalse) {
@@ -4719,11 +4727,12 @@ PHP_METHOD(imagick, unsharpmaskimage)
 PHP_METHOD(imagick, convolveimage)
 {
 	php_imagick_object *intern;
-	long order;
 	MagickBooleanType status;
 	zval *kernel_array;
 	double *kernel;
 	long channel = DefaultChannels;
+	unsigned long order = 0;
+	long num_elements = 0;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|l",  &kernel_array, &channel) == FAILURE) {
@@ -4733,10 +4742,17 @@ PHP_METHOD(imagick, convolveimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	kernel = get_double_array_from_zval(kernel_array, &order TSRMLS_CC);
+	kernel = get_double_array_from_zval(kernel_array, &num_elements TSRMLS_CC);
 
-	if(kernel == (double *)NULL) {
+	if (!kernel) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to read matrix array", 1);
+	}
+	
+	order = (unsigned long)sqrt(num_elements);
+	
+	if (pow((double)order, 2) != num_elements) {
+		efree(kernel);
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The kernel must contain a square number of elements", 1);
 	}
 
 	status = MagickConvolveImageChannel(intern->magick_wand, channel, order, kernel);
