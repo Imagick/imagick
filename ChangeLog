@@ -1,3 +1,7 @@
+?.?.?
+- Fixed build against PHP 5.1.x
+- Fixed PECL bug #17892
+
 3.0.0
 - No bugs reported against RC2 so releasing as stable
 
