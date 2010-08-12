@@ -21,18 +21,19 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2010-07-20</date>
+	<date>2010-08-12</date>
 	<version>
-		<release>3.0.0</release>
-		<api>3.0.0</api>
+		<release>3.0.1RC1</release>
+		<api>3.0.1RC</api>
 	</version>
 	<stability>
-		<release>stable</release>
+		<release>beta</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- No bugs reported against RC2 so releasing as stable
+- Fixed building against PHP 5.1.x
+- Fixed PECL bug #17892
 </notes>
 	<contents>
 		<dir name="/">
