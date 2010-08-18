@@ -145,16 +145,16 @@
 		value = (type)NULL; \
 	} \
 
-#define IMAGICK_SAFE_MODE_CHECK(filename, status)\
-	if (filename) { \
-		if (strlen(filename) > MAXPATHLEN) { \
-			status = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
+#define IMAGICK_SAFE_MODE_CHECK(filename_, status_)\
+	if (filename_) { \
+		if (strlen(filename_) > MAXPATHLEN) { \
+			status_ = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
 		} \
-		if (PG(safe_mode) && (!php_checkuid_ex(filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS))) { \
-			status = IMAGICK_READ_WRITE_SAFE_MODE_ERROR; \
+		if (PG(safe_mode) && (!php_checkuid_ex(filename_, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS))) { \
+			status_ = IMAGICK_READ_WRITE_SAFE_MODE_ERROR; \
 		} \
-		if (php_check_open_basedir_ex(filename, 0 TSRMLS_CC)) { \
-			status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
+		if (php_check_open_basedir_ex(filename_, 0 TSRMLS_CC)) { \
+			status_ = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
 		} \
 	} \
 

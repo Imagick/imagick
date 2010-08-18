@@ -129,6 +129,8 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, char *filename, int type TSRMLS_DC);
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
 
+int php_imagick_safe_mode_check(const char *filename TSRMLS_DC);
+
 /* Define some color constants */
 #define IMAGICKCOLORBLACK 11
 #define IMAGICKCOLORBLUE 12

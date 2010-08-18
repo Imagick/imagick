@@ -180,15 +180,7 @@ int php_imagick_safety_check(char *filename, int filename_len TSRMLS_DC)
 		char *absolute = php_imagick_get_absolute_filename(filename, filename_len TSRMLS_CC);
 				
 		if (absolute) {
-			
-			if (PG(safe_mode) && (!php_checkuid_ex(absolute, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS))) {
-				status = IMAGICK_READ_WRITE_SAFE_MODE_ERROR;
-			}
-			
-			if (PG(open_basedir) && php_check_open_basedir_ex(absolute, 0 TSRMLS_CC)) {
-				status = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR;
-			}
-			
+			status = php_imagick_safe_mode_check(filename TSRMLS_CC);
 			efree(absolute);
 		}
 	}

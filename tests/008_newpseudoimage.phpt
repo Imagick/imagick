@@ -29,26 +29,26 @@ var_dump($im->getImageGeometry());
 --EXPECTF--
 array(2) {
   ["width"]=>
-  int(100)
+  int(%d)
   ["height"]=>
-  int(100)
+  int(%d)
 }
 array(2) {
   ["width"]=>
-  int(640)
+  int(%d)
   ["height"]=>
-  int(480)
+  int(%d)
 }
 array(2) {
   ["width"]=>
-  int(640)
+  int(%d)
   ["height"]=>
-  int(480)
+  int(%d)
 }
 array(2) {
   ["width"]=>
-  int(70)
+  int(%d)
   ["height"]=>
-  int(46)
+  int(%d)
 }
 fail
