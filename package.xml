@@ -21,13 +21,13 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2010-08-12</date>
+	<date>2010-08-13</date>
 	<version>
-		<release>3.0.1RC1</release>
-		<api>3.0.1RC</api>
+		<release>3.0.1</release>
+		<api>3.0.1</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>

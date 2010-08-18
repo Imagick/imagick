@@ -168,6 +168,11 @@ int php_imagick_safe_mode_check(const char *filename TSRMLS_DC);
 #define IMAGICK_READ_IMAGE_FILE 3
 #define IMAGICK_PING_IMAGE_FILE 4
 
+/* Filename */
+#define PHP_IMAGICK_FILE_PLAIN	1
+#define PHP_IMAGICK_FILE_FORMAT	2
+#define PHP_IMAGICK_FILE_URL	3
+
 /* Class entries */
 extern zend_class_entry *php_imagick_sc_entry;
 extern zend_class_entry *php_imagick_exception_class_entry;
