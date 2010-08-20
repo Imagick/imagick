@@ -1,3 +1,7 @@
+3.0.1RC2
+- Fixed a bug which caused failure in writing files with format prefix
+  (such as png:test.jpg)
+
 3.0.1RC1
 - Fixed build against PHP 5.1.x
 - Fixed PECL bug #17892

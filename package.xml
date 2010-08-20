@@ -21,7 +21,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2010-08-13</date>
+	<date>2010-08-20</date>
 	<version>
 		<release>3.0.1RC2</release>
 		<api>3.0.1RC2</api>
@@ -32,8 +32,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed building against PHP 5.1.x
-- Fixed PECL bug #17892
+- Fixed a bug which caused failure in writing files with format prefix (such as png:test.jpg)
 </notes>
 	<contents>
 		<dir name="/">
