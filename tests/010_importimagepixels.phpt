@@ -23,7 +23,7 @@ $pixels =
 
 /* Width and height. The area is amount of pixels divided
    by three. Three comes from 'RGB', three values per pixel */
-$width = $height = (int)pow((count($pixels) / 3), 0.5);
+$width = $height = 100;
 
 /* Create empty image */
 $im = new Imagick();
