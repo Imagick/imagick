@@ -249,7 +249,7 @@ zend_bool php_imagick_has_format(const char *filename, int filename_len)
 	PHP_IMAGICK_FILE_URL		is url, http://example.com/test.gif (this also checks that php has wrapper for that url type)
 */
 
-int php_imagick_filename_type(const char *filename, int filename_len)
+int php_imagick_filename_type(const char *filename, int filename_len TSRMLS_DC)
 {
 	char *path = NULL;
 	
@@ -331,7 +331,7 @@ char *php_imagick_filename_path(const char *filename, int filename_len, char **f
 		return filename_cp;
 	}
 
-	type = php_imagick_filename_type(filename_cp, filename_len);
+	type = php_imagick_filename_type(filename_cp, filename_len TSRMLS_CC);
 	
 	if (type == PHP_IMAGICK_FILE_PLAIN) {
 		path = expand_filepath(filename_cp, NULL TSRMLS_CC);
