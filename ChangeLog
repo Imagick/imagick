@@ -1,3 +1,6 @@
+3.0.1RC3
+- Fixed PECL bug #17244
+
 3.0.1RC2
 - Fixed a bug which caused failure in writing files with format prefix
   (such as png:test.jpg)
