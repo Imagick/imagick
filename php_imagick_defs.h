@@ -565,6 +565,7 @@ PHP_METHOD(imagickdraw, settextinterwordspacing);
 PHP_METHOD(imagickdraw, __construct);
 PHP_METHOD(imagickdraw, setfillcolor);
 PHP_METHOD(imagickdraw, setfillalpha);
+PHP_METHOD(imagickdraw, setresolution);
 PHP_METHOD(imagickdraw, setstrokecolor);
 PHP_METHOD(imagickdraw, setstrokealpha);
 PHP_METHOD(imagickdraw, setstrokewidth);

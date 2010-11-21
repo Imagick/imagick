@@ -282,6 +282,44 @@ PHP_METHOD(imagickdraw, setfillcolor)
 }
 /* }}} */
 
+/* {{{ proto bool ImagickDraw::setResolution(float x, float y)
+	Sets the resolution
+*/
+PHP_METHOD(imagickdraw, setresolution)
+{
+	char *density, buf[512];
+	double x, y;
+	php_imagickdraw_object *internd;
+	DrawInfo *draw_info;
+	DrawingWand *d_wand;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
+		return;
+	}
+
+	internd = (php_imagickdraw_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	(void) snprintf(buf, 512, "%fx%f", x, y);
+	density = AcquireString(buf);
+
+	if (!density) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Failed to allocate memory", 2);
+	}
+
+	draw_info          = PeekDrawingWand(internd->drawing_wand);
+	draw_info->density = density;
+	
+	d_wand = (DrawingWand *) DrawAllocateWand(draw_info, NULL);
+	
+	if (!d_wand) {
+		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Failed to allocate new DrawingWand structure", 2);
+	}
+	
+	IMAGICKDRAW_REPLACE_DRAWINGWAND(internd, d_wand);
+	RETURN_TRUE;
+}
+/* }}} */
+
 /* {{{ proto bool ImagickDraw::setStrokeColor(PixelWand stroke_wand)
 	Sets the color used for stroking object outlines.
 */
