@@ -21,6 +21,7 @@
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
+#include "php_imagick_helpers.h"
 
 #if MagickLibVersion > 0x628
 /* {{{ proto bool ImagickDraw::resetvectorgraphics()

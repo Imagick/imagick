@@ -41,17 +41,19 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="CREDITS" role="doc" />
 			<file name="imagick.c" role="src" />
 			<file name="imagick_class.c" role="src" />
-			<file name="imagick_read.c" role="src" />
 			<file name="imagickdraw_class.c" role="src" />
 			<file name="imagickpixel_class.c" role="src" />
 			<file name="imagickpixeliterator_class.c" role="src" />
 			<file name="imagick_helpers.c" role="src" />
+			<file name="imagick_file.c" role="src" />
 			<file name="php_imagick.h" role="src">
 				<tasks:replace from="@PACKAGE_VERSION@" to="version" type="package-info" />
 			</file>
 			<file name="php_imagick_defs.h" role="src" />
+			<file name="php_imagick_helpers.h" role="src" />
 			<file name="php_imagick_macros.h" role="src" />
 			<file name="php_imagick_shared.h" role="src" />
+			<file name="php_imagick_file.h" role="src" />
 			<file name="TODO" role="doc" />
 			<file name="INSTALL" role="doc" />
 			<file name="ChangeLog" role="doc" />

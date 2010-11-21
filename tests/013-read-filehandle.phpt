@@ -16,6 +16,8 @@ $imagick->clear();
 $handle = fopen($file, 'rb');
 $imagick->readImageFile($handle);
 
+unlink($file);
+
 echo 'success';
 
 ?>
