@@ -1129,6 +1129,8 @@ PHP_METHOD(imagickdraw, clone)
 		return;
 	}
 	
+	IMAGICK_METHOD_DEPRECATED("ImagickDraw", "clone");
+	
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	tmp_wand = CloneDrawingWand(internd->drawing_wand);
 

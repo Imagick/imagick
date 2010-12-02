@@ -579,6 +579,8 @@ PHP_METHOD(imagickpixel, clone)
 		return;
 	}
 	
+	IMAGICK_METHOD_DEPRECATED("ImagickPixel", "clone");
+
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	IMAGICK_CLONE_PIXELWAND(internp->pixel_wand, pixel_wand);

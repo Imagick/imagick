@@ -8373,6 +8373,8 @@ PHP_METHOD(imagick, clone)
 		return;
 	}
 	
+	IMAGICK_METHOD_DEPRECATED("Imagick", "clone");
+	
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	tmp_wand = CloneMagickWand(intern->magick_wand);
 
