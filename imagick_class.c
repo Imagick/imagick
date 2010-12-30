@@ -530,6 +530,10 @@ PHP_METHOD(imagick, roundcornersimage)
 	image_width = MagickGetImageWidth(intern->magick_wand);
 	image_height = MagickGetImageHeight(intern->magick_wand);
 
+	if (!image_width || !image_height) {
+	    IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to round corners on empty image", 1);
+	}
+
 	status = MagickSetImageMatte(intern->magick_wand, MagickTrue);
 
 	if (status == MagickFalse) {
