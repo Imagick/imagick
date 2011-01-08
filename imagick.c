@@ -2502,39 +2502,59 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 
 static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC) 
 {
+	int ret;
 	php_imagick_object *intern;
-	zval *retval;
-	MAKE_STD_ZVAL(retval);
-	
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-	
-	if (Z_TYPE_P(member) != IS_STRING || MagickGetNumberImages(intern->magick_wand) == 0) {
-		ZVAL_NULL(retval);
-	} else {	
-		char *property   = Z_STRVAL_P(member);
-		int property_len = Z_STRLEN_P(member);
+	zval *retval = NULL, tmp_member;
+    zend_object_handlers *std_hnd;
 
-		if ((property_len == 5) && (memcmp(property, "width", 5) == 0)) {
-			ZVAL_LONG(retval, MagickGetImageWidth(intern->magick_wand));
-		} else if ((property_len == 6) && (memcmp(property, "height", 6) == 0)) {
-			ZVAL_LONG(retval, MagickGetImageHeight(intern->magick_wand));
-		} else if ((property_len == 6) && (memcmp(property, "format", 6) == 0)) {
-			char *format = MagickGetImageFormat(intern->magick_wand);
-			if (format) {
-				ZVAL_STRING(retval, format, 1);
-				IMAGICK_FREE_MEMORY(char *, format);
-			} else {
-				ZVAL_STRING(retval, "", 1);
+	if (Z_TYPE_P(member) != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+    }
+
+	std_hnd = zend_get_std_object_handlers();
+	ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
+
+	if (ret) {
+		std_hnd = zend_get_std_object_handlers();
+		retval = std_hnd->read_property(object, member, type TSRMLS_CC);
+	} else {
+		intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+		/* Do we have any images? */
+		if (MagickGetNumberImages(intern->magick_wand)) {
+			/* Is this overloaded? */
+			if (!strcmp(Z_STRVAL_P(member), "width") ||
+				!strcmp(Z_STRVAL_P(member), "height") ||
+				!strcmp(Z_STRVAL_P(member), "format")) {
+
+				MAKE_STD_ZVAL(retval);
+#ifdef Z_SET_REFCOUNT_P
+				Z_SET_REFCOUNT_P(retval, 0);
+#else
+				retval->refcount = 0;
+#endif
+				if (!strcmp(Z_STRVAL_P(member), "width")) {
+					ZVAL_LONG(retval, MagickGetImageWidth(intern->magick_wand));
+				} else if (!strcmp(Z_STRVAL_P(member), "height")) {
+					ZVAL_LONG(retval, MagickGetImageHeight(intern->magick_wand));
+				} else if (!strcmp(Z_STRVAL_P(member), "format")) {
+					char *format = MagickGetImageFormat(intern->magick_wand);
+
+					if (format) {
+						ZVAL_STRING(retval, format, 1);
+						IMAGICK_FREE_MEMORY(char *, format);
+					} else {
+						ZVAL_STRING(retval, "", 1);
+					}
+				}
 			}
-		} else {
-			ZVAL_NULL(retval);
 		}
 	}
-#ifdef Z_SET_REFCOUNT_P
-	Z_SET_REFCOUNT_P(retval, 0);
-#else
-	retval->refcount = 0;
-#endif
+	if (member == &tmp_member) {
+    	zval_dtor(member);
+    }
 	return retval;
 }
 
