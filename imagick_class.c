@@ -5805,13 +5805,15 @@ PHP_METHOD(imagick, getimagepixelcolor)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	tmp_wand = NewPixelWand();
-	status = MagickGetImagePixelColor(intern->magick_wand, x, y , tmp_wand);
 
-	if (tmp_wand == (PixelWand *)NULL) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image pixel color", 1);
+	if (!tmp_wand) {
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Failed to allocate new PixelWand", 1);
 	}
 
+	status = MagickGetImagePixelColor(intern->magick_wand, x, y , tmp_wand);
+
 	if (status == MagickFalse) {
+	    tmp_wand = DestroyPixelWand(tmp_wand);
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable get image pixel color", 1);
 	}
 
