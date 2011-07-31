@@ -24,8 +24,6 @@ void initialize_imagick_constants();
 
 void add_assoc_string_helper(zval *retvalue, char *name, char *key, char *hash_value TSRMLS_DC);
 
-void deallocate_wands(MagickWand *magick, DrawingWand *draw, PixelWand *pixel TSRMLS_DC);
-
 void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC);
 
 #if MagickLibVersion <= 0x628

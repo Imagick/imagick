@@ -545,17 +545,22 @@ PHP_METHOD(imagick, roundcornersimage)
 	draw       = (DrawingWand *)NewDrawingWand();
 	mask_image = (MagickWand *)NewMagickWand();
 
+#define exit_cleanup() \
+	if (color != NULL) color = DestroyPixelWand(color); \
+	if (draw != NULL) draw = DestroyDrawingWand(draw); \
+	if (mask_image != NULL) mask_image = DestroyMagickWand(mask_image);
+
 	status = PixelSetColor(color, "transparent");
 
 	if (status == MagickFalse) {
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
+        exit_cleanup();
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to set pixel color", 1);
 	}
 
 	status = MagickNewImage(mask_image, image_width, image_height, color);
 
 	if (status == MagickFalse) {
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
+		exit_cleanup();
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to allocate mask image", 1);
 	}
 
@@ -563,7 +568,7 @@ PHP_METHOD(imagick, roundcornersimage)
 	status = PixelSetColor(color, "white");
 
 	if (status == MagickFalse) {
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
+		exit_cleanup();
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to set pixel color", 1);
 	}
 
@@ -571,7 +576,7 @@ PHP_METHOD(imagick, roundcornersimage)
 	status = PixelSetColor(color, "black");
 
 	if (status == MagickFalse) {
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
+		exit_cleanup();
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to set pixel color", 1);
 	}
 
@@ -584,19 +589,20 @@ PHP_METHOD(imagick, roundcornersimage)
 	IMAGICK_RESTORE_LOCALE(old_locale, restore);
 
 	if (status == MagickFalse) {
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
+		exit_cleanup();
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to draw on image", 1);
 	}
 
 	status = MagickCompositeImage(intern->magick_wand, mask_image, DstInCompositeOp, 0, 0);
 
 	if (status == MagickFalse) {
-		deallocate_wands(mask_image, draw, color TSRMLS_CC);
+		exit_cleanup();
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to composite image", 1);
 	}
 
-	deallocate_wands(mask_image, draw, color TSRMLS_CC);
+	exit_cleanup();
 	RETURN_TRUE;
+#undef exit_cleanup
 }
 /* }}} */
 
@@ -2319,7 +2325,7 @@ PHP_METHOD(imagick, transformimagecolorspace)
 	if (status == MagickFalse) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to transform image colorspace", 1);
 	}
-    RETURN_TRUE;
+	RETURN_TRUE;
 }
 /* }}} */
 #endif
@@ -5123,7 +5129,7 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
@@ -5135,6 +5141,7 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 	}
 
 	if (status == MagickFalse) {
+		tmp_wand = DestroyPixelWand(tmp_wand);
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image background color", 1);
 	}
 
@@ -5201,6 +5208,7 @@ PHP_METHOD(imagick, getimagebordercolor)
 	}
 
 	if (status == MagickFalse) {
+		tmp_wand = DestroyPixelWand(tmp_wand);
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image border color", 1);
 	}
 
@@ -5397,6 +5405,7 @@ PHP_METHOD(imagick, getimagecolormapcolor)
 	}
 
 	if (status == MagickFalse) {
+		tmp_wand = DestroyPixelWand(tmp_wand);
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to get image colormap color", 1);
 	}
 
@@ -5741,6 +5750,7 @@ PHP_METHOD(imagick, getimagemattecolor)
 	}
 
 	if (status == MagickFalse) {
+		tmp_wand = DestroyPixelWand(tmp_wand);
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable get image matter color", 1);
 	}
 
@@ -5813,7 +5823,7 @@ PHP_METHOD(imagick, getimagepixelcolor)
 	status = MagickGetImagePixelColor(intern->magick_wand, x, y , tmp_wand);
 
 	if (status == MagickFalse) {
-	    tmp_wand = DestroyPixelWand(tmp_wand);
+		tmp_wand = DestroyPixelWand(tmp_wand);
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable get image pixel color", 1);
 	}
 
