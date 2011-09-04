@@ -2345,10 +2345,19 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 	efree(intern);
 }
 
+#if PHP_VERSION_ID < 50399
+# define object_properties_init(zo, class_type) { \
+			zval *tmp; \
+			zend_hash_copy((*zo).properties, \
+							&class_type->default_properties, \
+							(copy_ctor_func_t) zval_add_ref, \
+							(void *) &tmp, \
+							sizeof(zval *)); \
+		 }
+#endif
 
 static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr, zend_bool init_wand TSRMLS_DC)
 {
-	zval *tmp;
 	zend_object_value retval;
 	php_imagick_object *intern;
 
@@ -2380,7 +2389,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	zend_hash_copy(intern->zo.properties, &class_type->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &tmp, sizeof(zval *));
+	object_properties_init(&intern->zo, class_type);
 
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagick_object_free_storage, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &imagick_object_handlers;
@@ -2394,7 +2403,6 @@ static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSR
 
 static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr, zend_bool init_wand TSRMLS_DC)
 {
-	zval *tmp;
 	zend_object_value retval;
 	php_imagickdraw_object *intern;
 
@@ -2415,7 +2423,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	zend_hash_copy(intern->zo.properties, &class_type->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &tmp, sizeof(zval *));
+	object_properties_init(&intern->zo, class_type);
 
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickdraw_object_free_storage, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &imagickdraw_object_handlers;
@@ -2429,7 +2437,6 @@ static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type
 
 static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zval *tmp;
 	zend_object_value retval;
 	php_imagickpixeliterator_object *intern;
 
@@ -2449,7 +2456,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	zend_hash_copy(intern->zo.properties, &class_type->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &tmp, sizeof(zval *));
+	object_properties_init(&intern->zo, class_type);
 
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixeliterator_object_free_storage, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &imagickpixeliterator_object_handlers;
@@ -2458,7 +2465,6 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 
 static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_type, php_imagickpixel_object **ptr TSRMLS_DC)
 {
-	zval *tmp;
 	zend_object_value retval;
 	php_imagickpixel_object *intern;
 
@@ -2477,7 +2483,7 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	zend_hash_copy(intern->zo.properties, &class_type->default_properties, (copy_ctor_func_t) zval_add_ref,(void *) &tmp, sizeof(zval *));
+	object_properties_init(&intern->zo, class_type);
 
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixel_object_free_storage, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &imagickpixel_object_handlers;
