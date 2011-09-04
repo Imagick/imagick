@@ -210,10 +210,11 @@ return_error:
 
 int php_imagick_safe_mode_check(const char *filename TSRMLS_DC)
 {
+#if defined(CHECKUID_CHECK_FILE_AND_DIR)
 	if (PG(safe_mode) && (!php_checkuid_ex(filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS))) {
 		return IMAGICK_READ_WRITE_SAFE_MODE_ERROR;
 	}
-	
+#endif
 	if (PG(open_basedir) && php_check_open_basedir_ex(filename, 0 TSRMLS_CC)) {
 		return IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR;
 	}

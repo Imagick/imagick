@@ -145,7 +145,8 @@
 		value = (type)NULL; \
 	} \
 
-#define IMAGICK_SAFE_MODE_CHECK(filename_, status_)\
+#if defined(CHECKUID_CHECK_FILE_AND_DIR)
+#define IMAGICK_SAFE_MODE_CHECK(filename_, status_) \
 	if (filename_) { \
 		if (strlen(filename_) > MAXPATHLEN) { \
 			status_ = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
@@ -156,7 +157,18 @@
 		if (php_check_open_basedir_ex(filename_, 0 TSRMLS_CC)) { \
 			status_ = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
 		} \
-	} \
+	}
+#else
+#define IMAGICK_SAFE_MODE_CHECK(filename_, status_)\
+	if (filename_) { \
+		if (strlen(filename_) > MAXPATHLEN) { \
+			status_ = IMAGICK_READ_WRITE_FILENAME_TOO_LONG; \
+		} \
+		if (php_check_open_basedir_ex(filename_, 0 TSRMLS_CC)) { \
+			status_ = IMAGICK_READ_WRITE_OPEN_BASEDIR_ERROR; \
+		} \
+	}
+#endif
 
 #define IMAGICK_HAS_FORMAT(buffer, magick_wand, free_buffer)\
 	buffer = MagickGetImageFormat(magick_wand);\

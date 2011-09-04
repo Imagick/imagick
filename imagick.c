@@ -2505,8 +2505,11 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->locale_fix = 0;
 	imagick_globals->progress_monitor = 0;
 }
-
-static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC) 
+#if PHP_VERSION_ID < 50399
+static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC)
+#else
+static zval *php_imagick_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
+#endif
 {
 	int ret;
 	php_imagick_object *intern;
@@ -2521,11 +2524,19 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type TSRM
     }
 
 	std_hnd = zend_get_std_object_handlers();
-	ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
+#if PHP_VERSION_ID < 50399
+		ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
+#else
+		ret = std_hnd->has_property(object, member, 2, key TSRMLS_CC);
+#endif	
 
 	if (ret) {
 		std_hnd = zend_get_std_object_handlers();
+#if PHP_VERSION_ID < 50399
 		retval = std_hnd->read_property(object, member, type TSRMLS_CC);
+#else
+		retval = std_hnd->read_property(object, member, type, key TSRMLS_CC);
+#endif
 	} else {
 		intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 		/* Do we have any images? */
