@@ -21,10 +21,10 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2011-02-19</date>
+	<date>2011-09-04</date>
 	<version>
-		<release>3.1.0b1</release>
-		<api>3.1.0b1</api>
+		<release>3.1.0rc2</release>
+		<api>3.1.0rc2</api>
 	</version>
 	<stability>
 		<release>beta</release>
@@ -32,11 +32,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed PECL Bug #21229
-- Fixed PECL Bug #20636
-- Deprecated clone() method in favour of clone keyword 
-- Added ImagickDraw::setResolution
-- Internal refactoring on read/write code
+- Fixed PECL Bug #22722
+- Fixed possible memory leaks in error scenarios
+- Added PHP 5.4 support
 </notes>
 	<contents>
 		<dir name="/">
