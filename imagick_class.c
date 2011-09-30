@@ -3092,7 +3092,7 @@ PHP_METHOD(imagick, destroy)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	object = getThis();
 	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
 
@@ -3101,11 +3101,6 @@ PHP_METHOD(imagick, destroy)
 	}
 
 	ClearMagickWand(intern->magick_wand);
-#ifdef Z_SET_REFCOUNT_P
-	Z_SET_REFCOUNT_P(object, 0);
-#else
-	object->refcount = 0;
-#endif
 	RETURN_TRUE;
 }
 /* }}} */

@@ -514,12 +514,6 @@ PHP_METHOD(imagickpixeliterator, destroy)
 #if MagickLibVersion >= 0x628
 	ClearPixelIterator( internpix->pixel_iterator );
 #endif
-
-#ifdef Z_SET_REFCOUNT_P
-	Z_SET_REFCOUNT_P(object, 0);
-#else
-	object->refcount = 0;
-#endif
 	RETURN_TRUE;
 }
 /* }}} */

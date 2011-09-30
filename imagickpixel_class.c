@@ -324,11 +324,6 @@ PHP_METHOD(imagickpixel, destroy)
 	}
 
 	ClearPixelWand(internp->pixel_wand);
-#ifdef Z_SET_REFCOUNT_P
-	Z_SET_REFCOUNT_P(object, 0);
-#else
-	object->refcount = 0;
-#endif
 	RETURN_TRUE;
 }
 /* }}} */

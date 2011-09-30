@@ -935,11 +935,6 @@ PHP_METHOD(imagickdraw, destroy)
 	}
 
 	ClearDrawingWand(internd->drawing_wand);
-#ifdef Z_SET_REFCOUNT_P
-	Z_SET_REFCOUNT_P(object, 0);
-#else
-	object->refcount = 0;
-#endif
 	RETURN_TRUE;
 }
 /* }}} */
