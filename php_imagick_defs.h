@@ -530,6 +530,10 @@ PHP_METHOD(imagickdraw, settextkerning);
 PHP_METHOD(imagickdraw, gettextinterwordspacing);
 PHP_METHOD(imagickdraw, settextinterwordspacing);
 #endif
+#if MagickLibVersion > 0x655
+PHP_METHOD(imagickdraw, gettextinterlinespacing);
+PHP_METHOD(imagickdraw, settextinterlinespacing);
+#endif
 PHP_METHOD(imagickdraw, __construct);
 PHP_METHOD(imagickdraw, setfillcolor);
 PHP_METHOD(imagickdraw, setfillalpha);

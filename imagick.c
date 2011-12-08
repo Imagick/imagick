@@ -1251,7 +1251,11 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, spacing)
 	ZEND_END_ARG_INFO()
 #endif
-
+#if MagickLibVersion > 0x655
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextinterlinespacing_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, spacing)
+	ZEND_END_ARG_INFO()
+#endif
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
@@ -1719,6 +1723,10 @@ static zend_function_entry php_imagickdraw_class_methods[] =
 	PHP_ME(imagickdraw, settextkerning, imagickdraw_settextkerning_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, gettextinterwordspacing, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, settextinterwordspacing, imagickdraw_settextinterwordspacing_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x655
+	PHP_ME(imagickdraw, gettextinterlinespacing, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, settextinterlinespacing, imagickdraw_settextinterlinespacing_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagickdraw, __construct, imagickdraw_zero_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickdraw, setfillcolor, imagickdraw_setfillcolor_args, ZEND_ACC_PUBLIC)

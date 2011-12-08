@@ -112,6 +112,42 @@ PHP_METHOD(imagickdraw, settextinterwordspacing)
 /* }}} */
 #endif
 
+#if MagickLibVersion > 0x655
+/* {{{ proto bool ImagickDraw::getTextInterlineSpacing()
+	Gets the text interword spacing
+*/
+PHP_METHOD(imagickdraw, gettextinterlinespacing)
+{
+	php_imagickdraw_object *internd;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+		return;
+	}
+
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETURN_DOUBLE(DrawGetTextInterlineSpacing(internd->drawing_wand));
+}
+/* }}} */
+
+/* {{{ proto bool ImagickDraw::setTextInterlineSpacing(float spacing)
+	Sets the text interword spacing
+*/
+PHP_METHOD(imagickdraw, settextinterlinespacing)
+{
+	php_imagickdraw_object *internd;
+	double spacing;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &spacing) == FAILURE) {
+		return;
+	}
+
+	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	DrawSetTextInterlineSpacing(internd->drawing_wand, spacing);
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 /* {{{ proto ImagickDraw ImagickDraw::__construct()
    The ImagickDraw constructor
 */
