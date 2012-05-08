@@ -115,7 +115,7 @@ zend_bool php_imagick_resize_bounding_box(MagickWand *magick_wand, long box_widt
 {
 	long new_width, new_height;
 	long extent_x, extent_y;
-	
+
 	/* Calculate dimensions */
 	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
 		return 0;
@@ -125,14 +125,12 @@ zend_bool php_imagick_resize_bounding_box(MagickWand *magick_wand, long box_widt
 	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
 		return 0;
 	}
-	
-	MagickWriteImage(magick_wand, "after_thumbnail.png");
 
 	/* If user does not want to fill we are all done here */
 	if (!fill) {
 		return 1;
 	}
-	
+
 	/* In case user wants to fill use extent for it rather than creating a new canvas */
 	extent_x = (box_width > new_width)   ? ((box_width - new_width) / 2)   : 0;
 	extent_y = (box_height > new_height) ? ((box_height - new_height) / 2) : 0;
