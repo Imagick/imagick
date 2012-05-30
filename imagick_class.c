@@ -7817,7 +7817,7 @@ PHP_METHOD(imagick, writeimages)
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The filename is too long", 1);
 	}
-	status = php_imagick_write_file(intern, &file, ImagickWriteImage, adjoin TSRMLS_CC);
+	status = php_imagick_write_file(intern, &file, ImagickWriteImages, adjoin TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 	
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to write the file: %s");
