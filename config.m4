@@ -84,15 +84,22 @@ if test $PHP_IMAGICK != "no"; then
   fi
 
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
+  
+  IMAGICK_MAGICK_PREFIX=`$WAND_BINARY --prefix`
+  
+  export ORIG_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
+  export PKG_CONFIG_PATH="$IMAGICK_MAGICK_PREFIX/lib/pkgconfig/"
 
   IMAGICK_LIBS=`$WAND_BINARY --libs`
-  IMAGICK_INCS=`$WAND_BINARY --cflags`
+  IMAGICK_CFLAGS=`$WAND_BINARY --cflags`
       
   PHP_EVAL_LIBLINE($IMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
-  PHP_EVAL_INCLINE($IMAGICK_INCS)
+  PHP_EVAL_INCLINE($IMAGICK_CFLAGS)
+  
+  export PKG_CONFIG_PATH="$ORIG_PKG_CONFIG_PATH"
 
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
 		
-  PHP_NEW_EXTENSION(imagick, imagick_file.c imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c, $ext_shared)
+  PHP_NEW_EXTENSION(imagick, imagick_file.c imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c, $ext_shared,, $IMAGICK_CFLAGS)
   PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h])
 fi
