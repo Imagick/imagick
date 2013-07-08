@@ -69,7 +69,10 @@ zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool be
 		ratio_x = (double)desired_width / (double)orig_width; 
 		ratio_y = (double)desired_height / (double)orig_height; 
 		
-		if (ratio_x < ratio_y) { 
+		if (ratio_x == ratio_y) { 
+			*new_width  = desired_width; 
+			*new_height = desired_height; 
+		} else if (ratio_x < ratio_y) { 
 			*new_width  = desired_width; 
 			*new_height = ratio_x * (double)orig_height; 
 		} else { 
