@@ -49,6 +49,12 @@ if test $PHP_IMAGICK != "no"; then
   	else
   		AC_MSG_ERROR(Cannot locate header file magick-wand.h)
     fi	
+  elif test "$IMAGEMAGICK_VERSION_MASK" -gt 6008000; then
+    if test -r $WAND_DIR/include/ImageMagick-6/wand/magick-wand.h; then
+      AC_MSG_RESULT(found in $WAND_DIR/include/ImageMagick-6/wand/magick-wand.h)
+    else
+        AC_MSG_ERROR(Cannot locate header file magick-wand.h)
+    fi 
   else	
     AC_MSG_CHECKING(for MagickWand.h header file)
 
