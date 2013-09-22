@@ -58,6 +58,7 @@ if test $PHP_IMAGICK != "no"; then
       if test -r "$path"; then
         AC_MSG_RESULT(found in $path)
         IMAGICK_FOUND_HEADER="yes"
+        break;
       fi
     done
     if test "x$IMAGICK_FOUND_HEADER" = "xno"; then
