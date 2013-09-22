@@ -1519,7 +1519,7 @@ PHP_METHOD(imagick, setpointsize)
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set font", 1);
+		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to set point size", 1);
 	}
 
 	RETURN_TRUE;
