@@ -57,6 +57,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="TODO" role="doc" />
 			<file name="INSTALL" role="doc" />
 			<file name="ChangeLog" role="doc" />
+			<file name="LICENSE" role="doc" />
 			<dir name="examples">
 				<file name="polygon.php" role="doc" />
 				<file name="captcha.php" role="doc" />
