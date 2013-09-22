@@ -130,17 +130,6 @@ typedef struct _php_imagickpixel_object  {
 #define IMAGICK_READ_WRITE_FILENAME_TOO_LONG 5
 #define IMAGICK_READ_WRITE_PATH_DOES_NOT_EXIST 6
 
-/* Filehandle handling */
-#define IMAGICK_WRITE_IMAGE_FILE 1
-#define IMAGICK_WRITE_IMAGES_FILE 2
-#define IMAGICK_READ_IMAGE_FILE 3
-#define IMAGICK_PING_IMAGE_FILE 4
-
-/* Filename */
-#define PHP_IMAGICK_FILE_PLAIN	1
-#define PHP_IMAGICK_FILE_FORMAT	2
-#define PHP_IMAGICK_FILE_URL	3
-
 /* Class entries */
 extern zend_class_entry *php_imagick_sc_entry;
 extern zend_class_entry *php_imagick_exception_class_entry;
