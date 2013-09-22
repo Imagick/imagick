@@ -48,20 +48,20 @@ if test $PHP_IMAGICK != "no"; then
       AC_MSG_RESULT(found in $WAND_DIR/include/wand/magick-wand.h)
     else
       AC_MSG_ERROR(Cannot locate header file magick-wand.h)
-    fi	
-  elif test "$IMAGEMAGICK_VERSION_MASK" -gt 6008000; then
-    if test -r $WAND_DIR/include/ImageMagick-6/wand/magick-wand.h; then
-      AC_MSG_RESULT(found in $WAND_DIR/include/ImageMagick-6/wand/magick-wand.h)
-    else
-        AC_MSG_ERROR(Cannot locate header file magick-wand.h)
-    fi 
+    fi
   else
     AC_MSG_CHECKING(for MagickWand.h header file)
+    IMAGICK_FOUND_HEADER="no"
+    IMAGEMAGICK_MAJOR_VERSION=`echo ${IMAGEMAGICK_VERSION_ORIG} | awk 'BEGIN { FS = "."; } {print $1}'`
 
-    if test -r $WAND_DIR/include/ImageMagick/wand/MagickWand.h; then
-      AC_MSG_RESULT(found in $WAND_DIR/include/ImageMagick/wand/MagickWand.h)
-    else
-      AC_MSG_ERROR(Cannot locate header file MagickWand.h)
+    for path in "$WAND_DIR/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/wand/MagickWand.h" "$WAND_DIR/include/ImageMagick/wand/MagickWand.h"; do
+      if test -r "$path"; then
+        AC_MSG_RESULT(found in $path)
+        IMAGICK_FOUND_HEADER="yes"
+      fi
+    done
+    if test "x$IMAGICK_FOUND_HEADER" = "xno"; then
+        AC_MSG_ERROR([Unable to find MagickWand.h header])
     fi
     AC_DEFINE(IMAGICK_USE_NEW_HEADER,1,[ ])
     PHP_IMAGICK_USE_NEW_HEADER=1
