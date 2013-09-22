@@ -7782,6 +7782,7 @@ PHP_METHOD(imagick, writeimage)
 	char *filename = NULL;
 	int status = 0;
 	int filename_len = 0;
+	zend_bool free_filename = 0;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
 
@@ -7794,11 +7795,12 @@ PHP_METHOD(imagick, writeimage)
 
 	if (!filename) {
 		filename = MagickGetImageFilename(intern->magick_wand);
-		
+
 		if (!filename) {
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "No image filename specified", 1);
 		}
 		filename_len = strlen(filename);
+		free_filename = 1;
 	}
 
 	if (!filename_len) {
@@ -7812,6 +7814,9 @@ PHP_METHOD(imagick, writeimage)
 	php_imagick_file_deinit(&file);
 
 	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to write the file: %s");
+	if (free_filename) {
+		IMAGICK_FREE_MEMORY(char *, filename);
+	}
 	RETURN_TRUE;
 }
 /* }}} */

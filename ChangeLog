@@ -1,3 +1,34 @@
+3.1.2
+- Fixed ZTS build
+- Added LICENSE file to comply with Fedora Packaging Guidelines
+- Fixed memory leaks
+
+3.1.1
+- Reworked identifyImage method
+
+3.1.0
+- Releasing RC3 as is
+
+3.1.0RC3
+- Fixed building against latest ImageMagick versions (#GH-2)
+- Fixed thumbnail resize bug (#GH-1)
+- Fixed building against latest PHP versions
+
+3.1.0RC2
+- Fixed PHP bug #61879 (Imagick writeImages no longer works with PHP5.4)
+
+3.1.0RC1
+- Fixed PECL Bug #22722
+- Fixed possible memory leaks in error scenarios
+- Added PHP 5.4 support
+
+3.1.0b1
+- Fixed PECL Bug #21229
+- Fixed PECL Bug #20636
+- Deprecated clone() method in favour of clone keyword
+- Added ImagickDraw::setResolution
+- Internal refactoring on read/write code
+
 3.0.1
 - Fixed PECL bug #17244
 
