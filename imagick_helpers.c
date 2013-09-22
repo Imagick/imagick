@@ -188,46 +188,6 @@ int count_occurences_of(char needle, char *haystack TSRMLS_DC)
 	return occurances;
 }
 
-void add_assoc_string_helper(zval *retvalue, char *name, char *key, char *hash_value TSRMLS_DC)
-{
-	char *pch;
-	char *trimmed;
-	zval *array;
-	int width, height;
-	double x, y;
-
-	if (strncmp(hash_value, name, strlen(name)) == 0) {
-		
-		if (strcmp("geometry", key) == 0) {
-
-			MAKE_STD_ZVAL(array);
-			array_init(array);
-			sscanf(hash_value, "%*s %d%*c%d", &width, &height);
-			add_assoc_long(array, "width", width);
-			add_assoc_long(array, "height", height);
-			add_assoc_zval(retvalue, key, array);
-		
-		} else if (strcmp("resolution" , key) == 0) {
-
-			MAKE_STD_ZVAL(array);
-			array_init(array);
-
-			sscanf(hash_value, "%*s %lf%*c%lf", &x, &y);
-			add_assoc_double(array, "x", x);
-			add_assoc_double(array, "y", y);
-			add_assoc_zval(retvalue, key, array);
-		
-		} else {
-
-			pch = strchr(hash_value, ':');
-			pch = strchr(pch + 1, ' ');
-			trimmed = php_trim(pch, strlen(pch), (char *)NULL, 0, NULL, 3 TSRMLS_CC);
-			add_assoc_string(retvalue, key, trimmed, 1);
-			efree(trimmed);
-		}
-	}
-}
-
 double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;

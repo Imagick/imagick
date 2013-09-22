@@ -11,23 +11,23 @@ fi
 if test $PHP_IMAGICK != "no"; then
 
   AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
-		
+
   for i in $PHP_IMAGICK /usr/local /usr;
   do
     test -r $i/bin/MagickWand-config && IMAGICK_AFTER_BWC_BREAK=true && WAND_BINARY=$i/bin/MagickWand-config && break
   done
-		
-	if test -z "$WAND_BINARY"; then
+
+  if test -z "$WAND_BINARY"; then
     for i in $PHP_IMAGICK /usr/local /usr;
     do
       test -r $i/bin/Wand-config && WAND_BINARY=$i/bin/Wand-config && break
     done
   fi
-		
+
   if test -z "$WAND_BINARY"; then
     AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
   fi
-		
+
   AC_MSG_RESULT(found in $WAND_BINARY)
 
   IMAGEMAGICK_VERSION_ORIG=`$WAND_BINARY --version`
@@ -39,15 +39,15 @@ if test $PHP_IMAGICK != "no"; then
   else
     AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
   fi
-		
+
   WAND_DIR=`$WAND_BINARY --prefix` 
-		
+
   if test -z "$IMAGICK_AFTER_BWC_BREAK"; then
     AC_MSG_CHECKING(for magick-wand.h header file)
     if test -r $WAND_DIR/include/wand/magick-wand.h; then
       AC_MSG_RESULT(found in $WAND_DIR/include/wand/magick-wand.h)
-  	else
-  		AC_MSG_ERROR(Cannot locate header file magick-wand.h)
+    else
+      AC_MSG_ERROR(Cannot locate header file magick-wand.h)
     fi	
   elif test "$IMAGEMAGICK_VERSION_MASK" -gt 6008000; then
     if test -r $WAND_DIR/include/ImageMagick-6/wand/magick-wand.h; then
@@ -55,7 +55,7 @@ if test $PHP_IMAGICK != "no"; then
     else
         AC_MSG_ERROR(Cannot locate header file magick-wand.h)
     fi 
-  else	
+  else
     AC_MSG_CHECKING(for MagickWand.h header file)
 
     if test -r $WAND_DIR/include/ImageMagick/wand/MagickWand.h; then
@@ -90,18 +90,22 @@ if test $PHP_IMAGICK != "no"; then
   fi
 
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
-  
+
   IMAGICK_MAGICK_PREFIX=`$WAND_BINARY --prefix`
   
   export ORIG_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
   export PKG_CONFIG_PATH="$IMAGICK_MAGICK_PREFIX/lib/pkgconfig/"
 
   IMAGICK_LIBS=`$WAND_BINARY --libs`
+  IMAGICK_LIBS="$IMAGICK_LIBS -L$WAND_DIR/lib"
+  
   IMAGICK_CFLAGS=`$WAND_BINARY --cflags`
-      
+  IMAGICK_CFLAGS="$IMAGICK_CFLAGS -I$WAND_DIR/include"
+
+  
   PHP_EVAL_LIBLINE($IMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
   PHP_EVAL_INCLINE($IMAGICK_CFLAGS)
-  
+
   export PKG_CONFIG_PATH="$ORIG_PKG_CONFIG_PATH"
 
   PHP_SUBST(IMAGICK_SHARED_LIBADD)

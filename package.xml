@@ -21,18 +21,18 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2013-09-06</date>
+	<date>2013-09-22</date>
 	<version>
-		<release>3.1.0</release>
-		<api>3.1.0</api>
+		<release>3.1.1</release>
+		<api>3.1.1</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Releasing RC3 as is
+- Reworked identifyImage method
 </notes>
 	<contents>
 		<dir name="/">
