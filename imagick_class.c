@@ -6637,7 +6637,7 @@ void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 }
 
 static
-void s_add_named_strings (zval *array, const char *haystack)
+void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
 	int done = 0;
 	char *line, *last_ptr = NULL, *buffer;
@@ -6690,7 +6690,7 @@ void s_add_named_strings (zval *array, const char *haystack)
 */
 PHP_METHOD(imagick, identifyimage)
 {
-	char *identify;
+	char *format, *identify, *filename;
 	php_imagick_object *intern;
 	zend_bool append_raw_string = 0;
 	zval *array;
@@ -6713,8 +6713,25 @@ PHP_METHOD(imagick, identifyimage)
 	array_init(return_value);
 
     // Name of the image
-	s_add_assoc_str (return_value, "imageName", MagickGetImageFilename (intern->magick_wand), 1);
-	s_add_named_strings (return_value, identify);
+	filename = MagickGetImageFilename (intern->magick_wand);
+	s_add_assoc_str (return_value, "imageName", filename, 1);
+	IMAGICK_FREE_MEMORY(char *, filename);
+
+	format = MagickGetImageFormat (intern->magick_wand);
+	if (format) {
+		char *mime_type = MagickToMime(format);
+		if (mime_type) {
+			s_add_assoc_str (return_value, "mimetype", mime_type, 1);
+			IMAGICK_FREE_MEMORY(char *, mime_type);
+		} else
+			s_add_assoc_str (return_value, "mimetype", "unknown", 1);
+
+		IMAGICK_FREE_MEMORY(char *, format);
+	}
+	else
+		s_add_assoc_str (return_value, "mimetype", "unknown", 1);
+
+	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	// Geometry is an associative array
 	MAKE_STD_ZVAL (array);
