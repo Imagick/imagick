@@ -244,16 +244,14 @@ php_imagick_rw_result_t php_imagick_read_file(php_imagick_object *intern, struct
 php_imagick_rw_result_t php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type, zend_bool adjoin TSRMLS_DC)
 {
 	php_imagick_rw_result_t rc;
-	MagickBooleanType status;
-	
+	MagickBooleanType status = MagickFalse;
+
 	if (file->type == ImagickFile) {
 		rc = php_imagick_safe_mode_check(file->absolute_path TSRMLS_CC);
-		
 		if (rc != IMAGICK_RW_OK) {
 			return rc;
 		}
 	}
-	
 	if (type == ImagickWriteImage) {
 		status = MagickWriteImage(intern->magick_wand, file->filename);
 	} else if (type == ImagickWriteImages) {
