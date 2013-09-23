@@ -268,7 +268,7 @@ int php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t
 	return IMAGICK_READ_WRITE_NO_ERROR;
 }
 
-int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, ImagickOperationType type TSRMLS_DC)
+zend_bool php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, ImagickOperationType type TSRMLS_DC)
 {
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_error_handling error_handling;
@@ -289,7 +289,7 @@ int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, I
 	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
 		goto return_on_error;
 	}
-	
+
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
@@ -298,14 +298,14 @@ int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, I
 
 	/* php_stream_cast returns warning on some streams but still does not return FAILURE */
 	if (EG(exception)) {
-		return 1;
+		return 0;
 	}
-	
+
 	switch (type) {
 		case ImagickWriteImageFile:
 			status = MagickWriteImageFile(intern->magick_wand, fp);
 		break;
-		
+
 		case ImagickWriteImagesFile:
 			status = MagickWriteImagesFile(intern->magick_wand, fp);
 		break;
@@ -313,30 +313,25 @@ int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, I
 		case ImagickReadImageFile:
 			status = MagickReadImageFile(intern->magick_wand, fp);
 		break;
-		
+
 		case ImagickPingImageFile:
 			status = MagickPingImageFile(intern->magick_wand, fp);
 		break;
-		
+
 		default:
 			goto return_on_error;
 		break;
 	}
-
 	if (status == MagickFalse) {
-		return 2;
-	}	
-	return 0;
-	
+		return 0;
+	}
+	return 1;
+
 return_on_error:
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
 	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
 #endif
-	if (EG(exception)) {
-		return 1;
-	} else {
-		return 2;
-	}
+	return 0;
 }

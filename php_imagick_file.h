@@ -72,6 +72,6 @@ int php_imagick_read_file(php_imagick_object *intern, struct php_imagick_file_t 
 int php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type, zend_bool adjoin TSRMLS_DC);
 
 /* Handle streams */
-int php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, ImagickOperationType type TSRMLS_DC);
+zend_bool php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, ImagickOperationType type TSRMLS_DC);
 
 #endif /* PHP_IMAGICK_FILE_H */

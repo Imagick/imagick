@@ -35,28 +35,28 @@ PHP_METHOD(imagick, pingimagefile)
 	php_imagick_object *intern;
 	zval *zstream;
 	php_stream *stream;
-	int result;
+	zend_bool result;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	php_stream_from_zval(stream, &zstream);
 	result = php_imagick_stream_handler(intern, stream, ImagickPingImageFile TSRMLS_CC);
-	
-	if (result == 1) {
-		RETURN_FALSE;
-	} else if (result == 2) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to ping image from the filehandle", 1);
+
+	if (result == 0) {
+		if (!EG(exception)) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to ping image from the filehandle", 1);
+		}
+		return;
 	}
-	
+
 	if (filename) {
 		MagickSetImageFilename(intern->magick_wand, filename);
 		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
 	}
-	
 	RETURN_TRUE;
 }
 /* }}} */
@@ -1221,22 +1221,23 @@ PHP_METHOD(imagick, writeimagefile)
 	php_imagick_object *intern;
 	zval *zstream;
 	php_stream *stream;
-	int result;
+	zend_bool result;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zstream) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	php_stream_from_zval(stream, &zstream);
 	result = php_imagick_stream_handler(intern, stream, ImagickWriteImageFile TSRMLS_CC);
-	
-	if (result == 1) {
-		RETURN_FALSE;
-	} else if (result == 2) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write image to the filehandle", 1);
+
+	if (result == 0) {
+		if (!EG(exception)) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write image to the filehandle", 1);
+		}
+		return;
 	}
 	RETURN_TRUE;
 }
@@ -1250,22 +1251,23 @@ PHP_METHOD(imagick, writeimagesfile)
 	php_imagick_object *intern;
 	zval *zstream;
 	php_stream *stream;
-	int result;
+	zend_bool result;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zstream) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	php_stream_from_zval(stream, &zstream);
 	result = php_imagick_stream_handler(intern, stream, ImagickWriteImagesFile TSRMLS_CC);
-	
-	if (result == 1) {
-		RETURN_FALSE;
-	} else if (result == 2) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write images to the filehandle", 1);
+
+	if (result == 0) {
+		if (!EG(exception)) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to write images to the filehandle", 1);
+		}
+		return;
 	}
 	RETURN_TRUE;
 }
@@ -2881,29 +2883,30 @@ PHP_METHOD(imagick, readimagefile)
 	int filename_len;
 	php_imagick_object *intern;
 	zval *zstream;
-	int result;
+	zend_bool result;
 	php_stream *stream;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	php_stream_from_zval(stream, &zstream);
 	result = php_imagick_stream_handler(intern, stream, ImagickReadImageFile TSRMLS_CC);
-	
-	if (result == 1) {
-		RETURN_FALSE;
-	} else if (result == 2) {
-		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to read image from the filehandle", 1);
+
+	if (result == 0) {
+		if (!EG(exception)) {
+			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to read image from the filehandle", 1);
+		}
+		return;
 	}
-	
+
 	if (filename) {
 		MagickSetImageFilename(intern->magick_wand, filename);
 		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
 	}
-	
+
 	RETURN_TRUE;
 }
 /* }}} */
