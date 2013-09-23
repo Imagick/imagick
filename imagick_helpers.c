@@ -130,7 +130,7 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 		if (!match) {
 			return 0;
 		}
-		*(p++);
+		p++;
 	}
 	return 1;
 }
@@ -138,7 +138,6 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;
-	HashTable *ht;
 	double *double_array;
 	long elements, i = 0;
 
