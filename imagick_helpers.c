@@ -130,7 +130,7 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 		if (!match) {
 			return 0;
 		}
-		*(p++);
+		p++;
 	}
 	return 1;
 }
