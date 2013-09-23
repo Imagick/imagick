@@ -1051,7 +1051,6 @@ PHP_METHOD(imagick, setimageorientation)
 PHP_METHOD(imagick, paintfloodfillimage)
 {
 	php_imagick_object *intern;
-	php_imagickpixel_object *intern_fill, *intern_border;
 	zval *fill_param, *border_param;
 	long x, y, channel = DefaultChannels;
 	double fuzz;
@@ -1503,7 +1502,7 @@ PHP_METHOD(imagick, setfont)
 {
 	php_imagick_object *intern;
 	char *font, *absolute;
-	int font_len, error = 0;
+	int font_len;
 	MagickBooleanType status;
 	php_imagick_rw_result_t rc;
 
@@ -6511,7 +6510,6 @@ PHP_METHOD(imagick, thumbnailimage)
 {
 	long width, height, new_width, new_height;
 	php_imagick_object *intern;
-	MagickBooleanType status;
 	zend_bool bestfit = 0, fill = 0;
 
 	/* Parse parameters given to function */
@@ -7328,7 +7326,6 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 {
 	zval *param;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 	PixelWand *color_wand;
 	zend_bool allocated;
@@ -7949,7 +7946,6 @@ PHP_METHOD(imagick, setimagemattecolor)
 {
 	zval *param;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 	PixelWand *color_wand;
 	zend_bool allocated;
@@ -8723,7 +8719,6 @@ PHP_METHOD(imagick, borderimage)
 {
 	zval *param;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 	long width, height;
 	PixelWand *color_wand;
