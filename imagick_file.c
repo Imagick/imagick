@@ -256,6 +256,9 @@ php_imagick_rw_result_t php_imagick_write_file(php_imagick_object *intern, struc
 		status = MagickWriteImage(intern->magick_wand, file->filename);
 	} else if (type == ImagickWriteImages) {
 		status = MagickWriteImages(intern->magick_wand, file->filename, adjoin);
+	} else {
+		/* will never happen */
+		status = MagickFalse;
 	}
 
 	/* Write succeded ? */
