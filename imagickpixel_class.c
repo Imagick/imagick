@@ -280,7 +280,7 @@ PHP_METHOD(imagickpixel, setcolor)
 	status = PixelSetColor(internp->pixel_wand, color_name);
 
 	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(internp->pixel_wand, "Unable to set ImagickPixel color", 4);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to set ImagickPixel color", 4);
 	}
 
 	RETURN_TRUE;
