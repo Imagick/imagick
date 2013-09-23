@@ -56,7 +56,7 @@ PHP_METHOD(imagick, pingimagefile)
 
 	if (filename) {
 		MagickSetImageFilename(intern->magick_wand, filename);
-		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+		MagickSetLastIterator(intern->magick_wand);
 	}
 	RETURN_TRUE;
 }
@@ -3058,7 +3058,7 @@ PHP_METHOD(imagick, readimagefile)
 
 	if (filename) {
 		MagickSetImageFilename(intern->magick_wand, filename);
-		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+		MagickSetLastIterator(intern->magick_wand);
 	}
 
 	RETURN_TRUE;
@@ -3158,7 +3158,7 @@ PHP_METHOD(imagick, readimageblob)
 
 	/* Even if filename is null we need to give a name here. Otherwise segfaults will happen */
 	MagickSetImageFilename(intern->magick_wand, filename);
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -3741,7 +3741,7 @@ PHP_METHOD(imagick, addimage)
 		return;
 	}
 
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -3795,7 +3795,7 @@ PHP_METHOD(imagick, newimage)
 		}
 	}
 
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -6864,7 +6864,7 @@ PHP_METHOD(imagick, removeimage)
 		return;
 	}
 	intern->next_out_of_bound = 0;
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */

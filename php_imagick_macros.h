@@ -39,9 +39,6 @@
 #define IMAGICK_METHOD_DEPRECATED_USE_INSTEAD(class_name, method_name, new_class, new_method) \
 	php_error(E_STRICT, "%s::%s is deprecated. %s::%s should be used instead", class_name, method_name, new_class, new_method);
 
-#define IMAGICK_CORRECT_ITERATOR_POSITION(intern)\
-	MagickSetLastIterator(intern->magick_wand);
-
 #define IMAGICK_REPLACE_MAGICKWAND(intern, new_wand)\
 	if (intern->magick_wand == NULL) {\
 		intern->magick_wand = new_wand; \
