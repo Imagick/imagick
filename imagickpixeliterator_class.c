@@ -46,7 +46,7 @@ PHP_METHOD(imagickpixeliterator, __construct)
 		return;
 	}
 
-	internpix->pixel_iterator = NewPixelIterator( intern->magick_wand );
+	internpix->pixel_iterator = NewPixelIterator(intern->magick_wand);
 	internpix->iterator_type = 1;
 
 #if MagickLibVersion <= 0x628
@@ -72,7 +72,7 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -85,7 +85,7 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 		return;
 	}
 
-	PixelResetIterator( internpix->pixel_iterator );
+	PixelResetIterator(internpix->pixel_iterator);
 #if MagickLibVersion <= 0x628
 	internpix->iterator_position = 0;
 #endif
@@ -103,7 +103,7 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -116,7 +116,7 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 		return;
 	}
 
-	PixelSyncIterator( internpix->pixel_iterator );
+	PixelSyncIterator(internpix->pixel_iterator);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -131,7 +131,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -144,7 +144,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 		return;
 	}
 
-	PixelSetFirstIteratorRow( internpix->pixel_iterator );
+	PixelSetFirstIteratorRow(internpix->pixel_iterator);
 #if MagickLibVersion <= 0x628
 	internpix->iterator_position = 0;
 #endif
@@ -162,7 +162,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -175,7 +175,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 		return;
 	}
 
-	PixelSetLastIteratorRow( internpix->pixel_iterator );
+	PixelSetLastIteratorRow(internpix->pixel_iterator);
 #if MagickLibVersion <= 0x628
 	internpix->iterator_position = (internpix->rows - 1);
 #endif
@@ -317,7 +317,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 		return;
 	}
 
-	status = PixelSetIteratorRow( internpix->pixel_iterator, row );
+	status = PixelSetIteratorRow(internpix->pixel_iterator, row);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagickpixeliterator_exception(internpix->pixel_iterator, "Unable to set iterator row" TSRMLS_CC);
@@ -344,7 +344,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -357,29 +357,29 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 		return;
 	}
 
-	wand_array = PixelGetPreviousIteratorRow( internpix->pixel_iterator, &num_wands );
+	wand_array = PixelGetPreviousIteratorRow(internpix->pixel_iterator, &num_wands);
 
 #if MagickLibVersion <= 0x628
-	if ( internpix->iterator_position != 0 ) {
+	if (internpix->iterator_position != 0) {
 		internpix->iterator_position--;
 	}
 #endif
 
-	if ( wand_array == (PixelWand **)NULL ) {
+	if (!wand_array) {
 		RETURN_NULL();
 	}
 
-	array_init( return_value );
+	array_init(return_value);
 
-	for (i = 0; i < num_wands; i++ ) {
+	for (i = 0; i < num_wands; i++) {
 
-		if ( wand_array[i] != (PixelWand *)NULL && IsPixelWand ( wand_array[i] ) ) {
-			MAKE_STD_ZVAL( tmp_pixelwand );
-			object_init_ex( tmp_pixelwand, php_imagickpixel_sc_entry );
+		if (wand_array[i] != NULL && IsPixelWand (wand_array[i])) {
+			MAKE_STD_ZVAL(tmp_pixelwand);
+			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, wand_array[i] );
+			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
 			internp->initialized_via_iterator = 1;
-			add_next_index_zval( return_value, tmp_pixelwand );
+			add_next_index_zval(return_value, tmp_pixelwand);
 		}
 	}
 
@@ -403,7 +403,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -416,32 +416,32 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 		return;
 	}
 #if MagickLibVersion <= 0x628
-	if ( internpix->iterator_position >= internpix->rows ) {
+	if ( internpix->iterator_position >= internpix->rows) {
 		RETURN_NULL();
-	} else if ( internpix->iterator_position != 0 ) {
+	} else if ( internpix->iterator_position != 0) {
 		long tmp;
-		(void)PixelGetPreviousIteratorRow( internpix->pixel_iterator, &tmp );
+		(void)PixelGetPreviousIteratorRow(internpix->pixel_iterator, &tmp);
 	}
-	wand_array = (PixelWand **)PixelGetNextIteratorRow( internpix->pixel_iterator, &num_wands );
+	wand_array = (PixelWand **)PixelGetNextIteratorRow(internpix->pixel_iterator, &num_wands);
 #else
-	wand_array = (PixelWand **)PixelGetCurrentIteratorRow( internpix->pixel_iterator, &num_wands );
+	wand_array = (PixelWand **)PixelGetCurrentIteratorRow(internpix->pixel_iterator, &num_wands);
 #endif
 
-	if ( wand_array == (PixelWand **)NULL ) {
+	if (wand_array == NULL) {
 		RETURN_NULL();
 	}
 
-	array_init( return_value );
+	array_init(return_value);
 
 	for (i = 0; i < num_wands; i++ ) {
 
-		if ( wand_array[i] != (PixelWand *)NULL && IsPixelWand ( wand_array[i] ) ) {
-			MAKE_STD_ZVAL( tmp_pixelwand );
-			object_init_ex( tmp_pixelwand, php_imagickpixel_sc_entry );
+		if (wand_array[i] != NULL && IsPixelWand (wand_array[i])) {
+			MAKE_STD_ZVAL(tmp_pixelwand);
+			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, wand_array[i] );
+			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
 			internp->initialized_via_iterator = 1;
-			add_next_index_zval( return_value, tmp_pixelwand );
+			add_next_index_zval(return_value, tmp_pixelwand);
 		}
 	}
 
@@ -463,7 +463,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -476,28 +476,28 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 		return;
 	}
 
-	wand_array = PixelGetNextIteratorRow( internpix->pixel_iterator, &num_wands );
+	wand_array = PixelGetNextIteratorRow(internpix->pixel_iterator, &num_wands);
 
 #if MagickLibVersion <= 0x628
 	internpix->iterator_position++;
 #endif
 
-	if ( wand_array == (PixelWand **)NULL ) {
+	if (wand_array == NULL) {
 		RETURN_NULL();
 	}
 
-	array_init( return_value );
+	array_init(return_value);
 
-	for (i = 0; i < num_wands; i++ ) {
+	for (i = 0; i < num_wands; i++) {
 
-		if ( wand_array[i] != (PixelWand *)NULL && IsPixelWand ( wand_array[i] ) ) {
+		if (wand_array[i] != NULL && IsPixelWand (wand_array[i])) {
 
 			MAKE_STD_ZVAL( tmp_pixelwand );
-			object_init_ex( tmp_pixelwand, php_imagickpixel_sc_entry );
+			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND( internp, wand_array[i] );
+			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
 			internp->initialized_via_iterator = 1;
-			add_next_index_zval( return_value, tmp_pixelwand );
+			add_next_index_zval(return_value, tmp_pixelwand);
 		}
 	}
 	return;
@@ -512,11 +512,11 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	zval *object;
 	php_imagickpixeliterator_object *internpix;
 	object = getThis();
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	if (internpix->instanciated_correctly < 1) {
@@ -595,7 +595,7 @@ PHP_METHOD(imagickpixeliterator, valid)
 	}
 #else
 	/* Test if the current row is valid */
-	if ( PixelSetIteratorRow( internpix->pixel_iterator, PixelGetIteratorRow( internpix->pixel_iterator ) ) ) {
+	if ( PixelSetIteratorRow(internpix->pixel_iterator, PixelGetIteratorRow(internpix->pixel_iterator))) {
 		 RETURN_TRUE;
 	}
 #endif
