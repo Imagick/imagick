@@ -1055,7 +1055,7 @@ PHP_METHOD(imagick, paintfloodfillimage)
 	long x, y, channel = DefaultChannels;
 	double fuzz;
 	MagickBooleanType status;
-	PixelWand *fill_wand, *border_wand;
+	PixelWand *fill_wand, *border_wand = NULL;
 	zend_bool fill_allocated = 0, border_allocated = 0;
 
 	/* Parse parameters given to function */
