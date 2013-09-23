@@ -504,7 +504,7 @@ PHP_METHOD(imagickdraw, setfont)
 {
 	php_imagickdraw_object *internd;
 	char *font, *absolute;
-	int font_len, error = 0;
+	int font_len;
 	MagickBooleanType status;
 	php_imagick_rw_result_t rc;
 
