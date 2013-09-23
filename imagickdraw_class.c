@@ -410,7 +410,11 @@ PHP_METHOD(imagickdraw, setfillalpha)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
+#if MagickLibVersion >= 0x635
+	DrawSetFillOpacity(internd->drawing_wand, opacity);
+#else
 	DrawSetFillAlpha(internd->drawing_wand, opacity);
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
@@ -473,7 +477,11 @@ PHP_METHOD(imagickdraw, setstrokealpha)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
+#if MagickLibVersion >= 0x635
+	DrawSetStrokeOpacity(internd->drawing_wand, opacity);
+#else
 	DrawSetStrokeAlpha(internd->drawing_wand, opacity);
+#endif
 	RETURN_TRUE;
 }
 /* }}} */
