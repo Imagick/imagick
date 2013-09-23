@@ -132,10 +132,9 @@ static int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, 
 	} else {
 		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
-	
-	MagickSetImageFilename(intern->magick_wand, file->absolute_path);
 
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetImageFilename(intern->magick_wand, file->absolute_path);
+	MagickSetLastIterator(intern->magick_wand);
 	return IMAGICK_RW_OK;
 }
 
@@ -167,7 +166,7 @@ static int php_imagick_read_image_using_php_streams(php_imagick_object *intern, 
 	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
 		goto return_error;
 	}
-	
+
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
 #else
@@ -175,7 +174,7 @@ static int php_imagick_read_image_using_php_streams(php_imagick_object *intern, 
 #endif
 
 	if (type == ImagickReadImage) {
-		status = MagickReadImageFile(intern->magick_wand, fp);	
+		status = MagickReadImageFile(intern->magick_wand, fp);
 	} else if (type == ImagickPingImage){
 		status = MagickPingImageFile(intern->magick_wand, fp);
 	} else {
@@ -186,17 +185,17 @@ static int php_imagick_read_image_using_php_streams(php_imagick_object *intern, 
 		php_stream_close(stream);
 		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
-	
+
 	MagickSetImageFilename(intern->magick_wand, file->absolute_path);
 	php_stream_close(stream);
 
 	if (status == MagickFalse) {
 		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
-	
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+
+	MagickSetLastIterator(intern->magick_wand);
 	return IMAGICK_RW_OK;
-	
+
 return_error:
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_restore_error_handling(&error_handling TSRMLS_CC);
@@ -223,28 +222,28 @@ int php_imagick_safe_mode_check(const char *filename TSRMLS_DC)
 	return IMAGICK_RW_OK;
 }
 
-int php_imagick_read_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
-{	
-	int rc;
-	
+php_imagick_rw_result_t php_imagick_read_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
+{
+	php_imagick_rw_result_t rc;
+
 	if (file->type == ImagickFile) {
 		rc = php_imagick_safe_mode_check(file->absolute_path TSRMLS_CC);
-		
+
 		if (rc != IMAGICK_RW_OK) {
 			return rc;
 		}
 	}
-	
+
 	if (file->type == ImagickUri) {
 		return php_imagick_read_image_using_php_streams(intern, file, type TSRMLS_CC);
 	} else {
-		return php_imagick_read_image_using_imagemagick(intern, file, type TSRMLS_CC);	
+		return php_imagick_read_image_using_imagemagick(intern, file, type TSRMLS_CC);
 	}
 }
 
-int php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type, zend_bool adjoin TSRMLS_DC)
+php_imagick_rw_result_t php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type, zend_bool adjoin TSRMLS_DC)
 {
-	int rc;
+	php_imagick_rw_result_t rc;
 	MagickBooleanType status;
 	
 	if (file->type == ImagickFile) {
