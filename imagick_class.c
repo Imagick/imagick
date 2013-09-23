@@ -1212,7 +1212,7 @@ PHP_METHOD(imagick, getimageprofiles)
 	if (values) {
 
 		for (i = 0; i < profiles_count; i++) {
-			profile = MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
+			profile = (char *)MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
 			add_assoc_stringl(return_value, profiles[i], profile, length, 1);
 			IMAGICK_FREE_MEMORY(char *, profile);
 		}
@@ -9800,7 +9800,8 @@ PHP_METHOD(imagick, getpage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long width, height, x, y;
+	unsigned long width, height;
+	long x, y;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9830,7 +9831,7 @@ PHP_METHOD(imagick, getpage)
 PHP_METHOD(imagick, getquantumdepth)
 {
 	char *quantum_depth;
-	long depth;
+	unsigned long depth;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9852,7 +9853,7 @@ PHP_METHOD(imagick, getquantumdepth)
 PHP_METHOD(imagick, getquantumrange)
 {
 	char *quantum_range;
-	long range;
+	unsigned long range;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9921,7 +9922,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 {
 	php_imagick_object *intern;
 	double *sampling_factors;
-	long number_factors = 0, i;
+	unsigned long number_factors = 0, i;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
