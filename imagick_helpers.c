@@ -26,24 +26,24 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 {
 	FILE *fp;
 	php_imagick_object *intern = (php_imagick_object *)client_data;
-	
+
 	if (!intern) {
 		return MagickFalse;
 	}
-	
+
 	if (!intern->progress_monitor_name) {
 		return MagickFalse;
 	}
 
 	fp = fopen(intern->progress_monitor_name, "a+");
-	
+
 	if (!fp) {
 		return MagickFalse;
 	}
 
-	fprintf(fp, "text: %s, offset: %ld, span: %ld\n", text, offset, span);
+	fprintf(fp, "text: %s, offset: %lld, span: %lld\n", text, offset, span);
 	fclose(fp);
-	return MagickTrue;	
+	return MagickTrue;
 }
 
 zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
@@ -109,48 +109,10 @@ zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool be
 	return 1;
 }
 
-#if MagickLibVersion > 0x631
-/*
-	Resizes an image so that it is 'bestfit' for the bounding box
-	If the image does not fill the box completely the box is filled with
-	image's background color. The background color can be set using MagickSetImageBackgroundColor
-*/
-zend_bool php_imagick_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill)
-{
-	long new_width, new_height;
-	long extent_x, extent_y;
-
-	/* Calculate dimensions */
-	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
-		return 0;
-	}
-
-	/* Resize the image to the new size */
-	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
-		return 0;
-	}
-
-	/* If user does not want to fill we are all done here */
-	if (!fill) {
-		return 1;
-	}
-
-	/* In case user wants to fill use extent for it rather than creating a new canvas */
-	extent_x = (box_width > new_width)   ? ((box_width - new_width) / 2)   : 0;
-	extent_y = (box_height > new_height) ? ((box_height - new_height) / 2) : 0;
-
-	if (MagickExtentImage(magick_wand, box_width, box_height, extent_x * -1, extent_y * -1) == MagickFalse) {
-		return 0;
-	}
-	return 1;
-}
-#endif
-
-
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 {
 	zend_bool match;
-	char *p = map;
+	const char *p = map;
 	char allow_map[] = { 'R', 'G', 'B', 
 						 'A', 'O', 'C', 
 						 'Y', 'M', 'K', 
@@ -172,23 +134,7 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 	return 1;
 }
 
-int count_occurences_of(char needle, char *haystack TSRMLS_DC)
-{
-	int occurances = 0;
-
-	if (haystack == (char *)NULL) {
-		return 0;
-	}
-
-	while (*haystack != '\0') {
-		if (*(haystack++) == needle) {
-			occurances++;
-		}
-	}
-	return occurances;
-}
-
-double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
+double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;
 	HashTable *ht;
@@ -221,7 +167,7 @@ double *get_double_array_from_zval(zval *param_array, long *num_elements TSRMLS_
 	return double_array;
 }
 
-long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
+long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;
 	long *long_array;
@@ -253,7 +199,7 @@ long *get_long_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
 	return long_array;
 }
 
-unsigned char *get_char_array_from_zval(zval *param_array, long *num_elements TSRMLS_DC)
+unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
 	zval **ppzval;
 	unsigned char *char_array;
@@ -306,54 +252,7 @@ int check_configured_font(char *font, int font_len TSRMLS_DC)
 	return retval;
 }
 
-zend_bool crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC)
-{
-	double ratio_x, ratio_y;
-	long crop_x = 0, crop_y = 0, new_width, new_height;
-	
-	long orig_width  = MagickGetImageWidth(magick_wand);
-	long orig_height = MagickGetImageHeight(magick_wand);
-	
-	/* Already at the size, just strip profiles */
-	if ((orig_width == desired_width) && (orig_height == desired_height)) {
-		if (!MagickStripImage(magick_wand)) {
-			return 0;
-		}
-		return 1;
-	}
-	
-	ratio_x = (double)desired_width / (double)orig_width; 
-	ratio_y = (double)desired_height / (double)orig_height; 
-	
-	if (ratio_x > ratio_y) { 
-		new_width  = desired_width; 
-		new_height = ratio_x * (double)orig_height; 
-	} else { 
-		new_height = desired_height; 
-		new_width  = ratio_y * (double)orig_width; 
-	}
-	
-	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
-		return 0;
-	}
-	
-	/* all done here */
-	if ((new_width == desired_width) && (new_height == desired_height)) {
-		return 1;
-	}
-	
-	crop_x = (new_width - desired_width) / 2;
-	crop_y = (new_height - desired_height) / 2;
-
-	if (MagickCropImage(magick_wand, desired_width, desired_height, crop_x, crop_y) == MagickFalse) {
-		return 0;
-	}
-	
-	MagickSetImagePage(magick_wand, desired_width, desired_height, 0, 0);
-	return 1;
-}
-
-void *get_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
+PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 {
 	PointInfo *coordinates;
 	long elements, sub_elements, i;

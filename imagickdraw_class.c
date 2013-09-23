@@ -1064,7 +1064,7 @@ PHP_METHOD(imagickdraw, polygon)
 		return;
 	}
 
-	coordinates = get_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
+	coordinates = php_imagick_zval_to_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
 	if (!coordinates) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
@@ -1094,7 +1094,7 @@ PHP_METHOD(imagickdraw, bezier)
 		return;
 	}
 
-	coordinates = get_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
+	coordinates = php_imagick_zval_to_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
 	if (!coordinates) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
@@ -1549,7 +1549,7 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 		return;
 	}
 
-	double_array = get_double_array_from_zval(param_array, &elements TSRMLS_CC);
+	double_array = php_imagick_zval_to_double_array(param_array, &elements TSRMLS_CC);
 
 	if (!double_array) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Can't read array", 2);
@@ -2201,7 +2201,7 @@ PHP_METHOD(imagickdraw, polyline)
 		return;
 	}
 
-	coordinates = get_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
+	coordinates = php_imagick_zval_to_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
 	if (!coordinates) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);

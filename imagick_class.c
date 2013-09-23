@@ -1195,7 +1195,7 @@ PHP_METHOD(imagick, distortimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	arguments = get_double_array_from_zval(arg_array, &elements TSRMLS_CC);
+	arguments = php_imagick_zval_to_double_array(arg_array, &elements TSRMLS_CC);
 
 	if (!arguments) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can't read argument array", 1);
@@ -1404,7 +1404,7 @@ PHP_METHOD(imagick, recolorimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 	
-	array = get_double_array_from_zval(matrix, &num_elements TSRMLS_CC);
+	array = php_imagick_zval_to_double_array(matrix, &num_elements TSRMLS_CC);
 	
 	if (!array) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map contains disallowed characters", 1);
@@ -1992,7 +1992,7 @@ PHP_METHOD(imagick, importimagepixels)
 		case DoublePixel:
 			/* Use doubles */
 			storage = DoublePixel;
-			double_array = (double *)get_double_array_from_zval(pixels, &num_elements TSRMLS_CC);
+			double_array = (double *)php_imagick_zval_to_double_array(pixels, &num_elements TSRMLS_CC);
 			if (!double_array) {
 				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map must contain only numeric values", 1);
 			}
@@ -2005,7 +2005,7 @@ PHP_METHOD(imagick, importimagepixels)
 		case LongPixel:
 			/* Use longs */
 			storage = LongPixel;
-			long_array = (long *)get_long_array_from_zval(pixels, &num_elements TSRMLS_CC);
+			long_array = (long *)php_imagick_zval_to_long_array(pixels, &num_elements TSRMLS_CC);
 			if (!long_array) {
 				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map must contain only numeric values", 1);
 			}
@@ -2014,7 +2014,7 @@ PHP_METHOD(imagick, importimagepixels)
 		break;
 		
 		case CharPixel:
-			char_array = (unsigned char *)get_char_array_from_zval(pixels, &num_elements TSRMLS_CC);
+			char_array = (unsigned char *)php_imagick_zval_to_char_array(pixels, &num_elements TSRMLS_CC);
 			if (!char_array) {
 				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The character array contains incorrect values", 1);
 			}
@@ -2092,7 +2092,7 @@ PHP_METHOD(imagick, sparsecolorimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 	
-	double_array = (double *)get_double_array_from_zval(arguments, &num_elements TSRMLS_CC);
+	double_array = (double *)php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 	
 	if (!double_array) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The map must contain only numeric values", 1);
@@ -2283,7 +2283,7 @@ PHP_METHOD(imagick, functionimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	array = get_double_array_from_zval(arguments, &num_elements TSRMLS_CC);
+	array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!array) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The arguments array contains disallowed characters", 1);
@@ -2653,7 +2653,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 
 	/* No parameter passed, this means we should autodetect */
 	if (!multiline) {
-		if (count_occurences_of('\n', text TSRMLS_CC ) > 0) {
+		if (strchr (text, '\n') != NULL) {
 			query_multiline = 1;
 		} else {
 			query_multiline = 0;
@@ -3607,7 +3607,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	MagickBooleanType status;
 	long columns, rows;
 	char *pseudo_string;
-	int pseudo_string_len;
+	int pseudo_string_len, rc;
 	struct php_imagick_file_t file = {0};
 	
 	/* Parse parameters given to function */
@@ -3616,7 +3616,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	}
 	
 	/* Allow only pseudo formats in this method */
-	if (count_occurences_of(':', pseudo_string TSRMLS_CC ) < 1) {
+	if (strchr (pseudo_string, ':') == NULL) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid pseudo format string", 1);
 	}
 	
@@ -3633,10 +3633,10 @@ PHP_METHOD(imagick, newpseudoimage)
 	if (!php_imagick_file_init(&file, pseudo_string, pseudo_string_len TSRMLS_CC)) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The filename is too long", 1);
 	}
-	status = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, pseudo_string, status, IMAGICK_DONT_FREE_FILENAME, "Unable to create new pseudo image: %s");
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, pseudo_string, rc, IMAGICK_DONT_FREE_FILENAME, "Unable to create new pseudo image: %s");
 	RETURN_TRUE;
 }
 /* }}} */
@@ -4775,7 +4775,7 @@ PHP_METHOD(imagick, convolveimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
-	kernel = get_double_array_from_zval(kernel_array, &num_elements TSRMLS_CC);
+	kernel = php_imagick_zval_to_double_array(kernel_array, &num_elements TSRMLS_CC);
 
 	if (!kernel) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Unable to read matrix array", 1);
@@ -6134,6 +6134,44 @@ PHP_METHOD(imagick, getnumberimages)
 }
 /* }}} */
 
+/*
+	Resizes an image so that it is 'bestfit' for the bounding box
+	If the image does not fill the box completely the box is filled with
+	image's background color. The background color can be set using MagickSetImageBackgroundColor
+*/
+#if MagickLibVersion > 0x631
+static
+zend_bool s_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill)
+{
+	long new_width, new_height;
+	long extent_x, extent_y;
+
+	/* Calculate dimensions */
+	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
+		return 0;
+	}
+
+	/* Resize the image to the new size */
+	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
+		return 0;
+	}
+
+	/* If user does not want to fill we are all done here */
+	if (!fill) {
+		return 1;
+	}
+
+	/* In case user wants to fill use extent for it rather than creating a new canvas */
+	extent_x = (box_width > new_width)   ? ((box_width - new_width) / 2)   : 0;
+	extent_y = (box_height > new_height) ? ((box_height - new_height) / 2) : 0;
+
+	if (MagickExtentImage(magick_wand, box_width, box_height, extent_x * -1, extent_y * -1) == MagickFalse) {
+		return 0;
+	}
+	return 1;
+}
+#endif
+
 /* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false, bool fill = false])
 	 Changes the size of an image to the given dimensions and removes any associated profiles
 */
@@ -6151,10 +6189,10 @@ PHP_METHOD(imagick, thumbnailimage)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
-	
-	if (bestfit && fill) {	
+
+	if (bestfit && fill) {
 #if MagickLibVersion > 0x631
-		if (!php_imagick_resize_bounding_box(intern->magick_wand, width, height, fill)) {
+		if (!s_resize_bounding_box(intern->magick_wand, width, height, fill)) {
 			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to resize and fill image", 1);
 		}
 #else 
@@ -6164,7 +6202,6 @@ PHP_METHOD(imagick, thumbnailimage)
 		if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
 			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Invalid image geometry", 1);
 		}
-		
 		/* No magick is going to happen */
 		if (MagickThumbnailImage(intern->magick_wand, new_width, new_height) == MagickFalse) {
 			IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to thumbnail image", 1);
@@ -6173,6 +6210,55 @@ PHP_METHOD(imagick, thumbnailimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+static
+zend_bool s_crop_thumbnail_image(MagickWand *magick_wand, long desired_width, long desired_height TSRMLS_DC)
+{
+	double ratio_x, ratio_y;
+	long crop_x = 0, crop_y = 0, new_width, new_height;
+
+	long orig_width  = MagickGetImageWidth(magick_wand);
+	long orig_height = MagickGetImageHeight(magick_wand);
+
+	/* Already at the size, just strip profiles */
+	if ((orig_width == desired_width) && (orig_height == desired_height)) {
+		if (!MagickStripImage(magick_wand)) {
+			return 0;
+		}
+		return 1;
+	}
+
+	ratio_x = ((double) desired_width / (double) orig_width);
+	ratio_y = ((double) desired_height / (double) orig_height);
+
+	if (ratio_x > ratio_y) {
+		new_width  = desired_width;
+		new_height = ratio_x * (double)orig_height;
+	} else {
+		new_height = desired_height;
+		new_width  = ratio_y * (double)orig_width;
+	}
+
+	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
+		return 0;
+	}
+
+	/* all done here */
+	if ((new_width == desired_width) && (new_height == desired_height)) {
+		return 1;
+	}
+
+	crop_x = (long) ((new_width - desired_width) / 2);
+	crop_y = (long) ((new_height - desired_height) / 2);
+
+	if (MagickCropImage(magick_wand, desired_width, desired_height, crop_x, crop_y) == MagickFalse) {
+		return 0;
+	}
+
+	MagickSetImagePage(magick_wand, desired_width, desired_height, 0, 0);
+	return 1;
+}
+
 // 
 /* {{{ proto bool Imagick::cropthumbnailImage(int columns, int rows)
 	 Creates a crop thumbnail
@@ -6191,7 +6277,7 @@ PHP_METHOD(imagick, cropthumbnailimage)
 	IMAGICK_CHECK_NOT_EMPTY(intern->magick_wand, 1, 1);
 
 	/* The world collapses.. */
-	if (!crop_thumbnail_image(intern->magick_wand, crop_width, crop_height TSRMLS_CC)) {
+	if (!s_crop_thumbnail_image(intern->magick_wand, crop_width, crop_height TSRMLS_CC)) {
 		IMAGICK_THROW_IMAGICK_EXCEPTION(intern->magick_wand, "Unable to crop-thumbnail image", 1);
 	}
 
@@ -9372,7 +9458,7 @@ PHP_METHOD(imagick, getsize)
 PHP_METHOD(imagick, getversion)
 {
 	char *version_string;
-	long version_number;
+	size_t version_number;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9381,7 +9467,7 @@ PHP_METHOD(imagick, getversion)
 	version_string = (char *)MagickGetVersion(&version_number);
 	array_init(return_value);
 
-	add_assoc_long(return_value, "versionNumber", version_number);
+	add_assoc_long(return_value, "versionNumber", (long) version_number);
 	add_assoc_string(return_value, "versionString", version_string, 1);
 	return;
 }
@@ -9689,7 +9775,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 		return;
 	}
 
-	double_array = get_double_array_from_zval(factors, &elements TSRMLS_CC);
+	double_array = php_imagick_zval_to_double_array(factors, &elements TSRMLS_CC);
 
 	if (double_array == (double *)NULL) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can't read array", 1);
