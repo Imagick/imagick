@@ -320,7 +320,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 	status = PixelSetIteratorRow( internpix->pixel_iterator, row );
 
 	if (status == MagickFalse) {
-		php_imagick_convert_imagickpixeliterator_exception( internpix->pixel_iterator, "Unable to set iterator row");
+		php_imagick_convert_imagickpixeliterator_exception(internpix->pixel_iterator, "Unable to set iterator row" TSRMLS_CC);
 		return;
 	}
 #if MagickLibVersion <= 0x628
