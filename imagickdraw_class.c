@@ -347,7 +347,7 @@ PHP_METHOD(imagickdraw, setresolution)
 	efree (buf);
 
 	if (!density) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Failed to allocate memory", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to allocate memory" TSRMLS_CC);
 		return;
 	}
 
@@ -357,7 +357,7 @@ PHP_METHOD(imagickdraw, setresolution)
 	d_wand = (DrawingWand *) DrawAllocateWand(draw_info, NULL);
 
 	if (!d_wand) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Failed to allocate new DrawingWand structure", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to allocate new DrawingWand structure" TSRMLS_CC);
 		return;
 	}
 
@@ -435,7 +435,10 @@ PHP_METHOD(imagickdraw, settextantialias)
 /* }}} */
 
 /* {{{ proto bool ImagickDraw::setTextEncoding(string encoding)
-	Specifies specifies the code set to use for text annotations. The only character encoding which may be specified at this time is "UTF-8" for representing Unicode as a sequence of bytes. Specify an empty string to set text encoding to the system's default. Successful text annotation using Unicode may require fonts designed to support Unicode.
+	Specifies specifies the code set to use for text annotations.
+	The only character encoding which may be specified at this time is "UTF-8" for representing Unicode as a sequence of bytes.
+	Specify an empty string to set text encoding to the system's default. 
+	Successful text annotation using Unicode may require fonts designed to support Unicode.
 */
 PHP_METHOD(imagickdraw, settextencoding)
 {
@@ -503,6 +506,7 @@ PHP_METHOD(imagickdraw, setfont)
 	char *font, *absolute;
 	int font_len, error = 0;
 	MagickBooleanType status;
+	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &font, &font_len) == FAILURE) {
@@ -511,32 +515,27 @@ PHP_METHOD(imagickdraw, setfont)
 
 	/* Check that no empty string is passed */
 	if (font_len == 0) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Can not set empty font", 2);
+		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Can not set empty font" TSRMLS_CC);
 		return;
 	}
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	/* And if it wasn't */
-	if (!check_configured_font(font, font_len TSRMLS_CC )) {
+	if (!php_imagick_check_font(font, font_len TSRMLS_CC)) {
 
 		if ((absolute = expand_filepath(font, NULL TSRMLS_CC)) == NULL) {
-			php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Unable to set font", 2);
+			php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Unable to set font, file path expansion failed" TSRMLS_CC);
 			return;
 		}
 
-		/* Do a safe-mode check for the font */
-		IMAGICK_SAFE_MODE_CHECK(absolute, error);
-		IMAGICKDRAW_CHECK_READ_OR_WRITE_ERROR(internd, absolute, error, IMAGICK_FREE_FILENAME);
-
-		if (VCWD_ACCESS(absolute, F_OK|R_OK )) {
-			zend_throw_exception_ex(php_imagickdraw_exception_class_entry, 2 TSRMLS_CC,
-				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute);
-
+		/* Do an access check for the font */
+		if ((rc = php_imagick_file_access_check (absolute TSRMLS_CC)) != IMAGICK_RW_OK) {
+			// Failed
+			php_imagick_imagickdraw_rw_fail_to_exception (internd->drawing_wand, rc, absolute TSRMLS_CC);
 			efree(absolute);
 			return;
 		}
-
 		status = DrawSetFont(internd->drawing_wand, absolute);
 		efree(absolute);
 
@@ -544,9 +543,9 @@ PHP_METHOD(imagickdraw, setfont)
 		status = DrawSetFont(internd->drawing_wand, font);
 	}
 
-	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICKDRAW_EXCEPTION(internd->drawing_wand, "Unable to set font", 1);
+		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to set font" TSRMLS_CC);
+		return;
 	}
 
 	RETURN_TRUE;
@@ -570,21 +569,21 @@ PHP_METHOD(imagickdraw, setfontfamily)
 
 	/* Check that no empty string is passed */
 	if (font_family_len == 0) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Can not set empty font family", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Can not set empty font family" TSRMLS_CC);
 		return;
 	}
 
-	if (!check_configured_font(font_family, font_family_len TSRMLS_CC )) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Unable to set font family; parameter not found in the list of configured fonts", 2);
+	if (!php_imagick_check_font(font_family, font_family_len TSRMLS_CC )) {
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Unable to set font family; parameter not found in the list of configured fonts" TSRMLS_CC);
 		return;
 	}
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = DrawSetFontFamily(internd->drawing_wand, font_family);
 
-	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		IMAGICK_THROW_IMAGICKDRAW_EXCEPTION(internd->drawing_wand, "Unable to set font family", 1);
+		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to set font family" TSRMLS_CC);
+		return;
 	}
 
 	RETURN_TRUE;
@@ -649,7 +648,7 @@ PHP_METHOD(imagickdraw, setfontweight)
 		DrawSetFontWeight(internd->drawing_wand, weight);
 		RETURN_TRUE;
 	}
-	php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Font weight valid range is 100-900", 2);
+	php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Font weight valid range is 100-900" TSRMLS_CC);
 	return;
 }
 /* }}} */
@@ -1012,7 +1011,7 @@ PHP_METHOD(imagickdraw, annotation)
 
 	/* Fixes PECL Bug #11328 */
 	if (!font) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Font needs to be set before annotating an image", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Font needs to be set before annotating an image" TSRMLS_CC);
 		return;
 	}
 #endif
@@ -1081,7 +1080,7 @@ PHP_METHOD(imagickdraw, polygon)
 	coordinates = php_imagick_zval_to_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
 	if (!coordinates) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Unable to read coordinate array" TSRMLS_CC);
 		return;
 	}
 
@@ -1112,7 +1111,7 @@ PHP_METHOD(imagickdraw, bezier)
 	coordinates = php_imagick_zval_to_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
 	if (!coordinates) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Unable to read coordinate array" TSRMLS_CC);
 		return;
 	}
 
@@ -1218,7 +1217,7 @@ PHP_METHOD(imagickdraw, affine)
 
 		if (zend_hash_find(affine, matrix_elements[i], 3, (void**)&ppzval) == FAILURE) {
 			efree(pmatrix);
-			php_imagick_throw_exception (IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty", 2);
+			php_imagick_throw_exception(IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty" TSRMLS_CC);
 			return;
 		} else {
 			zval tmp_zval, *tmp_pzval;
@@ -1569,7 +1568,7 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 	double_array = php_imagick_zval_to_double_array(param_array, &elements TSRMLS_CC);
 
 	if (!double_array) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Cannot read stroke dash array parameter", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Cannot read stroke dash array parameter" TSRMLS_CC);
 		return;
 	}
 
@@ -1777,7 +1776,7 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 	tmp_wand = NewPixelWand();
 
 	if (!tmp_wand) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Failed to allocate space for new PixelWand", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to allocate space for new PixelWand" TSRMLS_CC);
 		return;
 	}
 
@@ -2222,7 +2221,7 @@ PHP_METHOD(imagickdraw, polyline)
 	coordinates = php_imagick_zval_to_pointinfo_array(coordinate_array, &num_elements TSRMLS_CC);
 
 	if (!coordinates) {
-		php_imagick_throw_exception (IMAGICKDRAW_CLASS, "Unable to read coordinate array", 2);
+		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Unable to read coordinate array" TSRMLS_CC);
 		return;
 	}
 

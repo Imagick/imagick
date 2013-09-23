@@ -56,7 +56,7 @@ PHP_METHOD(imagick, pingimagefile)
 
 	if (filename) {
 		MagickSetImageFilename(intern->magick_wand, filename);
-		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+		MagickSetLastIterator(intern->magick_wand);
 	}
 	RETURN_TRUE;
 }
@@ -79,7 +79,7 @@ PHP_METHOD(imagick, pingimageblob)
 	}
 
 	if (image_string_len == 0) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Empty image string passed", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Empty image string passed" TSRMLS_CC);
 		return;
 	}
 
@@ -339,7 +339,7 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 	
 	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 		return;
 	}
 
@@ -549,14 +549,14 @@ PHP_METHOD(imagick, roundcornersimage)
 	image_height = MagickGetImageHeight(intern->magick_wand);
 
 	if (!image_width || !image_height) {
-	    php_imagick_throw_exception(IMAGICK_CLASS, "Unable to round corners on empty image", 1);
+	    php_imagick_throw_exception(IMAGICK_CLASS, "Unable to round corners on empty image" TSRMLS_CC);
 		return;
 	}
 
 	status = MagickSetImageMatte(intern->magick_wand, MagickTrue);
 
 	if (status == MagickFalse) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set image matte", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set image matte" TSRMLS_CC);
 		return;
 	}
 
@@ -574,7 +574,7 @@ PHP_METHOD(imagick, roundcornersimage)
 
 	if (status == MagickFalse) {
         exit_cleanup();
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color" TSRMLS_CC);
 		return;
 	}
 
@@ -582,7 +582,7 @@ PHP_METHOD(imagick, roundcornersimage)
 
 	if (status == MagickFalse) {
 		exit_cleanup();
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to allocate mask image", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to allocate mask image" TSRMLS_CC);
 		return;
 	}
 
@@ -591,7 +591,7 @@ PHP_METHOD(imagick, roundcornersimage)
 
 	if (status == MagickFalse) {
 		exit_cleanup();
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color" TSRMLS_CC);
 		return;
 	}
 
@@ -600,7 +600,7 @@ PHP_METHOD(imagick, roundcornersimage)
 
 	if (status == MagickFalse) {
 		exit_cleanup();
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color" TSRMLS_CC);
 		return;
 	}
 
@@ -614,7 +614,7 @@ PHP_METHOD(imagick, roundcornersimage)
 
 	if (status == MagickFalse) {
 		exit_cleanup();
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to draw on image", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to draw on image" TSRMLS_CC);
 		return;
 	}
 
@@ -622,7 +622,7 @@ PHP_METHOD(imagick, roundcornersimage)
 
 	if (status == MagickFalse) {
 		exit_cleanup();
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to composite image", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to composite image" TSRMLS_CC);
 		return;
 	}
 
@@ -1254,7 +1254,7 @@ PHP_METHOD(imagick, distortimage)
 	arguments = php_imagick_zval_to_double_array(arg_array, &elements TSRMLS_CC);
 
 	if (!arguments) {
-		php_imagick_throw_exception (IMAGICK_CLASS, "Can't read argument array", 1);
+		php_imagick_throw_exception (IMAGICK_CLASS, "Can't read argument array" TSRMLS_CC);
 		return;
 	}
 
@@ -1473,7 +1473,7 @@ PHP_METHOD(imagick, recolorimage)
 	array = php_imagick_zval_to_double_array(matrix, &num_elements TSRMLS_CC);
 	
 	if (!array) {
-		php_imagick_throw_exception (IMAGICK_CLASS, "The map contains disallowed characters", 1);
+		php_imagick_throw_exception (IMAGICK_CLASS, "The map contains disallowed characters" TSRMLS_CC);
 		return;
 	}
 	
@@ -1481,7 +1481,7 @@ PHP_METHOD(imagick, recolorimage)
 	
 	if (pow((double)order, 2) != num_elements) {
 		efree(array);
-		php_imagick_throw_exception(IMAGICK_CLASS, "The color matrix must contain a square number of elements", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The color matrix must contain a square number of elements" TSRMLS_CC);
 		return;
 	}
 
@@ -1505,6 +1505,7 @@ PHP_METHOD(imagick, setfont)
 	char *font, *absolute;
 	int font_len, error = 0;
 	MagickBooleanType status;
+	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &font, &font_len) == FAILURE) {
@@ -1513,35 +1514,27 @@ PHP_METHOD(imagick, setfont)
 
 	/* Check that no empty string is passed */
 	if (font_len == 0) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Can not set empty font", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Can not set empty font" TSRMLS_CC);
 		return;
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	/* And if it wasn't */
-	if (!check_configured_font(font, font_len TSRMLS_CC)) {
+	if (!php_imagick_check_font(font, font_len TSRMLS_CC)) {
 
 		if (!(absolute = expand_filepath(font, NULL TSRMLS_CC))) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set font", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set font" TSRMLS_CC);
 			return;
 		}
 
-		/* Do a safe-mode check for the font */
-		IMAGICK_SAFE_MODE_CHECK(absolute, error);
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, absolute, error, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
-
-		if (VCWD_ACCESS(absolute, F_OK|R_OK)) {
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 2 TSRMLS_CC,
-				"The given font is not found in the ImageMagick configuration and the file (%s) is not accessible", absolute);
-
+		if ((rc = php_imagick_file_access_check (absolute TSRMLS_CC)) != IMAGICK_RW_OK) {
+			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, absolute TSRMLS_CC);
 			efree(absolute);
 			return;
 		}
-
 		status = MagickSetFont(intern->magick_wand, absolute);
 		efree(absolute);
-	
 	} else {
 		status = MagickSetFont(intern->magick_wand, font);
 	}
@@ -2091,23 +2084,23 @@ PHP_METHOD(imagick, importimagepixels)
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);	
 	
 	if (x < 0 || y < 0) {
-		php_imagick_throw_exception (IMAGICK_CLASS, "The coordinates must be non-negative", 1);
+		php_imagick_throw_exception (IMAGICK_CLASS, "The coordinates must be non-negative" TSRMLS_CC);
 		return;
 	}
 	
 	if (width <= 0 || height <= 0) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The width and height must be greater than zero", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The width and height must be greater than zero" TSRMLS_CC);
 		return;
 	}
 	
 	array = Z_ARRVAL_P(pixels);
 	
 	if (zend_hash_num_elements(array) != ((width * height) * map_len)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The map contains incorrect number of elements", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The map contains incorrect number of elements" TSRMLS_CC);
 		return;
 	} else {
 		if (!php_imagick_validate_map(map TSRMLS_CC)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "The map contains disallowed characters", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "The map contains disallowed characters" TSRMLS_CC);
 			return;
 		}
 	}
@@ -2119,7 +2112,7 @@ PHP_METHOD(imagick, importimagepixels)
 			storage = DoublePixel;
 			double_array = (double *)php_imagick_zval_to_double_array(pixels, &num_elements TSRMLS_CC);
 			if (!double_array) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values", 1);
+				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
 				return;
 			}
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, double_array);
@@ -2133,7 +2126,7 @@ PHP_METHOD(imagick, importimagepixels)
 			storage = LongPixel;
 			long_array = (long *)php_imagick_zval_to_long_array(pixels, &num_elements TSRMLS_CC);
 			if (!long_array) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values", 1);
+				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
 				return;
 			}
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, long_array);
@@ -2143,7 +2136,7 @@ PHP_METHOD(imagick, importimagepixels)
 		case CharPixel:
 			char_array = (unsigned char *)php_imagick_zval_to_char_array(pixels, &num_elements TSRMLS_CC);
 			if (!char_array) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "The character array contains incorrect values", 1);
+				php_imagick_throw_exception(IMAGICK_CLASS, "The character array contains incorrect values" TSRMLS_CC);
 				return;
 			}
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, char_array);
@@ -2151,7 +2144,7 @@ PHP_METHOD(imagick, importimagepixels)
 		break;
 		
 		default:
-			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format" TSRMLS_CC);
 			return;
 		break;
 	}
@@ -2227,7 +2220,7 @@ PHP_METHOD(imagick, sparsecolorimage)
 	double_array = (double *)php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 	
 	if (!double_array) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
 		return;
 	}
 	
@@ -2294,17 +2287,17 @@ PHP_METHOD(imagick, exportimagepixels)
 	}
 
 	if ((x < 0) || (y < 0)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The coordinates must be non-negative", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The coordinates must be non-negative" TSRMLS_CC);
 		return;
 	}
 
 	if (width <= 0 || height <= 0) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The width and height must be greater than zero", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The width and height must be greater than zero" TSRMLS_CC);
 		return;
 	}
 
 	if (!php_imagick_validate_map(map TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The map contains disallowed characters", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The map contains disallowed characters" TSRMLS_CC);
 		return;
 	}
 
@@ -2360,7 +2353,7 @@ PHP_METHOD(imagick, exportimagepixels)
 		break;
 
 		default:
-			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format" TSRMLS_CC);
 			return;
 		break;
 	}
@@ -2427,7 +2420,7 @@ PHP_METHOD(imagick, functionimage)
 	array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!array) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters" TSRMLS_CC);
 		return;
 	}
 
@@ -2515,20 +2508,20 @@ PHP_METHOD(imagick, setimageartifact)
 	MagickBooleanType status;
 	char *artifact, *value;
 	int artifact_len, value_len;
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
-	
+
 	status = MagickSetImageArtifact(intern->magick_wand, artifact, value);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image artifact" TSRMLS_CC);
 		return;
 	}
-	RETURN_TRUE;	
+	RETURN_TRUE;
 }
 
 
@@ -2629,9 +2622,9 @@ PHP_METHOD(imagick, __construct)
 	php_imagick_object *intern;
 	zval *files = NULL;
 	HashPosition pos;
-	int status = 0;
+	php_imagick_rw_result_t rc;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|z!", &files) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|z!/", &files) == FAILURE) {
 		return;
 	}
 
@@ -2639,56 +2632,57 @@ PHP_METHOD(imagick, __construct)
 	if (!files) {
 		return;
 	}
-	
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	if (Z_TYPE_P (files) == IS_LONG || Z_TYPE_P (files) == IS_DOUBLE)
+		convert_to_string (files);
 
 	/* A single file was given */
 	if (Z_TYPE_P(files) == IS_STRING) {
 		struct php_imagick_file_t file = {0};
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(files), Z_STRLEN_P(files) TSRMLS_CC)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 			return;
 		}
-		status = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 		php_imagick_file_deinit(&file);
-		
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, Z_STRVAL_P(files), status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
+
+		if (rc != IMAGICK_RW_OK) {
+			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_P(files) TSRMLS_CC);
+			return;
+		}
 	}
 
 	/* an array of filenames was given */
+	else
 	if (Z_TYPE_P(files) == IS_ARRAY) {
-		
-		char *filename = NULL;
-		
 		for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(files), &pos);
 			zend_hash_has_more_elements_ex(Z_ARRVAL_P(files), &pos) == SUCCESS;
 			zend_hash_move_forward_ex(Z_ARRVAL_P(files), &pos)) {
-				
+
 			struct php_imagick_file_t file = {0};
 			zval **ppzval;
 
 			if (zend_hash_get_current_data_ex(Z_ARRVAL_P(files), (void**)&ppzval, &pos) == FAILURE) {
 				continue;
 			}
-			
+
 			if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+				php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 				return;
 			}
-			
-			status = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+
+			rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 			php_imagick_file_deinit(&file);
 
-			if (status != IMAGICK_READ_WRITE_NO_ERROR) {
-				filename = estrdup(Z_STRVAL_PP(ppzval));
-				break;
+			if (rc != IMAGICK_RW_OK) {
+				php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_PP(ppzval) TSRMLS_CC);
+				return;
 			}
 		}
-		IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
-		RETURN_TRUE;
 	}
-
+	RETURN_TRUE;
 }
 /* }}} */
 
@@ -2926,9 +2920,10 @@ PHP_METHOD(imagick, current)
 PHP_METHOD(imagick, readimage)
 {
 	char *filename;
-	int filename_len, status;
+	int filename_len;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
+	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
@@ -2936,16 +2931,20 @@ PHP_METHOD(imagick, readimage)
 	}
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	
+
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 		return;
 	}
-	
-	status = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+
+	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
-	
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
+
+	if (rc != IMAGICK_RW_OK) {
+		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
+		return;
+	}
+
 	RETURN_TRUE;
 }
 /* }}} */
@@ -2956,10 +2955,9 @@ PHP_METHOD(imagick, readimage)
 PHP_METHOD(imagick, readimages)
 {
 	zval *files;
-	char *filename = NULL;
-	int status = 0;
 	php_imagick_object *intern;
 	HashPosition pos;
+	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &files) == FAILURE) {
@@ -2978,21 +2976,20 @@ PHP_METHOD(imagick, readimages)
 		if (zend_hash_get_current_data_ex(Z_ARRVAL_P(files), (void**)&ppzval, &pos) == FAILURE) {
 			continue;
 		}
-		
+
 		if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 			return;
 		}
-		
-		status = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+
+		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 		php_imagick_file_deinit(&file);
 
-		if (status != IMAGICK_READ_WRITE_NO_ERROR) {
-			filename = estrdup(Z_STRVAL_PP(ppzval));
-			break;
+		if (rc != IMAGICK_RW_OK) {
+			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_PP(ppzval) TSRMLS_CC);
+			return;
 		}
 	}
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_FREE_FILENAME, "Unable to read the file: %s");
 	RETURN_TRUE;
 }
 
@@ -3004,10 +3001,10 @@ PHP_METHOD(imagick, pingimage)
 {
 	char *filename;
 	int filename_len;
-	int status = 0;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
-	
+	php_imagick_rw_result_t rc;
+
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
 		return;
@@ -3016,13 +3013,16 @@ PHP_METHOD(imagick, pingimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 		return;
 	}
-	status = php_imagick_read_file(intern, &file, ImagickPingImage TSRMLS_CC);
+	rc = php_imagick_read_file(intern, &file, ImagickPingImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to ping the file: %s");
+	if (rc != IMAGICK_RW_OK) {
+		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
+		return;
+	}
 	RETURN_TRUE;
 }
 /* }}} */
@@ -3058,7 +3058,7 @@ PHP_METHOD(imagick, readimagefile)
 
 	if (filename) {
 		MagickSetImageFilename(intern->magick_wand, filename);
-		IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+		MagickSetLastIterator(intern->magick_wand);
 	}
 
 	RETURN_TRUE;
@@ -3143,7 +3143,7 @@ PHP_METHOD(imagick, readimageblob)
 	}
 
 	if (!image_string_len) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Zero size image string passed", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Zero size image string passed" TSRMLS_CC);
 		return;
 	}
 
@@ -3158,7 +3158,7 @@ PHP_METHOD(imagick, readimageblob)
 
 	/* Even if filename is null we need to give a name here. Otherwise segfaults will happen */
 	MagickSetImageFilename(intern->magick_wand, filename);
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -3288,7 +3288,7 @@ PHP_METHOD(imagick, scaleimage)
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 	
 	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 		return;
 	}
 
@@ -3741,7 +3741,7 @@ PHP_METHOD(imagick, addimage)
 		return;
 	}
 
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -3795,7 +3795,7 @@ PHP_METHOD(imagick, newimage)
 		}
 	}
 
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -3809,22 +3809,23 @@ PHP_METHOD(imagick, newpseudoimage)
 	MagickBooleanType status;
 	long columns, rows;
 	char *pseudo_string;
-	int pseudo_string_len, rc;
+	int pseudo_string_len;
 	struct php_imagick_file_t file = {0};
-	
+	php_imagick_rw_result_t rc;
+
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lls", &columns, &rows, &pseudo_string, &pseudo_string_len) == FAILURE) {
 		return;
 	}
-	
+
 	/* Allow only pseudo formats in this method */
 	if (strchr (pseudo_string, ':') == NULL) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid pseudo format string", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid pseudo format string" TSRMLS_CC);
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	
+
 	/* Pseudo image needs a size set manually */
 	status = MagickSetSize(intern->magick_wand, columns, rows);
 
@@ -3833,15 +3834,18 @@ PHP_METHOD(imagick, newpseudoimage)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to create new pseudo image" TSRMLS_CC);
 		return;
 	}
-	
+
 	if (!php_imagick_file_init(&file, pseudo_string, pseudo_string_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 		return;
 	}
 	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, pseudo_string, rc, IMAGICK_DONT_FREE_FILENAME, "Unable to create new pseudo image: %s");
+	if (rc != IMAGICK_RW_OK) {
+		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, pseudo_string TSRMLS_CC);
+		return;
+	}
 	RETURN_TRUE;
 }
 /* }}} */
@@ -4375,7 +4379,7 @@ PHP_METHOD(imagick, removeimageprofile)
 	profile = MagickRemoveImageProfile(intern->magick_wand, name, &profile_len);
 
 	if (!profile) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The image profile does not exist", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The image profile does not exist" TSRMLS_CC);
 		return;
 	}
 
@@ -4990,7 +4994,7 @@ PHP_METHOD(imagick, tintimage)
 	zend_bool tint_allocated, opacity_allocated;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz/", &tint_param, &opacity_param) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &tint_param, &opacity_param) == FAILURE) {
 		return;
 	}
 
@@ -5001,10 +5005,7 @@ PHP_METHOD(imagick, tintimage)
 	if (!tint_wand)
 		return;
 
-	if (Z_TYPE_P (opacity_param) == IS_STRING)
-		convert_to_double (opacity_param);
-
-	opacity_wand = php_imagick_zval_to_pixelwand (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	opacity_wand = php_imagick_zval_to_opacity (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
 	if (!opacity_wand) {
 		if (tint_allocated)
 			tint_wand = DestroyPixelWand (tint_wand);
@@ -5075,7 +5076,7 @@ PHP_METHOD(imagick, convolveimage)
 	kernel = php_imagick_zval_to_double_array(kernel_array, &num_elements TSRMLS_CC);
 
 	if (!kernel) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read matrix array", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read matrix array" TSRMLS_CC);
 		return;
 	}
 
@@ -5083,7 +5084,7 @@ PHP_METHOD(imagick, convolveimage)
 
 	if (pow((double)order, 2) != num_elements) {
 		efree(kernel);
-		php_imagick_throw_exception(IMAGICK_CLASS, "The kernel must contain a square number of elements", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The kernel must contain a square number of elements" TSRMLS_CC);
 		return;
 	}
 
@@ -6186,7 +6187,7 @@ PHP_METHOD(imagick, getimageprofile)
 		return;
 	}
 
-	php_imagick_throw_exception(IMAGICK_CLASS, "Can not get image profile", 1);
+	php_imagick_throw_exception(IMAGICK_CLASS, "Can not get image profile" TSRMLS_CC);
 	return;
 }
 /* }}} */
@@ -6528,12 +6529,12 @@ PHP_METHOD(imagick, thumbnailimage)
 		return;
 		}
 #else 
-		php_imagick_throw_exception(IMAGICK_CLASS, "Fill parameter is only supported with ImageMagick 6.3.2+", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Fill parameter is only supported with ImageMagick 6.3.2+" TSRMLS_CC);
 		return;
 #endif
 	} else {
 		if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 			return;
 		}
 		/* No magick is going to happen */
@@ -6863,7 +6864,7 @@ PHP_METHOD(imagick, removeimage)
 		return;
 	}
 	intern->next_out_of_bound = 0;
-	IMAGICK_CORRECT_ITERATOR_POSITION(intern);
+	MagickSetLastIterator(intern->magick_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -6942,7 +6943,7 @@ PHP_METHOD(imagick, getimageblob)
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 
 	if (!s_image_has_format (intern->magick_wand)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format", 1 TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
 		return;
 	}
 
@@ -6989,7 +6990,7 @@ PHP_METHOD(imagick, getimagesblob)
 	/* Loop all images to make sure they have a format */
 	while (MagickNextImage(intern->magick_wand)) {
 		if (!s_image_has_format (intern->magick_wand)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format", 1 TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
 			return;
 		}
 	}
@@ -7033,7 +7034,7 @@ PHP_METHOD(imagick, getimageformat)
 
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 	if (!s_image_has_format (intern->magick_wand)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format", 1 TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
 		return;
 	}
 
@@ -7060,7 +7061,7 @@ PHP_METHOD(imagick, getimagemimetype)
 
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 	if (!s_image_has_format (intern->magick_wand)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format", 1 TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
 		return;
 	}
 
@@ -7070,7 +7071,7 @@ PHP_METHOD(imagick, getimagemimetype)
 	IMAGICK_FREE_MEMORY(char *, format);
 
 	if (!mime_type) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image mime-type", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image mime-type" TSRMLS_CC);
 		return;
 	}
 
@@ -7090,7 +7091,6 @@ void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 static
 void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
-	int done = 0;
 	char *line, *last_ptr = NULL, *buffer;
 	size_t num_keys;
 
@@ -7458,7 +7458,7 @@ PHP_METHOD(imagick, colorizeimage)
 	zend_bool color_allocated, opacity_allocated;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz/", &color_param, &opacity_param) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &color_param, &opacity_param) == FAILURE) {
 		return;
 	}
 
@@ -7469,10 +7469,7 @@ PHP_METHOD(imagick, colorizeimage)
 	if (!color_wand)
 		return;
 
-	if (Z_TYPE_P (opacity_param) == IS_STRING)
-		convert_to_double (opacity_param);
-
-	opacity_wand = php_imagick_zval_to_pixelwand (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	opacity_wand = php_imagick_zval_to_opacity (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
 	if (!opacity_wand) {
 		if (color_allocated)
 			color_wand = DestroyPixelWand (color_wand);
@@ -8307,11 +8304,11 @@ PHP_METHOD(imagick, labelimage)
 PHP_METHOD(imagick, writeimage)
 {
 	char *filename = NULL;
-	int status = 0;
 	int filename_len = 0;
 	zend_bool free_filename = 0;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
+	php_imagick_rw_result_t rc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s!", &filename, &filename_len) == FAILURE) {
 		return;
@@ -8324,7 +8321,7 @@ PHP_METHOD(imagick, writeimage)
 		filename = MagickGetImageFilename(intern->magick_wand);
 
 		if (!filename) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "No image filename specified", 1);
+			php_imagick_throw_exception(IMAGICK_CLASS, "No image filename specified" TSRMLS_CC);
 			return;
 		}
 		filename_len = strlen(filename);
@@ -8332,18 +8329,25 @@ PHP_METHOD(imagick, writeimage)
 	}
 
 	if (!filename_len) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Can not use empty string as a filename", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Can not use empty string as a filename" TSRMLS_CC);
 		return;
 	}
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 		return;
 	}
-	status = php_imagick_write_file(intern, &file, ImagickWriteImage, 0 TSRMLS_CC);
+	rc = php_imagick_write_file(intern, &file, ImagickWriteImage, 0 TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to write the file: %s");
+	if (rc != IMAGICK_RW_OK) {
+		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
+		if (free_filename) {
+			IMAGICK_FREE_MEMORY(char *, filename);
+		}
+		return;
+	}
+
 	if (free_filename) {
 		IMAGICK_FREE_MEMORY(char *, filename);
 	}
@@ -8360,8 +8364,8 @@ PHP_METHOD(imagick, writeimages)
 	zend_bool adjoin;
 	int filename_len;
 	php_imagick_object *intern;
-	int status = 0;
 	struct php_imagick_file_t file = {0};
+	php_imagick_rw_result_t rc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sb", &filename, &filename_len, &adjoin) == FAILURE) {
 		return;
@@ -8370,20 +8374,22 @@ PHP_METHOD(imagick, writeimages)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 
-
 	if (!filename_len) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Can not use empty string as a filename" TSRMLS_CC);
 		return;
 	}
-	
+
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
 		return;
 	}
-	status = php_imagick_write_file(intern, &file, ImagickWriteImages, adjoin TSRMLS_CC);
+	rc = php_imagick_write_file(intern, &file, ImagickWriteImages, adjoin TSRMLS_CC);
 	php_imagick_file_deinit(&file);
-	
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to write the file: %s");
+
+	if (rc != IMAGICK_RW_OK) {
+		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
+		return;
+	}
 	RETURN_TRUE;
 
 }
@@ -8455,7 +8461,7 @@ PHP_METHOD(imagick, annotateimage)
 
 	/* Fixes PECL Bug #11328 */
 	if (!font) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Font needs to be set before annotating an image", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Font needs to be set before annotating an image" TSRMLS_CC);
 		return;
 	}
 #endif
@@ -9418,7 +9424,7 @@ PHP_METHOD(imagick, resizeimage)
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
 	
 	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 		return;
 	}
 
@@ -10215,13 +10221,13 @@ PHP_METHOD(imagick, setpage)
 
 PHP_METHOD(imagick, setimageprogressmonitor)
 {
-	int status = IMAGICK_READ_WRITE_NO_ERROR;
 	char *filename;
 	int filename_len;
 	php_imagick_object *intern;
+	php_imagick_rw_result_t rc;
 
 	if (!IMAGICK_G(progress_monitor)) {
-		php_imagick_throw_exception(1, "Progress monitoring is disabled in ini-settings", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Progress monitoring is disabled in ini-settings" TSRMLS_CC);
 		return;
 	}
 
@@ -10229,16 +10235,18 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	
-	IMAGICK_SAFE_MODE_CHECK(filename, status);
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, filename, status, IMAGICK_DONT_FREE_FILENAME, "Unable to read the file: %s");
+
+	if ((rc = php_imagick_file_access_check (filename TSRMLS_CC)) != IMAGICK_RW_OK) {
+		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
+		return;
+	}
 
 	if (intern->progress_monitor_name) {
 		efree(intern->progress_monitor_name);
 	}
-	
+
 	intern->progress_monitor_name = estrdup(filename);
 	MagickSetImageProgressMonitor(intern->magick_wand, php_imagick_progress_monitor, intern);
 	RETURN_TRUE;
@@ -10261,7 +10269,7 @@ PHP_METHOD(imagick, setresourcelimit)
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set resource limit", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set resource limit" TSRMLS_CC);
 		return;
 	}
 	RETURN_TRUE;
@@ -10313,7 +10321,7 @@ PHP_METHOD(imagick, setsamplingfactors)
 	double_array = php_imagick_zval_to_double_array(factors, &elements TSRMLS_CC);
 
 	if (!double_array) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "Can't read array", 1);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Can't read array" TSRMLS_CC);
 		return;
 	}
 

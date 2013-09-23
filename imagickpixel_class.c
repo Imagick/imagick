@@ -122,7 +122,7 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 		break;
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
 			return;
 		break;
 	}
@@ -184,7 +184,7 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 		break;
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
 			return;
 		break;
 	}
@@ -245,14 +245,14 @@ PHP_METHOD(imagickpixel, __construct)
 	internp->pixel_wand = NewPixelWand();
 
 	if (!internp->pixel_wand) {
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure", 4);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure" TSRMLS_CC);
 		return;
 	}
 
 	/* If color was given as parameter, set it here.*/
 	if (color_name && color_name_len) {
 		if (PixelSetColor(internp->pixel_wand, color_name) == MagickFalse) {
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to construct ImagickPixel", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to construct ImagickPixel" TSRMLS_CC);
 			return;
 		}
 	}
@@ -280,7 +280,8 @@ PHP_METHOD(imagickpixel, setcolor)
 	status = PixelSetColor(internp->pixel_wand, color_name);
 
 	if (status == MagickFalse) {
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to set ImagickPixel color", 4);
+		php_imagick_convert_imagickpixel_exception (internp->pixel_wand, "Unable to set ImagickPixel color" TSRMLS_CC);
+		return;
 	}
 
 	RETURN_TRUE;
@@ -421,7 +422,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 #endif
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
 			return;
 		break;
 	}
@@ -490,7 +491,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 #endif
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
 			return;
 		break;
 	}

@@ -21,6 +21,7 @@
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
+#include "php_imagick_helpers.h"
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data)
 {
@@ -230,9 +231,9 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 	return char_array;
 }
 
-int check_configured_font(char *font, int font_len TSRMLS_DC)
+zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
 {
-	int retval = 0;
+	zend_bool retval = 0;
 	char **fonts;
 	unsigned long num_fonts = 0, i = 0;
 
@@ -250,6 +251,74 @@ int check_configured_font(char *font, int font_len TSRMLS_DC)
 	IMAGICK_FREE_MEMORY(char **, fonts);
 	return retval;
 }
+
+php_imagick_rw_result_t php_imagick_file_access_check (const char *filename TSRMLS_DC)
+{
+	if (strlen(filename) >= MAXPATHLEN)
+		return IMAGICK_RW_FILENAME_TOO_LONG;
+
+#if defined(CHECKUID_CHECK_FILE_AND_DIR)
+	if (PG(safe_mode) && (!php_checkuid_ex(filename, NULL, CHECKUID_CHECK_FILE_AND_DIR, CHECKUID_NO_ERRORS)))
+	 	return IMAGICK_RW_SAFE_MODE_ERROR;
+#endif
+
+	if (php_check_open_basedir_ex(filename, 0 TSRMLS_CC))
+		return IMAGICK_RW_OPEN_BASEDIR_ERROR;
+
+	if (VCWD_ACCESS(filename, F_OK|R_OK))
+		return IMAGICK_RW_PERMISSION_DENIED;
+
+	return IMAGICK_RW_OK;
+}
+
+static
+void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename TSRMLS_DC)
+{
+	switch (rc) {
+
+		case IMAGICK_RW_SAFE_MODE_ERROR:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read the file: %s", filename);
+		break;
+
+		case IMAGICK_RW_OPEN_BASEDIR_ERROR:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);
+		break;
+
+		case IMAGICK_RW_PERMISSION_DENIED:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Permission denied to: %s", filename);
+		break;
+
+		case IMAGICK_RW_FILENAME_TOO_LONG:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Filename too long: %s", filename);
+		break;
+
+		case IMAGICK_RW_PATH_DOES_NOT_EXIST:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);
+		break;
+
+		default:
+		break;
+	}
+}
+
+void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_result_t rc, const char *filename TSRMLS_DC)
+{
+	if (rc == IMAGICK_RW_UNDERLYING_LIBRARY) {
+		php_imagick_convert_imagick_exception (magick_wand, "Failed to read the file" TSRMLS_CC);
+		return;
+	}
+	s_rw_fail_to_exception (rc, filename TSRMLS_CC);
+}
+
+void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, php_imagick_rw_result_t rc, const char *filename TSRMLS_DC)
+{
+	if (rc == IMAGICK_RW_UNDERLYING_LIBRARY) {
+		php_imagick_convert_imagickdraw_exception (drawing_wand, "Failed to read the file" TSRMLS_CC);
+		return;
+	}
+	s_rw_fail_to_exception (rc, filename TSRMLS_CC);
+}
+
 
 PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 {
@@ -332,26 +401,31 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	return coordinates;
 }
 
-void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description, int code TSRMLS_DC)
+void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description TSRMLS_DC)
 {
+	int code;
 	zend_class_entry *ce = NULL;
 
 	switch (type) {
 		case IMAGICK_CLASS:
 		default:
 			ce = php_imagick_exception_class_entry;
+			code = 1;
 		break;
 
 		case IMAGICKDRAW_CLASS:
 			ce = php_imagickdraw_exception_class_entry;
+			code = 2;
 		break;
 
 		case IMAGICKPIXELITERATOR_CLASS:
 			ce = php_imagickpixeliterator_exception_class_entry;
+			code = 3;
 		break;
 
 		case IMAGICKPIXEL_CLASS:
 			ce = php_imagickpixel_exception_class_entry;
+			code = 4;
 		break;
 	}
 	zend_throw_exception(ce, description, code TSRMLS_CC);
@@ -369,7 +443,7 @@ void s_convert_exception (char *description, const char *default_message, long s
 		return;
 	}
 	zend_throw_exception(php_imagick_exception_class_entry, description, severity TSRMLS_CC);
-	description = MagickRelinquishMemory (description);
+	MagickRelinquishMemory (description);
 }
 
 /**
@@ -408,10 +482,30 @@ void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_it
 	s_convert_exception (description, default_message, severity, 3 TSRMLS_CC);
 }
 
+void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const char *default_message TSRMLS_DC)
+{
+	ExceptionType severity;
+	char *description;
+
+	description = PixelGetException(pixel_wand, &severity);
+	PixelClearException (pixel_wand);
+
+	s_convert_exception (description, default_message, severity, 4 TSRMLS_CC);
+}
+
 PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC)
 {
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
+
+	if (Z_TYPE_P (param) == IS_LONG || Z_TYPE_P (param) == IS_DOUBLE) {
+		zval var;
+		var = *param;
+
+		zval_copy_ctor(&var);
+		convert_to_string(&var);
+		param = &var;
+	}
 
 	switch (Z_TYPE_P(param)) {
 		case IS_STRING:
@@ -421,12 +515,41 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 
 			if (PixelSetColor (pixel_wand, Z_STRVAL_P(param)) == MagickFalse) {
 				pixel_wand = DestroyPixelWand(pixel_wand);
-				php_imagick_throw_exception (caller, "Unrecognized color string", 1);
+				php_imagick_throw_exception (caller, "Unrecognized color string" TSRMLS_CC);
 				return NULL;
 			}
 		}
 		break;
 
+		case IS_OBJECT:
+			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) {
+				php_imagickpixel_object *intern = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC);
+				pixel_wand = intern->pixel_wand;
+			} else
+				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string" TSRMLS_CC);
+		break;
+
+		default:
+			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
+	}
+	return pixel_wand;
+}
+
+PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC)
+{
+	PixelWand *pixel_wand = NULL;
+	*allocated = 0;
+
+	if (Z_TYPE_P (param) == IS_STRING) {
+		zval var;
+		var = *param;
+
+		zval_copy_ctor(&var);
+		convert_to_double(&var);
+		param = &var;
+	}
+
+	switch (Z_TYPE_P(param)) {
 		case IS_LONG:
 		case IS_DOUBLE:
 		{
@@ -441,11 +564,11 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 				php_imagickpixel_object *intern = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC);
 				pixel_wand = intern->pixel_wand;
 			} else
-				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string", 1);
+				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string"  TSRMLS_CC);
 		break;
 
 		default:
-			php_imagick_throw_exception(caller, "Invalid color parameter provided", 1);
+			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
 	}
 	return pixel_wand;
 }

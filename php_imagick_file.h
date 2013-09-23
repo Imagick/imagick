@@ -66,10 +66,10 @@ void php_imagick_file_deinit(struct php_imagick_file_t *file);
 int php_imagick_safe_mode_check(const char *filename TSRMLS_DC);
 
 /* Read operations */
-int php_imagick_read_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC);
+php_imagick_rw_result_t php_imagick_read_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC);
 
 /* Write operations */
-int php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type, zend_bool adjoin TSRMLS_DC);
+php_imagick_rw_result_t php_imagick_write_file(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type, zend_bool adjoin TSRMLS_DC);
 
 /* Handle streams */
 zend_bool php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, ImagickOperationType type TSRMLS_DC);
