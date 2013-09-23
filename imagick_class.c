@@ -2508,20 +2508,20 @@ PHP_METHOD(imagick, setimageartifact)
 	MagickBooleanType status;
 	char *artifact, *value;
 	int artifact_len, value_len;
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
-	
+
 	status = MagickSetImageArtifact(intern->magick_wand, artifact, value);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image artifact" TSRMLS_CC);
 		return;
 	}
-	RETURN_TRUE;	
+	RETURN_TRUE;
 }
 
 
@@ -7091,7 +7091,6 @@ void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 static
 void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
-	int done = 0;
 	char *line, *last_ptr = NULL, *buffer;
 	size_t num_keys;
 

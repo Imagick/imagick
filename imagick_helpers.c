@@ -296,6 +296,9 @@ void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename TS
 		case IMAGICK_RW_PATH_DOES_NOT_EXIST:
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);
 		break;
+
+		default:
+		break;
 	}
 }
 
@@ -441,7 +444,7 @@ void s_convert_exception (char *description, const char *default_message, long s
 		return;
 	}
 	zend_throw_exception(php_imagick_exception_class_entry, description, severity TSRMLS_CC);
-	description = MagickRelinquishMemory (description);
+	MagickRelinquishMemory (description);
 }
 
 /**
