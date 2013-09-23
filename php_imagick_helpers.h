@@ -43,4 +43,13 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
 
 
+PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC);
+
+
+void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message TSRMLS_DC);
+void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message TSRMLS_DC);
+void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message TSRMLS_DC);
+
+void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description, int code TSRMLS_DC);
+
 #endif /* PHP_IMAGICK_HELPERS_H */

@@ -112,10 +112,12 @@ typedef struct _php_imagickpixel_object  {
 #define IMAGICKCOLORFUZZ 20
 
 /* Class enum */
-#define IMAGICK_CLASS 1
-#define IMAGICKDRAW_CLASS 2
-#define IMAGICKPIXELITERATOR_CLASS 3
-#define IMAGICKPIXEL_CLASS 4
+typedef enum _php_imagick_class_type_t {
+	IMAGICK_CLASS,
+	IMAGICKDRAW_CLASS,
+	IMAGICKPIXELITERATOR_CLASS,
+	IMAGICKPIXEL_CLASS
+} php_imagick_class_type_t;
 
 /* Free filename constants */
 #define IMAGICK_DONT_FREE_FILENAME 0

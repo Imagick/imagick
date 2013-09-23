@@ -21,6 +21,7 @@
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
+#include "php_imagick_helpers.h"
 
 #if MagickLibVersion > 0x628
 /* {{{ proto array ImagickPixel::getHSL()
@@ -121,10 +122,11 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 		break;
 
 		default:
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			return;
 		break;
 	}
-	RETVAL_LONG(color_value);		
+	RETVAL_LONG(color_value);
 }
 /* }}} */
 
@@ -182,7 +184,8 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 		break;
 
 		default:
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			return;
 		break;
 	}
 	RETVAL_TRUE;
@@ -240,15 +243,17 @@ PHP_METHOD(imagickpixel, __construct)
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	internp->pixel_wand = NewPixelWand();
-	
+
 	if (!internp->pixel_wand) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure", 4);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure", 4);
+		return;
 	}
 
 	/* If color was given as parameter, set it here.*/
 	if (color_name && color_name_len) {
 		if (PixelSetColor(internp->pixel_wand, color_name) == MagickFalse) {
-			IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(internp->pixel_wand, "Unable to construct ImagickPixel", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to construct ImagickPixel", 4);
+			return;
 		}
 	}
 	RETURN_TRUE;
@@ -292,12 +297,8 @@ PHP_METHOD(imagickpixel, clear)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (!internp->pixel_wand) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "ImagickPixel is not allocated", 4);
-	}
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	ClearPixelWand(internp->pixel_wand);
 	RETURN_TRUE;
@@ -315,13 +316,9 @@ PHP_METHOD(imagickpixel, destroy)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	object = getThis();
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	if (!internp->pixel_wand) {
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "ImagickPixel is not allocated properly", 4);
-	}
 
 	ClearPixelWand(internp->pixel_wand);
 	RETURN_TRUE;
@@ -335,8 +332,10 @@ PHP_METHOD(imagickpixel, issimilar)
 {
 	zval *param;
 	double fuzz;
-	php_imagickpixel_object *internp, *internp_second;
+	php_imagickpixel_object *internp;
 	MagickBooleanType status;
+	PixelWand *color_wand;
+	zend_bool allocated;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &fuzz) == FAILURE) {
@@ -344,11 +343,16 @@ PHP_METHOD(imagickpixel, issimilar)
 	}
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp_second, 4);
 
-	status = IsPixelWandSimilar(internp->pixel_wand, internp_second->pixel_wand, fuzz);
+	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICKPIXEL_CLASS, &allocated TSRMLS_CC);
+	if (!color_wand)
+		return;
 
-	if(status == MagickFalse) {
+	status = IsPixelWandSimilar(internp->pixel_wand, color_wand, fuzz);
+	if (allocated)
+		color_wand = DestroyPixelWand (color_wand);
+
+	if (status == MagickFalse) {
 		RETURN_FALSE;
 	}
 
@@ -417,7 +421,8 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 #endif
 
 		default:
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			return;
 		break;
 	}
 	RETVAL_DOUBLE(color_value);
@@ -485,7 +490,8 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 #endif
 
 		default:
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type", 4);
+			return;
 		break;
 	}
 	RETVAL_TRUE;

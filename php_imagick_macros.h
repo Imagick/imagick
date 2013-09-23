@@ -21,123 +21,11 @@
 #ifndef PHP_IMAGICK_MACROS_H
 # define PHP_IMAGICK_MACROS_H
 
-/* Define a set of macros to throw exceptions */
-#define IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(type, description, code) \
-{ \
-	switch(type) { \
-		case 1: \
-			zend_throw_exception(php_imagick_exception_class_entry, description, (long)code TSRMLS_CC); \
-			RETURN_NULL(); \
-		break; \
-		case 2: \
-			zend_throw_exception(php_imagickdraw_exception_class_entry, description, (long)code TSRMLS_CC); \
-			RETURN_NULL(); \
-		break; \
-		case 3: \
-			zend_throw_exception(php_imagickpixeliterator_exception_class_entry, description, (long)code TSRMLS_CC); \
-			RETURN_NULL(); \
-		break; \
-		case 4: \
-			zend_throw_exception(php_imagickpixel_exception_class_entry, description, (long)code TSRMLS_CC); \
-			RETURN_NULL(); \
-		break; \
-	} \
-} \
-
-#define IMAGICK_THROW_IMAGICK_EXCEPTION(magick_wand, fallback, code) \
-{ \
-	ExceptionType severity; \
-	char *description; \
-	description = MagickGetException(magick_wand, &severity); \
-	if (description && strlen(description) == 0) { \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		description = NULL; \
-	} \
-	if (!description) { \
-		zend_throw_exception(php_imagick_exception_class_entry, fallback, (long)code TSRMLS_CC); \
-		RETURN_NULL(); \
-	} else { \
-		zend_throw_exception(php_imagick_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		MagickClearException(magick_wand); \
-		RETURN_NULL(); \
-	} \
-} \
-
-#define IMAGICK_THROW_IMAGICKDRAW_EXCEPTION(drawing_wand, fallback, code) \
-{ \
-	ExceptionType severity; \
-	char *description; \
-	description = DrawGetException(drawing_wand, &severity); \
-	if (description && strlen(description) == 0) { \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		description = NULL; \
-	} \
-	if (!description) { \
-		zend_throw_exception(php_imagickdraw_exception_class_entry, fallback, (long)code TSRMLS_CC); \
-		RETURN_NULL(); \
-	} else { \
-		zend_throw_exception(php_imagickdraw_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		DrawClearException(drawing_wand); \
-		RETURN_NULL(); \
-	} \
-} \
-
-#define IMAGICK_THROW_IMAGICKPIXEL_EXCEPTION(pixel_wand, fallback, code) \
-{ \
-	ExceptionType severity; \
-	char *description; \
-	description = PixelGetException(pixel_wand, &severity); \
-	if (description && strlen(description) == 0) { \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		description = NULL; \
-	} \
-	if (!description) { \
-		zend_throw_exception(php_imagickpixel_exception_class_entry, fallback, (long)code TSRMLS_CC); \
-		RETURN_NULL(); \
-	} else { \
-		zend_throw_exception(php_imagickpixel_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		PixelClearException(pixel_wand); \
-		RETURN_NULL(); \
-	} \
-} \
-
-#define IMAGICK_THROW_IMAGICKPIXELITERATOR_EXCEPTION(pixel_iterator, fallback, code) \
-{ \
-	ExceptionType severity; \
-	char *description; \
-	description = PixelGetIteratorException(pixel_iterator, &severity); \
-	if (description && strlen(description) == 0) { \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		description = NULL; \
-	} \
-	if (!description) { \
-		zend_throw_exception(php_imagickpixeliterator_exception_class_entry, fallback, (long)code TSRMLS_CC); \
-		RETURN_NULL(); \
-	} else { \
-		zend_throw_exception(php_imagickpixeliterator_exception_class_entry, description, (long)severity TSRMLS_CC); \
-		IMAGICK_FREE_MEMORY(char *, description); \
-		PixelClearIteratorException(pixel_iterator); \
-		RETURN_NULL(); \
-	} \
-} \
-
-/* Borrowed from zip extension */
-#define IMAGICK_REGISTER_CONST_LONG(const_name, value)\
-	zend_declare_class_constant_long(php_imagick_sc_entry, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
-
-#define IMAGICK_REGISTER_CONST_STRING(const_name, value)\
-	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value TSRMLS_CC);
-
-#define IMAGICK_CHECK_NOT_EMPTY(magick_wand, type, code)\
+#define IMAGICK_ENSURE_NOT_EMPTY(magick_wand) \
 	if(MagickGetNumberImages(magick_wand) == 0) { \
-		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Can not process empty Imagick object", (long)code); \
-	} \
-
-#define IMAGICK_INITIALIZE_ZERO_ARGS(wand_type, intern)\
-	intern = (wand_type)zend_object_store_get_object(getThis() TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Can not process empty Imagick object", 1 TSRMLS_CC); \
+		return; \
+	}
 
 #define IMAGICK_FREE_MEMORY(type, value)\
 	if (value != (type) NULL) { \
@@ -169,14 +57,6 @@
 		} \
 	}
 #endif
-
-#define IMAGICK_HAS_FORMAT(buffer, magick_wand, free_buffer)\
-	buffer = MagickGetImageFormat(magick_wand);\
-	if(buffer == (char *)NULL || *buffer == '\0') {\
-		IMAGICK_FREE_MEMORY(char *, buffer); IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "Image has no format", 1); \
-	} else { \
-		if (free_buffer) IMAGICK_FREE_MEMORY(char *, buffer); \
-	} \
 
 #define IMAGICK_METHOD_DEPRECATED(class_name, method_name) \
 	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", class_name, method_name);
@@ -277,86 +157,27 @@
 	MagickSetLastIterator(intern->magick_wand);
 
 #define IMAGICK_REPLACE_MAGICKWAND(intern, new_wand)\
-	if (intern->magick_wand == (MagickWand *)NULL) {\
+	if (intern->magick_wand == NULL) {\
 		intern->magick_wand = new_wand; \
 	} else { \
-		intern->magick_wand = (MagickWand *)DestroyMagickWand(intern->magick_wand); \
+		intern->magick_wand = DestroyMagickWand(intern->magick_wand); \
 		intern->magick_wand = new_wand; \
 	}
 
 #define IMAGICKPIXEL_REPLACE_PIXELWAND(intern, new_wand)\
-	if(intern->pixel_wand != (PixelWand *)NULL && intern->initialized_via_iterator != 1) {\
-		intern->pixel_wand = (PixelWand *)DestroyPixelWand(intern->pixel_wand);\
+	if(intern->pixel_wand != NULL && intern->initialized_via_iterator != 1) {\
+		intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);\
 		intern->pixel_wand = new_wand;\
 	} else {\
 		intern->pixel_wand = new_wand;\
-	} \
+	}
 
 #define IMAGICKDRAW_REPLACE_DRAWINGWAND(intern, new_wand) \
-	if (intern->drawing_wand == (DrawingWand *)NULL) { \
+	if (intern->drawing_wand == NULL) { \
 		intern->drawing_wand = new_wand; \
 	} else { \
 		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand(intern->drawing_wand); \
 		intern->drawing_wand = new_wand; \
-	} \
-
-#define IMAGICK_CAST_PARAMETER_TO_COLOR(param, internp, caller) \
-	switch (Z_TYPE_P(param)) { \
-		case IS_STRING: \
-		{ \
-			zval *object; \
-			PixelWand *pixel_wand = NewPixelWand(); \
-			if (!PixelSetColor(pixel_wand, Z_STRVAL_P(param))) { \
-				pixel_wand = DestroyPixelWand(pixel_wand); \
-				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Unrecognized color string", caller); \
-				return; \
-			} \
-			MAKE_STD_ZVAL(object); \
-			object_init_ex(object, php_imagickpixel_sc_entry); \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC); \
-			internp->initialized_via_iterator = 0; \
-			efree(object); \
-			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, pixel_wand); \
-		} \
-		break; \
-		case IS_OBJECT: \
-			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) { \
-				internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
-			} else { \
-				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "The parameter must be an instance of ImagickPixel or a string", (long)caller); \
-			} \
-		break; \
-		default: \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
-		break; \
-	} \
-
-#define IMAGICK_CAST_PARAMETER_TO_OPACITY(param, internp, caller) \
-	switch (Z_TYPE_P(param)) { \
-		case IS_LONG: \
-		case IS_DOUBLE: \
-		{ \
-			zval *object; \
-			PixelWand *pixel_wand = NewPixelWand(); \
-			PixelSetOpacity(pixel_wand, Z_DVAL_P(param)); \
-			MAKE_STD_ZVAL(object); \
-			object_init_ex(object, php_imagickpixel_sc_entry); \
-			internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC); \
-			internp->initialized_via_iterator = 0; \
-			efree(object); \
-			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, pixel_wand); \
-		} \
-		break; \
-		case IS_OBJECT: \
-			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) { \
-				internp = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC); \
-			} else { \
-				IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "The parameter must be an instance of ImagickPixel or a string", (long)caller); \
-			} \
-		break; \
-		default: \
-			IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(caller, "Invalid parameter provided", (long)caller); \
-		break; \
 	}
 
 

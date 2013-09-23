@@ -307,19 +307,19 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 			*num_elements = 0;
 			return NULL;
 		}
-		
+
 		tmp_zx = **ppz_x;
 		zval_copy_ctor(&tmp_zx);
 		tmp_pzx = &tmp_zx;
 		convert_to_double(tmp_pzx);
-		
+
 		/* Get Y */
 		if (zend_hash_find(sub_array, "y", sizeof("y"), (void**)&ppz_y) == FAILURE) {
 			efree(coordinates);
 			*num_elements = 0;
 			return NULL;
-		}	
-		
+		}
+
 		tmp_zy = **ppz_y;
 		zval_copy_ctor(&tmp_zy);
 		tmp_pzy = &tmp_zy;
@@ -331,6 +331,124 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	}
 
 	return coordinates;
+}
+
+void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description, int code TSRMLS_DC)
+{
+	zend_class_entry *ce = NULL;
+
+	switch (type) {
+		case IMAGICK_CLASS:
+		default:
+			ce = php_imagick_exception_class_entry;
+		break;
+
+		case IMAGICKDRAW_CLASS:
+			ce = php_imagickdraw_exception_class_entry;
+		break;
+
+		case IMAGICKPIXELITERATOR_CLASS:
+			ce = php_imagickpixeliterator_exception_class_entry;
+		break;
+
+		case IMAGICKPIXEL_CLASS:
+			ce = php_imagickpixel_exception_class_entry;
+		break;
+	}
+	zend_throw_exception(ce, description, code TSRMLS_CC);
+}
+
+static
+void s_convert_exception (char *description, const char *default_message, long severity, int code TSRMLS_DC)
+{
+	// No description provided or empty one
+	if (!description || (strlen (description) == 0)) {
+		if (description) {
+			description = MagickRelinquishMemory (description);
+		}
+		zend_throw_exception(php_imagick_exception_class_entry, default_message, code TSRMLS_CC);
+		return;
+	}
+	zend_throw_exception(php_imagick_exception_class_entry, description, severity TSRMLS_CC);
+	description = MagickRelinquishMemory (description);
+}
+
+/**
+	Convert image magick MagickWand exception to PHP exception
+*/
+void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message TSRMLS_DC)
+{
+	ExceptionType severity;
+	char *description;
+
+	description = MagickGetException(magick_wand, &severity);
+	MagickClearException (magick_wand);
+
+	s_convert_exception (description, default_message, severity, 1 TSRMLS_CC);
+}
+
+void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message TSRMLS_DC)
+{
+	ExceptionType severity;
+	char *description;
+
+	description = DrawGetException(drawing_wand, &severity);
+	DrawClearException (drawing_wand);
+
+	s_convert_exception (description, default_message, severity, 2 TSRMLS_CC);
+}
+
+void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message TSRMLS_DC)
+{
+	ExceptionType severity;
+	char *description;
+
+	description = PixelGetIteratorException(pixel_iterator, &severity);
+	PixelClearIteratorException (pixel_iterator);
+
+	s_convert_exception (description, default_message, severity, 3 TSRMLS_CC);
+}
+
+PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC)
+{
+	PixelWand *pixel_wand = NULL;
+	*allocated = 0;
+
+	switch (Z_TYPE_P(param)) {
+		case IS_STRING:
+		{
+			pixel_wand = NewPixelWand();
+			*allocated = 1;
+
+			if (PixelSetColor (pixel_wand, Z_STRVAL_P(param)) == MagickFalse) {
+				pixel_wand = DestroyPixelWand(pixel_wand);
+				php_imagick_throw_exception (caller, "Unrecognized color string", 1);
+				return NULL;
+			}
+		}
+		break;
+
+		case IS_LONG:
+		case IS_DOUBLE:
+		{
+			pixel_wand = NewPixelWand();
+			PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
+			*allocated = 1;
+		}
+		break;
+
+		case IS_OBJECT:
+			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) {
+				php_imagickpixel_object *intern = (php_imagickpixel_object *)zend_object_store_get_object(param TSRMLS_CC);
+				pixel_wand = intern->pixel_wand;
+			} else
+				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string", 1);
+		break;
+
+		default:
+			php_imagick_throw_exception(caller, "Invalid color parameter provided", 1);
+	}
+	return pixel_wand;
 }
 
 #if MagickLibVersion <= 0x628
@@ -353,6 +471,12 @@ void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_
 void initialize_imagick_constants()
 {
 	TSRMLS_FETCH();
+
+#define IMAGICK_REGISTER_CONST_LONG(const_name, value)\
+	zend_declare_class_constant_long(php_imagick_sc_entry, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
+
+#define IMAGICK_REGISTER_CONST_STRING(const_name, value)\
+	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value TSRMLS_CC);
 
 	/* Constants defined in php_imagick.h */
 	IMAGICK_REGISTER_CONST_LONG("COLOR_BLACK", IMAGICKCOLORBLACK);
@@ -785,4 +909,7 @@ void initialize_imagick_constants()
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_POLYNOMIAL", PolynomialFunction);
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_SINUSOID", SinusoidFunction);
 #endif
+
+#undef IMAGICK_REGISTER_CONST_LONG
+#undef IMAGICK_REGISTER_CONST_STRING
 }
