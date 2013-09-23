@@ -1051,12 +1051,11 @@ PHP_METHOD(imagick, setimageorientation)
 PHP_METHOD(imagick, paintfloodfillimage)
 {
 	php_imagick_object *intern;
-	php_imagickpixel_object *intern_fill, *intern_border;
 	zval *fill_param, *border_param;
 	long x, y, channel = DefaultChannels;
 	double fuzz;
 	MagickBooleanType status;
-	PixelWand *fill_wand, *border_wand;
+	PixelWand *fill_wand, *border_wand = NULL;
 	zend_bool fill_allocated = 0, border_allocated = 0;
 
 	/* Parse parameters given to function */
@@ -1213,7 +1212,7 @@ PHP_METHOD(imagick, getimageprofiles)
 	if (values) {
 
 		for (i = 0; i < profiles_count; i++) {
-			profile = MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
+			profile = (char *)MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
 			add_assoc_stringl(return_value, profiles[i], profile, length, 1);
 			IMAGICK_FREE_MEMORY(char *, profile);
 		}
@@ -1503,7 +1502,7 @@ PHP_METHOD(imagick, setfont)
 {
 	php_imagick_object *intern;
 	char *font, *absolute;
-	int font_len, error = 0;
+	int font_len;
 	MagickBooleanType status;
 	php_imagick_rw_result_t rc;
 
@@ -6511,7 +6510,6 @@ PHP_METHOD(imagick, thumbnailimage)
 {
 	long width, height, new_width, new_height;
 	php_imagick_object *intern;
-	MagickBooleanType status;
 	zend_bool bestfit = 0, fill = 0;
 
 	/* Parse parameters given to function */
@@ -7085,7 +7083,7 @@ PHP_METHOD(imagick, getimagemimetype)
 static
 void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 {
-    add_assoc_string (array, key, value ? value : "", copy);
+    add_assoc_string (array, key, (char *)(value ? value : ""), copy);
 }
 
 static
@@ -7328,7 +7326,6 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 {
 	zval *param;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 	PixelWand *color_wand;
 	zend_bool allocated;
@@ -7949,7 +7946,6 @@ PHP_METHOD(imagick, setimagemattecolor)
 {
 	zval *param;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 	PixelWand *color_wand;
 	zend_bool allocated;
@@ -8723,7 +8719,6 @@ PHP_METHOD(imagick, borderimage)
 {
 	zval *param;
 	php_imagick_object *intern;
-	php_imagickpixel_object *internp;
 	MagickBooleanType status;
 	long width, height;
 	PixelWand *color_wand;
@@ -9805,7 +9800,8 @@ PHP_METHOD(imagick, getpage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long width, height, x, y;
+	unsigned long width, height;
+	long x, y;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9835,7 +9831,7 @@ PHP_METHOD(imagick, getpage)
 PHP_METHOD(imagick, getquantumdepth)
 {
 	char *quantum_depth;
-	long depth;
+	unsigned long depth;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9857,7 +9853,7 @@ PHP_METHOD(imagick, getquantumdepth)
 PHP_METHOD(imagick, getquantumrange)
 {
 	char *quantum_range;
-	long range;
+	unsigned long range;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
@@ -9926,7 +9922,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 {
 	php_imagick_object *intern;
 	double *sampling_factors;
-	long number_factors = 0, i;
+	unsigned long number_factors = 0, i;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
