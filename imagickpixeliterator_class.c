@@ -396,7 +396,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	php_imagickpixeliterator_object *internpix;
 	php_imagickpixel_object *internp;
 	PixelWand **wand_array;
-	long num_wands;
+	unsigned long num_wands;
 	int i;
 	zval *tmp_pixelwand;
 
