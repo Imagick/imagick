@@ -7083,7 +7083,7 @@ PHP_METHOD(imagick, getimagemimetype)
 static
 void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 {
-    add_assoc_string (array, key, value ? value : "", copy);
+    add_assoc_string (array, key, (char *)(value ? value : ""), copy);
 }
 
 static
