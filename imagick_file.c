@@ -25,19 +25,35 @@
 
 static zend_bool php_imagick_is_virtual_format(const char *format) 
 {
-#ifdef PHP_WIN32
-	const int elements = 18;
-	int i = 0;
-	const char *virtual_fmt[] = { "CAPTION", "CLIPBOARD", "FRACTAL", "GRADIENT", "LABEL", "MATTE",
-									"NULL", "PLASMA", "PRINT", "SCAN", "RADIAL-GRADIENT", "SCANX",
-									"WIN", "XC", "MAGICK", "GRANITE", "LOGO", "NETSCAPE", "ROSE" };
-#else
-	const int elements = 19;
-	int i = 0;
-	const char *virtual_fmt[] = { "CAPTION", "CLIPBOARD", "FRACTAL", "GRADIENT", "LABEL", "MATTE",
-									"NULL", "PLASMA", "PRINT", "SCAN", "RADIAL-GRADIENT", "SCANX",
-									"WIN", "X", "XC", "MAGICK", "GRANITE", "LOGO", "NETSCAPE", "ROSE" };
+	int i, elements;
+
+	const char *virtual_fmt[] = {
+		"CAPTION",
+		"CLIPBOARD",
+		"FRACTAL",
+		"GRADIENT",
+		"LABEL",
+		"MATTE",
+		"NULL",
+		"PLASMA",
+		"PRINT",
+		"SCAN",
+		"RADIAL-GRADIENT",
+		"SCANX",
+		"WIN",
+#ifndef PHP_WIN32
+		"X",
 #endif
+		"XC",
+		"MAGICK",
+		"GRANITE",
+		"LOGO",
+		"NETSCAPE",
+		"ROSE"
+	};
+
+	elements = sizeof (virtual_fmt) / sizeof (virtual_fmt [0]);
+
 	for (i = 0; i <= elements; i++) {
 		if (strcasecmp(format, virtual_fmt[i]) == 0) {
 			return 1;
