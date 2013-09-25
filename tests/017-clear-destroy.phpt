@@ -1,5 +1,5 @@
 --TEST--
-Test static methods
+Clear and destroy aliases
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
 --FILE--
