@@ -2358,7 +2358,7 @@ PHP_METHOD(imagickdraw, pushpattern)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::render()
+/* {{{ proto bool ImagickDraw::render()
 	Renders all preceding drawing commands.
 */
 PHP_METHOD(imagickdraw, render)
