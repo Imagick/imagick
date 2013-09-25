@@ -664,12 +664,11 @@ void php_imagick_replace_drawingwand (php_imagickdraw_object *obj, DrawingWand *
 
 void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new_wand)
 {
-	if (!obj->pixel_wand)
-		obj->pixel_wand = new_wand;
-	else {
+	if (obj->pixel_wand && obj->initialized_via_iterator != 1) {
 		obj->pixel_wand = DestroyPixelWand(obj->pixel_wand);
 		obj->pixel_wand = new_wand;
-	}
+	} else
+		obj->pixel_wand = new_wand;
 }
 
 void initialize_imagick_constants()
