@@ -35,6 +35,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 - Large amount of internal refactoring, removal of unnecessary macros
 - Removed unused code
 - Added error handling around object creation and cloning failures
+- Fixed PHP bug #64945	ZEND_ACC_ALLOW_STATIC vs ZEND_ACC_STATIC
+- Fixed Doc Bug #65043	Destroy and clear method do the same things
 </notes>
 	<contents>
 		<dir name="/">
