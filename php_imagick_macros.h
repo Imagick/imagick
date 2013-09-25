@@ -39,28 +39,4 @@
 #define IMAGICK_METHOD_DEPRECATED_USE_INSTEAD(class_name, method_name, new_class, new_method) \
 	php_error(E_STRICT, "%s::%s is deprecated. %s::%s should be used instead", class_name, method_name, new_class, new_method);
 
-#define IMAGICK_REPLACE_MAGICKWAND(intern, new_wand)\
-	if (intern->magick_wand == NULL) {\
-		intern->magick_wand = new_wand; \
-	} else { \
-		intern->magick_wand = DestroyMagickWand(intern->magick_wand); \
-		intern->magick_wand = new_wand; \
-	}
-
-#define IMAGICKPIXEL_REPLACE_PIXELWAND(intern, new_wand)\
-	if(intern->pixel_wand != NULL && intern->initialized_via_iterator != 1) {\
-		intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);\
-		intern->pixel_wand = new_wand;\
-	} else {\
-		intern->pixel_wand = new_wand;\
-	}
-
-#define IMAGICKDRAW_REPLACE_DRAWINGWAND(intern, new_wand) \
-	if (intern->drawing_wand == NULL) { \
-		intern->drawing_wand = new_wand; \
-	} else { \
-		intern->drawing_wand = (DrawingWand *)DestroyDrawingWand(intern->drawing_wand); \
-		intern->drawing_wand = new_wand; \
-	}
-
 #endif /* PHP_IMAGICK_MACROS_H */

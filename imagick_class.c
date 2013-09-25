@@ -712,7 +712,7 @@ PHP_METHOD(imagick, transformimage)
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, transformed);
+	php_imagick_replace_magickwand(intern_return, transformed);
 	return;
 }
 /* }}} */
@@ -1391,7 +1391,7 @@ PHP_METHOD(imagick, getimageclipmask)
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 }
 /* }}} */
@@ -1634,7 +1634,7 @@ PHP_METHOD(imagick, mergeimagelayers)
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, merged);
+	php_imagick_replace_magickwand(intern_return, merged);
 	return;
 }
 #endif
@@ -3565,7 +3565,7 @@ PHP_METHOD(imagick, coalesceimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 
 }
@@ -3649,7 +3649,7 @@ PHP_METHOD(imagick, combineimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -3711,7 +3711,7 @@ PHP_METHOD(imagick, getimage)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -4162,7 +4162,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -4234,7 +4234,7 @@ PHP_METHOD(imagick, previewimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 }
 /* }}} */
@@ -4944,7 +4944,7 @@ PHP_METHOD(imagick, stereoimage)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -4979,7 +4979,7 @@ PHP_METHOD(imagick, textureimage)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -5157,7 +5157,7 @@ PHP_METHOD(imagick, deconstructimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -5189,7 +5189,7 @@ PHP_METHOD(imagick, getimageregion)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 
@@ -5457,7 +5457,7 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -5527,7 +5527,7 @@ PHP_METHOD(imagick, getimagebordercolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -5729,7 +5729,7 @@ PHP_METHOD(imagick, getimagecolormapcolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -5996,7 +5996,7 @@ PHP_METHOD(imagick, getimagehistogram)
 			MAKE_STD_ZVAL(tmp_pixelwand);
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
+			php_imagick_replace_pixelwand(internp, wand_array[i]);
 			add_next_index_zval(return_value, tmp_pixelwand);
 		}
 	}
@@ -6079,7 +6079,7 @@ PHP_METHOD(imagick, getimagemattecolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -6155,7 +6155,7 @@ PHP_METHOD(imagick, getimagepixelcolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -7535,7 +7535,7 @@ PHP_METHOD(imagick, compareimagechannels)
 	array_init(return_value);
 	object_init_ex(new_wand, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(new_wand TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	add_next_index_zval(return_value, new_wand);
 	add_next_index_double(return_value, distortion);
@@ -7569,7 +7569,7 @@ PHP_METHOD(imagick, compareimagelayers)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -7601,7 +7601,7 @@ PHP_METHOD(imagick, flattenimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -7725,7 +7725,7 @@ PHP_METHOD(imagick, fximage)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -7823,7 +7823,7 @@ PHP_METHOD(imagick, compareimages)
 
 	object_init_ex(new_wand, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(new_wand TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	add_next_index_zval(return_value, new_wand);
 	add_next_index_double(return_value, distortion);
@@ -8656,7 +8656,7 @@ PHP_METHOD(imagick, montageimage)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -8716,7 +8716,7 @@ PHP_METHOD(imagick, averageimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 }
 /* }}} */
@@ -8971,7 +8971,7 @@ PHP_METHOD(imagick, steganoimage)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 }
 /* }}} */
@@ -9000,7 +9000,7 @@ PHP_METHOD(imagick, clone)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 }
 /* }}} */
@@ -9189,7 +9189,7 @@ PHP_METHOD(imagick, mosaicimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 
@@ -9221,7 +9221,7 @@ PHP_METHOD(imagick, morphimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
 	return;
 
@@ -9496,7 +9496,7 @@ PHP_METHOD(imagick, appendimages)
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICK_REPLACE_MAGICKWAND(intern_return, tmp_wand);
+	php_imagick_replace_magickwand(intern_return, tmp_wand);
 	return;
 }
 /* }}} */

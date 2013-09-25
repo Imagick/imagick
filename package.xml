@@ -34,6 +34,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 <notes>
 - Large amount of internal refactoring, removal of unnecessary macros
 - Removed unused code
+- Added error handling around object creation and cloning failures
 </notes>
 	<contents>
 		<dir name="/">

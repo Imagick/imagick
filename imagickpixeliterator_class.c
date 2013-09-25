@@ -377,7 +377,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 			MAKE_STD_ZVAL(tmp_pixelwand);
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
+			php_imagick_replace_pixelwand(internp, wand_array[i]);
 			internp->initialized_via_iterator = 1;
 			add_next_index_zval(return_value, tmp_pixelwand);
 		}
@@ -439,7 +439,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 			MAKE_STD_ZVAL(tmp_pixelwand);
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
+			php_imagick_replace_pixelwand(internp, wand_array[i]);
 			internp->initialized_via_iterator = 1;
 			add_next_index_zval(return_value, tmp_pixelwand);
 		}
@@ -495,7 +495,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 			MAKE_STD_ZVAL( tmp_pixelwand );
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
-			IMAGICKPIXEL_REPLACE_PIXELWAND(internp, wand_array[i]);
+			php_imagick_replace_pixelwand(internp, wand_array[i]);
 			internp->initialized_via_iterator = 1;
 			add_next_index_zval(return_value, tmp_pixelwand);
 		}

@@ -590,7 +590,7 @@ PHP_METHOD(imagickpixel, clone)
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	intern_return = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
 
-	IMAGICKPIXEL_REPLACE_PIXELWAND(intern_return, pixel_wand);
+	php_imagick_replace_pixelwand(intern_return, pixel_wand);
 	return;
 }
 /* }}} */

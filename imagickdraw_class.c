@@ -361,7 +361,7 @@ PHP_METHOD(imagickdraw, setresolution)
 		return;
 	}
 
-	IMAGICKDRAW_REPLACE_DRAWINGWAND(internd, d_wand);
+	php_imagick_replace_drawingwand(internd, d_wand);
 	RETURN_TRUE;
 }
 /* }}} */
@@ -1190,7 +1190,7 @@ PHP_METHOD(imagickdraw, clone)
 
 	object_init_ex(return_value, php_imagickdraw_sc_entry);
 	intern_return = (php_imagickdraw_object *)zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKDRAW_REPLACE_DRAWINGWAND(intern_return, tmp_wand);
+	php_imagick_replace_drawingwand(intern_return, tmp_wand);
 
 	return;
 }
@@ -1419,7 +1419,7 @@ PHP_METHOD(imagickdraw, getfillcolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *) zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -1525,7 +1525,7 @@ PHP_METHOD(imagickdraw, getstrokecolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *) zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }
@@ -1792,7 +1792,7 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = (php_imagickpixel_object *) zend_object_store_get_object(return_value TSRMLS_CC);
-	IMAGICKPIXEL_REPLACE_PIXELWAND(internp, tmp_wand);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
 
 	return;
 }

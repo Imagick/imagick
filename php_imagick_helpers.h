@@ -54,6 +54,13 @@ void php_imagick_restore_locale (const char *old_locale);
 
 PixelWand *php_imagick_clone_pixelwand (PixelWand *source);
 
+void php_imagick_replace_magickwand (php_imagick_object *obj, MagickWand *new_wand);
+
+void php_imagick_replace_drawingwand (php_imagickdraw_object *obj, DrawingWand *new_wand);
+
+void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new_wand);
+
+
 
 /*
   Convert ImageMagick exception types to PHP exceptions

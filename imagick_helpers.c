@@ -642,6 +642,36 @@ PixelWand *php_imagick_clone_pixelwand (PixelWand *source)
 #endif
 }
 
+void php_php_imagick_replace_magickwand (php_imagick_object *obj, MagickWand *new_wand)
+{
+	if (!obj->magick_wand)
+		obj->magick_wand = new_wand;
+	else {
+		obj->magick_wand = DestroyMagickWand(obj->magick_wand);
+		obj->magick_wand = new_wand;
+	}
+}
+
+void php_imagick_replace_drawingwand (php_imagickdraw_object *obj, DrawingWand *new_wand)
+{
+	if (!obj->drawing_wand)
+		obj->drawing_wand = new_wand;
+	else {
+		obj->drawing_wand = DestroyDrawingWand(obj->drawing_wand);
+		obj->drawing_wand = new_wand;
+	}
+}
+
+void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new_wand)
+{
+	if (!obj->pixel_wand)
+		obj->pixel_wand = new_wand;
+	else {
+		obj->pixel_wand = DestroyPixelWand(obj->pixel_wand);
+		obj->pixel_wand = new_wand;
+	}
+}
+
 void initialize_imagick_constants()
 {
 	TSRMLS_FETCH();
