@@ -580,12 +580,12 @@ PHP_METHOD(imagickpixel, clone)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	IMAGICK_METHOD_DEPRECATED("ImagickPixel", "clone");
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_CLONE_PIXELWAND(internp->pixel_wand, pixel_wand);
+	pixel_wand = php_imagick_clone_pixelwand (internp->pixel_wand);
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	intern_return = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);

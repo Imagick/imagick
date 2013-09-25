@@ -7479,7 +7479,8 @@ PHP_METHOD(imagick, colorizeimage)
 	}
 
 	/* Colorize wants both wands to be of same instance */
-	IMAGICK_CLONE_PIXELWAND(color_wand, param_wand);
+	param_wand = php_imagick_clone_pixelwand (color_wand);
+
 	PixelSetOpacity(param_wand, PixelGetOpacity(opacity_wand));
 	PixelSetAlpha(param_wand, PixelGetAlpha(opacity_wand));
 

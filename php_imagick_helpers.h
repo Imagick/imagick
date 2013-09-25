@@ -52,6 +52,8 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 char *php_imagick_set_locale (TSRMLS_D);
 void php_imagick_restore_locale (const char *old_locale);
 
+PixelWand *php_imagick_clone_pixelwand (PixelWand *source);
+
 
 /*
   Convert ImageMagick exception types to PHP exceptions

@@ -622,6 +622,26 @@ void php_imagick_restore_locale (const char *old_locale)
 		setlocale (LC_NUMERIC, old_locale);
 }
 
+PixelWand *php_imagick_clone_pixelwand (PixelWand *source)
+{
+#if MagickLibVersion >= 0x635
+	return ClonePixelWand(source);
+#else
+	PixelWand *pixel_wand = NewPixelWand ();
+	if (!pixel_wand)
+		return NULL;
+
+	PixelSetColorCount (target, PixelGetColorCount (source));
+	PixelSetRed (target, PixelGetRed (source));
+	PixelSetGreen (target, PixelGetGreen (source));
+	PixelSetBlue (target, PixelGetBlue (source));
+	PixelSetOpacity (target, PixelGetOpacity (source));
+	PixelSetAlpha (target, PixelGetAlpha (source));
+
+	return pixel_wand;
+#endif
+}
+
 void initialize_imagick_constants()
 {
 	TSRMLS_FETCH();

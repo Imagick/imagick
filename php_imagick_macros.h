@@ -63,18 +63,4 @@
 		intern->drawing_wand = new_wand; \
 	}
 
-#if MagickLibVersion >= 0x635
-#define IMAGICK_CLONE_PIXELWAND(source, target) \
-	target = ClonePixelWand(source);
-#else
-#define IMAGICK_CLONE_PIXELWAND(source, target) \
-	target = (PixelWand *)NewPixelWand(); \
-	PixelSetColorCount(target, PixelGetColorCount(source)); \
-	PixelSetRed(target, PixelGetRed(source)); \
-	PixelSetGreen(target, PixelGetGreen(source)); \
-	PixelSetBlue(target, PixelGetBlue(source)); \
-	PixelSetOpacity(target, PixelGetOpacity(source)); \
-	PixelSetAlpha(target, PixelGetAlpha(source));
-#endif
-
 #endif /* PHP_IMAGICK_MACROS_H */
