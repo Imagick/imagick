@@ -590,6 +590,38 @@ void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_
 }
 #endif
 
+/**
+ * Changes the locale to IMAGICK_LC_NUMERIC_LOCALE if imagick.locale_fix is on
+ * and returns the locale set before calling this function.
+ * If locale is not changed, NULL is returned
+ *
+ */
+char *php_imagick_set_locale (TSRMLS_D)
+{
+	char *current_locale;
+
+	if (!IMAGICK_G(locale_fix))
+		return NULL;
+
+	current_locale = setlocale(LC_NUMERIC, NULL);
+	if (current_locale != NULL) {
+		if (strcmp (current_locale, IMAGICK_LC_NUMERIC_LOCALE) != 0) {
+			setlocale (LC_NUMERIC, IMAGICK_LC_NUMERIC_LOCALE);
+			return estrdup (current_locale);
+		}
+	}
+	return NULL;
+}
+
+void php_imagick_restore_locale (const char *old_locale)
+{
+	if (!old_locale)
+		return;
+
+	if (strcmp (old_locale, IMAGICK_LC_NUMERIC_LOCALE) != 0)
+		setlocale (LC_NUMERIC, old_locale);
+}
+
 void initialize_imagick_constants()
 {
 	TSRMLS_FETCH();

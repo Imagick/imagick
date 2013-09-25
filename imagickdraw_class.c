@@ -2365,18 +2365,22 @@ PHP_METHOD(imagickdraw, render)
 {
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
-	char *old_locale = NULL, *buffer = NULL;
-	zend_bool restore = 0;
+	char *old_locale;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	IMAGICK_SET_LOCALE(old_locale, buffer, restore);
+	old_locale = php_imagick_set_locale (TSRMLS_C);
+
 	status = DrawRender(internd->drawing_wand);
-	IMAGICK_RESTORE_LOCALE(old_locale, restore);
+
+	php_imagick_restore_locale (old_locale);
+
+	if (old_locale)
+		efree (old_locale);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to render the drawing commands" TSRMLS_CC);

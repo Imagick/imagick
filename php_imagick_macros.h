@@ -63,29 +63,6 @@
 		intern->drawing_wand = new_wand; \
 	}
 
-#ifdef HAVE_LOCALE_H
-#define IMAGICK_SET_LOCALE(old_locale, tmp, restore) \
-	if ((IMAGICK_G(locale_fix)) && \
-		(tmp = setlocale(LC_NUMERIC, NULL)) != NULL && \
-		(strcmp(tmp, IMAGICK_LC_NUMERIC_LOCALE) != 0)) { \
-		old_locale = estrdup(tmp); \
-		setlocale(LC_NUMERIC, IMAGICK_LC_NUMERIC_LOCALE); \
-		restore = 1; \
-	} else { \
-		restore = 0; \
-	} \
-
-#define IMAGICK_RESTORE_LOCALE(old_locale, restore) \
-	if (restore && old_locale != NULL && (strcmp(old_locale, IMAGICK_LC_NUMERIC_LOCALE) != 0)) { \
- 		setlocale(LC_NUMERIC, old_locale); \
-		efree(old_locale); \
-	} \
-
-#else
-#define IMAGICK_SET_LOCALE(old_locale, tmp, restore)
-#define IMAGICK_RESTORE_LOCALE(old_locale, restore)
-#endif
-
 #if MagickLibVersion >= 0x635
 #define IMAGICK_CLONE_PIXELWAND(source, target) \
 	target = ClonePixelWand(source);

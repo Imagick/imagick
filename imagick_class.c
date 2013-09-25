@@ -525,6 +525,7 @@ PHP_METHOD(imagick, randomthresholdimage)
 */
 PHP_METHOD(imagick, roundcornersimage)
 {
+	char *old_locale;
 	double x_rounding, y_rounding;
 	DrawingWand *draw;
 	MagickWand *mask_image;
@@ -533,8 +534,6 @@ PHP_METHOD(imagick, roundcornersimage)
 	long image_width, image_height;
 	MagickBooleanType status;
 	double stroke_width = 10, displace = 5, correction = -6;
-	char *old_locale = NULL, *buffer = NULL;
-	zend_bool restore = 0;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|ddd", &x_rounding, &y_rounding, &stroke_width, &displace, &correction) == FAILURE) {
@@ -608,9 +607,14 @@ PHP_METHOD(imagick, roundcornersimage)
 	DrawSetStrokeWidth(draw, stroke_width);
 	DrawRoundRectangle(draw, displace, displace, image_width + correction, image_height + correction, x_rounding, y_rounding);
 
-	IMAGICK_SET_LOCALE(old_locale, buffer, restore);
+	old_locale = php_imagick_set_locale (TSRMLS_C);
+
 	status = MagickDrawImage(mask_image, draw);
-	IMAGICK_RESTORE_LOCALE(old_locale, restore);
+
+	php_imagick_restore_locale (old_locale);
+
+	if (old_locale)
+		efree (old_locale);
 
 	if (status == MagickFalse) {
 		exit_cleanup();
@@ -8400,8 +8404,7 @@ PHP_METHOD(imagick, drawimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	php_imagickdraw_object *internd;
-	char *old_locale = NULL, *buffer = NULL;
-	zend_bool restore = 0;
+	char *old_locale;
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
@@ -8413,9 +8416,14 @@ PHP_METHOD(imagick, drawimage)
 
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 
-	IMAGICK_SET_LOCALE(old_locale, buffer, restore);
+	old_locale = php_imagick_set_locale (TSRMLS_C);
+
 	status = MagickDrawImage(intern->magick_wand, internd->drawing_wand);
-	IMAGICK_RESTORE_LOCALE(old_locale, restore);
+
+	php_imagick_restore_locale (old_locale);
+
+	if (old_locale)
+		efree (old_locale);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {

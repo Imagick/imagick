@@ -48,6 +48,11 @@ php_imagick_rw_result_t php_imagick_file_access_check (const char *filename TSRM
 PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC);
 PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC);
 
+
+char *php_imagick_set_locale (TSRMLS_D);
+void php_imagick_restore_locale (const char *old_locale);
+
+
 /*
   Convert ImageMagick exception types to PHP exceptions
 */
