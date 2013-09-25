@@ -7093,6 +7093,7 @@ void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 static
 void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
+	int i, found = 0;
 	char *line, *last_ptr = NULL, *buffer;
 	size_t num_keys;
 
@@ -7119,7 +7120,6 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 	num_keys = sizeof (str_keys) / sizeof (str_keys[0]);
 	line = php_strtok_r (buffer, "\r\n", &last_ptr);
 
-	int i, found = 0;
 	while ((found < num_keys) && line) {
 		// Break the line further into tokens
 		char *trim = php_trim (line, strlen(line), NULL, 0, NULL, 3 TSRMLS_CC);
