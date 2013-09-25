@@ -642,7 +642,7 @@ PixelWand *php_imagick_clone_pixelwand (PixelWand *source)
 #endif
 }
 
-void php_php_imagick_replace_magickwand (php_imagick_object *obj, MagickWand *new_wand)
+void php_imagick_replace_magickwand (php_imagick_object *obj, MagickWand *new_wand)
 {
 	if (!obj->magick_wand)
 		obj->magick_wand = new_wand;
