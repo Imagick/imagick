@@ -6690,7 +6690,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 */
 PHP_METHOD(imagick, identifyimage)
 {
-	char *format, *identify, *filename;
+	char *format, *identify, *filename, *signature;
 	php_imagick_object *intern;
 	zend_bool append_raw_string = 0;
 	zval *array;
@@ -6715,7 +6715,7 @@ PHP_METHOD(imagick, identifyimage)
     // Name of the image
 	filename = MagickGetImageFilename (intern->magick_wand);
 	s_add_assoc_str (return_value, "imageName", filename, 1);
-	IMAGICK_FREE_MEMORY(char *, filename);
+	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	format = MagickGetImageFormat (intern->magick_wand);
 	if (format) {
@@ -6731,7 +6731,6 @@ PHP_METHOD(imagick, identifyimage)
 	else
 		s_add_assoc_str (return_value, "mimetype", "unknown", 1);
 
-	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	// Geometry is an associative array
 	MAKE_STD_ZVAL (array);
@@ -6749,17 +6748,18 @@ PHP_METHOD(imagick, identifyimage)
 	    add_assoc_double (array, "y", y);
 	    add_assoc_zval (return_value, "resolution", array);
 	}
-	s_add_assoc_str (return_value, "signature", MagickGetImageSignature (intern->magick_wand), 1);
+	signature = MagickGetImageSignature (intern->magick_wand);
+	s_add_assoc_str (return_value, "signature", signature, 1);
 
 	if (append_raw_string == 1)
 		add_assoc_string (return_value, "rawOutput", identify, 1);
 
+	IMAGICK_FREE_MEMORY(char *, filename);
 	IMAGICK_FREE_MEMORY(char *, identify);
+	IMAGICK_FREE_MEMORY(char *, signature);
 	return;
 }
 /* }}} */
-
-#undef imagick_option_to_string
 
 /* {{{ proto int Imagick::getImageColors()
 	Gets the number of unique colors in the image.
