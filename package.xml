@@ -32,11 +32,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixed ZTS build
-- Added LICENSE file to comply with Fedora Packaging Guidelines
-- Fixed memory leaks
-- Added mime type to identifyImage
 - Large amount of internal refactoring, removal of unnecessary macros
+- Removed unused code
 </notes>
 	<contents>
 		<dir name="/">
