@@ -36,6 +36,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 - Fix small memory leak in identifyImage
 - Added LICENSE
 - Added mimetype to identify image as per PECL bug 65037
+- Fixed type conversion error in newpseudoimage
 </notes>
 	<contents>
 		<dir name="/">
