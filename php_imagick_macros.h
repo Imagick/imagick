@@ -31,7 +31,7 @@
 	if (value != (type) NULL) { \
 		value = (type) MagickRelinquishMemory(value); \
 		value = (type)NULL; \
-	} \
+	}
 
 #define IMAGICK_METHOD_DEPRECATED(class_name, method_name) \
 	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", class_name, method_name);
