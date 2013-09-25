@@ -961,7 +961,7 @@ PHP_METHOD(imagick, getimagelength)
 	status = MagickGetImageLength(intern->magick_wand, &length);
 
 	if (status == MagickFalse) {
-		php_imagick_convert_imagick_exception(IMAGICK_CLASS, "Unable to acquire image length" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to acquire image length" TSRMLS_CC);
 		return;
 	}
 
@@ -1158,7 +1158,7 @@ PHP_METHOD(imagick, getimageproperties)
 	properties = MagickGetImageProperties(intern->magick_wand, pattern, &properties_count);
 
 	if (!properties) {
-		php_imagick_convert_imagick_exception(IMAGICK_CLASS, "Unable to get image properties" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image properties" TSRMLS_CC);
 		return;
 	}
 
@@ -1207,7 +1207,7 @@ PHP_METHOD(imagick, getimageprofiles)
 	profiles = MagickGetImageProfiles(intern->magick_wand, pattern, &profiles_count);
 
 	if (!profiles) {
-		php_imagick_convert_imagick_exception(IMAGICK_CLASS, "Unable to get image profiles" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image profiles" TSRMLS_CC);
 		return;
 	}
 
