@@ -3607,7 +3607,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	MagickBooleanType status;
 	long columns, rows;
 	char *pseudo_string;
-	int pseudo_string_len;
+	int pseudo_string_len, rc;
 	struct php_imagick_file_t file = {0};
 	
 	/* Parse parameters given to function */
@@ -3633,10 +3633,10 @@ PHP_METHOD(imagick, newpseudoimage)
 	if (!php_imagick_file_init(&file, pseudo_string, pseudo_string_len TSRMLS_CC)) {
 		IMAGICK_THROW_EXCEPTION_WITH_MESSAGE(IMAGICK_CLASS, "The filename is too long", 1);
 	}
-	status = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
-	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, pseudo_string, status, IMAGICK_DONT_FREE_FILENAME, "Unable to create new pseudo image: %s");
+	IMAGICK_CHECK_READ_OR_WRITE_ERROR(intern, pseudo_string, rc, IMAGICK_DONT_FREE_FILENAME, "Unable to create new pseudo image: %s");
 	RETURN_TRUE;
 }
 /* }}} */
