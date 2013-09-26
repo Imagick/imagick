@@ -586,6 +586,10 @@ PHP_METHOD(imagickpixel, clone)
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	pixel_wand = php_imagick_clone_pixelwand (internp->pixel_wand);
+	if (!pixel_wand) {
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate" TSRMLS_CC);
+		return;
+	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	intern_return = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);

@@ -1182,11 +1182,16 @@ PHP_METHOD(imagickdraw, clone)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
 		return;
 	}
-	
+
 	IMAGICK_METHOD_DEPRECATED("ImagickDraw", "clone");
-	
+
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	tmp_wand = CloneDrawingWand(internd->drawing_wand);
+
+	if (!tmp_wand) {
+		php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate DrawingWand structure" TSRMLS_CC);
+		return;
+	}
 
 	object_init_ex(return_value, php_imagickdraw_sc_entry);
 	intern_return = (php_imagickdraw_object *)zend_object_store_get_object(return_value TSRMLS_CC);
