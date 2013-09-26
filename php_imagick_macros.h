@@ -22,16 +22,20 @@
 # define PHP_IMAGICK_MACROS_H
 
 #define IMAGICK_ENSURE_NOT_EMPTY(magick_wand) \
-	if(MagickGetNumberImages(magick_wand) == 0) { \
-		php_imagick_throw_exception(IMAGICK_CLASS, "Can not process empty Imagick object" TSRMLS_CC); \
-		return; \
-	}
+	do { \
+		if(MagickGetNumberImages(magick_wand) == 0) { \
+			php_imagick_throw_exception(IMAGICK_CLASS, "Can not process empty Imagick object" TSRMLS_CC); \
+			return; \
+		} \
+	} while (0)
 
-#define IMAGICK_FREE_MEMORY(type, value)\
-	if (value != (type) NULL) { \
-		value = (type) MagickRelinquishMemory(value); \
-		value = (type)NULL; \
-	}
+#define IMAGICK_FREE_MEMORY(type, value) \
+	do { \
+		if (value) { \
+			MagickRelinquishMemory(value); \
+			value = (type) NULL; \
+		} \
+	} while (0)
 
 #define IMAGICK_METHOD_DEPRECATED(class_name, method_name) \
 	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", class_name, method_name);
