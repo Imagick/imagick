@@ -21,14 +21,6 @@
 #ifndef PHP_IMAGICK_MACROS_H
 # define PHP_IMAGICK_MACROS_H
 
-#define IMAGICK_ENSURE_NOT_EMPTY(magick_wand) \
-	do { \
-		if(MagickGetNumberImages(magick_wand) == 0) { \
-			php_imagick_throw_exception(IMAGICK_CLASS, "Can not process empty Imagick object" TSRMLS_CC); \
-			return; \
-		} \
-	} while (0)
-
 #define IMAGICK_FREE_MEMORY(type, value) \
 	do { \
 		if (value) { \

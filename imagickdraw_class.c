@@ -1280,7 +1280,9 @@ PHP_METHOD(imagickdraw, composite)
 	}
 
 	intern = (php_imagick_object *) zend_object_store_get_object(magick_obj TSRMLS_CC);
-	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
 
 	internd = (php_imagickdraw_object *) zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = DrawComposite(internd->drawing_wand, compose, x, y, width, height, intern->magick_wand);

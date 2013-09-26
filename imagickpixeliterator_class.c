@@ -39,7 +39,8 @@ PHP_METHOD(imagickpixeliterator, __construct)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
-	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
 
 	if (!intern->magick_wand || !IsMagickWand(intern->magick_wand)) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
@@ -199,7 +200,8 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
-	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
 
 	if (!intern->magick_wand || !IsMagickWand(intern->magick_wand)) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
@@ -244,7 +246,8 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 		return;
 	}
 
-	IMAGICK_ENSURE_NOT_EMPTY(intern->magick_wand);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
 
 	internpix->pixel_iterator = NewPixelRegionIterator( intern->magick_wand, x, y, columns, rows);
 	internpix->iterator_type = 2;

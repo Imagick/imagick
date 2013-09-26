@@ -60,6 +60,7 @@ void php_imagick_replace_drawingwand (php_imagickdraw_object *obj, DrawingWand *
 
 void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new_wand);
 
+zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand);
 
 
 /*

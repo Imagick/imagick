@@ -50,60 +50,59 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
 {
 	long orig_width, orig_height;
-	
-	orig_width  = MagickGetImageWidth(magick_wand); 
+
+	orig_width  = MagickGetImageWidth(magick_wand);
 	orig_height = MagickGetImageHeight(magick_wand);
-	
-	if ((orig_width == desired_width) && (orig_height == desired_height)) { 
-		*new_width  = desired_width; 
+
+	if ((orig_width == desired_width) && (orig_height == desired_height)) {
+		*new_width  = desired_width;
 		*new_height = desired_height;
 		return 1;
 	}
-	
-	if (bestfit) { 
-		double ratio_x, ratio_y; 
-		
+
+	if (bestfit) {
+		double ratio_x, ratio_y;
+
 		if (desired_width <= 0 || desired_height <= 0) {
 			return 0;
 		}
 
-		ratio_x = (double)desired_width / (double)orig_width; 
-		ratio_y = (double)desired_height / (double)orig_height; 
+		ratio_x = (double) desired_width  / (double) orig_width;
+		ratio_y = (double) desired_height / (double) orig_height;
 
 		//in the case of square images there should be no rounding error
 		if (ratio_x == ratio_y) {
 			*new_width  = desired_width;
 			*new_height = desired_height;
-		} else if (ratio_x < ratio_y) { 
+		} else if (ratio_x < ratio_y) {
 			*new_width  = desired_width;
-			*new_height = ratio_x * (double)orig_height; 
-		} else { 
-			*new_height = desired_height; 
-			*new_width  = ratio_y * (double)orig_width; 
-		} 
-		
-		*new_width  = (*new_width < 1)  ? 1 : *new_width; 
-		*new_height = (*new_height < 1) ? 1 : *new_height; 
- 
-	} else { 
-		double ratio; 
-		
-		if (desired_width <= 0 && desired_height <= 0) { 
+			*new_height = ratio_x * ((double) orig_height);
+		} else {
+			*new_height = desired_height;
+			*new_width  = ratio_y * ((double) orig_width);
+		}
+		*new_width  = (*new_width < 1)  ? 1 : *new_width;
+		*new_height = (*new_height < 1) ? 1 : *new_height;
+
+	} else {
+		double ratio;
+
+		if (desired_width <= 0 && desired_height <= 0) {
 			return 0;
 		}
-		
-		if (desired_width <= 0 || desired_height <= 0) {		 
-			if (desired_width <= 0) { 
-				ratio = (double)orig_height / (double)desired_height; 
-				*new_width  = orig_width / ratio;
+
+		if (desired_width <= 0 || desired_height <= 0) {
+			if (desired_width <= 0) {
+				ratio       = (double) orig_height / (double) desired_height;
+				*new_width  = ((double) orig_width) / ratio;
 				*new_height = desired_height;
-			} else { 
-				ratio = (double)orig_width / (double)desired_width; 
-				*new_height = orig_height / ratio;
+			} else {
+				ratio       = (double) orig_width / (double) desired_width;
+				*new_height = ((double) orig_height) / ratio;
 				*new_width  = desired_width;
 			}
 		} else {
-			*new_width  = desired_width; 
+			*new_width  = desired_width;
 			*new_height = desired_height;
 		}
 	}
@@ -114,9 +113,9 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 {
 	zend_bool match;
 	const char *p = map;
-	char allow_map[] = { 'R', 'G', 'B', 
-						 'A', 'O', 'C', 
-						 'Y', 'M', 'K', 
+	char allow_map[] = { 'R', 'G', 'B',
+						 'A', 'O', 'C',
+						 'Y', 'M', 'K',
 						 'I', 'P' };
 
 	while (*p != '\0') {
@@ -154,12 +153,12 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
 	) {
 		zval tmp_zval, *tmp_pzval;
-		
+
 		tmp_zval = **ppzval;
 		zval_copy_ctor(&tmp_zval);
 		tmp_pzval = &tmp_zval;
 		convert_to_double(tmp_pzval);
-		
+
 		double_array[i] = Z_DVAL_P(tmp_pzval);
 		tmp_pzval = NULL;
 	}
@@ -186,12 +185,12 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
 	) {
 		zval tmp_zval, *tmp_pzval;
-		
+
 		tmp_zval = **ppzval;
 		zval_copy_ctor(&tmp_zval);
 		tmp_pzval = &tmp_zval;
 		convert_to_long(tmp_pzval);
-		
+
 		long_array[i] = Z_LVAL_P(tmp_pzval);
 		tmp_pzval = NULL;
 	}
@@ -218,12 +217,12 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
 	) {
 		zval tmp_zval, *tmp_pzval;
-		
+
 		tmp_zval = **ppzval;
 		zval_copy_ctor(&tmp_zval);
 		tmp_pzval = &tmp_zval;
 		convert_to_long(tmp_pzval);
-		
+
 		char_array[i] = Z_LVAL_P(tmp_pzval);
 		tmp_pzval = NULL;
 	}
@@ -238,7 +237,7 @@ zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
 	unsigned long num_fonts = 0, i = 0;
 
 	/* Check that user is only able to set a proper font */
-	fonts = (char **) MagickQueryFonts("*", &num_fonts);
+	fonts = MagickQueryFonts("*", &num_fonts);
 
 	for(i = 0 ; i < num_fonts ; i++) {
 		/* Let's see if the font is among configured fonts */
@@ -669,6 +668,15 @@ void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new
 		obj->pixel_wand = new_wand;
 	} else
 		obj->pixel_wand = new_wand;
+}
+
+zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand)
+{
+	if (MagickGetNumberImages(magick_wand) == 0) {
+		php_imagick_throw_exception (IMAGICK_CLASS, "Can not process empty Imagick object" TSRMLS_CC);
+		return 0;
+	}
+	return 1;
 }
 
 void initialize_imagick_constants()
