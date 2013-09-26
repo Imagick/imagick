@@ -119,10 +119,6 @@ typedef enum _php_imagick_class_type_t {
 	IMAGICKPIXEL_CLASS
 } php_imagick_class_type_t;
 
-/* Free filename constants */
-#define IMAGICK_DONT_FREE_FILENAME 0
-#define IMAGICK_FREE_FILENAME 1
-
 /* Read / write constants */
 typedef enum _php_imagick_rw_result_t {
 	IMAGICK_RW_OK,
