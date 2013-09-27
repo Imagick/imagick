@@ -70,7 +70,7 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -101,7 +101,7 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -129,7 +129,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -160,7 +160,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -271,7 +271,7 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
@@ -344,7 +344,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	unsigned long num_wands, i;
 	zval *tmp_pixelwand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -403,7 +403,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	int i;
 	zval *tmp_pixelwand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -463,7 +463,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	unsigned long num_wands, i;
 	zval *tmp_pixelwand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -516,7 +516,7 @@ PHP_METHOD(imagickpixeliterator, destroy)
 	php_imagickpixeliterator_object *internpix;
 	object = getThis();
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -546,7 +546,7 @@ PHP_METHOD(imagickpixeliterator, clear)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
@@ -577,7 +577,7 @@ PHP_METHOD(imagickpixeliterator, valid)
 {
 	php_imagickpixeliterator_object *internpix;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	

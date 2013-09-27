@@ -31,7 +31,7 @@ PHP_METHOD(imagickdraw, resetvectorgraphics)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -50,7 +50,7 @@ PHP_METHOD(imagickdraw, gettextkerning)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -84,7 +84,7 @@ PHP_METHOD(imagickdraw, gettextinterwordspacing)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -120,7 +120,7 @@ PHP_METHOD(imagickdraw, gettextinterlinespacing)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -810,7 +810,7 @@ PHP_METHOD(imagickdraw, getfont)
 	php_imagickdraw_object *internd;
 	char *font;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -836,7 +836,7 @@ PHP_METHOD(imagickdraw, getfontfamily)
 	php_imagickdraw_object *internd;
 	char *font_family;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -861,7 +861,7 @@ PHP_METHOD(imagickdraw, getfontsize)
 	php_imagickdraw_object *internd;
 	double font_size;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -881,7 +881,7 @@ PHP_METHOD(imagickdraw, getfontstyle)
 	php_imagickdraw_object *internd;
 	long font_style;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -901,7 +901,7 @@ PHP_METHOD(imagickdraw, getfontweight)
 	php_imagickdraw_object *internd;
 	long weight;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -920,7 +920,7 @@ PHP_METHOD(imagickdraw, clear)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -938,7 +938,7 @@ PHP_METHOD(imagickdraw, gettextdecoration)
 	php_imagickdraw_object *internd;
 	long decoration;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -958,7 +958,7 @@ PHP_METHOD(imagickdraw, gettextencoding)
 	php_imagickdraw_object *internd;
 	char *encoding;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -983,7 +983,7 @@ PHP_METHOD(imagickdraw, destroy)
 	zval *object;
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1179,7 +1179,7 @@ PHP_METHOD(imagickdraw, clone)
 	php_imagickdraw_object *internd, *intern_return;
 	DrawingWand *tmp_wand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -1351,7 +1351,7 @@ PHP_METHOD(imagickdraw, getclippath)
 	php_imagickdraw_object *internd;
 	char *clip_path;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1376,7 +1376,7 @@ PHP_METHOD(imagickdraw, getcliprule)
 	php_imagickdraw_object *internd;
 	long clip_rule;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1395,7 +1395,7 @@ PHP_METHOD(imagickdraw, getclipunits)
 	php_imagickdraw_object *internd;
 	long units;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1415,7 +1415,7 @@ PHP_METHOD(imagickdraw, getfillcolor)
 	php_imagickdraw_object *internd;
 	PixelWand *tmp_wand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1440,7 +1440,7 @@ PHP_METHOD(imagickdraw, getfillopacity)
 	php_imagickdraw_object *internd;
 	double opacity;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1459,7 +1459,7 @@ PHP_METHOD(imagickdraw, getfillrule)
 	php_imagickdraw_object *internd;
 	long fill_rule;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1478,7 +1478,7 @@ PHP_METHOD(imagickdraw, getgravity)
 	php_imagickdraw_object *internd;
 	long gravity;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -1497,7 +1497,7 @@ PHP_METHOD(imagickdraw, getstrokeantialias)
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1521,7 +1521,7 @@ PHP_METHOD(imagickdraw, getstrokecolor)
 	php_imagickdraw_object *internd;
 	PixelWand *tmp_wand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1547,7 +1547,7 @@ PHP_METHOD(imagickdraw, getstrokedasharray)
 	double *stroke_array;
 	unsigned long num_elements, i;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1604,7 +1604,7 @@ PHP_METHOD(imagickdraw, getstrokedashoffset)
 	php_imagickdraw_object *internd;
 	double offset;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1623,7 +1623,7 @@ PHP_METHOD(imagickdraw, getstrokelinecap)
 	php_imagickdraw_object *internd;
 	long line_cap;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1642,7 +1642,7 @@ PHP_METHOD(imagickdraw, getstrokelinejoin)
 	php_imagickdraw_object *internd;
 	long line_join;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1661,7 +1661,7 @@ PHP_METHOD(imagickdraw, getstrokemiterlimit)
 	php_imagickdraw_object *internd;
 	unsigned long miter_limit;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1680,7 +1680,7 @@ PHP_METHOD(imagickdraw, getstrokeopacity)
 	php_imagickdraw_object *internd;
 	double opacity;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1699,7 +1699,7 @@ PHP_METHOD(imagickdraw, getstrokewidth)
 	php_imagickdraw_object *internd;
 	double width;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1718,7 +1718,7 @@ PHP_METHOD(imagickdraw, gettextalignment)
 	php_imagickdraw_object *internd;
 	long align_type;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1737,7 +1737,7 @@ PHP_METHOD(imagickdraw, gettextantialias)
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1760,7 +1760,7 @@ PHP_METHOD(imagickdraw, getvectorgraphics)
 	php_imagickdraw_object *internd;
 	char *vector;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -1783,7 +1783,7 @@ PHP_METHOD(imagickdraw, gettextundercolor)
 	php_imagickdraw_object *internd;
 	PixelWand *tmp_wand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -1812,7 +1812,7 @@ PHP_METHOD(imagickdraw, pathclose)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -2031,7 +2031,7 @@ PHP_METHOD(imagickdraw, pathfinish)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -2208,7 +2208,7 @@ PHP_METHOD(imagickdraw, pathstart)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -2256,7 +2256,7 @@ PHP_METHOD(imagickdraw, popclippath)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -2273,7 +2273,7 @@ PHP_METHOD(imagickdraw, popdefs)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -2291,7 +2291,7 @@ PHP_METHOD(imagickdraw, poppattern)
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
@@ -2333,7 +2333,7 @@ PHP_METHOD(imagickdraw, pushdefs)
 {
 	php_imagickdraw_object *internd;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -2374,7 +2374,7 @@ PHP_METHOD(imagickdraw, render)
 	MagickBooleanType status;
 	char *old_locale;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -2750,7 +2750,7 @@ PHP_METHOD(imagickdraw, pop)
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -2773,7 +2773,7 @@ PHP_METHOD(imagickdraw, push)
 	php_imagickdraw_object *internd;
 	MagickBooleanType status;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 

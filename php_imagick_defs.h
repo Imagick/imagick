@@ -53,6 +53,10 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 # endif
 #endif
 
+#if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 3
+#define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
+#endif
+
 /* Class names */
 #define PHP_IMAGICK_SC_NAME "Imagick"
 #define PHP_IMAGICK_EXCEPTION_SC_NAME "ImagickException"

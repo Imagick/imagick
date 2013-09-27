@@ -32,7 +32,7 @@ PHP_METHOD(imagickpixel, gethsl)
 	php_imagickpixel_object *internp;
 	double hue, saturation, luminosity;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -199,7 +199,7 @@ PHP_METHOD(imagickpixel, getindex)
 {
 	php_imagickpixel_object *internp;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -295,7 +295,7 @@ PHP_METHOD(imagickpixel, clear)
 {
 	php_imagickpixel_object *internp;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -314,7 +314,7 @@ PHP_METHOD(imagickpixel, destroy)
 	zval *object;
 	php_imagickpixel_object *internp;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -554,7 +554,7 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 	php_imagickpixel_object *internp;
 	char *color_string;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
@@ -577,7 +577,7 @@ PHP_METHOD(imagickpixel, clone)
 	php_imagickpixel_object *intern_return;
 	PixelWand *pixel_wand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
@@ -606,7 +606,7 @@ PHP_METHOD(imagickpixel, getcolorcount)
 {
 	php_imagickpixel_object *internp;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "") == FAILURE) {
+	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 	
