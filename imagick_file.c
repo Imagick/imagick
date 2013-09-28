@@ -23,7 +23,8 @@
 #include "php_imagick_macros.h"
 #include "php_imagick_defs.h"
 
-static zend_bool php_imagick_is_virtual_format(const char *format) 
+static
+zend_bool php_imagick_is_virtual_format(const char *format)
 {
 	int i, elements;
 
@@ -62,7 +63,8 @@ static zend_bool php_imagick_is_virtual_format(const char *format)
 	return 0;
 }
 
-static zend_bool php_imagick_is_url(const char *filename TSRMLS_DC)
+static
+zend_bool php_imagick_is_url(const char *filename TSRMLS_DC)
 {
 	char *path_for_open;
 
@@ -78,19 +80,19 @@ zend_bool php_imagick_file_init(struct php_imagick_file_t *file, const char *fil
 
 	/* Undefined for now */
 	file->type = ImagickUndefinedType;
-	
+
 	if (filename_len > MaxTextExtent) {
 		return 0;
 	}
-	
+
 	/* Take a copy of the original string */
 	strlcpy(file->filename, filename, MaxTextExtent);
 	file->filename_len = filename_len;
-	
+
 	/* Break the path into pieces */
 	memset(magick_path, 0, MaxTextExtent);
 	GetPathComponent(file->filename, MagickPath, magick_path);
-	
+
 	/* The path has a format identifier, check for url and virtual format */
 	if (strlen(magick_path) > 0) {
 		/* Virtual format? */
@@ -106,21 +108,21 @@ zend_bool php_imagick_file_init(struct php_imagick_file_t *file, const char *fil
 			return 1;
 		}
 	}
-	
+
 	/* This is a normal file path */
 	file->type = ImagickFile;
-	
+
 	memset(head_path, 0, MaxTextExtent);
 	memset(tail_path, 0, MaxTextExtent);
-	
+
 	GetPathComponent(file->filename, HeadPath, head_path);
 	GetPathComponent(file->filename, TailPath, tail_path);
 
 	(void) snprintf(buffer, MaxTextExtent, "%s/%s", head_path, tail_path);
-	
+
 	/* The full path to the file */
 	file->absolute_path = expand_filepath(buffer, NULL TSRMLS_CC);
-	
+
 	/* Failed to resolve absolute path */
 	if (!file->absolute_path) {
 		file->absolute_path = estrdup("");
@@ -132,15 +134,16 @@ void php_imagick_file_deinit(struct php_imagick_file_t *file)
 {
 	if (file->absolute_path) {
 		efree(file->absolute_path);
-	}	
+	}
 }
 
-static int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
+static
+int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
 {
 	if (type == ImagickReadImage) {
 		if (MagickReadImage(intern->magick_wand, file->filename) == MagickFalse) {
 			return IMAGICK_RW_UNDERLYING_LIBRARY;
-		}	
+		}
 	} else if (type == ImagickPingImage){
 		if (MagickPingImage(intern->magick_wand, file->filename) == MagickFalse) {
 			return IMAGICK_RW_UNDERLYING_LIBRARY;
@@ -154,7 +157,8 @@ static int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, 
 	return IMAGICK_RW_OK;
 }
 
-static int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
+static
+int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
 {
 	php_stream *stream;
 	MagickBooleanType status;
@@ -162,19 +166,19 @@ static int php_imagick_read_image_using_php_streams(php_imagick_object *intern, 
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_error_handling error_handling;
 #endif
-	
+
 #if ZEND_MODULE_API_NO > 20060613 
 	zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC);
 #else
 	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
 #endif
-	
+
 	stream = php_stream_open_wrapper(file->filename, "rb", (ENFORCE_SAFE_MODE|IGNORE_PATH) & ~REPORT_ERRORS, NULL);
 
 	if (!stream) {
 		goto return_error;
 	}
-	
+
 	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL) == FAILURE) {
 		goto return_error;
 	}
