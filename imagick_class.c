@@ -2910,19 +2910,19 @@ PHP_METHOD(imagick, queryfontmetrics)
 	if (MagickGetNumberImages(intern->magick_wand) < 1) {
 		PixelWand *pixel_wand;
 		MagickBooleanType status;
-		
+
 		/* Empty bg color */
 		pixel_wand = NewPixelWand();
-		
+
 		if (!pixel_wand) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to allocate background color for the temporary canvas" TSRMLS_CC);
 			return;
 		}
-		
+
 		/* 1x1 should be enough to get the metrics */
 		status     = MagickNewImage(intern->magick_wand, 1, 1, pixel_wand);
 		pixel_wand = DestroyPixelWand(pixel_wand);
-		
+
 		if (status == MagickFalse) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to allocate temporary canvas" TSRMLS_CC);
 			return;
@@ -2941,7 +2941,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 	if (remove_canvas) {
 		MagickRemoveImage(intern->magick_wand);
 	}
-	
+
 	if (!metrics) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to query the font metrics" TSRMLS_CC);
 		return;

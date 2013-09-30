@@ -55,7 +55,7 @@ zend_bool php_imagick_is_virtual_format(const char *format)
 
 	elements = sizeof (virtual_fmt) / sizeof (virtual_fmt [0]);
 
-	for (i = 0; i <= elements; i++) {
+	for (i = 0; i < elements; i++) {
 		if (strcasecmp(format, virtual_fmt[i]) == 0) {
 			return 1;
 		}

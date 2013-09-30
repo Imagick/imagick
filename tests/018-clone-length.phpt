@@ -1,7 +1,5 @@
 --TEST--
-Test clone length
---XFAIL-- 
-Image length should not be the same after clone but it is
+Test clone length, this is expected upstream behaviour
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
 --FILE--

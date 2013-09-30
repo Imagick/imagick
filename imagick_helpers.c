@@ -336,7 +336,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	}
 
 	*num_elements = elements;
-	coordinates = (PointInfo *)emalloc(sizeof(PointInfo) * elements);
+	coordinates = emalloc(sizeof(PointInfo) * elements);
 
 	coords = Z_ARRVAL_P(coordinate_array);
 	zend_hash_internal_pointer_reset_ex(coords, (HashPosition *) 0);
@@ -349,7 +349,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 		zval tmp_zx, *tmp_pzx, tmp_zy, *tmp_pzy;
 
 		/* If its something than array lets error here */
-		if(Z_TYPE_PP(ppzval) != IS_ARRAY) {	
+		if(Z_TYPE_PP(ppzval) != IS_ARRAY) {
 			efree(coordinates);
 			*num_elements = 0;
 			return NULL;
