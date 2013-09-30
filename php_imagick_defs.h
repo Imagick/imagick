@@ -20,6 +20,25 @@
 #ifndef PHP_IMAGICK_DEFS_H /* PHP_IMAGICK_DEFS_H */
 # define PHP_IMAGICK_DEFS_H
 
+/* Include magic wand header */
+#ifdef IMAGICK_USE_NEW_HEADER
+#  include <wand/MagickWand.h>
+#else
+#  include <wand/magick-wand.h>
+#endif
+
+#ifndef DefaultChannels
+# define DefaultChannels (AllChannels &~ OpacityChannel)
+#endif
+
+/* Some extra headers */
+#include "Zend/zend_exceptions.h"
+#include "Zend/zend_interfaces.h"
+#include "ext/standard/php_string.h"
+#include "ext/standard/info.h"
+#include "ext/standard/php_filestat.h"
+#include "php_ini.h"
+
 /*
 	API exports
 */

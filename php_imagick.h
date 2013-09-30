@@ -44,25 +44,6 @@
 # include <locale.h>
 #endif
 
-/* Include magic wand header */
-#ifdef IMAGICK_USE_NEW_HEADER
-#  include <wand/MagickWand.h>
-#else
-#  include <wand/magick-wand.h>
-#endif
-
-#ifndef DefaultChannels
-# define DefaultChannels (AllChannels &~ OpacityChannel)
-#endif
-
-/* Some extra headers */
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
-#include "ext/standard/php_string.h"
-#include "ext/standard/info.h"
-#include "ext/standard/php_filestat.h"
-#include "php_ini.h"
-
 /* Define the entry point symbol
  * Zend will use when loading this module
  */
