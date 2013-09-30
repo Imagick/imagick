@@ -134,6 +134,7 @@ void php_imagick_file_deinit(struct php_imagick_file_t *file)
 {
 	if (file->absolute_path) {
 		efree(file->absolute_path);
+		file->absolute_path = NULL;
 	}
 }
 
