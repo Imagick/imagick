@@ -869,7 +869,7 @@ PHP_METHOD(imagick, getimageproperty)
 
 	if (value) {
 		ZVAL_STRING(return_value, (char *)value, 1);
-		IMAGICK_FREE_MEMORY(char *, value);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
 		return;
 	}
 	RETURN_FALSE;
@@ -1222,7 +1222,7 @@ PHP_METHOD(imagick, getimageproperties)
 		for (i = 0; i < properties_count; i++) {
 			property = MagickGetImageProperty(intern->magick_wand, properties[i]);
 			add_assoc_string(return_value, properties[i], property, 1);
-			IMAGICK_FREE_MEMORY(char *, property);
+			IMAGICK_FREE_MAGICK_MEMORY(property);
 		}
 
 	} else {
@@ -1232,7 +1232,7 @@ PHP_METHOD(imagick, getimageproperties)
 		}
 	}
 
-	IMAGICK_FREE_MEMORY(char **, properties);
+	IMAGICK_FREE_MAGICK_MEMORY(properties);
 	return;
 }
 /* }}} */
@@ -1272,7 +1272,7 @@ PHP_METHOD(imagick, getimageprofiles)
 		for (i = 0; i < profiles_count; i++) {
 			profile = (char *)MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
 			add_assoc_stringl(return_value, profiles[i], profile, length, 1);
-			IMAGICK_FREE_MEMORY(char *, profile);
+			IMAGICK_FREE_MAGICK_MEMORY(profile);
 		}
 
 	} else {
@@ -1282,7 +1282,7 @@ PHP_METHOD(imagick, getimageprofiles)
 		}
 	}
 
-	IMAGICK_FREE_MEMORY(char **, profiles);
+	IMAGICK_FREE_MAGICK_MEMORY(profiles);
 	return;
 }
 /* }}} */
@@ -1630,7 +1630,7 @@ PHP_METHOD(imagick, getfont)
 
 	if (font) {
 		ZVAL_STRING(return_value, font, 1);
-		IMAGICK_FREE_MEMORY(char *, font);
+		IMAGICK_FREE_MAGICK_MEMORY(font);
 		return;
 	}
 	RETURN_FALSE;
@@ -2640,7 +2640,7 @@ PHP_METHOD(imagick, getimageartifact)
 		return;
 	}
 	RETVAL_STRING(value, 1);
-	IMAGICK_FREE_MEMORY(char *, value);
+	IMAGICK_FREE_MAGICK_MEMORY(value);
 	return;
 }
 
@@ -2809,12 +2809,12 @@ PHP_METHOD(imagick, __tostring)
 		ZVAL_STRING(return_value, "", 1);
 		return;
 	} else {
-		IMAGICK_FREE_MEMORY(char *, buffer);
+		IMAGICK_FREE_MAGICK_MEMORY(buffer);
 	}
 
 	image = MagickGetImageBlob(intern->magick_wand, &image_size);
 	ZVAL_STRINGL(return_value, (char *)image, image_size, 1);
-	IMAGICK_FREE_MEMORY(unsigned char *, image);
+	IMAGICK_FREE_MAGICK_MEMORY(image);
 	return;
 }
 /* }}} */
@@ -2838,10 +2838,10 @@ PHP_METHOD(imagick, queryformats)
 
 	for (i = 0 ; i < num_formats ; i++) {
 		add_next_index_string(return_value, supported_formats[i], 1);
-		IMAGICK_FREE_MEMORY(char *, supported_formats[i]);
+		IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 	}
 
-	IMAGICK_FREE_MEMORY(char **, supported_formats);
+	IMAGICK_FREE_MAGICK_MEMORY(supported_formats);
 	return;
 }
 /* }}} */
@@ -2865,10 +2865,10 @@ PHP_METHOD(imagick, queryfonts)
 
 	for (i = 0 ; i < num_fonts ; i++) {
 		add_next_index_string(return_value, fonts[i], 1);
-		IMAGICK_FREE_MEMORY(char *, fonts[i]);
+		IMAGICK_FREE_MAGICK_MEMORY(fonts[i]);
 	}
 
-	IMAGICK_FREE_MEMORY(char **, fonts);
+	IMAGICK_FREE_MAGICK_MEMORY(fonts);
 	return;
 }
 /* }}} */
@@ -2969,7 +2969,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		add_assoc_double(return_value, "originX", metrics[11]);
 		add_assoc_double(return_value, "originY", metrics[12]);
 
-		IMAGICK_FREE_MEMORY(double *, metrics);
+		IMAGICK_FREE_MAGICK_MEMORY(metrics);
 		return;
 	}
 }
@@ -4528,7 +4528,7 @@ PHP_METHOD(imagick, removeimageprofile)
 	}
 
 	ZVAL_STRING(return_value, (char *)profile, 1);
-	IMAGICK_FREE_MEMORY(unsigned char *, profile);
+	IMAGICK_FREE_MAGICK_MEMORY(profile);
 	return;
 }
 /* }}} */
@@ -5594,7 +5594,7 @@ PHP_METHOD(imagick, getimageattribute)
 	}
 
 	ZVAL_STRING(return_value, attribute, 1);
-	IMAGICK_FREE_MEMORY(char *, attribute);
+	IMAGICK_FREE_MAGICK_MEMORY(attribute);
 
 	return;
 }
@@ -6203,7 +6203,7 @@ PHP_METHOD(imagick, getimagehistogram)
 		}
 	}
 
-	IMAGICK_FREE_MEMORY(PixelWand **, wand_array);
+	IMAGICK_FREE_MAGICK_MEMORY(wand_array);
 	return;
 }
 /* }}} */
@@ -6396,7 +6396,7 @@ PHP_METHOD(imagick, getimageprofile)
 
 	if (profile) {
 		ZVAL_STRINGL(return_value, profile, length, 1);
-		IMAGICK_FREE_MEMORY(char *, profile);
+		IMAGICK_FREE_MAGICK_MEMORY(profile);
 		return;
 	}
 
@@ -6529,7 +6529,7 @@ PHP_METHOD(imagick, getimagesignature)
 
 	signature = MagickGetImageSignature(intern->magick_wand);
 	ZVAL_STRING(return_value, signature, 1);
-	IMAGICK_FREE_MEMORY(char *, signature);
+	IMAGICK_FREE_MAGICK_MEMORY(signature);
 	return;
 }
 /* }}} */
@@ -7118,7 +7118,7 @@ PHP_METHOD(imagick, getimagefilename)
 	}
 
 	ZVAL_STRING(return_value, filename, 1);
-	IMAGICK_FREE_MEMORY(char *, filename);
+	IMAGICK_FREE_MAGICK_MEMORY(filename);
 	return;
 }
 /* }}} */
@@ -7182,7 +7182,7 @@ PHP_METHOD(imagick, getimageblob)
 	}
 
 	ZVAL_STRINGL(return_value, (char *)image_contents, image_size, 1);
-	IMAGICK_FREE_MEMORY(unsigned char *, image_contents);
+	IMAGICK_FREE_MAGICK_MEMORY(image_contents);
 	return;
 }
 /* }}} */
@@ -7244,7 +7244,7 @@ PHP_METHOD(imagick, getimagesblob)
 	}
 
 	ZVAL_STRINGL(return_value, (char *)image_contents, image_size, 1);
-	IMAGICK_FREE_MEMORY(unsigned char *, image_contents);
+	IMAGICK_FREE_MAGICK_MEMORY(image_contents);
 	return;
 }
 /* }}} */
@@ -7271,7 +7271,7 @@ PHP_METHOD(imagick, getimageformat)
 
 	format = MagickGetImageFormat (intern->magick_wand);
 	ZVAL_STRING(return_value, format, 1);
-	IMAGICK_FREE_MEMORY (char *, format);
+	IMAGICK_FREE_MAGICK_MEMORY(format);
 	return;
 }
 /* }}} */
@@ -7300,7 +7300,7 @@ PHP_METHOD(imagick, getimagemimetype)
 	format = MagickGetImageFormat (intern->magick_wand);
 
 	mime_type = (char *) MagickToMime(format);
-	IMAGICK_FREE_MEMORY(char *, format);
+	IMAGICK_FREE_MAGICK_MEMORY(format);
 
 	if (!mime_type) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image mime-type" TSRMLS_CC);
@@ -7308,7 +7308,7 @@ PHP_METHOD(imagick, getimagemimetype)
 	}
 
 	ZVAL_STRING(return_value, mime_type, 1);
-	IMAGICK_FREE_MEMORY(char *, mime_type);
+	IMAGICK_FREE_MAGICK_MEMORY(mime_type);
 	return;
 }
 /* }}} */
@@ -7399,18 +7399,18 @@ PHP_METHOD(imagick, identifyimage)
     // Name of the image
 	filename = MagickGetImageFilename (intern->magick_wand);
 	s_add_assoc_str (return_value, "imageName", filename, 1);
-	IMAGICK_FREE_MEMORY(char *, filename);
+	IMAGICK_FREE_MAGICK_MEMORY(filename);
 
 	format = MagickGetImageFormat (intern->magick_wand);
 	if (format) {
 		char *mime_type = MagickToMime(format);
 		if (mime_type) {
 			s_add_assoc_str (return_value, "mimetype", mime_type, 1);
-			IMAGICK_FREE_MEMORY(char *, mime_type);
+			IMAGICK_FREE_MAGICK_MEMORY(mime_type);
 		} else
 			s_add_assoc_str (return_value, "mimetype", "unknown", 1);
 
-		IMAGICK_FREE_MEMORY(char *, format);
+		IMAGICK_FREE_MAGICK_MEMORY(format);
 	}
 	else
 		s_add_assoc_str (return_value, "mimetype", "unknown", 1);
@@ -7438,7 +7438,7 @@ PHP_METHOD(imagick, identifyimage)
 	if (append_raw_string == 1)
 		add_assoc_string (return_value, "rawOutput", identify, 1);
 
-	IMAGICK_FREE_MEMORY(char *, identify);
+	IMAGICK_FREE_MAGICK_MEMORY(identify);
 	return;
 }
 /* }}} */
@@ -8619,13 +8619,13 @@ PHP_METHOD(imagick, writeimage)
 	if (rc != IMAGICK_RW_OK) {
 		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
 		if (free_filename) {
-			IMAGICK_FREE_MEMORY(char *, filename);
+			IMAGICK_FREE_MAGICK_MEMORY(filename);
 		}
 		return;
 	}
 
 	if (free_filename) {
-		IMAGICK_FREE_MEMORY(char *, filename);
+		IMAGICK_FREE_MAGICK_MEMORY(filename);
 	}
 	RETURN_TRUE;
 }
@@ -10012,7 +10012,7 @@ PHP_METHOD(imagick, getfilename)
 	
 	if (filename) {
 		ZVAL_STRING(return_value, filename, 1);
-		IMAGICK_FREE_MEMORY(char *, filename);
+		IMAGICK_FREE_MAGICK_MEMORY(filename);
 	}
 	return;
 }
@@ -10035,7 +10035,7 @@ PHP_METHOD(imagick, getformat)
 	
 	if (format) {
 		ZVAL_STRING(return_value, format, 1);
-		IMAGICK_FREE_MEMORY(char *, format);
+		IMAGICK_FREE_MAGICK_MEMORY(format);
 	}
 	return;
 }
@@ -10055,7 +10055,7 @@ PHP_METHOD(imagick, gethomeurl)
 	home_url = (char *)MagickGetHomeURL();
 	if (home_url) {
 		ZVAL_STRING(return_value, home_url, 1);
-		IMAGICK_FREE_MEMORY(char *, home_url);
+		IMAGICK_FREE_MAGICK_MEMORY(home_url);
 	}
 	return;
 }
@@ -10096,7 +10096,7 @@ PHP_METHOD(imagick, getoption)
 
 	if (value) {	
 		ZVAL_STRING(return_value, value, 1);
-		IMAGICK_FREE_MEMORY(char *, value);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
 	}
 	return;
 }

@@ -822,7 +822,7 @@ PHP_METHOD(imagickdraw, getfont)
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, font, 1);
-		IMAGICK_FREE_MEMORY(char *, font);
+		IMAGICK_FREE_MAGICK_MEMORY(font);
 		return;
 	}
 }
@@ -847,7 +847,7 @@ PHP_METHOD(imagickdraw, getfontfamily)
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, font_family, 1);
-		IMAGICK_FREE_MEMORY(char *, font_family);
+		IMAGICK_FREE_MAGICK_MEMORY(font_family);
 		return;
 	}
 }
@@ -969,7 +969,7 @@ PHP_METHOD(imagickdraw, gettextencoding)
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, encoding, 1);
-		IMAGICK_FREE_MEMORY(char *, encoding);
+		IMAGICK_FREE_MAGICK_MEMORY(encoding);
 		return;
 	}
 }
@@ -1362,7 +1362,7 @@ PHP_METHOD(imagickdraw, getclippath)
 		RETURN_FALSE;
 	} else {
 		ZVAL_STRING(return_value, clip_path, 1);
-		IMAGICK_FREE_MEMORY(char *, clip_path);
+		IMAGICK_FREE_MAGICK_MEMORY(clip_path);
 		return;
 	}
 }
@@ -1560,7 +1560,7 @@ PHP_METHOD(imagickdraw, getstrokedasharray)
 		add_next_index_double(return_value, stroke_array[i]);
 	}
 
-	IMAGICK_FREE_MEMORY(double *, stroke_array);
+	IMAGICK_FREE_MAGICK_MEMORY(stroke_array);
 	return;
 }
 /* }}} */
@@ -1768,7 +1768,7 @@ PHP_METHOD(imagickdraw, getvectorgraphics)
 	vector = DrawGetVectorGraphics(internd->drawing_wand);
 
 	ZVAL_STRING(return_value, vector, 1);
-	IMAGICK_FREE_MEMORY(char *, vector);
+	IMAGICK_FREE_MAGICK_MEMORY(vector);
 
 	return;
 }

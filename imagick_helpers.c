@@ -247,7 +247,7 @@ zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
 		}
 	}
 
-	IMAGICK_FREE_MEMORY(char **, fonts);
+	IMAGICK_FREE_MAGICK_MEMORY(fonts);
 	return retval;
 }
 

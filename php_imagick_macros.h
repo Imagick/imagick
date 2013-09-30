@@ -21,11 +21,11 @@
 #ifndef PHP_IMAGICK_MACROS_H
 # define PHP_IMAGICK_MACROS_H
 
-#define IMAGICK_FREE_MEMORY(type, value) \
+#define IMAGICK_FREE_MAGICK_MEMORY(value) \
 	do { \
 		if (value) { \
 			MagickRelinquishMemory(value); \
-			value = (type) NULL; \
+			value = NULL; \
 		} \
 	} while (0)
 

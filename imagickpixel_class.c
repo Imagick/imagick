@@ -563,7 +563,7 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 	color_string = PixelGetColorAsString(internp->pixel_wand);
 	ZVAL_STRING(return_value, color_string, 1);
 
-	IMAGICK_FREE_MEMORY(char *, color_string);
+	IMAGICK_FREE_MAGICK_MEMORY(color_string);
 	return;
 }
 /* }}} */

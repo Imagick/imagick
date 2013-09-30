@@ -2580,7 +2580,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 
 					if (format) {
 						ZVAL_STRING(retval, format, 1);
-						IMAGICK_FREE_MEMORY(char *, format);
+						IMAGICK_FREE_MAGICK_MEMORY(format);
 					} else {
 						ZVAL_STRING(retval, "", 1);
 					}
@@ -2771,12 +2771,12 @@ PHP_MINFO_FUNCTION(imagick)
 			if (i != (num_formats - 1)) {
  				smart_str_appends(&formats, ", ");
 			}
-			IMAGICK_FREE_MEMORY(char *, supported_formats[i]);
+			IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 		}
 		smart_str_0(&formats);
 		php_info_print_table_row(2, "ImageMagick supported formats", formats.c);
 		smart_str_free(&formats);
-		IMAGICK_FREE_MEMORY(char **, supported_formats);
+		IMAGICK_FREE_MAGICK_MEMORY(supported_formats);
 	}
 
 	php_info_print_table_end();
