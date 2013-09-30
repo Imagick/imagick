@@ -81,7 +81,7 @@ zend_bool php_imagick_file_init(struct php_imagick_file_t *file, const char *fil
 	/* Undefined for now */
 	file->type = ImagickUndefinedType;
 
-	if (filename_len > MaxTextExtent) {
+	if (filename_len >= MaxTextExtent) {
 		return 0;
 	}
 
