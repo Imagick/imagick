@@ -2735,7 +2735,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickpixel_object_handlers.clone_obj = php_imagick_clone_imagickpixel_object;
 	php_imagickpixel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
-	initialize_imagick_constants();
+	php_imagick_initialize_constants (TSRMLS_C);
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	imagick_mutex = tsrm_mutex_alloc();
@@ -2749,12 +2749,12 @@ PHP_MINIT_FUNCTION(imagick)
 PHP_MINFO_FUNCTION(imagick)
 {
 	smart_str formats = {0};
-	
-	char **supported_formats, buffer[52];
+
+	char **supported_formats, *buffer;
 	unsigned long version_number, num_formats = 0, i;
 
 	supported_formats = MagickQueryFormats("*", &num_formats);
-	snprintf(buffer, 52, "%ld", num_formats);
+	spprintf(&buffer, 0, "%ld", num_formats);
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, "imagick module", "enabled");
@@ -2764,6 +2764,8 @@ PHP_MINFO_FUNCTION(imagick)
 	php_info_print_table_row(2, "ImageMagick copyright", MagickGetCopyright());
 	php_info_print_table_row(2, "ImageMagick release date", MagickGetReleaseDate());
 	php_info_print_table_row(2, "ImageMagick number of supported formats: ", buffer);
+
+	efree (buffer);
 
 	if (supported_formats) {
 		for (i = 0; i < num_formats; i++) {

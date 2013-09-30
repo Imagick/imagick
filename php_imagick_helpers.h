@@ -20,7 +20,7 @@
 #ifndef PHP_IMAGICK_HELPERS_H 
 # define PHP_IMAGICK_HELPERS_H
 
-void initialize_imagick_constants();
+void php_imagick_initialize_constants(TSRMLS_D);
 
 #if MagickLibVersion <= 0x628
 void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_DC );

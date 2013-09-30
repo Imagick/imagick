@@ -85,39 +85,39 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 	
 	switch (color) {
 
-		case IMAGICKCOLORBLACK:
+		case PHP_IMAGICK_COLOR_BLACK:
 			color_value = PixelGetBlackQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORBLUE:
+		case PHP_IMAGICK_COLOR_BLUE:
 			color_value = PixelGetBlueQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORCYAN:
+		case PHP_IMAGICK_COLOR_CYAN:
 			color_value = PixelGetCyanQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORGREEN:
+		case PHP_IMAGICK_COLOR_GREEN:
 			color_value = PixelGetGreenQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORRED:
+		case PHP_IMAGICK_COLOR_RED:
 			color_value = PixelGetRedQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORYELLOW:
+		case PHP_IMAGICK_COLOR_YELLOW:
 			color_value = PixelGetYellowQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORMAGENTA:
+		case PHP_IMAGICK_COLOR_MAGENTA:
 			color_value = PixelGetMagentaQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLOROPACITY:
+		case PHP_IMAGICK_COLOR_OPACITY:
 			color_value = PixelGetOpacityQuantum(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORALPHA:
+		case PHP_IMAGICK_COLOR_ALPHA:
 			color_value = PixelGetAlphaQuantum(internp->pixel_wand);
 		break;
 
@@ -147,39 +147,39 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 
 	switch (color) {
 
-		case IMAGICKCOLORBLACK:
+		case PHP_IMAGICK_COLOR_BLACK:
 			PixelSetBlackQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORBLUE:
+		case PHP_IMAGICK_COLOR_BLUE:
 			PixelSetBlueQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORCYAN:
+		case PHP_IMAGICK_COLOR_CYAN:
 			PixelSetCyanQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORGREEN:
+		case PHP_IMAGICK_COLOR_GREEN:
 			PixelSetGreenQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORRED:
+		case PHP_IMAGICK_COLOR_RED:
 			PixelSetRedQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORYELLOW:
+		case PHP_IMAGICK_COLOR_YELLOW:
 			PixelSetYellowQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORMAGENTA:
+		case PHP_IMAGICK_COLOR_MAGENTA:
 			PixelSetMagentaQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLOROPACITY:
+		case PHP_IMAGICK_COLOR_OPACITY:
 			PixelSetOpacityQuantum(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORALPHA:
+		case PHP_IMAGICK_COLOR_ALPHA:
 			PixelSetAlphaQuantum(internp->pixel_wand, color_value);
 		break;
 
@@ -366,6 +366,7 @@ PHP_METHOD(imagickpixel, issimilar)
 */
 PHP_METHOD(imagickpixel, getcolorvalue)
 {
+	php_imagick_color_t color_enum;
 	php_imagickpixel_object *internp;
 	long color;
 	double color_value = 0;
@@ -377,46 +378,53 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	switch (color) {
+	if (color <= PHP_IMAGICK_COLOR_MIN || color >= PHP_IMAGICK_COLOR_MAX) {
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+		return;
+	}
 
-		case IMAGICKCOLORBLACK:
+	color_enum = color;
+
+	switch (color_enum) {
+
+		case PHP_IMAGICK_COLOR_BLACK:
 			color_value = PixelGetBlack(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORBLUE:
+		case PHP_IMAGICK_COLOR_BLUE:
 			color_value = PixelGetBlue(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORCYAN:
+		case PHP_IMAGICK_COLOR_CYAN:
 			color_value = PixelGetCyan(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORGREEN:
+		case PHP_IMAGICK_COLOR_GREEN:
 			color_value = PixelGetGreen(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORRED:
+		case PHP_IMAGICK_COLOR_RED:
 			color_value = PixelGetRed(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORYELLOW:
+		case PHP_IMAGICK_COLOR_YELLOW:
 			color_value = PixelGetYellow(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORMAGENTA:
+		case PHP_IMAGICK_COLOR_MAGENTA:
 			color_value = PixelGetMagenta(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLOROPACITY:
+		case PHP_IMAGICK_COLOR_OPACITY:
 			color_value = PixelGetOpacity(internp->pixel_wand);
 		break;
 
-		case IMAGICKCOLORALPHA:
+		case PHP_IMAGICK_COLOR_ALPHA:
 			color_value = PixelGetAlpha(internp->pixel_wand);
 		break;
 
 #if MagickLibVersion > 0x628
-		case IMAGICKCOLORFUZZ:
+		case PHP_IMAGICK_COLOR_FUZZ:
 			color_value = PixelGetFuzz(internp->pixel_wand);
 		break;
 #endif
@@ -435,6 +443,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 */
 PHP_METHOD(imagickpixel, setcolorvalue)
 {
+	php_imagick_color_t color_enum;
 	php_imagickpixel_object *internp;
 	long color;
 	double color_value;
@@ -443,49 +452,56 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value) == FAILURE) {
 		return;
 	}
-	
+
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	switch (color) {
+	if (color <= PHP_IMAGICK_COLOR_MIN || color >= PHP_IMAGICK_COLOR_MAX) {
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+		return;
+	}
 
-		case IMAGICKCOLORBLACK:
+	color_enum = color;
+
+	switch (color_enum) {
+
+		case PHP_IMAGICK_COLOR_BLACK:
 			PixelSetBlack(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORBLUE:
+		case PHP_IMAGICK_COLOR_BLUE:
 			PixelSetBlue(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORCYAN:
+		case PHP_IMAGICK_COLOR_CYAN:
 			PixelSetCyan(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORGREEN:
+		case PHP_IMAGICK_COLOR_GREEN:
 			PixelSetGreen(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORRED:
+		case PHP_IMAGICK_COLOR_RED:
 			PixelSetRed(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORYELLOW:
+		case PHP_IMAGICK_COLOR_YELLOW:
 			PixelSetYellow(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORMAGENTA:
+		case PHP_IMAGICK_COLOR_MAGENTA:
 			PixelSetMagenta(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLOROPACITY:
+		case PHP_IMAGICK_COLOR_OPACITY:
 			PixelSetOpacity(internp->pixel_wand, color_value);
 		break;
 
-		case IMAGICKCOLORALPHA:
+		case PHP_IMAGICK_COLOR_ALPHA:
 			PixelSetAlpha(internp->pixel_wand, color_value);
 		break;
 
 #if MagickLibVersion > 0x628
-		case IMAGICKCOLORFUZZ:
+		case PHP_IMAGICK_COLOR_FUZZ:
 			PixelSetFuzz(internp->pixel_wand, color_value);
 		break;
 #endif
