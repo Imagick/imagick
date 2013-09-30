@@ -673,6 +673,7 @@ void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new
 zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand)
 {
 	if (MagickGetNumberImages(magick_wand) == 0) {
+		TSRMLS_FETCH ();
 		php_imagick_throw_exception (IMAGICK_CLASS, "Can not process empty Imagick object" TSRMLS_CC);
 		return 0;
 	}
