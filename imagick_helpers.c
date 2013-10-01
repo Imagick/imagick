@@ -609,8 +609,8 @@ PixelWand *php_imagick_clone_pixelwand (PixelWand *source)
 #if MagickLibVersion >= 0x635
 	return ClonePixelWand(source);
 #else
-	PixelWand *pixel_wand = NewPixelWand ();
-	if (!pixel_wand)
+	PixelWand *target = NewPixelWand ();
+	if (!target)
 		return NULL;
 
 	PixelSetColorCount (target, PixelGetColorCount (source));
@@ -620,7 +620,7 @@ PixelWand *php_imagick_clone_pixelwand (PixelWand *source)
 	PixelSetOpacity (target, PixelGetOpacity (source));
 	PixelSetAlpha (target, PixelGetAlpha (source));
 
-	return pixel_wand;
+	return target;
 #endif
 }
 
