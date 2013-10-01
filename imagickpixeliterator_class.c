@@ -468,7 +468,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	wand_array = PixelGetPreviousIteratorRow(internpix->pixel_iterator, &num_wands);
 
 #if MagickLibVersion <= 0x628
-	if (internpix->iterator_position != 0) {
+	if (internpix->iterator_position > 0) {
 		internpix->iterator_position--;
 	}
 #endif

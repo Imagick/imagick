@@ -961,7 +961,7 @@ PHP_METHOD(imagickdraw, gettextencoding)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
+
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	encoding = DrawGetTextEncoding(internd->drawing_wand);
 
@@ -972,26 +972,6 @@ PHP_METHOD(imagickdraw, gettextencoding)
 		IMAGICK_FREE_MAGICK_MEMORY(encoding);
 		return;
 	}
-}
-/* }}} */
-
-/* {{{ proto bool ImagickDraw::destroy()
-	Frees all resources associated with the drawing wand.
-*/
-PHP_METHOD(imagickdraw, destroy)
-{
-	zval *object;
-	php_imagickdraw_object *internd;
-
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-	
-	object = getThis();
-	internd = (php_imagickdraw_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	ClearDrawingWand(internd->drawing_wand);
-	RETURN_TRUE;
 }
 /* }}} */
 

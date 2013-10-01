@@ -2797,7 +2797,7 @@ PHP_METHOD(imagick, __tostring)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (MagickGetNumberImages(intern->magick_wand) == 0) {
@@ -2818,6 +2818,22 @@ PHP_METHOD(imagick, __tostring)
 	ZVAL_STRINGL(return_value, (char *)image, image_size, 1);
 	IMAGICK_FREE_MAGICK_MEMORY(image);
 	return;
+}
+/* }}} */
+
+/* {{{ proto string Imagick::count()
+   Returns the number of images
+*/
+PHP_METHOD(imagick, count)
+{
+	php_imagick_object *intern;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	RETVAL_LONG (MagickGetNumberImages(intern->magick_wand));
 }
 /* }}} */
 

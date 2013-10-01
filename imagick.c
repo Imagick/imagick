@@ -25,6 +25,11 @@
 
 #include "ext/standard/php_smart_str.h"
 
+/* For the countable interface */
+#if defined(HAVE_SPL)
+#include "ext/spl/spl_iterators.h"
+#endif
+
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
 zend_class_entry *php_imagick_sc_entry;
@@ -2043,6 +2048,7 @@ static zend_function_entry php_imagick_class_methods[] =
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, count, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixelregioniterator, imagick_getpixelregioniterator_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
@@ -2721,7 +2727,11 @@ PHP_MINIT_FUNCTION(imagick)
 	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
 	imagick_object_handlers.read_property = php_imagick_read_property;
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+#if defined(HAVE_SPL)
+	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, spl_ce_Countable);
+#else
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
+#endif
 
 	/*
 		Initialize the class (ImagickDraw)

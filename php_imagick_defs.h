@@ -291,6 +291,7 @@ PHP_METHOD(imagick, getcolorspace);
 #endif
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
+PHP_METHOD(imagick, count);
 PHP_METHOD(imagick, getpixeliterator);
 PHP_METHOD(imagick, getpixelregioniterator);
 PHP_METHOD(imagick, readimage);
