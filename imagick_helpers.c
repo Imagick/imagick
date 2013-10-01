@@ -572,23 +572,6 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 	return pixel_wand;
 }
 
-#if MagickLibVersion <= 0x628
-void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_DC)
-{
-	long rows = 0, tmp;
-	PixelWand **row;
-	(void) PixelResetIterator(internpix->pixel_iterator);
-
-	while ((row = (PixelWand **)PixelGetNextIteratorRow(internpix->pixel_iterator, &tmp))) {
-		if (row == (PixelWand **)NULL) {
-			break;
-		}
-		rows++;
-	}
-	internpix->rows = rows;
-}
-#endif
-
 /**
  * Changes the locale to IMAGICK_LC_NUMERIC_LOCALE if imagick.locale_fix is on
  * and returns the locale set before calling this function.

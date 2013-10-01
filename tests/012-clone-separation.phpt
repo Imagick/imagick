@@ -20,6 +20,6 @@ var_dump($im->width, $new2->width);
 int(100)
 int(200)
 
-Strict Standards: Imagick::clone method is deprecated and it's use should be avoided in %s on line %d
+%s: Imagick::clone method is deprecated and it's use should be avoided in %s on line %d
 int(100)
 int(200)

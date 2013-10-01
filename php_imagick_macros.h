@@ -29,10 +29,14 @@
 		} \
 	} while (0)
 
+#if !defined(E_DEPRECATED)
+#  define E_DEPRECATED E_STRICT
+#endif
+
 #define IMAGICK_METHOD_DEPRECATED(class_name, method_name) \
-	php_error(E_STRICT, "%s::%s method is deprecated and it's use should be avoided", class_name, method_name);
+	php_error(E_DEPRECATED, "%s::%s method is deprecated and it's use should be avoided", class_name, method_name);
 
 #define IMAGICK_METHOD_DEPRECATED_USE_INSTEAD(class_name, method_name, new_class, new_method) \
-	php_error(E_STRICT, "%s::%s is deprecated. %s::%s should be used instead", class_name, method_name, new_class, new_method);
+	php_error(E_DEPRECATED, "%s::%s is deprecated. %s::%s should be used instead", class_name, method_name, new_class, new_method);
 
 #endif /* PHP_IMAGICK_MACROS_H */

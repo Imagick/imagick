@@ -22,10 +22,6 @@
 
 void php_imagick_initialize_constants(TSRMLS_D);
 
-#if MagickLibVersion <= 0x628
-void count_pixeliterator_rows(php_imagickpixeliterator_object *internpix TSRMLS_DC );
-#endif
-
 zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC);
 
 zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height);
@@ -62,6 +58,8 @@ void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new
 
 zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand);
 
+/* Defined in imagickpixeliterator_class.c */
+void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value TSRMLS_DC);
 
 /*
   Convert ImageMagick exception types to PHP exceptions

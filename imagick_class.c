@@ -9863,39 +9863,26 @@ PHP_METHOD(imagick, whitethresholdimage)
 */
 PHP_METHOD(imagick, getpixeliterator)
 {
+	PixelIterator *pixel_it;
 	php_imagick_object *intern;
-	zval retval, *method_array;
-	zval *args[1];
-	zval *tmp_object;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	MAKE_STD_ZVAL(tmp_object);
+	pixel_it = NewPixelIterator(intern->magick_wand);
 
-	object_init_ex(tmp_object, php_imagickpixeliterator_sc_entry);
+	if (!pixel_it) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
+		return;
+	}
 
-	MAKE_STD_ZVAL(method_array);
-	array_init(method_array);
-
-	add_next_index_zval(method_array, tmp_object);
-	add_next_index_string(method_array, "newpixeliterator", 1);
-
-	args[0] = getThis();
-	call_user_function(EG(function_table), NULL, method_array, &retval, 1, args TSRMLS_CC);
-
-	*return_value = *tmp_object;
-	zval_copy_ctor(return_value);
-
-	zval_dtor(method_array);
-	FREE_ZVAL(method_array);
-
+	php_imagick_pixel_iterator_new (pixel_it, return_value TSRMLS_CC);
 	return;
 }
 /* }}} */
@@ -9905,49 +9892,29 @@ PHP_METHOD(imagick, getpixeliterator)
 */
 PHP_METHOD(imagick, getpixelregioniterator)
 {
-	zval *object;
+	PixelIterator *pixel_it;
 	php_imagick_object *intern;
-	zval retval, *method_array;
-	zval *args[5];
-	zval *tmp_object;
-	zval *x, *y, *columns, *rows;
+	long x, y, columns, rows;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzzz", &x, &y, &columns, &rows) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x, &y, &columns, &rows) == FAILURE) {
 		return;
 	}
 
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis () TSRMLS_CC);
 
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	MAKE_STD_ZVAL(tmp_object);
+	pixel_it = NewPixelRegionIterator(intern->magick_wand, x, y, columns, rows);
 
-	object_init_ex(tmp_object, php_imagickpixeliterator_sc_entry);
+	if (!pixel_it) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
+		return;
+	}
 
-	MAKE_STD_ZVAL(method_array);
-	array_init(method_array);
-
-	add_next_index_zval(method_array, tmp_object);
-	add_next_index_string(method_array, "newpixelregioniterator", 1);
-
-	args[0] = object;
-	args[1] = x;
-	args[2] = y;
-	args[3] = columns;
-	args[4] = rows;
-	call_user_function(EG(function_table), NULL, method_array, &retval, 5, args TSRMLS_CC);
-
-	*return_value = *tmp_object;
-	zval_copy_ctor(return_value);
-
-	zval_dtor(method_array);
-	FREE_ZVAL(method_array);
-
+	php_imagick_pixel_iterator_new (pixel_it, return_value TSRMLS_CC);
 	return;
-
 }
 /* }}} */
 

@@ -23,6 +23,36 @@
 #include "php_imagick_macros.h"
 #include "php_imagick_helpers.h"
 
+#if MagickLibVersion <= 0x628
+static
+long s_count_pixeliterator_rows(php_imagickpixeliterator_object *internpix)
+{
+	long rows = 0, tmp;
+	PixelWand **row;
+	PixelResetIterator(internpix->pixel_iterator);
+
+	while ((row = PixelGetNextIteratorRow(internpix->pixel_iterator, &tmp)) != NULL)
+		rows++;
+
+	return rows;
+}
+#endif
+
+void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value TSRMLS_DC)
+{
+	php_imagickpixeliterator_object *internpix;
+
+	object_init_ex(return_value, php_imagickpixeliterator_sc_entry);
+	internpix = (php_imagickpixeliterator_object *) zend_object_store_get_object(return_value TSRMLS_CC);
+
+	internpix->pixel_iterator = pixel_it;
+	internpix->initialized = 1;
+
+#if MagickLibVersion <= 0x628
+	internpix->rows = s_count_pixeliterator_rows (internpix);
+#endif
+}
+
 /* {{{ proto ImagickPixelIterator ImagickPixelIterator::__construct(Imagick source)
    The ImagickPixelIterator constructor
 */
@@ -33,32 +63,33 @@ PHP_METHOD(imagickpixeliterator, __construct)
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|llll", &magick_object, php_imagick_sc_entry) == FAILURE) {
 		return;
 	}
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 
-	if (!intern->magick_wand || !IsMagickWand(intern->magick_wand)) {
+	if (!intern->magick_wand) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
 		return;
 	}
 
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
 	internpix->pixel_iterator = NewPixelIterator(intern->magick_wand);
-	internpix->iterator_type = 1;
 
-#if MagickLibVersion <= 0x628
-	count_pixeliterator_rows(internpix TSRMLS_CC);
-#endif
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->pixel_iterator) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
 		return;
 	}
-	internpix->instanciated_correctly = 1;
+
+#if MagickLibVersion <= 0x628
+	internpix->rows = s_count_pixeliterator_rows (internpix);
+#endif
+
+	internpix->initialized = 1;
 	RETURN_TRUE;
 }
 /* }}} */
@@ -76,12 +107,7 @@ PHP_METHOD(imagickpixeliterator, resetiterator)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -107,12 +133,7 @@ PHP_METHOD(imagickpixeliterator, synciterator)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -135,12 +156,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorfirstrow)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -166,12 +182,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -184,11 +195,47 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 }
 /* }}} */
 
+/* {{{ proto ImagickPixelIterator ImagickPixelIterator::getPixelIterator(Imagick source)
+	Returns a new pixel iterator, static method
+*/
+PHP_METHOD(imagickpixeliterator, getpixeliterator)
+{
+	PixelIterator *pixel_it;
+	zval *magick_object;
+	php_imagick_object *intern;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
+
+	if (!intern->magick_wand) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
+		return;
+	}
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	pixel_it = NewPixelIterator (intern->magick_wand);
+	if (!pixel_it) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
+		return;
+	}
+
+	php_imagick_pixel_iterator_new (pixel_it, return_value TSRMLS_CC);
+	return;
+}
+/* }}} */
+
 /* {{{ proto ImagickPixelIterator ImagickPixelIterator::newPixelIterator(Imagick source)
 	Returns a new pixel iterator.
 */
 PHP_METHOD(imagickpixeliterator, newpixeliterator)
 {
+	PixelIterator *pixel_it;
 	zval *magick_object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagick_object *intern;
@@ -198,28 +245,72 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 		return;
 	}
 
+	IMAGICK_METHOD_DEPRECATED_USE_INSTEAD("ImagickPixelIterator", "newPixelIterator", "ImagickPixelIterator", "getPixelIterator");
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 
-	if (!intern->magick_wand || !IsMagickWand(intern->magick_wand)) {
+	if (!intern->magick_wand) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
 		return;
 	}
 
-	internpix->pixel_iterator = NewPixelIterator(intern->magick_wand);
-	internpix->iterator_type = 1;
-#if MagickLibVersion <= 0x628
-	count_pixeliterator_rows(internpix TSRMLS_CC);
-#endif
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	pixel_it = NewPixelIterator(intern->magick_wand);
+
+	if (!pixel_it) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
 		return;
 	}
 
-	internpix->instanciated_correctly = 1;
+	if (internpix->initialized && internpix->pixel_iterator)
+		DestroyPixelIterator (internpix->pixel_iterator);
+
+	internpix->pixel_iterator = pixel_it;
+#if MagickLibVersion <= 0x628
+	internpix->rows = s_count_pixeliterator_rows (internpix);
+#endif
+
+	internpix->initialized = 1;
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto ImagickPixelIterator ImagickPixelIterator::getPixelRegionIterator(Imagick source, int x, int y, int columns, int rows)
+	Returns a new pixel region iterator, static method
+*/
+PHP_METHOD(imagickpixeliterator, getpixelregioniterator)
+{
+	PixelIterator *pixel_it;
+	zval *magick_object;
+	php_imagick_object *intern;
+	long x, y, columns, rows;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry, &x, &y, &columns, &rows) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
+
+	if (!intern->magick_wand) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
+		return;
+	}
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	pixel_it = NewPixelRegionIterator(intern->magick_wand, x, y, columns, rows);
+	if (!pixel_it) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
+		return;
+	}
+
+	php_imagick_pixel_iterator_new (pixel_it, return_value TSRMLS_CC);
+	return;
 }
 /* }}} */
 
@@ -228,6 +319,7 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 */
 PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 {
+	PixelIterator *pixel_it;
 	zval *magick_object;
 	php_imagickpixeliterator_object *internpix;
 	php_imagick_object *intern;
@@ -238,10 +330,12 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 		return;
 	}
 
+	IMAGICK_METHOD_DEPRECATED_USE_INSTEAD("ImagickPixelIterator", "newPixelRegionIterator", "ImagickPixelIterator", "getPixelRegionIterator");
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	intern = (php_imagick_object *)zend_object_store_get_object(magick_object TSRMLS_CC);
 
-	if (!intern->magick_wand || !IsMagickWand(intern->magick_wand)) {
+	if (!intern->magick_wand) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
 		return;
 	}
@@ -249,17 +343,22 @@ PHP_METHOD(imagickpixeliterator, newpixelregioniterator)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	internpix->pixel_iterator = NewPixelRegionIterator(intern->magick_wand, x, y, columns, rows);
-	internpix->iterator_type = 2;
-#if MagickLibVersion <= 0x628
-	count_pixeliterator_rows(internpix TSRMLS_CC);
-#endif
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	pixel_it = NewPixelRegionIterator(intern->magick_wand, x, y, columns, rows);
+
+	if (!pixel_it) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
 		return;
 	}
 
-	internpix->instanciated_correctly = 1;
+	if (internpix->initialized && internpix->pixel_iterator)
+		DestroyPixelIterator (internpix->pixel_iterator);
+
+	internpix->pixel_iterator = pixel_it;
+
+#if MagickLibVersion <= 0x628
+	internpix->rows = s_count_pixeliterator_rows (internpix);
+#endif
+	internpix->initialized = 1;
 	RETURN_TRUE;
 }
 /* }}} */
@@ -276,15 +375,11 @@ PHP_METHOD(imagickpixeliterator, getiteratorrow)
 	}
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
 
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
 #if MagickLibVersion <= 0x628
 	ZVAL_LONG(return_value, internpix->iterator_position);
 #else
@@ -310,12 +405,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -350,12 +440,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -373,9 +458,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	}
 
 	array_init(return_value);
-
 	for (i = 0; i < num_wands; i++) {
-
 		if (wand_array[i] != NULL && IsPixelWand (wand_array[i])) {
 			MAKE_STD_ZVAL(tmp_pixelwand);
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
@@ -409,15 +492,11 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
 
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
 #if MagickLibVersion <= 0x628
 	if (internpix->iterator_position >= internpix->rows) {
 		RETURN_NULL();
@@ -469,12 +548,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -490,11 +564,8 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	}
 
 	array_init(return_value);
-
 	for (i = 0; i < num_wands; i++) {
-
 		if (wand_array[i] != NULL && IsPixelWand (wand_array[i])) {
-
 			MAKE_STD_ZVAL(tmp_pixelwand);
 			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
@@ -504,38 +575,6 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 		}
 	}
 	return;
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixelIterator::destroy()
-	Deallocates resources associated with a PixelIterator.
-*/
-PHP_METHOD(imagickpixeliterator, destroy)
-{
-	zval *object;
-	php_imagickpixeliterator_object *internpix;
-	object = getThis();
-
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-
-	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-#if MagickLibVersion >= 0x628
-	ClearPixelIterator(internpix->pixel_iterator);
-#endif
-	RETURN_TRUE;
 }
 /* }}} */
 
@@ -551,12 +590,7 @@ PHP_METHOD(imagickpixeliterator, clear)
 	}
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}
@@ -580,15 +614,10 @@ PHP_METHOD(imagickpixeliterator, valid)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
+
 	internpix = (php_imagickpixeliterator_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (internpix->instanciated_correctly < 1) {
-		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
-	}
-
-	if (!internpix->pixel_iterator || !IsPixelIterator(internpix->pixel_iterator)) {
+	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
 		return;
 	}

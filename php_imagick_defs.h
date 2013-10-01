@@ -107,8 +107,8 @@ typedef struct _php_imagickdraw_object  {
 typedef struct _php_imagickpixeliterator_object  {
 	zend_object zo;
 	PixelIterator *pixel_iterator;
-	long instanciated_correctly;
-	int iterator_type;
+	zend_bool initialized;
+
 #if MagickLibVersion <= 0x628
 	long rows;
 	long iterator_position;
@@ -672,6 +672,8 @@ PHP_METHOD(imagickdraw, push);
 PHP_METHOD(imagickpixeliterator, __construct);
 PHP_METHOD(imagickpixeliterator, newpixeliterator);
 PHP_METHOD(imagickpixeliterator, newpixelregioniterator);
+PHP_METHOD(imagickpixeliterator, getpixeliterator);
+PHP_METHOD(imagickpixeliterator, getpixelregioniterator);
 PHP_METHOD(imagickpixeliterator, getiteratorrow);
 PHP_METHOD(imagickpixeliterator, setiteratorrow);
 PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow);

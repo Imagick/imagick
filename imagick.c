@@ -1849,7 +1849,20 @@ static zend_function_entry php_imagickdraw_class_methods[] =
 	{ NULL, NULL, NULL }
 };
 
-static zend_function_entry php_imagickpixeliterator_class_methods[] =
+ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_getpixeliterator_args, 0, 0, 6)
+	ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_getpixelregioniterator_args, 0, 0, 6)
+	ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+	ZEND_ARG_INFO(0, x)
+	ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, columns)
+	ZEND_ARG_INFO(0, rows)
+ZEND_END_ARG_INFO()
+
+static
+zend_function_entry php_imagickpixeliterator_class_methods[] =
 {
 	PHP_ME(imagickpixeliterator, __construct, imagickpixeliterator_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagickpixeliterator, newpixeliterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
@@ -1865,6 +1878,9 @@ static zend_function_entry php_imagickpixeliterator_class_methods[] =
 	PHP_ME(imagickpixeliterator, synciterator, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	ZEND_MALIAS(imagickpixeliterator, destroy, clear, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixeliterator, clear, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
+
+	PHP_ME(imagickpixeliterator, getpixeliterator,       imagickpixeliterator_getpixeliterator_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(imagickpixeliterator, getpixelregioniterator, imagickpixeliterator_getpixelregioniterator_args, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 
 	/* Iterator interface */
 	PHP_MALIAS(imagickpixeliterator, key, getiteratorrow, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
@@ -2463,7 +2479,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 
 	/* We cant initialize yet */
 	intern->pixel_iterator = NULL;
-	intern->instanciated_correctly = 0;
+	intern->initialized    = 0;
 
 #if MagickLibVersion <= 0x628
 	intern->rows = 0;
