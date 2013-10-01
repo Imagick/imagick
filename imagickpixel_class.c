@@ -256,7 +256,6 @@ PHP_METHOD(imagickpixel, __construct)
 			return;
 		}
 	}
-	RETURN_TRUE;
 }
 /* }}} */
 
@@ -300,26 +299,6 @@ PHP_METHOD(imagickpixel, clear)
 	}
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
-	ClearPixelWand(internp->pixel_wand);
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool ImagickPixel::destroy()
-	Deallocates resources associated with a PixelWand.
-*/
-PHP_METHOD(imagickpixel, destroy)
-{
-	zval *object;
-	php_imagickpixel_object *internp;
-
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-
-	object = getThis();
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(object TSRMLS_CC);
 
 	ClearPixelWand(internp->pixel_wand);
 	RETURN_TRUE;
@@ -543,18 +522,18 @@ PHP_METHOD(imagickpixel, getcolor)
 		add_assoc_double(return_value, "g", green);
 		add_assoc_double(return_value, "b", blue);
 		add_assoc_double(return_value, "a", alpha);
-	
+
 	} else {
 
 		/* TODO: should this be quantum range instead of hardcoded 255.. */
-		red   = PixelGetRed(internp->pixel_wand ) * 255;
-		green = PixelGetGreen(internp->pixel_wand ) * 255;
-		blue  = PixelGetBlue(internp->pixel_wand ) * 255;
+		red   = PixelGetRed(internp->pixel_wand)   * 255;
+		green = PixelGetGreen(internp->pixel_wand) * 255;
+		blue  = PixelGetBlue(internp->pixel_wand)  * 255;
 		alpha = PixelGetAlpha(internp->pixel_wand);
 
-		add_assoc_long(return_value, "r", (int)(red > 0.0 ? red + 0.5 : red - 0.5));
-		add_assoc_long(return_value, "g", (int)(green > 0.0 ? green + 0.5 : green - 0.5));
-		add_assoc_long(return_value, "b", (int)(blue > 0.0 ? blue + 0.5 : blue - 0.5));
+		add_assoc_long(return_value, "r", (long) (red   > 0.0 ? red   + 0.5 : red   - 0.5));
+		add_assoc_long(return_value, "g", (long) (green > 0.0 ? green + 0.5 : green - 0.5));
+		add_assoc_long(return_value, "b", (long) (blue  > 0.0 ? blue  + 0.5 : blue  - 0.5));
 		add_assoc_long(return_value, "a", alpha);
 	}
 
@@ -573,7 +552,7 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
+
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	color_string = PixelGetColorAsString(internp->pixel_wand);

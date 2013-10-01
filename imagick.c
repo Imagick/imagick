@@ -2360,11 +2360,8 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 	if (!intern) {
 		return;
 	}
-	if (intern->initialized_via_iterator < 1) {
-		if(intern->pixel_wand != NULL) {
-			intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);
-		}
-	}
+	if (!intern->initialized_via_iterator && intern->pixel_wand)
+		intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
 	efree(intern);

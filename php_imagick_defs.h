@@ -119,7 +119,7 @@ typedef struct _php_imagickpixeliterator_object  {
 typedef struct _php_imagickpixel_object  {
     zend_object zo;
     PixelWand *pixel_wand;
-	int initialized_via_iterator;
+	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
 
 /* Define some color constants */
