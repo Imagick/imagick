@@ -1270,7 +1270,7 @@ PHP_METHOD(imagick, getimageprofiles)
 	if (values) {
 
 		for (i = 0; i < profiles_count; i++) {
-			profile = (char *)MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
+			profile = MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
 			add_assoc_stringl(return_value, profiles[i], profile, length, 1);
 			IMAGICK_FREE_MAGICK_MEMORY(profile);
 		}
@@ -1353,7 +1353,7 @@ PHP_METHOD(imagick, writeimagefile)
 	if (result == 0) {
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to write image to the filehandle" TSRMLS_CC);
-		return;
+			return;
 		}
 		return;
 	}
@@ -1385,7 +1385,7 @@ PHP_METHOD(imagick, writeimagesfile)
 	if (result == 0) {
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to write images to the filehandle" TSRMLS_CC);
-		return;
+			return;
 		}
 		return;
 	}
@@ -1496,7 +1496,7 @@ PHP_METHOD(imagick, animateimages)
 	MagickBooleanType status;
 	char *server_name;
 	int server_name_len;
-	
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
 		return;
 	}
@@ -1504,10 +1504,11 @@ PHP_METHOD(imagick, animateimages)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
-	
+
+	/* TODO: should this call be there? Not sure */
 	(void)MagickSetFirstIterator(intern->magick_wand);
 	status = MagickAnimateImages(intern->magick_wand, server_name);
-	
+
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to animate images" TSRMLS_CC);
 		return;
@@ -1686,7 +1687,8 @@ PHP_METHOD(imagick, mergeimagelayers)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	/* Reset the iterator */
+	/* TODO: SHOULD THIS BE HERE? 
+	   Reset the iterator */
 	(void)MagickSetFirstIterator(intern->magick_wand);
 
 	merged = MagickMergeImageLayers(intern->magick_wand, layer_method);
@@ -7840,6 +7842,8 @@ PHP_METHOD(imagick, flattenimages)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+
+	/* TODO: SHOULD THIS BE HERE? */
 	MagickSetFirstIterator(intern->magick_wand);
 
 	tmp_wand = MagickFlattenImages(intern->magick_wand);
@@ -9483,6 +9487,7 @@ PHP_METHOD(imagick, mosaicimages)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+	/* TODO: should this be here? */
 	MagickSetFirstIterator(intern->magick_wand);
 	tmp_wand = MagickMosaicImages(intern->magick_wand);
 
