@@ -40,6 +40,9 @@ fclose ($fp);
 $identify = new Imagick (PNG_FILE);
 echo $identify->getImageFormat () . PHP_EOL;
 
+unlink (PNG_FILE);
+unlink (JPEG_FILE);
+
 echo 'done' . PHP_EOL;
 ?>
 --EXPECT--
