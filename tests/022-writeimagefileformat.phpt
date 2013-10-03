@@ -40,6 +40,17 @@ fclose ($fp);
 $identify = new Imagick (PNG_FILE);
 echo $identify->getImageFormat () . PHP_EOL;
 
+// Lastly, test the newly added format parameter
+$fp = fopen (PNG_FILE, "w+");
+$im->readImage (JPEG_FILE);
+$im->writeImageFile ($fp, 'png');
+$im->clear ();
+fclose ($fp);
+
+// If all goes according to plan, on second time we should get PNG
+$identify = new Imagick (PNG_FILE);
+echo $identify->getImageFormat () . PHP_EOL;
+
 unlink (PNG_FILE);
 unlink (JPEG_FILE);
 
@@ -47,5 +58,6 @@ echo 'done' . PHP_EOL;
 ?>
 --EXPECT--
 JPEG
+PNG
 PNG
 done

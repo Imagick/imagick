@@ -1329,8 +1329,9 @@ PHP_METHOD(imagick, distortimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::writeImageFile(resource $handle)
-	Writes image to an open filehandle
+/* {{{ proto bool Imagick::writeImageFile(resource $handle[, string $format])
+	Writes image to an open filehandle. Optional parameter format defines the format the file
+	is stored with
 */
 PHP_METHOD(imagick, writeimagefile)
 {
@@ -1338,8 +1339,11 @@ PHP_METHOD(imagick, writeimagefile)
 	zval *zstream;
 	php_stream *stream;
 	zend_bool result;
+	char *format = NULL;
+	int format_len;
+	char *orig_name = NULL, *buffer;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zstream) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &format, &format_len) == FAILURE) {
 		return;
 	}
 
@@ -1347,8 +1351,23 @@ PHP_METHOD(imagick, writeimagefile)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+	// Get the current name
+	if (format) {
+		orig_name = MagickGetImageFilename (intern->magick_wand);
+
+		spprintf (&buffer, 0, "%s:", format);
+		MagickSetImageFilename (intern->magick_wand, buffer);
+		efree (buffer);
+	}
+
 	php_stream_from_zval(stream, &zstream);
 	result = php_imagick_stream_handler(intern, stream, ImagickWriteImageFile TSRMLS_CC);
+
+	/* Restore the original name after write */
+	if (orig_name) {
+		MagickSetImageFilename (intern->magick_wand, orig_name);
+		MagickRelinquishMemory (orig_name);
+	}
 
 	if (result == 0) {
 		if (!EG(exception)) {
@@ -1361,7 +1380,7 @@ PHP_METHOD(imagick, writeimagefile)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::writeImagesFile(resource $handle)
+/* {{{ proto bool Imagick::writeImagesFile(resource $handle[, string $format])
 	Writes images to an open filehandle
 */
 PHP_METHOD(imagick, writeimagesfile)
@@ -1370,8 +1389,11 @@ PHP_METHOD(imagick, writeimagesfile)
 	zval *zstream;
 	php_stream *stream;
 	zend_bool result;
+	char *format = NULL;
+	int format_len;
+	char *orig_name = NULL, *buffer;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r", &zstream) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &format, &format_len) == FAILURE) {
 		return;
 	}
 
@@ -1379,8 +1401,23 @@ PHP_METHOD(imagick, writeimagesfile)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+	// Get the current name
+	if (format) {
+		orig_name = MagickGetImageFilename (intern->magick_wand);
+
+		spprintf (&buffer, 0, "%s:", format);
+		MagickSetImageFilename (intern->magick_wand, buffer);
+		efree (buffer);
+	}
+
 	php_stream_from_zval(stream, &zstream);
 	result = php_imagick_stream_handler(intern, stream, ImagickWriteImagesFile TSRMLS_CC);
+
+	/* Restore the original name after write */
+	if (orig_name) {
+		MagickSetImageFilename (intern->magick_wand, orig_name);
+		MagickRelinquishMemory (orig_name);
+	}
 
 	if (result == 0) {
 		if (!EG(exception)) {

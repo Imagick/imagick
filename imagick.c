@@ -254,10 +254,12 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimagefile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, handle)
+		ZEND_ARG_INFO(0, format)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_writeimagesfile_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, handle)
+		ZEND_ARG_INFO(0, format)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_resetimagepage_args, 0, 0, 1)
