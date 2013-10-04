@@ -54,6 +54,9 @@
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
 	zend_bool locale_fix;
 	zend_bool progress_monitor;
+#ifdef PHP_IMAGICK_ZEND_MM
+	MagickWand *keep_alive;
+#endif
 ZEND_END_MODULE_GLOBALS(imagick)
 
 #ifdef ZTS

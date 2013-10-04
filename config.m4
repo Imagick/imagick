@@ -4,6 +4,9 @@ PHP_ARG_WITH(imagick, whether to enable the imagick extension,
 PHP_ARG_WITH(imagick-gm, whether to enable the imagick GraphicsMagick backend,
 [ --with-imagick-gm[=DIR]	GraphicsMagick backend. NO LONGER SUPPORTED!], no, no)
 
+PHP_ARG_ENABLE(imagick-zend-mm, whether to make Imagick respect PHP memory limits,
+[ --enable-imagick-zend-mm	Make Imagick respect PHP memory limits], no, no)
+
 if test $PHP_IMAGICK_GM != "no"; then
 	AC_MSG_ERROR(GraphicsMagick backend is no longer supported)
 fi
@@ -91,6 +94,14 @@ if test $PHP_IMAGICK != "no"; then
   fi
 
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
+
+  AC_MSG_CHECKING([whether to use Zend MM])
+  if test $PHP_IMAGICK_ZEND_MM != "no"; then
+    AC_DEFINE(PHP_IMAGICK_ZEND_MM,1,[ ])
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+  fi
 
   IMAGICK_MAGICK_PREFIX=`$WAND_BINARY --prefix`
   

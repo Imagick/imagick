@@ -2675,6 +2675,26 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	return new_ov;
 }
 
+#ifdef PHP_IMAGICK_ZEND_MM
+static
+void *s_my_emalloc (size_t size)
+{
+	return emalloc (size);
+}
+
+static
+void *s_my_erealloc (void *ptr, size_t size)
+{
+	return erealloc (ptr, size);
+}
+
+static
+void s_my_efree (void *ptr)
+{
+	efree (ptr);
+}
+#endif
+
 PHP_MINIT_FUNCTION(imagick)
 {
 	zend_class_entry ce;
@@ -2690,8 +2710,15 @@ PHP_MINIT_FUNCTION(imagick)
 	memcpy(&imagickpixeliterator_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	memcpy(&imagickpixel_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-	/* Setup magickwand env */
+	/* Set custom allocators */
+#ifdef PHP_IMAGICK_ZEND_MM
+	SetMagickMemoryMethods(&s_my_emalloc, &s_my_erealloc, &s_my_efree);
+#else
+	/* Setup magickwand env, when using PHP allocators it's on-demand
+		http://www.imagemagick.org/discourse-server/viewtopic.php?f=6&t=8243
+	 */
 	MagickWandGenesis();
+#endif
 
 	/*
 		Initialize exceptions (Imagick exception)
@@ -2813,27 +2840,41 @@ PHP_MINFO_FUNCTION(imagick)
 
 PHP_MSHUTDOWN_FUNCTION(imagick)
 {
-	/* Destroy the magick wand env */
+#if !defined(PHP_IMAGICK_ZEND_MM)
 	MagickWandTerminus();
+#endif
+
 #if defined(ZTS) && defined(PHP_WIN32)
 	tsrm_mutex_free(imagick_mutex);
 #endif
 	UNREGISTER_INI_ENTRIES();
-	return(SUCCESS);
+	return SUCCESS;
 }
 
-#if defined(ZTS) && defined(PHP_WIN32)
+PHP_RINIT_FUNCTION(imagick)
+{
+#ifdef PHP_IMAGICK_ZEND_MM
+	IMAGICK_G(keep_alive) = NewMagickWand ();
+#endif
+	return SUCCESS;
+}
+
 PHP_RSHUTDOWN_FUNCTION(imagick)
 {
+#ifdef PHP_IMAGICK_ZEND_MM
+	DestroyMagickWand (IMAGICK_G(keep_alive));
+#endif
+
+#if defined(ZTS) && defined(PHP_WIN32)
 	/* We have the lock so lets release it */
 	if (imagick_thread_id == tsrm_thread_id()) {
 		imagick_thread_id = (THREAD_T)NULL;
 		tsrm_mutex_unlock(imagick_mutex);
 	}
-
+#endif
 	return SUCCESS;
 }
-#endif
+
 
 zend_module_entry imagick_module_entry =
 {
@@ -2843,13 +2884,9 @@ zend_module_entry imagick_module_entry =
         PHP_IMAGICK_EXTNAME,
         php_imagick_functions,                  /* Functions */
         PHP_MINIT(imagick),                     /* MINIT */
-        PHP_MSHUTDOWN(imagick),         /* MSHUTDOWN */
-        NULL,                                               /* RINIT */
-#if defined(ZTS) && defined(PHP_WIN32)
+        PHP_MSHUTDOWN(imagick),                 /* MSHUTDOWN */
+        PHP_RINIT(imagick),                     /* RINIT */
         PHP_RSHUTDOWN(imagick),
-#else
-        NULL,                                               /* RSHUTDOWN */
-#endif
         PHP_MINFO(imagick),                     /* MINFO */
         PHP_IMAGICK_VERSION,
         STANDARD_MODULE_PROPERTIES
