@@ -1,3 +1,12 @@
+3.2.0b1
+- Added Countable interface to Imagick class
+- Added experimental support for Zend MM
+- Added additional parameter to writeImageFile to allow setting format
+- Distribute tests as part of the release
+- Fixed Bug #65043: Destroy and clear method do the same things
+- Fixed Bug #64945: ZEND_ACC_ALLOW_STATIC vs ZEND_ACC_STATIC
+- A lot of internal refactoring: rewrite macros as functions, clean up naming etc
+
 3.1.2
 - Fixed ZTS build
 - Added LICENSE file to comply with Fedora Packaging Guidelines

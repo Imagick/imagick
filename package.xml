@@ -21,7 +21,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2013-09-23</date>
+	<date>2013-10-05</date>
 	<version>
 		<release>3.2.0b1</release>
 		<api>3.2.0</api>
@@ -32,11 +32,13 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Large amount of internal refactoring, removal of unnecessary macros
-- Removed unused code
-- Added error handling around object creation and cloning failures
-- Fixed PHP bug #64945	ZEND_ACC_ALLOW_STATIC vs ZEND_ACC_STATIC
-- Fixed Doc Bug #65043	Destroy and clear method do the same things
+- Added Countable interface to Imagick class
+- Added experimental support for Zend MM
+- Added additional parameter to writeImageFile to allow setting format
+- Distribute tests as part of the release
+- Fixed Bug #65043: Destroy and clear method do the same things
+- Fixed Bug #64945: ZEND_ACC_ALLOW_STATIC vs ZEND_ACC_STATIC
+- A lot of internal refactoring: rewrite macros as functions, clean up naming etc
 </notes>
 	<contents>
 		<dir name="/">
@@ -67,6 +69,36 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="captcha.php" role="doc" />
 				<file name="thumbnail.php" role="doc" />
 				<file name="watermark.php" role="doc" />
+			</dir>
+			<dir name="tests">
+				<file name="001_imagick_readimage.phpt" role="test" />
+				<file name="002_thumbnail.phpt" role="test" />
+				<file name="003_cast_color_opacity.phpt" role="test" />
+				<file name="004_clone.phpt" role="test" />
+				<file name="005_bestfit.phpt" role="test" />
+				<file name="006_cropthumbnail.phpt" role="test" />
+				<file name="007_thumbnail_fill.phpt" role="test" />
+				<file name="008_newpseudoimage.phpt" role="test" />
+				<file name="009_properties.phpt" role="test" />
+				<file name="010_importimagepixels.phpt" role="test" />
+				<file name="011_polygon.phpt" role="test" />
+				<file name="012-clone-separation.phpt" role="test" />
+				<file name="013-read-filehandle.phpt" role="test" />
+				<file name="014-setresourcelimit.phpt" role="test" />
+				<file name="015-imagickdrawsetresolution.phpt" role="test" />
+				<file name="016-static-methods.phpt" role="test" />
+				<file name="017-clear-destroy.phpt" role="test" />
+				<file name="018-clone-length.phpt" role="test" />
+				<file name="019-readimages.phpt" role="test" />
+				<file name="020-pixeliterator.phpt" role="test" />
+				<file name="021-countable.phpt" role="test" />
+				<file name="022-writeimagefileformat.phpt" role="test" />
+				<file name="023-php-allocators.phpt" role="test" />
+				<file name="bug20636.phpt" role="test" />
+				<file name="bug21229.phpt" role="test" />
+				<file name="bug64015.phpt" role="test" />
+				<file name="php.gif" role="doc" />
+				<file name="skipif.inc" role="doc" />
 			</dir>
 		</dir>
 	</contents>
