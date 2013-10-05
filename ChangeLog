@@ -1,6 +1,7 @@
 3.2.0b1
 - Added Countable interface to Imagick class
-- Added experimental support for Zend MM
+- Added experimental support for Zend MM. If compiled with --enable-imagick-zend-mm
+  Imagick will respect PHP memory limits
 - Added additional parameter to writeImageFile to allow setting format
 - Distribute tests as part of the release
 - Fixed Bug #65043: Destroy and clear method do the same things
