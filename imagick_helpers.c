@@ -510,6 +510,9 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 		case IS_STRING:
 		{
 			pixel_wand = NewPixelWand();
+			if (!pixel_wand) {
+				zend_error(E_ERROR, "Failed to allocate PixelWand structure");
+			}
 			*allocated = 1;
 
 			if (PixelSetColor (pixel_wand, Z_STRVAL_P(param)) == MagickFalse) {
@@ -553,6 +556,9 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 		case IS_DOUBLE:
 		{
 			pixel_wand = NewPixelWand();
+			if (!pixel_wand) {
+				zend_error(E_ERROR, "Failed to allocate PixelWand structure");
+			}
 			PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
 			*allocated = 1;
 		}

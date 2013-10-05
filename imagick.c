@@ -2411,9 +2411,9 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	if (init_wand) {
 		intern->magick_wand = NewMagickWand();
 
-		if (!intern->magick_wand)
+		if (!intern->magick_wand) {
 			zend_error(E_ERROR, "Failed to create ImagickDraw object");
-
+		}
 	} else {
 		intern->magick_wand = NULL;
 	}
@@ -2452,9 +2452,9 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	if (init_wand) {
 		intern->drawing_wand = NewDrawingWand();
 
-		if (!intern->drawing_wand)
+		if (!intern->drawing_wand) {
 			zend_error(E_ERROR, "Failed to create ImagickDraw object");
-
+		}
 	} else {
 		intern->drawing_wand = NULL;
 	}
@@ -2626,7 +2626,7 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 
 	wand_copy = CloneMagickWand(old_obj->magick_wand);
 	if (!wand_copy)
-		zend_throw_exception_ex(NULL, 0 TSRMLS_CC, "Failed to clone Imagick object");
+		zend_error(E_ERROR, "Failed to clone Imagick object");
 	else {
 		php_imagick_replace_magickwand(new_obj, wand_copy);
 		new_obj->next_out_of_bound = old_obj->next_out_of_bound;
@@ -2649,7 +2649,7 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 	wand_copy = CloneDrawingWand(old_obj->drawing_wand);
 
 	if (!wand_copy)
-		zend_throw_exception_ex(NULL, 0 TSRMLS_CC, "Failed to clone ImagickDraw object");
+		zend_error(E_ERROR, "Failed to clone ImagickDraw object");
 	else {
 		php_imagick_replace_drawingwand(new_obj, wand_copy);
 	}
@@ -2667,7 +2667,7 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 
 	wand_copy = php_imagick_clone_pixelwand (old_obj->pixel_wand);
 	if (!wand_copy) {
-		zend_throw_exception_ex(NULL, 0 TSRMLS_CC, "Failed to clone ImagickPixel object");
+		zend_error(E_ERROR, "Failed to clone ImagickPixel object");
 	} else {
 		php_imagick_replace_pixelwand(new_obj, wand_copy);
 		new_obj->initialized_via_iterator = 0;
