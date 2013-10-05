@@ -45,7 +45,7 @@
 #endif
 
 /* Define the entry point symbol
- * Zend will use when loading this module
+ * ZE will use when loading this module
  */
 extern zend_module_entry imagick_module_entry;
 #define phpext_imagick_ptr &imagick_module_entry
