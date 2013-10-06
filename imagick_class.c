@@ -1585,7 +1585,7 @@ PHP_METHOD(imagick, recolorimage)
 
 	order = (unsigned long)sqrt(num_elements);
 
-	if (pow((double) order, 2.0) != num_elements) {
+	if ((order * order) != num_elements) {
 		efree(array);
 		php_imagick_throw_exception(IMAGICK_CLASS, "The color matrix must contain a square number of elements" TSRMLS_CC);
 		return;
@@ -5306,7 +5306,7 @@ PHP_METHOD(imagick, convolveimage)
 
 	order = (unsigned long) sqrt(num_elements);
 
-	if (pow((double) order, 2.0) != num_elements) {
+	if ((order * order) != num_elements) {
 		efree(kernel);
 		php_imagick_throw_exception(IMAGICK_CLASS, "The kernel must contain a square number of elements" TSRMLS_CC);
 		return;
