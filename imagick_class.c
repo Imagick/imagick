@@ -2225,12 +2225,12 @@ PHP_METHOD(imagick, importimagepixels)
 		}
 	}
 
-	switch (storage) {	
+	switch (storage) {
 		case FloatPixel:
 		case DoublePixel:
 			/* Use doubles */
 			storage = DoublePixel;
-			double_array = (double *)php_imagick_zval_to_double_array(pixels, &num_elements TSRMLS_CC);
+			double_array = php_imagick_zval_to_double_array(pixels, &num_elements TSRMLS_CC);
 			if (!double_array) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
 				return;
@@ -2238,13 +2238,13 @@ PHP_METHOD(imagick, importimagepixels)
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, double_array);
 			efree(double_array);
 		break;
-		
+
 		case ShortPixel:
 		case IntegerPixel:
 		case LongPixel:
 			/* Use longs */
 			storage = LongPixel;
-			long_array = (long *)php_imagick_zval_to_long_array(pixels, &num_elements TSRMLS_CC);
+			long_array = php_imagick_zval_to_long_array(pixels, &num_elements TSRMLS_CC);
 			if (!long_array) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
 				return;
@@ -2252,9 +2252,9 @@ PHP_METHOD(imagick, importimagepixels)
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, long_array);
 			efree(long_array);
 		break;
-		
+
 		case CharPixel:
-			char_array = (unsigned char *)php_imagick_zval_to_char_array(pixels, &num_elements TSRMLS_CC);
+			char_array = php_imagick_zval_to_char_array(pixels, &num_elements TSRMLS_CC);
 			if (!char_array) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "The character array contains incorrect values" TSRMLS_CC);
 				return;
@@ -2262,7 +2262,7 @@ PHP_METHOD(imagick, importimagepixels)
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, char_array);
 			efree(char_array);
 		break;
-		
+
 		default:
 			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format" TSRMLS_CC);
 			return;
