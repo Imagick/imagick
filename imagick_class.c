@@ -3384,37 +3384,14 @@ PHP_METHOD(imagick, waveimage)
 PHP_METHOD(imagick, clear)
 {
 	php_imagick_object *intern;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-
 	if (!intern->magick_wand) {
-		RETURN_FALSE;
-	}
-
-	ClearMagickWand(intern->magick_wand);
-	RETURN_TRUE;
-}
-/* }}} */
-
-/* {{{ proto bool Imagick::destroy()
-	Destroys the Imagick object
-*/
-PHP_METHOD(imagick, destroy)
-{
-	zval *object;
-	php_imagick_object *intern;
-
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-
-	object = getThis();
-	intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
-
-	if (intern->magick_wand == NULL) {
 		RETURN_FALSE;
 	}
 
