@@ -2544,7 +2544,11 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 {
 	imagick_globals->locale_fix = 0;
 	imagick_globals->progress_monitor = 0;
+#ifdef PHP_IMAGICK_ZEND_MM
+	imagick_globals->keep_alive = NULL;
+#endif
 }
+
 #if PHP_VERSION_ID < 50399
 static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC)
 #else
@@ -2625,9 +2629,9 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 
 	wand_copy = CloneMagickWand(old_obj->magick_wand);
-	if (!wand_copy)
+	if (!wand_copy) {
 		zend_error(E_ERROR, "Failed to clone Imagick object");
-	else {
+	} else {
 		php_imagick_replace_magickwand(new_obj, wand_copy);
 		new_obj->next_out_of_bound = old_obj->next_out_of_bound;
 
@@ -2648,9 +2652,9 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 	wand_copy = CloneDrawingWand(old_obj->drawing_wand);
 
-	if (!wand_copy)
+	if (!wand_copy) {
 		zend_error(E_ERROR, "Failed to clone ImagickDraw object");
-	else {
+	} else {
 		php_imagick_replace_drawingwand(new_obj, wand_copy);
 	}
 	return new_ov;
