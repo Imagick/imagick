@@ -4608,7 +4608,7 @@ PHP_METHOD(imagick, sepiatoneimage)
 		return;
 	}
 
-	c_opacity = (threshold * QuantumRange ) / 100;
+	c_opacity = (threshold * QuantumRange) / 100;
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)

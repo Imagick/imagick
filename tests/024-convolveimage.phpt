@@ -15,6 +15,16 @@ for ($i = 1; $i < 40; $i++) {
 		echo "Failed for $n" . PHP_EOL;
 	}
 }
+
+for ($i = 1; $i < 40; $i++) {
+	$n = $i * $i + 1;
+
+	try {
+		$im->convolveImage (array_fill (0, $n, 1));
+		echo "Did not fail for $n" . PHP_EOL;
+	} catch (Exception $e) {}
+}
+
 echo "OK" . PHP_EOL;
 
 ?>
