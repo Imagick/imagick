@@ -3042,12 +3042,12 @@ PHP_METHOD(imagick, valid)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (intern->next_out_of_bound > 0) {
-		RETURN_FALSE;
-	}
-
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
+
+	if (intern->next_out_of_bound) {
+		RETURN_FALSE;
+	}
 	RETURN_TRUE;
 }
 /* }}} */

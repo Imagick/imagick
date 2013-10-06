@@ -97,7 +97,7 @@ typedef struct _php_imagick_object  {
 	zend_object zo;
 	MagickWand *magick_wand;
 	char *progress_monitor_name;
-	int next_out_of_bound;
+	zend_bool next_out_of_bound;
 } php_imagick_object;
 
 /* Structure for ImagickDraw object. */
