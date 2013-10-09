@@ -1,3 +1,6 @@
+?.?.?
+- Added Imagick::RESOURCETYPE_THREAD for limiting amount of threads
+
 3.2.0b1
 - Added Countable interface to Imagick class
 - Added experimental support for Zend MM. If compiled with --enable-imagick-zend-mm

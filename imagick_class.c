@@ -2201,7 +2201,7 @@ PHP_METHOD(imagick, importimagepixels)
 
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;	
+		return;
 
 	if (x < 0 || y < 0) {
 		php_imagick_throw_exception (IMAGICK_CLASS, "The coordinates must be non-negative" TSRMLS_CC);
@@ -2340,7 +2340,7 @@ PHP_METHOD(imagick, sparsecolorimage)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	double_array = (double *)php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
+	double_array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!double_array) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
@@ -2354,7 +2354,7 @@ PHP_METHOD(imagick, sparsecolorimage)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sparse color image" TSRMLS_CC);
 		return;
 	}
-	RETURN_TRUE;	
+	RETURN_TRUE;
 }
 
 /* {{{ proto bool Imagick::remapImage(Imagick remap, int DITHERMETHOD)
@@ -2488,7 +2488,7 @@ PHP_METHOD(imagick, exportimagepixels)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to export image pixels" TSRMLS_CC);
 		return;
 	}
-	RETURN_TRUE;
+	return;
 }
 /* }}} */
 #endif
@@ -2768,8 +2768,9 @@ PHP_METHOD(imagick, __construct)
 	}
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	if (Z_TYPE_P (files) == IS_LONG || Z_TYPE_P (files) == IS_DOUBLE)
+	if (Z_TYPE_P (files) == IS_LONG || Z_TYPE_P (files) == IS_DOUBLE) {
 		convert_to_string (files);
+	}
 
 	/* A single file was given */
 	if (Z_TYPE_P(files) == IS_STRING) {
