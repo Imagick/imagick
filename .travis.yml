@@ -15,7 +15,7 @@ env:
 before_script:
     - wget "https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz"
     - tar xvfz ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
-    - echo ImageMagick-${IMAGEMAGICK_VERSION} | sed 's~-[0-9]$~~' | xargs cd
+    - cd ImageMagick-*
     - ./configure --prefix="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
     - make -j 8
     - make install
