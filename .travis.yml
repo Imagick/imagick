@@ -15,12 +15,11 @@ env:
 before_script:
     - wget "https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz"
     - tar xvfz ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
-    - cd ImageMagick-*
+    - echo ImageMagick-${IMAGEMAGICK_VERSION} | sed 's~-[0-9]$~~' | xargs cd
     - ./configure --prefix="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
     - make -j 8
     - make install
     - cd ..
-
 
 script:
     - phpize
