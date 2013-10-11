@@ -1,0 +1,34 @@
+language: php
+php:
+    - 5.5
+    - 5.4
+    - 5.3
+env:
+    - IMAGEMAGICK_VERSION=6.8.7-0
+    - IMAGEMAGICK_VERSION=6.7.5-3
+    - IMAGEMAGICK_VERSION=6.6.0-9
+    - IMAGEMAGICK_VERSION=6.5.3-10
+    - IMAGEMAGICK_VERSION=6.4.0-11
+    - IMAGEMAGICK_VERSION=6.3.4-10
+    - IMAGEMAGICK_VERSION=6.2.3-6
+
+before_script:
+    - wget "https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz"
+    - tar xvfz ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz
+    - cd ImageMagick-*
+    - ./configure --prefix="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
+    - make -j 8
+    - make install
+    - cd ..
+
+
+script:
+    - phpize
+    - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
+    - make
+    - export NO_INTERACTION=1
+    - export REPORT_EXIT_STATUS=1
+    - export TEST_PHP_EXECUTABLE=`which php`
+    - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
+    - for i in `ls tests/*.out 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
+
