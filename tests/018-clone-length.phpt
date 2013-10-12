@@ -3,6 +3,8 @@ Test clone length, this is expected upstream behaviour
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc');
 
+$v = imagick::getversion ();
+
 if ($v ['versionNumber'] >= 0x640 && $v ['versionNumber'] < 0x650)
 	die ('skip seems to be different in this version of ImageMagick');
 ?>
