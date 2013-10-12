@@ -5282,13 +5282,6 @@ PHP_METHOD(imagick, convolveimage)
 	}
 
 	order = (unsigned long) sqrt(num_elements);
-
-	if ((order * order) != num_elements) {
-		efree(kernel);
-		php_imagick_throw_exception(IMAGICK_CLASS, "The kernel must contain a square number of elements" TSRMLS_CC);
-		return;
-	}
-
 	status = MagickConvolveImageChannel(intern->magick_wand, channel, order, kernel);
 	efree(kernel);
 
