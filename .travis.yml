@@ -19,12 +19,17 @@ before_script:
     - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
 
 script:
-    - phpize
-    - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
-    - make
     - export NO_INTERACTION=1
     - export REPORT_EXIT_STATUS=1
     - export TEST_PHP_EXECUTABLE=`which php`
+    - phpize
+    - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}" --enable-zend-mm
+    - make
+    - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
+    - for i in `ls tests/*.out 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
+    - make clean
+    - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
+    - make
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
     - for i in `ls tests/*.out 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
 
