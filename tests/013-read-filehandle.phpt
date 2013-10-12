@@ -21,5 +21,5 @@ unlink($file);
 echo 'success';
 
 ?>
---EXPECTF--
+--EXPECT--
 success

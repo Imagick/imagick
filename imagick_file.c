@@ -23,6 +23,16 @@
 #include "php_imagick_macros.h"
 #include "php_imagick_defs.h"
 
+#if ZEND_MODULE_API_NO > 20060613 
+#  define IMAGICK_INIT_ERROR_HANDLING  zend_error_handling error_handling
+#  define IMAGICK_SET_ERROR_HANDLING_THROW zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC)
+#  define IMAGICK_RESTORE_ERROR_HANDLING   zend_restore_error_handling(&error_handling TSRMLS_CC)
+#else
+#  define IMAGICK_INIT_ERROR_HANDLING
+#  define IMAGICK_SET_ERROR_HANDLING_THROW php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC)
+#  define IMAGICK_RESTORE_ERROR_HANDLING   php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC)
+#endif
+
 static
 zend_bool php_imagick_is_virtual_format(const char *format)
 {
@@ -164,42 +174,31 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct 
 	php_stream *stream;
 	MagickBooleanType status;
 	FILE *fp;
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_error_handling error_handling;
-#endif
-
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC);
-#else
-	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
-#endif
+	IMAGICK_INIT_ERROR_HANDLING;
+	IMAGICK_SET_ERROR_HANDLING_THROW;
 
 	stream = php_stream_open_wrapper(file->filename, "rb", (ENFORCE_SAFE_MODE|IGNORE_PATH) & ~REPORT_ERRORS, NULL);
 
 	if (!stream) {
-		goto return_error;
+		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
 
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL) == FAILURE) {
-		goto return_error;
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL) == FAILURE ||
+		php_stream_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+
+		php_stream_close(stream);
+		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
-		goto return_error;
-	}
-
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
-#else
-	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-#endif
+	IMAGICK_RESTORE_ERROR_HANDLING;
 
 	if (type == ImagickReadImage) {
 		status = MagickReadImageFile(intern->magick_wand, fp);
 	} else if (type == ImagickPingImage){
 		status = MagickPingImageFile(intern->magick_wand, fp);
 	} else {
-		goto return_error;
+		php_stream_close(stream);
+		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
 
 	if (status == MagickFalse) {
@@ -216,17 +215,6 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct 
 
 	MagickSetLastIterator(intern->magick_wand);
 	return IMAGICK_RW_OK;
-
-return_error:
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
-#else
-	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-#endif
-	if (stream) {
-		php_stream_close(stream);
-	}
-	return IMAGICK_RW_UNDERLYING_LIBRARY;
 }
 
 int php_imagick_safe_mode_check(const char *filename TSRMLS_DC)
@@ -289,31 +277,19 @@ php_imagick_rw_result_t php_imagick_write_file(php_imagick_object *intern, struc
 
 zend_bool php_imagick_stream_handler(php_imagick_object *intern, php_stream *stream, ImagickOperationType type TSRMLS_DC)
 {
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_error_handling error_handling;
-#endif
 	FILE *fp;
 	MagickBooleanType status = MagickFalse;
 
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC);
-#else
-	php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC);
-#endif	
+	IMAGICK_INIT_ERROR_HANDLING;
+	IMAGICK_SET_ERROR_HANDLING_THROW;
 
-	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE) {
-		goto return_on_error;
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE ||
+		php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+		IMAGICK_RESTORE_ERROR_HANDLING;
+		return 0;
 	}
 
-	if (php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
-		goto return_on_error;
-	}
-
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
-#else
-	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-#endif
+	IMAGICK_RESTORE_ERROR_HANDLING;
 
 	/* php_stream_cast returns warning on some streams but still does not return FAILURE */
 	if (EG(exception)) {
@@ -338,19 +314,12 @@ zend_bool php_imagick_stream_handler(php_imagick_object *intern, php_stream *str
 		break;
 
 		default:
-			goto return_on_error;
+			return 0;
 		break;
 	}
 	if (status == MagickFalse) {
 		return 0;
 	}
 	return 1;
-
-return_on_error:
-#if ZEND_MODULE_API_NO > 20060613 
-	zend_restore_error_handling(&error_handling TSRMLS_CC);
-#else
-	php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-#endif
-	return 0;
 }
+

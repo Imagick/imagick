@@ -3,6 +3,8 @@ php:
     - 5.5
     - 5.4
     - 5.3
+    - 5.2
+
 env:
     - IMAGEMAGICK_VERSION=dev
     - IMAGEMAGICK_VERSION=6.8.7-0
