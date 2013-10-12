@@ -6,6 +6,9 @@ Test filling thumbnail with color
 $v = Imagick::getVersion();
 if ($v['versionNumber'] < 0x632) {
 	die ('skip too old ImageMagick');
+
+if ($v ['versionNumber'] >= 0x660 && $v ['versionNumber'] < 0x670)
+	die ('skip seems to be broken in this version of ImageMagick');
 }
 --FILE--
 <?php
