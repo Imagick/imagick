@@ -264,7 +264,10 @@ php_imagick_rw_result_t php_imagick_file_access_check (const char *filename TSRM
 	if (php_check_open_basedir_ex(filename, 0 TSRMLS_CC))
 		return IMAGICK_RW_OPEN_BASEDIR_ERROR;
 
-	if (VCWD_ACCESS(filename, F_OK|R_OK))
+	if (VCWD_ACCESS(filename, F_OK) != 0)
+		return IMAGICK_RW_PATH_DOES_NOT_EXIST;
+
+	if (VCWD_ACCESS(filename, R_OK) != 0)
 		return IMAGICK_RW_PERMISSION_DENIED;
 
 	return IMAGICK_RW_OK;

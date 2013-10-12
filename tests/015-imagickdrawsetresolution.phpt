@@ -10,6 +10,7 @@ $im = new Imagick();
 $im->newImage(1000,1000, "white","png");
 
 $draw = new ImagickDraw();
+$draw->setFont (__DIR__ . '/anonymous_pro_minus.ttf');
 $draw->setFontSize(72);
 
 $draw->setResolution(10, 10);
