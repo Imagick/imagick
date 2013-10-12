@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/mkoppanen/imagick.png)](https://travis-ci.org/mkoppanen/imagick)
