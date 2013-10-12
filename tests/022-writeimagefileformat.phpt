@@ -5,8 +5,8 @@ Test format support in writeImageFile
 --FILE--
 <?php
 
-define ("JPEG_FILE", __DIR__ . "/imagick_test.jpg");
-define ("PNG_FILE", __DIR__ . "/imagick_test.png");
+define ("JPEG_FILE", dirname (__FILE__) . "/imagick_test.jpg");
+define ("PNG_FILE",dirname (__FILE__) . "/imagick_test.png");
 
 $im = new imagick ('magick:rose');
 $im->writeImage (JPEG_FILE);
