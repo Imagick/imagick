@@ -4,11 +4,7 @@ imagemagick_fetch_and_build () {
     local version=$1
 
     case $version in
-    trunk)
-        svn co https://www.imagemagick.org/subversion/ImageMagick/trunk imagemagick-trunk
-        cd imagemagick-trunk
-        ;;
-    stable-dev)
+    dev)
         svn co https://www.imagemagick.org/subversion/ImageMagick/branches/ImageMagick-6/ imagemagick-dev
         cd imagemagick-dev
         ;;
