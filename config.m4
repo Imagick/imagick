@@ -34,7 +34,7 @@ if test $PHP_IMAGICK != "no"; then
   if test "$PHP_IMAGICK" != "yes"; then
     export PKG_CONFIG_PATH="${PHP_IMAGICK}/${PHP_LIBDIR}/pkgconfig"
 
-    for i in "${PHP_IMAGICK}" /usr/local /usr /opt /opt/local;
+    for i in "$PHP_IMAGICK" /usr/local /usr /opt /opt/local;
     do
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
@@ -86,7 +86,7 @@ if test $PHP_IMAGICK != "no"; then
 
   # Potential locations for the header
   # include/wand/magick-wand.h
-  # include/wand/MagickWand.h
+  # include/ImageMagick/wand/MagickWand.h
   # include/ImageMagick-6/wand/MagickWand.h
   # include/ImageMagick-7/MagickWand/MagickWand.h
 
@@ -106,12 +106,12 @@ if test $PHP_IMAGICK != "no"; then
     AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [ImageMagick 6 style header])
     AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/wand/MagickWand.h])
 
-  elif test -r "${IMAGEMAGICK_PREFIX}/include/wand/MagickWand.h"; then
+  elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/MagickWand.h"; then
 
     AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [ImageMagick 6 style header])
-    AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/wand/MagickWand.h])
+    AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/MagickWand.h])
 
-  elif test -r "${IMAGEMAGICK_PREFIX}/include/wand/magick-wand.h"; then
+  elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/magick-wand.h"; then
 
     AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_OLD_OLD], [1], [Old old style header])
     AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/wand/magick-wand.h])
