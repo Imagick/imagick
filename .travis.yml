@@ -16,7 +16,7 @@ env:
 
 before_script:
     - sudo apt-get update
-    - sudo apt-get install valgrind
+    - sudo apt-get dist-upgrade -y
     - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
 
 script:

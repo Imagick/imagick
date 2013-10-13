@@ -5,10 +5,10 @@ Imagick::readImageFile test
 --FILE--
 <?php
 
-$file = dirname(__FILE__) . '/__tmp_rose.gif';
+$file = dirname(__FILE__) . '/__tmp_rose.jpg';
 
 $imagick = new Imagick('magick:rose');
-$imagick->setImageFormat('gif');
+$imagick->setImageFormat('jpg');
 $imagick->writeImage($file);
 
 $imagick->clear();
