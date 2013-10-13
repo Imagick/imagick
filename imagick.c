@@ -2718,9 +2718,6 @@ PHP_MINIT_FUNCTION(imagick)
 #ifdef PHP_IMAGICK_ZEND_MM
 	SetMagickMemoryMethods(&s_my_emalloc, &s_my_erealloc, &s_my_efree);
 #else
-	/* Setup magickwand env, when using PHP allocators it's on-demand
-		http://www.imagemagick.org/discourse-server/viewtopic.php?f=6&t=8243
-	 */
 	MagickWandGenesis();
 #endif
 
@@ -2845,7 +2842,7 @@ PHP_MINFO_FUNCTION(imagick)
 
 PHP_MSHUTDOWN_FUNCTION(imagick)
 {
-#if !defined(PHP_IMAGICK_ZEND_MM)
+#ifndef PHP_IMAGICK_ZEND_MM
 	MagickWandTerminus();
 #endif
 
@@ -2858,18 +2855,11 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 
 PHP_RINIT_FUNCTION(imagick)
 {
-#ifdef PHP_IMAGICK_ZEND_MM
-	IMAGICK_G(keep_alive) = NewMagickWand ();
-#endif
 	return SUCCESS;
 }
 
 PHP_RSHUTDOWN_FUNCTION(imagick)
 {
-#ifdef PHP_IMAGICK_ZEND_MM
-	DestroyMagickWand (IMAGICK_G(keep_alive));
-#endif
-
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* We have the lock so lets release it */
 	if (imagick_thread_id == tsrm_thread_id()) {
