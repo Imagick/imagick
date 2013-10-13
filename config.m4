@@ -32,7 +32,7 @@ if test $PHP_IMAGICK != "no"; then
   AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 
   if test "$PHP_IMAGICK" != "yes"; then
-    export PKG_CONFIG_PATH="${PHP_IMAGICK}/lib/pkgconfig"
+    export PKG_CONFIG_PATH="${PHP_IMAGICK}/${PHP_LIBDIR}/pkgconfig"
 
     for i in "${PHP_IMAGICK}" /usr/local /usr /opt /opt/local;
     do
@@ -48,9 +48,9 @@ if test $PHP_IMAGICK != "no"; then
     done
   else
     if test "x${PKG_CONFIG_PATH}" != "x"; then
-      export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig:/usr/lib/pkgconfig:/opt/lib/pkgconfig:/opt/local/lib/pkgconfig"
+      export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/$PHP_LIBDIR/pkgconfig:/usr/$PHP_LIBDIR/pkgconfig:/opt/$PHP_LIBDIR/pkgconfig:/opt/local/$PHP_LIBDIR/pkgconfig"
     else
-      export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:/usr/lib/pkgconfig:/opt/lib/pkgconfig:/opt/local/lib/pkgconfig"
+      export PKG_CONFIG_PATH="/usr/local/$PHP_LIBDIR/pkgconfig:/usr/$PHP_LIBDIR/pkgconfig:/opt/$PHP_LIBDIR/pkgconfig:/opt/local/$PHP_LIBDIR/pkgconfig"
     fi
 
     for i in /usr/local /usr /opt /opt/local;
@@ -160,10 +160,10 @@ if test $PHP_IMAGICK != "no"; then
 # Set libs and CFLAGS for building
 #
   IMAGICK_LIBS=`$IM_WAND_BINARY --libs`
-  IMAGICK_LIBS="$IMAGICK_LIBS -L$WAND_DIR/lib"
+  IMAGICK_LIBS="$IMAGICK_LIBS -L$IMAGEMAGICK_PREFIX/$PHP_LIBDIR"
   
   IMAGICK_CFLAGS=`$IM_WAND_BINARY --cflags`
-  IMAGICK_CFLAGS="$IMAGICK_CFLAGS -I$WAND_DIR/include"
+  IMAGICK_CFLAGS="$IMAGICK_CFLAGS -I$IMAGEMAGICK_PREFIX/include"
 
   PHP_EVAL_LIBLINE($IMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
   PHP_EVAL_INCLINE($IMAGICK_CFLAGS)
