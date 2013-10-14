@@ -32,36 +32,32 @@ if test $PHP_IMAGICK != "no"; then
   AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 
   if test "$PHP_IMAGICK" != "yes"; then
-    export PKG_CONFIG_PATH="${PHP_IMAGICK}/${PHP_LIBDIR}/pkgconfig"
-
     for i in "$PHP_IMAGICK" /usr/local /usr /opt /opt/local;
     do
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
+        PHP_IMAGEMAGICK_PATH=$i
         break
       fi
 
       if test -r "${i}/bin/Wand-config"; then
         IM_WAND_BINARY="${i}/bin/Wand-config"
+        PHP_IMAGEMAGICK_PATH=$i
         break
       fi
     done
   else
-    if test "x${PKG_CONFIG_PATH}" != "x"; then
-      export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/$PHP_LIBDIR/pkgconfig:/usr/$PHP_LIBDIR/pkgconfig:/opt/$PHP_LIBDIR/pkgconfig:/opt/local/$PHP_LIBDIR/pkgconfig"
-    else
-      export PKG_CONFIG_PATH="/usr/local/$PHP_LIBDIR/pkgconfig:/usr/$PHP_LIBDIR/pkgconfig:/opt/$PHP_LIBDIR/pkgconfig:/opt/local/$PHP_LIBDIR/pkgconfig"
-    fi
-
     for i in /usr/local /usr /opt /opt/local;
     do
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
+        PHP_IMAGEMAGICK_PATH=$i
         break
       fi
 
       if test -r "${i}/bin/Wand-config"; then
         IM_WAND_BINARY="${i}/bin/Wand-config"
+        PHP_IMAGEMAGICK_PATH=$i
         break
       fi
     done
@@ -71,6 +67,9 @@ if test $PHP_IMAGICK != "no"; then
     AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
   fi
   AC_MSG_RESULT([found in $IM_WAND_BINARY])
+
+  # This is used later for cflags and libs
+  export PKG_CONFIG_PATH="${PHP_IMAGEMAGICK_PATH}/${PHP_LIBDIR}/pkgconfig"
 
   # Check version
   # 
