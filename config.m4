@@ -1,15 +1,8 @@
 PHP_ARG_WITH(imagick, whether to enable the imagick extension,
 [ --with-imagick[=DIR]	Enables the imagick extension. DIR is the prefix to Imagemagick installation directory.], no)
 
-PHP_ARG_WITH(imagick-gm, whether to enable the imagick GraphicsMagick backend,
-[ --with-imagick-gm[=DIR]	GraphicsMagick backend. NO LONGER SUPPORTED!], no, no)
-
 PHP_ARG_ENABLE(imagick-zend-mm, whether to make Imagick respect PHP memory limits,
-[ --enable-imagick-zend-mm	Make Imagick respect PHP memory limits], no, no)
-
-if test $PHP_IMAGICK_GM != "no"; then
-	AC_MSG_ERROR(GraphicsMagick backend is no longer supported)
-fi
+[ --enable-imagick-zend-mm	Make Imagick respect PHP memory limits (experimental)], no, no)
 
 if test $PHP_IMAGICK != "no"; then
 
@@ -83,11 +76,11 @@ if test $PHP_IMAGICK != "no"; then
     AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
   fi
 
-  # Potential locations for the header
-  # include/wand/magick-wand.h
-  # include/ImageMagick/wand/MagickWand.h
-  # include/ImageMagick-6/wand/MagickWand.h
-  # include/ImageMagick-7/MagickWand/MagickWand.h
+# Potential locations for the header
+# include/wand/magick-wand.h
+# include/ImageMagick/wand/MagickWand.h
+# include/ImageMagick-6/wand/MagickWand.h
+# include/ImageMagick-7/MagickWand/MagickWand.h
 
   AC_MSG_CHECKING(for MagickWand.h or magick-wand.h header)
 
@@ -102,12 +95,12 @@ if test $PHP_IMAGICK != "no"; then
 
   elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/wand/MagickWand.h"; then
 
-    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [ImageMagick 6 style header])
+    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [Late ImageMagick 6 style header])
     AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/wand/MagickWand.h])
 
   elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/MagickWand.h"; then
 
-    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [ImageMagick 6 style header])
+    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [Early ImageMagick 6 style header])
     AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/MagickWand.h])
 
   elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/magick-wand.h"; then
