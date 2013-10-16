@@ -29,10 +29,6 @@
 #  include <wand/magick-wand.h>
 #endif
 
-#ifndef DefaultChannels
-# define DefaultChannels (AllChannels &~ OpacityChannel)
-#endif
-
 /* Some extra headers */
 #include "Zend/zend_exceptions.h"
 #include "Zend/zend_interfaces.h"
