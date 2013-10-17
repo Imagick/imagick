@@ -2821,7 +2821,39 @@ PHP_METHOD(imagick, clampimage)
 	status = MagickClampImageChannel(intern->magick_wand, channel);
 
 	if (status == MagickFalse) {
-		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to clamp image channel" TSRMLS_CC);
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to clamp image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x667
+/* {{{ proto boolean Imagick::smushimages(boolean stack, int offset)
+   Takes all images from the current image pointer to the end of the image list and smushs
+   them to each other top-to-bottom if the stack parameter is true, otherwise left-to-right.
+*/
+PHP_METHOD(imagick, smushimages)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	zend_bool stack;
+	long offset;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bl", &stack, &offset) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSmushImages(intern->magick_wand, (stack ? MagickTrue : MagickFalse), offset);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to smush images" TSRMLS_CC);
 		return;
 	}
 

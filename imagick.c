@@ -464,6 +464,12 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 #endif
+#if MagickLibVersion > 0x667
+	ZEND_BEGIN_ARG_INFO_EX(imagick_smushimages_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, stack)
+		ZEND_ARG_INFO(0, offset)
+	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
@@ -2066,6 +2072,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getcolorspace, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setcolorspace, imagick_setcolorspace_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, clampimage, imagick_clampimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x667
+	PHP_ME(imagick, smushimages, imagick_smushimages_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)

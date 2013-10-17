@@ -295,6 +295,9 @@ PHP_METHOD(imagick, setcolorspace);
 PHP_METHOD(imagick, getcolorspace);
 PHP_METHOD(imagick, clampimage);
 #endif
+#if MagickLibVersion > 0x667
+PHP_METHOD(imagick, smushimages);
+#endif
 
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
