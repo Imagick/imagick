@@ -4,113 +4,15 @@ PHP_ARG_WITH(imagick, whether to enable the imagick extension,
 PHP_ARG_ENABLE(imagick-zend-mm, whether to make Imagick respect PHP memory limits,
 [ --enable-imagick-zend-mm	Make Imagick respect PHP memory limits (experimental)], no, no)
 
+
+
 if test $PHP_IMAGICK != "no"; then
 
-  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-  if test "x$PKG_CONFIG" = "xno"; then
-    AC_MSG_RESULT([pkg-config not found])
-    AC_MSG_ERROR([Please reinstall the pkg-config distribution])
-  fi
-
-  if test -z "$AWK"; then
-    AC_MSG_ERROR([awk not found])
-  fi
-
-  # ImageMagick has the config program:
-  # bin/Wand-config
-  # bin/MagickWand-config
-  #
-  # Sets IM_WAND_BINARY
-  #
-  AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
-
-  if test "$PHP_IMAGICK" != "yes"; then
-    for i in "$PHP_IMAGICK" /usr/local /usr /opt /opt/local;
-    do
-      if test -r "${i}/bin/MagickWand-config"; then
-        IM_WAND_BINARY="${i}/bin/MagickWand-config"
-        PHP_IMAGEMAGICK_PATH=$i
-        break
-      fi
-
-      if test -r "${i}/bin/Wand-config"; then
-        IM_WAND_BINARY="${i}/bin/Wand-config"
-        PHP_IMAGEMAGICK_PATH=$i
-        break
-      fi
-    done
-  else
-    for i in /usr/local /usr /opt /opt/local;
-    do
-      if test -r "${i}/bin/MagickWand-config"; then
-        IM_WAND_BINARY="${i}/bin/MagickWand-config"
-        PHP_IMAGEMAGICK_PATH=$i
-        break
-      fi
-
-      if test -r "${i}/bin/Wand-config"; then
-        IM_WAND_BINARY="${i}/bin/Wand-config"
-        PHP_IMAGEMAGICK_PATH=$i
-        break
-      fi
-    done
-  fi
-
-  if test "x" = "x$IM_WAND_BINARY"; then
-    AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
-  fi
-  AC_MSG_RESULT([found in $IM_WAND_BINARY])
-
-  # This is used later for cflags and libs
-  export PKG_CONFIG_PATH="${PHP_IMAGEMAGICK_PATH}/${PHP_LIBDIR}/pkgconfig"
-
-  # Check version
-  # 
-  IMAGEMAGICK_VERSION=`$IM_WAND_BINARY --version`
-  IMAGEMAGICK_VERSION_MASK=`echo $IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
-
-  AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
-  if test "$IMAGEMAGICK_VERSION_MASK" -ge 6002004; then
-    AC_MSG_RESULT(found version $IMAGEMAGICK_VERSION)
-  else
-    AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
-  fi
-
-# Potential locations for the header
-# include/wand/magick-wand.h
-# include/ImageMagick/wand/MagickWand.h
-# include/ImageMagick-6/wand/MagickWand.h
-# include/ImageMagick-7/MagickWand/MagickWand.h
-
-  AC_MSG_CHECKING(for MagickWand.h or magick-wand.h header)
-
-  IMAGEMAGICK_PREFIX=`$IM_WAND_BINARY --prefix`
-  IMAGEMAGICK_MAJOR_VERSION=`echo $IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } {print $1}'`
-
-  # Try the header formats from newest to oldest
-  if test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/MagickWand/MagickWand.h"; then
-
-    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SEVEN], [1], [ImageMagick 7 style header])
-    AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/MagickWand/MagickWand.h])
-
-  elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/wand/MagickWand.h"; then
-
-    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [Late ImageMagick 6 style header])
-    AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick-${IMAGEMAGICK_MAJOR_VERSION}/wand/MagickWand.h])
-
-  elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/MagickWand.h"; then
-
-    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_SIX], [1], [Early ImageMagick 6 style header])
-    AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/MagickWand.h])
-
-  elif test -r "${IMAGEMAGICK_PREFIX}/include/ImageMagick/wand/magick-wand.h"; then
-
-    AC_DEFINE([IMAGEMAGICK_HEADER_STYLE_OLD_OLD], [1], [Old old style header])
-    AC_MSG_RESULT([${IMAGEMAGICK_PREFIX}/include/wand/magick-wand.h])
-
-  else
-    AC_MSG_ERROR([Unable to find MagickWand.h or magick-wand.h header])
-  fi
+#
+# Find ImageMagick
+#
+  m4_include([imagemagick.m4])
+  IM_FIND_IMAGEMAGICK(6002004)
 
 #
 # Zend MM
@@ -151,17 +53,11 @@ if test $PHP_IMAGICK != "no"; then
 #
 # Set libs and CFLAGS for building
 #
-  IMAGICK_LIBS=`$IM_WAND_BINARY --libs`
-  IMAGICK_LIBS="$IMAGICK_LIBS -L$IMAGEMAGICK_PREFIX/$PHP_LIBDIR"
-  
-  IMAGICK_CFLAGS=`$IM_WAND_BINARY --cflags`
-  IMAGICK_CFLAGS="$IMAGICK_CFLAGS -I$IMAGEMAGICK_PREFIX/include"
-
-  PHP_EVAL_LIBLINE($IMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
-  PHP_EVAL_INCLINE($IMAGICK_CFLAGS)
+  PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  PHP_EVAL_INCLINE($IM_IMAGEMAGICK_CFLAGS)
 
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
-  PHP_NEW_EXTENSION(imagick, imagick_file.c imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c, $ext_shared,, $IMAGICK_CFLAGS)
+  PHP_NEW_EXTENSION(imagick, imagick_file.c imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c, $ext_shared,, $IM_IMAGEMAGICK_CFLAGS)
   PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h])
 fi

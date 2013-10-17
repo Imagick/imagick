@@ -21,12 +21,12 @@
 # define PHP_IMAGICK_DEFS_H
 
 /* Include magic wand header */
-#if defined(IMAGEMAGICK_HEADER_STYLE_SEVEN)
+#if defined (IM_MAGICKWAND_HEADER_STYLE_SEVEN)
 #  include <MagickWand/MagickWand.h>
-#elif defined(IMAGEMAGICK_HEADER_STYLE_SIX)
-#  include <wand/MagickWand.h>
-#elif defined(IMAGEMAGICK_HEADER_STYLE_OLD_OLD)
+#elif defined (IM_MAGICKWAND_HEADER_STYLE_OLD)
 #  include <wand/magick-wand.h>
+#else
+#  include <wand/MagickWand.h>
 #endif
 
 /* Some extra headers */

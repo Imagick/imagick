@@ -44,6 +44,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	<contents>
 		<dir name="/">
 			<file name="config.m4" role="src" />
+			<file name="imagemagick.m4" role="src" />
 			<file name="config.w32" role="src" />
 			<file name="CREDITS" role="doc" />
 			<file name="imagick.c" role="src" />

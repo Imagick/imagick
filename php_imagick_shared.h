@@ -21,11 +21,7 @@
 #ifndef _PHP_IMAGICK_SHARED_H_
 # define _PHP_IMAGICK_SHARED_H_
 
-/* Only works with newer Imagick */
-#ifndef IMAGEMAGICK_HEADER_STYLE_SIX
-# define IMAGEMAGICK_HEADER_STYLE_SIX 1
-#endif
-
+/* Should work with ImageMagick 6.x for now */
 #include "php_imagick.h"
 #include "php_imagick_defs.h"
 
