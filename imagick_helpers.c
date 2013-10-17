@@ -696,6 +696,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("IMAGICK_EXTNUM", PHP_IMAGICK_EXTNUM);
 	IMAGICK_REGISTER_CONST_STRING("IMAGICK_EXTVER", PHP_IMAGICK_VERSION);
 
+#if defined(MagickQuantumRange)
+	IMAGICK_REGISTER_CONST_LONG("QUANTUM_RANGE", atoi (MagickQuantumRange));
+#endif
+
 	/* Are we using PHP allocations */
 #ifdef PHP_IMAGICK_ZEND_MM
 	IMAGICK_REGISTER_CONST_LONG("USE_ZEND_MM", 1);
