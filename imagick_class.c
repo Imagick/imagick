@@ -10151,14 +10151,14 @@ PHP_METHOD(imagick, getpage)
 */
 PHP_METHOD(imagick, getquantumdepth)
 {
-	char *quantum_depth;
+	const char *quantum_depth;
 	unsigned long depth;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
-	quantum_depth = (char *)MagickGetQuantumDepth(&depth);
+	quantum_depth = MagickGetQuantumDepth(&depth);
 
 	array_init(return_value);
 	add_assoc_long(return_value, "quantumDepthLong", depth);
@@ -10173,14 +10173,14 @@ PHP_METHOD(imagick, getquantumdepth)
 */
 PHP_METHOD(imagick, getquantumrange)
 {
-	char *quantum_range;
+	const char *quantum_range;
 	unsigned long range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
-	quantum_range = (char *)MagickGetQuantumRange(&range);
+	quantum_range = MagickGetQuantumRange(&range);
 	array_init(return_value);
 
 	add_assoc_long(return_value, "quantumRangeLong", range);
