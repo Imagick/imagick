@@ -2566,7 +2566,7 @@ PHP_METHOD(imagick, functionimage)
 #endif
 
 #if MagickLibVersion > 0x651
-/* {{{ proto boolean Imagick::transformImageColorspace()
+/* {{{ proto boolean Imagick::transformImageColorspace(int COLORSPACE)
 	Transform image colorspace
 */
 PHP_METHOD(imagick, transformimagecolorspace)
@@ -2625,6 +2625,34 @@ PHP_METHOD(imagick, haldclutimage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to hald clut image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if MagickLibVersion > 0x655
+/* {{{ proto boolean Imagick::autolevelImage([int CHANNEL])
+   Adjusts the levels of a particular image channel by scaling the minimum and maximum values to the full quantum range.
+*/
+PHP_METHOD(imagick, autolevelimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long channel = DefaultChannels;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickAutoLevelImageChannel(intern->magick_wand, channel);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to autolevel image" TSRMLS_CC);
 		return;
 	}
 	RETURN_TRUE;

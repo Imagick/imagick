@@ -432,6 +432,12 @@ MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()	
 #endif
 
+#if MagickLibVersion > 0x655
+	ZEND_BEGIN_ARG_INFO_EX(imagick_autolevelimage_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+#endif
+
 #if MagickLibVersion > 0x656
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageartifact_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, artifact)
@@ -2040,6 +2046,9 @@ static zend_function_entry php_imagick_class_methods[] =
 #endif
 #if MagickLibVersion > 0x652
 	PHP_ME(imagick, haldclutimage, imagick_haldclutimage_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x655
+	PHP_ME(imagick, autolevelimage, imagick_autolevelimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x656
 	PHP_ME(imagick, getimageartifact, imagick_getimageartifact_args, ZEND_ACC_PUBLIC)
