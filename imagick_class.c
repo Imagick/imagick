@@ -2837,10 +2837,11 @@ PHP_METHOD(imagick, clampimage)
 */
 PHP_METHOD(imagick, smushimages)
 {
-	php_imagick_object *intern;
+	php_imagick_object *intern, *intern_return;
 	MagickBooleanType status;
 	zend_bool stack;
 	long offset;
+	MagickWand *retwand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bl", &stack, &offset) == FAILURE) {
 		return;
@@ -2850,14 +2851,17 @@ PHP_METHOD(imagick, smushimages)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	status = MagickSmushImages(intern->magick_wand, (stack ? MagickTrue : MagickFalse), offset);
+	retwand = MagickSmushImages(intern->magick_wand, (stack ? MagickTrue : MagickFalse), offset);
 
-	if (status == MagickFalse) {
+	if (!retwand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to smush images" TSRMLS_CC);
 		return;
 	}
 
-	RETURN_TRUE;
+	object_init_ex(return_value, php_imagick_sc_entry);
+	intern_return = (php_imagick_object *) zend_object_store_get_object(return_value TSRMLS_CC);
+	php_imagick_replace_magickwand(intern_return, retwand);
+	return;
 }
 /* }}} */
 #endif
