@@ -2658,6 +2658,32 @@ PHP_METHOD(imagick, autolevelimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+/* {{{ proto boolean Imagick::blueShiftImage([float $factor = 1.5])
+   Mutes the colors of the image to simulate a scene at nighttime in the moonlight.
+*/
+PHP_METHOD(imagick, blueshiftimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double factor = 1.5;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|d", &factor) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickBlueShiftImage(intern->magick_wand, factor);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to blue shift image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 
 #if MagickLibVersion > 0x656
@@ -2772,6 +2798,34 @@ PHP_METHOD(imagick, setcolorspace)
 	status = MagickSetColorspace(intern->magick_wand, colorspace);
 
 	RETURN_BOOL(status == MagickTrue);
+}
+/* }}} */
+
+/* {{{ proto boolean Imagick::clampImage([int CHANNEL])
+   Restricts the color range from 0 to the quantum depth.
+*/
+PHP_METHOD(imagick, clampimage) 
+{
+	php_imagick_object *intern;
+	long channel = DefaultChannels;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickClampImageChannel(intern->magick_wand, channel);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to clamp image channel" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 #endif

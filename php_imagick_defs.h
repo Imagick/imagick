@@ -285,6 +285,7 @@ PHP_METHOD(imagick, haldclutimage);
 #endif
 #if MagickLibVersion > 0x655
 PHP_METHOD(imagick, autolevelimage);
+PHP_METHOD(imagick, blueshiftimage);
 #endif
 #if MagickLibVersion > 0x656
 PHP_METHOD(imagick, setimageartifact);
@@ -292,8 +293,8 @@ PHP_METHOD(imagick, getimageartifact);
 PHP_METHOD(imagick, deleteimageartifact);
 PHP_METHOD(imagick, setcolorspace);
 PHP_METHOD(imagick, getcolorspace);
+PHP_METHOD(imagick, clampimage);
 #endif
-
 
 PHP_METHOD(imagick, __construct);
 PHP_METHOD(imagick, __tostring);
