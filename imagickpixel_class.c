@@ -308,7 +308,8 @@ PHP_METHOD(imagickpixel, clear)
 /* {{{ proto bool ImagickPixel::isSimilar(float fuzz)
 	Returns true if the distance between two colors is less than the specified distance.
 */
-PHP_METHOD(imagickpixel, issimilar)
+static
+void s_is_pixelwand_similar(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 {
 	zval *param;
 	double fuzz;
@@ -328,7 +329,7 @@ PHP_METHOD(imagickpixel, issimilar)
 	if (!color_wand)
 		return;
 
-	status = IsPixelWandSimilar(internp->pixel_wand, color_wand, fuzz);
+	status = IsPixelWandSimilar(internp->pixel_wand, color_wand, (use_quantum ? (QuantumRange * fuzz) : fuzz));
 	if (allocated)
 		color_wand = DestroyPixelWand (color_wand);
 
@@ -337,6 +338,25 @@ PHP_METHOD(imagickpixel, issimilar)
 	}
 
 	RETURN_TRUE;
+}
+
+
+/* {{{ proto bool ImagickPixel::isSimilar(ImagickPixel pixel, float fuzz)
+	Returns true if the distance between two colors is less than the specified distance.
+*/
+PHP_METHOD(imagickpixel, issimilar)
+{
+	IMAGICK_METHOD_DEPRECATED_USE_INSTEAD("ImagickPixel", "isSimilar", "ImagickPixel", "isPixelSimilar");
+	s_is_pixelwand_similar (INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
+/* }}} */
+
+/* {{{ proto bool ImagickPixel::isPixelSimilar(ImagickPixel pixel, float fuzz)
+	Returns true if the distance between two colors is less than the specified distance.
+*/
+PHP_METHOD(imagickpixel, ispixelsimilar)
+{
+	s_is_pixelwand_similar (INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
 }
 /* }}} */
 
