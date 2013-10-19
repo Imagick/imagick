@@ -328,7 +328,7 @@ PHP_METHOD(imagickpixel, issimilar)
 	if (!color_wand)
 		return;
 
-	status = IsPixelWandSimilar(internp->pixel_wand, color_wand, fuzz);
+	status = IsPixelWandSimilar(internp->pixel_wand, color_wand, QuantumRange * fuzz);
 	if (allocated)
 		color_wand = DestroyPixelWand (color_wand);
 
