@@ -21,9 +21,9 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2013-10-05</date>
+	<date>2013-10-20</date>
 	<version>
-		<release>3.2.0b1</release>
+		<release>3.2.0b2</release>
 		<api>3.2.0</api>
 	</version>
 	<stability>
@@ -32,14 +32,62 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Added Countable interface to Imagick class
-- Added experimental support for Zend MM. If compiled with --enable-imagick-zend-mm
-  Imagick will respect PHP memory limits
-- Added additional parameter to writeImageFile to allow setting format
-- Distribute tests as part of the release
-- Fixed Bug #65043: Destroy and clear method do the same things
-- Fixed Bug #64945: ZEND_ACC_ALLOW_STATIC vs ZEND_ACC_STATIC
-- A lot of internal refactoring: rewrite macros as functions, clean up naming etc
+- A lot of internal improvements on the code
+- Added ImagickPixel::isPixelSimilar and deprecate ImagickPixel::isSimilar #10
+- Added imagick::smushimages
+- Added imagick::blueshiftimage and imagick::clampimage
+- Added Imagick::autolevelimage
+- Added constants:
+    Imagick::ALPHACHANNEL_REMOVE
+    Imagick::ALPHACHANNEL_FLATTEN
+    Imagick::RESOURCETYPE_THREAD
+    Imagick::COMPOSITE_CHANGEMASK
+    Imagick::COMPOSITE_LINEARLIGHT
+    Imagick::COMPOSITE_DIVIDE
+    Imagick::COMPOSITE_DISTORT
+    Imagick::COMPOSITE_BLUR
+    Imagick::COMPOSITE_PEGTOPLIGHT
+    Imagick::COMPOSITE_VIVIDLIGHT
+    Imagick::COMPOSITE_PINLIGHT
+    Imagick::COMPOSITE_LINEARDODGE
+    Imagick::COMPOSITE_LINEARBURN
+    Imagick::COMPOSITE_MATHEMATICS
+    Imagick::COMPOSITE_MODULUSADD
+    Imagick::COMPOSITE_MODULUSSUBTRACT
+    Imagick::COMPOSITE_MINUSDST
+    Imagick::COMPOSITE_DIVIDEDST
+    Imagick::COMPOSITE_DIVIDESRC
+    Imagick::COMPOSITE_MINUSSRC
+    Imagick::COMPOSITE_DARKENINTENSITY
+    Imagick::COMPOSITE_LIGHTENINTENSITY
+    Imagick::FILTER_KAISER
+    Imagick::FILTER_WELSH
+    Imagick::FILTER_PARZEN
+    Imagick::FILTER_LAGRANGE
+    Imagick::FILTER_SENTINEL
+    Imagick::FILTER_BOHMAN
+    Imagick::FILTER_BARTLETT
+    Imagick::FILTER_JINC
+    Imagick::FILTER_SINCFAST
+    Imagick::FILTER_LANCZOSSHARP
+    Imagick::FILTER_LANCZOS2
+    Imagick::FILTER_LANCZOS2SHARP
+    Imagick::FILTER_ROBIDOUX
+    Imagick::FILTER_LANCZOSSHARP
+    Imagick::FILTER_LANCZOS2
+    Imagick::FILTER_LANCZOS2SHARP
+    Imagick::FILTER_ROBIDOUXSHARP
+    Imagick::FILTER_COSINE
+    Imagick::FILTER_SPLINE
+    Imagick::FILTER_LANCZOSRADIUS
+    Imagick::COMPRESSION_ZIPS
+    Imagick::COMPRESSION_PIZ
+    Imagick::COMPRESSION_PXR24
+    Imagick::COMPRESSION_B44
+    Imagick::COMPRESSION_B44A
+    Imagick::COMPRESSION_LZMA
+    Imagick::COMPRESSION_JBIG1
+    Imagick::COMPRESSION_JBIG2
 </notes>
 	<contents>
 		<dir name="/">
