@@ -69,9 +69,6 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
     Imagick::FILTER_BARTLETT
     Imagick::FILTER_JINC
     Imagick::FILTER_SINCFAST
-    Imagick::FILTER_LANCZOSSHARP
-    Imagick::FILTER_LANCZOS2
-    Imagick::FILTER_LANCZOS2SHARP
     Imagick::FILTER_ROBIDOUX
     Imagick::FILTER_LANCZOSSHARP
     Imagick::FILTER_LANCZOS2
