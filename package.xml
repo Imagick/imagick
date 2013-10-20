@@ -146,6 +146,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="bug64015.phpt" role="test" />
 				<file name="php.gif" role="doc" />
 				<file name="skipif.inc" role="doc" />
+				<file name="anonymous_pro_minus.ttf" role="doc" />
+				<file name="OFL.txt" role="doc" />
 			</dir>
 		</dir>
 	</contents>
