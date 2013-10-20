@@ -107,8 +107,6 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="php_imagick_macros.h" role="src" />
 			<file name="php_imagick_shared.h" role="src" />
 			<file name="php_imagick_file.h" role="src" />
-			<file name="TODO" role="doc" />
-			<file name="INSTALL" role="doc" />
 			<file name="ChangeLog" role="doc" />
 			<file name="LICENSE" role="doc" />
 			<dir name="examples">
@@ -147,7 +145,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
 				<file name="anonymous_pro_minus.ttf" role="test" />
-				<file name="OFL.txt" role="test" />
+				<file name="OFL.txt" role="doc" />
 			</dir>
 		</dir>
 	</contents>
