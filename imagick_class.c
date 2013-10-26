@@ -8662,7 +8662,7 @@ PHP_METHOD(imagick, normalizeimage)
 {
 	MagickBooleanType status;
 	php_imagick_object *intern;
-	long channel;
+	long channel = DefaultChannels;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
