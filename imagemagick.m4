@@ -17,6 +17,12 @@
 
 AC_DEFUN([IM_FIND_IMAGEMAGICK],[
 
+#
+# Variables passed in
+#
+  IM_MINIMUM_VERSION=$1
+  IM_EXTRA_SEARCH_PREFIX=$2
+
   AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
   if test "x$PKG_CONFIG" = "xno"; then
     AC_MSG_RESULT([pkg-config not found])
@@ -29,8 +35,8 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
 
   AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 
-  if test "$2" != "yes"; then
-    for i in "$2" /usr/local /usr /opt /opt/local;
+  if test "$IM_EXTRA_SEARCH_PREFIX" != "yes"; then
+    for i in "$IM_EXTRA_SEARCH_PREFIX" /usr/local /usr /opt /opt/local;
     do
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
@@ -74,13 +80,13 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   IM_IMAGEMAGICK_VERSION=`$IM_WAND_BINARY --version`
   IM_IMAGEMAGICK_VERSION_MASK=`echo $IM_IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
 
-  IM_MIMIMUM_VERSION_MASK=`echo $1 | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
+  IM_MIMIMUM_VERSION_MASK=`echo $IM_MINIMUM_VERSION | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
 
-  AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
+  AC_MSG_CHECKING(if ImageMagick version is at least $IM_MINIMUM_VERSION)
   if test "$IM_IMAGEMAGICK_VERSION_MASK" -ge $IM_MIMIMUM_VERSION_MASK; then
     AC_MSG_RESULT(found version $IM_IMAGEMAGICK_VERSION)
   else
-    AC_MSG_ERROR(no. You need at least Imagemagick version $1 to use this extension.)
+    AC_MSG_ERROR(no. You need at least Imagemagick version $IM_MINIMUM_VERSION to use this extension.)
   fi
 
 # Potential locations for the header
