@@ -12,7 +12,7 @@ if test $PHP_IMAGICK != "no"; then
 # Find ImageMagick
 #
   m4_include([imagemagick.m4])
-  IM_FIND_IMAGEMAGICK(6002004)
+  IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 
 #
 # Zend MM

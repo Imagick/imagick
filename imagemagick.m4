@@ -10,7 +10,9 @@
 #  IM_IMAGEMAGICK_VERSION
 #  IM_IMAGEMAGICK_VERSION_MASK
 #
-
+# Usage:
+#   IM_FIND_IMAGEMAGICK (MINIMUM_VERSION, EXTRA_SEARCH_PREFIX)
+#
 #########################################################
 
 AC_DEFUN([IM_FIND_IMAGEMAGICK],[
@@ -27,8 +29,8 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
 
   AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 
-  if test "$PHP_IMAGICK" != "yes"; then
-    for i in "$PHP_IMAGICK" /usr/local /usr /opt /opt/local;
+  if test "$2" != "yes"; then
+    for i in "$2" /usr/local /usr /opt /opt/local;
     do
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
@@ -72,11 +74,13 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   IM_IMAGEMAGICK_VERSION=`$IM_WAND_BINARY --version`
   IM_IMAGEMAGICK_VERSION_MASK=`echo $IM_IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
 
+  IM_MIMIMUM_VERSION_MASK=`echo $1 | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
+
   AC_MSG_CHECKING(if ImageMagick version is at least 6.2.4)
-  if test "$IM_IMAGEMAGICK_VERSION_MASK" -ge $1; then
+  if test "$IM_IMAGEMAGICK_VERSION_MASK" -ge $IM_MIMIMUM_VERSION_MASK; then
     AC_MSG_RESULT(found version $IM_IMAGEMAGICK_VERSION)
   else
-    AC_MSG_ERROR(no. You need at least Imagemagick version 6.2.4 to use Imagick.)
+    AC_MSG_ERROR(no. You need at least Imagemagick version $1 to use this extension.)
   fi
 
 # Potential locations for the header
