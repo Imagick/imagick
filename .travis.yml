@@ -15,12 +15,18 @@ env:
     - IMAGEMAGICK_VERSION=6.2.3-6
 
 before_script:
+    - for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
     - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
 
 script:
     - export NO_INTERACTION=1
     - export REPORT_EXIT_STATUS=1
     - export TEST_PHP_EXECUTABLE=`which php`
+    - export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
+    - pear package
+    - mkdir /tmp/php-imagick-build
+    - tar xfz "imagick-${PHP_IMAGICK_VERSION}.tgz" -C /tmp/php-imagick-build
+    - cd /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}
     - phpize
     - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
     - make

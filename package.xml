@@ -139,9 +139,11 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="021-countable.phpt" role="test" />
 				<file name="022-writeimagefileformat.phpt" role="test" />
 				<file name="023-php-allocators.phpt" role="test" />
+				<file name="024-ispixelsimilar.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug64015.phpt" role="test" />
+				<file name="gh_14.phpt" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
 				<file name="anonymous_pro_minus.ttf" role="test" />
