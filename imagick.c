@@ -2603,9 +2603,9 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 
 	std_hnd = zend_get_std_object_handlers();
 #if PHP_VERSION_ID < 50399
-		ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
+	ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
 #else
-		ret = std_hnd->has_property(object, member, 2, key TSRMLS_CC);
+	ret = std_hnd->has_property(object, member, 2, key TSRMLS_CC);
 #endif	
 
 	if (ret) {
@@ -2616,7 +2616,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 		retval = std_hnd->read_property(object, member, type, key TSRMLS_CC);
 #endif
 	} else {
-		intern = (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+		intern = (php_imagick_object *) zend_object_store_get_object(object TSRMLS_CC);
 		/* Do we have any images? */
 		if (MagickGetNumberImages(intern->magick_wand)) {
 			/* Is this overloaded? */
@@ -2650,6 +2650,10 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 	if (member == &tmp_member) {
     	zval_dtor(member);
     }
+
+	if (!retval) {
+		retval = EG(uninitialized_zval_ptr);
+	}
 	return retval;
 }
 
