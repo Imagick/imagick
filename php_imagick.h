@@ -39,11 +39,6 @@
 /* Include PHP Standard Headers */
 #include "php.h"
 
-/* Include locale header */
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
-#endif
-
 /* Define the entry point symbol
  * ZE will use when loading this module
  */

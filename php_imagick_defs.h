@@ -37,6 +37,11 @@
 #include "ext/standard/php_filestat.h"
 #include "php_ini.h"
 
+/* Include locale header */
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 /*
 	API exports
 */
