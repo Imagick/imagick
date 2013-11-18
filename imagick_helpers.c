@@ -138,31 +138,37 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 {
 	zval **ppzval;
 	double *double_array;
-	long elements, i = 0;
+	long i = 0;
 
-	*num_elements = elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
-	if (elements == 0) {
+	if (*num_elements == 0) {
 		return NULL;
 	}
 
-	double_array = (double *)emalloc(sizeof(double) * elements);
+	double_array = ecalloc(*num_elements, sizeof(double));
 
 	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
 			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
-			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
-	) {
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
+	{
 		zval tmp_zval, *tmp_pzval;
+		double value = 0.0;
 
-		tmp_zval = **ppzval;
-		zval_copy_ctor(&tmp_zval);
-		tmp_pzval = &tmp_zval;
-		convert_to_double(tmp_pzval);
+		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
+			value = Z_DVAL_PP(ppzval);
+		}
+		else {
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
 
-		double_array[i] = Z_DVAL_P(tmp_pzval);
-		tmp_pzval = NULL;
+			value = Z_DVAL_P(tmp_pzval);
+			zval_dtor (tmp_pzval);
+		}
+		double_array[i] = value;
 	}
-	*num_elements = elements;
 	return double_array;
 }
 
@@ -170,31 +176,37 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 {
 	zval **ppzval;
 	long *long_array;
-	long elements, i = 0;
+	long i = 0;
 
-	*num_elements = elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
-	if (elements == 0) {
+	if (*num_elements == 0) {
 		return NULL;
 	}
 
-	long_array = emalloc(sizeof(long) * elements);
+	long_array = ecalloc(*num_elements, sizeof(long));
 
 	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
 			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
-			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
-	) {
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
+	{
 		zval tmp_zval, *tmp_pzval;
+		long value = 0;
 
-		tmp_zval = **ppzval;
-		zval_copy_ctor(&tmp_zval);
-		tmp_pzval = &tmp_zval;
-		convert_to_long(tmp_pzval);
+		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
+			value = Z_LVAL_PP(ppzval);
+		}
+		else {
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
 
-		long_array[i] = Z_LVAL_P(tmp_pzval);
-		tmp_pzval = NULL;
+			value = Z_LVAL_P(tmp_pzval);
+			zval_dtor (tmp_pzval);
+		}
+		long_array[i] = value;
 	}
-	*num_elements = elements;
 	return long_array;
 }
 
@@ -202,31 +214,37 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 {
 	zval **ppzval;
 	unsigned char *char_array;
-	long elements, i = 0;
+	long i = 0;
 
-	*num_elements = elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
+	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
-	if (elements == 0) {
+	if (*num_elements == 0) {
 		return NULL;
 	}
 
-	char_array = emalloc(sizeof(unsigned char) * elements);
+	char_array = ecalloc(*num_elements, sizeof(unsigned char));
 
 	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
 			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
-			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++
-	) {
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
+	{
 		zval tmp_zval, *tmp_pzval;
+		long value = 0;
 
-		tmp_zval = **ppzval;
-		zval_copy_ctor(&tmp_zval);
-		tmp_pzval = &tmp_zval;
-		convert_to_long(tmp_pzval);
+		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
+			value = Z_LVAL_PP(ppzval);
+		}
+		else {
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
 
-		char_array[i] = Z_LVAL_P(tmp_pzval);
-		tmp_pzval = NULL;
+			value = Z_LVAL_P(tmp_pzval);
+			zval_dtor (tmp_pzval);
+		}
+		char_array[i] = value;
 	}
-	*num_elements = elements;
 	return char_array;
 }
 
