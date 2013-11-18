@@ -59,5 +59,5 @@ if test $PHP_IMAGICK != "no"; then
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
   PHP_NEW_EXTENSION(imagick, imagick_file.c imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c, $ext_shared,, $IM_IMAGEMAGICK_CFLAGS)
-  PHP_INSTALL_HEADERS([ext/imagick], [php_imagick.h php_imagick_defs.h php_imagick_shared.h])
+  PHP_INSTALL_HEADERS([ext/imagick], [php_imagick_shared.h])
 fi

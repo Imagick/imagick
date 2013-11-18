@@ -22,14 +22,13 @@
 # define _PHP_IMAGICK_SHARED_H_
 
 /* Should work with ImageMagick 6.x for now */
-#include "php_imagick.h"
-#include "php_imagick_defs.h"
+#include "php.h"
 
 /*
 	Allow extensions to use the class entries
 */
-MY_IMAGICK_EXPORTS zend_class_entry *php_imagick_get_class_entry();
-MY_IMAGICK_EXPORTS zend_class_entry *php_imagickdraw_get_class_entry();
-MY_IMAGICK_EXPORTS zend_class_entry *php_imagickpixel_get_class_entry();
+PHPAPI zend_class_entry *php_imagick_get_class_entry();
+PHPAPI zend_class_entry *php_imagickdraw_get_class_entry();
+PHPAPI zend_class_entry *php_imagickpixel_get_class_entry();
 
 #endif
