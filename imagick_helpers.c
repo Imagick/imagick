@@ -124,6 +124,7 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 		while(*it != '\0') {
 			if (*(it++) == *p) {
 				match = 1;
+				break;
 			}
 		}
 		if (!match) {
