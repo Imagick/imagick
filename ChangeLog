@@ -1,3 +1,6 @@
+3.2.0RC1
+- Fix bug #66098: Segfault in zval_addref_p
+
 3.2.0b2
 - A lot of internal improvements on the code
 - Added ImagickPixel::isPixelSimilar and deprecate ImagickPixel::isSimilar #10
