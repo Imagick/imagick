@@ -24,11 +24,17 @@
 /* Should work with ImageMagick 6.x for now */
 #include "php.h"
 
+#if defined(PHP_WIN32) && defined(IMAGICK_EXPORTS)
+#define PHP_IMAGICK_API __declspec(dllexport)
+#else
+#define PHP_IMAGICK_API PHPAPI
+#endif
+
 /*
 	Allow extensions to use the class entries
 */
-PHPAPI zend_class_entry *php_imagick_get_class_entry();
-PHPAPI zend_class_entry *php_imagickdraw_get_class_entry();
-PHPAPI zend_class_entry *php_imagickpixel_get_class_entry();
+PHP_IMAGICK_API zend_class_entry *php_imagick_get_class_entry();
+PHP_IMAGICK_API zend_class_entry *php_imagickdraw_get_class_entry();
+PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry();
 
 #endif
