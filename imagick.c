@@ -22,6 +22,7 @@
 #include "php_imagick_defs.h"
 #include "php_imagick_macros.h"
 #include "php_imagick_helpers.h"
+#include "php_imagick_shared.h"
 
 #include "ext/standard/php_smart_str.h"
 
