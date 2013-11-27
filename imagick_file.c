@@ -33,6 +33,10 @@
 #  define IMAGICK_RESTORE_ERROR_HANDLING   php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC)
 #endif
 
+#ifndef S_ISDIR
+#  define S_ISDIR(mode) (((mode)&S_IFMT) == S_IFDIR)
+#endif
+
 static
 zend_bool php_imagick_is_virtual_format(const char *format)
 {
@@ -147,10 +151,6 @@ void php_imagick_file_deinit(struct php_imagick_file_t *file)
 		file->absolute_path = NULL;
 	}
 }
-
-#ifndef S_ISDIR
-#  define S_ISDIR(mode) (((mode)&S_IFMT) == S_IFDIR)
-#endif
 
 static
 int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
