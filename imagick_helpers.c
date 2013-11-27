@@ -317,7 +317,12 @@ void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename TS
 			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);
 		break;
 
+		case IMAGICK_RW_PATH_IS_DIR:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path is a directory: %s", filename);
+		break;
+
 		default:
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Unknown error");
 		break;
 	}
 }

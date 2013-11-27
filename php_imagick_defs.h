@@ -150,6 +150,7 @@ typedef enum _php_imagick_rw_result_t {
 	IMAGICK_RW_PERMISSION_DENIED,
 	IMAGICK_RW_FILENAME_TOO_LONG,
 	IMAGICK_RW_PATH_DOES_NOT_EXIST,
+	IMAGICK_RW_PATH_IS_DIR,
 } php_imagick_rw_result_t;
 
 /* Class entries */

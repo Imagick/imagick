@@ -148,11 +148,20 @@ void php_imagick_file_deinit(struct php_imagick_file_t *file)
 	}
 }
 
+#ifndef S_ISDIR
+#  define S_ISDIR(mode) (((mode)&S_IFMT) == S_IFDIR)
+#endif
+
 static
 int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
 {
 	if (type == ImagickReadImage) {
 		if (MagickReadImage(intern->magick_wand, file->filename) == MagickFalse) {
+			struct stat st;
+			/* Resolved to a filename. Check that it's not a dir */
+			if (php_sys_stat(file->absolute_path, &st) == 0 && S_ISDIR(st.st_mode)) {
+				return IMAGICK_RW_PATH_IS_DIR;
+			}
 			return IMAGICK_RW_UNDERLYING_LIBRARY;
 		}
 	} else if (type == ImagickPingImage){

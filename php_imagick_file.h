@@ -31,7 +31,6 @@ typedef enum {
 } ImagickFileType;
 
 struct php_imagick_file_t {
-	
 	/* The file type */
 	ImagickFileType type;
 
@@ -50,10 +49,10 @@ typedef enum {
 	ImagickPingImage,
 	ImagickWriteImage,
 	ImagickWriteImages,
-	
+
 	ImagickWriteImageFile,
 	ImagickWriteImagesFile,
-	
+
 	ImagickReadImageFile,
 	ImagickPingImageFile,
 } ImagickOperationType;
