@@ -585,8 +585,8 @@ PHP_METHOD(imagickpixeliterator, clear)
 }
 /* }}} */
 
-/* {{{ proto bool ImagickPixelIterator::clear()
-	Clear resources associated with a PixelIterator.
+/* {{{ proto bool ImagickPixelIterator::valid()
+	The if the current iterator row is valid
 */
 PHP_METHOD(imagickpixeliterator, valid)
 {

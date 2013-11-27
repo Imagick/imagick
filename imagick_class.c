@@ -3297,7 +3297,7 @@ PHP_METHOD(imagick, pingimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::readImageFile(resource filehandle )
+/* {{{ proto bool Imagick::readImageFile(resource filehandle[, string filename])
     Reads image from open filehandle
 */
 PHP_METHOD(imagick, readimagefile)
