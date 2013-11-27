@@ -92,6 +92,10 @@ zend_bool php_imagick_file_init(struct php_imagick_file_t *file, const char *fil
 {
 	char magick_path[MaxTextExtent], head_path[MaxTextExtent], tail_path[MaxTextExtent], buffer[MaxTextExtent];
 
+	if (!filename_len) {
+		return 0;
+	}
+
 	/* Undefined for now */
 	file->type = ImagickUndefinedType;
 

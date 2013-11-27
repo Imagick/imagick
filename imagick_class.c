@@ -2895,7 +2895,7 @@ PHP_METHOD(imagick, __construct)
 		struct php_imagick_file_t file = {0};
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(files), Z_STRLEN_P(files) TSRMLS_CC)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 			return;
 		}
 		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -2922,7 +2922,7 @@ PHP_METHOD(imagick, __construct)
 			}
 
 			if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+				php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 				return;
 			}
 
@@ -3203,7 +3203,7 @@ PHP_METHOD(imagick, readimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 		return;
 	}
 
@@ -3248,7 +3248,7 @@ PHP_METHOD(imagick, readimages)
 		}
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 			return;
 		}
 
@@ -3283,7 +3283,7 @@ PHP_METHOD(imagick, pingimage)
 	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 		return;
 	}
 	rc = php_imagick_read_file(intern, &file, ImagickPingImage TSRMLS_CC);
@@ -4103,7 +4103,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	}
 
 	if (!php_imagick_file_init(&file, pseudo_string, pseudo_string_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 		return;
 	}
 	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -8755,7 +8755,7 @@ PHP_METHOD(imagick, writeimage)
 	}
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 		return;
 	}
 	rc = php_imagick_write_file(intern, &file, ImagickWriteImage, 0 TSRMLS_CC);
@@ -8802,7 +8802,7 @@ PHP_METHOD(imagick, writeimages)
 	}
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The filename is too long" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
 		return;
 	}
 	rc = php_imagick_write_file(intern, &file, ImagickWriteImages, adjoin TSRMLS_CC);
