@@ -272,6 +272,7 @@ PHP_METHOD(imagick, contraststretchimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 
 /* {{{ proto int Imagick::getImageMatte()
 	Returns true if the image has a matte channel otherwise false
@@ -300,6 +301,8 @@ PHP_METHOD(imagick, getimagematte)
 	}
 }
 /* }}} */
+
+#endif
 
 /* {{{ proto bool Imagick::setImageMatte(bool matte)
 	Sets the image matte channel
@@ -1095,6 +1098,7 @@ PHP_METHOD(imagick, setimageorientation)
 /* }}} */
 #endif
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 #if MagickLibVersion > 0x634
 /* {{{ proto Imagick Imagick::paintFloodfillImage(mixed fill, float fuzz, mixed bordercolor, int x, int y[, int channel])
    Sets the image orientation
@@ -1150,6 +1154,7 @@ PHP_METHOD(imagick, paintfloodfillimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 #endif
 
 #if MagickLibVersion > 0x635
@@ -1554,6 +1559,7 @@ PHP_METHOD(imagick, animateimages)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::recolorImage(array matrix)
 	Translate, scale, shear, or rotate image colors
 */
@@ -1602,6 +1608,7 @@ PHP_METHOD(imagick, recolorimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 #endif
 
 #if MagickLibVersion > 0x636
@@ -3829,6 +3836,7 @@ PHP_METHOD(imagick, coalesceimages)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::colorFloodfillImage(ImagickPixel fill, double fuzz, ImagickPixel bordercolor, int x, int y)
 	Changes the color value of any pixel that matches target and is an immediate neighbor.
 */
@@ -3881,6 +3889,7 @@ PHP_METHOD(imagick, colorfloodfillimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto Imagick Imagick::combineImages()
 	Combines one or more images into a single image. The grayscale value of the pixels of each image in the sequence is assigned in order to the specified channels of the combined image. The typical ordering would be image 1 => Red, 2 => Green, 3 => Blue, etc.
@@ -4224,6 +4233,7 @@ PHP_METHOD(imagick, magnifyimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::cycleColormapImage(Imagick map, bool dither)
 	Replaces the colors of an image with the closest color from a reference image.
 */
@@ -4298,6 +4308,7 @@ PHP_METHOD(imagick, mattefloodfillimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::medianFilterImage(float radius)
 	Applies a digital filter that improves the quality of a noisy image.  Each pixel is replaced by the median in a set of neighboring pixels as defined by radius.
@@ -4360,6 +4371,7 @@ PHP_METHOD(imagick, negateimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::paintOpaqueImage(ImagickPixel target, ImagickPixel fill, float fuzz[, int channel])
 	Changes any pixel that matches color with the color defined by fill. Channel argument is supported in ImageMagick 6.2.8+.
 */
@@ -4416,6 +4428,8 @@ PHP_METHOD(imagick, paintopaqueimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
+
 #if MagickLibVersion > 0x628
 /* {{{ proto bool Imagick::optimizeImageLayers()
 	Compares each image the GIF disposed forms of the previous image in the sequence.  From this it attempts to select the smallest cropped image to replace each frame, while preserving the results of the animation.
@@ -4447,8 +4461,8 @@ PHP_METHOD(imagick, optimizeimagelayers)
 	return;
 }
 /* }}} */
-#endif
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::paintTransparentImage(ImagickPixel target, float alpha, float fuzz)
 	Changes any pixel that matches color with the color defined by fill.
 */
@@ -4489,8 +4503,10 @@ PHP_METHOD(imagick, painttransparentimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
+#endif
 
-/* {{{ proto bool Imagick::paintTransparentImage(int preview )
+/* {{{ proto bool Imagick::previewImages(int preview )
 	Tiles 9 thumbnails of the specified image with an image processing operation applied at varying strengths.
 	This is helpful to quickly pin-point an appropriate parameter for an image processing operation.
 */
@@ -5713,6 +5729,7 @@ PHP_METHOD(imagick, getimagegeometry)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto ImagickPixel Imagick::getImageAttribute(string key )
 	Returns a named attribute
 */
@@ -5742,6 +5759,7 @@ PHP_METHOD(imagick, getimageattribute)
 	return;
 }
 /* }}} */
+#endif
 
 /* {{{ proto ImagickPixel Imagick::getImageBackgroundColor()
 	Returns the image background color.
@@ -5912,6 +5930,7 @@ PHP_METHOD(imagick, getimagechanneldistortion)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto array Imagick::getImageChannelExtrema(int channel)
 	Gets the extrema for one or more image channels.  Return value is an associative array with the keys "minima" and "maxima".
 */
@@ -5946,6 +5965,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 	return;
 }
 /* }}} */
+#endif
 
 /* {{{ proto array Imagick::getImageChannelMean(int channel)
 	Gets the mean and standard deviation of one or more image channels.  Return value is an associative array with the keys "mean" and "standardDeviation".
@@ -6184,6 +6204,7 @@ PHP_METHOD(imagick, getimagedistortion)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto array Imagick::getImageExtrema()
 	Gets the extrema for the image.  Returns an associative array with the keys "min" and "max".
 */
@@ -6217,6 +6238,7 @@ PHP_METHOD(imagick, getimageextrema)
 	return;
 }
 /* }}} */
+#endif
 
 /* {{{ proto long Imagick::getImageDispose()
 	Gets the image disposal method.
@@ -7153,6 +7175,7 @@ PHP_METHOD(imagick, hasnextimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto int Imagick::getImageIndex()
 	Returns the index of the current active image, within the Imagick object.
 */
@@ -7208,6 +7231,7 @@ PHP_METHOD(imagick, setimageindex)
 
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::removeImage()
 	Removes an image from the image list.
@@ -7266,6 +7290,7 @@ PHP_METHOD(imagick, getimagefilename)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto int Imagick::getImageSize()
 	returns the image length in bytes
 */
@@ -7283,6 +7308,7 @@ PHP_METHOD(imagick, getimagesize)
 	return;
 }
 /* }}} */
+#endif
 
 static
 zend_bool s_image_has_format (MagickWand *magick_wand)
@@ -7671,6 +7697,7 @@ PHP_METHOD(imagick, setimagefilename)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* PS, DEPRECATED please remove: http://www.imagemagick.org/discourse-server/viewtopic.php?f=6&t=8196 */
 PHP_METHOD(imagick, setimageattribute)
 {
@@ -7700,6 +7727,7 @@ PHP_METHOD(imagick, setimageattribute)
 	}
 	RETURN_TRUE;
 }
+#endif
 
 /* {{{ proto bool Imagick::setImageBackgroundColor(ImagickPixel background)
 	Sets the image background color.
@@ -7981,6 +8009,8 @@ PHP_METHOD(imagick, compareimagelayers)
 }
 /* }}} */
 #endif
+
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto Imagick Imagick::flattenImages()
 	Merges a sequence of images.  This is useful for combining Photoshop layers into a single image.
 */
@@ -8017,6 +8047,7 @@ PHP_METHOD(imagick, flattenimages)
 	return;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::flipImage()
 	Creates a vertical mirror image by reflecting the pixels around the central x-axis.
@@ -9139,6 +9170,7 @@ PHP_METHOD(imagick, affinetransformimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto Imagick Imagick::averageImages()
 	Average a set of images.
 */
@@ -9170,6 +9202,7 @@ PHP_METHOD(imagick, averageimages)
 	return;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::borderImage(ImagickPixel bordercolor, int width, int height)
 	Surrounds the image with a border of the color defined by the bordercolor pixel wand.
@@ -9627,6 +9660,7 @@ PHP_METHOD(imagick, motionblurimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto Imagick Imagick::mosaicImages()
 	Inlays an image sequence to form a single coherent picture.  It returns a wand with each image in the sequence composited at the location defined by the page offset of the image.
 */
@@ -9662,6 +9696,7 @@ PHP_METHOD(imagick, mosaicimages)
 
 }
 /* }}} */
+#endif
 
 /* {{{ proto Imagick Imagick::morphImages(int number_frames)
 	Method morphs a set of images.  Both the image pixels and size are linearly interpolated to give the appearance of a meta-morphosis from one image to the next.

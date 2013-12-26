@@ -177,7 +177,9 @@ PHP_METHOD(imagick, vignetteimage);
 PHP_METHOD(imagick, compareimagelayers);
 PHP_METHOD(imagick, optimizeimagelayers);
 PHP_METHOD(imagick, uniqueimagecolors);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, getimagematte);
+#endif
 PHP_METHOD(imagick, setimagematte);
 PHP_METHOD(imagick, adaptiveresizeimage);
 PHP_METHOD(imagick, sketchimage);
@@ -211,8 +213,10 @@ PHP_METHOD(imagick, extentimage);
 PHP_METHOD(imagick, getimageorientation);
 PHP_METHOD(imagick, setimageorientation);
 #endif
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 #if MagickLibVersion > 0x634
 PHP_METHOD(imagick, paintfloodfillimage);
+#endif
 #endif
 #if MagickLibVersion > 0x635
 PHP_METHOD(imagick, clutimage);
@@ -225,7 +229,9 @@ PHP_METHOD(imagick, resetimagepage);
 PHP_METHOD(imagick, setimageclipmask);
 PHP_METHOD(imagick, getimageclipmask);
 PHP_METHOD(imagick, animateimages);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, recolorimage);
+#endif
 #endif
 #if MagickLibVersion > 0x636
 PHP_METHOD(imagick, setfont);
@@ -319,14 +325,18 @@ PHP_METHOD(imagick, previousimage);
 PHP_METHOD(imagick, nextimage);
 PHP_METHOD(imagick, haspreviousimage);
 PHP_METHOD(imagick, hasnextimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, setimageindex);
 PHP_METHOD(imagick, getimageindex);
+#endif
 PHP_METHOD(imagick, setimageformat);
 PHP_METHOD(imagick, setimagefilename);
 PHP_METHOD(imagick, getimagefilename);
 PHP_METHOD(imagick, getimageformat);
 PHP_METHOD(imagick, getimagemimetype);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, getimagesize);
+#endif
 PHP_METHOD(imagick, getimagegeometry);
 PHP_METHOD(imagick, getimagecolors);
 PHP_METHOD(imagick, scaleimage);
@@ -368,7 +378,9 @@ PHP_METHOD(imagick, rotateimage);
 PHP_METHOD(imagick, sampleimage);
 PHP_METHOD(imagick, solarizeimage);
 PHP_METHOD(imagick, shadowimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, setimageattribute);
+#endif
 PHP_METHOD(imagick, setimagebackgroundcolor);
 PHP_METHOD(imagick, setimagecompose);
 PHP_METHOD(imagick, setimagecompression);
@@ -396,18 +408,24 @@ PHP_METHOD(imagick, queryfonts);
 PHP_METHOD(imagick, queryfontmetrics);
 PHP_METHOD(imagick, steganoimage);
 PHP_METHOD(imagick, motionblurimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, mosaicimages);
+#endif
 PHP_METHOD(imagick, morphimages);
 PHP_METHOD(imagick, minifyimage);
 PHP_METHOD(imagick, addnoiseimage);
 PHP_METHOD(imagick, affinetransformimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, averageimages);
+#endif
 PHP_METHOD(imagick, borderimage);
 PHP_METHOD(imagick, chopimage);
 PHP_METHOD(imagick, clipimage);
 PHP_METHOD(imagick, clippathimage);
 PHP_METHOD(imagick, coalesceimages);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, colorfloodfillimage);
+#endif
 PHP_METHOD(imagick, colorizeimage);
 PHP_METHOD(imagick, compareimagechannels);
 PHP_METHOD(imagick, compareimages);
@@ -422,20 +440,26 @@ PHP_METHOD(imagick, embossimage);
 PHP_METHOD(imagick, enhanceimage);
 PHP_METHOD(imagick, equalizeimage);
 PHP_METHOD(imagick, evaluateimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, flattenimages);
+#endif
 PHP_METHOD(imagick, flipimage);
 PHP_METHOD(imagick, flopimage);
 PHP_METHOD(imagick, frameimage);
 PHP_METHOD(imagick, fximage);
 PHP_METHOD(imagick, gammaimage);
 PHP_METHOD(imagick, gaussianblurimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, getimageattribute);
+#endif
 PHP_METHOD(imagick, getimagebackgroundcolor);
 PHP_METHOD(imagick, getimageblueprimary);
 PHP_METHOD(imagick, getimagebordercolor);
 PHP_METHOD(imagick, getimagechanneldepth);
 PHP_METHOD(imagick, getimagechanneldistortion);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, getimagechannelextrema);
+#endif
 PHP_METHOD(imagick, getimagechannelmean);
 PHP_METHOD(imagick, getimagechannelstatistics);
 PHP_METHOD(imagick, getimagecolormapcolor);
@@ -444,7 +468,9 @@ PHP_METHOD(imagick, getimagecompose);
 PHP_METHOD(imagick, getimagedelay);
 PHP_METHOD(imagick, getimagedepth);
 PHP_METHOD(imagick, getimagedistortion);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, getimageextrema);
+#endif
 PHP_METHOD(imagick, getimagedispose);
 PHP_METHOD(imagick, getimagegamma);
 PHP_METHOD(imagick, getimagegreenprimary);
@@ -473,12 +499,16 @@ PHP_METHOD(imagick, getimageregion);
 PHP_METHOD(imagick, implodeimage);
 PHP_METHOD(imagick, levelimage);
 PHP_METHOD(imagick, magnifyimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, mapimage);
 PHP_METHOD(imagick, mattefloodfillimage);
+#endif
 PHP_METHOD(imagick, medianfilterimage);
 PHP_METHOD(imagick, negateimage);
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, paintopaqueimage);
 PHP_METHOD(imagick, painttransparentimage);
+#endif
 PHP_METHOD(imagick, previewimages);
 PHP_METHOD(imagick, profileimage);
 PHP_METHOD(imagick, quantizeimage);
