@@ -2625,9 +2625,6 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 {
 	imagick_globals->locale_fix = 0;
 	imagick_globals->progress_monitor = 0;
-#ifdef PHP_IMAGICK_ZEND_MM
-	imagick_globals->keep_alive = NULL;
-#endif
 }
 
 #if PHP_VERSION_ID < 50399
@@ -2764,26 +2761,6 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	return new_ov;
 }
 
-#ifdef PHP_IMAGICK_ZEND_MM
-static
-void *s_my_emalloc (size_t size)
-{
-	return emalloc (size);
-}
-
-static
-void *s_my_erealloc (void *ptr, size_t size)
-{
-	return erealloc (ptr, size);
-}
-
-static
-void s_my_efree (void *ptr)
-{
-	efree (ptr);
-}
-#endif
-
 PHP_MINIT_FUNCTION(imagick)
 {
 	zend_class_entry ce;
@@ -2800,11 +2777,7 @@ PHP_MINIT_FUNCTION(imagick)
 	memcpy(&imagickpixel_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 	/* Set custom allocators */
-#ifdef PHP_IMAGICK_ZEND_MM
-	SetMagickMemoryMethods(&s_my_emalloc, &s_my_erealloc, &s_my_efree);
-#else
 	MagickWandGenesis();
-#endif
 
 	/*
 		Initialize exceptions (Imagick exception)
@@ -2927,9 +2900,7 @@ PHP_MINFO_FUNCTION(imagick)
 
 PHP_MSHUTDOWN_FUNCTION(imagick)
 {
-#ifndef PHP_IMAGICK_ZEND_MM
 	MagickWandTerminus();
-#endif
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	tsrm_mutex_free(imagick_mutex);

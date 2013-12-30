@@ -1,10 +1,6 @@
 PHP_ARG_WITH(imagick, whether to enable the imagick extension,
 [ --with-imagick[=DIR]	Enables the imagick extension. DIR is the prefix to Imagemagick installation directory.], no)
 
-PHP_ARG_ENABLE(imagick-zend-mm, whether to make Imagick respect PHP memory limits,
-[ --enable-imagick-zend-mm	Make Imagick respect PHP memory limits (experimental)], no, no)
-
-
 
 if test $PHP_IMAGICK != "no"; then
 
@@ -13,17 +9,6 @@ if test $PHP_IMAGICK != "no"; then
 #
   m4_include([imagemagick.m4])
   IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
-
-#
-# Zend MM
-#
-  AC_MSG_CHECKING([whether to use Zend MM])
-  if test $PHP_IMAGICK_ZEND_MM != "no"; then
-    AC_DEFINE(PHP_IMAGICK_ZEND_MM,1,[ ])
-    AC_MSG_RESULT([yes])
-  else
-    AC_MSG_RESULT([no])
-  fi
 
 #
 # PHP minimum version
