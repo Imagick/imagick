@@ -2862,7 +2862,7 @@ PHP_MINFO_FUNCTION(imagick)
 	smart_str formats = {0};
 
 	char **supported_formats, *buffer;
-	unsigned long num_formats = 0, i;
+	size_t num_formats = 0, i;
 	size_t version_number;
 
 	supported_formats = MagickQueryFormats("*", &num_formats);
