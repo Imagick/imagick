@@ -2866,7 +2866,7 @@ PHP_MINFO_FUNCTION(imagick)
 	size_t version_number;
 
 	supported_formats = MagickQueryFormats("*", &num_formats);
-	spprintf(&buffer, 0, "%ld", num_formats);
+	spprintf(&buffer, 0, "%zd", num_formats);
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, "imagick module", "enabled");
