@@ -7,8 +7,13 @@ if test $PHP_IMAGICK != "no"; then
 #
 # Find ImageMagick
 #
-  sinclude([imagemagick.m4])
-  IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
+if test "$ext_shared" != "yes" && test "$ext_shared" != "shared"; then
+  define('PHP_IMAGICK_STATIC', 1)
+  PHP_IMAGICK_STATIC=yes
+fi
+m4_include(ifdef('PHP_IMAGICK_STATIC',PHP_EXT_BUILDDIR(imagick)[/],)[imagemagick.m4])
+
+IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 
 #
 # PHP minimum version
