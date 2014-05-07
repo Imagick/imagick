@@ -6041,6 +6041,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 		add_assoc_long(tmp, "depth", statistics[channels[i]].depth);
 		add_index_zval(return_value, channels[i], tmp);
 	}
+	MagickRelinquishMemory(statistics);
 	return;
 }
 /* }}} */
@@ -7315,12 +7316,11 @@ zend_bool s_image_has_format (MagickWand *magick_wand)
 {
 	char *buffer;
 	buffer = MagickGetImageFormat(magick_wand);
-	if (!buffer || *buffer == '\0') {
-		if (buffer)
-			MagickRelinquishMemory (buffer);
-		return 0;
+	zend_bool ret = buffer && *buffer != '\0';
+	if (buffer) {
+		MagickRelinquishMemory (buffer);
 	}
-	return 1;
+	return ret;
 }
 
 /* {{{ proto string Imagick::getImageBlob()
@@ -7542,7 +7542,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 */
 PHP_METHOD(imagick, identifyimage)
 {
-	char *format, *identify, *filename;
+	char *format, *identify, *filename, *signature;
 	php_imagick_object *intern;
 	zend_bool append_raw_string = 0;
 	zval *array;
@@ -7602,7 +7602,10 @@ PHP_METHOD(imagick, identifyimage)
 	    add_assoc_double (array, "y", y);
 	    add_assoc_zval (return_value, "resolution", array);
 	}
-	s_add_assoc_str (return_value, "signature", MagickGetImageSignature (intern->magick_wand), 1);
+
+	signature = MagickGetImageSignature(intern->magick_wand);
+	s_add_assoc_str (return_value, "signature", signature, 1);
+	IMAGICK_FREE_MAGICK_MEMORY(signature);
 
 	if (append_raw_string == 1)
 		add_assoc_string (return_value, "rawOutput", identify, 1);
@@ -10428,6 +10431,8 @@ PHP_METHOD(imagick, getsamplingfactors)
 	for (i = 0 ; i < number_factors; i++) {
 		add_next_index_double(return_value, sampling_factors[i]);
 	}
+
+	MagickRelinquishMemory(sampling_factors);
 
 	return;
 }
