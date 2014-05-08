@@ -2862,11 +2862,11 @@ PHP_MINFO_FUNCTION(imagick)
 	smart_str formats = {0};
 
 	char **supported_formats, *buffer;
-	size_t num_formats = 0, i;
+	MagickSizeType num_formats = 0, i;
 	size_t version_number;
 
 	supported_formats = MagickQueryFormats("*", &num_formats);
-	spprintf(&buffer, 0, "%zd", num_formats);
+	spprintf(&buffer, 0, MagickSizeFormat, num_formats);
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, "imagick module", "enabled");

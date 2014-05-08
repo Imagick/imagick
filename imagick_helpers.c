@@ -253,7 +253,7 @@ zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
 {
 	zend_bool retval = 0;
 	char **fonts;
-	size_t num_fonts = 0, i = 0;
+	MagickSizeType num_fonts = 0, i = 0;
 
 	/* Check that user is only able to set a proper font */
 	fonts = MagickQueryFonts("*", &num_fonts);

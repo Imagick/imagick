@@ -452,7 +452,7 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 {
 	php_imagickpixeliterator_object *internpix;
 	PixelWand **wand_array;
-	size_t num_wands;
+	MagickSizeType num_wands;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -490,7 +490,7 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 {
 	php_imagickpixeliterator_object *internpix;
 	PixelWand **wand_array;
-	size_t num_wands;
+	MagickSizeType num_wands;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -531,7 +531,7 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 {
 	php_imagickpixeliterator_object *internpix;
 	PixelWand **wand_array;
-	size_t num_wands;
+	MagickSizeType num_wands;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
