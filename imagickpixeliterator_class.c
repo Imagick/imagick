@@ -289,7 +289,7 @@ PHP_METHOD(imagickpixeliterator, getpixelregioniterator)
 	long x, y, columns, rows;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry, &x, &y, &columns, &rows) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ollll", &magick_object, php_imagick_sc_entry, &x, &y, &columns, &rows) == FAILURE) {
 		return;
 	}
 
