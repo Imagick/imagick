@@ -5351,7 +5351,7 @@ PHP_METHOD(imagick, tintimage)
 		tint_wand = DestroyPixelWand (tint_wand);
 
 	if (opacity_allocated)
-    	opacity_wand = DestroyPixelWand (opacity_wand);
+		opacity_wand = DestroyPixelWand (opacity_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
