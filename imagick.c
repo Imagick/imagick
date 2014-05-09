@@ -2767,22 +2767,32 @@ static int checkImagickVersion()
 	size_t imagickVersion = MagickLibVersion;
 
 	//This gets the version of Image Magick that has been loaded
-	char * imageMagickLibraryVersionString;
 	size_t imageMagickLibraryVersion;
-	imageMagickLibraryVersionString = GetMagickVersion(&imageMagickLibraryVersion);
 
-	if (imagickVersion != imageMagickLibraryVersion) {
-		zend_error(
-			E_ERROR,
-			"Version mismatch detected. Image Magick library version %s is being used, but Imagick was compiled against version %s.",
-			imageMagickLibraryVersionString,
-			MagickLibVersionText
-		);
+	GetMagickVersion(&imageMagickLibraryVersion);
 
-		return FAILURE;
+	if (imagickVersion == imageMagickLibraryVersion) {
+		return SUCCESS;
 	}
 
-	return SUCCESS;
+	if ((imagickVersion & imageMagickLibraryVersion & 0xfff0) != 0) {
+		zend_error(
+			E_WARNING,
+			"Version warning: Imagick was compiled against Image Magick version %x but version %x is loaded. Imagick will run but may behave surprisingly.",
+			imagickVersion,
+			imageMagickLibraryVersion
+		);
+		return SUCCESS;
+	}
+
+	zend_error(
+		E_ERROR,
+		"Version error: Imagick was compiled against Image Magick version %x but version %x is loaded. Imagick will not run.",
+		imagickVersion,
+		imageMagickLibraryVersion
+	);
+
+	return FAILURE;
 }
 
 PHP_MINIT_FUNCTION(imagick)
