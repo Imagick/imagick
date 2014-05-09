@@ -562,6 +562,7 @@ PHP_METHOD(imagick, getinterlacescheme);
 PHP_METHOD(imagick, getoption);
 PHP_METHOD(imagick, getpackagename);
 PHP_METHOD(imagick, getpage);
+PHP_METHOD(imagick, getquantum);
 PHP_METHOD(imagick, getquantumdepth);
 PHP_METHOD(imagick, getquantumrange);
 PHP_METHOD(imagick, getreleasedate);

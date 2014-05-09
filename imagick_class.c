@@ -10319,6 +10319,24 @@ PHP_METHOD(imagick, getpage)
 }
 /* }}} */
 
+/* {{{ proto array Imagick::getQuantum()
+	Returns the ImageMagick quantum range as an integer.
+*/
+PHP_METHOD(imagick, getquantum)
+{
+	unsigned long range;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	MagickGetQuantumRange(&range);
+	ZVAL_LONG(return_value, range);
+	return;
+}
+/* }}} */
+
+
 /* {{{ proto array Imagick::getQuantumDepth()
 	Returns the ImageMagick quantum depth as a string constant.
 */

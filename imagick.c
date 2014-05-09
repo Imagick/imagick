@@ -2356,6 +2356,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getoption, imagick_getoption_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpackagename, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpage, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getquantum, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantumdepth, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantumrange, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getreleasedate, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
