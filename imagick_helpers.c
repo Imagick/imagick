@@ -47,33 +47,36 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;
 }
 
+void cleanupProgressCallback(TSRMLS_D) {
+	php_imagick_callback* progress_callback = IMAGICK_G(progress_callback);
+
+	if (progress_callback) {
+		zval_ptr_dtor(&progress_callback->user_callback);
+		efree(progress_callback);
+		IMAGICK_G(progress_callback) = NULL;
+	}
+}
+
 MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *userData)
 {
+	//We can get the data both via the passed param and via
+	//IMAGICK_G(progress_callback) - this should be quicker
 	php_imagick_callback *callback = (php_imagick_callback*)userData;
 
 	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
-	php_imagick_object *imagick_object = callback->imagick_object;
 
-	int   error;
-	zval ***zargs = NULL;
+	int error;
+	zval **zargs[2];
 
 	zend_fcall_info_cache fci_cache = empty_fcall_info_cache;
-
-	//Why are we bothering to check this? The only way it can fail
-	//is if we forgot to set it up, or PHP is crashing.
-	if (!imagick_object) {
-		return MagickFalse;
-	}
 
 	zend_fcall_info fci;
 	zval *retval_ptr = NULL;
 
-	zargs = (zval ***)safe_emalloc(2, sizeof(zval **), 0);
-
 	fci.size = sizeof(fci);
 	fci.function_table = EG(function_table);
 	fci.object_ptr = NULL;
-	fci.function_name = callback->userFunction;
+	fci.function_name = callback->user_callback;
 	fci.retval_ptr_ptr = &retval_ptr;
 	fci.param_count = 2;
 	fci.params = zargs;
@@ -92,9 +95,15 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 
 	if (error == FAILURE) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "An error occurred while invoking the callback");
+		//Abort processing as user callback is no longer callable
+		return MagickFalse;
 	}
 
-	efree(zargs);
+	zval_ptr_dtor(zargs[0]);
+	zval_ptr_dtor(zargs[1]);
+
+	efree(zargs[0]);
+	efree(zargs[1]);
 
 	if (retval_ptr) {
 		if (Z_TYPE_P(retval_ptr) == IS_BOOL) {

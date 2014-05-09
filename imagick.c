@@ -2916,11 +2916,14 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 
 PHP_RINIT_FUNCTION(imagick)
 {
+	IMAGICK_G(progress_callback) = NULL;
 	return SUCCESS;
 }
 
 PHP_RSHUTDOWN_FUNCTION(imagick)
 {
+	cleanupProgressCallback(TSRMLS_C);
+
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* We have the lock so lets release it */
 	if (imagick_thread_id == tsrm_thread_id()) {

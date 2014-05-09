@@ -36,6 +36,8 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
 
+void cleanupProgressCallback(TSRMLS_D);
+
 MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
 
 zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
