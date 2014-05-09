@@ -47,6 +47,67 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;
 }
 
+MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *userData)
+{
+	php_imagick_callback *callback = (php_imagick_callback*)userData;
+
+	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
+	php_imagick_object *imagick_object = callback->imagick_object;
+
+	int   error;
+	zval ***zargs = NULL;
+
+	zend_fcall_info_cache fci_cache = empty_fcall_info_cache;
+
+	//Why are we bothering to check this? The only way it can fail
+	//is if we forgot to set it up, or PHP is crashing.
+	if (!imagick_object) {
+		return MagickFalse;
+	}
+
+	zend_fcall_info fci;
+	zval *retval_ptr = NULL;
+
+	zargs = (zval ***)safe_emalloc(2, sizeof(zval **), 0);
+
+	fci.size = sizeof(fci);
+	fci.function_table = EG(function_table);
+	fci.object_ptr = NULL;
+	fci.function_name = callback->userFunction;
+	fci.retval_ptr_ptr = &retval_ptr;
+	fci.param_count = 2;
+	fci.params = zargs;
+	fci.no_separation = 0;
+	fci.symbol_table = NULL;
+
+	zargs[0] = emalloc(sizeof(zval *));
+	MAKE_STD_ZVAL(*zargs[0]);
+	ZVAL_LONG(*zargs[0], offset);
+
+	zargs[1] = emalloc(sizeof(zval *));
+	MAKE_STD_ZVAL(*zargs[1]);
+	ZVAL_LONG(*zargs[1], span);
+
+	error = zend_call_function(&fci, &fci_cache TSRMLS_CC);
+
+	if (error == FAILURE) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "An error occurred while invoking the callback");
+	}
+
+	efree(zargs);
+
+	if (retval_ptr) {
+		if (Z_TYPE_P(retval_ptr) == IS_BOOL) {
+			if (Z_LVAL_P(retval_ptr) == 0) {
+				//User returned false - tell Imagick to abort processing.
+				return MagickFalse;
+			}
+		}
+	}
+
+	return MagickTrue;
+}
+
 zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
 {
 	long orig_width, orig_height;

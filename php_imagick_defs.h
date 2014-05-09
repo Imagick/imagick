@@ -92,6 +92,12 @@ typedef struct _php_imagick_object  {
 	zend_bool next_out_of_bound;
 } php_imagick_object;
 
+typedef struct _php_imagick_callback {
+	void ***thread_ctx;
+	php_imagick_object *imagick_object;
+	zval *userFunction;
+} php_imagick_callback;
+
 /* Structure for ImagickDraw object. */
 typedef struct _php_imagickdraw_object  {
 	zend_object zo;
@@ -391,6 +397,7 @@ PHP_METHOD(imagick, setimageiterations);
 PHP_METHOD(imagick, setimagemattecolor);
 PHP_METHOD(imagick, setimagepage);
 PHP_METHOD(imagick, setimageprogressmonitor);
+PHP_METHOD(imagick, setprogressmonitor);
 PHP_METHOD(imagick, setimageresolution);
 PHP_METHOD(imagick, setimagescene);
 PHP_METHOD(imagick, setimagetickspersecond);

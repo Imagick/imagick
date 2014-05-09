@@ -10744,6 +10744,48 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 	RETURN_TRUE;
 }
 
+/* {{{ proto bool Imagick::setProgressMonitor(callable callback)
+	Set a callback that will be called during the processing of the Imagick image.
+*/
+PHP_METHOD(imagick, setprogressmonitor)
+{
+	zval *userCallback;
+	char *cbname = NULL;
+
+	php_imagick_object *intern;
+	php_imagick_rw_result_t rc;
+
+// TODO - I don't think this new callback version needs to respect this flag.
+//	if (!IMAGICK_G(progress_monitor)) {
+//		php_imagick_throw_exception(IMAGICK_CLASS, "Progress monitoring is disabled in ini-settings" TSRMLS_CC);
+//		return;
+//	}
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &userCallback) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	// Check whether the callback is valid now, rather than failing later
+	if (!zend_is_callable(userCallback, 0, &cbname TSRMLS_CC)) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "function '%s' is not callable", cbname);
+		efree(cbname);
+		RETURN_FALSE;
+	}
+	efree(cbname);
+
+	php_imagick_callback *callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
+
+	TSRMLS_SET_CTX(callback->thread_ctx);
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	callback->imagick_object = intern;
+	MAKE_STD_ZVAL(callback->userFunction);
+	MAKE_COPY_ZVAL(&userCallback, callback->userFunction);
+
+	MagickSetImageProgressMonitor(intern->magick_wand, php_imagick_progress_monitor_callable, callback);
+	RETURN_TRUE;
+}
+
 /* {{{ proto bool Imagick::setResourceLimit(RESOURCETYPE type, int limit)
 	Sets the limit for a particular resource in megabytes.
 */
