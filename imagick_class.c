@@ -10768,13 +10768,13 @@ PHP_METHOD(imagick, setprogressmonitor)
 	}
 	efree(cbname);
 
-	if (IMAGICK_G(progress_callback) != NULL) {
-		cleanupProgressCallback(TSRMLS_C);
-	}
-
 	php_imagick_callback *callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
 
 	TSRMLS_SET_CTX(callback->thread_ctx);
+	//We can't free the previous callback as we can't guarantee that
+	//ImageMagick won't use it at some point. There is no 'unbind' function
+	//for previously set 'MagickSetImageProgressMonitor'
+	callback->previous_callback = IMAGICK_G(progress_callback);
 
 	ALLOC_ZVAL(callback->user_callback);
 	MAKE_COPY_ZVAL(&user_callback, callback->user_callback);

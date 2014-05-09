@@ -46,6 +46,7 @@
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
 	zval *user_callback;
+	struct _php_imagick_callback *previous_callback;
 } php_imagick_callback;
 
 /* Globals, needed for the ini settings */

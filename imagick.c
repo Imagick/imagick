@@ -2922,7 +2922,13 @@ PHP_RINIT_FUNCTION(imagick)
 
 PHP_RSHUTDOWN_FUNCTION(imagick)
 {
-	cleanupProgressCallback(TSRMLS_C);
+	php_imagick_callback* progress_callback = IMAGICK_G(progress_callback); 
+
+	if (progress_callback) {
+		php_imagick_cleanup_progress_callback(progress_callback TSRMLS_CC);
+		efree(progress_callback);
+		IMAGICK_G(progress_callback) = NULL;
+	}
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* We have the lock so lets release it */

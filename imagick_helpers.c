@@ -47,13 +47,15 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;
 }
 
-void cleanupProgressCallback(TSRMLS_D) {
-	php_imagick_callback* progress_callback = IMAGICK_G(progress_callback);
+void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callback TSRMLS_DC) {
 
 	if (progress_callback) {
+		if (progress_callback->previous_callback) {
+			php_imagick_cleanup_progress_callback(progress_callback->previous_callback TSRMLS_CC);
+			efree(progress_callback->previous_callback);
+		}
+
 		zval_ptr_dtor(&progress_callback->user_callback);
-		efree(progress_callback);
-		IMAGICK_G(progress_callback) = NULL;
 	}
 }
 
@@ -101,9 +103,6 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 
 	zval_ptr_dtor(zargs[0]);
 	zval_ptr_dtor(zargs[1]);
-
-	efree(zargs[0]);
-	efree(zargs[1]);
 
 	if (retval_ptr) {
 		if (Z_TYPE_P(retval_ptr) == IS_BOOL) {
