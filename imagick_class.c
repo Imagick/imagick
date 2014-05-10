@@ -10353,7 +10353,7 @@ PHP_METHOD(imagick, getquantumdepth)
 
 	array_init(return_value);
 	add_assoc_long(return_value, "quantumDepthLong", depth);
-	add_assoc_string(return_value, "quantumDepthString", quantum_depth, 1);
+	add_assoc_string(return_value, "quantumDepthString", (char *)quantum_depth, 1);
 
 	return;
 }
@@ -10375,7 +10375,7 @@ PHP_METHOD(imagick, getquantumrange)
 	array_init(return_value);
 
 	add_assoc_long(return_value, "quantumRangeLong", range);
-	add_assoc_string(return_value, "quantumRangeString", quantum_range, 1);
+	add_assoc_string(return_value, "quantumRangeString", (char *)quantum_range, 1);
 	return;
 }
 /* }}} */
