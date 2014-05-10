@@ -10768,7 +10768,6 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 PHP_METHOD(imagick, setprogressmonitor)
 {
 	zval *user_callback;
-	char *cbname = NULL;
 
 	php_imagick_object *intern;
 	php_imagick_rw_result_t rc;
