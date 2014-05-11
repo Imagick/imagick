@@ -445,6 +445,7 @@ PHP_METHOD(imagick, flattenimages);
 #endif
 PHP_METHOD(imagick, flipimage);
 PHP_METHOD(imagick, flopimage);
+PHP_METHOD(imagick, forwardfouriertransformimage);
 PHP_METHOD(imagick, frameimage);
 PHP_METHOD(imagick, fximage);
 PHP_METHOD(imagick, gammaimage);
@@ -497,6 +498,7 @@ PHP_METHOD(imagick, getnumberimages);
 PHP_METHOD(imagick, getimagetotalinkdensity);
 PHP_METHOD(imagick, getimageregion);
 PHP_METHOD(imagick, implodeimage);
+PHP_METHOD(imagick, inversefouriertransformimage);
 PHP_METHOD(imagick, levelimage);
 PHP_METHOD(imagick, magnifyimage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)

@@ -4176,6 +4176,40 @@ PHP_METHOD(imagick, implodeimage)
 }
 /* }}} */
 
+
+/* {{{ proto bool Imagick::inversefouriertransformimage(Imagick complement, bool magnitude)
+	
+*/
+PHP_METHOD(imagick, inversefouriertransformimage)
+{
+	php_imagick_object *intern, *intern_complement;
+	zval *complement_obj;
+	zend_bool magnitude;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ob", &complement_obj, php_imagick_sc_entry, &magnitude) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	intern_complement = (php_imagick_object *)zend_object_store_get_object(complement_obj TSRMLS_CC);
+	status =  MagickInverseFourierTransformImage(intern->magick_wand, intern_complement->magick_wand, magnitude);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to inversefouriertransformimage image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+
 /* {{{ proto bool Imagick::levelImage(float blackPoint, float gamma, float whitePoint[, int channel] )
 	Adjusts the levels of an image by scaling the colors falling between specified white and black points to the full available quantum range. The parameters provided represent the black, mid, and white points. The black point specifies the darkest color in the image. Colors darker than the black point are set to zero. Mid point specifies a gamma correction to apply to the image.  White point specifies the lightest color in the image. Colors brighter than the white point are set to the maximum quantum value.
 */
@@ -5700,6 +5734,41 @@ PHP_METHOD(imagick, evaluateimage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+/* {{{ proto bool Imagick::forwardfouriertransformimage(bool magnitude)
+	//http://www.fftw.org/
+	yum install fftw-devel fftw
+	./configure --enable-hdri
+*/
+PHP_METHOD(imagick, forwardfouriertransformimage)
+{
+	php_imagick_object *intern, *intern_complement;
+	zval *complement_obj;
+	zend_bool magnitude;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &magnitude) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickForwardFourierTransformImage(intern->magick_wand, magnitude);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to forwardfouriertransformimage image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+
 
 /* {{{ proto array Imagick::getImageGeometry()
 	Returns the width and height as an associative array.
