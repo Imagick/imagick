@@ -5381,6 +5381,12 @@ PHP_METHOD(imagick, tintimage)
 
 	status = MagickTintImage(intern->magick_wand, tint_wand, opacity_wand);
 
+	if (tint_allocated)
+		tint_wand = DestroyPixelWand (tint_wand);
+
+	if (opacity_allocated)
+		opacity_wand = DestroyPixelWand (opacity_wand);
+
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable tint image" TSRMLS_CC);
