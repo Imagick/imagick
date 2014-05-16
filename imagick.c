@@ -1294,6 +1294,23 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_brightnesscontrastimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, brightness)
+		ZEND_ARG_INFO(0, contrast)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+    
+    ZEND_BEGIN_ARG_INFO_EX(imagick_colormatriximage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, color_matrix)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_selectiveblurimage_args, 0, 0, 4)
+		ZEND_ARG_INFO(0, radius)
+		ZEND_ARG_INFO(0, sigma)
+		ZEND_ARG_INFO(0, threshold)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
@@ -2402,6 +2419,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_MALIAS(imagick, rewind, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, valid, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, current, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, brightnesscontrastimage, imagick_brightnesscontrastimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, colormatriximage, imagick_colormatriximage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, selectiveblurimage, imagick_selectiveblurimage_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 

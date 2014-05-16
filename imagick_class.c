@@ -11017,4 +11017,149 @@ PHP_METHOD(imagick, settype)
 }
 /* }}} */
 
+
+/* {{{ proto bool Imagick::brightnessContrastImage(float brigthness, float contrast[, int channel])
+	Change the brightness and/or contrast of an image. It converts the brightness and contrast parameters into slope and intercept and calls a polynomical function to apply to the image.
+*/
+PHP_METHOD(imagick, brightnesscontrastimage)
+{
+	php_imagick_object *intern;
+	double brightness, contrast;
+	MagickBooleanType status;
+	long channel = DefaultChannels;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &brightness, &contrast, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickBrightnessContrastImageChannel(intern->magick_wand, channel, brightness, contrast);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to brightnesscontrastimage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+
+KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
+{
+	KernelInfo *kernel_info;
+
+	kernel_info=AcquireKernelInfo("1");
+	if (kernel_info == (KernelInfo *) NULL) {
+		return NULL;
+	}
+
+	kernel_info->width=order;
+	kernel_info->height=order;
+	kernel_info->values=(double *) color_matrix;
+
+	return kernel_info;
+}
+
+
+/* {{{ proto bool Imagick::ColorMatrixImage(array kernel[, int channel])
+	apply color transformation to an image. The method permits saturation changes, hue rotation, luminance to alpha, and various other effects. Although variable-sized transformation matrices can be used, typically one uses a 5x5 matrix for an RGBA image and a 6x6 for CMYKA (or RGBA with offsets). The matrix is similar to those used by Adobe Flash except offsets are in column 6 rather than 5 (in support of CMYKA images) and offsets are normalized (divide Flash offset by 255).
+*/
+PHP_METHOD(imagick, colormatriximage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	zval *color_matrix_array;
+	double *colors;
+	size_t order = 0;
+	long num_elements = 0;
+	KernelInfo *kernel_color_matrix;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a",  &color_matrix_array) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	colors = php_imagick_zval_to_double_array(color_matrix_array, &num_elements TSRMLS_CC);
+
+	if (!colors) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read color matrix array" TSRMLS_CC);
+		return;
+	}
+	
+	if (num_elements == 25) {
+		order = 5;
+	}
+	else if (num_elements == 36) {
+		order = 6;
+	}
+	else {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Color matrix array must be 5x5 or 6x6" TSRMLS_CC);
+		return;
+	}
+
+	kernel_color_matrix = getKernelInfo(colors, order);
+
+	//TODO - add check that matrix is 5x5 or 6x6? 
+	status = MagickColorMatrixImage(intern->magick_wand, kernel_color_matrix);
+
+	//Free the memory
+	kernel_color_matrix->values = (double *) NULL;
+	kernel_color_matrix = DestroyKernelInfo(kernel_color_matrix);
+	efree(colors);
+
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to colormatriximage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::selectiveBlurImage(float radius, float sigma, float threshold[, int channel])
+	Selectively blur an image within a contrast threshold. It is similar to the unsharpen mask that sharpens everything with contrast above a certain threshold.
+*/
+PHP_METHOD(imagick, selectiveblurimage)
+{
+	php_imagick_object *intern;
+	double brightness, contrast, threshold;
+	MagickBooleanType status;
+	long channel = DefaultChannels;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &brightness, &contrast, &threshold, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSelectiveBlurImageChannel(intern->magick_wand, channel, brightness, contrast, threshold);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to selectiveblurimage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
 /* end of Imagick */

@@ -586,6 +586,9 @@ PHP_METHOD(imagick, setresolution);
 PHP_METHOD(imagick, setsamplingfactors);
 PHP_METHOD(imagick, setsize);
 PHP_METHOD(imagick, settype);
+PHP_METHOD(imagick, brightnesscontrastimage);
+PHP_METHOD(imagick, colormatriximage);
+PHP_METHOD(imagick, selectiveblurimage);
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
