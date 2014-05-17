@@ -11162,4 +11162,69 @@ PHP_METHOD(imagick, selectiveblurimage)
 /* }}} */
 
 
+
+
+/* {{{ proto bool Imagick::rotationalblurimage(float angle[, int channel])
+	Rotational blurs an image.
+*/
+PHP_METHOD(imagick, rotationalblurimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double angle;
+	long channel = DefaultChannels;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &angle, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickRotationalBlurImageChannel(intern->magick_wand, channel, angle);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to rotational blur image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::statisticImage(int type, float width, float height[, int channel] )
+	Replace each pixel with corresponding statistic from the neighborhood of the specified width and height.
+*/
+PHP_METHOD(imagick, statisticimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	long type;
+	double width, height;
+	long channel = DefaultChannels;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd|l", &type, &width, &height, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickStatisticImageChannel(intern->magick_wand, channel, type, width, height);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to statisticImage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+
 /* end of Imagick */

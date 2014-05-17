@@ -1293,14 +1293,13 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
 
-
 	ZEND_BEGIN_ARG_INFO_EX(imagick_brightnesscontrastimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, brightness)
 		ZEND_ARG_INFO(0, contrast)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
-    
-    ZEND_BEGIN_ARG_INFO_EX(imagick_colormatriximage_args, 0, 0, 1)
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_colormatriximage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color_matrix)
 	ZEND_END_ARG_INFO()
 
@@ -1308,6 +1307,18 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, sigma)
 		ZEND_ARG_INFO(0, threshold)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_rotationalblurimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, angle)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_statisticimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, type)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
@@ -2422,6 +2433,8 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, brightnesscontrastimage, imagick_brightnesscontrastimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colormatriximage, imagick_colormatriximage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, selectiveblurimage, imagick_selectiveblurimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, rotationalblurimage, imagick_rotationalblurimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, statisticimage, imagick_statisticimage_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
