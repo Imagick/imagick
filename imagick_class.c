@@ -538,7 +538,7 @@ PHP_METHOD(imagick, randomthresholdimage)
 }
 /* }}} */
 
-/* {{{ proto string Imagick::roundCornersImage(float x_rounding, float y_rounding[, float stroke_width, float displace, float size_correction] )
+/* {{{ proto string Imagick::roundCornersImage(float x_rounding, float y_rounding[, float stroke_width = 10[, float displace = 5[, float size_correction = -6]]] )
    Rounds image corners
 */
 PHP_METHOD(imagick, roundcornersimage)
