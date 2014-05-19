@@ -11227,10 +11227,13 @@ PHP_METHOD(imagick, statisticimage)
 
 
 
-/* {{{ proto bool Imagick::similarityimage(Imagick reference, float sigma, float threshold[, int channel])
-	Compares the reference image of the image and returns the best match offset. In addition, it returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
+/* {{{ proto bool Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
+	Searches for a subimage in the current image and returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
+	You can also pass in the optional parameters bestMatch and similarity. After calling the function similarity will be
+	set to the 'score' of the similarity between the subimage and the matching position in the larger image, bestMatch will
+	contain an associative array with elements x, y, width, height that describe the matching region.
 */
-PHP_METHOD(imagick, similarityimage)
+PHP_METHOD(imagick, subimagematch)
 {
 	php_imagick_object *intern;
 	RectangleInfo best_match_offset;
@@ -11266,7 +11269,7 @@ PHP_METHOD(imagick, similarityimage)
 	new_wand = MagickSimilarityImage(intern->magick_wand, reference_intern->magick_wand, &best_match_offset, &similarity);
 
 	if (new_wand == NULL) {
-		php_imagick_convert_imagick_exception(intern->magick_wand, "similarityImage failed" TSRMLS_CC);
+		php_imagick_convert_imagick_exception(intern->magick_wand, "subimagematch failed" TSRMLS_CC);
 		return;
 	}
 
@@ -11275,7 +11278,6 @@ PHP_METHOD(imagick, similarityimage)
 	}
 
 	if (z_best_match_offset) {
-		//ALLOC_INIT_ZVAL - this shouldn't be needed if we are getting the var by reference right?
 		array_init(z_best_match_offset);
 		add_assoc_long(z_best_match_offset, "x", best_match_offset.x);
 		add_assoc_long(z_best_match_offset, "y", best_match_offset.y);

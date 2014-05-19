@@ -1322,7 +1322,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
-	ZEND_BEGIN_ARG_INFO_EX(imagick_similarityimage_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_subimagematch_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(1, offset)
 		ZEND_ARG_INFO(1, similarity)
@@ -2441,7 +2441,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, selectiveblurimage, imagick_selectiveblurimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, rotationalblurimage, imagick_rotationalblurimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, statisticimage, imagick_statisticimage_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, similarityimage, imagick_similarityimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, subimagematch, imagick_subimagematch_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
