@@ -11227,4 +11227,70 @@ PHP_METHOD(imagick, statisticimage)
 
 
 
+/* {{{ proto bool Imagick::similarityimage(Imagick reference, float sigma, float threshold[, int channel])
+	Compares the reference image of the image and returns the best match offset. In addition, it returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
+*/
+PHP_METHOD(imagick, similarityimage)
+{
+	php_imagick_object *intern;
+	RectangleInfo best_match_offset;
+	double similarity;
+
+	zval *reference_obj;
+	php_imagick_object *reference_intern;
+	php_imagick_object *intern_return;
+	zval *z_similarity = NULL;
+	zval *z_best_match_offset = NULL;
+
+	//http://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zvals/
+	MagickWand *new_wand;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|zz", &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity) == FAILURE) {
+		return;
+	}
+
+	reference_intern = (php_imagick_object *)zend_object_store_get_object(reference_obj TSRMLS_CC);
+
+//	if (zSimilarity) {
+//		// check for parameter being passed by reference - is there _ANY_ point to this?
+//		if (!Z_ISREF_P(zSimilarity)) {
+//			zend_error(E_WARNING, "Parameter similarity wasn't passed by reference");
+//			RETURN_NULL();
+//		}
+//    }
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	new_wand = MagickSimilarityImage(intern->magick_wand, reference_intern->magick_wand, &best_match_offset, &similarity);
+
+	if (new_wand == NULL) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "similarityImage failed" TSRMLS_CC);
+		return;
+	}
+
+	if (z_similarity) {
+		ZVAL_DOUBLE(z_similarity, similarity);
+	}
+
+	if (z_best_match_offset) {
+		//ALLOC_INIT_ZVAL - this shouldn't be needed if we are getting the var by reference right?
+		array_init(z_best_match_offset);
+		add_assoc_long(z_best_match_offset, "x", best_match_offset.x);
+		add_assoc_long(z_best_match_offset, "y", best_match_offset.y);
+		add_assoc_long(z_best_match_offset, "width", best_match_offset.width);
+		add_assoc_long(z_best_match_offset, "height", best_match_offset.height);
+	}
+
+	object_init_ex(return_value, php_imagick_sc_entry);
+	intern_return = (php_imagick_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	php_imagick_replace_magickwand(intern_return, new_wand);
+
+	return;
+}
+/* }}} */
+
+
+
 /* end of Imagick */

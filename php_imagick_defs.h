@@ -591,6 +591,7 @@ PHP_METHOD(imagick, colormatriximage);
 PHP_METHOD(imagick, selectiveblurimage);
 PHP_METHOD(imagick, rotationalblurimage);
 PHP_METHOD(imagick, statisticimage);
+PHP_METHOD(imagick, similarityimage);
 
 
 /* Forward declarations (ImagickDraw) */
