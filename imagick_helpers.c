@@ -47,6 +47,75 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;
 }
 
+void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callback TSRMLS_DC) {
+
+	if (progress_callback) {
+		if (progress_callback->previous_callback) {
+			php_imagick_cleanup_progress_callback(progress_callback->previous_callback TSRMLS_CC);
+			efree(progress_callback->previous_callback);
+		}
+
+		zval_ptr_dtor(&progress_callback->user_callback);
+	}
+}
+
+MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *userData)
+{
+	//We can get the data both via the passed param and via
+	//IMAGICK_G(progress_callback) - this should be quicker
+	php_imagick_callback *callback = (php_imagick_callback*)userData;
+
+	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
+
+	int error;
+	zval **zargs[2];
+
+	zend_fcall_info_cache fci_cache = empty_fcall_info_cache;
+
+	zend_fcall_info fci;
+	zval *retval_ptr = NULL;
+
+	fci.size = sizeof(fci);
+	fci.function_table = EG(function_table);
+	fci.object_ptr = NULL;
+	fci.function_name = callback->user_callback;
+	fci.retval_ptr_ptr = &retval_ptr;
+	fci.param_count = 2;
+	fci.params = zargs;
+	fci.no_separation = 0;
+	fci.symbol_table = NULL;
+
+	zargs[0] = emalloc(sizeof(zval *));
+	MAKE_STD_ZVAL(*zargs[0]);
+	ZVAL_LONG(*zargs[0], offset);
+
+	zargs[1] = emalloc(sizeof(zval *));
+	MAKE_STD_ZVAL(*zargs[1]);
+	ZVAL_LONG(*zargs[1], span);
+
+	error = zend_call_function(&fci, &fci_cache TSRMLS_CC);
+
+	if (error == FAILURE) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "An error occurred while invoking the callback");
+		//Abort processing as user callback is no longer callable
+		return MagickFalse;
+	}
+
+	zval_ptr_dtor(zargs[0]);
+	zval_ptr_dtor(zargs[1]);
+
+	if (retval_ptr) {
+		if (Z_TYPE_P(retval_ptr) == IS_BOOL) {
+			if (Z_LVAL_P(retval_ptr) == 0) {
+				//User returned false - tell Imagick to abort processing.
+				return MagickFalse;
+			}
+		}
+	}
+
+	return MagickTrue;
+}
+
 zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
 {
 	long orig_width, orig_height;

@@ -751,6 +751,10 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageprogressmonitor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setprogressmonitor_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, callback)
+	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageresolution_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xResolution)
@@ -2184,6 +2188,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimagemattecolor, imagick_setimagemattecolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagepage, imagick_setimagepage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageprogressmonitor, imagick_setimageprogressmonitor_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setprogressmonitor, imagick_setprogressmonitor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageresolution, imagick_setimageresolution_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagescene, imagick_setimagescene_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagetickspersecond, imagick_setimagetickspersecond_args, ZEND_ACC_PUBLIC)
@@ -2949,11 +2954,20 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 
 PHP_RINIT_FUNCTION(imagick)
 {
+	IMAGICK_G(progress_callback) = NULL;
 	return SUCCESS;
 }
 
 PHP_RSHUTDOWN_FUNCTION(imagick)
 {
+	php_imagick_callback* progress_callback = IMAGICK_G(progress_callback); 
+
+	if (progress_callback) {
+		php_imagick_cleanup_progress_callback(progress_callback TSRMLS_CC);
+		efree(progress_callback);
+		IMAGICK_G(progress_callback) = NULL;
+	}
+
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* We have the lock so lets release it */
 	if (imagick_thread_id == tsrm_thread_id()) {

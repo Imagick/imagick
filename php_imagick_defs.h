@@ -42,10 +42,18 @@
 # include <locale.h>
 #endif
 
+
+typedef struct _php_imagick_callback {
+	void ***thread_ctx;
+	zval *user_callback;
+	struct _php_imagick_callback *previous_callback;
+} php_imagick_callback;
+
 /* Globals, needed for the ini settings */
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
 	zend_bool locale_fix;
 	zend_bool progress_monitor;
+	php_imagick_callback *progress_callback;
 #ifdef PHP_IMAGICK_ZEND_MM
 	MagickWand *keep_alive;
 #endif
@@ -91,6 +99,7 @@ typedef struct _php_imagick_object  {
 	char *progress_monitor_name;
 	zend_bool next_out_of_bound;
 } php_imagick_object;
+
 
 /* Structure for ImagickDraw object. */
 typedef struct _php_imagickdraw_object  {
@@ -391,6 +400,7 @@ PHP_METHOD(imagick, setimageiterations);
 PHP_METHOD(imagick, setimagemattecolor);
 PHP_METHOD(imagick, setimagepage);
 PHP_METHOD(imagick, setimageprogressmonitor);
+PHP_METHOD(imagick, setprogressmonitor);
 PHP_METHOD(imagick, setimageresolution);
 PHP_METHOD(imagick, setimagescene);
 PHP_METHOD(imagick, setimagetickspersecond);

@@ -10744,6 +10744,47 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 	RETURN_TRUE;
 }
 
+/* {{{ proto bool Imagick::setProgressMonitor(callable callback)
+	Set a callback that will be called during the processing of the Imagick image.
+*/
+PHP_METHOD(imagick, setprogressmonitor)
+{
+	zval *user_callback;
+
+	php_imagick_object *intern;
+	php_imagick_rw_result_t rc;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &user_callback) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	// Check whether the callback is valid now, rather than failing later
+	if (!user_callback || !zend_is_callable(user_callback, 0, NULL TSRMLS_CC)) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "First argument to setProgressMonitor is expected to be a valid callback" TSRMLS_CC);
+		RETURN_FALSE;
+	}
+
+	php_imagick_callback *callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
+
+	TSRMLS_SET_CTX(callback->thread_ctx);
+	//We can't free the previous callback as we can't guarantee that
+	//ImageMagick won't use it at some point. There is no 'unbind' function
+	//for previously set 'MagickSetImageProgressMonitor'
+	callback->previous_callback = IMAGICK_G(progress_callback);
+
+	//Add a ref and store the user's callback
+	Z_ADDREF_P(user_callback);
+	callback->user_callback = user_callback;
+
+	//The callback is now valid, store it in the global
+	IMAGICK_G(progress_callback) = callback;
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	MagickSetImageProgressMonitor(intern->magick_wand, php_imagick_progress_monitor_callable, callback);
+	RETURN_TRUE;
+}
+
 /* {{{ proto bool Imagick::setResourceLimit(RESOURCETYPE type, int limit)
 	Sets the limit for a particular resource in megabytes.
 */
