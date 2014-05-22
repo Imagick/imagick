@@ -2761,9 +2761,47 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	return new_ov;
 }
 
+static int checkImagickVersion()
+{
+	//This gets the version that Imagick was compiled against.
+	size_t imagickVersion = MagickLibVersion;
+
+	//This gets the version of Image Magick that has been loaded
+	size_t imageMagickLibraryVersion;
+
+	GetMagickVersion(&imageMagickLibraryVersion);
+
+	if (imagickVersion == imageMagickLibraryVersion) {
+		return SUCCESS;
+	}
+
+	if ((imagickVersion & imageMagickLibraryVersion & 0xfff0) != 0) {
+		zend_error(
+			E_WARNING,
+			"Version warning: Imagick was compiled against Image Magick version %x but version %x is loaded. Imagick will run but may behave surprisingly.",
+			imagickVersion,
+			imageMagickLibraryVersion
+		);
+		return SUCCESS;
+	}
+
+	zend_error(
+		E_ERROR,
+		"Version error: Imagick was compiled against Image Magick version %x but version %x is loaded. Imagick will not run.",
+		imagickVersion,
+		imageMagickLibraryVersion
+	);
+
+	return FAILURE;
+}
+
 PHP_MINIT_FUNCTION(imagick)
 {
 	zend_class_entry ce;
+
+	if (checkImagickVersion() != SUCCESS) {
+		return FAILURE;
+	}
 
 	/* Initialize globals */
 	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
