@@ -15,6 +15,12 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>mkoppanen@php.net</email>
 		<active>yes</active>
 	</lead>
+    <developer>
+        <name>Dan Ackroyd</name>
+        <user>danack</user>
+        <email>danack@basereality.com</email>
+        <active>yes</active>
+    </developer>
 	<lead>
 		<name>Scott MacVicar</name>
 		<user>scottmac</user>
