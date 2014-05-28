@@ -721,7 +721,7 @@ PHP_METHOD(imagick, setiteratorindex)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::transformimage(string crop, string geometry )
+/* {{{ proto Imagick Imagick::transformimage(string crop, string geometry )
 	Comfortability method for crop and resize
 */
 PHP_METHOD(imagick, transformimage)
@@ -2555,7 +2555,7 @@ PHP_METHOD(imagick, functionimage)
 	array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!array) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters or is empty." TSRMLS_CC);
 		return;
 	}
 
@@ -2838,7 +2838,7 @@ PHP_METHOD(imagick, clampimage)
 #endif
 
 #if MagickLibVersion > 0x667
-/* {{{ proto boolean Imagick::smushimages(boolean stack, int offset)
+/* {{{ proto Imagick Imagick::smushimages(boolean stack, int offset)
    Takes all images from the current image pointer to the end of the image list and smushs
    them to each other top-to-bottom if the stack parameter is true, otherwise left-to-right.
 */
@@ -4465,7 +4465,7 @@ PHP_METHOD(imagick, paintopaqueimage)
 #endif
 
 #if MagickLibVersion > 0x628
-/* {{{ proto bool Imagick::optimizeImageLayers()
+/* {{{ proto Imagick Imagick::optimizeImageLayers()
 	Compares each image the GIF disposed forms of the previous image in the sequence.  From this it attempts to select the smallest cropped image to replace each frame, while preserving the results of the animation.
 */
 PHP_METHOD(imagick, optimizeimagelayers)
@@ -4540,7 +4540,7 @@ PHP_METHOD(imagick, painttransparentimage)
 #endif
 #endif
 
-/* {{{ proto bool Imagick::previewImages(int preview )
+/* {{{ proto Imagick Imagick::previewImages(int preview )
 	Tiles 9 thumbnails of the specified image with an image processing operation applied at varying strengths.
 	This is helpful to quickly pin-point an appropriate parameter for an image processing operation.
 */
@@ -5311,7 +5311,7 @@ PHP_METHOD(imagick, stereoimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::textureImage(Imagick texture_wand)
+/* {{{ proto Imagick Imagick::textureImage(Imagick texture_wand)
 	Repeatedly tiles the texture image across and down the image canvas.
 */
 PHP_METHOD(imagick, textureimage)
@@ -5499,7 +5499,7 @@ PHP_METHOD(imagick, cyclecolormapimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::deconstructImages()
+/* {{{ proto Imagick Imagick::deconstructImages()
 	Compares each image with the next in a sequence and returns the maximum bounding region of any pixel differences it discovers.
 */
 PHP_METHOD(imagick, deconstructimages)
@@ -5530,8 +5530,8 @@ PHP_METHOD(imagick, deconstructimages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::getImageRegion(int width, int height, int x, int y)
-	Extracts a region of the image and returns it as a a new wand.
+/* {{{ proto Imagick Imagick::getImageRegion(int width, int height, int x, int y)
+	Extracts a region of the image and returns it as a new image.
 */
 PHP_METHOD(imagick, getimageregion)
 {
@@ -11227,7 +11227,7 @@ PHP_METHOD(imagick, statisticimage)
 
 
 
-/* {{{ proto bool Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
+/* {{{ proto Imagick Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
 	Searches for a subimage in the current image and returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
 	You can also pass in the optional parameters bestMatch and similarity. After calling the function similarity will be
 	set to the 'score' of the similarity between the subimage and the matching position in the larger image, bestMatch will
