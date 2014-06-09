@@ -5243,19 +5243,19 @@ PHP_METHOD(imagick, setimagewhitepoint)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta[, int channel])
+/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float contrast, float midpoint[, int channel])
 	Adjusts the contrast of an image with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black).  Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
 PHP_METHOD(imagick, sigmoidalcontrastimage)
 {
 	php_imagick_object *intern;
 	zend_bool sharpen;
-	double alpha, beta;
+	double contrast, midpoint;
 	MagickBooleanType status;
 	long channel = DefaultChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &alpha, &beta, &channel) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &contrast, &midpoint, &channel) == FAILURE) {
 		return;
 	}
 
@@ -5263,7 +5263,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	status = MagickSigmoidalContrastImageChannel(intern->magick_wand, channel, sharpen, alpha, beta);
+	status = MagickSigmoidalContrastImageChannel(intern->magick_wand, channel, sharpen, contrast, midpoint);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
