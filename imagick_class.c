@@ -11068,7 +11068,7 @@ KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
 }
 
 
-/* {{{ proto bool Imagick::ColorMatrixImage(array kernel[, int channel])
+/* {{{ proto bool Imagick::ColorMatrixImage(array kernel)
 	apply color transformation to an image. The method permits saturation changes, hue rotation, luminance to alpha, and various other effects. Although variable-sized transformation matrices can be used, typically one uses a 5x5 matrix for an RGBA image and a 6x6 for CMYKA (or RGBA with offsets). The matrix is similar to those used by Adobe Flash except offsets are in column 6 rather than 5 (in support of CMYKA images) and offsets are normalized (divide Flash offset by 255).
 */
 PHP_METHOD(imagick, colormatriximage)
