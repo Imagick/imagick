@@ -11194,6 +11194,16 @@ PHP_METHOD(imagick, rotationalblurimage)
 }
 /* }}} */
 
+#if MagickLibVersion > 0x683
+
+//Technically, this version is available in 0x682. However there was an incompatible 
+//change to the methods signature in a bug release. So only expose it for stable
+//versions.
+//
+//6.8.2.8 - MagickStatisticImage ( MagickWand* p1, enum ChannelType const p2, enum StatisticType const p3, size_t const p4, size_t const p5 ) (6) 
+//6.8.2.9 - MagickStatisticImage ( MagickWand* p1, enum StatisticType const p2, size_t const p3, size_t const p4 )
+
+
 /* {{{ proto bool Imagick::statisticImage(int type, float width, float height[, int channel] )
 	Replace each pixel with corresponding statistic from the neighborhood of the specified width and height.
 */
@@ -11225,6 +11235,7 @@ PHP_METHOD(imagick, statisticimage)
 }
 /* }}} */
 
+#endif
 
 
 /* {{{ proto bool Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
