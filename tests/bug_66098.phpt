@@ -1,5 +1,5 @@
 --TEST--
-Bug #66098	Segfault in zval_addref_p
+Bug #66098	Check that there is no segfault from zval_addref_p
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--

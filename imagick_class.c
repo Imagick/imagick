@@ -4175,9 +4175,11 @@ PHP_METHOD(imagick, implodeimage)
 }
 /* }}} */
 
+#if MagickLibVersion >= 0x658
+//Only stable as of 658
+//http://upstream-tracker.org/compat_reports/imagemagick/6.5.7.7_to_6.5.7.8/abi_compat_report.html
 
 /* {{{ proto bool Imagick::inversefouriertransformimage(Imagick complement, bool magnitude)
-	
 */
 PHP_METHOD(imagick, inversefouriertransformimage)
 {
@@ -4206,8 +4208,7 @@ PHP_METHOD(imagick, inversefouriertransformimage)
 	RETURN_TRUE;
 }
 /* }}} */
-
-
+#endif
 
 /* {{{ proto bool Imagick::levelImage(float blackPoint, float gamma, float whitePoint[, int channel] )
 	Adjusts the levels of an image by scaling the colors falling between specified white and black points to the full available quantum range. The parameters provided represent the black, mid, and white points. The black point specifies the darkest color in the image. Colors darker than the black point are set to zero. Mid point specifies a gamma correction to apply to the image.  White point specifies the lightest color in the image. Colors brighter than the white point are set to the maximum quantum value.
@@ -5741,6 +5742,8 @@ PHP_METHOD(imagick, evaluateimage)
 /* }}} */
 
 
+#if MagickLibVersion > 0x655
+
 /* {{{ proto bool Imagick::forwardfouriertransformimage(bool magnitude)
 	//http://www.fftw.org/
 	yum install fftw-devel fftw
@@ -5748,8 +5751,7 @@ PHP_METHOD(imagick, evaluateimage)
 */
 PHP_METHOD(imagick, forwardfouriertransformimage)
 {
-	php_imagick_object *intern, *intern_complement;
-	zval *complement_obj;
+	php_imagick_object *intern;
 	zend_bool magnitude;
 	MagickBooleanType status;
 
@@ -5773,6 +5775,7 @@ PHP_METHOD(imagick, forwardfouriertransformimage)
 }
 /* }}} */
 
+#endif
 
 
 /* {{{ proto array Imagick::getImageGeometry()
@@ -10844,7 +10847,6 @@ PHP_METHOD(imagick, setprogressmonitor)
 	zval *user_callback;
 
 	php_imagick_object *intern;
-	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &user_callback) == FAILURE) {
@@ -11049,6 +11051,7 @@ PHP_METHOD(imagick, brightnesscontrastimage)
 /* }}} */
 
 
+#if MagickLibVersion > 0x661
 
 KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
 {
@@ -11127,7 +11130,7 @@ PHP_METHOD(imagick, colormatriximage)
 	RETURN_TRUE;
 }
 /* }}} */
-
+#endif
 
 /* {{{ proto bool Imagick::selectiveBlurImage(float radius, float sigma, float threshold[, int channel])
 	Selectively blur an image within a contrast threshold. It is similar to the unsharpen mask that sharpens everything with contrast above a certain threshold.
@@ -11193,6 +11196,16 @@ PHP_METHOD(imagick, rotationalblurimage)
 }
 /* }}} */
 
+#if MagickLibVersion >= 0x683
+
+//Technically, this version is available in 0x682. However there was an incompatible 
+//change to the methods signature in a bug release. So only expose it for stable
+//versions.
+//
+//6.8.2.8 - MagickStatisticImage ( MagickWand* p1, enum ChannelType const p2, enum StatisticType const p3, size_t const p4, size_t const p5 ) (6) 
+//6.8.2.9 - MagickStatisticImage ( MagickWand* p1, enum StatisticType const p2, size_t const p3, size_t const p4 )
+
+
 /* {{{ proto bool Imagick::statisticImage(int type, float width, float height[, int channel] )
 	Replace each pixel with corresponding statistic from the neighborhood of the specified width and height.
 */
@@ -11224,6 +11237,7 @@ PHP_METHOD(imagick, statisticimage)
 }
 /* }}} */
 
+#endif
 
 
 /* {{{ proto bool Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
