@@ -2847,16 +2847,16 @@ static int checkImagickVersion()
 	if ((imagickVersion & imageMagickLibraryVersion & 0xfff0) != 0) {
 		zend_error(
 			E_WARNING,
-			"Version warning: Imagick was compiled against Image Magick version %x but version %x is loaded. Imagick will run but may behave surprisingly.",
-			imagickVersion,
-			imageMagickLibraryVersion
+			"Version warning: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will run but may behave surprisingly.",
+			(unsigned long)imagickVersion,
+			(unsigned long)imageMagickLibraryVersion
 		);
 		return SUCCESS;
 	}
 
 	zend_error(
 		E_ERROR,
-		"Version error: Imagick was compiled against Image Magick version %x but version %x is loaded. Imagick will not run.",
+		"Version error: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will not run.",
 		imagickVersion,
 		imageMagickLibraryVersion
 	);
