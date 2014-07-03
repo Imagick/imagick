@@ -2845,7 +2845,6 @@ PHP_METHOD(imagick, clampimage)
 PHP_METHOD(imagick, smushimages)
 {
 	php_imagick_object *intern, *intern_return;
-	MagickBooleanType status;
 	zend_bool stack;
 	long offset;
 	MagickWand *retwand;
