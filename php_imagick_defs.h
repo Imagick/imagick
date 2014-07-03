@@ -455,6 +455,7 @@ PHP_METHOD(imagick, flattenimages);
 #endif
 PHP_METHOD(imagick, flipimage);
 PHP_METHOD(imagick, flopimage);
+PHP_METHOD(imagick, forwardfouriertransformimage);
 PHP_METHOD(imagick, frameimage);
 PHP_METHOD(imagick, fximage);
 PHP_METHOD(imagick, gammaimage);
@@ -507,6 +508,7 @@ PHP_METHOD(imagick, getnumberimages);
 PHP_METHOD(imagick, getimagetotalinkdensity);
 PHP_METHOD(imagick, getimageregion);
 PHP_METHOD(imagick, implodeimage);
+PHP_METHOD(imagick, inversefouriertransformimage);
 PHP_METHOD(imagick, levelimage);
 PHP_METHOD(imagick, magnifyimage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
@@ -562,6 +564,7 @@ PHP_METHOD(imagick, getinterlacescheme);
 PHP_METHOD(imagick, getoption);
 PHP_METHOD(imagick, getpackagename);
 PHP_METHOD(imagick, getpage);
+PHP_METHOD(imagick, getquantum);
 PHP_METHOD(imagick, getquantumdepth);
 PHP_METHOD(imagick, getquantumrange);
 PHP_METHOD(imagick, getreleasedate);
@@ -583,6 +586,13 @@ PHP_METHOD(imagick, setresolution);
 PHP_METHOD(imagick, setsamplingfactors);
 PHP_METHOD(imagick, setsize);
 PHP_METHOD(imagick, settype);
+PHP_METHOD(imagick, brightnesscontrastimage);
+PHP_METHOD(imagick, colormatriximage);
+PHP_METHOD(imagick, selectiveblurimage);
+PHP_METHOD(imagick, rotationalblurimage);
+PHP_METHOD(imagick, statisticimage);
+PHP_METHOD(imagick, subimagematch);
+
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628

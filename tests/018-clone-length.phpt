@@ -13,7 +13,12 @@ if ($v ['versionNumber'] >= 0x640 && $v ['versionNumber'] < 0x650)
 
 $im = new Imagick ('magick:rose');
 $im->setImageFormat ('png');
-var_dump ($im->getImageLength ());
+if ($im->getImageLength()) {
+	echo "Image created has length" . PHP_EOL;
+}
+else {
+	echo "Image created has zero length" . PHP_EOL;
+}
 
 $cloned = clone $im;
 $cloned->setImageFormat ('png');
@@ -22,5 +27,5 @@ var_dump ($cloned->getImageLength ());
 
 ?>
 --EXPECT--
-int(9673)
+Image created has length
 int(0)

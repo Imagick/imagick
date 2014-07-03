@@ -936,6 +936,10 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_forwardfouriertransformimage_args, 0, 0, 5)
+		ZEND_ARG_INFO(0, magnitude)
+	ZEND_END_ARG_INFO()
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_frameimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, width)
@@ -1007,6 +1011,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, height)
 		ZEND_ARG_INFO(0, x)
 		ZEND_ARG_INFO(0, y)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_inversefouriertransformimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, complement)
+		ZEND_ARG_INFO(0, magnitude)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_levelimage_args, 0, 0, 3)
@@ -1284,6 +1293,40 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_brightnesscontrastimage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, brightness)
+		ZEND_ARG_INFO(0, contrast)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_colormatriximage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, color_matrix)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_selectiveblurimage_args, 0, 0, 4)
+		ZEND_ARG_INFO(0, radius)
+		ZEND_ARG_INFO(0, sigma)
+		ZEND_ARG_INFO(0, threshold)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_rotationalblurimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, angle)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_statisticimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, type)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_subimagematch_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+		ZEND_ARG_INFO(1, offset)
+		ZEND_ARG_INFO(1, similarity)
+	ZEND_END_ARG_INFO()
 
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
@@ -2249,6 +2292,7 @@ static zend_function_entry php_imagick_class_methods[] =
 #endif
 	PHP_ME(imagick, flipimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, flopimage, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, forwardfouriertransformimage, imagick_forwardfouriertransformimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, frameimage, imagick_frameimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, fximage, imagick_fximage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gammaimage, imagick_gammaimage_args, ZEND_ACC_PUBLIC)
@@ -2301,6 +2345,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimagetotalinkdensity, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageregion, imagick_getimageregion_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, implodeimage, imagick_getimagetotalinkdensity_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, inversefouriertransformimage, imagick_inversefouriertransformimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, levelimage, imagick_levelimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, magnifyimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
@@ -2356,6 +2401,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getoption, imagick_getoption_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpackagename, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpage, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getquantum, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantumdepth, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantumrange, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getreleasedate, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
@@ -2390,6 +2436,12 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_MALIAS(imagick, rewind, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, valid, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, current, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, brightnesscontrastimage, imagick_brightnesscontrastimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, colormatriximage, imagick_colormatriximage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, selectiveblurimage, imagick_selectiveblurimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, rotationalblurimage, imagick_rotationalblurimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, statisticimage, imagick_statisticimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, subimagematch, imagick_subimagematch_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
