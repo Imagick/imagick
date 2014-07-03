@@ -4176,7 +4176,7 @@ PHP_METHOD(imagick, implodeimage)
 }
 /* }}} */
 
-#if MagickLibVersion < 0x658
+#if MagickLibVersion >= 0x658
 //Only stable as of 658
 //http://upstream-tracker.org/compat_reports/imagemagick/6.5.7.7_to_6.5.7.8/abi_compat_report.html
 
@@ -5743,7 +5743,7 @@ PHP_METHOD(imagick, evaluateimage)
 /* }}} */
 
 
-#if MagickLibVersion < 0x655
+#if MagickLibVersion > 0x655
 
 /* {{{ proto bool Imagick::forwardfouriertransformimage(bool magnitude)
 	//http://www.fftw.org/
@@ -10848,7 +10848,6 @@ PHP_METHOD(imagick, setprogressmonitor)
 	zval *user_callback;
 
 	php_imagick_object *intern;
-	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &user_callback) == FAILURE) {
@@ -11198,7 +11197,7 @@ PHP_METHOD(imagick, rotationalblurimage)
 }
 /* }}} */
 
-#if MagickLibVersion > 0x683
+#if MagickLibVersion >= 0x683
 
 //Technically, this version is available in 0x682. However there was an incompatible 
 //change to the methods signature in a bug release. So only expose it for stable
