@@ -1179,8 +1179,8 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_sigmoidalcontrastimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, sharpen)
-		ZEND_ARG_INFO(0, alpha)
-		ZEND_ARG_INFO(0, beta)
+		ZEND_ARG_INFO(0, contrast)
+		ZEND_ARG_INFO(0, midpoint)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 

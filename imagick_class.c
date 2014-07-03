@@ -721,7 +721,7 @@ PHP_METHOD(imagick, setiteratorindex)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::transformimage(string crop, string geometry )
+/* {{{ proto Imagick Imagick::transformimage(string crop, string geometry )
 	Comfortability method for crop and resize
 */
 PHP_METHOD(imagick, transformimage)
@@ -2555,7 +2555,7 @@ PHP_METHOD(imagick, functionimage)
 	array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!array) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters" TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters or is empty." TSRMLS_CC);
 		return;
 	}
 
@@ -2838,7 +2838,7 @@ PHP_METHOD(imagick, clampimage)
 #endif
 
 #if MagickLibVersion > 0x667
-/* {{{ proto boolean Imagick::smushimages(boolean stack, int offset)
+/* {{{ proto Imagick Imagick::smushimages(boolean stack, int offset)
    Takes all images from the current image pointer to the end of the image list and smushs
    them to each other top-to-bottom if the stack parameter is true, otherwise left-to-right.
 */
@@ -4465,7 +4465,7 @@ PHP_METHOD(imagick, paintopaqueimage)
 #endif
 
 #if MagickLibVersion > 0x628
-/* {{{ proto bool Imagick::optimizeImageLayers()
+/* {{{ proto Imagick Imagick::optimizeImageLayers()
 	Compares each image the GIF disposed forms of the previous image in the sequence.  From this it attempts to select the smallest cropped image to replace each frame, while preserving the results of the animation.
 */
 PHP_METHOD(imagick, optimizeimagelayers)
@@ -4540,7 +4540,7 @@ PHP_METHOD(imagick, painttransparentimage)
 #endif
 #endif
 
-/* {{{ proto bool Imagick::previewImages(int preview )
+/* {{{ proto Imagick Imagick::previewImages(int preview )
 	Tiles 9 thumbnails of the specified image with an image processing operation applied at varying strengths.
 	This is helpful to quickly pin-point an appropriate parameter for an image processing operation.
 */
@@ -5243,19 +5243,19 @@ PHP_METHOD(imagick, setimagewhitepoint)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float alpha, float beta[, int channel])
+/* {{{ proto bool Imagick::sigmoidalContrastImage(bool sharpen, float contrast, float midpoint[, int channel])
 	Adjusts the contrast of an image with a non-linear sigmoidal contrast algorithm.  Increase the contrast of the image using a sigmoidal transfer function without saturating highlights or shadows.  Contrast indicates how much to increase the contrast (0 is none; 3 is typical; 20 is pushing it); mid-point indicates where midtones fall in the resultant image (0 is white; 50 is middle-gray; 100 is black).  Set sharpen to true to increase the image contrast otherwise the contrast is reduced.
 */
 PHP_METHOD(imagick, sigmoidalcontrastimage)
 {
 	php_imagick_object *intern;
 	zend_bool sharpen;
-	double alpha, beta;
+	double contrast, midpoint;
 	MagickBooleanType status;
 	long channel = DefaultChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &alpha, &beta, &channel) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &contrast, &midpoint, &channel) == FAILURE) {
 		return;
 	}
 
@@ -5263,7 +5263,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	status = MagickSigmoidalContrastImageChannel(intern->magick_wand, channel, sharpen, alpha, beta);
+	status = MagickSigmoidalContrastImageChannel(intern->magick_wand, channel, sharpen, contrast, midpoint);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -5311,7 +5311,7 @@ PHP_METHOD(imagick, stereoimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::textureImage(Imagick texture_wand)
+/* {{{ proto Imagick Imagick::textureImage(Imagick texture_wand)
 	Repeatedly tiles the texture image across and down the image canvas.
 */
 PHP_METHOD(imagick, textureimage)
@@ -5499,7 +5499,7 @@ PHP_METHOD(imagick, cyclecolormapimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::deconstructImages()
+/* {{{ proto Imagick Imagick::deconstructImages()
 	Compares each image with the next in a sequence and returns the maximum bounding region of any pixel differences it discovers.
 */
 PHP_METHOD(imagick, deconstructimages)
@@ -5530,8 +5530,8 @@ PHP_METHOD(imagick, deconstructimages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::getImageRegion(int width, int height, int x, int y)
-	Extracts a region of the image and returns it as a a new wand.
+/* {{{ proto Imagick Imagick::getImageRegion(int width, int height, int x, int y)
+	Extracts a region of the image and returns it as a new image.
 */
 PHP_METHOD(imagick, getimageregion)
 {
@@ -11070,7 +11070,7 @@ KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
 }
 
 
-/* {{{ proto bool Imagick::ColorMatrixImage(array kernel[, int channel])
+/* {{{ proto bool Imagick::ColorMatrixImage(array kernel)
 	apply color transformation to an image. The method permits saturation changes, hue rotation, luminance to alpha, and various other effects. Although variable-sized transformation matrices can be used, typically one uses a 5x5 matrix for an RGBA image and a 6x6 for CMYKA (or RGBA with offsets). The matrix is similar to those used by Adobe Flash except offsets are in column 6 rather than 5 (in support of CMYKA images) and offsets are normalized (divide Flash offset by 255).
 */
 PHP_METHOD(imagick, colormatriximage)
@@ -11240,7 +11240,7 @@ PHP_METHOD(imagick, statisticimage)
 #endif
 
 
-/* {{{ proto bool Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
+/* {{{ proto Imagick Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
 	Searches for a subimage in the current image and returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
 	You can also pass in the optional parameters bestMatch and similarity. After calling the function similarity will be
 	set to the 'score' of the similarity between the subimage and the matching position in the larger image, bestMatch will

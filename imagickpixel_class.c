@@ -583,7 +583,7 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 }
 /* }}} */
 
-/* {{{ proto array ImagickPixel::clone(void)
+/* {{{ proto ImagickPixel ImagickPixel::clone(void)
         Clones the ImagickPixel
 */
 PHP_METHOD(imagickpixel, clone)
