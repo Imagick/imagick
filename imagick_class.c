@@ -11165,7 +11165,7 @@ PHP_METHOD(imagick, selectiveblurimage)
 
 
 
-
+#if MagickLibVersion >= 0x689
 /* {{{ proto bool Imagick::rotationalblurimage(float angle[, int channel])
 	Rotational blurs an image.
 */
@@ -11195,6 +11195,7 @@ PHP_METHOD(imagick, rotationalblurimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 #if MagickLibVersion >= 0x683
 
@@ -11239,7 +11240,7 @@ PHP_METHOD(imagick, statisticimage)
 
 #endif
 
-
+#if MagickLibVersion >= 0x652
 /* {{{ proto Imagick Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
 	Searches for a subimage in the current image and returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
 	You can also pass in the optional parameters bestMatch and similarity. After calling the function similarity will be
@@ -11305,7 +11306,7 @@ PHP_METHOD(imagick, subimagematch)
 	return;
 }
 /* }}} */
-
+#endif
 
 
 /* end of Imagick */

@@ -1314,10 +1314,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x689
 	ZEND_BEGIN_ARG_INFO_EX(imagick_rotationalblurimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, angle)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 
 #if MagickLibVersion >= 0x683
 	ZEND_BEGIN_ARG_INFO_EX(imagick_statisticimage_args, 0, 0, 3)
@@ -1328,11 +1330,13 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion >= 0x652
 	ZEND_BEGIN_ARG_INFO_EX(imagick_subimagematch_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(1, offset)
 		ZEND_ARG_INFO(1, similarity)
 	ZEND_END_ARG_INFO()
+#endif
 
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
