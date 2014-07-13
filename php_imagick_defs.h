@@ -591,7 +591,9 @@ PHP_METHOD(imagick, setsamplingfactors);
 PHP_METHOD(imagick, setsize);
 PHP_METHOD(imagick, settype);
 PHP_METHOD(imagick, brightnesscontrastimage);
+#if MagickLibVersion > 0x661
 PHP_METHOD(imagick, colormatriximage);
+#endif
 PHP_METHOD(imagick, selectiveblurimage);
 #if MagickLibVersion >= 0x689
 PHP_METHOD(imagick, rotationalblurimage);
