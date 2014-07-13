@@ -2453,11 +2453,15 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, brightnesscontrastimage, imagick_brightnesscontrastimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colormatriximage, imagick_colormatriximage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, selectiveblurimage, imagick_selectiveblurimage_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x689
 	PHP_ME(imagick, rotationalblurimage, imagick_rotationalblurimage_args, ZEND_ACC_PUBLIC)
+#endif
 #if MagickLibVersion >= 0x683
 	PHP_ME(imagick, statisticimage, imagick_statisticimage_args, ZEND_ACC_PUBLIC)
 #endif
+#if MagickLibVersion >= 0x652
 	PHP_ME(imagick, subimagematch, imagick_subimagematch_args, ZEND_ACC_PUBLIC)
+#endif
 	{ NULL, NULL, NULL }
 };
 
