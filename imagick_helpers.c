@@ -1365,6 +1365,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_SINUSOID", SinusoidFunction);
 #endif
 #if MagickLibVersion >= 0x653
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_BACKGROUND", BackgroundAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_ARCSIN", ArcsinFunction);
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_ARCTAN", ArctanFunction);
 #endif
