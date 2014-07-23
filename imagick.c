@@ -2718,7 +2718,6 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->progress_monitor = 0;
 }
 
-#if defined(HAVE_SPL)
 static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{{ */
 	{
 	php_imagick_object *intern= (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
@@ -2729,7 +2728,6 @@ static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{
 	}
 	return FAILURE;
 	}
-#endif
 
 #if PHP_VERSION_ID < 50399
 static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC)
@@ -2956,9 +2954,9 @@ PHP_MINIT_FUNCTION(imagick)
 	ce.create_object = php_imagick_object_new;
 	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
 	imagick_object_handlers.read_property = php_imagick_read_property;
+	imagick_object_handlers.count_elements = php_imagick_count_elements;
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 #if defined(HAVE_SPL)
-	imagick_object_handlers.count_elements = php_imagick_count_elements;
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, spl_ce_Countable);
 #else
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
