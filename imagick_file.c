@@ -80,7 +80,7 @@ zend_bool php_imagick_is_virtual_format(const char *format)
 static
 zend_bool php_imagick_is_url(const char *filename TSRMLS_DC)
 {
-	char *path_for_open;
+	const char *path_for_open;
 
 	if (php_stream_locate_url_wrapper(filename, &path_for_open, STREAM_LOCATE_WRAPPERS_ONLY TSRMLS_CC)) {
 		return 1;
