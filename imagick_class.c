@@ -2988,8 +2988,9 @@ PHP_METHOD(imagick, __tostring)
 PHP_METHOD(imagick, count)
 {
 	php_imagick_object *intern;
+	long mode = 0;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &mode) == FAILURE) {
 		return;
 	}
 
