@@ -1340,6 +1340,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 #endif
 
+#if PHP_VERSION_ID >= 50600
+	ZEND_BEGIN_ARG_INFO_EX(imagick_count_args, 0, 0, 0)
+		ZEND_ARG_INFO(0, mode)
+	ZEND_END_ARG_INFO()
+#endif
+
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
@@ -2161,7 +2167,11 @@ static zend_function_entry php_imagick_class_methods[] =
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
+#if PHP_VERSION_ID >= 50600
+	PHP_ME(imagick, count, imagick_count_args, ZEND_ACC_PUBLIC)
+#else
 	PHP_ME(imagick, count, imagick_zero_args, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(imagick, getpixeliterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpixelregioniterator, imagick_getpixelregioniterator_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, readimage, imagick_readimage_args, ZEND_ACC_PUBLIC)
@@ -2708,6 +2718,17 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->progress_monitor = 0;
 }
 
+static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{{ */
+	{
+	php_imagick_object *intern= (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+
+	if (intern->magick_wand) {
+		*count = MagickGetNumberImages(intern->magick_wand);
+		return SUCCESS;
+	}
+	return FAILURE;
+	}
+
 #if PHP_VERSION_ID < 50399
 static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC)
 #else
@@ -2933,6 +2954,7 @@ PHP_MINIT_FUNCTION(imagick)
 	ce.create_object = php_imagick_object_new;
 	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
 	imagick_object_handlers.read_property = php_imagick_read_property;
+	imagick_object_handlers.count_elements = php_imagick_count_elements;
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 #if defined(HAVE_SPL)
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, spl_ce_Countable);
