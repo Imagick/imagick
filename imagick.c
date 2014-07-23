@@ -3054,12 +3054,12 @@ PHP_RSHUTDOWN_FUNCTION(imagick)
 	return SUCCESS;
 }
 
-#if ZEND_MODULE_API_NO >ZEND_MODULE_API_NO= 20050922
+#if ZEND_MODULE_API_NO >= 20050922
 static const zend_module_dep imagick_deps[] = {
 #ifdef HAVE_SPL
-ZEND_MOD_REQUIRED("spl")
+    ZEND_MOD_REQUIRED("spl")
 #endif
-ZEND_MOD_END
+    ZEND_MOD_END
 };
 #endif
 
