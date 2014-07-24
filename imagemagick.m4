@@ -154,3 +154,35 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   export IM_IMAGEMAGICK_CFLAGS
 ])
 
+
+dnl
+dnl IM_EVAL_LIBLINE_DEFER(libline, SHARED-LIBADD)
+dnl
+dnl Use this macro, if you need to add libraries and or library search
+dnl paths to the PHP build system which are only given in compiler
+dnl notation. The libraries are deferred, not used during configure
+dnl
+AC_DEFUN([IM_EVAL_LIBLINE_DEFER],[
+  for ac_i in $1; do
+    case $ac_i in
+    -pthread[)]
+      if test "$ext_shared" = "yes"; then
+        $2="[$]$2 -pthread"
+      else
+        PHP_RUN_ONCE(EXTRA_LDFLAGS, [$ac_i], [EXTRA_LDFLAGS="$EXTRA_LDFLAGS $ac_i"])
+      fi
+    ;;
+    -l*[)]
+      ac_ii=`echo $ac_i|cut -c 3-`
+      PHP_ADD_LIBRARY_DEFER($ac_ii,1,$2)
+    ;;
+    -L*[)]
+      ac_ii=`echo $ac_i|cut -c 3-`
+#     TODO - Check that $ac_ii is the same as $2
+#     Otherwise the user is using a different library dir
+#     than imagick is telling us to.
+      PHP_ADD_LIBPATH($ac_ii,$2)
+    ;;
+    esac
+  done
+])

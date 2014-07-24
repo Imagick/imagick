@@ -43,7 +43,14 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 #
 # Set libs and CFLAGS for building
 #
-  PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  if test $PHP_IMAGICK_STATIC == "yes"; then
+    AC_MSG_NOTICE([Imagick compiling statically - add libs to link path])
+    IM_EVAL_LIBLINE_DEFER($IM_IMAGEMAGICK_LIBS, $PHP_IMAGICK)
+  else 
+    AC_MSG_NOTICE([Imagick compiling as extension - add libs everything])
+    PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  fi
+
   PHP_EVAL_INCLINE($IM_IMAGEMAGICK_CFLAGS)
 
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
