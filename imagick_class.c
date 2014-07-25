@@ -4345,6 +4345,7 @@ PHP_METHOD(imagick, mattefloodfillimage)
 /* }}} */
 #endif
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::medianFilterImage(float radius)
 	Applies a digital filter that improves the quality of a noisy image.  Each pixel is replaced by the median in a set of neighboring pixels as defined by radius.
 */
@@ -4375,6 +4376,7 @@ PHP_METHOD(imagick, medianfilterimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::negateImage(bool gray[, int channel] )
 	Negates the colors in the reference image.  The Grayscale option means that only grayscale values within the image are negated.
@@ -4666,6 +4668,7 @@ PHP_METHOD(imagick, quantizeimages)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::reduceNoiseImage(float radius)
 	Smooths the contours of an image
 */
@@ -4696,6 +4699,7 @@ PHP_METHOD(imagick, reducenoiseimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto string Imagick::removeImageProfile(string name)
 	Removes the named image profile and returns it
@@ -7393,8 +7397,9 @@ static
 zend_bool s_image_has_format (MagickWand *magick_wand)
 {
 	char *buffer;
+	zend_bool ret;
 	buffer = MagickGetImageFormat(magick_wand);
-	zend_bool ret = buffer && *buffer != '\0';
+	ret = buffer && *buffer != '\0';
 	if (buffer) {
 		MagickRelinquishMemory (buffer);
 	}
@@ -9872,6 +9877,7 @@ PHP_METHOD(imagick, posterizeimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto bool Imagick::radialBlurImage(float angle[, int channel])
 	Radial blurs an image.
 */
@@ -9881,6 +9887,8 @@ PHP_METHOD(imagick, radialblurimage)
 	MagickBooleanType status;
 	double angle;
 	long channel = DefaultChannels;
+
+	IMAGICK_METHOD_DEPRECATED ("Imagick", "radialBlurImage");
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &angle, &channel) == FAILURE) {
 		return;
@@ -9901,6 +9909,7 @@ PHP_METHOD(imagick, radialblurimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::raiseImage(int width, int height, int x, int y, bool raise)
 	Creates a simulated three-dimensional button-like effect by lightening and darkening the edges of the image.  Members width and height of raise_info define the width of the vertical and horizontal edge of the effect.
@@ -10848,6 +10857,7 @@ PHP_METHOD(imagick, setprogressmonitor)
 	zval *user_callback;
 
 	php_imagick_object *intern;
+	php_imagick_callback *callback;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &user_callback) == FAILURE) {
@@ -10860,7 +10870,7 @@ PHP_METHOD(imagick, setprogressmonitor)
 		RETURN_FALSE;
 	}
 
-	php_imagick_callback *callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
+	callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
 
 	TSRMLS_SET_CTX(callback->thread_ctx);
 	//We can't free the previous callback as we can't guarantee that
