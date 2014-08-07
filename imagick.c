@@ -2725,11 +2725,12 @@ static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{
 	return FAILURE;
 }
 
+
 static zval *php_imagick_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv TSRMLS_DC)
 {
 	int ret;
 	php_imagick_object *intern;
-	zval *retval;
+	zval *retval = NULL;
 	zval tmp_member;
     zend_object_handlers *std_hnd;
 
@@ -2787,11 +2788,11 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 			}
 		}
 	}
-	
+
 	if (!retval) {
-		//TODO - this doesn't work.
-		retval = rv;
-		ZVAL_COPY_VALUE(retval, &EG(uninitialized_zval));
+		//TODO - why is the error silent?
+		zend_error(E_NOTICE,"Undefined property: \Imagick::$%s", Z_STRVAL_P(member));
+		retval = &EG(uninitialized_zval);
 	}
 
 	if (member == &tmp_member) {
