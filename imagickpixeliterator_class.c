@@ -293,7 +293,7 @@ PHP_METHOD(imagickpixeliterator, getpixelregioniterator)
 		return;
 	}
 
-	intern = Z_IMAGICKPIXELITERATOR_P(magick_object);
+	intern = Z_IMAGICK_P(magick_object);
 
 	if (!intern->magick_wand) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Invalid Imagick object passed" TSRMLS_CC);
@@ -427,20 +427,20 @@ static
 void s_pixelwands_to_zval (PixelWand **wand_array, unsigned long num_wands, zval *return_value TSRMLS_DC)
 {
 	php_imagickpixel_object *internp;
-	zval *obj;
+	zval obj;
 	unsigned long i;
 
 	array_init(return_value);
 
 	for (i = 0; i < num_wands; i++) {
-		MAKE_STD_ZVAL(obj);
-		object_init_ex(obj, php_imagickpixel_sc_entry);
+		//MAKE_STD_ZVAL(obj);
+		object_init_ex(&obj, php_imagickpixel_sc_entry);
 
-		internp = Z_IMAGICKPIXEL_P(obj);
+		internp = Z_IMAGICKPIXEL_P(&obj);
 		internp->initialized_via_iterator = 1;
 
 		php_imagick_replace_pixelwand(internp, wand_array[i]);
-		add_next_index_zval(return_value, obj);
+		add_next_index_zval(return_value, &obj);
 	}
 
 }

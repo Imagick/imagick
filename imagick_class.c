@@ -3133,7 +3133,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to query the font metrics" TSRMLS_CC);
 		return;
 	} else {
-		zval *bounding;
+		zval bounding;
 
 		array_init(return_value);
 		add_assoc_double(return_value, "characterWidth", metrics[0]);
@@ -3144,15 +3144,12 @@ PHP_METHOD(imagick, queryfontmetrics)
 		add_assoc_double(return_value, "textHeight", metrics[5]);
 		add_assoc_double(return_value, "maxHorizontalAdvance", metrics[6]);
 
-		MAKE_STD_ZVAL(bounding);
-		array_init(bounding);
-
-		add_assoc_double(bounding, "x1", metrics[7]);
-		add_assoc_double(bounding, "y1", metrics[8]);
-		add_assoc_double(bounding, "x2", metrics[9]);
-		add_assoc_double(bounding, "y2", metrics[10]);
-		add_assoc_zval(return_value, "boundingBox", bounding);
-
+		array_init(&bounding);
+		add_assoc_double(&bounding, "x1", metrics[7]);
+		add_assoc_double(&bounding, "y1", metrics[8]);
+		add_assoc_double(&bounding, "x2", metrics[9]);
+		add_assoc_double(&bounding, "y2", metrics[10]);
+		add_assoc_zval(return_value, "boundingBox", &bounding);
 		add_assoc_double(return_value, "originX", metrics[11]);
 		add_assoc_double(return_value, "originY", metrics[12]);
 
@@ -6095,7 +6092,7 @@ PHP_METHOD(imagick, getimagechannelmean)
 */
 PHP_METHOD(imagick, getimagechannelstatistics)
 {
-	zval *tmp;
+	zval tmp;
 
 	const long channels[] = { UndefinedChannel, RedChannel, CyanChannel,
 							  GreenChannel, MagentaChannel, BlueChannel,
@@ -6118,18 +6115,19 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 
 	for (i = 0; i < elements ; i++) {
 
-		MAKE_STD_ZVAL(tmp);
-		array_init(tmp);
+//		MAKE_STD_ZVAL(tmp);
+//		array_init(tmp);
+		ZVAL_NEW_ARR(&tmp);
 
-		add_assoc_double(tmp, "mean", statistics[channels[i]].mean);
-		add_assoc_double(tmp, "minima", statistics[channels[i]].minima);
-		add_assoc_double(tmp, "maxima", statistics[channels[i]].maxima);
-		add_assoc_double(tmp, "standardDeviation", statistics[channels[i]].standard_deviation);
+		add_assoc_double(&tmp, "mean", statistics[channels[i]].mean);
+		add_assoc_double(&tmp, "minima", statistics[channels[i]].minima);
+		add_assoc_double(&tmp, "maxima", statistics[channels[i]].maxima);
+		add_assoc_double(&tmp, "standardDeviation", statistics[channels[i]].standard_deviation);
 #if MagickLibVersion < 0x635
-		add_assoc_long(tmp, "scale", statistics[channels[i]].scale);
+		add_assoc_long(&tmp, "scale", statistics[channels[i]].scale);
 #endif
-		add_assoc_long(tmp, "depth", statistics[channels[i]].depth);
-		add_index_zval(return_value, channels[i], tmp);
+		add_assoc_long(&tmp, "depth", statistics[channels[i]].depth);
+		add_index_zval(return_value, channels[i], &tmp);
 	}
 	MagickRelinquishMemory(statistics);
 	return;
@@ -7679,16 +7677,18 @@ PHP_METHOD(imagick, identifyimage)
 	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	// Geometry is an associative array
-	MAKE_STD_ZVAL (array);
-	array_init (array);
+//	MAKE_STD_ZVAL (array);
+//	array_init (array);
+	ZVAL_NEW_ARR(array);
 
 	add_assoc_long (array, "width", MagickGetImageWidth (intern->magick_wand));
 	add_assoc_long (array, "height", MagickGetImageHeight (intern->magick_wand));
 	add_assoc_zval (return_value, "geometry", array);
 
 	if (MagickGetImageResolution(intern->magick_wand, &x, &y) == MagickTrue) {
-	    MAKE_STD_ZVAL (array);
-	    array_init (array);
+//	    MAKE_STD_ZVAL (&array);
+//	    array_init (&array);
+	    //ZVAL_NEW_ARR(&array)
 
 	    add_assoc_double (array, "x", x);
 	    add_assoc_double (array, "y", y);
@@ -8038,7 +8038,7 @@ PHP_METHOD(imagick, compareimagechannels)
 	php_imagick_object *intern, *intern_second, *intern_return;
 	long channel_type, metric_type;
 	double distortion;
-	zval *new_wand;
+	zval new_wand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &channel_type, &metric_type) == FAILURE) {
 		return;
@@ -8059,13 +8059,15 @@ PHP_METHOD(imagick, compareimagechannels)
 		return;
 	}
 
-	MAKE_STD_ZVAL(new_wand);
-	array_init(return_value);
-	object_init_ex(new_wand, php_imagick_sc_entry);
-	intern_return = Z_IMAGICK_P(new_wand);
+	//MAKE_STD_ZVAL(new_wand);
+	//array_init(return_value);
+	ZVAL_NEW_ARR(return_value);
+	
+	object_init_ex(&new_wand, php_imagick_sc_entry);
+	intern_return = Z_IMAGICK_P(&new_wand);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
-	add_next_index_zval(return_value, new_wand);
+	add_next_index_zval(return_value, &new_wand);
 	add_next_index_double(return_value, distortion);
 
 	return;
@@ -8342,7 +8344,7 @@ PHP_METHOD(imagick, compareimages)
 	php_imagick_object *intern, *intern_second, *intern_return;
 	long metric_type;
 	double distortion;
-	zval *new_wand;
+	zval new_wand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &metric_type) == FAILURE) {
 		return;
@@ -8356,8 +8358,9 @@ PHP_METHOD(imagick, compareimages)
 	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
 		return;
 
-	MAKE_STD_ZVAL(new_wand);
-	array_init(return_value);
+	//MAKE_STD_ZVAL(new_wand);
+	//array_init(return_value);
+	ZVAL_NEW_ARR(return_value);
 
 	tmp_wand = MagickCompareImages(intern->magick_wand, intern_second->magick_wand, metric_type, &distortion);
 
@@ -8366,11 +8369,11 @@ PHP_METHOD(imagick, compareimages)
 		return;
 	}
 
-	object_init_ex(new_wand, php_imagick_sc_entry);
-	intern_return = Z_IMAGICK_P(new_wand);
+	object_init_ex(&new_wand, php_imagick_sc_entry);
+	intern_return = Z_IMAGICK_P(&new_wand);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
-	add_next_index_zval(return_value, new_wand);
+	add_next_index_zval(return_value, &new_wand);
 	add_next_index_double(return_value, distortion);
 
 	return;

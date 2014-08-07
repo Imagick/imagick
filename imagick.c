@@ -2969,6 +2969,8 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_SC_NAME, php_imagickdraw_class_methods);
 	ce.create_object = php_imagickdraw_object_new;
 	imagickdraw_object_handlers.clone_obj = php_imagick_clone_imagickdraw_object;
+	imagickdraw_object_handlers.offset = XtOffsetOf(php_imagickdraw_object, zo);
+	imagickdraw_object_handlers.free_obj = php_imagickdraw_object_free_storage;
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
 	/*
@@ -2977,6 +2979,8 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_SC_NAME, php_imagickpixeliterator_class_methods);
 	ce.create_object = php_imagickpixeliterator_object_new;
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
+	imagickpixeliterator_object_handlers.offset = XtOffsetOf(php_imagickpixeliterator_object, zo);
+	imagickpixeliterator_object_handlers.free_obj = php_imagickpixeliterator_object_free_storage;
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_imagickpixeliterator_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
 

@@ -143,6 +143,24 @@ typedef struct _php_imagickdraw_object  {
 
 #endif
 
+#ifdef ZEND_ENGINE_3
+
+/* Structure for ImagickPixelIterator object. */
+typedef struct _php_imagickpixeliterator_object  {
+	
+	PixelIterator *pixel_iterator;
+	zend_bool initialized;
+
+#if MagickLibVersion <= 0x628
+	long rows;
+	long iterator_position;
+#endif
+
+	zend_object zo;
+} php_imagickpixeliterator_object;
+
+#else
+
 /* Structure for ImagickPixelIterator object. */
 typedef struct _php_imagickpixeliterator_object  {
 	zend_object zo;
@@ -153,7 +171,11 @@ typedef struct _php_imagickpixeliterator_object  {
 	long rows;
 	long iterator_position;
 #endif
+
 } php_imagickpixeliterator_object;
+
+#endif;
+
 
 #ifdef ZEND_ENGINE_3
 
