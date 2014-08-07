@@ -459,7 +459,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 		zval *pz_x, *pz_y;
 
 		/* If its something than array lets error here */
-		if(Z_TYPE_PP(pzvalue) != IS_ARRAY) {
+		if(Z_TYPE_P(pzvalue) != IS_ARRAY) {
 			efree(coordinates);
 			*num_elements = 0;
 			return NULL;

@@ -2729,7 +2729,8 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 {
 	int ret;
 	php_imagick_object *intern;
-	zval *retval = NULL, tmp_member;
+	zval *retval;
+	zval tmp_member;
     zend_object_handlers *std_hnd;
 
 	if (Z_TYPE_P(member) != IS_STRING) {
@@ -2740,47 +2741,63 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
     }
 
 	std_hnd = zend_get_std_object_handlers();
-	retval = std_hnd->read_property(object, member, type, cache_slot, rv TSRMLS_CC);
 
-	if (!retval) {
+	ret = std_hnd->has_property(object, member, type, cache_slot TSRMLS_CC);
+
+	if (ret) {
+		//TODO - this would allow better immutability
+		//ZVAL_COPY_VALUE(retval, std_hnd->read_property(object, member, type, cache_slot, rv TSRMLS_CC));
+		retval = std_hnd->read_property(object, member, type, cache_slot, rv TSRMLS_CC);
+	}
+	else {
+
 		intern = Z_IMAGICK_P(object);
 		/* Do we have any images? */
 		if (MagickGetNumberImages(intern->magick_wand)) {
+
+			//TODO - this seems redundant
 			/* Is this overloaded? */
 			if (!strcmp(Z_STRVAL_P(member), "width") ||
 				!strcmp(Z_STRVAL_P(member), "height") ||
 				!strcmp(Z_STRVAL_P(member), "format")) {
 
-				MAKE_STD_ZVAL(retval);
-#ifdef Z_SET_REFCOUNT_P
-				Z_SET_REFCOUNT_P(retval, 0);
-#else
-				retval->refcount = 0;
-#endif
+//#ifdef Z_SET_REFCOUNT_P
+//				Z_SET_REFCOUNT_P(retval, 0);
+//#else
+//				retval->refcount = 0;
+//#endif
 				if (!strcmp(Z_STRVAL_P(member), "width")) {
+					retval = rv;
 					ZVAL_LONG(retval, MagickGetImageWidth(intern->magick_wand));
 				} else if (!strcmp(Z_STRVAL_P(member), "height")) {
+					retval = rv;
 					ZVAL_LONG(retval, MagickGetImageHeight(intern->magick_wand));
 				} else if (!strcmp(Z_STRVAL_P(member), "format")) {
 					char *format = MagickGetImageFormat(intern->magick_wand);
 
 					if (format) {
+						retval = rv;
 						ZVAL_STRING(retval, format);
 						IMAGICK_FREE_MAGICK_MEMORY(format);
 					} else {
+						retval = rv;
 						ZVAL_STRING(retval, "");
 					}
 				}
 			}
 		}
 	}
-	if (member == &tmp_member) {
-    	zval_dtor(member);
-    }
-
+	
 	if (!retval) {
-		retval = &EG(uninitialized_zval);
+		//TODO - this doesn't work.
+		retval = rv;
+		ZVAL_COPY_VALUE(retval, &EG(uninitialized_zval));
 	}
+
+	if (member == &tmp_member) {
+		zval_dtor(member);
+	}
+
 	return retval;
 }
 
