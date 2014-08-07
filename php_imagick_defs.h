@@ -174,7 +174,7 @@ typedef struct _php_imagickpixeliterator_object  {
 
 } php_imagickpixeliterator_object;
 
-#endif;
+#endif
 
 
 #ifdef ZEND_ENGINE_3
