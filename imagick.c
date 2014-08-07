@@ -26,6 +26,8 @@
 
 #include "ext/standard/php_smart_str.h"
 
+
+
 /* For the countable interface */
 #if defined(HAVE_SPL)
 #include "ext/spl/spl_iterators.h"
@@ -58,6 +60,8 @@ PHP_IMAGICK_API zend_class_entry *php_imagick_get_class_entry()
 {
 	return php_imagick_sc_entry;
 }
+
+
 
 PHP_IMAGICK_API zend_class_entry *php_imagickdraw_get_class_entry()
 {
@@ -2558,14 +2562,20 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 		 }
 #endif
 
-static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr, zend_bool init_wand TSRMLS_DC)
+static zend_object * php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr, zend_bool init_wand TSRMLS_DC)
 {
-	zend_object_value retval;
+	//zend_object_value retval;
 	php_imagick_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagick_object *) emalloc(sizeof(php_imagick_object));
-	memset(&intern->zo, 0, sizeof(zend_object));
+	//intern = (php_imagick_object *) emalloc(sizeof(php_imagick_object));
+	
+  	//Allocate sizeof(custom) + sizeof(properties table requirements)
+	intern = ecalloc(1,
+		sizeof(php_imagick_object) +
+		sizeof(zval) * (class_type->default_properties_count - 1));
+
+	//memset(&intern->zo, 0, sizeof(zend_object));
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	/* If its our thread then we already have the lock so no need to lock again */
@@ -2584,7 +2594,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 		intern->magick_wand = NewMagickWand();
 
 		if (!intern->magick_wand) {
-			zend_error(E_ERROR, "Failed to create ImagickDraw object");
+			zend_error(E_ERROR, "Failed to create Imagick object, could not set magick_wand");
 		}
 	} else {
 		intern->magick_wand = NULL;
@@ -2594,27 +2604,50 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
+//	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+//	object_properties_init(&intern->zo, class_type);
+
+
+//	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagick_object_free_storage, NULL TSRMLS_CC);
+//	retval.handlers = (zend_object_handlers *) &imagick_object_handlers;
+
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagick_object_free_storage, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &imagick_object_handlers;
-	return retval;
+//	retval.handlers.offset = XtOffsetof(struct php_imagick_object, std);
+//    retval.handlers.free_obj = php_imagick_object_free_storage;
+    
+    intern->zo.handlers = &imagick_object_handlers;
+
+	return &intern->zo;
 }
 
-static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object * php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	return php_imagick_object_new_ex(class_type, NULL, 1 TSRMLS_CC);
 }
 
-static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr, zend_bool init_wand TSRMLS_DC)
+static zend_object * php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr, zend_bool init_wand TSRMLS_DC)
 {
-	zend_object_value retval;
+	//zend_object_value retval;
 	php_imagickdraw_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagickdraw_object *) emalloc(sizeof(php_imagickdraw_object));
-	memset(&intern->zo, 0, sizeof(zend_object));
+//	intern = (php_imagickdraw_object *) emalloc(sizeof(php_imagickdraw_object));
+//	memset(&intern->zo, 0, sizeof(zend_object));
+	
+	
+		
+	intern = ecalloc(1,
+		sizeof(php_imagickdraw_object) +
+		sizeof(zval) * (class_type->default_properties_count - 1));
+
+	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+	object_properties_init(&intern->zo, class_type);
+	
+	intern->zo.handlers = &imagickdraw_object_handlers;
+
+
 
 	if (ptr) {
 		*ptr = intern;
@@ -2632,27 +2665,37 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	}
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	object_properties_init(&intern->zo, class_type);
+//	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+//	object_properties_init(&intern->zo, class_type);
+//
+//	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickdraw_object_free_storage, NULL TSRMLS_CC);
+//	retval.handlers = (zend_object_handlers *) &imagickdraw_object_handlers;
+//	return retval;
+	
+	
+	intern->zo.handlers = &imagickdraw_object_handlers;
 
-	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickdraw_object_free_storage, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &imagickdraw_object_handlers;
-	return retval;
+	return &intern->zo;
 }
 
-static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object * php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	return php_imagickdraw_object_new_ex(class_type, NULL, 1 TSRMLS_CC);
 }
 
-static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object * php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
-	zend_object_value retval;
+	//zend_object_value retval;
 	php_imagickpixeliterator_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagickpixeliterator_object *) emalloc(sizeof(php_imagickpixeliterator_object));
-	memset(&intern->zo, 0, sizeof(zend_object));
+//	intern = (php_imagickpixeliterator_object *) emalloc(sizeof(php_imagickpixeliterator_object));
+//	memset(&intern->zo, 0, sizeof(zend_object));
+	
+	intern = ecalloc(1,
+    		sizeof(php_imagickpixeliterator_object) +
+    		sizeof(zval) * (class_type->default_properties_count - 1));
+	
 
 	/* We cant initialize yet */
 	intern->pixel_iterator = NULL;
@@ -2663,24 +2706,30 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	intern->iterator_position = 0;
 #endif
 
-	/* ALLOC_HASHTABLE(intern->zo.properties); */
+//	/* ALLOC_HASHTABLE(intern->zo.properties); */
+//
+//	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+//	object_properties_init(&intern->zo, class_type);
+//
+//	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixeliterator_object_free_storage, NULL TSRMLS_CC);
+//	retval.handlers = (zend_object_handlers *) &imagickpixeliterator_object_handlers;
+//	return retval;
 
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	object_properties_init(&intern->zo, class_type);
-
-	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixeliterator_object_free_storage, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &imagickpixeliterator_object_handlers;
-	return retval;
+	intern->zo.handlers = &imagickpixeliterator_object_handlers;
+	return &intern->zo;
 }
 
-static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_type, php_imagickpixel_object **ptr TSRMLS_DC)
+static zend_object * php_imagickpixel_object_new_ex(zend_class_entry *class_type, php_imagickpixel_object **ptr TSRMLS_DC)
 {
-	zend_object_value retval;
+	//zend_object_value retval;
 	php_imagickpixel_object *intern;
 
 	/* Allocate memory for it */
-	intern = (php_imagickpixel_object *) emalloc(sizeof(php_imagickpixel_object));
-	memset(&intern->zo, 0, sizeof(zend_object));
+//	intern = (php_imagickpixel_object *) emalloc(sizeof(php_imagickpixel_object));
+//	memset(&intern->zo, 0, sizeof(zend_object));
+	intern = ecalloc(1,
+        		sizeof(php_imagickpixel_object) +
+        		sizeof(zval) * (class_type->default_properties_count - 1));
 
 	if (ptr) {
 		*ptr = intern;
@@ -2692,17 +2741,22 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 
 	/* ALLOC_HASHTABLE(intern->zo.properties); */
 
-	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
-	object_properties_init(&intern->zo, class_type);
+//	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
+//	object_properties_init(&intern->zo, class_type);
+//
+//	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixel_object_free_storage, NULL TSRMLS_CC);
+//	retval.handlers = (zend_object_handlers *) &imagickpixel_object_handlers;
+//	return retval;
+	
+	
+	intern->zo.handlers = &imagickpixel_object_handlers;
+	return &intern->zo;
 
-	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixel_object_free_storage, NULL TSRMLS_CC);
-	retval.handlers = (zend_object_handlers *) &imagickpixel_object_handlers;
-	return retval;
 }
 
 #undef object_properties_init
 
-static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
+static zend_object * php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	return php_imagickpixel_object_new_ex(class_type, NULL TSRMLS_CC);
 }
@@ -2719,21 +2773,24 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 }
 
 static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{{ */
-	{
-	php_imagick_object *intern= (php_imagick_object *)zend_object_store_get_object(object TSRMLS_CC);
+{
+	php_imagick_object *intern= Z_IMAGICK_P(object);
 
 	if (intern->magick_wand) {
 		*count = MagickGetNumberImages(intern->magick_wand);
 		return SUCCESS;
 	}
 	return FAILURE;
-	}
+}
 
-#if PHP_VERSION_ID < 50399
-static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC)
-#else
-static zval *php_imagick_read_property(zval *object, zval *member, int type, const zend_literal *key TSRMLS_DC)
-#endif
+//#if PHP_VERSION_ID < 50399
+//static zval *php_imagick_read_property(zval *object, zval *member, int type TSRMLS_DC)
+//#else
+//static zval *php_imagick_read_property(zval *object, zval *member, void **cache_slot, zval *rv TSRMLS_DC)
+//#endif
+
+
+static zval *php_imagick_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv TSRMLS_DC)
 {
 	int ret;
 	php_imagick_object *intern;
@@ -2747,22 +2804,26 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 		member = &tmp_member;
     }
 
-	std_hnd = zend_get_std_object_handlers();
-#if PHP_VERSION_ID < 50399
-	ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
-#else
-	ret = std_hnd->has_property(object, member, 2, key TSRMLS_CC);
-#endif	
+//	std_hnd = zend_get_std_object_handlers();
+//#if PHP_VERSION_ID < 50399
+//	ret = std_hnd->has_property(object, member, 2 TSRMLS_CC);
+//#else
+//	ret = std_hnd->has_property(object, member, 2, key TSRMLS_CC);
+//#endif	
 
-	if (ret) {
-		std_hnd = zend_get_std_object_handlers();
-#if PHP_VERSION_ID < 50399
-		retval = std_hnd->read_property(object, member, type TSRMLS_CC);
-#else
-		retval = std_hnd->read_property(object, member, type, key TSRMLS_CC);
-#endif
-	} else {
-		intern = (php_imagick_object *) zend_object_store_get_object(object TSRMLS_CC);
+	std_hnd = zend_get_std_object_handlers();
+	retval = std_hnd->read_property(object, member, type, cache_slot, rv TSRMLS_CC);
+
+	if (!retval) {
+		
+//#if PHP_VERSION_ID < 50399
+//		retval = std_hnd->read_property(object, member, type TSRMLS_CC);
+//#else
+//		retval = std_hnd->read_property(object, member, type, key TSRMLS_CC);
+//#endif
+
+	//} else {
+		intern = Z_IMAGICK_P(object);
 		/* Do we have any images? */
 		if (MagickGetNumberImages(intern->magick_wand)) {
 			/* Is this overloaded? */
@@ -2784,10 +2845,10 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 					char *format = MagickGetImageFormat(intern->magick_wand);
 
 					if (format) {
-						ZVAL_STRING(retval, format, 1);
+						ZVAL_STRING(retval, format);
 						IMAGICK_FREE_MAGICK_MEMORY(format);
 					} else {
-						ZVAL_STRING(retval, "", 1);
+						ZVAL_STRING(retval, "");
 					}
 				}
 			}
@@ -2798,19 +2859,21 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
     }
 
 	if (!retval) {
-		retval = EG(uninitialized_zval_ptr);
+		//retval = EG(uninitialized_zval_ptr);
+		retval = &EG(uninitialized_zval);
 	}
 	return retval;
 }
 
-static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
+static zend_object * php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
 {
 	MagickWand *wand_copy = NULL;
 	php_imagick_object *new_obj = NULL;
-	php_imagick_object *old_obj = (php_imagick_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
+	php_imagick_object *old_obj = Z_IMAGICK_P(this_ptr);
+	zend_object * new_zo = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
 
-	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	//zend_objects_clone_members(&new_obj->zo, new_zo, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
 
 	wand_copy = CloneMagickWand(old_obj->magick_wand);
 	if (!wand_copy) {
@@ -2823,17 +2886,18 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 			new_obj->progress_monitor_name = estrdup(old_obj->progress_monitor_name);
 		}
 	}
-	return new_ov;
+	return new_zo;
 }
 
-static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSRMLS_DC)
+static zend_object * php_imagick_clone_imagickdraw_object(zval *this_ptr TSRMLS_DC)
 {
 	DrawingWand *wand_copy = NULL;
 	php_imagickdraw_object *new_obj = NULL;
-	php_imagickdraw_object *old_obj = (php_imagickdraw_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
+	php_imagickdraw_object *old_obj = Z_IMAGICKDRAW_P(this_ptr);
+	zend_object * new_zo = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
 
-	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	//zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
 	wand_copy = CloneDrawingWand(old_obj->drawing_wand);
 
 	if (!wand_copy) {
@@ -2841,17 +2905,17 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 	} else {
 		php_imagick_replace_drawingwand(new_obj, wand_copy);
 	}
-	return new_ov;
+	return new_zo;
 }
 
-static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TSRMLS_DC)
+static zend_object * php_imagick_clone_imagickpixel_object(zval *this_ptr TSRMLS_DC)
 {
 	PixelWand *wand_copy = NULL;
 	php_imagickpixel_object *new_obj = NULL;
-	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	php_imagickpixel_object *old_obj = Z_IMAGICKPIXEL_P(this_ptr);
+	zend_object * new_zo = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 
-	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
 
 	wand_copy = php_imagick_clone_pixelwand (old_obj->pixel_wand);
 	if (!wand_copy) {
@@ -2860,7 +2924,7 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 		php_imagick_replace_pixelwand(new_obj, wand_copy);
 		new_obj->initialized_via_iterator = 0;
 	}
-	return new_ov;
+	return new_zo;
 }
 
 static int checkImagickVersion()
@@ -2923,28 +2987,28 @@ PHP_MINIT_FUNCTION(imagick)
 		Initialize exceptions (Imagick exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICK_EXCEPTION_SC_NAME, NULL);
-	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C) TSRMLS_CC);
 	php_imagick_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
 	Initialize exceptions (ImagickDraw exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_EXCEPTION_SC_NAME, NULL);
-	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C) TSRMLS_CC);
 	php_imagickdraw_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
 	Initialize exceptions (ImagickPixelIterator exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME, NULL);
-	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C) TSRMLS_CC);
 	php_imagickpixeliterator_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
 	Initialize exceptions (ImagickPixel exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXEL_EXCEPTION_SC_NAME, NULL);
-	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C) TSRMLS_CC);
 	php_imagickpixel_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
@@ -3029,7 +3093,7 @@ PHP_MINFO_FUNCTION(imagick)
 			IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 		}
 		smart_str_0(&formats);
-		php_info_print_table_row(2, "ImageMagick supported formats", formats.c);
+		php_info_print_table_row(2, "ImageMagick supported formats", formats.s);
 		smart_str_free(&formats);
 		IMAGICK_FREE_MAGICK_MEMORY(supported_formats);
 	}

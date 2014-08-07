@@ -45,7 +45,7 @@
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
-	zval *user_callback;
+	zval user_callback;
 	struct _php_imagick_callback *previous_callback;
 } php_imagick_callback;
 
@@ -79,6 +79,13 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
 #endif
 
+#if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION == 7
+#define ZEND_ENGINE_3 1
+#endif
+
+
+
+
 /* Class names */
 #define PHP_IMAGICK_SC_NAME "Imagick"
 #define PHP_IMAGICK_EXCEPTION_SC_NAME "ImagickException"
@@ -92,6 +99,18 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
 #define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
 
+#ifdef ZEND_ENGINE_3
+
+/* Structure for Imagick object. */
+typedef struct _php_imagick_object  {
+	MagickWand *magick_wand;
+	char *progress_monitor_name;
+	zend_bool next_out_of_bound;
+	zend_object zo;
+} php_imagick_object;
+
+#else 
+
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
 	zend_object zo;
@@ -100,12 +119,29 @@ typedef struct _php_imagick_object  {
 	zend_bool next_out_of_bound;
 } php_imagick_object;
 
+#endif
+
+
+#ifdef ZEND_ENGINE_3
+
+/* Structure for ImagickDraw object. */
+typedef struct _php_imagickdraw_object  {
+	DrawingWand *drawing_wand;
+	zend_object zo;
+} php_imagickdraw_object;
+
+
+#else 
+
 
 /* Structure for ImagickDraw object. */
 typedef struct _php_imagickdraw_object  {
 	zend_object zo;
 	DrawingWand *drawing_wand;
 } php_imagickdraw_object;
+
+
+#endif
 
 /* Structure for ImagickPixelIterator object. */
 typedef struct _php_imagickpixeliterator_object  {
@@ -125,6 +161,34 @@ typedef struct _php_imagickpixel_object  {
     PixelWand *pixel_wand;
 	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
+
+
+#ifdef ZEND_ENGINE_3 
+
+static inline php_imagick_object *php_imagick_fetch_object(zend_object *obj) {
+	return (php_imagick_object *)((char*)(obj) - XtOffsetOf(php_imagick_object, zo));
+}
+
+static inline php_imagickdraw_object *php_imagickdraw_fetch_object(zend_object *obj) {
+	return (php_imagickdraw_object *)((char*)(obj) - XtOffsetOf(php_imagickdraw_object, zo));
+}
+
+static inline php_imagickpixel_object *php_imagickpixel_fetch_object(zend_object *obj) {
+	return (php_imagickpixel_object *)((char*)(obj) - XtOffsetOf(php_imagickpixel_object, zo));
+}
+
+
+static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_object(zend_object *obj) {
+	return (php_imagickpixeliterator_object *)((char*)(obj) - XtOffsetOf(php_imagickpixeliterator_object, zo));
+}
+
+
+#define Z_IMAGICK_P(zv) php_imagick_fetch_object(Z_OBJ_P((zv)))
+#define Z_IMAGICKDRAW_P(zv) php_imagickdraw_fetch_object(Z_OBJ_P((zv)))
+#define Z_IMAGICKPIXEL_P(zv) php_imagickpixel_fetch_object(Z_OBJ_P((zv)))
+#define Z_IMAGICKPIXELITERATOR_P(zv) php_imagickpixeliterator_fetch_object(Z_OBJ_P((zv)))
+
+#endif
 
 /* Define some color constants */
 typedef enum _php_imagick_color_t {

@@ -36,7 +36,7 @@ PHP_METHOD(imagickpixel, gethsl)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	PixelGetHSL(internp->pixel_wand, &hue, &saturation, &luminosity);
 
@@ -61,7 +61,7 @@ PHP_METHOD(imagickpixel, sethsl)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	PixelSetHSL(internp->pixel_wand, hue, saturation, luminosity);
 	RETURN_TRUE;
@@ -81,7 +81,7 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 	
 	switch (color) {
 
@@ -143,7 +143,7 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	switch (color) {
 
@@ -203,7 +203,7 @@ PHP_METHOD(imagickpixel, getindex)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 	RETVAL_LONG(PixelGetIndex(internp->pixel_wand));
 }
 /* }}} */
@@ -221,7 +221,7 @@ PHP_METHOD(imagickpixel, setindex)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 	PixelSetIndex(internp->pixel_wand, index);
 	RETURN_TRUE;
 }
@@ -241,7 +241,7 @@ PHP_METHOD(imagickpixel, __construct)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 	internp->pixel_wand = NewPixelWand();
 
 	if (!internp->pixel_wand) {
@@ -275,7 +275,7 @@ PHP_METHOD(imagickpixel, setcolor)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 	status = PixelSetColor(internp->pixel_wand, color_name);
 
 	if (status == MagickFalse) {
@@ -298,7 +298,7 @@ PHP_METHOD(imagickpixel, clear)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	ClearPixelWand(internp->pixel_wand);
 	RETURN_TRUE;
@@ -323,7 +323,7 @@ void s_is_pixelwand_similar(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICKPIXEL_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -375,7 +375,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	if (color <= PHP_IMAGICK_COLOR_MIN || color >= PHP_IMAGICK_COLOR_MAX) {
 		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
@@ -452,7 +452,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	if (color <= PHP_IMAGICK_COLOR_MIN || color >= PHP_IMAGICK_COLOR_MAX) {
 		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
@@ -528,7 +528,7 @@ PHP_METHOD(imagickpixel, getcolor)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 	array_init(return_value);
 
 	if (normalized == 1) {
@@ -573,10 +573,10 @@ PHP_METHOD(imagickpixel, getcolorasstring)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	color_string = PixelGetColorAsString(internp->pixel_wand);
-	ZVAL_STRING(return_value, color_string, 1);
+	ZVAL_STRING(return_value, color_string);
 
 	IMAGICK_FREE_MAGICK_MEMORY(color_string);
 	return;
@@ -598,7 +598,7 @@ PHP_METHOD(imagickpixel, clone)
 
 	IMAGICK_METHOD_DEPRECATED("ImagickPixel", "clone");
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	pixel_wand = php_imagick_clone_pixelwand (internp->pixel_wand);
 	if (!pixel_wand) {
@@ -607,7 +607,7 @@ PHP_METHOD(imagickpixel, clone)
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
-	intern_return = (php_imagickpixel_object *)zend_object_store_get_object(return_value TSRMLS_CC);
+	intern_return = Z_IMAGICKPIXEL_P(return_value);
 
 	php_imagick_replace_pixelwand(intern_return, pixel_wand);
 	return;
@@ -625,7 +625,7 @@ PHP_METHOD(imagickpixel, getcolorcount)
 		return;
 	}
 	
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
 	RETVAL_LONG(PixelGetColorCount(internp->pixel_wand));
 }
@@ -644,7 +644,7 @@ PHP_METHOD(imagickpixel, setcolorcount)
 		return;
 	}
 
-	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	internp = Z_IMAGICKPIXEL_P(getThis());
 
     PixelSetColorCount(internp->pixel_wand, color_count);
 	RETVAL_TRUE;
