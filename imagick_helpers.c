@@ -55,7 +55,7 @@ void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callba
 			efree(progress_callback->previous_callback);
 		}
 
-		zval_ptr_dtor(&progress_callback->user_callback);
+		zval_ptr_dtor(progress_callback->user_callback);
 	}
 }
 
@@ -78,7 +78,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci.size = sizeof(fci);
 	fci.function_table = EG(function_table);
 	fci.object = NULL;
-	fci.function_name = callback->user_callback;
+	fci.function_name = *callback->user_callback;
 	fci.retval = &retval;
 	fci.param_count = 2;
 	fci.params = zargs;
@@ -455,17 +455,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	*num_elements = elements;
 	coordinates = emalloc(sizeof(PointInfo) * elements);
 
-	//coords = Z_ARRVAL_P(coordinate_array);
-	//zend_hash_internal_pointer_reset_ex(coords, (HashPosition *) 0);
-
-//	for (i = 0, zend_hash_internal_pointer_reset(coords);
-//			zend_hash_get_current_data(coords, (void **) &ppzval) == SUCCESS;
-//			zend_hash_move_forward(coords), i++
-//	) {
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(coordinate_array), num_key, key, pzvalue) {
-//		zval **ppz_x, **ppz_y;
-//		zval tmp_zx, *tmp_pzx, tmp_zy, *tmp_pzy;
-
 		zval *pz_x, *pz_y;
 
 		/* If its something than array lets error here */
@@ -490,33 +480,19 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 
 		/* Get X */
 		if ((pz_x = zend_hash_str_find(sub_array, "x", sizeof("x")-1)) == NULL) {
-		//if (zend_hash_find(sub_array, "x", sizeof("x"), (void**)&ppz_x) == FAILURE) {
 			efree(coordinates);
 			*num_elements = 0;
 			return NULL;
 		}
-
-//		tmp_zx = **ppz_x;
-//		zval_copy_ctor(&tmp_zx);
-//		tmp_pzx = &tmp_zx;
-//		convert_to_double(tmp_pzx);
 
 		/* Get Y */
 		if ((pz_y = zend_hash_str_find(sub_array, "y", sizeof("y")-1)) == NULL) {
-		//if (zend_hash_find(sub_array, "y", sizeof("y"), (void**)&ppz_y) == FAILURE) {
 			efree(coordinates);
 			*num_elements = 0;
 			return NULL;
 		}
 
-//		tmp_zy = **ppz_y;
-//		zval_copy_ctor(&tmp_zy);
-//		tmp_pzy = &tmp_zy;
-//		convert_to_double(tmp_pzy);
-
 		/* Assign X and Y */
-//		coordinates[i].x = Z_DVAL(tmp_zx);
-//		coordinates[i].y = Z_DVAL(tmp_zy);
 		coordinates[i].x = zval_get_double(pz_x);
 		coordinates[i].y = zval_get_double(pz_y);
 	} ZEND_HASH_FOREACH_END();

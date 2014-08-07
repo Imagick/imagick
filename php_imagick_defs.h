@@ -45,7 +45,7 @@
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
-	zval user_callback;
+	zval *user_callback;
 	struct _php_imagick_callback *previous_callback;
 } php_imagick_callback;
 
@@ -155,6 +155,19 @@ typedef struct _php_imagickpixeliterator_object  {
 #endif
 } php_imagickpixeliterator_object;
 
+#ifdef ZEND_ENGINE_3
+
+/* Structure for ImagickPixel object. */
+typedef struct _php_imagickpixel_object  {
+	PixelWand *pixel_wand;
+	zend_bool initialized_via_iterator;
+	zend_object zo;
+} php_imagickpixel_object;
+
+
+#else
+
+
 /* Structure for ImagickPixel object. */
 typedef struct _php_imagickpixel_object  {
     zend_object zo;
@@ -162,6 +175,8 @@ typedef struct _php_imagickpixel_object  {
 	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
 
+
+#endif
 
 #ifdef ZEND_ENGINE_3 
 
@@ -176,7 +191,6 @@ static inline php_imagickdraw_object *php_imagickdraw_fetch_object(zend_object *
 static inline php_imagickpixel_object *php_imagickpixel_fetch_object(zend_object *obj) {
 	return (php_imagickpixel_object *)((char*)(obj) - XtOffsetOf(php_imagickpixel_object, zo));
 }
-
 
 static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_object(zend_object *obj) {
 	return (php_imagickpixeliterator_object *)((char*)(obj) - XtOffsetOf(php_imagickpixeliterator_object, zo));
