@@ -2790,8 +2790,9 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 	}
 
 	if (!retval) {
-		//TODO - why is the error silent?
-		zend_error(E_NOTICE,"Undefined property: \Imagick::$%s", Z_STRVAL_P(member));
+		//TODO - why is the error silent - it would be a small BC break
+		//to enable the warning. I think it would be the correct thing to do though.
+		//zend_error(E_NOTICE,"Undefined property: \Imagick::$%s", Z_STRVAL_P(member));
 		retval = &EG(uninitialized_zval);
 	}
 
