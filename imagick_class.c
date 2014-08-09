@@ -433,7 +433,7 @@ PHP_METHOD(imagick, shadeimage)
 PHP_METHOD(imagick, getsizeoffset)
 {
 	php_imagick_object *intern;
-	long offset;
+	MagickSizeType offset;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -1201,7 +1201,7 @@ PHP_METHOD(imagick, getimageproperties)
 	zend_bool values = 1;
 	char *pattern = "*", **properties, *property;
 	int pattern_len;
-	unsigned long properties_count, i;
+	MagickSizeType properties_count, i;
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
@@ -1250,7 +1250,7 @@ PHP_METHOD(imagick, getimageprofiles)
 	zend_bool values = 1;
 	char *pattern = "*", **profiles, *profile;
 	int pattern_len;
-	unsigned long profiles_count, i;
+	MagickSizeType profiles_count, i;
 	php_imagick_object *intern;
 	size_t length;
 
@@ -3005,7 +3005,7 @@ PHP_METHOD(imagick, count)
 PHP_METHOD(imagick, queryformats)
 {
 	char **supported_formats;
-	unsigned long num_formats = 0, i;
+	MagickSizeType num_formats = 0, i;
 	char *pattern = "*";
 	int pattern_len = 1;
 
@@ -3032,7 +3032,7 @@ PHP_METHOD(imagick, queryformats)
 PHP_METHOD(imagick, queryfonts)
 {
 	char **fonts;
-	unsigned long num_fonts = 0, i;
+	MagickSizeType num_fonts = 0, i;
 	char *pattern = "*";
 	int pattern_len = 1;
 
@@ -6016,7 +6016,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 {
 	php_imagick_object *intern;
 	long channel_type;
-	unsigned long minima, maxima;
+	MagickSizeType minima, maxima;
 	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageChannelExtrema");
@@ -6290,7 +6290,7 @@ PHP_METHOD(imagick, getimagedistortion)
 PHP_METHOD(imagick, getimageextrema)
 {
 	php_imagick_object *intern;
-	unsigned long min, max;
+	MagickSizeType min, max;
 	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageExtrema");
@@ -6422,8 +6422,7 @@ PHP_METHOD(imagick, getimagehistogram)
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	PixelWand **wand_array;
-	unsigned long colors = 0;
-	unsigned long i;
+	MagickSizeType colors = 0, i;
 	zval *tmp_pixelwand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -6543,8 +6542,8 @@ PHP_METHOD(imagick, getimagepage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	unsigned long width, height;
-	long x, y;
+	MagickSizeType width, height;
+	MagickSizeType x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -7393,8 +7392,10 @@ static
 zend_bool s_image_has_format (MagickWand *magick_wand)
 {
 	char *buffer;
+	zend_bool ret;
+
 	buffer = MagickGetImageFormat(magick_wand);
-	zend_bool ret = buffer && *buffer != '\0';
+	ret = buffer && *buffer != '\0';
 	if (buffer) {
 		MagickRelinquishMemory (buffer);
 	}
@@ -10372,8 +10373,8 @@ PHP_METHOD(imagick, getpage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	unsigned long width, height;
-	long x, y;
+	MagickSizeType width, height;
+	MagickSizeType x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10421,7 +10422,7 @@ PHP_METHOD(imagick, getquantum)
 PHP_METHOD(imagick, getquantumdepth)
 {
 	const char *quantum_depth;
-	unsigned long depth;
+	MagickSizeType depth;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10443,7 +10444,7 @@ PHP_METHOD(imagick, getquantumdepth)
 PHP_METHOD(imagick, getquantumrange)
 {
 	const char *quantum_range;
-	unsigned long range;
+	MagickSizeType range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10512,7 +10513,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 {
 	php_imagick_object *intern;
 	double *sampling_factors;
-	unsigned long number_factors = 0, i;
+	MagickSizeType number_factors = 0, i;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10540,7 +10541,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 PHP_METHOD(imagick, getsize)
 {
 	php_imagick_object *intern;
-	unsigned long columns, rows;
+	MagickSizeType columns, rows;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -10788,7 +10789,7 @@ PHP_METHOD(imagick, setpage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long width, height, x, y;
+	MagickSizeType width, height, x, y;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {

@@ -1525,7 +1525,7 @@ PHP_METHOD(imagickdraw, getstrokedasharray)
 {
 	php_imagickdraw_object *internd;
 	double *stroke_array;
-	unsigned long num_elements, i;
+	MagickSizeType num_elements, i;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
