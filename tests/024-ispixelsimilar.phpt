@@ -37,10 +37,14 @@ try {
 		$color1Pixel = new ImagickPixel($color1);
 		$color2Pixel = new ImagickPixel($color2);
 
-		$isSimilar = $color1Pixel->isPixelSimilar($color2Pixel, $testDistance);
-
+		$isSimilar = $color1Pixel->isSimilar($color2Pixel, $testDistance * \Imagick::getquantum());
 		if ($isSimilar !== $expectation) {
-			echo "isPixelSimilar failed. Color [$color1] compared to color [$color2] is not within distance $testDistance.". PHP_EOL;
+			echo "isSimilar failed. Color [$color1] compared to color [$color2] distance $testDistance doesn't meet expected result [$expectation].". PHP_EOL;
+		}
+
+		$isPixelSimilar = $color1Pixel->isPixelSimilar($color2Pixel, $testDistance);
+		if ($isPixelSimilar !== $expectation) {
+			echo "isPixelSimilar failed. Color [$color1] compared to color [$color2] distance $testDistance doesn't meet expected result [$expectation].". PHP_EOL;
 		}
 	}
 	echo "success";

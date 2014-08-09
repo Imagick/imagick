@@ -2021,6 +2021,7 @@ static zend_function_entry php_imagickpixel_class_methods[] =
 	PHP_ME(imagickpixel, issimilar, imagickpixel_issimilar_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, ispixelsimilar, imagickpixel_ispixelsimilar_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolor, imagickpixel_getcolor_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getcolorquantum, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorasstring, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorcount, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorcount, imagickpixel_setcolorcount_args, ZEND_ACC_PUBLIC)

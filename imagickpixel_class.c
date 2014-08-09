@@ -68,13 +68,15 @@ PHP_METHOD(imagickpixel, sethsl)
 }
 /* }}} */
 
-/* {{{ proto int ImagickPixel::getColorValueQuantum(int color)
-	Gets the quantum color of the ImagickPixel
+/* {{{ proto Quantum ImagickPixel::getColorValueQuantum(int color)
+	Gets the quantum value of a color in the ImagickPixel. Quantum is a float if ImageMagick was compiled with HDRI
+	otherwise an integer.
 */
 PHP_METHOD(imagickpixel, getcolorvaluequantum)
 {
 	php_imagickpixel_object *internp;
-	long color, color_value;
+	long color;
+	Quantum color_value;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color) == FAILURE) {
@@ -126,7 +128,12 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 			return;
 		break;
 	}
+	
+#ifdef MAGICKCORE_HDRI_ENABLE
+	RETVAL_DOUBLE(color_value);
+#else
 	RETVAL_LONG(color_value);
+#endif
 }
 /* }}} */
 
@@ -136,12 +143,22 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 PHP_METHOD(imagickpixel, setcolorvaluequantum)
 {
 	php_imagickpixel_object *internp;
-	long color, color_value;
+	long color;
 
+
+#ifdef MAGICKCORE_HDRI_ENABLE
+	double color_value;
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value) == FAILURE) {
+		return;
+	}
+#else
+	long color_value;
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &color, &color_value) == FAILURE) {
 		return;
 	}
+#endif
 	
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
@@ -343,16 +360,21 @@ void s_is_pixelwand_similar(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 
 /* {{{ proto bool ImagickPixel::isSimilar(ImagickPixel pixel, float fuzz)
 	Returns true if the distance between two colors is less than the specified distance.
+	The fuzz value should be in the range 0-QuantumRange.
+	The maximum value represents the longest possible distance in the colorspace.
+	e.g. from RGB(0, 0, 0) to RGB(255, 255, 255) for the RGB colorspace
 */
 PHP_METHOD(imagickpixel, issimilar)
 {
-	IMAGICK_METHOD_DEPRECATED_USE_INSTEAD("ImagickPixel", "isSimilar", "ImagickPixel", "isPixelSimilar");
 	s_is_pixelwand_similar (INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
 /* }}} */
 
 /* {{{ proto bool ImagickPixel::isPixelSimilar(ImagickPixel pixel, float fuzz)
 	Returns true if the distance between two colors is less than the specified distance.
+	The fuzz value should be in the range 0-1.
+	The maximum value represents the longest possible distance in the colorspace.
+	e.g. from RGB(0, 0, 0) to RGB(255, 255, 255) for the RGB colorspace
 */
 PHP_METHOD(imagickpixel, ispixelsimilar)
 {
@@ -361,7 +383,7 @@ PHP_METHOD(imagickpixel, ispixelsimilar)
 /* }}} */
 
 /* {{{ proto float ImagickPixel::getColorValue(int color)
-	Gets the normalized color of the ImagickPixel.
+	Gets the normalized value of a color in the ImagickPixel.
 */
 PHP_METHOD(imagickpixel, getcolorvalue)
 {
@@ -514,48 +536,112 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 }
 /* }}} */
 
-/* {{{ proto array ImagickPixel::getColor([bool normalized])
+/* {{{ proto array ImagickPixel::getColor([int normalization])
 	Returns the color of the pixel in an array
+	normalization - 0 - values returned in the range 0,255 and will be ints, except 
+		for legacy reasons alpha which is 0-1
+	normalization - 1 - values returned in the range 0,1 and will be floats
+	normalization - 2 - values returned in the range 0,255 and will be ints including alpha
+	values i.e. float if ImageMagick was compiled with HDRI, or integers normally.
 */
 PHP_METHOD(imagickpixel, getcolor)
 {
 	php_imagickpixel_object *internp;
-	zend_bool normalized = 0;
+	long normalization = 0;
 	double red, green, blue, alpha;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|b", &normalized) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &normalization) == FAILURE) {
 		return;
 	}
 
 	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	array_init(return_value);
 
-	if (normalized == 1) {
+	red   = PixelGetRed(internp->pixel_wand);
+	green = PixelGetGreen(internp->pixel_wand);
+	blue  = PixelGetBlue(internp->pixel_wand);
+	alpha = PixelGetAlpha(internp->pixel_wand);
 
-		red   = PixelGetRed(internp->pixel_wand);
-		green = PixelGetGreen(internp->pixel_wand);
-		blue  = PixelGetBlue(internp->pixel_wand);
-		alpha = PixelGetAlpha(internp->pixel_wand);
+	switch (normalization){
+		//values returned in the range 0,255 and will be ints
+		case(0): { 
+			//Leave like this for legacy code 
+			//TODO fix the alpha not being normalised at next major/minor verysion
+			red   *= 255;
+			green *= 255;
+			blue  *= 255;
 
-		add_assoc_double(return_value, "r", red);
-		add_assoc_double(return_value, "g", green);
-		add_assoc_double(return_value, "b", blue);
-		add_assoc_double(return_value, "a", alpha);
+			//values are always >=0, so the rounding below may not be necessary
+			add_assoc_long(return_value, "r", (long) (red   > 0.0 ? red   + 0.5 : red   - 0.5));
+			add_assoc_long(return_value, "g", (long) (green > 0.0 ? green + 0.5 : green - 0.5));
+			add_assoc_long(return_value, "b", (long) (blue  > 0.0 ? blue  + 0.5 : blue  - 0.5));
+			add_assoc_long(return_value, "a", alpha);
+			break;
+		}
 
-	} else {
+		//values returned in the range 0,1 and will be floats
+		case(1): {
+			add_assoc_double(return_value, "r", red);
+			add_assoc_double(return_value, "g", green);
+			add_assoc_double(return_value, "b", blue);
+			add_assoc_double(return_value, "a", alpha);
+			break;
+		}
 
-		/* TODO: should this be quantum range instead of hardcoded 255.. */
-		red   = PixelGetRed(internp->pixel_wand)   * 255;
-		green = PixelGetGreen(internp->pixel_wand) * 255;
-		blue  = PixelGetBlue(internp->pixel_wand)  * 255;
-		alpha = PixelGetAlpha(internp->pixel_wand);
+		case(2): {
+			red   *= 255;
+			green *= 255;
+			blue  *= 255;
+			alpha *= 255;
 
-		add_assoc_long(return_value, "r", (long) (red   > 0.0 ? red   + 0.5 : red   - 0.5));
-		add_assoc_long(return_value, "g", (long) (green > 0.0 ? green + 0.5 : green - 0.5));
-		add_assoc_long(return_value, "b", (long) (blue  > 0.0 ? blue  + 0.5 : blue  - 0.5));
-		add_assoc_long(return_value, "a", alpha);
+			//values are always >=0, so the rounding below may not be necessary
+			add_assoc_long(return_value, "r", (long) (red   > 0.0 ? red   + 0.5 : red   - 0.5));
+			add_assoc_long(return_value, "g", (long) (green > 0.0 ? green + 0.5 : green - 0.5));
+			add_assoc_long(return_value, "b", (long) (blue  > 0.0 ? blue  + 0.5 : blue  - 0.5));
+			add_assoc_long(return_value, "a", (long) (alpha  > 0.0 ? alpha  + 0.5 : alpha  - 0.5));
+			break;
+		}
 	}
+
+	return;
+}
+/* }}} */
+
+
+/* {{{ proto array ImagickPixel::getColorQuantum()
+	Returns the color of the pixel in an array as Quantum values. If ImageMagick was compiled
+	as HDRI these will be floats, otherwise they will be integers
+*/
+PHP_METHOD(imagickpixel, getcolorquantum)
+{
+	php_imagickpixel_object *internp;
+	Quantum red, green, blue, alpha;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internp = (php_imagickpixel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	array_init(return_value);
+
+	red   = PixelGetRedQuantum(internp->pixel_wand);
+	green = PixelGetGreenQuantum(internp->pixel_wand);
+	blue  = PixelGetBlueQuantum(internp->pixel_wand)  ;
+	alpha = PixelGetAlphaQuantum(internp->pixel_wand);
+
+
+#ifdef MAGICKCORE_HDRI_ENABLE
+	add_assoc_double(return_value, "r", red);
+	add_assoc_double(return_value, "g", green);
+	add_assoc_double(return_value, "b", blue);
+	add_assoc_double(return_value, "a", alpha);
+#else
+	add_assoc_long(return_value, "r", (long)red);
+	add_assoc_long(return_value, "g", (long)green);
+	add_assoc_long(return_value, "b", (long)blue);
+	add_assoc_long(return_value, "a", (long)alpha);
+#endif
 
 	return;
 }
