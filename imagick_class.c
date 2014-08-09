@@ -10397,7 +10397,7 @@ PHP_METHOD(imagick, getpage)
 }
 /* }}} */
 
-/* {{{ proto array Imagick::getQuantum()
+/* {{{ proto int Imagick::getQuantum()
 	Returns the ImageMagick quantum range as an integer.
 */
 PHP_METHOD(imagick, getquantum)
@@ -11208,7 +11208,7 @@ PHP_METHOD(imagick, rotationalblurimage)
 //6.8.2.9 - MagickStatisticImage ( MagickWand* p1, enum StatisticType const p2, size_t const p3, size_t const p4 )
 
 
-/* {{{ proto bool Imagick::statisticImage(int type, float width, float height[, int channel] )
+/* {{{ proto bool Imagick::statisticImage(int type, int width, int height[, int channel] )
 	Replace each pixel with corresponding statistic from the neighborhood of the specified width and height.
 */
 PHP_METHOD(imagick, statisticimage)
@@ -11216,10 +11216,10 @@ PHP_METHOD(imagick, statisticimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long type;
-	double width, height;
+	long width, height;
 	long channel = DefaultChannels;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd|l", &type, &width, &height, &channel) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &type, &width, &height, &channel) == FAILURE) {
 		return;
 	}
 
