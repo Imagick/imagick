@@ -770,7 +770,7 @@ PHP_METHOD(imagickpixel, __construct);
 PHP_METHOD(imagickpixel, setcolor);
 PHP_METHOD(imagickpixel, clear);
 PHP_METHOD(imagickpixel, destroy);
-PHP_METHOD(imagickpixel, issimilar);
+PHP_METHOD(imagickpixel, ispixelsimilarquantum);
 PHP_METHOD(imagickpixel, ispixelsimilar);
 PHP_METHOD(imagickpixel, getcolorvalue);
 PHP_METHOD(imagickpixel, setcolorvalue);

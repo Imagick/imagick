@@ -37,7 +37,7 @@ try {
 		$color1Pixel = new ImagickPixel($color1);
 		$color2Pixel = new ImagickPixel($color2);
 
-		$isSimilar = $color1Pixel->isSimilar($color2Pixel, $testDistance * \Imagick::getquantum());
+		$isSimilar = $color1Pixel->isPixelSimilarQuantum($color2Pixel, $testDistance * \Imagick::getquantum());
 		if ($isSimilar !== $expectation) {
 			echo "isSimilar failed. Color [$color1] compared to color [$color2] distance $testDistance doesn't meet expected result [$expectation].". PHP_EOL;
 		}

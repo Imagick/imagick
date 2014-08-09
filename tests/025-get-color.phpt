@@ -1,5 +1,5 @@
 --TEST--
-Test functionimage
+Test getColor and getColorQuantum
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc');
 ?>

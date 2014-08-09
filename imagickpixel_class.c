@@ -358,13 +358,13 @@ void s_is_pixelwand_similar(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 }
 
 
-/* {{{ proto bool ImagickPixel::isSimilar(ImagickPixel pixel, float fuzz)
+/* {{{ proto bool ImagickPixel::isPixelSimilarQuantum(ImagickPixel pixel, float fuzz)
 	Returns true if the distance between two colors is less than the specified distance.
 	The fuzz value should be in the range 0-QuantumRange.
 	The maximum value represents the longest possible distance in the colorspace.
 	e.g. from RGB(0, 0, 0) to RGB(255, 255, 255) for the RGB colorspace
 */
-PHP_METHOD(imagickpixel, issimilar)
+PHP_METHOD(imagickpixel, ispixelsimilarquantum)
 {
 	s_is_pixelwand_similar (INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
 }
