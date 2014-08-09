@@ -64,16 +64,17 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	//We can get the data both via the passed param and via
 	//IMAGICK_G(progress_callback) - this should be quicker
 	php_imagick_callback *callback = (php_imagick_callback*)userData;
-
-	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
-
 	int error;
 	zval **zargs[2];
 
-	zend_fcall_info_cache fci_cache = empty_fcall_info_cache;
+	zend_fcall_info_cache fci_cache;
 
 	zend_fcall_info fci;
 	zval *retval_ptr = NULL;
+
+	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
+	fci_cache = empty_fcall_info_cache;
+	retval_ptr = NULL;
 
 	fci.size = sizeof(fci);
 	fci.function_table = EG(function_table);
