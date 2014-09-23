@@ -49,4 +49,4 @@ rm -rf $RPM_BUILD_ROOT
 %doc CREDITS
 %config(noreplace) %{_sysconfdir}/php.d/imagick.ini
 %{php_extdir}/imagick.so
-/usr/include/php/ext/imagick/
+%{_prefix}/include/php/ext/imagick/
