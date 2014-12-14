@@ -212,6 +212,8 @@ PHP_METHOD(imagick, orderedposterizeimage);
 PHP_METHOD(imagick, polaroidimage);
 PHP_METHOD(imagick, getimageproperty);
 PHP_METHOD(imagick, setimageproperty);
+PHP_METHOD(imagick, deleteimageproperty);
+PHP_METHOD(imagick, identifyformat);
 PHP_METHOD(imagick, setimageinterpolatemethod);
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);

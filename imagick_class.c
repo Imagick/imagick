@@ -909,6 +909,79 @@ PHP_METHOD(imagick, setimageproperty)
 }
 /* }}} */
 
+/* {{{ proto bool Imagick::deleteimageproperty(string name)
+	Deletes an image property.
+*/
+PHP_METHOD(imagick, deleteimageproperty)
+{
+	php_imagick_object *intern;
+	char *name;
+	int name_len;
+	MagickBooleanType status;
+
+	ImageInfo *image_info;
+	Image *image;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	image = GetImageFromMagickWand(intern->magick_wand);
+	status = DeleteImageProperty(image, name);
+
+	if (status == MagickFalse) {
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::identifyformat(string embedText)
+	Replaces any embedded formatting characters with the appropriate image property and returns the interpreted text. See http://www.imagemagick.org/script/escape.php for escape sequences.
+*/
+PHP_METHOD(imagick, identifyformat)
+{
+	php_imagick_object *intern;
+	char *embedText;
+	int embedText_len;
+	char *result;
+
+	ImageInfo *image_info;
+	Image *image;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &embedText, &embedText_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0) {
+		return;
+	}
+
+	image_info = AcquireImageInfo();
+	image = GetImageFromMagickWand(intern->magick_wand);
+	result = InterpretImageProperties(image_info, image, embedText);
+	image_info = DestroyImageInfo(image_info);
+
+	if (result) {
+		RETVAL_STRING(result, 1);
+		IMAGICK_FREE_MAGICK_MEMORY(result);
+
+		return;
+	}
+
+	RETURN_FALSE;
+}
+/* }}} */
+
 /* {{{ proto int Imagick::getImageInterpolateMethod()
 	Returns the interpolation method for the sepcified image.
 */
