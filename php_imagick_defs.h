@@ -536,6 +536,7 @@ PHP_METHOD(imagick, removeimageprofile);
 PHP_METHOD(imagick, separateimagechannel);
 PHP_METHOD(imagick, sepiatoneimage);
 PHP_METHOD(imagick, setimagebias);
+PHP_METHOD(imagick, setimagebiasquantum);
 PHP_METHOD(imagick, setimageblueprimary);
 PHP_METHOD(imagick, setimagebordercolor);
 PHP_METHOD(imagick, setimagechanneldepth);

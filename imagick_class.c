@@ -4875,7 +4875,8 @@ PHP_METHOD(imagick, sepiatoneimage)
 /* {{{ proto bool Imagick::setImageBias(float bias)
 	Sets the image bias
 */
-PHP_METHOD(imagick, setimagebias)
+static
+void s_set_image_bias(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 {
 	php_imagick_object *intern;
 	double bias;
@@ -4890,6 +4891,10 @@ PHP_METHOD(imagick, setimagebias)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+	if (use_quantum) {
+		bias *= QuantumRange;
+	}
+
 	status = MagickSetImageBias(intern->magick_wand, bias);
 
 	/* No magick is going to happen */
@@ -4900,6 +4905,29 @@ PHP_METHOD(imagick, setimagebias)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+/* {{{ proto bool Imagick::setImageBiasQuantum(float bias)
+	Sets the image bias. Bias should be scaled with 0 = no adjustment, 1 = quantum value
+*/
+PHP_METHOD(imagick, setimagebiasquantum)
+{
+	s_set_image_bias (INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::setImageBias(float bias)
+	Sets the image bias. Bias should be scaled with 0 = no adjustment, 2^^x = adjust black to white
+	where x = the quantum depth ImageMagick was compiled with
+*/
+PHP_METHOD(imagick, setimagebias)
+{
+	s_set_image_bias (INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
+/* }}} */
+
+
 
 /* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
 	Sets the image chromaticity blue primary point
