@@ -1364,6 +1364,15 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 #endif
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setregistry_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, key)
+		ZEND_ARG_INFO(0, value)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getregistry_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, key)
+	ZEND_END_ARG_INFO()
+
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
@@ -2505,6 +2514,9 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion >= 0x652
 	PHP_ME(imagick, subimagematch, imagick_subimagematch_args, ZEND_ACC_PUBLIC)
 #endif
+	PHP_ME(imagick, setregistry, imagick_setregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getregistry, imagick_getregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, listregistry, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 

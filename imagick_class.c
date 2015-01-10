@@ -11419,4 +11419,80 @@ PHP_METHOD(imagick, subimagematch)
 #endif
 
 
+/* {{{ proto array Imagick::setRegistry(string key, string value)
+	Sets the ImageMagick registry entry named key to value. This is most
+	useful for setting "temporary-path" which controls where ImageMagick
+	creates temporary images e.g. while processing PDFs.
+*/
+PHP_METHOD(imagick, setregistry)
+{
+	MagickBooleanType status;
+	char *key, *value;
+	int key_len, value_len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &key, &key_len, &value, &value_len) == FAILURE) {
+		return;
+	}
+
+	status = SetImageRegistry(StringRegistryType, key, value, NULL);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto array Imagick::getRegistry(string key)
+	Get the StringRegistry entry for the named key or false if not set.
+*/
+PHP_METHOD(imagick, getregistry)
+{
+	MagickBooleanType status;
+	char *key, *value;
+	int key_len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
+		return;
+	}
+
+	value = GetImageRegistry(StringRegistryType, key, NULL);
+
+	if (value != NULL) {
+		ZVAL_STRING(return_value, (char *)value, 1);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
+		return;
+	}
+
+	RETURN_FALSE;
+}
+/* }}} */
+
+
+/* {{{ proto array Imagick::setRegistry()
+	List all the registry settings calls GetImageRegistry. returns an array of all the key/value pairs in the registry 
+*/
+PHP_METHOD(imagick, listregistry)
+{
+	char *registry = NULL;
+	char *value = NULL;
+
+	array_init(return_value);
+
+	ResetImageRegistryIterator();
+	while (registry = GetNextImageRegistry()) {
+		value = GetImageRegistry(StringRegistryType, registry, NULL);
+		//should this be add_assoc_string(return_value, estrdup(registry), value, 1);
+		add_assoc_string(return_value, registry, value, 1);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
+	}
+
+	return;
+}
+/* }}} */
+
+
 /* end of Imagick */

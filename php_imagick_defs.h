@@ -608,6 +608,9 @@ PHP_METHOD(imagick, statisticimage);
 PHP_METHOD(imagick, subimagematch);
 #endif
 
+PHP_METHOD(imagick, setregistry);
+PHP_METHOD(imagick, getregistry);
+PHP_METHOD(imagick, listregistry);
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
