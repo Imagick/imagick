@@ -36,6 +36,7 @@
 #include "ext/standard/info.h"
 #include "ext/standard/php_filestat.h"
 #include "php_ini.h"
+#include "Zend/zend.h"
 
 /* Include locale header */
 #ifdef HAVE_LOCALE_H
@@ -78,12 +79,6 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 3
 #define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
 #endif
-
-#if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION == 7
-#define ZEND_ENGINE_3 1
-#endif
-
-
 
 
 /* Class names */

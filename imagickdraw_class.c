@@ -35,7 +35,7 @@ PHP_METHOD(imagickdraw, resetvectorgraphics)
 		return;
 	}
 	
-	internd = Z_IMAGICKDRAW_P(getThis());;
+	internd = Z_IMAGICKDRAW_P(getThis());
 	DrawResetVectorGraphics(internd->drawing_wand);
 	RETURN_TRUE;
 }

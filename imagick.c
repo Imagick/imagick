@@ -2504,7 +2504,7 @@ static void php_imagick_object_free_storage(zend_object *object TSRMLS_DC)
 }
 
 
-static void php_imagickdraw_object_free_storage(void *object TSRMLS_DC)
+static void php_imagickdraw_object_free_storage(zend_object *object TSRMLS_DC)
 {
 	php_imagickdraw_object *intern = php_imagickdraw_fetch_object(object);
 
@@ -3039,7 +3039,11 @@ PHP_MINFO_FUNCTION(imagick)
 			IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 		}
 		smart_str_0(&formats);
+#ifdef ZEND_ENGINE_3
+		php_info_print_table_row(2, "ImageMagick supported formats", formats);
+#else
 		php_info_print_table_row(2, "ImageMagick supported formats", formats.s);
+#endif
 		smart_str_free(&formats);
 		IMAGICK_FREE_MAGICK_MEMORY(supported_formats);
 	}

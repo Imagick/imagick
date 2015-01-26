@@ -42,7 +42,6 @@ PHP_METHOD(imagick, pingimagefile)
 		return;
 	}
 
-	//intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	intern = Z_IMAGICK_P(getThis());
 
 
@@ -7583,8 +7582,14 @@ static
 void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
 	int i, found = 0;
-	char *line, *last_ptr = NULL, *buffer;
+	char *last_ptr = NULL, *buffer;
 	size_t num_keys;
+	char *trim;
+#ifdef ZEND_ENGINE_3
+	zend_string    *line;
+#else
+	char *line;
+#endif
 
 	const char *str_keys [] = {
 		"Format: ",
@@ -7611,7 +7616,13 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 
 	while ((found < num_keys) && line) {
 		// Break the line further into tokens
-		char *trim = php_trim (line, strlen(line), NULL, 0, NULL, 3 TSRMLS_CC);
+
+#ifdef ZEND_ENGINE_3
+		//str, what, what_len, mode
+		trim = php_trim(line, NULL, 0, 3);
+#else
+		trim = php_trim(line, strlen(line), NULL, 0, NULL, 3 TSRMLS_CC);
+#endif
 
 		for (i = 0; i < num_keys; i++) {
 			if (strncmp (trim, str_keys [i], strlen (str_keys [i])) == 0) {
