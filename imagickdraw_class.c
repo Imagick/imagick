@@ -448,7 +448,7 @@ PHP_METHOD(imagickdraw, settextencoding)
 {
 	php_imagickdraw_object *internd;
 	char *encoding;
-	int encoding_len;
+	size_t encoding_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &encoding, &encoding_len) == FAILURE) {
 		return;
@@ -512,7 +512,7 @@ PHP_METHOD(imagickdraw, setfont)
 {
 	php_imagickdraw_object *internd;
 	char *font, *absolute;
-	int font_len;
+	size_t font_len;
 	MagickBooleanType status;
 	php_imagick_rw_result_t rc;
 
@@ -567,7 +567,7 @@ PHP_METHOD(imagickdraw, setfontfamily)
 {
 	php_imagickdraw_object *internd;
 	char *font_family;
-	int font_family_len;
+	size_t font_family_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -983,7 +983,7 @@ PHP_METHOD(imagickdraw, annotation)
 	php_imagickdraw_object *internd;
 	double x, y;
 	unsigned char *text;
-	int text_len;
+	size_t text_len;
 #if MagickLibVersion < 0x632
 	char *font;
 #endif
@@ -1313,7 +1313,7 @@ PHP_METHOD(imagickdraw, comment)
 {
 	php_imagickdraw_object *internd;
 	char *comment;
-	int comment_len;
+	size_t comment_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &comment, &comment_len) == FAILURE) {
@@ -2296,7 +2296,7 @@ PHP_METHOD(imagickdraw, pushclippath)
 {
 	php_imagickdraw_object *internd;
 	char *clip_mask;
-	int clip_mask_len;
+	size_t clip_mask_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &clip_mask, &clip_mask_len) == FAILURE) {
@@ -2428,7 +2428,7 @@ PHP_METHOD(imagickdraw, setclippath)
 {
 	php_imagickdraw_object *internd;
 	char *clip_mask;
-	int clip_mask_len;
+	size_t clip_mask_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -2515,7 +2515,7 @@ PHP_METHOD(imagickdraw, setfillpatternurl)
 {
 	php_imagickdraw_object *internd;
 	char *url;
-	int url_len;
+	size_t url_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -2581,7 +2581,7 @@ PHP_METHOD(imagickdraw, setstrokepatternurl)
 {
 	php_imagickdraw_object *internd;
 	char *url;
-	int url_len;
+	size_t url_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -2707,7 +2707,7 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 {
 	php_imagickdraw_object *internd;
 	char *vector;
-	int vector_len;
+	size_t vector_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */

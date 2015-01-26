@@ -235,7 +235,7 @@ PHP_METHOD(imagickpixel, __construct)
 {
 	php_imagickpixel_object *internp;
 	char *color_name = NULL;
-	int color_name_len = 0;
+	size_t color_name_len = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len) == FAILURE) {
 		return;
@@ -265,7 +265,7 @@ PHP_METHOD(imagickpixel, __construct)
 PHP_METHOD(imagickpixel, setcolor)
 {
 	char *color_name;
-	int color_name_len;
+	size_t color_name_len;
 	
 	php_imagickpixel_object *internp;
 	MagickBooleanType status;
