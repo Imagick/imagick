@@ -6434,7 +6434,7 @@ PHP_METHOD(imagick, getimagehistogram)
 	PixelWand **wand_array;
 	unsigned long colors = 0;
 	unsigned long i;
-	zval *tmp_pixelwand;
+	zval tmp_pixelwand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -6449,11 +6449,10 @@ PHP_METHOD(imagick, getimagehistogram)
 
 	for (i = 0; i < colors; i++) {
 		if (wand_array[i]) {
-			MAKE_STD_ZVAL(tmp_pixelwand);
-			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
-			internp = Z_IMAGICKPIXEL_P(tmp_pixelwand);
+			object_init_ex(&tmp_pixelwand, php_imagickpixel_sc_entry);
+			internp = Z_IMAGICKPIXEL_P(&tmp_pixelwand);
 			php_imagick_replace_pixelwand(internp, wand_array[i]);
-			add_next_index_zval(return_value, tmp_pixelwand);
+			add_next_index_zval(return_value, &tmp_pixelwand);
 		}
 	}
 
