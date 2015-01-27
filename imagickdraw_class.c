@@ -1189,6 +1189,7 @@ PHP_METHOD(imagickdraw, affine)
 	php_imagickdraw_object *internd;
 	zval *affine_matrix, **ppzval;
 	zval *pzval;
+	HashPosition pos;
 	HashTable *affine;
 	char *matrix_elements[] = { "sx", "rx", "ry",
 						        "sy", "tx", "ty" };
@@ -1205,13 +1206,11 @@ PHP_METHOD(imagickdraw, affine)
 	pmatrix = emalloc(sizeof(AffineMatrix));
 
 	affine = Z_ARRVAL_P(affine_matrix);
-	zend_hash_internal_pointer_reset_ex(affine, (HashPosition *) 0);
+	zend_hash_internal_pointer_reset_ex(affine, &pos);
 
 	for (i = 0; i < 6 ; i++) {
-	
-	
-		if ((pzval = zend_hash_str_find(affine, matrix_elements[i], 3)) == NULL) {
-		//if (zend_hash_find(affine, matrix_elements[i], 3, (void**)&ppzval) == FAILURE) {
+		pzval = zend_hash_str_find(affine, matrix_elements[i], 2);
+		if (pzval == NULL) {
 			efree(pmatrix);
 			php_imagick_throw_exception(IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty" TSRMLS_CC);
 			return;
