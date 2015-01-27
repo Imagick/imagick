@@ -24,7 +24,7 @@
 #include "php_imagick_helpers.h"
 #include "php_imagick_shared.h"
 
-#include "ext/standard/php_smart_str.h"
+#include "ext/standard/php_smart_string_public.h"
 
 
 
@@ -3010,7 +3010,7 @@ PHP_MINIT_FUNCTION(imagick)
 
 PHP_MINFO_FUNCTION(imagick)
 {
-	smart_str formats = {0};
+	smart_string formats = {0};
 
 	char **supported_formats, *buffer;
 	unsigned long num_formats = 0, i;
