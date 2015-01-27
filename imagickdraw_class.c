@@ -1195,56 +1195,40 @@ PHP_METHOD(imagickdraw, affine)
 						        "sy", "tx", "ty" };
 	int i;
 	double value;
-	AffineMatrix *pmatrix;
+	AffineMatrix matrix;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &affine_matrix) == FAILURE) {
 		return;
 	}
 
-	/* Allocate space to build matrix */
-	pmatrix = emalloc(sizeof(AffineMatrix));
-
-	affine = Z_ARRVAL_P(affine_matrix);
-	zend_hash_internal_pointer_reset_ex(affine, &pos);
-
 	for (i = 0; i < 6 ; i++) {
-		pzval = zend_hash_str_find(affine, matrix_elements[i], 2);
+		pzval = zend_hash_str_find(HASH_OF(affine_matrix), matrix_elements[i], 2);
 		if (pzval == NULL) {
-			efree(pmatrix);
 			php_imagick_throw_exception(IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty" TSRMLS_CC);
 			return;
 		} else {
-			zval tmp_zval, *tmp_pzval;
-
-//			tmp_zval = **ppzval;
-//			zval_copy_ctor(&tmp_zval);
-//			tmp_pzval = &tmp_zval;
-//			convert_to_double(tmp_pzval);
-//			value = Z_DVAL(tmp_zval);
-
 			value = zval_get_double(pzval);
 
 			if (strcmp(matrix_elements[i], "sx") == 0) {
-				pmatrix->sx = value;
+				matrix.sx = value;
 			} else if (strcmp(matrix_elements[i], "rx") == 0) {
-				pmatrix->rx = value;
+				matrix.rx = value;
 			} else if (strcmp(matrix_elements[i], "ry") == 0) {
-				pmatrix->ry = value;
+				matrix.ry = value;
 			} else if (strcmp(matrix_elements[i], "sy") == 0) {
-				pmatrix->sy = value;
+				matrix.sy = value;
 			} else if (strcmp(matrix_elements[i], "tx") == 0) {
-				pmatrix->tx = value;
+				matrix.tx = value;
 			} else if (strcmp(matrix_elements[i], "ty") == 0) {
-				pmatrix->ty = value;
+				matrix.ty = value;
 			}
 		}
 	}
 	
 	internd = Z_IMAGICKDRAW_P(getThis());
 
-	DrawAffine(internd->drawing_wand, pmatrix);
-	efree(pmatrix);
+	DrawAffine(internd->drawing_wand, &matrix);
 
 	RETURN_TRUE;
 }
