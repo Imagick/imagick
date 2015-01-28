@@ -24,7 +24,7 @@
 #include "php_imagick_helpers.h"
 #include "php_imagick_shared.h"
 
-#include "ext/standard/php_smart_string_public.h"
+#include "ext/standard/php_smart_string.h"
 
 
 
@@ -3032,19 +3032,19 @@ PHP_MINFO_FUNCTION(imagick)
 
 	if (supported_formats) {
 		for (i = 0; i < num_formats; i++) {
-			smart_str_appends(&formats, supported_formats[i]);
+			smart_string_appends(&formats, supported_formats[i]);
 			if (i != (num_formats - 1)) {
- 				smart_str_appends(&formats, ", ");
+ 				smart_string_appends(&formats, ", ");
 			}
 			IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 		}
-		smart_str_0(&formats);
+		smart_string_0(&formats);
 #ifdef ZEND_ENGINE_3
 		php_info_print_table_row(2, "ImageMagick supported formats", formats);
 #else
 		php_info_print_table_row(2, "ImageMagick supported formats", formats.s);
 #endif
-		smart_str_free(&formats);
+		smart_string_free(&formats);
 		IMAGICK_FREE_MAGICK_MEMORY(supported_formats);
 	}
 
