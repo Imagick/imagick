@@ -1048,9 +1048,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 #endif
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 	ZEND_BEGIN_ARG_INFO_EX(imagick_medianfilterimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_negateimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, gray)
@@ -2382,7 +2384,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, mapimage, imagick_mapimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, mattefloodfillimage, imagick_mattefloodfillimage_args, ZEND_ACC_PUBLIC)
 #endif
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 	PHP_ME(imagick, medianfilterimage, imagick_medianfilterimage_args, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(imagick, negateimage, imagick_negateimage_args, ZEND_ACC_PUBLIC)
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 	PHP_ME(imagick, paintopaqueimage, imagick_paintopaqueimage_args, ZEND_ACC_PUBLIC)

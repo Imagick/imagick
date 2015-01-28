@@ -4354,6 +4354,8 @@ PHP_METHOD(imagick, mattefloodfillimage)
 /* }}} */
 #endif
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+
 /* {{{ proto bool Imagick::medianFilterImage(float radius)
 	Applies a digital filter that improves the quality of a noisy image.  Each pixel is replaced by the median in a set of neighboring pixels as defined by radius.
 */
@@ -4384,6 +4386,7 @@ PHP_METHOD(imagick, medianfilterimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::negateImage(bool gray[, int channel] )
 	Negates the colors in the reference image.  The Grayscale option means that only grayscale values within the image are negated.
