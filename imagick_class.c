@@ -7402,8 +7402,9 @@ static
 zend_bool s_image_has_format (MagickWand *magick_wand)
 {
 	char *buffer;
+	zend_bool ret;
 	buffer = MagickGetImageFormat(magick_wand);
-	zend_bool ret = buffer && *buffer != '\0';
+	ret = buffer && *buffer != '\0';
 	if (buffer) {
 		MagickRelinquishMemory (buffer);
 	}
@@ -10877,6 +10878,8 @@ PHP_METHOD(imagick, setprogressmonitor)
 
 	php_imagick_object *intern;
 
+	php_imagick_callback *callback;
+
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &user_callback) == FAILURE) {
 		RETURN_FALSE;
@@ -10888,7 +10891,7 @@ PHP_METHOD(imagick, setprogressmonitor)
 		RETURN_FALSE;
 	}
 
-	php_imagick_callback *callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
+	callback = (php_imagick_callback *) emalloc(sizeof(php_imagick_callback));
 
 	TSRMLS_SET_CTX(callback->thread_ctx);
 	//We can't free the previous callback as we can't guarantee that
