@@ -4678,6 +4678,8 @@ PHP_METHOD(imagick, quantizeimages)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+
 /* {{{ proto bool Imagick::reduceNoiseImage(float radius)
 	Smooths the contours of an image
 */
@@ -4708,6 +4710,7 @@ PHP_METHOD(imagick, reducenoiseimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto string Imagick::removeImageProfile(string name)
 	Removes the named image profile and returns it
