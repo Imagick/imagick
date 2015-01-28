@@ -9907,6 +9907,8 @@ PHP_METHOD(imagick, posterizeimage)
 }
 /* }}} */
 
+#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+
 /* {{{ proto bool Imagick::radialBlurImage(float angle[, int channel])
 	Radial blurs an image.
 */
@@ -9936,6 +9938,7 @@ PHP_METHOD(imagick, radialblurimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::raiseImage(int width, int height, int x, int y, bool raise)
 	Creates a simulated three-dimensional button-like effect by lightening and darkening the edges of the image.  Members width and height of raise_info define the width of the vertical and horizontal edge of the effect.
