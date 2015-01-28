@@ -3065,13 +3065,16 @@ PHP_METHOD(imagick, queryfonts)
 */
 PHP_METHOD(imagick, queryfontmetrics)
 {
-	zval *objvar, *multiline = NULL;
-	zend_bool remove_canvas = 0, query_multiline;
+	zval *objvar, *multiline;
+	zend_bool remove_canvas, query_multiline;
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
 	char *text;
 	size_t text_len;
 	double *metrics;
+
+	multiline = NULL;
+	remove_canvas = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Os|z!", &objvar, php_imagickdraw_sc_entry, &text, &text_len, &multiline) == FAILURE) {
 		return;
@@ -3085,8 +3088,8 @@ PHP_METHOD(imagick, queryfontmetrics)
 			query_multiline = 0;
 		}
 	} else {
-		convert_to_boolean(multiline);
-		query_multiline = Z_BVAL_P(multiline);
+		convert_to_double(multiline);
+		query_multiline = Z_DVAL_P(multiline);
 	}
 
 	/* fetch the objects */
