@@ -212,7 +212,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 	double *double_array;
 	long i = 0;
 
-	ulong num_key;
+	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
 
@@ -224,27 +224,9 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 
 	double_array = ecalloc(*num_elements, sizeof(double));
 
-//	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
-//			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
-//			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
-//	{
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
-		zval tmp_zval, *tmp_pzval;
-		double value = 0.0;
-
-//		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
-//			value = Z_DVAL_PP(ppzval);
-//		}
-//		else {
-//			tmp_zval = **ppzval;
-//			zval_copy_ctor(&tmp_zval);
-//			tmp_pzval = &tmp_zval;
-//			convert_to_double(tmp_pzval);
-//
-//			value = Z_DVAL_P(tmp_pzval);
-//			zval_dtor (tmp_pzval);
-//		}
 		double_array[i] = zval_get_double(pzvalue);
+		i++;
 	} ZEND_HASH_FOREACH_END();
 	return double_array;
 }
@@ -255,7 +237,7 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 	long *long_array;
 	long i = 0;
 	
-	ulong num_key;
+	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
 
@@ -268,27 +250,11 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 
 	long_array = ecalloc(*num_elements, sizeof(long));
 
-//	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
-//			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
-//			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
-//	{
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
 		zval tmp_zval, *tmp_pzval;
 		long value = 0;
-
-//		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
-//			value = Z_LVAL_PP(ppzval);
-//		}
-//		else {
-//			tmp_zval = **ppzval;
-//			zval_copy_ctor(&tmp_zval);
-//			tmp_pzval = &tmp_zval;
-//			convert_to_double(tmp_pzval);
-//
-//			value = Z_LVAL_P(tmp_pzval);
-//			zval_dtor (tmp_pzval);
-//		}
 		long_array[i] = zval_get_long(pzvalue);
+		i++;
 	} ZEND_HASH_FOREACH_END();
 	return long_array;
 }
@@ -299,7 +265,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 	unsigned char *char_array;
 	long i = 0;
 
-	ulong num_key;
+	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
 
@@ -312,27 +278,12 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 
 	char_array = ecalloc(*num_elements, sizeof(unsigned char));
 
-//	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
-//			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
-//			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
-//	{
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
 		zval tmp_zval, *tmp_pzval;
 		long value = 0;
 
-//		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
-//			value = Z_LVAL_PP(ppzval);
-//		}
-//		else {
-//			tmp_zval = **ppzval;
-//			zval_copy_ctor(&tmp_zval);
-//			tmp_pzval = &tmp_zval;
-//			convert_to_double(tmp_pzval);
-//
-//			value = Z_LVAL_P(tmp_pzval);
-//			zval_dtor (tmp_pzval);
-//		}
 		char_array[i] = zval_get_long(pzvalue);
+		i++;
 	} ZEND_HASH_FOREACH_END();
 	return char_array;
 }
@@ -442,7 +393,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	zval **ppzval;
 	HashTable *sub_array;
 	
-	ulong num_key;
+	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
 
@@ -497,6 +448,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 		/* Assign X and Y */
 		coordinates[i].x = zval_get_double(pz_x);
 		coordinates[i].y = zval_get_double(pz_y);
+		i++;
 	} ZEND_HASH_FOREACH_END();
 
 	return coordinates;
