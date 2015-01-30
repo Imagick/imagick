@@ -6123,10 +6123,8 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	array_init(return_value);
 
 	for (i = 0; i < elements ; i++) {
-
-//		MAKE_STD_ZVAL(tmp);
-//		array_init(tmp);
 		ZVAL_NEW_ARR(&tmp);
+		array_init(&tmp);
 
 		add_assoc_double(&tmp, "mean", statistics[channels[i]].mean);
 		add_assoc_double(&tmp, "minima", statistics[channels[i]].minima);
@@ -7656,7 +7654,7 @@ PHP_METHOD(imagick, identifyimage)
 	char *format, *identify, *filename, *signature;
 	php_imagick_object *intern;
 	zend_bool append_raw_string = 0;
-	zval *array;
+	zval array;
     double x, y;
 
 	/* Parse parameters given to function */
@@ -7698,22 +7696,17 @@ PHP_METHOD(imagick, identifyimage)
 	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	// Geometry is an associative array
-//	MAKE_STD_ZVAL (array);
-//	array_init (array);
-	ZVAL_NEW_ARR(array);
+	ZVAL_NEW_ARR(&array);
+	array_init(&array);
 
-	add_assoc_long (array, "width", MagickGetImageWidth (intern->magick_wand));
-	add_assoc_long (array, "height", MagickGetImageHeight (intern->magick_wand));
-	add_assoc_zval (return_value, "geometry", array);
+	add_assoc_long (&array, "width", MagickGetImageWidth (intern->magick_wand));
+	add_assoc_long (&array, "height", MagickGetImageHeight (intern->magick_wand));
+	add_assoc_zval (return_value, "geometry", &array);
 
 	if (MagickGetImageResolution(intern->magick_wand, &x, &y) == MagickTrue) {
-//	    MAKE_STD_ZVAL (&array);
-//	    array_init (&array);
-	    //ZVAL_NEW_ARR(&array)
-
-	    add_assoc_double (array, "x", x);
-	    add_assoc_double (array, "y", y);
-	    add_assoc_zval (return_value, "resolution", array);
+	    add_assoc_double (&array, "x", x);
+	    add_assoc_double (&array, "y", y);
+	    add_assoc_zval (return_value, "resolution", &array);
 	}
 
 	signature = MagickGetImageSignature(intern->magick_wand);
@@ -8080,9 +8073,8 @@ PHP_METHOD(imagick, compareimagechannels)
 		return;
 	}
 
-	//MAKE_STD_ZVAL(new_wand);
-	//array_init(return_value);
 	ZVAL_NEW_ARR(return_value);
+	array_init(return_value);
 	
 	object_init_ex(&new_wand, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(&new_wand);
@@ -8379,9 +8371,8 @@ PHP_METHOD(imagick, compareimages)
 	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
 		return;
 
-	//MAKE_STD_ZVAL(new_wand);
-	//array_init(return_value);
 	ZVAL_NEW_ARR(return_value);
+	array_init(return_value);
 
 	tmp_wand = MagickCompareImages(intern->magick_wand, intern_second->magick_wand, metric_type, &distortion);
 
