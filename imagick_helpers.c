@@ -1438,6 +1438,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARREL", BarrelDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARRELINVERSE", BarrelInverseDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SHEPARDS", ShepardsDistortion);
+
+	// SentinelDistortion is not a real distortion type. It is a guard value 
+	// that shouldn't have been exposed in Imagick. TODO remove at next
+	// minor version.
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SENTINEL", SentinelDistortion);
 #endif
 #if MagickLibVersion >= 0x644
