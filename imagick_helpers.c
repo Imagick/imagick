@@ -491,7 +491,7 @@ void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, ph
 PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
 {
 	PointInfo *coordinates;
-	long elements, sub_elements, i = 0;
+	long elements, sub_elements, i;
 	HashTable *coords;
 	zval **ppzval;
 	HashTable *sub_array;
@@ -501,6 +501,8 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	zend_string *key;
 	zval *pzvalue;
 #endif
+
+	i = 0;
 
 	elements = zend_hash_num_elements(Z_ARRVAL_P(coordinate_array));
 

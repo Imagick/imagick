@@ -3168,8 +3168,10 @@ PHP_METHOD(imagick, queryfontmetrics)
 			query_multiline = 0;
 		}
 	} else {
-		convert_to_double(multiline);
-		query_multiline = Z_DVAL_P(multiline);
+		convert_to_boolean(multiline);
+		if (Z_TYPE_P(multiline) == IS_TRUE) {
+			query_multiline = 1;
+		}
 	}
 
 	/* fetch the objects */
@@ -7706,7 +7708,7 @@ void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 static
 void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
-	int i, found = 0;
+	int i, found;
 	char *last_ptr = NULL, *buffer;
 	size_t num_keys;
 	char *trim;
@@ -7715,6 +7717,9 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 #else
 	char *line;
 #endif
+
+	found = 0;
+
 
 	const char *str_keys [] = {
 		"Format: ",
