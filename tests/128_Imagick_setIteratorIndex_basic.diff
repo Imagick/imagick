@@ -1,0 +1,7 @@
+001+ Fatal error: Uncaught exception 'ImagickException' with message 'Unable to set iterator index' in /home/github/mkoppanen-imagick/tests/128_Imagick_setIteratorIndex_basic.php:8
+001- Ok
+002+ Stack trace:
+003+ #0 /home/github/mkoppanen-imagick/tests/128_Imagick_setIteratorIndex_basic.php(8): Imagick->setiteratorindex(3)
+004+ #1 /home/github/mkoppanen-imagick/tests/128_Imagick_setIteratorIndex_basic.php(21): setIteratorIndex(3)
+005+ #2 {main}
+006+   thrown in /home/github/mkoppanen-imagick/tests/128_Imagick_setIteratorIndex_basic.php on line 8

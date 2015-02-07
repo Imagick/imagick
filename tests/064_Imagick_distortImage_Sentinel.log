@@ -1,0 +1,12 @@
+
+---- EXPECTED OUTPUT
+Ok
+---- ACTUAL OUTPUT
+unknown method given: No such file or directory
+
+Fatal error: Uncaught exception 'ImagickException' with message 'memory allocation failed GenerateCoefficients @ error/distort.c/GenerateCoefficients/497' in /home/github/mkoppanen-imagick/tests/064_Imagick_distortImage_Sentinel.php:19
+Stack trace:
+#0 /home/github/mkoppanen-imagick/tests/064_Imagick_distortImage_Sentinel.php(19): Imagick->distortimage(18, Array, true)
+#1 {main}
+  thrown in /home/github/mkoppanen-imagick/tests/064_Imagick_distortImage_Sentinel.php on line 19
+---- FAILED
