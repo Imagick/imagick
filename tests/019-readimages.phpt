@@ -14,34 +14,35 @@ try {
 	));
 	echo 'Fail'. PHP_EOL;
 } catch (ImagickException $e) {
-	echo 'OK' . PHP_EOL;
+	echo 'OK construct exception' . PHP_EOL;
 }
 
-try {
-	$imagick = new Imagick(array (
-							'magick:rose',
-							'magick:rose',
-							'magick:rose',
-	));
-	echo 'OK' . PHP_EOL;
-	$imagick->readImages (array (
-							'magick:rose',
-							'magick:rose',
-							'magick:rose',
-	));
-	echo 'OK' . PHP_EOL;
+$imagick = new Imagick();
+$imagick = new Imagick(array (
+						'magick:rose',
+						'magick:rose',
+						'magick:rose',
+));
+echo 'OK construct' . PHP_EOL;
+$imagick->readImages (array (
+						'magick:rose',
+						'magick:rose',
+						'magick:rose',
+));
+echo 'OK readImages' . PHP_EOL;
+try{
 	$imagick->readImages (array (
 							'magick:rose',
 							'fail_this_does_not_exist.jpg',
 	));	
 	echo 'Fail' . PHP_EOL;
 } catch (ImagickException $e) {
-	echo 'Third OK'. PHP_EOL;
+	echo 'OK readImages exception'. PHP_EOL;
 }
 
 ?>
 --EXPECT--
-OK
-OK
-OK
-Third OK
+OK construct exception
+OK construct
+OK readImages
+OK readImages exception
