@@ -32,7 +32,7 @@
 PHP_METHOD(imagick, pingimagefile)
 {
 	char *filename = NULL;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	php_imagick_object *intern;
 	zval *zstream;
 	php_stream *stream;
@@ -44,8 +44,11 @@ PHP_METHOD(imagick, pingimagefile)
 
 	intern = Z_IMAGICK_P(getThis());
 
-
+#ifdef ZEND_ENGINE_3
 	php_stream_from_zval(stream, zstream);
+#else
+	php_stream_from_zval(stream, &zstream);
+#endif
 	result = php_imagick_stream_handler(intern, stream, ImagickPingImageFile TSRMLS_CC);
 
 	if (result == 0) {
@@ -70,7 +73,7 @@ PHP_METHOD(imagick, pingimagefile)
 PHP_METHOD(imagick, pingimageblob)
 {
 	char *image_string;
-	size_t image_string_len;
+	IM_LEN_TYPE image_string_len;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
@@ -728,7 +731,7 @@ PHP_METHOD(imagick, setiteratorindex)
 PHP_METHOD(imagick, transformimage)
 {
 	char *crop, *geometry;
-	size_t crop_len, geometry_len;
+	IM_LEN_TYPE crop_len, geometry_len;
 	MagickWand *transformed;
 	php_imagick_object *intern, *intern_return;
 
@@ -794,7 +797,7 @@ PHP_METHOD(imagick, setimageopacity)
 PHP_METHOD(imagick, orderedposterizeimage)
 {
 	char *map;
-	size_t map_len;
+	IM_LEN_TYPE map_len;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 	long channel = DefaultChannels;
@@ -859,7 +862,7 @@ PHP_METHOD(imagick, getimageproperty)
 {
 	php_imagick_object *intern;
 	char *name, *value;
-	size_t name_len;
+	IM_LEN_TYPE name_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
 		return;
@@ -872,7 +875,7 @@ PHP_METHOD(imagick, getimageproperty)
 	value = MagickGetImageProperty(intern->magick_wand, name);
 
 	if (value) {
-		ZVAL_STRING(return_value, (char *)value);
+		IM_ZVAL_STRING(return_value, (char *)value);
 		IMAGICK_FREE_MAGICK_MEMORY(value);
 		return;
 	}
@@ -887,7 +890,7 @@ PHP_METHOD(imagick, setimageproperty)
 {
 	php_imagick_object *intern;
 	char *name, *value;
-	size_t name_len, value_len;
+	IM_LEN_TYPE name_len, value_len;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &name, &name_len, &value, &value_len) == FAILURE) {
@@ -1201,7 +1204,7 @@ PHP_METHOD(imagick, getimageproperties)
 {
 	zend_bool values = 1;
 	char *pattern = "*", **properties, *property;
-	size_t pattern_len;
+	IM_LEN_TYPE pattern_len;
 	unsigned long properties_count, i;
 	php_imagick_object *intern;
 
@@ -1227,14 +1230,14 @@ PHP_METHOD(imagick, getimageproperties)
 
 		for (i = 0; i < properties_count; i++) {
 			property = MagickGetImageProperty(intern->magick_wand, properties[i]);
-			add_assoc_string(return_value, properties[i], property);
+			IM_add_assoc_string(return_value, properties[i], property);
 			IMAGICK_FREE_MAGICK_MEMORY(property);
 		}
 
 	} else {
 
 		for (i = 0; i < properties_count; i++) {
-			add_next_index_string(return_value, properties[i]);
+			IM_add_next_index_string(return_value, properties[i]);
 		}
 	}
 
@@ -1250,10 +1253,10 @@ PHP_METHOD(imagick, getimageprofiles)
 {
 	zend_bool values = 1;
 	char *pattern = "*", **profiles, *profile;
-	size_t pattern_len;
+	IM_LEN_TYPE pattern_len;
 	unsigned long profiles_count, i;
 	php_imagick_object *intern;
-	size_t length;
+	IM_LEN_TYPE length;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &pattern_len, &values) == FAILURE) {
@@ -1277,14 +1280,18 @@ PHP_METHOD(imagick, getimageprofiles)
 
 		for (i = 0; i < profiles_count; i++) {
 			profile = MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
+#ifdef ZEND_ENGINE_3
 			add_assoc_stringl(return_value, profiles[i], profile, length);
+#else
+			add_assoc_stringl(return_value, profiles[i], profile, length, 1);
+#endif
 			IMAGICK_FREE_MAGICK_MEMORY(profile);
 		}
 
 	} else {
 
 		for (i = 0; i < profiles_count; i++) {
-			add_next_index_string(return_value, profiles[i]);
+			IM_add_next_index_string(return_value, profiles[i]);
 		}
 	}
 
@@ -1346,7 +1353,7 @@ PHP_METHOD(imagick, writeimagefile)
 	php_stream *stream;
 	zend_bool result;
 	char *format = NULL;
-	size_t format_len;
+	IM_LEN_TYPE format_len;
 	char *orig_name = NULL, *buffer;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &format, &format_len) == FAILURE) {
@@ -1366,7 +1373,11 @@ PHP_METHOD(imagick, writeimagefile)
 		efree (buffer);
 	}
 
+#ifdef ZEND_ENGINE_3
 	php_stream_from_zval(stream, zstream);
+#else
+	php_stream_from_zval(stream, &zstream);
+#endif
 	result = php_imagick_stream_handler(intern, stream, ImagickWriteImageFile TSRMLS_CC);
 
 	/* Restore the original name after write */
@@ -1396,7 +1407,7 @@ PHP_METHOD(imagick, writeimagesfile)
 	php_stream *stream;
 	zend_bool result;
 	char *format = NULL;
-	size_t format_len;
+	IM_LEN_TYPE format_len;
 	char *orig_name = NULL, *buffer;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &format, &format_len) == FAILURE) {
@@ -1416,7 +1427,11 @@ PHP_METHOD(imagick, writeimagesfile)
 		efree (buffer);
 	}
 
+#ifdef ZEND_ENGINE_3
 	php_stream_from_zval(stream, zstream);
+#else
+	php_stream_from_zval(stream, &zstream);
+#endif
 	result = php_imagick_stream_handler(intern, stream, ImagickWriteImagesFile TSRMLS_CC);
 
 	/* Restore the original name after write */
@@ -1444,7 +1459,7 @@ PHP_METHOD(imagick, resetimagepage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *page;
-	size_t page_len;
+	IM_LEN_TYPE page_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &page, &page_len) == FAILURE) {
 		return;
@@ -1538,7 +1553,7 @@ PHP_METHOD(imagick, animateimages)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *server_name;
-	size_t server_name_len;
+	IM_LEN_TYPE server_name_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
 		return;
@@ -1617,7 +1632,7 @@ PHP_METHOD(imagick, setfont)
 {
 	php_imagick_object *intern;
 	char *font, *absolute;
-	size_t font_len;
+	IM_LEN_TYPE font_len;
 	MagickBooleanType status;
 	php_imagick_rw_result_t rc;
 
@@ -1675,7 +1690,7 @@ PHP_METHOD(imagick, getfont)
 	font   = MagickGetFont(intern->magick_wand);
 
 	if (font) {
-		ZVAL_STRING(return_value, font);
+		IM_ZVAL_STRING(return_value, font);
 		IMAGICK_FREE_MAGICK_MEMORY(font);
 		return;
 	}
@@ -1958,7 +1973,7 @@ PHP_METHOD(imagick, decipherimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *passphrase;
-	size_t passphrase_len;
+	IM_LEN_TYPE passphrase_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &passphrase, &passphrase_len) == FAILURE) {
 		return;
@@ -1986,7 +2001,7 @@ PHP_METHOD(imagick, encipherimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *passphrase;
-	size_t passphrase_len;
+	IM_LEN_TYPE passphrase_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &passphrase, &passphrase_len) == FAILURE) {
 		return;
@@ -2198,7 +2213,7 @@ PHP_METHOD(imagick, importimagepixels)
 
 	long storage, num_elements;
 	long x, y, width, height;
-	size_t map_len;
+	IM_LEN_TYPE map_len;
 	char *map;
 	zval *pixels;
 	HashTable *array;
@@ -2411,7 +2426,7 @@ PHP_METHOD(imagick, exportimagepixels)
 	long x, y, width, height, storage;
 	char *map;
 	int map_size, i = 0;
-	size_t map_len;
+	IM_LEN_TYPE map_len;
 	double *double_array;
 	long *long_array;
 	char *char_array;
@@ -2701,7 +2716,7 @@ PHP_METHOD(imagick, setimageartifact)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *artifact, *value;
-	size_t artifact_len, value_len;
+	IM_LEN_TYPE artifact_len, value_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
 		return;
@@ -2740,7 +2755,11 @@ PHP_METHOD(imagick, getimageartifact)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image artifact" TSRMLS_CC);
 		return;
 	}
+#ifdef ZEND_ENGINE_3 
 	RETVAL_STRING(value);
+#else
+	RETVAL_STRING(value, 1);
+#endif
 	IMAGICK_FREE_MAGICK_MEMORY(value);
 	return;
 }
@@ -2877,11 +2896,12 @@ PHP_METHOD(imagick, smushimages)
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
    The Imagick constructor
 */
+#ifdef ZEND_ENGINE_3
 PHP_METHOD(imagick, __construct)
 {
 	php_imagick_object *intern;
 	zval *files = NULL;
-	//HashPosition pos;
+
 	ulong num_key;
 	zend_string *key;
 	zval *pzval;
@@ -2922,17 +2942,7 @@ PHP_METHOD(imagick, __construct)
 	else
 	if (Z_TYPE_P(files) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(files), num_key, key, pzval) {
-
-		//for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(files), &pos);
-		//	zend_hash_has_more_elements_ex(Z_ARRVAL_P(files), &pos) == SUCCESS;
-		//	zend_hash_move_forward_ex(Z_ARRVAL_P(files), &pos)) {
-
 			struct php_imagick_file_t file = {0};
-			//zval **ppzval;
-
-//			if (zend_hash_get_current_data_ex(Z_ARRVAL_P(files), (void**)&ppzval, &pos) == FAILURE) {
-//				continue;
-//			}
 
 			if (!php_imagick_file_init(&file, Z_STRVAL_P(pzval), Z_STRLEN_P(pzval) TSRMLS_CC)) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
@@ -2950,6 +2960,76 @@ PHP_METHOD(imagick, __construct)
 	}
 	RETURN_TRUE;
 }
+#else
+PHP_METHOD(imagick, __construct)
+{
+	php_imagick_object *intern;
+	zval *files = NULL;
+	HashPosition pos;
+	php_imagick_rw_result_t rc;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|z!/", &files) == FAILURE) {
+		return;
+	}
+
+	/* No files given.. or null passed */
+	if (!files) {
+		return;
+	}
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	if (Z_TYPE_P (files) == IS_LONG || Z_TYPE_P (files) == IS_DOUBLE) {
+		convert_to_string (files);
+	}
+
+	/* A single file was given */
+	if (Z_TYPE_P(files) == IS_STRING) {
+		struct php_imagick_file_t file = {0};
+
+		if (!php_imagick_file_init(&file, Z_STRVAL_P(files), Z_STRLEN_P(files) TSRMLS_CC)) {
+			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
+			return;
+		}
+		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+		php_imagick_file_deinit(&file);
+
+		if (rc != IMAGICK_RW_OK) {
+			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_P(files) TSRMLS_CC);
+			return;
+		}
+	}
+
+	/* an array of filenames was given */
+	else
+	if (Z_TYPE_P(files) == IS_ARRAY) {
+		for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(files), &pos);
+			zend_hash_has_more_elements_ex(Z_ARRVAL_P(files), &pos) == SUCCESS;
+			zend_hash_move_forward_ex(Z_ARRVAL_P(files), &pos)) {
+
+			struct php_imagick_file_t file = {0};
+			zval **ppzval;
+
+			if (zend_hash_get_current_data_ex(Z_ARRVAL_P(files), (void**)&ppzval, &pos) == FAILURE) {
+				continue;
+			}
+
+			if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
+				php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
+				return;
+			}
+
+			rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+			php_imagick_file_deinit(&file);
+
+			if (rc != IMAGICK_RW_OK) {
+				php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_PP(ppzval) TSRMLS_CC);
+				return;
+			}
+		}
+	}
+	RETURN_TRUE;
+}
+#endif
 /* }}} */
 
 /* {{{ proto string Imagick::__toString()
@@ -2960,7 +3040,7 @@ PHP_METHOD(imagick, __tostring)
 	php_imagick_object *intern;
 	unsigned char *image;
 	char *buffer;
-	size_t image_size;
+	IM_LEN_TYPE image_size;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -2969,21 +3049,21 @@ PHP_METHOD(imagick, __tostring)
 	intern = Z_IMAGICK_P(getThis());
 
 	if (MagickGetNumberImages(intern->magick_wand) == 0) {
-		ZVAL_STRING(return_value, "");
+		IM_ZVAL_STRING(return_value, "");
 		return;
 	}
 
 	buffer = MagickGetImageFormat(intern->magick_wand);
 
 	if (!buffer) {
-		ZVAL_STRING(return_value, "");
+		IM_ZVAL_STRING(return_value, "");
 		return;
 	} else {
 		IMAGICK_FREE_MAGICK_MEMORY(buffer);
 	}
 
 	image = MagickGetImageBlob(intern->magick_wand, &image_size);
-	ZVAL_STRINGL(return_value, (char *)image, image_size);
+	IM_ZVAL_STRINGL(return_value, (char *)image, image_size);
 	IMAGICK_FREE_MAGICK_MEMORY(image);
 	return;
 }
@@ -3024,7 +3104,7 @@ PHP_METHOD(imagick, queryformats)
 	array_init(return_value);
 
 	for (i = 0 ; i < num_formats ; i++) {
-		add_next_index_string(return_value, supported_formats[i]);
+		IM_add_next_index_string(return_value, supported_formats[i]);
 		IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 	}
 
@@ -3041,7 +3121,7 @@ PHP_METHOD(imagick, queryfonts)
 	char **fonts;
 	unsigned long num_fonts = 0, i;
 	char *pattern = "*";
-	size_t pattern_len = 1;
+	IM_LEN_TYPE pattern_len = 1;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
@@ -3051,7 +3131,7 @@ PHP_METHOD(imagick, queryfonts)
 	array_init(return_value);
 
 	for (i = 0 ; i < num_fonts ; i++) {
-		add_next_index_string(return_value, fonts[i]);
+		IM_add_next_index_string(return_value, fonts[i]);
 		IMAGICK_FREE_MAGICK_MEMORY(fonts[i]);
 	}
 
@@ -3070,7 +3150,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 	php_imagick_object *intern;
 	php_imagickdraw_object *internd;
 	char *text;
-	size_t text_len;
+	IM_LEN_TYPE text_len;
 	double *metrics;
 
 	multiline = NULL;
@@ -3204,7 +3284,7 @@ PHP_METHOD(imagick, current)
 PHP_METHOD(imagick, readimage)
 {
 	char *filename;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
 	php_imagick_rw_result_t rc;
@@ -3236,12 +3316,14 @@ PHP_METHOD(imagick, readimage)
 /* {{{ proto bool Imagick::readImages(array files )
     Reads image from an array of filenames
 */
+#ifdef ZEND_ENGINE_3
 PHP_METHOD(imagick, readimages)
 {
-	zval *files;
+
 	ulong num_key;
 	zend_string *key;
 	zval *value;
+	zval *files;
 	php_imagick_object *intern;
 	HashPosition pos;
 	php_imagick_rw_result_t rc;
@@ -3252,19 +3334,8 @@ PHP_METHOD(imagick, readimages)
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-//	for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(files), &pos);
-//		zend_hash_has_more_elements_ex(Z_ARRVAL_P(files), &pos) == SUCCESS;
-//		zend_hash_move_forward_ex(Z_ARRVAL_P(files), &pos)) {
-
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(files), num_key, key, value) {
-
 		struct php_imagick_file_t file = {0};
-		//zval *pzval;
-
-//		if (zend_hash_get_current_data_ex(Z_ARRVAL_P(files), (void**)&ppzval, &pos) == FAILURE) {
-//			continue;
-//		}
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(value), Z_STRLEN_P(value) TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
@@ -3281,6 +3352,48 @@ PHP_METHOD(imagick, readimages)
 	} ZEND_HASH_FOREACH_END();
 	RETURN_TRUE;
 }
+#else
+PHP_METHOD(imagick, readimages)
+{
+	zval *files;
+	php_imagick_object *intern;
+	HashPosition pos;
+	php_imagick_rw_result_t rc;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &files) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
+	for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(files), &pos);
+		zend_hash_has_more_elements_ex(Z_ARRVAL_P(files), &pos) == SUCCESS;
+		zend_hash_move_forward_ex(Z_ARRVAL_P(files), &pos)) {
+
+		struct php_imagick_file_t file = {0};
+		zval **ppzval;
+
+		if (zend_hash_get_current_data_ex(Z_ARRVAL_P(files), (void**)&ppzval, &pos) == FAILURE) {
+			continue;
+		}
+
+		if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
+			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
+			return;
+		}
+
+		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
+		php_imagick_file_deinit(&file);
+
+		if (rc != IMAGICK_RW_OK) {
+			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_PP(ppzval) TSRMLS_CC);
+			return;
+		}
+	}
+	RETURN_TRUE;
+}
+#endif
 
 
 /* {{{ proto bool Imagick::pingImage(string filename )
@@ -3289,7 +3402,7 @@ PHP_METHOD(imagick, readimages)
 PHP_METHOD(imagick, pingimage)
 {
 	char *filename;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
 	php_imagick_rw_result_t rc;
@@ -3322,7 +3435,7 @@ PHP_METHOD(imagick, pingimage)
 PHP_METHOD(imagick, readimagefile)
 {
 	char *filename = NULL;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	php_imagick_object *intern;
 	zval *zstream;
 	zend_bool result;
@@ -3334,7 +3447,11 @@ PHP_METHOD(imagick, readimagefile)
 
 	intern = Z_IMAGICK_P(getThis());
 
+#ifdef ZEND_ENGINE_3
 	php_stream_from_zval(stream, zstream);
+#else
+	php_stream_from_zval(stream, &zstream);
+#endif
 	result = php_imagick_stream_handler(intern, stream, ImagickReadImageFile TSRMLS_CC);
 
 	if (result == 0) {
@@ -3362,7 +3479,7 @@ PHP_METHOD(imagick, displayimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *server_name;
-	size_t server_name_len;
+	IM_LEN_TYPE server_name_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
@@ -3393,7 +3510,7 @@ PHP_METHOD(imagick, displayimages)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *server_name;
-	size_t server_name_len;
+	IM_LEN_TYPE server_name_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
@@ -3424,7 +3541,7 @@ PHP_METHOD(imagick, readimageblob)
 	char *image_string;
 	char *filename = NULL;
 	long filename_len;
-	size_t image_string_len;
+	IM_LEN_TYPE image_string_len;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
@@ -3788,7 +3905,7 @@ PHP_METHOD(imagick, clippathimage)
 {
 	php_imagick_object *intern;
 	char *clip_path;
-	size_t clip_path_len;
+	IM_LEN_TYPE clip_path_len;
 	zend_bool inside;
 	MagickBooleanType status;
 
@@ -4044,7 +4161,7 @@ PHP_METHOD(imagick, newimage)
 	MagickBooleanType status;
 	long columns, rows;
 	char *format = NULL;
-	size_t format_len = 0;
+	IM_LEN_TYPE format_len = 0;
 	PixelWand *color_wand;
 	zend_bool allocated;
 
@@ -4097,7 +4214,7 @@ PHP_METHOD(imagick, newpseudoimage)
 	MagickBooleanType status;
 	long columns, rows;
 	char *pseudo_string;
-	size_t pseudo_string_len;
+	IM_LEN_TYPE pseudo_string_len;
 	struct php_imagick_file_t file = {0};
 	php_imagick_rw_result_t rc;
 
@@ -4596,7 +4713,7 @@ PHP_METHOD(imagick, profileimage)
 {
 	php_imagick_object *intern;
 	char *name, *profile;
-	size_t name_len, profile_len;
+	IM_LEN_TYPE name_len, profile_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -4723,7 +4840,7 @@ PHP_METHOD(imagick, removeimageprofile)
 	php_imagick_object *intern;
 	char *name;
 	unsigned char *profile;
-	size_t name_len;
+	IM_LEN_TYPE name_len;
 #if MagickLibVersion < 0x628
 	long profile_len;
 #else
@@ -4746,7 +4863,7 @@ PHP_METHOD(imagick, removeimageprofile)
 		return;
 	}
 
-	ZVAL_STRING(return_value, (char *)profile);
+	IM_ZVAL_STRING(return_value, (char *)profile);
 	IMAGICK_FREE_MAGICK_MEMORY(profile);
 	return;
 }
@@ -5130,7 +5247,7 @@ PHP_METHOD(imagick, setimageprofile)
 {
 	php_imagick_object *intern;
 	char *name, *profile;
-	size_t profile_len, name_len;
+	IM_LEN_TYPE profile_len, name_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -5833,7 +5950,7 @@ PHP_METHOD(imagick, getimageattribute)
 {
 	php_imagick_object *intern;
 	char *key, *attribute;
-	size_t key_len;
+	IM_LEN_TYPE key_len;
 
 	IMAGICK_METHOD_DEPRECATED("Imagick", "getImageAttribute");
 
@@ -5849,7 +5966,7 @@ PHP_METHOD(imagick, getimageattribute)
 		RETURN_FALSE;
 	}
 
-	ZVAL_STRING(return_value, attribute);
+	IM_ZVAL_STRING(return_value, attribute);
 	IMAGICK_FREE_MAGICK_MEMORY(attribute);
 
 	return;
@@ -6637,7 +6754,7 @@ PHP_METHOD(imagick, getimageprofile)
 {
 	php_imagick_object *intern;
 	char *profile, *name;
-	size_t name_len;
+	IM_LEN_TYPE name_len;
 #if MagickLibVersion < 0x628
 	long length;
 #else
@@ -6655,7 +6772,7 @@ PHP_METHOD(imagick, getimageprofile)
 	profile = (char *)MagickGetImageProfile(intern->magick_wand, name, &length);
 
 	if (profile) {
-		ZVAL_STRINGL(return_value, profile, length);
+		IM_ZVAL_STRINGL(return_value, profile, length);
 		IMAGICK_FREE_MAGICK_MEMORY(profile);
 		return;
 	}
@@ -6788,7 +6905,7 @@ PHP_METHOD(imagick, getimagesignature)
 		return;
 
 	signature = MagickGetImageSignature(intern->magick_wand);
-	ZVAL_STRING(return_value, signature);
+	IM_ZVAL_STRING(return_value, signature);
 	IMAGICK_FREE_MAGICK_MEMORY(signature);
 	return;
 }
@@ -7379,7 +7496,7 @@ PHP_METHOD(imagick, getimagefilename)
 		return;
 	}
 
-	ZVAL_STRING(return_value, filename);
+	IM_ZVAL_STRING(return_value, filename);
 	IMAGICK_FREE_MAGICK_MEMORY(filename);
 	return;
 }
@@ -7445,7 +7562,7 @@ PHP_METHOD(imagick, getimageblob)
 		return;
 	}
 
-	ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
+	IM_ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
 	IMAGICK_FREE_MAGICK_MEMORY(image_contents);
 	return;
 }
@@ -7507,7 +7624,7 @@ PHP_METHOD(imagick, getimagesblob)
 		return;
 	}
 
-	ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
+	IM_ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
 	IMAGICK_FREE_MAGICK_MEMORY(image_contents);
 	return;
 }
@@ -7534,7 +7651,7 @@ PHP_METHOD(imagick, getimageformat)
 	}
 
 	format = MagickGetImageFormat (intern->magick_wand);
-	ZVAL_STRING(return_value, format);
+	IM_ZVAL_STRING(return_value, format);
 	IMAGICK_FREE_MAGICK_MEMORY(format);
 	return;
 }
@@ -7571,7 +7688,7 @@ PHP_METHOD(imagick, getimagemimetype)
 		return;
 	}
 
-	ZVAL_STRING(return_value, mime_type);
+	IM_ZVAL_STRING(return_value, mime_type);
 	IMAGICK_FREE_MAGICK_MEMORY(mime_type);
 	return;
 }
@@ -7582,7 +7699,7 @@ static
 void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 {
     //add_assoc_string (array, key, (char *)(value ? value : ""), copy);
-    add_assoc_string (array, key, (char *)(value ? value : ""));
+    IM_add_assoc_string (array, key, (char *)(value ? value : ""));
     //TODO - if copy == 0 free the string?
 }
 
@@ -7635,7 +7752,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 		for (i = 0; i < num_keys; i++) {
 			if (strncmp (trim, str_keys [i], strlen (str_keys [i])) == 0) {
 				// This should be our line
-				add_assoc_string (array, arr_keys [i], trim + strlen (str_keys [i]));
+				IM_add_assoc_string (array, arr_keys [i], trim + strlen (str_keys [i]));
 				found++;
 			}
 		}
@@ -7714,7 +7831,7 @@ PHP_METHOD(imagick, identifyimage)
 	IMAGICK_FREE_MAGICK_MEMORY(signature);
 
 	if (append_raw_string == 1)
-		add_assoc_string (return_value, "rawOutput", identify);
+		IM_add_assoc_string (return_value, "rawOutput", identify);
 
 	IMAGICK_FREE_MAGICK_MEMORY(identify);
 	return;
@@ -7750,7 +7867,7 @@ PHP_METHOD(imagick, commentimage)
 {
 	php_imagick_object *intern;
 	char *comment;
-	size_t comment_len;
+	IM_LEN_TYPE comment_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -7782,7 +7899,7 @@ PHP_METHOD(imagick, setimagefilename)
 {
 	php_imagick_object *intern;
 	char *filename;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -7812,7 +7929,7 @@ PHP_METHOD(imagick, setimageattribute)
 {
 	php_imagick_object *intern;
 	char *key, *attribute;
-	size_t key_len, attribute_len;
+	IM_LEN_TYPE key_len, attribute_len;
 	MagickBooleanType status;
 
 	/* Tell user that this method has been deprecated. */
@@ -8260,7 +8377,7 @@ PHP_METHOD(imagick, fximage)
 	MagickWand *tmp_wand;
 	php_imagick_object *intern, *intern_return;
 	char *expression;
-	size_t expression_len;
+	IM_LEN_TYPE expression_len;
 	long channel = DefaultChannels;
 
 	/* Parse parameters given to function */
@@ -8728,7 +8845,7 @@ PHP_METHOD(imagick, setimageunits)
 PHP_METHOD(imagick, setimageformat)
 {
 	char *format;
-	size_t format_len;
+	IM_LEN_TYPE format_len;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
@@ -8850,7 +8967,7 @@ PHP_METHOD(imagick, normalizeimage)
 PHP_METHOD(imagick, labelimage)
 {
 	char *label;
-	size_t label_len;
+	IM_LEN_TYPE label_len;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
@@ -8881,7 +8998,7 @@ PHP_METHOD(imagick, labelimage)
 PHP_METHOD(imagick, writeimage)
 {
 	char *filename = NULL;
-	size_t filename_len = 0;
+	IM_LEN_TYPE filename_len = 0;
 	zend_bool free_filename = 0;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
@@ -8940,7 +9057,7 @@ PHP_METHOD(imagick, writeimages)
 {
 	char *filename;
 	zend_bool adjoin;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	php_imagick_object *intern;
 	struct php_imagick_file_t file = {0};
 	php_imagick_rw_result_t rc;
@@ -9025,7 +9142,7 @@ PHP_METHOD(imagick, annotateimage)
 	php_imagickdraw_object *internd;
 	double x, y, angle;
 	char *text;
-	size_t text_len;
+	IM_LEN_TYPE text_len;
 	zval *objvar;
 #if MagickLibVersion < 0x632
 	char *font;
@@ -9216,7 +9333,7 @@ PHP_METHOD(imagick, montageimage)
 	php_imagick_object *intern, *intern_return;
 	php_imagickdraw_object *internd;
 	char *tile_geometry, *thumbnail_geometry, *frame;
-	size_t tile_geometry_len, thumbnail_geometry_len, frame_len;
+	IM_LEN_TYPE tile_geometry_len, thumbnail_geometry_len, frame_len;
 	long montage_mode = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ossls", &objvar, php_imagickdraw_sc_entry,
@@ -10268,7 +10385,7 @@ PHP_METHOD(imagick, getcopyright)
 	}
 
 	copyright = (char *)MagickGetCopyright();
-	ZVAL_STRING(return_value, copyright);
+	IM_ZVAL_STRING(return_value, copyright);
 	return;
 }
 /* }}} */
@@ -10289,7 +10406,7 @@ PHP_METHOD(imagick, getfilename)
 	filename = (char *)MagickGetFilename(intern->magick_wand);
 
 	if (filename) {
-		ZVAL_STRING(return_value, filename);
+		IM_ZVAL_STRING(return_value, filename);
 		IMAGICK_FREE_MAGICK_MEMORY(filename);
 	}
 	return;
@@ -10312,7 +10429,7 @@ PHP_METHOD(imagick, getformat)
 	format = (char *)MagickGetFormat(intern->magick_wand);
 
 	if (format) {
-		ZVAL_STRING(return_value, format);
+		IM_ZVAL_STRING(return_value, format);
 		IMAGICK_FREE_MAGICK_MEMORY(format);
 	}
 	return;
@@ -10332,7 +10449,7 @@ PHP_METHOD(imagick, gethomeurl)
 
 	home_url = (char *)MagickGetHomeURL();
 	if (home_url) {
-		ZVAL_STRING(return_value, home_url);
+		IM_ZVAL_STRING(return_value, home_url);
 		IMAGICK_FREE_MAGICK_MEMORY(home_url);
 	}
 	return;
@@ -10362,7 +10479,7 @@ PHP_METHOD(imagick, getoption)
 {
 	php_imagick_object *intern;
 	char *key, *value;
-	size_t key_len;
+	IM_LEN_TYPE key_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
 		return;
@@ -10373,7 +10490,7 @@ PHP_METHOD(imagick, getoption)
 	value = MagickGetOption(intern->magick_wand, key);
 
 	if (value) {	
-		ZVAL_STRING(return_value, value);
+		IM_ZVAL_STRING(return_value, value);
 		IMAGICK_FREE_MAGICK_MEMORY(value);
 	}
 	return;
@@ -10392,7 +10509,7 @@ PHP_METHOD(imagick, getpackagename)
 	}
 
 	package_name = (char *)MagickGetPackageName();
-	ZVAL_STRING(return_value, package_name);
+	IM_ZVAL_STRING(return_value, package_name);
 	return;
 }
 /* }}} */
@@ -10463,7 +10580,7 @@ PHP_METHOD(imagick, getquantumdepth)
 
 	array_init(return_value);
 	add_assoc_long(return_value, "quantumDepthLong", depth);
-	add_assoc_string(return_value, "quantumDepthString", (char *)quantum_depth);
+	IM_add_assoc_string(return_value, "quantumDepthString", (char *)quantum_depth);
 
 	return;
 }
@@ -10485,7 +10602,7 @@ PHP_METHOD(imagick, getquantumrange)
 	array_init(return_value);
 
 	add_assoc_long(return_value, "quantumRangeLong", range);
-	add_assoc_string(return_value, "quantumRangeString", (char *)quantum_range);
+	IM_add_assoc_string(return_value, "quantumRangeString", (char *)quantum_range);
 	return;
 }
 /* }}} */
@@ -10502,7 +10619,7 @@ PHP_METHOD(imagick, getreleasedate)
 	}
 
 	release_date = (char *)MagickGetReleaseDate();
-	ZVAL_STRING(return_value, release_date);
+	IM_ZVAL_STRING(return_value, release_date);
 	return;
 }
 /* }}} */
@@ -10611,7 +10728,7 @@ PHP_METHOD(imagick, getversion)
 	array_init(return_value);
 
 	add_assoc_long(return_value, "versionNumber", (long) version_number);
-	add_assoc_string(return_value, "versionString", version_string);
+	IM_add_assoc_string(return_value, "versionString", version_string);
 	return;
 }
 /* }}} */
@@ -10711,7 +10828,7 @@ PHP_METHOD(imagick, setfilename)
 {
 	php_imagick_object *intern;
 	char *filename;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -10739,7 +10856,7 @@ PHP_METHOD(imagick, setformat)
 {
 	php_imagick_object *intern;
 	char *format;
-	size_t format_len;
+	IM_LEN_TYPE format_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -10794,7 +10911,7 @@ PHP_METHOD(imagick, setoption)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *key, *value;
-	size_t key_len, value_len;
+	IM_LEN_TYPE key_len, value_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &key, &key_len, &value, &value_len) == FAILURE) {
@@ -10842,7 +10959,7 @@ PHP_METHOD(imagick, setpage)
 PHP_METHOD(imagick, setimageprogressmonitor)
 {
 	char *filename;
-	size_t filename_len;
+	IM_LEN_TYPE filename_len;
 	php_imagick_object *intern;
 	php_imagick_rw_result_t rc;
 

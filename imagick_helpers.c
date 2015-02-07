@@ -55,19 +55,27 @@ void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callba
 			efree(progress_callback->previous_callback);
 		}
 
+#ifdef ZEND_ENGINE_3
 		zval_ptr_dtor(progress_callback->user_callback);
+#else
+		zval_ptr_dtor(&progress_callback->user_callback);
+#endif
 	}
 }
 
 MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *userData)
 {
 	int error;
-	zval zargs[2];
-
 	zend_fcall_info fci;
 	zval retval;
-
 	zend_fcall_info_cache fci_cache;
+
+#ifdef ZEND_ENGINE_3
+	zval zargs[2];
+#else
+	zval **zargs[2];
+	zval *retval_ptr = NULL;
+#endif
 
 	//We can get the data both via the passed param and via
 	//IMAGICK_G(progress_callback) - this should be quicker
@@ -79,23 +87,32 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 
 	fci.size = sizeof(fci);
 	fci.function_table = EG(function_table);
+#ifdef ZEND_ENGINE_3
 	fci.object = NULL;
 	fci.function_name = *callback->user_callback;
 	fci.retval = &retval;
+#else
+	fci.object_ptr = NULL;
+	fci.function_name = callback->user_callback;
+	fci.retval_ptr_ptr = &retval_ptr;
+#endif
 	fci.param_count = 2;
 	fci.params = zargs;
 	fci.no_separation = 0;
 	fci.symbol_table = NULL;
 
-//	zargs[0] = emalloc(sizeof(zval *));
-//	MAKE_STD_ZVAL(*zargs[0]);
-//	ZVAL_LONG(*zargs[0], offset);
-//
-//	zargs[1] = emalloc(sizeof(zval *));
-//	MAKE_STD_ZVAL(*zargs[1]);
-//	ZVAL_LONG(*zargs[1], span);
+#ifdef ZEND_ENGINE_3
 	ZVAL_LONG(&zargs[0], offset);
     ZVAL_LONG(&zargs[1], span);
+#else
+	zargs[0] = emalloc(sizeof(zval *));
+	MAKE_STD_ZVAL(*zargs[0]);
+	ZVAL_LONG(*zargs[0], offset);
+
+	zargs[1] = emalloc(sizeof(zval *));
+	MAKE_STD_ZVAL(*zargs[1]);
+	ZVAL_LONG(*zargs[1], span);
+#endif
 
 	error = zend_call_function(&fci, &fci_cache TSRMLS_CC);
 
@@ -104,16 +121,24 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 		//Abort processing as user callback is no longer callable
 		return MagickFalse;
 	}
+#ifdef ZEND_ENGINE_3
+	if (Z_TYPE(retval) == IS_FALSE) {
+		//User returned false - tell Imagick to abort processing.
+		return MagickFalse;
+	}
+#else
+	zval_ptr_dtor(zargs[0]);
+	zval_ptr_dtor(zargs[1]);
 
-//	zval_ptr_dtor(zargs[0]);
-//	zval_ptr_dtor(zargs[1]);
-
-	//if (retval_ptr) {
-		if (Z_TYPE(retval) == IS_FALSE) {
-			//User returned false - tell Imagick to abort processing.
-			return MagickFalse;
+	if (retval_ptr) {
+		if (Z_TYPE_P(retval_ptr) == IS_BOOL) {
+			if (Z_LVAL_P(retval_ptr) == 0) {
+				//User returned false - tell Imagick to abort processing.
+				return MagickFalse;
+			}
 		}
-	//}
+	}
+#endif
 
 	return MagickTrue;
 }
@@ -212,9 +237,11 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 	double *double_array;
 	long i = 0;
 
+#ifdef ZEND_ENGINE_3
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
+#endif
 
 	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
@@ -224,10 +251,34 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 
 	double_array = ecalloc(*num_elements, sizeof(double));
 
+#ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
 		double_array[i] = zval_get_double(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
+#else
+	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
+			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
+	{
+		zval tmp_zval, *tmp_pzval;
+		double value = 0.0;
+
+		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
+			value = Z_DVAL_PP(ppzval);
+		}
+		else {
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
+
+			value = Z_DVAL_P(tmp_pzval);
+			zval_dtor (tmp_pzval);
+		}
+		double_array[i] = value;
+	}
+#endif
 	return double_array;
 }
 
@@ -236,11 +287,12 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 	zval **ppzval;
 	long *long_array;
 	long i = 0;
-	
+
+#ifdef ZEND_ENGINE_3
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
-
+#endif
 
 	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
@@ -250,12 +302,38 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 
 	long_array = ecalloc(*num_elements, sizeof(long));
 
+#ifdef ZEND_ENGINE_3
+
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
 		zval tmp_zval, *tmp_pzval;
 		long value = 0;
 		long_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
+#else
+	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
+			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
+	{
+		zval tmp_zval, *tmp_pzval;
+ 		long value = 0;
+
+		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
+			value = Z_LVAL_PP(ppzval);
+		}
+		else {
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
+
+			value = Z_LVAL_P(tmp_pzval);
+			zval_dtor (tmp_pzval);
+		}
+		long_array[i] = value;
+	}
+#endif
+
 	return long_array;
 }
 
@@ -265,10 +343,11 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 	unsigned char *char_array;
 	long i = 0;
 
+#ifdef ZEND_ENGINE_3
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
-
+#endif
 
 	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
 
@@ -278,6 +357,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 
 	char_array = ecalloc(*num_elements, sizeof(unsigned char));
 
+#ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
 		zval tmp_zval, *tmp_pzval;
 		long value = 0;
@@ -285,6 +365,29 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 		char_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
+#else
+	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(param_array));
+			zend_hash_get_current_data(Z_ARRVAL_P(param_array), (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
+	{
+		zval tmp_zval, *tmp_pzval;
+		long value = 0;
+		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
+			value = Z_LVAL_PP(ppzval);
+		}
+		else {
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
+
+			value = Z_LVAL_P(tmp_pzval);
+			zval_dtor (tmp_pzval);
+		}
+		char_array[i] = value;
+	}
+#endif
+
 	return char_array;
 }
 
@@ -392,10 +495,12 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	HashTable *coords;
 	zval **ppzval;
 	HashTable *sub_array;
-	
+
+#ifdef ZEND_ENGINE_3
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
+#endif
 
 	elements = zend_hash_num_elements(Z_ARRVAL_P(coordinate_array));
 
@@ -408,6 +513,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	*num_elements = elements;
 	coordinates = emalloc(sizeof(PointInfo) * elements);
 
+#ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(coordinate_array), num_key, key, pzvalue) {
 		zval *pz_x, *pz_y;
 
@@ -450,6 +556,67 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 		coordinates[i].y = zval_get_double(pz_y);
 		i++;
 	} ZEND_HASH_FOREACH_END();
+	
+#else
+	coords = Z_ARRVAL_P(coordinate_array);
+	zend_hash_internal_pointer_reset_ex(coords, (HashPosition *) 0);
+
+	for (i = 0, zend_hash_internal_pointer_reset(coords);
+			zend_hash_get_current_data(coords, (void **) &ppzval) == SUCCESS;
+			zend_hash_move_forward(coords), i++
+	) {
+		zval **ppz_x, **ppz_y;
+		zval tmp_zx, *tmp_pzx, tmp_zy, *tmp_pzy;
+
+		/* If its something than array lets error here */
+		if(Z_TYPE_PP(ppzval) != IS_ARRAY) {
+			efree(coordinates);
+			*num_elements = 0;
+			return NULL;
+		}
+
+		/* Subarray should have two elements. X and Y */
+		sub_elements = zend_hash_num_elements(Z_ARRVAL_PP(ppzval));
+
+		/* Exactly two elements */
+		if (sub_elements != 2) {
+			efree(coordinates);
+			*num_elements = 0;
+			return NULL;
+		}
+
+		/* Subarray values */
+		sub_array = Z_ARRVAL_PP(ppzval);
+
+		/* Get X */
+		if (zend_hash_find(sub_array, "x", sizeof("x"), (void**)&ppz_x) == FAILURE) {
+			efree(coordinates);
+			*num_elements = 0;
+			return NULL;
+		}
+
+		tmp_zx = **ppz_x;
+		zval_copy_ctor(&tmp_zx);
+		tmp_pzx = &tmp_zx;
+		convert_to_double(tmp_pzx);
+
+		/* Get Y */
+		if (zend_hash_find(sub_array, "y", sizeof("y"), (void**)&ppz_y) == FAILURE) {
+			efree(coordinates);
+			*num_elements = 0;
+			return NULL;
+		}
+
+		tmp_zy = **ppz_y;
+		zval_copy_ctor(&tmp_zy);
+		tmp_pzy = &tmp_zy;
+		convert_to_double(tmp_pzy);
+
+		/* Assign X and Y */
+		coordinates[i].x = Z_DVAL(tmp_zx);
+		coordinates[i].y = Z_DVAL(tmp_zy);
+	}
+#endif
 
 	return coordinates;
 }

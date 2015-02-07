@@ -195,6 +195,7 @@ typedef struct _php_imagickpixel_object  {
 
 #endif
 
+//Object fetching.
 #ifdef ZEND_ENGINE_3 
 
 static inline php_imagick_object *php_imagick_fetch_object(zend_object *obj) {
@@ -213,13 +214,51 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 	return (php_imagickpixeliterator_object *)((char*)(obj) - XtOffsetOf(php_imagickpixeliterator_object, zo));
 }
 
-
-#define Z_IMAGICK_P(zv) php_imagick_fetch_object(Z_OBJ_P((zv)))
-#define Z_IMAGICKDRAW_P(zv) php_imagickdraw_fetch_object(Z_OBJ_P((zv)))
-#define Z_IMAGICKPIXEL_P(zv) php_imagickpixel_fetch_object(Z_OBJ_P((zv)))
-#define Z_IMAGICKPIXELITERATOR_P(zv) php_imagickpixeliterator_fetch_object(Z_OBJ_P((zv)))
-
+#else 
+	#define php_imagick_fetch_object(object) ((php_imagick_object *)object)
+	#define php_imagickdraw_fetch_object(object) ((php_imagickdraw_object *)object) 
+	#define php_imagickpixel_fetch_object(object) ((php_imagickpixel_object *)object)
+	#define php_imagickpixeliterator_fetch_object(object) ((php_imagickpixeliterator_object *)object)
 #endif
+
+// Object access
+#ifdef ZEND_ENGINE_3
+	#define Z_IMAGICK_P(zv) php_imagick_fetch_object(Z_OBJ_P((zv)))
+	#define Z_IMAGICKDRAW_P(zv) php_imagickdraw_fetch_object(Z_OBJ_P((zv)))
+	#define Z_IMAGICKPIXEL_P(zv) php_imagickpixel_fetch_object(Z_OBJ_P((zv)))
+	#define Z_IMAGICKPIXELITERATOR_P(zv) php_imagickpixeliterator_fetch_object(Z_OBJ_P((zv)))
+#else
+	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv TSRMLS_CC)
+	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv TSRMLS_CC)
+	#define Z_IMAGICKPIXEL_P(zv) (php_imagickpixel_object *) zend_object_store_get_object(zv TSRMLS_CC)
+	#define Z_IMAGICKPIXELITERATOR_P(zv) (php_imagickpixeliterator_object *)zend_object_store_get_object(zv TSRMLS_CC)
+#endif
+
+// String access
+#ifdef ZEND_ENGINE_3
+	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar);
+#else
+	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar, 1);
+#endif
+
+#ifdef ZEND_ENGINE_3
+	#define IM_add_assoc_string(zv, key, charstr) add_assoc_string(zv, key, charstr)
+	#define IM_ZVAL_STRINGL(zv, charstr, length) ZVAL_STRINGL(zv, charstr, length)
+	#define IM_add_next_index_string(zv, charstr) add_next_index_string(zv, charstr)
+	#define IM_LEN_TYPE size_t
+#else
+	#define IM_add_assoc_string(zv, key, charstr) add_assoc_string(zv, key, charstr, 1)
+	#define IM_ZVAL_STRINGL(zv, charstr, length) ZVAL_STRINGL(zv, charstr, length, 1)
+	#define IM_add_next_index_string(zv, charstr) add_next_index_string(zv, charstr, 1)
+	#define IM_LEN_TYPE int
+#endif
+
+#ifdef ZEND_ENGINE_3
+	#define IM_ZEND_OBJECT zend_object
+#else 
+	#define IM_ZEND_OBJECT void
+#endif
+
 
 /* Define some color constants */
 typedef enum _php_imagick_color_t {

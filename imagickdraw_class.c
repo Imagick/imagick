@@ -448,7 +448,7 @@ PHP_METHOD(imagickdraw, settextencoding)
 {
 	php_imagickdraw_object *internd;
 	char *encoding;
-	size_t encoding_len;
+	IM_LEN_TYPE encoding_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &encoding, &encoding_len) == FAILURE) {
 		return;
@@ -512,7 +512,7 @@ PHP_METHOD(imagickdraw, setfont)
 {
 	php_imagickdraw_object *internd;
 	char *font, *absolute;
-	size_t font_len;
+	IM_LEN_TYPE font_len;
 	MagickBooleanType status;
 	php_imagick_rw_result_t rc;
 
@@ -567,7 +567,7 @@ PHP_METHOD(imagickdraw, setfontfamily)
 {
 	php_imagickdraw_object *internd;
 	char *font_family;
-	size_t font_family_len;
+	IM_LEN_TYPE font_family_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -821,7 +821,7 @@ PHP_METHOD(imagickdraw, getfont)
 	if (!font) {
 		RETURN_FALSE;
 	} else {
-		ZVAL_STRING(return_value, font);
+		IM_ZVAL_STRING(return_value, font);
 		IMAGICK_FREE_MAGICK_MEMORY(font);
 		return;
 	}
@@ -846,7 +846,7 @@ PHP_METHOD(imagickdraw, getfontfamily)
 	if (!font_family) {
 		RETURN_FALSE;
 	} else {
-		ZVAL_STRING(return_value, font_family);
+		IM_ZVAL_STRING(return_value, font_family);
 		IMAGICK_FREE_MAGICK_MEMORY(font_family);
 		return;
 	}
@@ -968,7 +968,7 @@ PHP_METHOD(imagickdraw, gettextencoding)
 	if (!encoding) {
 		RETURN_FALSE;
 	} else {
-		ZVAL_STRING(return_value, encoding);
+		IM_ZVAL_STRING(return_value, encoding);
 		IMAGICK_FREE_MAGICK_MEMORY(encoding);
 		return;
 	}
@@ -983,7 +983,7 @@ PHP_METHOD(imagickdraw, annotation)
 	php_imagickdraw_object *internd;
 	double x, y;
 	unsigned char *text;
-	size_t text_len;
+	IM_LEN_TYPE text_len;
 #if MagickLibVersion < 0x632
 	char *font;
 #endif
@@ -1202,14 +1202,31 @@ PHP_METHOD(imagickdraw, affine)
 		return;
 	}
 
+
 	for (i = 0; i < 6 ; i++) {
+#ifdef ZEND_ENGINE_3
 		pzval = zend_hash_str_find(HASH_OF(affine_matrix), matrix_elements[i], 2);
 		if (pzval == NULL) {
 			php_imagick_throw_exception(IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty" TSRMLS_CC);
 			return;
+#else
+		if (zend_hash_find(affine, matrix_elements[i], 3, (void**)&ppzval) == FAILURE) {
+			php_imagick_throw_exception(IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty" TSRMLS_CC);
+			return;
+#endif
 		} else {
+		
+#ifdef ZEND_ENGINE_3
 			value = zval_get_double(pzval);
+#else
+			zval tmp_zval, *tmp_pzval;
 
+			tmp_zval = **ppzval;
+			zval_copy_ctor(&tmp_zval);
+			tmp_pzval = &tmp_zval;
+			convert_to_double(tmp_pzval);
+			value = Z_DVAL(tmp_zval);
+#endif
 			if (strcmp(matrix_elements[i], "sx") == 0) {
 				matrix.sx = value;
 			} else if (strcmp(matrix_elements[i], "rx") == 0) {
@@ -1225,7 +1242,7 @@ PHP_METHOD(imagickdraw, affine)
 			}
 		}
 	}
-	
+
 	internd = Z_IMAGICKDRAW_P(getThis());
 
 	DrawAffine(internd->drawing_wand, &matrix);
@@ -1296,7 +1313,7 @@ PHP_METHOD(imagickdraw, comment)
 {
 	php_imagickdraw_object *internd;
 	char *comment;
-	size_t comment_len;
+	IM_LEN_TYPE comment_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &comment, &comment_len) == FAILURE) {
@@ -1328,7 +1345,7 @@ PHP_METHOD(imagickdraw, getclippath)
 	if (!clip_path) {
 		RETURN_FALSE;
 	} else {
-		ZVAL_STRING(return_value, clip_path);
+		IM_ZVAL_STRING(return_value, clip_path);
 		IMAGICK_FREE_MAGICK_MEMORY(clip_path);
 		return;
 	}
@@ -1734,7 +1751,7 @@ PHP_METHOD(imagickdraw, getvectorgraphics)
 	internd = Z_IMAGICKDRAW_P(getThis());;
 	vector = DrawGetVectorGraphics(internd->drawing_wand);
 
-	ZVAL_STRING(return_value, vector);
+	IM_ZVAL_STRING(return_value, vector);
 	IMAGICK_FREE_MAGICK_MEMORY(vector);
 
 	return;
@@ -2279,7 +2296,7 @@ PHP_METHOD(imagickdraw, pushclippath)
 {
 	php_imagickdraw_object *internd;
 	char *clip_mask;
-	size_t clip_mask_len;
+	IM_LEN_TYPE clip_mask_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &clip_mask, &clip_mask_len) == FAILURE) {
@@ -2411,7 +2428,7 @@ PHP_METHOD(imagickdraw, setclippath)
 {
 	php_imagickdraw_object *internd;
 	char *clip_mask;
-	size_t clip_mask_len;
+	IM_LEN_TYPE clip_mask_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -2498,7 +2515,7 @@ PHP_METHOD(imagickdraw, setfillpatternurl)
 {
 	php_imagickdraw_object *internd;
 	char *url;
-	size_t url_len;
+	IM_LEN_TYPE url_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -2564,7 +2581,7 @@ PHP_METHOD(imagickdraw, setstrokepatternurl)
 {
 	php_imagickdraw_object *internd;
 	char *url;
-	size_t url_len;
+	IM_LEN_TYPE url_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
@@ -2690,7 +2707,7 @@ PHP_METHOD(imagickdraw, setvectorgraphics)
 {
 	php_imagickdraw_object *internd;
 	char *vector;
-	size_t vector_len;
+	IM_LEN_TYPE vector_len;
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
