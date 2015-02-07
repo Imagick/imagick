@@ -1,6 +1,0 @@
-Fatal error: Uncaught exception 'ImagickException' with message 'Can not process empty Imagick object' in /home/github/mkoppanen-imagick/tests/124_Imagick_setImageDelay_basic.php:9
-Stack trace:
-#0 /home/github/mkoppanen-imagick/tests/124_Imagick_setImageDelay_basic.php(9): Imagick->valid()
-#1 /home/github/mkoppanen-imagick/tests/124_Imagick_setImageDelay_basic.php(21): setImageDelay()
-#2 {main}
-  thrown in /home/github/mkoppanen-imagick/tests/124_Imagick_setImageDelay_basic.php on line 9

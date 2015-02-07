@@ -1,6 +1,0 @@
-
----- EXPECTED OUTPUT
-Ok
----- ACTUAL OUTPUT
-Parse error: syntax error, unexpected 'png' (T_STRING) in /home/github/mkoppanen-imagick/tests/126_Imagick_setIteratorIndex_basic.php on line 27
----- FAILED

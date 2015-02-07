@@ -1,7 +1,0 @@
-001+ Fatal error: Uncaught exception 'ImagickException' with message 'The path does not exist: /home/github/fonts/Consolas.ttf' in /home/github/mkoppanen-imagick/tests/205_ImagickDraw_setFont_basic.php:19
-001- Ok
-002+ Stack trace:
-003+ #0 /home/github/mkoppanen-imagick/tests/205_ImagickDraw_setFont_basic.php(19): ImagickDraw->setfont('../fonts/Consol...')
-004+ #1 /home/github/mkoppanen-imagick/tests/205_ImagickDraw_setFont_basic.php(36): setFont('DodgerBlue2', 'rgb(0, 0, 0)', 'rgb(225, 225, 2...')
-005+ #2 {main}
-006+   thrown in /home/github/mkoppanen-imagick/tests/205_ImagickDraw_setFont_basic.php on line 19

@@ -1,6 +1,0 @@
-Fatal error: Uncaught exception 'ImagickException' with message 'Can not process empty Imagick object' in /home/github/mkoppanen-imagick/tests/129_Imagick_setImageTicksPerSecond_basic.php:10
-Stack trace:
-#0 /home/github/mkoppanen-imagick/tests/129_Imagick_setImageTicksPerSecond_basic.php(10): Imagick->valid()
-#1 /home/github/mkoppanen-imagick/tests/129_Imagick_setImageTicksPerSecond_basic.php(29): setImageTicksPerSecond()
-#2 {main}
-  thrown in /home/github/mkoppanen-imagick/tests/129_Imagick_setImageTicksPerSecond_basic.php on line 10
