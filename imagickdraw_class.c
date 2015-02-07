@@ -2334,7 +2334,7 @@ PHP_METHOD(imagickdraw, pushpattern)
 {	
 	php_imagickdraw_object *internd;
 	char *pattern_id;
-	int pattern_id_len;
+	IM_LEN_TYPE pattern_id_len;
 	double x, y, width, height;
 
 	/* Parse parameters given to function */
