@@ -3246,9 +3246,13 @@ PHP_METHOD(imagick, queryfontmetrics)
 		}
 	} else {
 		convert_to_boolean(multiline);
+#ifdef ZEND_ENGINE_3
 		if (Z_TYPE_P(multiline) == IS_TRUE) {
 			query_multiline = 1;
 		}
+#else
+		query_multiline = Z_BVAL_P(multiline);
+#endif
 	}
 
 	/* fetch the objects */
@@ -6323,7 +6327,11 @@ PHP_METHOD(imagick, getimagechannelmean)
 */
 PHP_METHOD(imagick, getimagechannelstatistics)
 {
+#ifdef ZEND_ENGINE_3
 	zval tmp;
+#else
+ 	zval *tmp;
+#endif
 
 	const long channels[] = { UndefinedChannel, RedChannel, CyanChannel,
 							  GreenChannel, MagentaChannel, BlueChannel,
@@ -6345,8 +6353,13 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	array_init(return_value);
 
 	for (i = 0; i < elements ; i++) {
+#ifdef ZEND_ENGINE_3
 		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
+#else
+		MAKE_STD_ZVAL(tmp);
+		array_init(tmp);
+#endif
 
 		add_assoc_double(&tmp, "mean", statistics[channels[i]].mean);
 		add_assoc_double(&tmp, "minima", statistics[channels[i]].minima);
@@ -7879,7 +7892,11 @@ PHP_METHOD(imagick, identifyimage)
 	char *format, *identify, *filename, *signature;
 	php_imagick_object *intern;
 	zend_bool append_raw_string = 0;
+#ifdef ZEND_ENGINE_3
 	zval array;
+#else
+	zval *array;
+#endif
     double x, y;
 
 	/* Parse parameters given to function */
@@ -7921,7 +7938,12 @@ PHP_METHOD(imagick, identifyimage)
 	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	// Geometry is an associative array
-	ZVAL_NEW_ARR(&array);
+	
+#ifdef ZEND_ENGINE_3
+		ZVAL_NEW_ARR(&array);
+#else
+		MAKE_STD_ZVAL(array);
+#endif
 	array_init(&array);
 
 	add_assoc_long (&array, "width", MagickGetImageWidth (intern->magick_wand));
@@ -8277,7 +8299,11 @@ PHP_METHOD(imagick, compareimagechannels)
 	php_imagick_object *intern, *intern_second, *intern_return;
 	long channel_type, metric_type;
 	double distortion;
+#ifdef ZEND_ENGINE_3
 	zval new_wand;
+#else
+	zval *new_wand;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &channel_type, &metric_type) == FAILURE) {
 		return;
@@ -8298,9 +8324,11 @@ PHP_METHOD(imagick, compareimagechannels)
 		return;
 	}
 
-	ZVAL_NEW_ARR(return_value);
+#ifndef ZEND_ENGINE_3
+	MAKE_STD_ZVAL(new_wand);
+#endif
 	array_init(return_value);
-	
+
 	object_init_ex(&new_wand, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(&new_wand);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
@@ -8582,7 +8610,11 @@ PHP_METHOD(imagick, compareimages)
 	php_imagick_object *intern, *intern_second, *intern_return;
 	long metric_type;
 	double distortion;
+#ifdef ZEND_ENGINE_3
 	zval new_wand;
+#else
+	zval *new_wand;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &metric_type) == FAILURE) {
 		return;
@@ -8596,7 +8628,9 @@ PHP_METHOD(imagick, compareimages)
 	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
 		return;
 
-	ZVAL_NEW_ARR(return_value);
+#ifndef ZEND_ENGINE_3
+	MAKE_STD_ZVAL(new_wand);
+#endif
 	array_init(return_value);
 
 	tmp_wand = MagickCompareImages(intern->magick_wand, intern_second->magick_wand, metric_type, &distortion);
