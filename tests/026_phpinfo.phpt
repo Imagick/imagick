@@ -18,7 +18,6 @@ else {
 	var_dump($contents);
 }
 
-var_dump($contents);
 ?>
 --EXPECTF--
 Ok
