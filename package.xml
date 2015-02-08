@@ -123,16 +123,16 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="050_Imagick_distortImage_Affine.phpt" role="test" />
 				<file name="051_Imagick_distortImage_Projection.phpt" role="test" />
 				<file name="052_Imagick_distortImage_Arc.phpt" role="test" />
-				<file name="053_Imagick_distortImage_Rotated Arc.phpt" role="test" />
+				<file name="053_Imagick_distortImage_RotatedArc.phpt" role="test" />
 				<file name="054_Imagick_distortImage_Bilinear.phpt" role="test" />
-				<file name="055_Imagick_distortImage_Scale Rotate Transform.phpt" role="test" />
+				<file name="055_Imagick_distortImage_ScaleRotateTransform.phpt" role="test" />
 				<file name="056_Imagick_distortImage_Perspective.phpt" role="test" />
 				<file name="057_Imagick_distortImage_PerspectiveProjection.phpt" role="test" />
 				<file name="058_Imagick_distortImage_Polynomial.phpt" role="test" />
 				<file name="059_Imagick_distortImage_Polar.phpt" role="test" />
 				<file name="060_Imagick_distortImage_Polar.phpt" role="test" />
 				<file name="061_Imagick_distortImage_Barrel.phpt" role="test" />
-				<file name="062_Imagick_distortImage_Barrel Inverse.phpt" role="test" />
+				<file name="062_Imagick_distortImage_BarrelInverse.phpt" role="test" />
 				<file name="063_Imagick_distortImage_Shepards.phpt" role="test" />
 				<file name="065_Imagick_despeckleImage_basic.phpt" role="test" />
 				<file name="066_Imagick_embossImage_basic.phpt" role="test" />
