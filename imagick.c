@@ -2546,6 +2546,9 @@ static void php_imagick_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+#ifndef ZEND_ENGINE_3
+	efree(intern);
+#endif
 }
 
 
@@ -2562,6 +2565,10 @@ static void php_imagickdraw_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_DC
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+
+	#ifndef ZEND_ENGINE_3
+		efree(intern);
+	#endif
 }
 
 static void php_imagickpixeliterator_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_DC)
@@ -2577,6 +2584,9 @@ static void php_imagickpixeliterator_object_free_storage(IM_ZEND_OBJECT *object 
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	#ifndef ZEND_ENGINE_3
+		efree(intern);
+	#endif
 }
 
 
@@ -2592,6 +2602,9 @@ static void php_imagickpixel_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_D
 		intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+	#ifndef ZEND_ENGINE_3
+		efree(intern);
+	#endif
 }
 
 #if PHP_VERSION_ID < 50399

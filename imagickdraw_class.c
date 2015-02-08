@@ -1189,8 +1189,9 @@ PHP_METHOD(imagickdraw, affine)
 	php_imagickdraw_object *internd;
 	zval *affine_matrix, **ppzval;
 	zval *pzval;
-	HashPosition pos;
+#ifndef ZEND_ENGINE_3
 	HashTable *affine;
+#endif
 	char *matrix_elements[] = { "sx", "rx", "ry",
 						        "sy", "tx", "ty" };
 	int i;
@@ -1201,6 +1202,11 @@ PHP_METHOD(imagickdraw, affine)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &affine_matrix) == FAILURE) {
 		return;
 	}
+
+#ifndef ZEND_ENGINE_3
+	affine = Z_ARRVAL_P(affine_matrix);
+	zend_hash_internal_pointer_reset_ex(affine, (HashPosition *) 0);
+#endif
 
 
 	for (i = 0; i < 6 ; i++) {

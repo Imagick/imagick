@@ -427,20 +427,34 @@ static
 void s_pixelwands_to_zval (PixelWand **wand_array, unsigned long num_wands, zval *return_value TSRMLS_DC)
 {
 	php_imagickpixel_object *internp;
+#ifdef ZEND_ENGINE_3
 	zval obj;
+#else
+	zval *obj;
+#endif
+
 	unsigned long i;
 
 	array_init(return_value);
 
 	for (i = 0; i < num_wands; i++) {
-		//MAKE_STD_ZVAL(obj);
+#ifdef ZEND_ENGINE_3
 		object_init_ex(&obj, php_imagickpixel_sc_entry);
-
 		internp = Z_IMAGICKPIXEL_P(&obj);
+#else 
+		MAKE_STD_ZVAL(obj);
+		object_init_ex(obj, php_imagickpixel_sc_entry);
+		internp = Z_IMAGICKPIXEL_P(obj);
+#endif
+
 		internp->initialized_via_iterator = 1;
 
 		php_imagick_replace_pixelwand(internp, wand_array[i]);
+#ifdef ZEND_ENGINE_3
 		add_next_index_zval(return_value, &obj);
+#else
+		add_next_index_zval(return_value, obj);
+#endif
 	}
 
 }
