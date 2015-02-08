@@ -913,6 +913,83 @@ PHP_METHOD(imagick, setimageproperty)
 }
 /* }}} */
 
+/* {{{ proto bool Imagick::deleteimageproperty(string name)
+	Deletes an image property.
+*/
+PHP_METHOD(imagick, deleteimageproperty)
+{
+	php_imagick_object *intern;
+	char *name;
+	IM_LEN_TYPE name_len;
+	MagickBooleanType status;
+
+	ImageInfo *image_info;
+	Image *image;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	image = GetImageFromMagickWand(intern->magick_wand);
+	status = DeleteImageProperty(image, name);
+
+	if (status == MagickFalse) {
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::identifyformat(string embedText)
+	Replaces any embedded formatting characters with the appropriate image property and returns the interpreted text. See http://www.imagemagick.org/script/escape.php for escape sequences.
+*/
+PHP_METHOD(imagick, identifyformat)
+{
+	php_imagick_object *intern;
+	char *embedText;
+	IM_LEN_TYPE embedText_len;
+	char *result;
+
+	ImageInfo *image_info;
+	Image *image;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &embedText, &embedText_len) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0) {
+		return;
+	}
+
+	image_info = AcquireImageInfo();
+	image = GetImageFromMagickWand(intern->magick_wand);
+	result = InterpretImageProperties(image_info, image, embedText);
+	image_info = DestroyImageInfo(image_info);
+
+	if (result) {
+#ifdef ZEND_ENGINE_3 
+		RETVAL_STRING(result);
+#else
+		RETVAL_STRING(result, 1);
+#endif
+		IMAGICK_FREE_MAGICK_MEMORY(result);
+
+		return;
+	}
+
+	RETURN_FALSE;
+}
+/* }}} */
+
 /* {{{ proto int Imagick::getImageInterpolateMethod()
 	Returns the interpolation method for the sepcified image.
 */
@@ -2976,7 +3053,7 @@ PHP_METHOD(imagick, __construct)
 	if (!files) {
 		return;
 	}
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
 
 	if (Z_TYPE_P (files) == IS_LONG || Z_TYPE_P (files) == IS_DOUBLE) {
 		convert_to_string (files);
@@ -3367,7 +3444,7 @@ PHP_METHOD(imagick, readimages)
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
 
 	for(zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(files), &pos);
 		zend_hash_has_more_elements_ex(Z_ARRVAL_P(files), &pos) == SUCCESS;
@@ -4477,7 +4554,6 @@ PHP_METHOD(imagick, mattefloodfillimage)
 #endif
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-
 /* {{{ proto bool Imagick::medianFilterImage(float radius)
 	Applies a digital filter that improves the quality of a noisy image.  Each pixel is replaced by the median in a set of neighboring pixels as defined by radius.
 */
@@ -4801,7 +4877,6 @@ PHP_METHOD(imagick, quantizeimages)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-
 /* {{{ proto bool Imagick::reduceNoiseImage(float radius)
 	Smooths the contours of an image
 */
@@ -4935,7 +5010,8 @@ PHP_METHOD(imagick, sepiatoneimage)
 /* {{{ proto bool Imagick::setImageBias(float bias)
 	Sets the image bias
 */
-PHP_METHOD(imagick, setimagebias)
+static
+void s_set_image_bias(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 {
 	php_imagick_object *intern;
 	double bias;
@@ -4950,6 +5026,10 @@ PHP_METHOD(imagick, setimagebias)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+	if (use_quantum) {
+		bias *= QuantumRange;
+	}
+
 	status = MagickSetImageBias(intern->magick_wand, bias);
 
 	/* No magick is going to happen */
@@ -4960,6 +5040,29 @@ PHP_METHOD(imagick, setimagebias)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+/* {{{ proto bool Imagick::setImageBiasQuantum(float bias)
+	Sets the image bias. Bias should be scaled with 0 = no adjustment, 1 = quantum value
+*/
+PHP_METHOD(imagick, setimagebiasquantum)
+{
+	s_set_image_bias (INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::setImageBias(float bias)
+	Sets the image bias. Bias should be scaled with 0 = no adjustment, 2^^x = adjust black to white
+	where x = the quantum depth ImageMagick was compiled with
+*/
+PHP_METHOD(imagick, setimagebias)
+{
+	s_set_image_bias (INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
+/* }}} */
+
+
 
 /* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
 	Sets the image chromaticity blue primary point
@@ -10024,7 +10127,6 @@ PHP_METHOD(imagick, posterizeimage)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-
 /* {{{ proto bool Imagick::radialBlurImage(float angle[, int channel])
 	Radial blurs an image.
 */
@@ -10551,7 +10653,7 @@ PHP_METHOD(imagick, getpage)
 }
 /* }}} */
 
-/* {{{ proto array Imagick::getQuantum()
+/* {{{ proto int Imagick::getQuantum()
 	Returns the ImageMagick quantum range as an integer.
 */
 PHP_METHOD(imagick, getquantum)
@@ -11002,7 +11104,6 @@ PHP_METHOD(imagick, setprogressmonitor)
 	zval *user_callback;
 
 	php_imagick_object *intern;
-
 	php_imagick_callback *callback;
 
 	/* Parse parameters given to function */
@@ -11365,7 +11466,7 @@ PHP_METHOD(imagick, rotationalblurimage)
 //6.8.2.9 - MagickStatisticImage ( MagickWand* p1, enum StatisticType const p2, size_t const p3, size_t const p4 )
 
 
-/* {{{ proto bool Imagick::statisticImage(int type, float width, float height[, int channel] )
+/* {{{ proto bool Imagick::statisticImage(int type, int width, int height[, int channel] )
 	Replace each pixel with corresponding statistic from the neighborhood of the specified width and height.
 */
 PHP_METHOD(imagick, statisticimage)
@@ -11373,10 +11474,10 @@ PHP_METHOD(imagick, statisticimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long type;
-	double width, height;
+	long width, height;
 	long channel = DefaultChannels;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd|l", &type, &width, &height, &channel) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &type, &width, &height, &channel) == FAILURE) {
 		return;
 	}
 
@@ -11423,8 +11524,6 @@ PHP_METHOD(imagick, subimagematch)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|zz", &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity) == FAILURE) {
 		return;
 	}
-
-	//reference_intern = (php_imagick_object *)zend_object_store_get_object(reference_obj TSRMLS_CC);
 	reference_intern = Z_IMAGICK_P(reference_obj);
 
 //	if (zSimilarity) {
@@ -11466,6 +11565,82 @@ PHP_METHOD(imagick, subimagematch)
 }
 /* }}} */
 #endif
+
+
+/* {{{ proto array Imagick::setRegistry(string key, string value)
+	Sets the ImageMagick registry entry named key to value. This is most
+	useful for setting "temporary-path" which controls where ImageMagick
+	creates temporary images e.g. while processing PDFs.
+*/
+PHP_METHOD(imagick, setregistry)
+{
+	MagickBooleanType status;
+	char *key, *value;
+	IM_LEN_TYPE key_len, value_len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &key, &key_len, &value, &value_len) == FAILURE) {
+		return;
+	}
+
+	status = SetImageRegistry(StringRegistryType, key, value, NULL);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto array Imagick::getRegistry(string key)
+	Get the StringRegistry entry for the named key or false if not set.
+*/
+PHP_METHOD(imagick, getregistry)
+{
+	MagickBooleanType status;
+	char *key, *value;
+	IM_LEN_TYPE key_len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
+		return;
+	}
+
+	value = GetImageRegistry(StringRegistryType, key, NULL);
+
+	if (value != NULL) {
+		IM_ZVAL_STRING(return_value, value);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
+		return;
+	}
+
+	RETURN_FALSE;
+}
+/* }}} */
+
+
+/* {{{ proto array Imagick::setRegistry()
+	List all the registry settings calls GetImageRegistry. returns an array of all the key/value pairs in the registry 
+*/
+PHP_METHOD(imagick, listregistry)
+{
+	char *registry = NULL;
+	char *value = NULL;
+
+	array_init(return_value);
+
+	ResetImageRegistryIterator();
+	while (registry = GetNextImageRegistry()) {
+		value = GetImageRegistry(StringRegistryType, registry, NULL);
+		//should this be add_assoc_string(return_value, estrdup(registry), value, 1);
+		IM_add_assoc_string(return_value, registry, value);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
+	}
+
+	return;
+}
+/* }}} */
 
 
 /* end of Imagick */

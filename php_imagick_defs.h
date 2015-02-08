@@ -346,6 +346,8 @@ PHP_METHOD(imagick, orderedposterizeimage);
 PHP_METHOD(imagick, polaroidimage);
 PHP_METHOD(imagick, getimageproperty);
 PHP_METHOD(imagick, setimageproperty);
+PHP_METHOD(imagick, deleteimageproperty);
+PHP_METHOD(imagick, identifyformat);
 PHP_METHOD(imagick, setimageinterpolatemethod);
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
@@ -668,6 +670,7 @@ PHP_METHOD(imagick, removeimageprofile);
 PHP_METHOD(imagick, separateimagechannel);
 PHP_METHOD(imagick, sepiatoneimage);
 PHP_METHOD(imagick, setimagebias);
+PHP_METHOD(imagick, setimagebiasquantum);
 PHP_METHOD(imagick, setimageblueprimary);
 PHP_METHOD(imagick, setimagebordercolor);
 PHP_METHOD(imagick, setimagechanneldepth);
@@ -739,6 +742,9 @@ PHP_METHOD(imagick, statisticimage);
 PHP_METHOD(imagick, subimagematch);
 #endif
 
+PHP_METHOD(imagick, setregistry);
+PHP_METHOD(imagick, getregistry);
+PHP_METHOD(imagick, listregistry);
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
@@ -904,11 +910,12 @@ PHP_METHOD(imagickpixel, __construct);
 PHP_METHOD(imagickpixel, setcolor);
 PHP_METHOD(imagickpixel, clear);
 PHP_METHOD(imagickpixel, destroy);
-PHP_METHOD(imagickpixel, issimilar);
+PHP_METHOD(imagickpixel, ispixelsimilarquantum);
 PHP_METHOD(imagickpixel, ispixelsimilar);
 PHP_METHOD(imagickpixel, getcolorvalue);
 PHP_METHOD(imagickpixel, setcolorvalue);
 PHP_METHOD(imagickpixel, getcolor);
+PHP_METHOD(imagickpixel, getcolorquantum);
 PHP_METHOD(imagickpixel, getcolorasstring);
 PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);

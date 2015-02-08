@@ -192,6 +192,14 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_deleteimageproperty_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, name)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_identifyformat_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, embedText)
+	ZEND_END_ARG_INFO()
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageinterpolatemethod_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, INTERPOLATE)
 	ZEND_END_ARG_INFO()
@@ -1126,6 +1134,10 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebias_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, bias)
 	ZEND_END_ARG_INFO()
+	
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebiasquantum_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, bias)
+	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageblueprimary_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
@@ -1359,6 +1371,15 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, mode)
 	ZEND_END_ARG_INFO()
 #endif
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setregistry_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, key)
+		ZEND_ARG_INFO(0, value)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getregistry_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, key)
+	ZEND_END_ARG_INFO()
 
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
@@ -1792,7 +1813,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
-	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_issimilar_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_ispixelsimilarquantum_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
@@ -2032,9 +2053,11 @@ static zend_function_entry php_imagickpixel_class_methods[] =
 	PHP_ME(imagickpixel, getcolorvalue, imagickpixel_getcolorvalue_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, clear, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	ZEND_MALIAS(imagickpixel, destroy, clear, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, issimilar, imagickpixel_issimilar_args, ZEND_ACC_PUBLIC)
+	PHP_MALIAS(imagickpixel, issimilar, ispixelsimilarquantum, imagickpixel_ispixelsimilarquantum_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, ispixelsimilarquantum, imagickpixel_ispixelsimilarquantum_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, ispixelsimilar, imagickpixel_ispixelsimilar_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolor, imagickpixel_getcolor_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getcolorquantum, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorasstring, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getcolorcount, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorcount, imagickpixel_setcolorcount_args, ZEND_ACC_PUBLIC)
@@ -2083,6 +2106,8 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, deleteimageproperty, imagick_deleteimageproperty_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, identifyformat, imagick_identifyformat_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
@@ -2413,6 +2438,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, separateimagechannel, imagick_separateimagechannel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, sepiatoneimage, imagick_sepiatoneimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagebias, imagick_setimagebias_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, setimagebiasquantum, imagick_setimagebiasquantum_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimageblueprimary, imagick_setimageblueprimary_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagebordercolor, imagick_setimagebordercolor_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagechanneldepth, imagick_setimagechanneldepth_args, ZEND_ACC_PUBLIC)
@@ -2496,6 +2522,9 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion >= 0x652
 	PHP_ME(imagick, subimagematch, imagick_subimagematch_args, ZEND_ACC_PUBLIC)
 #endif
+	PHP_ME(imagick, setregistry, imagick_setregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getregistry, imagick_getregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, listregistry, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 

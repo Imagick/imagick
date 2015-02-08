@@ -74,7 +74,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	zval zargs[2];
 #else
 	zval **zargs[2];
-	zval *retval_ptr = NULL;
+	zval *retval_ptr;
 #endif
 
 	//We can get the data both via the passed param and via
@@ -82,7 +82,6 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	php_imagick_callback *callback = (php_imagick_callback*)userData;
 
 	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
-
 	fci_cache = empty_fcall_info_cache;
 
 	fci.size = sizeof(fci);
@@ -92,6 +91,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci.function_name = *callback->user_callback;
 	fci.retval = &retval;
 #else
+	retval_ptr = NULL;
 	fci.object_ptr = NULL;
 	fci.function_name = callback->user_callback;
 	fci.retval_ptr_ptr = &retval_ptr;
@@ -1365,6 +1365,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_FILE", FileResource);
 	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_MAP", MapResource);
 	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_MEMORY", MemoryResource);
+#if MagickLibVersion >= 0x675
+	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_TIME", TimeResource);
+	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_THROTTLE", ThrottleResource);
+#endif
 #if MagickLibVersion > 0x678
 	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_THREAD", ThreadResource);
 #endif
