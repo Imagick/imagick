@@ -3271,8 +3271,11 @@ PHP_MINFO_FUNCTION(imagick)
 #endif
 
 	char **supported_formats, *buffer;
-	unsigned long num_formats = 0, i;
+	unsigned long i;
+	size_t num_formats;
 	size_t version_number;
+
+	num_formats = 0;
 
 	supported_formats = MagickQueryFormats("*", &num_formats);
 	spprintf(&buffer, 0, "%ld", num_formats);
@@ -3291,10 +3294,10 @@ PHP_MINFO_FUNCTION(imagick)
 	if (supported_formats) {
 		for (i = 0; i < num_formats; i++) {
 #ifdef ZEND_ENGINE_3
-			smart_string_appends(&formats, supported_formats[i]);
-			if (i != (num_formats - 1)) {
+			if (i != 0) {
  				smart_string_appends(&formats, ", ");
 			}
+			smart_string_appends(&formats, supported_formats[i]);
 #else
 			smart_str_appends(&formats, supported_formats[i]);
 			if (i != (num_formats - 1)) {
@@ -3303,10 +3306,12 @@ PHP_MINFO_FUNCTION(imagick)
 #endif
 			IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 		}
-		smart_string_0(&formats);
+		
 #ifdef ZEND_ENGINE_3
-		smart_string_0(&formats);
-		php_info_print_table_row(2, "ImageMagick supported formats", formats);
+		if (str.s) {
+			smart_string_0(&formats);
+			php_info_print_table_row(2, "ImageMagick supported formats", formats.s);
+		}
 		smart_string_free(&formats);
 #else
 		smart_str_0(&formats);
