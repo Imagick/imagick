@@ -16,7 +16,7 @@ function setStrokeDashOffset($strokeColor, $fillColor, $backgroundColor) {
     $draw->setStrokeColor($strokeColor);
     $draw->setFillColor($fillColor);
     $draw->setStrokeWidth(4);
-    $draw->setStrokeDashArray([20, 20]);
+    $draw->setStrokeDashArray(array(20, 20));
     $draw->setStrokeDashOffset(0);
     $draw->rectangle(100, 50, 225, 175);
 

@@ -62,9 +62,9 @@ function createGradientImage($width, $height, $colorPoints, $sparseMethod, $abso
 
 function renderImageBarycentric() {
     $points = array(
-        [0, 0, 'skyblue'],
-        [-1, 1, 'skyblue'],
-        [1, 1, 'black'],
+        array(0, 0, 'skyblue'),
+        array(-1, 1, 'skyblue'),
+        array(1, 1, 'black'),
     );
     $imagick = createGradientImage(600, 200, $points, \Imagick::SPARSECOLORMETHOD_BARYCENTRIC);
     $bytes = $imagick->getImageBlob();

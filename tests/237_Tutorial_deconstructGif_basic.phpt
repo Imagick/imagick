@@ -29,7 +29,8 @@ function makeSimpleGif($deconstruct) {
 
     $backgroundPalette->addimage($blackWhitePalette);
 
-    for($count=0 ; $count<$imageFrames ; $count++){
+    for($count=0 ; $count<$imageFrames ; $count++) {
+        echo "Frame: ".$imageFrames."\n";
         $drawing = new \ImagickDraw();
         $drawing->setFillColor('white');
         $drawing->setStrokeColor('rgba(64, 64, 64, 0.8)');
@@ -60,4 +61,10 @@ makeSimpleGif($deconstruct) ;
 echo "Ok";
 ?>
 --EXPECTF--
+Frame: 1
+Frame: 2
+Frame: 3
+Frame: 4
+Frame: 5
+Frame: 6
 Ok
