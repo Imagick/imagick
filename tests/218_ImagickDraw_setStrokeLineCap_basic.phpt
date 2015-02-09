@@ -16,7 +16,7 @@ function setStrokeLineCap($strokeColor, $fillColor, $backgroundColor) {
     $draw->setFillColor($fillColor);
     $draw->setStrokeWidth(25);
 
-    $lineTypes = [\Imagick::LINECAP_BUTT, \Imagick::LINECAP_ROUND, \Imagick::LINECAP_SQUARE,];
+    $lineTypes = array(\Imagick::LINECAP_BUTT, \Imagick::LINECAP_ROUND, \Imagick::LINECAP_SQUARE,);
 
     $offset = 0;
 

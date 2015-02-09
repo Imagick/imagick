@@ -26,7 +26,11 @@ function setStrokeMiterLimit($strokeColor, $fillColor, $backgroundColor) {
 
         $draw->setStrokeMiterLimit(40 * $y);
 
-        $points = [['x' => 22 * 3, 'y' => 15 * 4 + $y * $yOffset], ['x' => 20 * 3, 'y' => 20 * 4 + $y * $yOffset], ['x' => 70 * 5, 'y' => 45 * 4 + $y * $yOffset],];
+        $points = array(
+            array('x' => 22 * 3, 'y' => 15 * 4 + $y * $yOffset),
+            array('x' => 20 * 3, 'y' => 20 * 4 + $y * $yOffset),
+            array('x' => 70 * 5, 'y' => 45 * 4 + $y * $yOffset),
+        );
 
         $draw->polygon($points);
     }

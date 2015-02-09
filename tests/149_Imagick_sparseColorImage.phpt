@@ -61,35 +61,35 @@ function createGradientImage($width, $height, $colorPoints, $sparseMethod, $abso
 }
 
 function renderImageBarycentric() {
-    $points = [
+    $points = array(
         [0, 0, 'skyblue'],
         [-1, 1, 'skyblue'],
         [1, 1, 'black'],
-    ];
+    );
     $imagick = createGradientImage(600, 200, $points, \Imagick::SPARSECOLORMETHOD_BARYCENTRIC);
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
     echo "Ok".PHP_EOL;
 }
 function renderImageVoronoi() {
-    $points = [
-        [0.30, 0.10, 'red'],
-        [0.10, 0.80, 'blue'],
-        [0.70, 0.60, 'lime'],
-        [0.80, 0.20, 'yellow'],
-    ];
+    $points = array(
+        array(0.30, 0.10, 'red'),
+        array(0.10, 0.80, 'blue'),
+        array(0.70, 0.60, 'lime'),
+        array(0.80, 0.20, 'yellow'),
+    );
     $imagick = createGradientImage(500, 500, $points, \Imagick::SPARSECOLORMETHOD_VORONOI);
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
     echo "Ok".PHP_EOL;
 }
 function renderImageShepards() {
-    $points = [
-            [0.30, 0.10, 'red'],
-            [0.10, 0.80, 'blue'],
-            [0.70, 0.60, 'lime'],
-            [0.80, 0.20, 'yellow'],
-        ];
+    $points = array(
+            array(0.30, 0.10, 'red'),
+            array(0.10, 0.80, 'blue'),
+            array(0.70, 0.60, 'lime'),
+            array(0.80, 0.20, 'yellow'),
+        );
     $imagick = createGradientImage(600, 600, $points, \Imagick::SPARSECOLORMETHOD_SPEPARDS);
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
@@ -97,7 +97,12 @@ function renderImageShepards() {
 }
 
 function renderImageBilinear() {
-    $points = [[0.30, 0.10, 'red'], [0.10, 0.80, 'blue'], [0.70, 0.60, 'lime'], [0.80, 0.20, 'yellow'],];
+    $points = array(
+        array(0.30, 0.10, 'red'),
+        array(0.10, 0.80, 'blue'),
+        array(0.70, 0.60, 'lime'),
+        array(0.80, 0.20, 'yellow'),
+    );
     $imagick = createGradientImage(500, 500, $points, \Imagick::SPARSECOLORMETHOD_BILINEAR);
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";}

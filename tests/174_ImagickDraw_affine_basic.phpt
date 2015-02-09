@@ -39,7 +39,7 @@ function affine($strokeColor, $fillColor, $backgroundColor) {
     //The identiy affine matrix
     $affineIdentity = array("sx" => 1, "sy" => 1, "rx" => 0, "ry" => 0, "tx" => 0, "ty" => 0);
 
-    $examples = [$affineScale, $affineShear, $affineRotate, $affineTranslate, $affineIdentity,];
+    $examples = array($affineScale, $affineShear, $affineRotate, $affineTranslate, $affineIdentity,);
 
     $count = 0;
 

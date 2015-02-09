@@ -17,7 +17,7 @@ function setFillRule($fillColor, $strokeColor, $backgroundColor) {
     $draw->setStrokeColor($strokeColor);
     $draw->setFillColor($fillColor);
 
-    $fillRules = [\Imagick::FILLRULE_NONZERO, \Imagick::FILLRULE_EVENODD];
+    $fillRules = array(\Imagick::FILLRULE_NONZERO, \Imagick::FILLRULE_EVENODD);
 
     $points = 11;
     $size = 150;

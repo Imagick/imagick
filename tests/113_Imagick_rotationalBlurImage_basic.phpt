@@ -1,7 +1,15 @@
 --TEST--
 Test Imagick, rotationalBlurImage
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php require_once(dirname(__FILE__) . '/skipif.inc'); 
+
+$requiredMethods = array(
+    'rotationalBlurImage'
+);
+ 
+require_once(dirname(__FILE__) . '/skipmethod.inc');
+
+?>
 --FILE--
 <?php
 

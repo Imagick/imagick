@@ -18,7 +18,7 @@ function setFontSize($fillColor, $strokeColor, $backgroundColor) {
     $draw->setFillColor($fillColor);
     $draw->setStrokeWidth(2);
 
-    $sizes = [24, 36, 48, 60, 72];
+    $sizes = array(24, 36, 48, 60, 72);
 
     foreach ($sizes as $size) {
         $draw->setFontSize($size);

@@ -22,14 +22,40 @@ function bezier($strokeColor, $fillColor, $backgroundColor) {
 
     $draw->setStrokeWidth(2);
 
-    $smoothPointsSet = [[['x' => 10.0 * 5, 'y' => 10.0 * 5], ['x' => 30.0 * 5, 'y' => 90.0 * 5], ['x' => 25.0 * 5, 'y' => 10.0 * 5], ['x' => 50.0 * 5, 'y' => 50.0 * 5],], [['x' => 50.0 * 5, 'y' => 50.0 * 5], ['x' => 75.0 * 5, 'y' => 90.0 * 5], ['x' => 70.0 * 5, 'y' => 10.0 * 5], ['x' => 90.0 * 5, 'y' => 40.0 * 5],],];
+    $smoothPointsSet = array(
+        array(
+            array('x' => 10.0 * 5, 'y' => 10.0 * 5),
+            array('x' => 30.0 * 5, 'y' => 90.0 * 5),
+            array('x' => 25.0 * 5, 'y' => 10.0 * 5),
+            array('x' => 50.0 * 5, 'y' => 50.0 * 5),
+        ),
+        array(
+            array('x' => 50.0 * 5, 'y' => 50.0 * 5),
+            array('x' => 75.0 * 5, 'y' => 90.0 * 5),
+            array('x' => 70.0 * 5, 'y' => 10.0 * 5),
+            array('x' => 90.0 * 5, 'y' => 40.0 * 5),
+        ),
+    );
 
     foreach ($smoothPointsSet as $points) {
         $draw->bezier($points);
     }
 
 
-    $disjointPoints = [[['x' => 10 * 5, 'y' => 10 * 5], ['x' => 30 * 5, 'y' => 90 * 5], ['x' => 25 * 5, 'y' => 10 * 5], ['x' => 50 * 5, 'y' => 50 * 5],], [['x' => 50 * 5, 'y' => 50 * 5], ['x' => 80 * 5, 'y' => 50 * 5], ['x' => 70 * 5, 'y' => 10 * 5], ['x' => 90 * 5, 'y' => 40 * 5],]];
+    $disjointPoints = array(
+        array(
+            array('x' => 10 * 5, 'y' => 10 * 5),
+            array('x' => 30 * 5, 'y' => 90 * 5),
+            array('x' => 25 * 5, 'y' => 10 * 5),
+            array('x' => 50 * 5, 'y' => 50 * 5),
+        ),
+        array(
+            array('x' => 50 * 5, 'y' => 50 * 5),
+            array('x' => 80 * 5, 'y' => 50 * 5),
+            array('x' => 70 * 5, 'y' => 10 * 5),
+            array('x' => 90 * 5, 'y' => 40 * 5),
+        )
+    );
     $draw->translate(0, 200);
 
     foreach ($disjointPoints as $points) {

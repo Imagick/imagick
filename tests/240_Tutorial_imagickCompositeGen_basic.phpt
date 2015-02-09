@@ -35,7 +35,7 @@ function mergeImages($outputSize, $overlap, $contrast = 10, $blendMidpoint = 0.5
 
     $blendWidth = 0;
 
-    $srcImages = [1, 2, 3];
+    $srcImages = array(1, 2, 3);
 
     foreach ($srcImages as $srcImage) {
         $nextImage = new \Imagick();

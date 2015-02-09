@@ -1,7 +1,16 @@
 --TEST--
 Test Imagick, forwardFourierTransformImage
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php require_once(dirname(__FILE__) . '/skipif.inc'); 
+
+$requiredMethods = array(
+	'forwardFourierTransformImage',
+	'inverseFourierTransformImage'
+);
+
+require_once(dirname(__FILE__) . '/skipmethod.inc');
+
+?>
 --FILE--
 <?php
 

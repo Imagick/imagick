@@ -10,7 +10,7 @@ $firstTerm = 0.5;
 $gradientStartColor = 'black';
 $gradientEndColor = 'white';
 
-$evaluateTypes = [
+$evaluateTypes = array(
 	\Imagick::EVALUATE_ADD,
 	\Imagick::EVALUATE_AND,
 	\Imagick::EVALUATE_MAX,
@@ -38,7 +38,7 @@ $evaluateTypes = [
 	\Imagick::EVALUATE_UNIFORMNOISE,
 	\Imagick::EVALUATE_COSINE,
 	\Imagick::EVALUATE_SINE,
-];
+);
 
 
 
@@ -51,7 +51,7 @@ function evaluateImage($evaluateType, $firstTerm, $gradientStartColor, $gradient
         "gradient:$gradientStartColor-$gradientEndColor"
     );
     
-    $quantumScaledTypes = [
+    $quantumScaledTypes = array(
         \Imagick::EVALUATE_ADD,
         \Imagick::EVALUATE_AND,
         \Imagick::EVALUATE_MAX,
@@ -64,9 +64,9 @@ function evaluateImage($evaluateType, $firstTerm, $gradientStartColor, $gradient
         \Imagick::EVALUATE_THRESHOLDBLACK,
         \Imagick::EVALUATE_THRESHOLDWHITE,
         \Imagick::EVALUATE_ADDMODULUS,
-    ];
+    );
 
-    $unscaledTypes = [
+    $unscaledTypes = array(
         \Imagick::EVALUATE_DIVIDE,
         \Imagick::EVALUATE_MULTIPLY,
         \Imagick::EVALUATE_RIGHTSHIFT,
@@ -81,7 +81,7 @@ function evaluateImage($evaluateType, $firstTerm, $gradientStartColor, $gradient
         \Imagick::EVALUATE_UNIFORMNOISE,
         \Imagick::EVALUATE_COSINE,
         \Imagick::EVALUATE_SINE,
-    ];
+    );
 
     if (in_array($evaluateType, $unscaledTypes)) {
         $imagick->evaluateimage($evaluateType, $firstTerm);

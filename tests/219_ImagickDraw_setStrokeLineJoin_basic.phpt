@@ -20,11 +20,16 @@ function setStrokeLineJoin($strokeColor, $fillColor, $backgroundColor) {
 
     $offset = 220;
 
-    $lineJoinStyle = [\Imagick::LINEJOIN_MITER, \Imagick::LINEJOIN_ROUND, \Imagick::LINEJOIN_BEVEL,];
+    $lineJoinStyle = array(\Imagick::LINEJOIN_MITER, \Imagick::LINEJOIN_ROUND, \Imagick::LINEJOIN_BEVEL,);
 
     for ($x = 0; $x < count($lineJoinStyle); $x++) {
         $draw->setStrokeLineJoin($lineJoinStyle[$x]);
-        $points = [['x' => 40 * 5, 'y' => 10 * 5 + $x * $offset], ['x' => 20 * 5, 'y' => 20 * 5 + $x * $offset], ['x' => 70 * 5, 'y' => 50 * 5 + $x * $offset], ['x' => 40 * 5, 'y' => 10 * 5 + $x * $offset],];
+        $points = array(
+            array('x' => 40 * 5, 'y' => 10 * 5 + $x * $offset),
+            array('x' => 20 * 5, 'y' => 20 * 5 + $x * $offset),
+            array('x' => 70 * 5, 'y' => 50 * 5 + $x * $offset),
+            array('x' => 40 * 5, 'y' => 10 * 5 + $x * $offset),
+        );
 
         $draw->polyline($points);
     }

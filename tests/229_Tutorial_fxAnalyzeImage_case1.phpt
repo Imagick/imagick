@@ -18,7 +18,7 @@ function fxAnalyzeImage(\Imagick $imagick) {
 
     $imageIterator = new \ImagickPixelIterator($imagick);
 
-    $reds = [];
+    $reds = array();
 
     foreach ($imageIterator as $pixels) { /* Loop trough pixel rows */
         foreach ($pixels as $pixel) { /* Loop through the pixels in the row (columns) */
@@ -40,11 +40,11 @@ function fxAnalyzeImage(\Imagick $imagick) {
     $draw->setStrokeAntiAlias(true);
 
     $x = 0;
-    $points = [];
+    $points = array();
     
     foreach ($reds as $red) {
         $pos = $graphHeight - ($red * $graphHeight / 256);
-        $points[] = ['x' => $x, 'y' => $pos];
+        $points[] = array('x' => $x, 'y' => $pos);
         $x += 1;
     }
 
@@ -69,7 +69,7 @@ function fxAnalyzeImage(\Imagick $imagick) {
 }
 
 
-$arguments = [5, 1, 0.5];
+$arguments = array(5, 1, 0.5);
 
 $imagick = new \Imagick();
 $imagick->newPseudoImage(500, 500, 'gradient:black-white');

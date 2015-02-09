@@ -7,7 +7,7 @@ Test Imagick, getImageHistogram
 
 
 function getColorStatistics($histogramElements, $colorChannel) {
-    $colorStatistics = [];
+    $colorStatistics = array();
 
     foreach ($histogramElements as $histogramElement) {
         //So broken. Wow. Much surprise. Sad. Bad. Sad, bad, sad.
@@ -64,11 +64,11 @@ function getImageHistogram() {
         return $carry;
     };
 
-    $colorValues = [
+    $colorValues = array(
         'red' => getColorStatistics($histogramElements, \Imagick::COLOR_RED),
         'lime' => getColorStatistics($histogramElements, \Imagick::COLOR_GREEN),
         'blue' => getColorStatistics($histogramElements, \Imagick::COLOR_BLUE),
-    ];
+    );
 
     $max = array_reduce($colorValues['red'] , $getMax, 0);
     $max = array_reduce($colorValues['lime'] , $getMax, $max);

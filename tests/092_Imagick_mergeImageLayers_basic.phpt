@@ -11,11 +11,11 @@ function mergeImageLayers($layerMethodType) {
 
     $imagick = new \Imagick();
     $nextImage = null;
-    $imageNames = [
+    $imageNames = array(
         "magick:NETSCAPE",
         "magick:logo",
         "magick:GRANITE",
-    ];
+    );
 
     foreach ($imageNames as $imageName) {        
         $nextImage = new \Imagick();
