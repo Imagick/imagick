@@ -12,7 +12,7 @@ function makeSimpleGif($deconstruct) {
     $aniGif->setFormat("gif");
 
     $circleRadius = 20;
-    $imageFrames = 40;
+    $imageFrames = 6;
     $imageSize = 200;
 
     $background = new \Imagick();
