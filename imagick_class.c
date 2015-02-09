@@ -1333,7 +1333,7 @@ PHP_METHOD(imagick, getimageprofiles)
 	IM_LEN_TYPE pattern_len;
 	unsigned long profiles_count, i;
 	php_imagick_object *intern;
-	IM_LEN_TYPE length;
+	size_t length;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &pattern_len, &values) == FAILURE) {
@@ -3117,7 +3117,7 @@ PHP_METHOD(imagick, __tostring)
 	php_imagick_object *intern;
 	unsigned char *image;
 	char *buffer;
-	IM_LEN_TYPE image_size;
+	size_t image_size;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -6356,11 +6356,6 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 #ifdef ZEND_ENGINE_3
 		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
-#else
-		MAKE_STD_ZVAL(tmp);
-		array_init(tmp);
-#endif
-
 		add_assoc_double(&tmp, "mean", statistics[channels[i]].mean);
 		add_assoc_double(&tmp, "minima", statistics[channels[i]].minima);
 		add_assoc_double(&tmp, "maxima", statistics[channels[i]].maxima);
@@ -6370,6 +6365,21 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 #endif
 		add_assoc_long(&tmp, "depth", statistics[channels[i]].depth);
 		add_index_zval(return_value, channels[i], &tmp);
+#else
+		MAKE_STD_ZVAL(tmp);
+		array_init(tmp);
+		add_assoc_double(tmp, "mean", statistics[channels[i]].mean);
+		add_assoc_double(tmp, "minima", statistics[channels[i]].minima);
+		add_assoc_double(tmp, "maxima", statistics[channels[i]].maxima);
+		add_assoc_double(tmp, "standardDeviation", statistics[channels[i]].standard_deviation);
+#if MagickLibVersion < 0x635
+		add_assoc_long(&tmp, "scale", statistics[channels[i]].scale);
+#endif
+		add_assoc_long(tmp, "depth", statistics[channels[i]].depth);
+		add_index_zval(return_value, channels[i], tmp);
+#endif
+
+
 	}
 	MagickRelinquishMemory(statistics);
 	return;
@@ -6676,7 +6686,12 @@ PHP_METHOD(imagick, getimagehistogram)
 	PixelWand **wand_array;
 	unsigned long colors = 0;
 	unsigned long i;
+#ifdef ZEND_ENGINE_3
 	zval tmp_pixelwand;
+#else
+	zval *tmp_pixelwand;
+#endif
+
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -6691,10 +6706,18 @@ PHP_METHOD(imagick, getimagehistogram)
 
 	for (i = 0; i < colors; i++) {
 		if (wand_array[i]) {
+#ifdef ZEND_ENGINE_3
 			object_init_ex(&tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = Z_IMAGICKPIXEL_P(&tmp_pixelwand);
 			php_imagick_replace_pixelwand(internp, wand_array[i]);
 			add_next_index_zval(return_value, &tmp_pixelwand);
+#else
+			MAKE_STD_ZVAL(tmp_pixelwand);
+			object_init_ex(tmp_pixelwand, php_imagickpixel_sc_entry);
+			internp = (php_imagickpixel_object *)zend_object_store_get_object(tmp_pixelwand TSRMLS_CC);
+			php_imagick_replace_pixelwand(internp, wand_array[i]);
+			add_next_index_zval(return_value, tmp_pixelwand);
+#endif
 		}
 	}
 
@@ -7892,12 +7915,15 @@ PHP_METHOD(imagick, identifyimage)
 	char *format, *identify, *filename, *signature;
 	php_imagick_object *intern;
 	zend_bool append_raw_string = 0;
+	double x, y;
+
 #ifdef ZEND_ENGINE_3
 	zval array;
 #else
 	zval *array;
 #endif
-    double x, y;
+    
+    zval *pArray;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|b", &append_raw_string) == FAILURE) {
@@ -7940,20 +7966,23 @@ PHP_METHOD(imagick, identifyimage)
 	// Geometry is an associative array
 	
 #ifdef ZEND_ENGINE_3
-		ZVAL_NEW_ARR(&array);
+	ZVAL_NEW_ARR(&array);
+	pArray = &array;
 #else
-		MAKE_STD_ZVAL(array);
+	MAKE_STD_ZVAL(array);
+	pArray = array;
 #endif
-	array_init(&array);
 
-	add_assoc_long (&array, "width", MagickGetImageWidth (intern->magick_wand));
-	add_assoc_long (&array, "height", MagickGetImageHeight (intern->magick_wand));
-	add_assoc_zval (return_value, "geometry", &array);
+	array_init(pArray);
+
+	add_assoc_long (pArray, "width", MagickGetImageWidth (intern->magick_wand));
+	add_assoc_long (pArray, "height", MagickGetImageHeight (intern->magick_wand));
+	add_assoc_zval (return_value, "geometry", pArray);
 
 	if (MagickGetImageResolution(intern->magick_wand, &x, &y) == MagickTrue) {
-	    add_assoc_double (&array, "x", x);
-	    add_assoc_double (&array, "y", y);
-	    add_assoc_zval (return_value, "resolution", &array);
+		add_assoc_double(pArray, "x", x);
+		add_assoc_double(pArray, "y", y);
+		add_assoc_zval(return_value, "resolution", pArray);
 	}
 
 	signature = MagickGetImageSignature(intern->magick_wand);
@@ -8305,6 +8334,9 @@ PHP_METHOD(imagick, compareimagechannels)
 	zval *new_wand;
 #endif
 
+	zval *pNewWand;
+
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &channel_type, &metric_type) == FAILURE) {
 		return;
 	}
@@ -8324,16 +8356,19 @@ PHP_METHOD(imagick, compareimagechannels)
 		return;
 	}
 
-#ifndef ZEND_ENGINE_3
+#ifdef ZEND_ENGINE_3
+	pNewWand = &new_wand;
+#else
 	MAKE_STD_ZVAL(new_wand);
+	pNewWand = new_wand;
 #endif
 	array_init(return_value);
 
-	object_init_ex(&new_wand, php_imagick_sc_entry);
-	intern_return = Z_IMAGICK_P(&new_wand);
+	object_init_ex(pNewWand, php_imagick_sc_entry);
+	intern_return = Z_IMAGICK_P(pNewWand);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
-	add_next_index_zval(return_value, &new_wand);
+	add_next_index_zval(return_value, pNewWand);
 	add_next_index_double(return_value, distortion);
 
 	return;
@@ -8616,6 +8651,8 @@ PHP_METHOD(imagick, compareimages)
 	zval *new_wand;
 #endif
 
+	zval *pNewWand;
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &metric_type) == FAILURE) {
 		return;
 	}
@@ -8628,8 +8665,11 @@ PHP_METHOD(imagick, compareimages)
 	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
 		return;
 
-#ifndef ZEND_ENGINE_3
+#ifdef ZEND_ENGINE_3
+	pNewWand = &new_wand;
+#else
 	MAKE_STD_ZVAL(new_wand);
+	pNewWand = new_wand;
 #endif
 	array_init(return_value);
 
@@ -8640,11 +8680,11 @@ PHP_METHOD(imagick, compareimages)
 		return;
 	}
 
-	object_init_ex(&new_wand, php_imagick_sc_entry);
-	intern_return = Z_IMAGICK_P(&new_wand);
+	object_init_ex(pNewWand, php_imagick_sc_entry);
+	intern_return = Z_IMAGICK_P(pNewWand);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
 
-	add_next_index_zval(return_value, &new_wand);
+	add_next_index_zval(return_value, pNewWand);
 	add_next_index_double(return_value, distortion);
 
 	return;

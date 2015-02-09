@@ -5,6 +5,7 @@ Test Tutorial, fxAnalyzeImage
 --FILE--
 <?php
 
+ini_set('memory_limit','512M');
 
 // Analyzes a one pixel wide image to make it easy to see what the
 // gradient is doing

@@ -32,6 +32,7 @@ if ($result[1] == 0) {
 }
 else {
     echo "Error, reopened images have changed.";
+    var_dump($result);
 }
 
 ?>

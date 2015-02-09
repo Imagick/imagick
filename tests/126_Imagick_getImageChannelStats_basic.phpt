@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, setImageOrientation
+Test Imagick, getImageChannelStatistics
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
 --FILE--
@@ -9,7 +9,6 @@ Test Imagick, setImageOrientation
 $imagick = new \Imagick();
 $imagick->newPseudoImage(640, 480, "magick:logo");
 $identifyInfo = $imagick->getImageChannelStatistics();
-var_dump($identifyInfo);
 
 echo "Ok";
 ?>
