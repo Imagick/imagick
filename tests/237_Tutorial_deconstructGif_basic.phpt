@@ -60,6 +60,8 @@ function makeSimpleGif($deconstruct) {
 makeSimpleGif($deconstruct) ;
 echo "Ok";
 ?>
+--XFAIL--
+This test dies on multiple platforms including Travis and SUSE.
 --EXPECTF--
 Frame: 1
 Frame: 2
