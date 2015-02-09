@@ -72,5 +72,7 @@ function forwardFourierTransformImage() {
 forwardFourierTransformImage() ;
 echo "Ok";
 ?>
+--XFAIL--
+ImageMagick is compiling with fftw functions enabled on Travis when they're not available.
 --EXPECTF--
 Ok
