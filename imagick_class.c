@@ -3232,6 +3232,7 @@ PHP_METHOD(imagick, queryfontmetrics)
 
 	multiline = NULL;
 	remove_canvas = 0;
+	query_multiline = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Os|z!", &objvar, php_imagickdraw_sc_entry, &text, &text_len, &multiline) == FAILURE) {
 		return;
@@ -3241,8 +3242,6 @@ PHP_METHOD(imagick, queryfontmetrics)
 	if (!multiline) {
 		if (strchr (text, '\n') != NULL) {
 			query_multiline = 1;
-		} else {
-			query_multiline = 0;
 		}
 	} else {
 		convert_to_boolean(multiline);

@@ -3321,10 +3321,8 @@ PHP_MINFO_FUNCTION(imagick)
 		}
 		
 #ifdef ZEND_ENGINE_3
-		if (str.s) {
-			smart_string_0(&formats);
-			php_info_print_table_row(2, "ImageMagick supported formats", formats.s);
-		}
+		smart_string_0(&formats);
+		php_info_print_table_row(2, "ImageMagick supported formats", formats.c);
 		smart_string_free(&formats);
 #else
 		smart_str_0(&formats);
