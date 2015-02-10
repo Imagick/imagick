@@ -7856,9 +7856,6 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 	char *line;
 #endif
 
-	found = 0;
-
-
 	const char *str_keys [] = {
 		"Format: ",
 		"Units: ",
@@ -7876,6 +7873,9 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 		"fileSize",
 		"compression"
 	};
+
+	found = 0;
+
 
 	buffer = estrdup (haystack);
 
