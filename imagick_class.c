@@ -11494,5 +11494,44 @@ PHP_METHOD(imagick, listregistry)
 }
 /* }}} */
 
+/* {{{ proto bool Imagick::morphology(int morphologyMethod, int iterations, kernel, [int CHANNEL]  )
+	Applies a user supplied kernel to the image according to the given mophology method.
+
+	iterations - A value of -1 means loop until no change found. How this is applied may depend on the morphology method. Typically this is a value of 1.
+*/
+PHP_METHOD(imagick, morphology)
+{
+	zval *objvar;
+	php_imagick_object *intern;
+	php_imagickkernel_object *kernel;
+	long morphologyMethod, iterations;
+	MagickBooleanType status;
+	long channel = DefaultChannels;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llO|l", &morphologyMethod, &iterations, &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	kernel = (php_imagickkernel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+
+	if (channel == DefaultChannels) {
+		status = MagickMorphologyImage(intern->magick_wand,
+			morphologyMethod, iterations, kernel->kernel_info);
+	}
+	else {
+		status = MagickMorphologyImageChannel(intern->magick_wand,
+			channel, morphologyMethod, iterations, kernel->kernel_info);
+	}
+
+	// No magick is going to happen
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to morphology image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 
 /* end of Imagick */

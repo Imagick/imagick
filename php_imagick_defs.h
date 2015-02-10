@@ -92,6 +92,10 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
 #define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
 
+#define PHP_IMAGICKKERNEL_SC_NAME "ImagickKernel"
+#define PHP_IMAGICKKERNEL_EXCEPTION_SC_NAME "ImagickKernelException"
+
+
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
 	zend_object zo;
@@ -121,10 +125,17 @@ typedef struct _php_imagickpixeliterator_object  {
 
 /* Structure for ImagickPixel object. */
 typedef struct _php_imagickpixel_object  {
-    zend_object zo;
-    PixelWand *pixel_wand;
+	zend_object zo;
+	PixelWand *pixel_wand;
 	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
+
+/* Structure for ImagickKernel object. */
+typedef struct _php_imagickkernel_object  {
+    zend_object zo;
+    KernelInfo *kernel_info;
+} php_imagickkernel_object;
+
 
 /* Define some color constants */
 typedef enum _php_imagick_color_t {
@@ -147,7 +158,8 @@ typedef enum _php_imagick_class_type_t {
 	IMAGICK_CLASS,
 	IMAGICKDRAW_CLASS,
 	IMAGICKPIXELITERATOR_CLASS,
-	IMAGICKPIXEL_CLASS
+	IMAGICKPIXEL_CLASS,
+	IMAGICKKERNEL_CLASS
 } php_imagick_class_type_t;
 
 /* Read / write constants */
@@ -171,6 +183,8 @@ extern zend_class_entry *php_imagickpixel_sc_entry;
 extern zend_class_entry *php_imagickpixel_exception_class_entry;
 extern zend_class_entry *php_imagickpixeliterator_sc_entry;
 extern zend_class_entry *php_imagickpixeliterator_exception_class_entry;
+extern zend_class_entry *php_imagickkernel_sc_entry;
+extern zend_class_entry *php_imagickkernel_exception_class_entry;
 
 /* Forward declarations (Imagick) */
 
@@ -370,6 +384,7 @@ PHP_METHOD(imagick, annotateimage);
 PHP_METHOD(imagick, compositeimage);
 PHP_METHOD(imagick, modulateimage);
 PHP_METHOD(imagick, montageimage);
+PHP_METHOD(imagick, morphology);
 PHP_METHOD(imagick, identifyimage);
 PHP_METHOD(imagick, thresholdimage);
 PHP_METHOD(imagick, adaptivethresholdimage);
@@ -611,6 +626,7 @@ PHP_METHOD(imagick, subimagematch);
 PHP_METHOD(imagick, setregistry);
 PHP_METHOD(imagick, getregistry);
 PHP_METHOD(imagick, listregistry);
+PHP_METHOD(imagick, morphology);
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
@@ -786,5 +802,11 @@ PHP_METHOD(imagickpixel, getcolorasstring);
 PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
+
+PHP_METHOD(imagickkernel, fromarray);
+PHP_METHOD(imagickkernel, frombuiltin);
+PHP_METHOD(imagickkernel, addkernel);
+PHP_METHOD(imagickkernel, getvalues);
+PHP_METHOD(imagickkernel, separate);
 
 #endif /* PHP_IMAGICK_DEFS_H */

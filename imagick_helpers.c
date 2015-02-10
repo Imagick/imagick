@@ -523,6 +523,11 @@ void php_imagick_throw_exception (php_imagick_class_type_t type, const char *des
 			ce = php_imagickpixel_exception_class_entry;
 			code = 4;
 		break;
+
+		case IMAGICKKERNEL_CLASS:
+			ce = php_imagickkernel_exception_class_entry;
+			code = 5;
+		break;
 	}
 	zend_throw_exception(ce, description, code TSRMLS_CC);
 }
@@ -1389,6 +1394,81 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_NONPEAK", NonpeakStatistic);
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_STANDARD_DEVIATION", StandardDeviationStatistic);
 #endif
+
+/* Convolve / Correlate weighted sums */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CONVOLVE", ConvolveMorphology); /* Weighted Sum with reflected kernel */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CORRELATE", CorrelateMorphology); /* Weighted Sum using a sliding window */
+/* Low-level Morphology methods */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_ERODE", ErodeMorphology);  /* Minimum Value in Neighbourhood */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_DILATE", DilateMorphology);  /* Maximum Value in Neighbourhood */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_ERODE_INTENSITY", ErodeIntensityMorphology); /* Pixel Pick using GreyScale Erode */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_DILATE_INTENSITY", DilateIntensityMorphology); /* Pixel Pick using GreyScale Dialate */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_DISTANCE",  DistanceMorphology); /* Add Kernel Value, take Minimum */
+/* Second-level Morphology methods */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_OPEN", OpenMorphology); /* Dilate then Erode */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CLOSE", CloseMorphology); /* Erode then Dilate */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_OPEN_INTENSITY", OpenIntensityMorphology); /* Pixel Pick using GreyScale Open */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CLOSE_INTENSITY", CloseIntensityMorphology); /* Pixel Pick using GreyScale Close */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_SMOOTH", SmoothMorphology); /* Open then Close */
+/* Difference Morphology methods */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_EDGE_IN", EdgeInMorphology); /* Dilate difference from Original */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_EDGE_OUT", EdgeOutMorphology); /* Erode difference from Original */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_EDGE", EdgeMorphology); /* Dilate difference with Erode */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_TOP_HAT", TopHatMorphology); /* Close difference from Original */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_BOTTOM_HAT", BottomHatMorphology); /* Open difference from Original */
+/* Recursive Morphology methods */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_HIT_AND_MISS", HitAndMissMorphology); /* Foreground/Background pattern matching */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_THINNING", ThinningMorphology); /* Remove matching pixels from image */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_THICKEN", ThickenMorphology); /* Add matching pixels from image */
+/* Experimental Morphology methods */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_VORONOI", VoronoiMorphology); /* distance matte channel copy nearest color */
+IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_ITERATIVE", IterativeDistanceMorphology); /* Add Kernel Value, take Minimum */
+
+
+/* The no-op or 'original image' kernel */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_UNITY", UnityKernel);
+/* Convolution Kernels, Gaussian Based */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_GAUSSIAN", GaussianKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_DIFFERENCE_OF_GAUSSIANS", DoGKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_LAPLACIAN_OF_GAUSSIANS", LoGKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_BLUR", BlurKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_COMET", CometKernel);
+/* Convolution Kernels, by Name */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_LAPLACIAN", LaplacianKernel);    
+IMAGICK_REGISTER_CONST_LONG("KERNEL_SOBEL", SobelKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_FREI_CHEN", FreiChenKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_ROBERTS", RobertsKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_PREWITT", PrewittKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_COMPASS", CompassKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_KIRSCH", KirschKernel);
+/* Shape Kernels */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_DIAMOND", DiamondKernel); 
+IMAGICK_REGISTER_CONST_LONG("KERNEL_SQUARE", SquareKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_RECTANGLE", RectangleKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_OCTAGON", OctagonKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_DISK", DiskKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_PLUS", PlusKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_CROSS", CrossKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_RING", RingKernel);
+/* Hit And Miss Kernels */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_PEAKS", PeaksKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_EDGES", EdgesKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_CORNERS", CornersKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_DIAGONALS", DiagonalsKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_LINE_ENDS", LineEndsKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_LINE_JUNCTIONS", LineJunctionsKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_RIDGES", RidgesKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_CONVEX_HULL", ConvexHullKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_THIN_SE", ThinSEKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_SKELETON", SkeletonKernel);
+/* Distance Measuring Kernels */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_CHEBYSHEV", ChebyshevKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_MANHATTAN", ManhattanKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_OCTAGONAL", OctagonalKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_EUCLIDEAN", EuclideanKernel);
+/* User Specified Kernel Array */
+IMAGICK_REGISTER_CONST_LONG("KERNEL_USER_DEFINED", UserDefinedKernel);
+IMAGICK_REGISTER_CONST_LONG("KERNEL_BINOMIAL", BinomialKernel);
 
 #undef IMAGICK_REGISTER_CONST_LONG
 #undef IMAGICK_REGISTER_CONST_STRING
