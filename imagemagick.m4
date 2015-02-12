@@ -13,6 +13,10 @@
 # Usage:
 #   IM_FIND_IMAGEMAGICK (MINIMUM_VERSION, EXTRA_SEARCH_PREFIX)
 #
+# Note:
+# IM_PREFIX - the directory reported by `MagickWand-config --prefix`
+# IM_IMAGEMAGICK_PREFIX - the user specified location to use
+#
 #########################################################
 
 AC_DEFUN([IM_FIND_IMAGEMAGICK],[
@@ -101,7 +105,15 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   IM_MAJOR_VERSION=`echo $IM_IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } {print $[1]}'`
 
   # Try the header formats from newest to oldest
-  if test -r "${IM_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/MagickWand/MagickWand.h"; then
+  if test -r "${IM_IMAGEMAGICK_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/wand/MagickWand.h"; then
+  
+    IM_INCLUDE_FORMAT="wand/MagickWand.h"
+    IM_HEADER_STYLE="SIX"
+    AC_DEFINE([IM_MAGICKWAND_HEADER_STYLE_SIX], [1], [ImageMagick 6.x style header])
+  
+    AC_MSG_RESULT([${IM_IMAGEMAGICK_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/wand/MagickWand.h])
+
+  elif test -r "${IM_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/MagickWand/MagickWand.h"; then
 
     IM_INCLUDE_FORMAT="MagickWand/MagickWand.h"
     IM_HEADER_STYLE="SEVEN"
