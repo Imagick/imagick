@@ -71,32 +71,42 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   if test "$IM_EXTRA_SEARCH_PREFIX" != "yes"; then
     for i in "$IM_EXTRA_SEARCH_PREFIX" /usr/local /usr /opt /opt/local;
     do
+      AC_MSG_CHECKING([Testing ${i}/bin/MagickWand-config])
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
         IM_IMAGEMAGICK_PREFIX=$i
+        AC_MSG_RESULT([It exists])
         break
       fi
+      AC_MSG_RESULT([Doesn't exist])
 
+      AC_MSG_CHECKING([Testing ${i}/bin/Wand-config])
       if test -r "${i}/bin/Wand-config"; then
         IM_WAND_BINARY="${i}/bin/Wand-config"
         IM_IMAGEMAGICK_PREFIX=$i
+        AC_MSG_RESULT([It exists])
         break
       fi
+      AC_MSG_RESULT([Doesn't exist])
     done
   else
     for i in /usr/local /usr /opt /opt/local;
     do
+      AC_MSG_CHECKING([Testing ${i}/bin/MagickWand-config])
       if test -r "${i}/bin/MagickWand-config"; then
         IM_WAND_BINARY="${i}/bin/MagickWand-config"
         IM_IMAGEMAGICK_PREFIX=$i
+        AC_MSG_RESULT([It exists])
         break
       fi
 
       if test -r "${i}/bin/Wand-config"; then
         IM_WAND_BINARY="${i}/bin/Wand-config"
         IM_IMAGEMAGICK_PREFIX=$i
+        AC_MSG_RESULT([It exists])
         break
       fi
+      AC_MSG_RESULT([Doesn't exist])
     done
   fi
 
@@ -140,7 +150,7 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
     IM_HEADER_STYLE="SIX"
     AC_DEFINE([IM_MAGICKWAND_HEADER_STYLE_SIX], [1], [ImageMagick 6.x style header])
   
-    AC_MSG_RESULT([${IM_IMAGEMAGICK_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/wand/MagickWand.h])
+    AC_MSG_RESULT([user location ${IM_IMAGEMAGICK_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/wand/MagickWand.h])
 
   elif test -r "${IM_PREFIX}/include/ImageMagick-${IM_MAJOR_VERSION}/MagickWand/MagickWand.h"; then
 
