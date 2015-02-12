@@ -16,7 +16,7 @@ function makeSimpleGif($deconstruct) {
     $imageSize = 200;
 
     $background = new \Imagick();
-    $background->newpseudoimage($imageSize, $imageSize, "plasma:tomato-steelblue");
+    $background->newpseudoimage($imageSize, $imageSize, "canvas:gray");
 
     $blackWhite = new \Imagick();
     $blackWhite->newpseudoimage($imageSize, $imageSize, "gradient:black-white");
