@@ -19,6 +19,7 @@
 #include "php_imagick_macros.h"
 #include "php_imagick_helpers.h"
 
+#if MagickLibVersion >= 0x680
 
 static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 	zval *row;
@@ -502,3 +503,4 @@ PHP_METHOD(imagickkernel, addunitykernel)
 }
 /* }}} */
 
+#endif

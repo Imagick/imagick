@@ -1395,6 +1395,8 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_STANDARD_DEVIATION", StandardDeviationStatistic);
 #endif
 
+#if MagickLibVersion >= 0x680
+
 /* Convolve / Correlate weighted sums */
 IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CONVOLVE", ConvolveMorphology); /* Weighted Sum with reflected kernel */
 IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CORRELATE", CorrelateMorphology); /* Weighted Sum using a sliding window */
@@ -1485,6 +1487,7 @@ IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_VALUE", NormalizeValue);
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_CORRELATE", CorrelateNormalizeValue);
 // Scale the kernel by a percent.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_PERCENT", PercentValue);
+#endif
 
 #undef IMAGICK_REGISTER_CONST_LONG
 #undef IMAGICK_REGISTER_CONST_STRING

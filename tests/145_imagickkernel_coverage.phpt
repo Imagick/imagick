@@ -1,7 +1,12 @@
 --TEST--
 ImagickKernel::fromArray test
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+
+$imageMagickRequiredVersion = 680;
+require_once(dirname(__FILE__) . '/skipif.inc');
+ 
+?>
 --FILE--
 <?php
 

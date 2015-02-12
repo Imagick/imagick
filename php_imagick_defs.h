@@ -805,6 +805,7 @@ PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
 
+#if MagickLibVersion >= 0x680
 PHP_METHOD(imagickkernel, fromarray);
 PHP_METHOD(imagickkernel, frombuiltin);
 PHP_METHOD(imagickkernel, addkernel);
@@ -812,5 +813,7 @@ PHP_METHOD(imagickkernel, getvalues);
 PHP_METHOD(imagickkernel, separate);
 PHP_METHOD(imagickkernel, scale);
 PHP_METHOD(imagickkernel, addunitykernel);
+#endif
+
 
 #endif /* PHP_IMAGICK_DEFS_H */
