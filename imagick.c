@@ -33,7 +33,9 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
+#ifdef IMAGICK_WITH_KERNEL
 HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC); /* {{{ */
+#endif
 
 zend_class_entry *php_imagick_sc_entry;
 zend_class_entry *php_imagick_exception_class_entry;
@@ -43,8 +45,10 @@ zend_class_entry *php_imagickpixel_sc_entry;
 zend_class_entry *php_imagickpixel_exception_class_entry;
 zend_class_entry *php_imagickpixeliterator_sc_entry;
 zend_class_entry *php_imagickpixeliterator_exception_class_entry;
+#ifdef IMAGICK_WITH_KERNEL
 zend_class_entry *php_imagickkernel_sc_entry;
 zend_class_entry *php_imagickkernel_exception_class_entry;
+#endif
 
 #if defined(ZTS) && defined(PHP_WIN32)
 static MUTEX_T imagick_mutex;
@@ -56,7 +60,9 @@ static zend_object_handlers imagick_object_handlers;
 static zend_object_handlers imagickdraw_object_handlers;
 static zend_object_handlers imagickpixel_object_handlers;
 static zend_object_handlers imagickpixeliterator_object_handlers;
+#ifdef IMAGICK_WITH_KERNEL
 static zend_object_handlers imagickkernel_object_handlers;
+#endif
 
 /* External API */
 PHP_IMAGICK_API zend_class_entry *php_imagick_get_class_entry()
@@ -612,7 +618,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, frame)
 	ZEND_END_ARG_INFO()
 
-#if MagickLibVersion >= 0x680
+#ifdef IMAGICK_WITH_KERNEL
 	ZEND_BEGIN_ARG_INFO_EX(imagick_morphology_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, morphologyMethod)
 		ZEND_ARG_INFO(0, iterations)
@@ -1864,7 +1870,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, row)
 	ZEND_END_ARG_INFO()
 
-#if MagickLibVersion >= 0x680
+#ifdef IMAGICK_WITH_KERNEL
 	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
@@ -2571,9 +2577,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	{ NULL, NULL, NULL }
 };
 
+#ifdef IMAGICK_WITH_KERNEL
 static zend_function_entry php_imagickkernel_class_methods[] =
 {
-#if MagickLibVersion >= 0x680
 	PHP_ME(imagickkernel, fromarray, imagickkernel_fromarray_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, frombuiltin, imagickkernel_frombuiltin_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, addkernel, imagickkernel_addkernel_args, ZEND_ACC_PUBLIC)
@@ -2581,9 +2587,9 @@ static zend_function_entry php_imagickkernel_class_methods[] =
 	PHP_ME(imagickkernel, separate, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, scale, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, addunitykernel, imagick_zero_args, ZEND_ACC_PUBLIC)
-#endif
 	{ NULL, NULL, NULL }
 };
+#endif
 
 static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 {
@@ -2653,6 +2659,7 @@ static void php_imagickpixel_object_free_storage(void *object TSRMLS_DC)
 	efree(intern);
 }
 
+#ifdef IMAGICK_WITH_KERNEL
 static void php_imagickkernel_object_free_storage(void *object TSRMLS_DC)
 {
 	php_imagickkernel_object *intern = (php_imagickkernel_object *)object;
@@ -2666,6 +2673,7 @@ static void php_imagickkernel_object_free_storage(void *object TSRMLS_DC)
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
 	efree(intern);
 }
+#endif
 
 
 #if PHP_VERSION_ID < 50399
@@ -2828,7 +2836,7 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 	return php_imagickpixel_object_new_ex(class_type, NULL TSRMLS_CC);
 }
 
-
+#ifdef IMAGICK_WITH_KERNEL
 static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class_type, php_imagickkernel_object **ptr TSRMLS_DC)
 {
 	zend_object_value retval;
@@ -2853,13 +2861,16 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 	retval.handlers = (zend_object_handlers *) &imagickkernel_object_handlers;
 	return retval;
 }
+#endif
 
 #undef object_properties_init
 
+#ifdef IMAGICK_WITH_KERNEL
 static zend_object_value php_imagickkernel_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	return php_imagickkernel_object_new_ex(class_type, NULL TSRMLS_CC);
 }
+#endif
 
 
 
@@ -3019,6 +3030,7 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	return new_ov;
 }
 
+#ifdef IMAGICK_WITH_KERNEL
 static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr TSRMLS_DC)
 {
 	KernelInfo *kernel_info_copy = NULL;
@@ -3037,6 +3049,7 @@ static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr T
 	}
 	return new_ov;
 }
+#endif
 
 
 static int checkImagickVersion()
@@ -3091,7 +3104,9 @@ PHP_MINIT_FUNCTION(imagick)
 	memcpy(&imagickdraw_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	memcpy(&imagickpixeliterator_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 	memcpy(&imagickpixel_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+#ifdef IMAGICK_WITH_KERNEL
 	memcpy(&imagickkernel_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+#endif
 
 	/* Set custom allocators */
 	MagickWandGenesis();
@@ -3124,7 +3139,7 @@ PHP_MINIT_FUNCTION(imagick)
 	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 	php_imagickpixel_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
-#if MagickLibVersion >= 0x680
+#ifdef IMAGICK_WITH_KERNEL
 	/*
 	Initialize exceptions (ImagickKernel exception)
 	*/
@@ -3173,7 +3188,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickpixel_object_handlers.clone_obj = php_imagick_clone_imagickpixel_object;
 	php_imagickpixel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
-#if MagickLibVersion >= 0x680
+#ifdef IMAGICK_WITH_KERNEL
 	/*
 		Initialize the class (ImagickKernel)
 	*/
@@ -3209,7 +3224,11 @@ PHP_MINFO_FUNCTION(imagick)
 	php_info_print_table_start();
 	php_info_print_table_header(2, "imagick module", "enabled");
 	php_info_print_table_row(2, "imagick module version", PHP_IMAGICK_VERSION);
+#ifdef IMAGICK_WITH_KERNEL
 	php_info_print_table_row(2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator, ImagickKernel");
+#else
+	php_info_print_table_row(2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator");
+#endif
 	php_info_print_table_row(2, "ImageMagick version", MagickGetVersion(&version_number));
 	php_info_print_table_row(2, "ImageMagick copyright", MagickGetCopyright());
 	php_info_print_table_row(2, "ImageMagick release date", MagickGetReleaseDate());

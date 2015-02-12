@@ -42,6 +42,9 @@
 # include <locale.h>
 #endif
 
+#if MagickLibVersion >= 0x680
+	#define IMAGICK_WITH_KERNEL
+#endif
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
@@ -92,8 +95,10 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
 #define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
 
+#ifdef IMAGICK_WITH_KERNEL
 #define PHP_IMAGICKKERNEL_SC_NAME "ImagickKernel"
 #define PHP_IMAGICKKERNEL_EXCEPTION_SC_NAME "ImagickKernelException"
+#endif
 
 
 /* Structure for Imagick object. */
@@ -130,12 +135,13 @@ typedef struct _php_imagickpixel_object  {
 	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
 
+#ifdef IMAGICK_WITH_KERNEL
 /* Structure for ImagickKernel object. */
 typedef struct _php_imagickkernel_object  {
     zend_object zo;
     KernelInfo *kernel_info;
 } php_imagickkernel_object;
-
+#endif
 
 /* Define some color constants */
 typedef enum _php_imagick_color_t {
@@ -159,7 +165,9 @@ typedef enum _php_imagick_class_type_t {
 	IMAGICKDRAW_CLASS,
 	IMAGICKPIXELITERATOR_CLASS,
 	IMAGICKPIXEL_CLASS,
+#ifdef IMAGICK_WITH_KERNEL
 	IMAGICKKERNEL_CLASS
+#endif
 } php_imagick_class_type_t;
 
 /* Read / write constants */
@@ -183,8 +191,10 @@ extern zend_class_entry *php_imagickpixel_sc_entry;
 extern zend_class_entry *php_imagickpixel_exception_class_entry;
 extern zend_class_entry *php_imagickpixeliterator_sc_entry;
 extern zend_class_entry *php_imagickpixeliterator_exception_class_entry;
+#ifdef IMAGICK_WITH_KERNEL
 extern zend_class_entry *php_imagickkernel_sc_entry;
 extern zend_class_entry *php_imagickkernel_exception_class_entry;
+#endif
 
 /* Forward declarations (Imagick) */
 
@@ -805,7 +815,7 @@ PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
 
-#if MagickLibVersion >= 0x680
+#ifdef IMAGICK_WITH_KERNEL
 PHP_METHOD(imagickkernel, fromarray);
 PHP_METHOD(imagickkernel, frombuiltin);
 PHP_METHOD(imagickkernel, addkernel);

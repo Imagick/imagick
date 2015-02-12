@@ -523,11 +523,12 @@ void php_imagick_throw_exception (php_imagick_class_type_t type, const char *des
 			ce = php_imagickpixel_exception_class_entry;
 			code = 4;
 		break;
-
+#ifdef IMAGICK_WITH_KERNEL
 		case IMAGICKKERNEL_CLASS:
 			ce = php_imagickkernel_exception_class_entry;
 			code = 5;
 		break;
+#endif
 	}
 	zend_throw_exception(ce, description, code TSRMLS_CC);
 }
@@ -1395,8 +1396,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_STANDARD_DEVIATION", StandardDeviationStatistic);
 #endif
 
-#if MagickLibVersion >= 0x680
-
+#ifdef IMAGICK_WITH_KERNEL
 /* Convolve / Correlate weighted sums */
 IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CONVOLVE", ConvolveMorphology); /* Weighted Sum with reflected kernel */
 IMAGICK_REGISTER_CONST_LONG("MORPHOLOGY_CORRELATE", CorrelateMorphology); /* Weighted Sum using a sliding window */
