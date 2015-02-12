@@ -51,6 +51,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="imagickdraw_class.c" role="src" />
 			<file name="imagickpixel_class.c" role="src" />
 			<file name="imagickpixeliterator_class.c" role="src" />
+            <file name="imagickkernel_class.c" role="src" />
 			<file name="imagick_helpers.c" role="src" />
 			<file name="imagick_file.c" role="src" />
 			<file name="php_imagick.h" role="src">

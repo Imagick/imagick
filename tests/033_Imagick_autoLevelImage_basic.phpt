@@ -1,7 +1,10 @@
 --TEST--
 Test Imagick, autoLevelImage
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php
+require_once(dirname(__FILE__) . '/skipif.inc');
+$imageMagickRequiredVersion=675;
+?>
 --FILE--
 <?php
 

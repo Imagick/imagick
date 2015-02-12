@@ -1,7 +1,10 @@
 --TEST--
 Test Imagick, clutImage
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php
+$imageMagickRequiredVersion=675;
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+?>
 --FILE--
 <?php
 

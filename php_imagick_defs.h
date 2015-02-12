@@ -43,6 +43,9 @@
 # include <locale.h>
 #endif
 
+#if MagickLibVersion >= 0x680
+	#define IMAGICK_WITH_KERNEL
+#endif
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
@@ -94,6 +97,12 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #define PHP_IMAGICKPIXELITERATOR_SC_NAME "ImagickPixelIterator"
 #define PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME "ImagickPixelIteratorException"
 
+#ifdef IMAGICK_WITH_KERNEL
+#define PHP_IMAGICKKERNEL_SC_NAME "ImagickKernel"
+#define PHP_IMAGICKKERNEL_EXCEPTION_SC_NAME "ImagickKernelException"
+#endif
+
+
 #ifdef ZEND_ENGINE_3
 
 /* Structure for Imagick object. */
@@ -104,7 +113,7 @@ typedef struct _php_imagick_object  {
 	zend_object zo;
 } php_imagick_object;
 
-#else 
+#else
 
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
@@ -187,8 +196,8 @@ typedef struct _php_imagickpixel_object  {
 
 /* Structure for ImagickPixel object. */
 typedef struct _php_imagickpixel_object  {
-    zend_object zo;
-    PixelWand *pixel_wand;
+	zend_object zo;
+	PixelWand *pixel_wand;
 	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
 
@@ -227,11 +236,13 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 	#define Z_IMAGICKDRAW_P(zv) php_imagickdraw_fetch_object(Z_OBJ_P((zv)))
 	#define Z_IMAGICKPIXEL_P(zv) php_imagickpixel_fetch_object(Z_OBJ_P((zv)))
 	#define Z_IMAGICKPIXELITERATOR_P(zv) php_imagickpixeliterator_fetch_object(Z_OBJ_P((zv)))
+	#define Z_IMAGICKKERNEL_P(zv) php_imagickkernel_fetch_object(Z_OBJ_P((zv)))
 #else
 	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv TSRMLS_CC)
 	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv TSRMLS_CC)
 	#define Z_IMAGICKPIXEL_P(zv) (php_imagickpixel_object *) zend_object_store_get_object(zv TSRMLS_CC)
 	#define Z_IMAGICKPIXELITERATOR_P(zv) (php_imagickpixeliterator_object *)zend_object_store_get_object(zv TSRMLS_CC)
+	#define Z_IMAGICKKERNEL_P(zv) (php_imagickkernel_object *)zend_object_store_get_object(zv TSRMLS_CC)
 #endif
 
 // String access
@@ -260,6 +271,26 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 #endif
 
 
+
+#ifdef IMAGICK_WITH_KERNEL
+#ifdef ZEND_ENGINE_3
+/* Structure for ImagickKernel object. */
+typedef struct _php_imagickkernel_object  {
+	zend_object zo;
+	KernelInfo *kernel_info;
+} php_imagickkernel_object;
+
+#else
+
+/* Structure for ImagickKernel object. */
+typedef struct _php_imagickkernel_object  {
+    zend_object zo;
+    KernelInfo *kernel_info;
+} php_imagickkernel_object;
+#endif
+#endif
+
+
 /* Define some color constants */
 typedef enum _php_imagick_color_t {
 	PHP_IMAGICK_COLOR_MIN = 10,
@@ -281,7 +312,10 @@ typedef enum _php_imagick_class_type_t {
 	IMAGICK_CLASS,
 	IMAGICKDRAW_CLASS,
 	IMAGICKPIXELITERATOR_CLASS,
-	IMAGICKPIXEL_CLASS
+	IMAGICKPIXEL_CLASS,
+#ifdef IMAGICK_WITH_KERNEL
+	IMAGICKKERNEL_CLASS
+#endif
 } php_imagick_class_type_t;
 
 /* Read / write constants */
@@ -305,6 +339,10 @@ extern zend_class_entry *php_imagickpixel_sc_entry;
 extern zend_class_entry *php_imagickpixel_exception_class_entry;
 extern zend_class_entry *php_imagickpixeliterator_sc_entry;
 extern zend_class_entry *php_imagickpixeliterator_exception_class_entry;
+#ifdef IMAGICK_WITH_KERNEL
+extern zend_class_entry *php_imagickkernel_sc_entry;
+extern zend_class_entry *php_imagickkernel_exception_class_entry;
+#endif
 
 /* Forward declarations (Imagick) */
 
@@ -504,6 +542,7 @@ PHP_METHOD(imagick, annotateimage);
 PHP_METHOD(imagick, compositeimage);
 PHP_METHOD(imagick, modulateimage);
 PHP_METHOD(imagick, montageimage);
+PHP_METHOD(imagick, morphology);
 PHP_METHOD(imagick, identifyimage);
 PHP_METHOD(imagick, thresholdimage);
 PHP_METHOD(imagick, adaptivethresholdimage);
@@ -745,6 +784,9 @@ PHP_METHOD(imagick, subimagematch);
 PHP_METHOD(imagick, setregistry);
 PHP_METHOD(imagick, getregistry);
 PHP_METHOD(imagick, listregistry);
+PHP_METHOD(imagick, morphology);
+PHP_METHOD(imagick, filter);
+
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
@@ -920,5 +962,16 @@ PHP_METHOD(imagickpixel, getcolorasstring);
 PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
+
+#ifdef IMAGICK_WITH_KERNEL
+PHP_METHOD(imagickkernel, fromarray);
+PHP_METHOD(imagickkernel, frombuiltin);
+PHP_METHOD(imagickkernel, addkernel);
+PHP_METHOD(imagickkernel, getvalues);
+PHP_METHOD(imagickkernel, separate);
+PHP_METHOD(imagickkernel, scale);
+PHP_METHOD(imagickkernel, addunitykernel);
+#endif
+
 
 #endif /* PHP_IMAGICK_DEFS_H */

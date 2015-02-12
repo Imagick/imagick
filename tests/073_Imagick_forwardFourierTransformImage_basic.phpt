@@ -1,14 +1,11 @@
 --TEST--
 Test Imagick, forwardFourierTransformImage
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); 
+<?php
+$imageMagickRequiredVersion=675;
 
-$requiredMethods = array(
-	'forwardFourierTransformImage',
-	'inverseFourierTransformImage'
-);
-
-require_once(dirname(__FILE__) . '/skipmethod.inc');
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+//require_once(dirname(__FILE__) . '/skipprobefourier.inc');
 
 ?>
 --FILE--
@@ -72,7 +69,5 @@ function forwardFourierTransformImage() {
 forwardFourierTransformImage() ;
 echo "Ok";
 ?>
---XFAIL--
-ImageMagick is compiling with fftw functions enabled on Travis when they're not available.
 --EXPECTF--
 Ok
