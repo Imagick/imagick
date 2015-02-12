@@ -627,6 +627,8 @@ PHP_METHOD(imagick, setregistry);
 PHP_METHOD(imagick, getregistry);
 PHP_METHOD(imagick, listregistry);
 PHP_METHOD(imagick, morphology);
+PHP_METHOD(imagick, filter);
+
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
@@ -808,5 +810,7 @@ PHP_METHOD(imagickkernel, frombuiltin);
 PHP_METHOD(imagickkernel, addkernel);
 PHP_METHOD(imagickkernel, getvalues);
 PHP_METHOD(imagickkernel, separate);
+PHP_METHOD(imagickkernel, scale);
+PHP_METHOD(imagickkernel, addunitykernel);
 
 #endif /* PHP_IMAGICK_DEFS_H */

@@ -33,6 +33,8 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
+HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC); /* {{{ */
+
 zend_class_entry *php_imagick_sc_entry;
 zend_class_entry *php_imagick_exception_class_entry;
 zend_class_entry *php_imagickdraw_sc_entry;
@@ -613,6 +615,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagick_morphology_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, morphologyMethod)
 		ZEND_ARG_INFO(0, iterations)
+		ZEND_ARG_OBJ_INFO(0, ImagickKernel, ImagickKernel, 0)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_filter_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, ImagickKernel, ImagickKernel, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
@@ -1868,7 +1875,16 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_addkernel_args, 0, 0, 1)
-		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+		ZEND_ARG_OBJ_INFO(0, ImagickKernel, ImagickKernel, 0)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_scale_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, scale)
+		ZEND_ARG_INFO(0, normalize_flag)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_addunitykernel_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, scale)
 	ZEND_END_ARG_INFO()
 
 static zend_function_entry php_imagick_functions[] =
@@ -2544,6 +2560,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getregistry, imagick_getregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, listregistry, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, morphology, imagick_morphology_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, filter, imagick_filter_args, ZEND_ACC_PUBLIC)
 
 	{ NULL, NULL, NULL }
 };
@@ -2555,9 +2572,10 @@ static zend_function_entry php_imagickkernel_class_methods[] =
 	PHP_ME(imagickkernel, addkernel, imagickkernel_addkernel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, getvalues, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, separate, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickkernel, scale, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickkernel, addunitykernel, imagick_zero_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
-
 
 static void php_imagick_object_free_storage(void *object TSRMLS_DC)
 {
@@ -3150,6 +3168,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_SC_NAME, php_imagickkernel_class_methods);
 	ce.create_object = php_imagickkernel_object_new;
+	imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 
