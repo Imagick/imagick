@@ -11167,14 +11167,15 @@ KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
 {
 	KernelInfo *kernel_info;
 
-	kernel_info=AcquireKernelInfo("1");
+	kernel_info=AcquireKernelInfo(NULL);
 	if (kernel_info == (KernelInfo *) NULL) {
 		return NULL;
 	}
 
-	kernel_info->width=order;
-	kernel_info->height=order;
-	kernel_info->values=(double *) color_matrix;
+	kernel_info->width = order;
+	kernel_info->height = order;
+	kernel_info->values = (double *)AcquireAlignedMemory(order, order*sizeof(double));
+	memcpy(kernel_info->values, color_matrix, order * order * sizeof(double));
 
 	return kernel_info;
 }
