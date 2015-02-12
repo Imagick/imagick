@@ -2563,8 +2563,10 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setregistry, imagick_setregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getregistry, imagick_getregistry_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, listregistry, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x680
 	PHP_ME(imagick, morphology, imagick_morphology_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, filter, imagick_filter_args, ZEND_ACC_PUBLIC)
+#endif
 
 	{ NULL, NULL, NULL }
 };
