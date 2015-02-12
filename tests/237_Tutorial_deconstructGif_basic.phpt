@@ -30,7 +30,7 @@ function makeSimpleGif($deconstruct) {
     $backgroundPalette->addimage($blackWhitePalette);
 
     for($count=0 ; $count<$imageFrames ; $count++) {
-        echo "Frame: ".$imageFrames."\n";
+        echo "Frame: ".$count."\n";
         $drawing = new \ImagickDraw();
         $drawing->setFillColor('white');
         $drawing->setStrokeColor('rgba(64, 64, 64, 0.8)');
@@ -60,13 +60,11 @@ function makeSimpleGif($deconstruct) {
 makeSimpleGif($deconstruct) ;
 echo "Ok";
 ?>
---XFAIL--
-This test dies on multiple platforms including Travis and SUSE.
 --EXPECTF--
+Frame: 0
 Frame: 1
 Frame: 2
 Frame: 3
 Frame: 4
 Frame: 5
-Frame: 6
 Ok
