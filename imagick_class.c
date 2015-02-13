@@ -11163,7 +11163,7 @@ PHP_METHOD(imagick, brightnesscontrastimage)
 
 #if MagickLibVersion > 0x661
 
-KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
+static KernelInfo *php_imagick_getKernelInfo(const double *color_matrix, const size_t order)
 {
 	KernelInfo *kernel_info;
 
@@ -11217,11 +11217,12 @@ PHP_METHOD(imagick, colormatriximage)
 		order = 6;
 	}
 	else {
+		efree(colors);
 		php_imagick_throw_exception(IMAGICK_CLASS, "Color matrix array must be 5x5 or 6x6" TSRMLS_CC);
 		return;
 	}
 
-	kernel_color_matrix = getKernelInfo(colors, order);
+	kernel_color_matrix = php_imagick_getKernelInfo(colors, order);
 
 	//TODO - add check that matrix is 5x5 or 6x6? 
 	status = MagickColorMatrixImage(intern->magick_wand, kernel_color_matrix);
