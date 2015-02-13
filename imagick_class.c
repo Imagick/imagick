@@ -437,7 +437,7 @@ PHP_METHOD(imagick, shadeimage)
 PHP_METHOD(imagick, getsizeoffset)
 {
 	php_imagick_object *intern;
-	long offset;
+	size_t offset;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -1282,7 +1282,8 @@ PHP_METHOD(imagick, getimageproperties)
 	zend_bool values = 1;
 	char *pattern = "*", **properties, *property;
 	IM_LEN_TYPE pattern_len;
-	unsigned long properties_count, i;
+	unsigned long i;
+	size_t properties_count;
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
@@ -1331,9 +1332,9 @@ PHP_METHOD(imagick, getimageprofiles)
 	zend_bool values = 1;
 	char *pattern = "*", **profiles, *profile;
 	IM_LEN_TYPE pattern_len;
-	unsigned long profiles_count, i;
+	unsigned long i;
 	php_imagick_object *intern;
-	size_t length;
+	size_t length, profiles_count;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &pattern_len, &values) == FAILURE) {
@@ -3169,9 +3170,10 @@ PHP_METHOD(imagick, count)
 PHP_METHOD(imagick, queryformats)
 {
 	char **supported_formats;
-	unsigned long num_formats = 0, i;
+	unsigned long i;
 	char *pattern = "*";
 	int pattern_len = 1;
+	size_t num_formats = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
@@ -3196,9 +3198,10 @@ PHP_METHOD(imagick, queryformats)
 PHP_METHOD(imagick, queryfonts)
 {
 	char **fonts;
-	unsigned long num_fonts = 0, i;
+	unsigned long i;
 	char *pattern = "*";
 	IM_LEN_TYPE pattern_len = 1;
+	size_t num_fonts;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
@@ -6259,7 +6262,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 {
 	php_imagick_object *intern;
 	long channel_type;
-	unsigned long minima, maxima;
+	size_t minima, maxima;
 	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageChannelExtrema");
@@ -6551,7 +6554,7 @@ PHP_METHOD(imagick, getimagedistortion)
 PHP_METHOD(imagick, getimageextrema)
 {
 	php_imagick_object *intern;
-	unsigned long min, max;
+	size_t min, max;
 	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageExtrema");
@@ -6683,7 +6686,7 @@ PHP_METHOD(imagick, getimagehistogram)
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	PixelWand **wand_array;
-	unsigned long colors = 0;
+	size_t colors = 0;
 	unsigned long i;
 #ifdef ZEND_ENGINE_3
 	zval tmp_pixelwand;
@@ -6816,8 +6819,8 @@ PHP_METHOD(imagick, getimagepage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	unsigned long width, height;
-	long x, y;
+	size_t width, height;
+	size_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -7851,12 +7854,13 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 	size_t num_keys;
 
 #ifdef ZEND_ENGINE_3
-	zend_string    *line;
 	zend_string    *trim;
+	zend_string    *line_string;
 #else
-	char *line;
 	char *trim;
 #endif
+
+	char *line;
 
 	const char *str_keys [] = {
 		"Format: ",
@@ -7888,12 +7892,23 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 		// Break the line further into tokens
 
 #ifdef ZEND_ENGINE_3
+		line_string = zend_string_init(line, strlen(line), 0);
 		//str, what, what_len, mode
-		trim = php_trim(line, NULL, 0, 3);
+		trim = php_trim(line_string, NULL, 0, 3);
+		for (i = 0; i < num_keys; i++) {
+			if (trim->val) {
+				if (strncmp (trim->val, str_keys [i], strlen (str_keys [i])) == 0) {
+					// This should be our line
+					IM_add_assoc_string (array, arr_keys [i], trim->val + strlen (str_keys [i]));
+					found++;
+				}
+			}
+		}
+		// zend_string_release(line_string); - 0 in zend_string_init means no need to free?
+		zend_string_release(trim);
+		line = php_strtok_r (NULL, "\r\n", &last_ptr);
 #else
 		trim = php_trim(line, strlen(line), NULL, 0, NULL, 3 TSRMLS_CC);
-#endif
-
 		for (i = 0; i < num_keys; i++) {
 			if (strncmp (trim, str_keys [i], strlen (str_keys [i])) == 0) {
 				// This should be our line
@@ -7903,8 +7918,11 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 		}
 		efree (trim);
 		line = php_strtok_r (NULL, "\r\n", &last_ptr);
+#endif
 	}
 	efree (buffer);
+
+
 }
 
 /* {{{ proto array Imagick::identifyImage([bool appendRawOutput] )
@@ -10703,8 +10721,8 @@ PHP_METHOD(imagick, getpage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	unsigned long width, height;
-	long x, y;
+	size_t width, height;
+	size_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10733,7 +10751,7 @@ PHP_METHOD(imagick, getpage)
 */
 PHP_METHOD(imagick, getquantum)
 {
-	unsigned long range;
+	size_t range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10752,7 +10770,7 @@ PHP_METHOD(imagick, getquantum)
 PHP_METHOD(imagick, getquantumdepth)
 {
 	const char *quantum_depth;
-	unsigned long depth;
+	size_t depth;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10774,7 +10792,7 @@ PHP_METHOD(imagick, getquantumdepth)
 PHP_METHOD(imagick, getquantumrange)
 {
 	const char *quantum_range;
-	unsigned long range;
+	size_t range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10843,7 +10861,8 @@ PHP_METHOD(imagick, getsamplingfactors)
 {
 	php_imagick_object *intern;
 	double *sampling_factors;
-	unsigned long number_factors = 0, i;
+	unsigned long i;
+	size_t number_factors = 0;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10871,7 +10890,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 PHP_METHOD(imagick, getsize)
 {
 	php_imagick_object *intern;
-	unsigned long columns, rows;
+	size_t columns, rows;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -11387,7 +11406,7 @@ PHP_METHOD(imagick, brightnesscontrastimage)
 
 #if MagickLibVersion > 0x661
 
-KernelInfo *getKernelInfo(const double *color_matrix, const size_t order)
+static KernelInfo *php_imagick_getKernelInfo(const double *color_matrix, const size_t order)
 {
 	KernelInfo *kernel_info;
 
@@ -11441,11 +11460,12 @@ PHP_METHOD(imagick, colormatriximage)
 		order = 6;
 	}
 	else {
+		efree(colors);
 		php_imagick_throw_exception(IMAGICK_CLASS, "Color matrix array must be 5x5 or 6x6" TSRMLS_CC);
 		return;
 	}
 
-	kernel_color_matrix = getKernelInfo(colors, order);
+	kernel_color_matrix = php_imagick_getKernelInfo(colors, order);
 
 	//TODO - add check that matrix is 5x5 or 6x6? 
 	status = MagickColorMatrixImage(intern->magick_wand, kernel_color_matrix);

@@ -3316,8 +3316,8 @@ static int checkImagickVersion()
 	zend_error(
 		E_ERROR,
 		"Version error: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will not run.",
-		imagickVersion,
-		imageMagickLibraryVersion
+		(long)imagickVersion,
+		(long)imageMagickLibraryVersion
 	);
 
 	return FAILURE;
@@ -3504,7 +3504,7 @@ PHP_MINFO_FUNCTION(imagick)
 	num_formats = 0;
 
 	supported_formats = MagickQueryFormats("*", &num_formats);
-	spprintf(&buffer, 0, "%ld", num_formats);
+	spprintf(&buffer, 0, "%ld", (long)num_formats);
 
 	php_info_print_table_start();
 	php_info_print_table_header(2, "imagick module", "enabled");
