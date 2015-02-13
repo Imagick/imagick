@@ -7849,11 +7849,13 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 	int i, found;
 	char *last_ptr = NULL, *buffer;
 	size_t num_keys;
-	char *trim;
+
 #ifdef ZEND_ENGINE_3
 	zend_string    *line;
+	zend_string    *trim;
 #else
 	char *line;
+	char *trim;
 #endif
 
 	const char *str_keys [] = {
@@ -11734,8 +11736,8 @@ PHP_METHOD(imagick, morphology)
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	kernel = (php_imagickkernel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
+	kernel = Z_IMAGICKKERNEL_P(objvar);
 
 	if (channel == DefaultChannels) {
 		status = MagickMorphologyImage(intern->magick_wand,
@@ -11772,8 +11774,8 @@ PHP_METHOD(imagick, filter)
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-	kernel = (php_imagickkernel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
+	kernel = Z_IMAGICKKERNEL_P(objvar);
 
 	if ((kernel->kernel_info->width % 2) != 1) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Only odd-sized, square kernels can be applied as a filter." TSRMLS_CC);

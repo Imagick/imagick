@@ -2933,14 +2933,26 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 }
 
 #ifdef IMAGICK_WITH_KERNEL
+
+#ifdef ZEND_ENGINE_3
+static zend_object *  php_imagickkernel_object_new_ex(zend_class_entry *class_type, php_imagickkernel_object **ptr TSRMLS_DC)
+#else
 static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class_type, php_imagickkernel_object **ptr TSRMLS_DC)
+#endif
 {
-	zend_object_value retval;
+
 	php_imagickkernel_object *intern;
 
 	/* Allocate memory for it */
+#ifdef ZEND_ENGINE_3
+	intern = ecalloc(1,
+		sizeof(php_imagickkernel_object) +
+		sizeof(zval) * (class_type->default_properties_count - 1));
+#else
+	zend_object_value retval;
 	intern = (php_imagickkernel_object *) emalloc(sizeof(php_imagickkernel_object));
-	memset(&intern->zo, 0, sizeof(zend_object));
+		memset(&intern->zo, 0, sizeof(zend_object));
+#endif
 
 	if (ptr) {
 		*ptr = intern;
@@ -2953,16 +2965,27 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
+#ifdef ZEND_ENGINE_3
+	intern->zo.handlers = &imagickkernel_object_handlers;
+
+	return &intern->zo;
+#else
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickkernel_object_free_storage, NULL TSRMLS_CC);
 	retval.handlers = (zend_object_handlers *) &imagickkernel_object_handlers;
+
 	return retval;
+#endif
 }
 #endif
 
 #undef object_properties_init
 
 #ifdef IMAGICK_WITH_KERNEL
+#ifdef ZEND_ENGINE_3
+static zend_object * php_imagickkernel_object_new(zend_class_entry *class_type TSRMLS_DC)
+#else
 static zend_object_value php_imagickkernel_object_new(zend_class_entry *class_type TSRMLS_DC)
+#endif
 {
 	return php_imagickkernel_object_new_ex(class_type, NULL TSRMLS_CC);
 }
@@ -3211,8 +3234,9 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 	PixelWand *wand_copy = NULL;
 	php_imagickpixel_object *new_obj = NULL;
 #ifdef ZEND_ENGINE_3
+	zend_object *new_zo;
 	php_imagickpixel_object *old_obj = Z_IMAGICKPIXEL_P(this_ptr);
-	zend_object * new_zo = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	new_zo = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
 #else 
 	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
@@ -3231,14 +3255,27 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 }
 
 #ifdef IMAGICK_WITH_KERNEL
+#ifdef ZEND_ENGINE_3
+static zend_object * php_imagick_clone_imagickkernel_object(zval *this_ptr TSRMLS_DC)
+#else
 static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr TSRMLS_DC)
+#endif
 {
 	KernelInfo *kernel_info_copy = NULL;
-
 	php_imagickkernel_object *new_obj = NULL;
+
+#ifdef ZEND_ENGINE_3
+	zend_object *new_zo;
+	php_imagickkernel_object *old_obj = Z_IMAGICKKERNEL_P(this_ptr);
+	new_zo = php_imagickkernel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
+#else
+	zend_object_value new_zo;
 	php_imagickkernel_object *old_obj = (php_imagickkernel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
-	zend_object_value new_ov = php_imagickkernel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
-	zend_objects_clone_members(&new_obj->zo, new_ov, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+	new_zo = php_imagickkernel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, new_zo, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
+#endif
+
 	kernel_info_copy = CloneKernelInfo(old_obj->kernel_info);
 
 	if (!kernel_info_copy) {
@@ -3247,7 +3284,7 @@ static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr T
 		new_obj->kernel_info = kernel_info_copy;
 
 	}
-	return new_ov;
+	return new_zo;
 }
 #endif
 
@@ -3361,7 +3398,12 @@ PHP_MINIT_FUNCTION(imagick)
 	Initialize exceptions (ImagickKernel exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_EXCEPTION_SC_NAME, NULL);
+	#ifdef ZEND_ENGINE_3
+	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C) TSRMLS_CC);
+    #else
 	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+    #endif
+
 	php_imagickkernel_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 #endif
 

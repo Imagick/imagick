@@ -201,7 +201,24 @@ typedef struct _php_imagickpixel_object  {
 	zend_bool initialized_via_iterator;
 } php_imagickpixel_object;
 
+#endif
 
+
+#ifdef IMAGICK_WITH_KERNEL
+#ifdef ZEND_ENGINE_3
+/* Structure for ImagickKernel object. */
+typedef struct _php_imagickkernel_object  {
+	zend_object zo;
+	KernelInfo *kernel_info;
+} php_imagickkernel_object;
+#else
+
+/* Structure for ImagickKernel object. */
+typedef struct _php_imagickkernel_object  {
+    zend_object zo;
+    KernelInfo *kernel_info;
+} php_imagickkernel_object;
+#endif
 #endif
 
 //Object fetching.
@@ -223,6 +240,12 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 	return (php_imagickpixeliterator_object *)((char*)(obj) - XtOffsetOf(php_imagickpixeliterator_object, zo));
 }
 
+#ifdef IMAGICK_WITH_KERNEL
+static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_object *obj) {
+	return (php_imagickkernel_object *)((char*)(obj) - XtOffsetOf(php_imagickkernel_object, zo));
+}
+#endif
+
 #else 
 	#define php_imagick_fetch_object(object) ((php_imagick_object *)object)
 	#define php_imagickdraw_fetch_object(object) ((php_imagickdraw_object *)object) 
@@ -236,7 +259,9 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 	#define Z_IMAGICKDRAW_P(zv) php_imagickdraw_fetch_object(Z_OBJ_P((zv)))
 	#define Z_IMAGICKPIXEL_P(zv) php_imagickpixel_fetch_object(Z_OBJ_P((zv)))
 	#define Z_IMAGICKPIXELITERATOR_P(zv) php_imagickpixeliterator_fetch_object(Z_OBJ_P((zv)))
+#ifdef IMAGICK_WITH_KERNEL
 	#define Z_IMAGICKKERNEL_P(zv) php_imagickkernel_fetch_object(Z_OBJ_P((zv)))
+#endif
 #else
 	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv TSRMLS_CC)
 	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv TSRMLS_CC)
@@ -261,6 +286,7 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 	#define IM_add_assoc_string(zv, key, charstr) add_assoc_string(zv, key, charstr, 1)
 	#define IM_ZVAL_STRINGL(zv, charstr, length) ZVAL_STRINGL(zv, charstr, length, 1)
 	#define IM_add_next_index_string(zv, charstr) add_next_index_string(zv, charstr, 1)
+	#define IM_add_next_index_zval(zv1, zv2)
 	#define IM_LEN_TYPE int
 #endif
 
@@ -272,23 +298,6 @@ static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_ob
 
 
 
-#ifdef IMAGICK_WITH_KERNEL
-#ifdef ZEND_ENGINE_3
-/* Structure for ImagickKernel object. */
-typedef struct _php_imagickkernel_object  {
-	zend_object zo;
-	KernelInfo *kernel_info;
-} php_imagickkernel_object;
-
-#else
-
-/* Structure for ImagickKernel object. */
-typedef struct _php_imagickkernel_object  {
-    zend_object zo;
-    KernelInfo *kernel_info;
-} php_imagickkernel_object;
-#endif
-#endif
 
 
 /* Define some color constants */
