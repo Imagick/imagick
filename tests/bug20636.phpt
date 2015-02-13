@@ -4,6 +4,12 @@ Test PECL bug #20636
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
 --FILE--
 <?php
+// This test fails to work as expected on 32bit Ubuntu. Instead of the
+// image being created and then roundCorners failing, instead the image
+// fails to be created with the error message "unable to acquire cache 
+// view `No such file or directory' @ 
+// fatal/cache-view.c/AcquireAuthenticCacheView/121"
+
 $image = new Imagick();
 $image->newImage(0, 0, '#dddddd', 'png' );
 

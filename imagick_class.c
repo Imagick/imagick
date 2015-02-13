@@ -433,7 +433,7 @@ PHP_METHOD(imagick, shadeimage)
 PHP_METHOD(imagick, getsizeoffset)
 {
 	php_imagick_object *intern;
-	long offset;
+	size_t offset;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -1274,7 +1274,8 @@ PHP_METHOD(imagick, getimageproperties)
 	zend_bool values = 1;
 	char *pattern = "*", **properties, *property;
 	int pattern_len;
-	unsigned long properties_count, i;
+	unsigned long i;
+	size_t properties_count;
 	php_imagick_object *intern;
 
 	/* Parse parameters given to function */
@@ -1323,9 +1324,9 @@ PHP_METHOD(imagick, getimageprofiles)
 	zend_bool values = 1;
 	char *pattern = "*", **profiles, *profile;
 	int pattern_len;
-	unsigned long profiles_count, i;
+	unsigned long i;
 	php_imagick_object *intern;
-	size_t length;
+	size_t length, profiles_count;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &pattern_len, &values) == FAILURE) {
@@ -3078,9 +3079,10 @@ PHP_METHOD(imagick, count)
 PHP_METHOD(imagick, queryformats)
 {
 	char **supported_formats;
-	unsigned long num_formats = 0, i;
+	unsigned long i;
 	char *pattern = "*";
 	int pattern_len = 1;
+	size_t num_formats = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
@@ -3105,9 +3107,10 @@ PHP_METHOD(imagick, queryformats)
 PHP_METHOD(imagick, queryfonts)
 {
 	char **fonts;
-	unsigned long num_fonts = 0, i;
+	unsigned long i;
 	char *pattern = "*";
 	int pattern_len = 1;
+	size_t num_fonts;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
@@ -6121,7 +6124,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 {
 	php_imagick_object *intern;
 	long channel_type;
-	unsigned long minima, maxima;
+	size_t minima, maxima;
 	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageChannelExtrema");
@@ -6395,7 +6398,7 @@ PHP_METHOD(imagick, getimagedistortion)
 PHP_METHOD(imagick, getimageextrema)
 {
 	php_imagick_object *intern;
-	unsigned long min, max;
+	size_t min, max;
 	MagickBooleanType status;
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageExtrema");
@@ -6527,7 +6530,7 @@ PHP_METHOD(imagick, getimagehistogram)
 	php_imagick_object *intern;
 	php_imagickpixel_object *internp;
 	PixelWand **wand_array;
-	unsigned long colors = 0;
+	size_t colors = 0;
 	unsigned long i;
 	zval *tmp_pixelwand;
 
@@ -6648,8 +6651,8 @@ PHP_METHOD(imagick, getimagepage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	unsigned long width, height;
-	long x, y;
+	size_t width, height;
+	size_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10480,8 +10483,8 @@ PHP_METHOD(imagick, getpage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	unsigned long width, height;
-	long x, y;
+	size_t width, height;
+	size_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10510,7 +10513,7 @@ PHP_METHOD(imagick, getpage)
 */
 PHP_METHOD(imagick, getquantum)
 {
-	unsigned long range;
+	size_t range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10529,7 +10532,7 @@ PHP_METHOD(imagick, getquantum)
 PHP_METHOD(imagick, getquantumdepth)
 {
 	const char *quantum_depth;
-	unsigned long depth;
+	size_t depth;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10551,7 +10554,7 @@ PHP_METHOD(imagick, getquantumdepth)
 PHP_METHOD(imagick, getquantumrange)
 {
 	const char *quantum_range;
-	unsigned long range;
+	size_t range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10620,7 +10623,8 @@ PHP_METHOD(imagick, getsamplingfactors)
 {
 	php_imagick_object *intern;
 	double *sampling_factors;
-	unsigned long number_factors = 0, i;
+	unsigned long i;
+	size_t number_factors = 0;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10648,7 +10652,7 @@ PHP_METHOD(imagick, getsamplingfactors)
 PHP_METHOD(imagick, getsize)
 {
 	php_imagick_object *intern;
-	unsigned long columns, rows;
+	size_t columns, rows;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
