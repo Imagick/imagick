@@ -73,7 +73,6 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 		MAKE_STD_ZVAL(matrix);
 		array_init(matrix);
 		php_imagickkernelvalues_to_zval(matrix, kernel_info);
-		add_next_index_string(&zrv, "This is an ImagickKernel", 1);
 		add_next_index_zval(&zrv, matrix);
 		kernel_info = kernel_info->next;
 	}
@@ -123,6 +122,10 @@ KernelInfo *createKernel(double *values, size_t width, size_t height)
 
 	kernel_info->width = width;
 	kernel_info->height = height;
+
+	kernel_info->x = (width - 1) >> 1;
+	kernel_info->y = (height - 1) >> 1;
+
 	//Need to free old values?
 	if (kernel_info->values != NULL) {
 		RelinquishAlignedMemory(kernel_info->values);
@@ -145,12 +148,16 @@ static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
 	intern_return->kernel_info = kernel_info;
 }
 
-/* {{{ proto ImagickKernel ImagickKernel::fromArray(array)
+#define MATRIX_ERROR_EMPTY "Cannot create kernel, matrix is empty."
+#define MATRIX_ERROR_UNEVEN "Values must be matrix, with the same number of columns in each row."
+#define MATRIX_ERROR_BAD_VALUE "Only numbers or false are valid values in a kernel matrix."
+
+/* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array)
 	Returns a new Kernel from a 2d array of values. The array should be rectangular
 	and contain i) float values where the kernel element should be used ii) false
 	where the element should be skipped
 */
-PHP_METHOD(imagickkernel, fromarray)
+PHP_METHOD(imagickkernel, frommatrix)
 {
 	php_imagickkernel_object *internp;
 	php_imagickkernel_object *intern_return;
@@ -177,7 +184,7 @@ PHP_METHOD(imagickkernel, fromarray)
 
 	if (num_rows == 0) {
 		//error - array has zero elements.
-		php_imagick_throw_exception(IMAGICK_CLASS, "Matrix is empty." TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
 		return;
 	}
 
@@ -194,7 +201,7 @@ PHP_METHOD(imagickkernel, fromarray)
 			num_columns = zend_hash_num_elements(inner_array);
 
 			if (num_columns == 0) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "Matrix is empty." TSRMLS_CC);
+				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
 				goto cleanup;
 			}
 
@@ -205,7 +212,7 @@ PHP_METHOD(imagickkernel, fromarray)
 
 			if (previous_num_columns != -1) {
 				if (previous_num_columns != num_columns) {
-					php_imagick_throw_exception(IMAGICK_CLASS, "Values must be matrix, with the same number of columns in each row." TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 					goto cleanup;
 				}
 			}
@@ -228,22 +235,19 @@ PHP_METHOD(imagickkernel, fromarray)
 					values[count] = notanumber;
 				}
 				else {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, "Only numbers or false are valid values " TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE TSRMLS_CC);
 					goto cleanup;
 				}
 				count++;
 			}
 		}
 		else {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Values must be matrix, with the same number of columns in each row." TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 			goto cleanup;
 		}
 	}
 
 	kernel_info = createKernel(values, num_columns, num_rows);
-//	NormalizeValue
-//	CorrelateNormalizeValue,
-//	PercentValue
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
 	return;
@@ -255,7 +259,7 @@ cleanup:
 }
 /* }}} */
 
-static void fiddle_with_geometry_info(ssize_t type, GeometryFlags flags, GeometryInfo *geometry_info) {
+static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags, GeometryInfo *geometry_info) {
 
 	/* special handling of missing values in input string */
 	switch( type ) {
@@ -328,7 +332,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 {
 	php_imagickkernel_object *intern_return;
 	long kernel_type;
-	GeometryInfo geometry_info;
+	GeometryInfo geometry_info = {0};
 	KernelInfo *kernel_info;
 	char *string;
 	long string_len;
@@ -339,7 +343,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 	}
 
 	flags = ParseGeometry(string, &geometry_info);
-	fiddle_with_geometry_info(kernel_type, flags, &geometry_info);
+	imagick_fiddle_with_geometry_info(kernel_type, flags, &geometry_info);
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
@@ -349,7 +353,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 /* }}} */
 
 
-/* {{{ proto ImagickKernel ImagickKernel::addKernel(ImagickKernel kernel)
+/* {{{ proto void ImagickKernel::addKernel(ImagickKernel kernel)
     Attach a kernel to another kernel. Returns the new combined kernel 
 */
 PHP_METHOD(imagickkernel, addkernel)
@@ -371,13 +375,12 @@ PHP_METHOD(imagickkernel, addkernel)
 	kernel = (php_imagickkernel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
 	internp = (php_imagickkernel_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	kernel_info_this_clone = CloneKernelInfo(internp->kernel_info); 
 	kernel_info_add_clone = CloneKernelInfo(kernel->kernel_info);
-	createKernelZval(return_value, kernel_info_this_clone TSRMLS_CC);
+	kernel_info = internp->kernel_info;
 
-	while (kernel_info_this_clone != NULL) {
-		kernel_info_target = kernel_info_this_clone;
-		kernel_info_this_clone = kernel_info_this_clone->next;
+	while (kernel_info != NULL) {
+		kernel_info_target = kernel_info;
+		kernel_info = kernel_info->next;
 	};
 
 	kernel_info_target->next = kernel_info_add_clone;
@@ -435,11 +438,11 @@ PHP_METHOD(imagickkernel, separate)
 /* }}} */
 
 
-/* {{{ proto [] ImagickKernel::getValues(void)
+/* {{{ proto [] ImagickKernel::getMatrix(void)
 	Return the values used in the kernel. The array contains floats
 	for the elements used and false for the elements not used.
 */
-PHP_METHOD(imagickkernel, getvalues)
+PHP_METHOD(imagickkernel, getmatrix)
 {
 	php_imagickkernel_object *internp;
 
