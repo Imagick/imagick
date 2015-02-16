@@ -11500,5 +11500,92 @@ PHP_METHOD(imagick, listregistry)
 }
 /* }}} */
 
+#if MagickLibVersion >= 0x680
+/* {{{ proto bool Imagick::morphology(int morphologyMethod, int iterations, kernel, [int CHANNEL]  )
+	Applies a user supplied kernel to the image according to the given mophology method.
+	iterations - A value of -1 means loop until no change found. How this is applied may depend on the morphology method. Typically this is a value of 1.
+*/
+PHP_METHOD(imagick, morphology)
+{
+	zval *objvar;
+	php_imagick_object *intern;
+	php_imagickkernel_object *kernel;
+	long morphologyMethod, iterations;
+	MagickBooleanType status;
+	long channel = 0;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llO|l", &morphologyMethod, &iterations, &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	kernel = (php_imagickkernel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+
+	if (channel == DefaultChannels) {
+		status = MagickMorphologyImage(intern->magick_wand,
+			morphologyMethod, iterations, kernel->kernel_info);
+	}
+	else {
+		status = MagickMorphologyImageChannel(intern->magick_wand,
+			channel, morphologyMethod, iterations, kernel->kernel_info);
+	}
+
+	// No magick is going to happen
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to morphology image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::filter(ImagickKernel kernel, [int CHANNEL] )
+	Applies a custom convolution kernel to the image.
+*/
+PHP_METHOD(imagick, filter)
+{
+	zval *objvar;
+	php_imagick_object *intern;
+	php_imagickkernel_object *kernel;
+	MagickBooleanType status;
+	long channel = 0;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	kernel = (php_imagickkernel_object *)zend_object_store_get_object(objvar TSRMLS_CC);
+
+	if ((kernel->kernel_info->width % 2) != 1) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Only odd-sized, square kernels can be applied as a filter." TSRMLS_CC);
+		return;
+	}
+
+	if (kernel->kernel_info->width != kernel->kernel_info->height) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Only odd-sized, square kernels can be applied as a filter." TSRMLS_CC);
+		return;
+	}
+
+	if (channel == 0) {
+		status = MagickFilterImage(intern->magick_wand, kernel->kernel_info);
+	}
+	else {
+		status = MagickFilterImageChannel(intern->magick_wand, channel, kernel->kernel_info);
+	}
+
+	// No magick is going to happen
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to filter image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 
 /* end of Imagick */
