@@ -1876,6 +1876,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_frommatrix_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, array)
+		ZEND_ARG_INFO(0, array)
 	ZEND_END_ARG_INFO()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_frombuiltin_args, 0, 0, 2)

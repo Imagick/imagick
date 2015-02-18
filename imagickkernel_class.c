@@ -111,7 +111,7 @@ static void im_CalcKernelMetaData(KernelInfo *kernel) {
 
 
 #if MagickLibVersion > 0x661
-KernelInfo *createKernel(double *values, size_t width, size_t height)
+static KernelInfo *imagick_createKernel(double *values, size_t width, size_t height, size_t origin_x, size_t origin_y)
 {
 	KernelInfo *kernel_info;
 
@@ -123,8 +123,8 @@ KernelInfo *createKernel(double *values, size_t width, size_t height)
 	kernel_info->width = width;
 	kernel_info->height = height;
 
-	kernel_info->x = (width - 1) >> 1;
-	kernel_info->y = (height - 1) >> 1;
+	kernel_info->x = origin_x;
+	kernel_info->y = origin_y;
 
 	//Need to free old values?
 	if (kernel_info->values != NULL) {
@@ -151,18 +151,25 @@ static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
 #define MATRIX_ERROR_EMPTY "Cannot create kernel, matrix is empty."
 #define MATRIX_ERROR_UNEVEN "Values must be matrix, with the same number of columns in each row."
 #define MATRIX_ERROR_BAD_VALUE "Only numbers or false are valid values in a kernel matrix."
+#define MATRIX_ORIGIN_REQUIRED "For kernels with even numbered rows or columns, the origin position must be specified."
 
-/* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array)
-	Returns a new Kernel from a 2d array of values. The array should be rectangular
-	and contain i) float values where the kernel element should be used ii) false
-	where the element should be skipped
+/* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array matrix, [array origin])
+	Returns a new Kernel from a 2d array of values. The matrix should contain: 
+	i) float values where the kernel element should be used 
+	ii) false where the element should be skipped
+	Each row should have the same number of columns.
+	For matrixes with odd number of rows and columns the second parameter can 
+	be skipped - the origin will default to the centre of the matrix. For other
+	matrixes or if desired the origin co-ordinate can be specified.
 */
 PHP_METHOD(imagickkernel, frommatrix)
 {
 	php_imagickkernel_object *internp;
 	php_imagickkernel_object *intern_return;
 	zval *kernel_array;
+	zval *origin_array;
 	HashTable *inner_array;
+	HashTable *origin_array_ht;
 	zval **ppzval_outer;
 	zval **ppzval_inner;
 	KernelInfo *kernel_info;
@@ -170,13 +177,16 @@ PHP_METHOD(imagickkernel, frommatrix)
 	int previous_num_columns = -1;
 	int row, column;
 	int count = 0;
+	size_t origin_x, origin_y;
+	zval **tmp;
 
 	double *values = NULL;
 	double notanumber = sqrt((double)-1.0);  /* Special Value : Not A Number */
 
 	row = 0;
+	origin_array = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &kernel_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
 		return;
 	}
 
@@ -247,7 +257,34 @@ PHP_METHOD(imagickkernel, frommatrix)
 		}
 	}
 
-	kernel_info = createKernel(values, num_columns, num_rows);
+	if (origin_array == NULL) {
+		if (((num_columns%2) == 0) || ((num_rows%2) == 0)) {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+		origin_x = (num_columns - 1) >> 1;
+		origin_y = (num_rows - 1) >> 1;
+	}
+	else {
+		origin_array_ht = Z_ARRVAL_P(origin_array);
+		if (zend_hash_index_find(origin_array_ht, 0, (void**)&tmp) == SUCCESS) {
+			origin_x = Z_LVAL_PP(tmp);
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+
+		if (zend_hash_index_find(origin_array_ht, 1, (void**)&tmp) == SUCCESS) {
+			origin_y = Z_LVAL_PP(tmp);
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+	}
+
+	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
 	return;
