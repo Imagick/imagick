@@ -198,10 +198,12 @@ PHP_METHOD(imagickkernel, frommatrix)
 		return;
 	}
 
-	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(kernel_array));
-			zend_hash_get_current_data(Z_ARRVAL_P(kernel_array), (void **) &ppzval_outer) == SUCCESS;
-			zend_hash_move_forward(Z_ARRVAL_P(kernel_array)), row++)
-	{
+	for (row=0 ; row<num_rows ; row++) {
+		if (zend_hash_index_find(Z_ARRVAL_P(kernel_array), row, (void **) &ppzval_outer) != SUCCESS) {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			goto cleanup;
+		}
+
 		zval tmp_zval, *tmp_pzval;
 		column = 0;
 
@@ -216,7 +218,6 @@ PHP_METHOD(imagickkernel, frommatrix)
 			}
 
 			if (values == NULL) {
-				//values = malloc(num_rows * num_columns * sizeof(double));
 				values = (double *)AcquireAlignedMemory(num_columns, num_rows*sizeof(double));
 			}
 
@@ -226,12 +227,15 @@ PHP_METHOD(imagickkernel, frommatrix)
 					goto cleanup;
 				}
 			}
+
 			previous_num_columns = num_columns;
 
-			for (zend_hash_internal_pointer_reset(inner_array);
-					zend_hash_get_current_data(inner_array, (void **) &ppzval_inner) == SUCCESS;
-					zend_hash_move_forward(inner_array), column++)
-			{
+			for (column=0; column<num_columns ; column++) { 
+				if (zend_hash_index_find(inner_array, column, (void **) &ppzval_inner) != SUCCESS) {
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					goto cleanup;
+				}
+
 				if (Z_TYPE_PP(ppzval_inner) == IS_DOUBLE) {
 					//It's a float lets use it.
 					values[count] = Z_DVAL_PP(ppzval_inner);

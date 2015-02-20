@@ -166,6 +166,27 @@ if ($kernel->getMatrix() != $matrixIn) {
 	echo "Values do not match for 'Test even sized kernel works'".PHP_EOL;
 }
 
+//Test 'wrong' order matrix is converted correctly.
+$matrix = array(
+	array(0.0, 1.0),
+	array(0.5, false)
+);
+ 
+$outOfOrderMatrix = array();
+$outOfOrderMatrix[1][1] = $matrix[1][1];
+$outOfOrderMatrix[1][0] = $matrix[1][0];
+$outOfOrderMatrix[0][1] = $matrix[0][1];
+$outOfOrderMatrix[0][0] = $matrix[0][0];
+
+$kernel = ImagickKernel::fromMatrix($outOfOrderMatrix, array(0, 0));
+$kernelMatrix = $kernel->getMatrix();
+if ($kernelMatrix !== $matrix) {
+	echo "Kernel generated from 'out of order' matrix is incorrect.".PHP_EOL;
+	var_dump($matrix);
+	echo "vs".PHP_EOL;
+	var_dump($kernelMatrix);
+}
+
 echo "Complete".PHP_EOL;
 ?>
 --EXPECTF--
