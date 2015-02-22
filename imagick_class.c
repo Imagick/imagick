@@ -8005,9 +8005,20 @@ PHP_METHOD(imagick, identifyimage)
 	add_assoc_zval (return_value, "geometry", pArray);
 
 	if (MagickGetImageResolution(intern->magick_wand, &x, &y) == MagickTrue) {
-		add_assoc_double(pArray, "x", x);
-		add_assoc_double(pArray, "y", y);
-		add_assoc_zval(return_value, "resolution", pArray);
+#ifdef ZEND_ENGINE_3
+		zval geometry_array;
+		array_init(&geometry_array);
+		add_assoc_double(&geometry_array, "x", x);
+		add_assoc_double(&geometry_array, "y", y);
+		add_assoc_zval(return_value, "resolution", &geometry_array);
+#else
+		zval *p_geometry_array;
+		MAKE_STD_ZVAL(p_geometry_array);
+		array_init(p_geometry_array);
+		add_assoc_double(p_geometry_array, "x", x);
+		add_assoc_double(p_geometry_array, "y", y);
+		add_assoc_zval(return_value, "resolution", p_geometry_array);
+#endif
 	}
 
 	signature = MagickGetImageSignature(intern->magick_wand);
