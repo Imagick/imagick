@@ -229,13 +229,15 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 
 	for (row=0 ; row<num_rows ; row++) {
+		zval tmp_zval, *tmp_pzval;
+
 		pzval_outer = zend_hash_index_find(Z_ARRVAL_P(kernel_array), row);
 		if (pzval_outer == NULL) {
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 			goto cleanup;
 		}
 
-		zval tmp_zval, *tmp_pzval;
+		
 		column = 0;
 
 		if (Z_TYPE_P(pzval_outer) == IS_ARRAY ) {
