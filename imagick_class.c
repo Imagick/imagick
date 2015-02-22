@@ -3301,7 +3301,13 @@ PHP_METHOD(imagick, queryfontmetrics)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to query the font metrics" TSRMLS_CC);
 		return;
 	} else {
+		zval *pbounding;
+#ifdef ZEND_ENGINE_3
 		zval bounding;
+		pbounding = &bounding;
+#else
+		MAKE_STD_ZVAL(pbounding)
+#endif
 
 		array_init(return_value);
 		add_assoc_double(return_value, "characterWidth", metrics[0]);
@@ -3312,12 +3318,12 @@ PHP_METHOD(imagick, queryfontmetrics)
 		add_assoc_double(return_value, "textHeight", metrics[5]);
 		add_assoc_double(return_value, "maxHorizontalAdvance", metrics[6]);
 
-		array_init(&bounding);
-		add_assoc_double(&bounding, "x1", metrics[7]);
-		add_assoc_double(&bounding, "y1", metrics[8]);
-		add_assoc_double(&bounding, "x2", metrics[9]);
-		add_assoc_double(&bounding, "y2", metrics[10]);
-		add_assoc_zval(return_value, "boundingBox", &bounding);
+		array_init(pbounding);
+		add_assoc_double(pbounding, "x1", metrics[7]);
+		add_assoc_double(pbounding, "y1", metrics[8]);
+		add_assoc_double(pbounding, "x2", metrics[9]);
+		add_assoc_double(pbounding, "y2", metrics[10]);
+		add_assoc_zval(return_value, "boundingBox", pbounding);
 		add_assoc_double(return_value, "originX", metrics[11]);
 		add_assoc_double(return_value, "originY", metrics[12]);
 
