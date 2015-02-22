@@ -11750,7 +11750,7 @@ PHP_METHOD(imagick, morphology)
 	php_imagickkernel_object *kernel;
 	long morphologyMethod, iterations;
 	MagickBooleanType status;
-	long channel = 0;
+	long channel = DefaultChannels;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llO|l", &morphologyMethod, &iterations, &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
 		return;
@@ -11759,14 +11759,8 @@ PHP_METHOD(imagick, morphology)
 	intern = Z_IMAGICK_P(getThis());
 	kernel = Z_IMAGICKKERNEL_P(objvar);
 
-	if (channel == DefaultChannels) {
-		status = MagickMorphologyImage(intern->magick_wand,
-			morphologyMethod, iterations, kernel->kernel_info);
-	}
-	else {
-		status = MagickMorphologyImageChannel(intern->magick_wand,
-			channel, morphologyMethod, iterations, kernel->kernel_info);
-	}
+	status = MagickMorphologyImageChannel(intern->magick_wand,
+			DefaultChannels, morphologyMethod, iterations, kernel->kernel_info);
 
 	// No magick is going to happen
 	if (status == MagickFalse) {

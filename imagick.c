@@ -1882,7 +1882,8 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_zero_args, 0, 0, 0)
 	ZEND_END_ARG_INFO()
 
-	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_fromarray_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_frommatrix_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, array)
 		ZEND_ARG_INFO(0, array)
 	ZEND_END_ARG_INFO()
 
@@ -2588,10 +2589,10 @@ static zend_function_entry php_imagick_class_methods[] =
 #ifdef IMAGICK_WITH_KERNEL
 static zend_function_entry php_imagickkernel_class_methods[] =
 {
-	PHP_ME(imagickkernel, fromarray, imagickkernel_fromarray_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(imagickkernel, frommatrix, imagickkernel_frommatrix_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, frombuiltin, imagickkernel_frombuiltin_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, addkernel, imagickkernel_addkernel_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickkernel, getvalues, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickkernel, getmatrix, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, separate, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, scale, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, addunitykernel, imagick_zero_args, ZEND_ACC_PUBLIC)
@@ -2687,10 +2688,16 @@ static void php_imagickkernel_object_free_storage(void *object TSRMLS_DC)
 		return;
 	}
 
-	intern->kernel_info = DestroyKernelInfo(intern->kernel_info);
+	if (intern->kernel_info != NULL) {
+		// This segfaults in PHP 5.6
+		//intern->kernel_info = DestroyKernelInfo(intern->kernel_info);
+		intern->kernel_info = NULL;
+	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
+#ifndef ZEND_ENGINE_3
 	efree(intern);
+#endif
 }
 #endif
 

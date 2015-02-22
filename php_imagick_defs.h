@@ -208,8 +208,8 @@ typedef struct _php_imagickpixel_object  {
 #ifdef ZEND_ENGINE_3
 /* Structure for ImagickKernel object. */
 typedef struct _php_imagickkernel_object  {
-	zend_object zo;
 	KernelInfo *kernel_info;
+	zend_object zo;
 } php_imagickkernel_object;
 #else
 
@@ -973,10 +973,10 @@ PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
 
 #ifdef IMAGICK_WITH_KERNEL
-PHP_METHOD(imagickkernel, fromarray);
+PHP_METHOD(imagickkernel, frommatrix);
 PHP_METHOD(imagickkernel, frombuiltin);
 PHP_METHOD(imagickkernel, addkernel);
-PHP_METHOD(imagickkernel, getvalues);
+PHP_METHOD(imagickkernel, getmatrix);
 PHP_METHOD(imagickkernel, separate);
 PHP_METHOD(imagickkernel, scale);
 PHP_METHOD(imagickkernel, addunitykernel);

@@ -22,16 +22,28 @@
 #ifdef IMAGICK_WITH_KERNEL
 
 static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
-	zval *row;
 	int count;
 	double value;
 	int x, y;
+#ifdef ZEND_ENGINE_3
+	zval row;
+#else
+	zval *row;
+#endif
+
+	zval *p_row;
 
 	count = 0;
 
 	for (y=0; y<kernel_info->height ; y++) {
+#ifdef ZEND_ENGINE_3
+		p_row = &row;
+#else
 		MAKE_STD_ZVAL(row);
-		array_init(row);
+		p_row = row;
+#endif
+
+		array_init(p_row);
 		for (x=0; x<kernel_info->width ; x++) {
 			value = kernel_info->values[count];
 			count++;
@@ -39,14 +51,14 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 			//nan is not equal to itself
 			if (value != value) {
 				//this will be broken by some compilers - need to investigate more...
-				add_next_index_bool(row, 0);
+				add_next_index_bool(p_row, 0);
 			}
 			else {
-				add_next_index_double(row, value);
+				add_next_index_double(p_row, value);
 			}
 		}
 
-		add_next_index_zval(zv, row);
+		add_next_index_zval(zv, p_row);
 	}
 }
 
@@ -57,8 +69,12 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 	HashTable *retval;
 	KernelInfo *kernel_info;
 	zval *tmp, zrv;
-	zval *matrix;
 	zval *row;
+#ifdef ZEND_ENGINE_3
+	zval matrix;
+#else
+	zval *matrix;
+#endif
 
 	internp = Z_IMAGICKKERNEL_P(obj);
 	kernel_info = internp->kernel_info;
@@ -69,18 +85,18 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 	INIT_PZVAL(&zrv);
 
 #ifndef ZEND_ENGINE_3
-
 	Z_ARRVAL(zrv) = retval;
 #endif
 
 	while (kernel_info != NULL) {
+#ifdef ZEND_ENGINE_3
+		array_init(&matrix);
+		php_imagickkernelvalues_to_zval(&matrix, kernel_info);
+		zend_hash_next_index_insert(retval, &matrix);
+#else
 		MAKE_STD_ZVAL(matrix);
 		array_init(matrix);
 		php_imagickkernelvalues_to_zval(matrix, kernel_info);
-
-#ifdef ZEND_ENGINE_3
-		zend_hash_next_index_insert(retval, matrix);
-#else
 		add_next_index_zval(&zrv, matrix);
 #endif
 		kernel_info = kernel_info->next;
@@ -120,7 +136,7 @@ static void im_CalcKernelMetaData(KernelInfo *kernel) {
 
 
 #if MagickLibVersion > 0x661
-KernelInfo *createKernel(double *values, size_t width, size_t height)
+static KernelInfo *imagick_createKernel(double *values, size_t width, size_t height, size_t origin_x, size_t origin_y)
 {
 	KernelInfo *kernel_info;
 
@@ -131,6 +147,10 @@ KernelInfo *createKernel(double *values, size_t width, size_t height)
 
 	kernel_info->width = width;
 	kernel_info->height = height;
+
+	kernel_info->x = origin_x;
+	kernel_info->y = origin_y;
+
 	//Need to free old values?
 	if (kernel_info->values != NULL) {
 		RelinquishAlignedMemory(kernel_info->values);
@@ -153,33 +173,39 @@ static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
 	intern_return->kernel_info = kernel_info;
 }
 
-/* {{{ proto ImagickKernel ImagickKernel::fromArray(array)
-	Returns a new Kernel from a 2d array of values. The array should be rectangular
-	and contain i) float values where the kernel element should be used ii) false
-	where the element should be skipped
+#define MATRIX_ERROR_EMPTY "Cannot create kernel, matrix is empty."
+#define MATRIX_ERROR_UNEVEN "Values must be matrix, with the same number of columns in each row."
+#define MATRIX_ERROR_BAD_VALUE "Only numbers or false are valid values in a kernel matrix."
+#define MATRIX_ORIGIN_REQUIRED "For kernels with even numbered rows or columns, the origin position must be specified."
+
+/* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array matrix, [array origin])
+	Returns a new Kernel from a 2d array of values. The matrix should contain: 
+	i) float values where the kernel element should be used 
+	ii) false where the element should be skipped
+	Each row should have the same number of columns.
+	For matrixes with odd number of rows and columns the second parameter can 
+	be skipped - the origin will default to the centre of the matrix. For other
+	matrixes or if desired the origin co-ordinate can be specified.
 */
-PHP_METHOD(imagickkernel, fromarray)
+#ifdef ZEND_ENGINE_3
+PHP_METHOD(imagickkernel, frommatrix)
 {
 	php_imagickkernel_object *internp;
 	php_imagickkernel_object *intern_return;
 	zval *kernel_array;
+	zval *origin_array;
 	HashTable *inner_array;
-
 	KernelInfo *kernel_info;
 	long num_rows, num_columns;
 	int previous_num_columns;
 	int row, column;
-	int count;
 
-#ifdef ZEND_ENGINE_3
-	ulong num_key;
-	zend_string *key;
 	zval *pzval_outer;
 	zval *pzval_inner;
-#else
-	zval **ppzval_outer;
-	zval **ppzval_inner;
-#endif
+
+	int count = 0;
+	size_t origin_x, origin_y;
+	zval *tmp;
 
 	double *values = NULL;
 	double notanumber = sqrt((double)-1.0);  /* Special Value : Not A Number */
@@ -187,8 +213,9 @@ PHP_METHOD(imagickkernel, fromarray)
 	previous_num_columns = -1;
 	count = 0;
 	row = 0;
+	origin_array = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &kernel_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
 		return;
 	}
 
@@ -196,81 +223,27 @@ PHP_METHOD(imagickkernel, fromarray)
 
 	if (num_rows == 0) {
 		//error - array has zero elements.
-		php_imagick_throw_exception(IMAGICK_CLASS, "Matrix is empty." TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
 		return;
 	}
 
-#ifdef ZEND_ENGINE_3
 
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(kernel_array), num_key, key, pzval_outer) {
-
-		inner_array = Z_ARRVAL_P(pzval_outer);
-		num_columns = zend_hash_num_elements(inner_array);
-		
-		if (num_columns == 0) {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Matrix is empty." TSRMLS_CC);
+	for (row=0 ; row<num_rows ; row++) {
+		pzval_outer = zend_hash_index_find(Z_ARRVAL_P(kernel_array), row);
+		if (pzval_outer == NULL) {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 			goto cleanup;
 		}
 
-		if (values == NULL) {
-			values = (double *)AcquireAlignedMemory(num_columns, num_rows*sizeof(double));
-		}
-
-		if (previous_num_columns != -1) {
-			if (previous_num_columns != num_columns) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "Values must be matrix, with the same number of columns in each row." TSRMLS_CC);
-				goto cleanup;
-			}
-		}
-
-		if (Z_TYPE_P(pzval_outer) == IS_ARRAY ) {
-
-			ZEND_HASH_FOREACH_KEY_VAL(inner_array, num_key, key, pzval_inner) {
-					if (Z_TYPE_P(pzval_inner) == IS_DOUBLE) {
-						//It's a float lets use it.
-						values[count] = Z_DVAL_P(pzval_inner);
-					}
-					else if (Z_TYPE_P(pzval_inner) == IS_LONG) {
-						//It's a long lets use it.
-						values[count] = (float)Z_LVAL_P(pzval_inner);
-					}
-					else if (Z_TYPE_P(pzval_inner) == IS_FALSE) { 
-						//It's false, use nan
-						values[count] = notanumber;
-					}
-					else {
-						php_imagick_throw_exception(IMAGICKKERNEL_CLASS, "Only numbers or false are valid values " TSRMLS_CC);
-						goto cleanup;
-					}
-					count++;
-	
-	
-			} ZEND_HASH_FOREACH_END();
-		}
-		else {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Values must be matrix, with the same number of columns in each row." TSRMLS_CC);
-			goto cleanup;
-		}
-	
-	} ZEND_HASH_FOREACH_END();
-
-
-#else
-
-	for (zend_hash_internal_pointer_reset(Z_ARRVAL_P(kernel_array));
-			zend_hash_get_current_data(Z_ARRVAL_P(kernel_array), (void **) &ppzval_outer) == SUCCESS;
-			zend_hash_move_forward(Z_ARRVAL_P(kernel_array)), row++)
-	{
 		zval tmp_zval, *tmp_pzval;
 		column = 0;
 
-		if (Z_TYPE_PP(ppzval_outer) == IS_ARRAY ) {
-			//parse this row
-			inner_array = Z_ARRVAL_PP(ppzval_outer);
+		if (Z_TYPE_P(pzval_outer) == IS_ARRAY ) {
+			inner_array = Z_ARRVAL_P(pzval_outer);
 			num_columns = zend_hash_num_elements(inner_array);
 
 			if (num_columns == 0) {
-				php_imagick_throw_exception(IMAGICK_CLASS, "Matrix is empty." TSRMLS_CC);
+				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
 				goto cleanup;
 			}
 
@@ -280,16 +253,166 @@ PHP_METHOD(imagickkernel, fromarray)
 
 			if (previous_num_columns != -1) {
 				if (previous_num_columns != num_columns) {
-					php_imagick_throw_exception(IMAGICK_CLASS, "Values must be matrix, with the same number of columns in each row." TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 					goto cleanup;
 				}
 			}
+
 			previous_num_columns = num_columns;
 
-			for (zend_hash_internal_pointer_reset(inner_array);
-					zend_hash_get_current_data(inner_array, (void **) &ppzval_inner) == SUCCESS;
-					zend_hash_move_forward(inner_array), column++)
-			{
+			for (column=0; column<num_columns ; column++) { 
+				pzval_inner = zend_hash_index_find(inner_array, row);
+				if (pzval_inner == NULL) {
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					goto cleanup;
+				}
+
+				if (Z_TYPE_P(pzval_inner) == IS_DOUBLE) {
+					//It's a float lets use it.
+					values[count] = Z_DVAL_P(pzval_inner);
+				}
+				else if (Z_TYPE_P(pzval_inner) == IS_LONG) {
+					//It's a long lets use it.
+					values[count] = (float)Z_LVAL_P(pzval_inner);
+				}
+				else if (Z_TYPE_P(pzval_inner) == IS_FALSE) { 
+					//It's false, use nan
+					values[count] = notanumber;
+				}
+				else {
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE TSRMLS_CC);
+					goto cleanup;
+				}
+				count++;
+			}
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			goto cleanup;
+		}
+	}
+
+	if (origin_array == NULL) {
+		if (((num_columns%2) == 0) || ((num_rows%2) == 0)) {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+		origin_x = (num_columns - 1) >> 1;
+		origin_y = (num_rows - 1) >> 1;
+	}
+	else {
+		HashTable *origin_array_ht;
+		origin_array_ht = Z_ARRVAL_P(origin_array);
+		tmp = zend_hash_index_find(origin_array_ht, 0);
+		if (tmp != NULL) {
+			origin_x = Z_LVAL_P(tmp);
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+		tmp = zend_hash_index_find(origin_array_ht, 1);
+		if (tmp != NULL) {
+			origin_y = Z_LVAL_P(tmp);
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+	}
+
+	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
+	createKernelZval(return_value, kernel_info TSRMLS_CC);
+
+	return;
+
+cleanup:
+	if (values != NULL) {
+		RelinquishAlignedMemory(values);
+	}
+}
+
+#else //not ZEND_ENGINE_3
+
+
+PHP_METHOD(imagickkernel, frommatrix)
+{
+	php_imagickkernel_object *internp;
+	php_imagickkernel_object *intern_return;
+	zval *kernel_array;
+	zval *origin_array;
+	HashTable *inner_array;
+	KernelInfo *kernel_info;
+	long num_rows, num_columns;
+	int previous_num_columns;
+	int row, column;
+
+	HashTable *origin_array_ht;
+	zval **ppzval_outer;
+	zval **ppzval_inner;
+
+	int count = 0;
+	size_t origin_x, origin_y;
+	zval **tmp;
+
+	double *values = NULL;
+	double notanumber = sqrt((double)-1.0);  /* Special Value : Not A Number */
+
+	previous_num_columns = -1;
+	count = 0;
+	row = 0;
+	origin_array = NULL;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
+		return;
+	}
+
+	num_rows = zend_hash_num_elements(Z_ARRVAL_P(kernel_array));
+
+	if (num_rows == 0) {
+		//error - array has zero elements.
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
+		return;
+	}
+
+	for (row=0 ; row<num_rows ; row++) {
+		if (zend_hash_index_find(Z_ARRVAL_P(kernel_array), row, (void **) &ppzval_outer) != SUCCESS) {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			goto cleanup;
+		}
+
+		zval tmp_zval, *tmp_pzval;
+		column = 0;
+
+		if (Z_TYPE_PP(ppzval_outer) == IS_ARRAY ) {
+			//parse this row
+			inner_array = Z_ARRVAL_PP(ppzval_outer);
+			num_columns = zend_hash_num_elements(inner_array);
+
+			if (num_columns == 0) {
+				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
+				goto cleanup;
+			}
+
+			if (values == NULL) {
+				values = (double *)AcquireAlignedMemory(num_columns, num_rows*sizeof(double));
+			}
+
+			if (previous_num_columns != -1) {
+				if (previous_num_columns != num_columns) {
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					goto cleanup;
+				}
+			}
+
+			previous_num_columns = num_columns;
+
+			for (column=0; column<num_columns ; column++) { 
+				if (zend_hash_index_find(inner_array, column, (void **) &ppzval_inner) != SUCCESS) {
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					goto cleanup;
+				}
+
 				if (Z_TYPE_PP(ppzval_inner) == IS_DOUBLE) {
 					//It's a float lets use it.
 					values[count] = Z_DVAL_PP(ppzval_inner);
@@ -303,21 +426,46 @@ PHP_METHOD(imagickkernel, fromarray)
 					values[count] = notanumber;
 				}
 				else {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, "Only numbers or false are valid values " TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE TSRMLS_CC);
 					goto cleanup;
 				}
 				count++;
 			}
 		}
 		else {
-			php_imagick_throw_exception(IMAGICK_CLASS, "Values must be matrix, with the same number of columns in each row." TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 			goto cleanup;
 		}
 	}
-#endif
 
+	if (origin_array == NULL) {
+		if (((num_columns%2) == 0) || ((num_rows%2) == 0)) {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+		origin_x = (num_columns - 1) >> 1;
+		origin_y = (num_rows - 1) >> 1;
+	}
+	else {
+		origin_array_ht = Z_ARRVAL_P(origin_array);
+		if (zend_hash_index_find(origin_array_ht, 0, (void**)&tmp) == SUCCESS) {
+			origin_x = Z_LVAL_PP(tmp);
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
 
-	kernel_info = createKernel(values, num_columns, num_rows);
+		if (zend_hash_index_find(origin_array_ht, 1, (void**)&tmp) == SUCCESS) {
+			origin_y = Z_LVAL_PP(tmp);
+		}
+		else {
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+	}
+
+	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
 	return;
@@ -327,9 +475,10 @@ cleanup:
 		RelinquishAlignedMemory(values);
 	}
 }
+#endif //end of zend_engine_3 
 /* }}} */
 
-static void fiddle_with_geometry_info(ssize_t type, GeometryFlags flags, GeometryInfo *geometry_info) {
+static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags, GeometryInfo *geometry_info) {
 
 	/* special handling of missing values in input string */
 	switch( type ) {
@@ -402,7 +551,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 {
 	php_imagickkernel_object *intern_return;
 	long kernel_type;
-	GeometryInfo geometry_info;
+	GeometryInfo geometry_info = {0};
 	KernelInfo *kernel_info;
 	char *string;
 	IM_LEN_TYPE string_len;
@@ -413,7 +562,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 	}
 
 	flags = ParseGeometry(string, &geometry_info);
-	fiddle_with_geometry_info(kernel_type, flags, &geometry_info);
+	imagick_fiddle_with_geometry_info(kernel_type, flags, &geometry_info);
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
@@ -423,7 +572,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 /* }}} */
 
 
-/* {{{ proto ImagickKernel ImagickKernel::addKernel(ImagickKernel kernel)
+/* {{{ proto void ImagickKernel::addKernel(ImagickKernel kernel)
     Attach a kernel to another kernel. Returns the new combined kernel 
 */
 PHP_METHOD(imagickkernel, addkernel)
@@ -444,16 +593,16 @@ PHP_METHOD(imagickkernel, addkernel)
 
 	kernel = Z_IMAGICKKERNEL_P(objvar);
 	internp = Z_IMAGICKKERNEL_P(getThis());
+	kernel_info = internp->kernel_info;
 
-	kernel_info_this_clone = CloneKernelInfo(internp->kernel_info); 
-	kernel_info_add_clone = CloneKernelInfo(kernel->kernel_info);
 	createKernelZval(return_value, kernel_info_this_clone TSRMLS_CC);
 
-	while (kernel_info_this_clone != NULL) {
-		kernel_info_target = kernel_info_this_clone;
-		kernel_info_this_clone = kernel_info_this_clone->next;
+	while (kernel_info != NULL) {
+		kernel_info_target = kernel_info;
+		kernel_info = kernel_info->next;
 	};
 
+	kernel_info_add_clone = CloneKernelInfo(kernel->kernel_info);
 	kernel_info_target->next = kernel_info_add_clone;
 
 	return;
@@ -466,12 +615,18 @@ PHP_METHOD(imagickkernel, addkernel)
 */
 PHP_METHOD(imagickkernel, separate)
 {
-	zval *separate_object;
 	php_imagickkernel_object *separate_kernel;
 	php_imagickkernel_object *internp;
 	KernelInfo *kernel_info;
 	KernelInfo *kernel_info_copy;
 	int number_values;
+	double * values_copy;
+
+#ifdef ZEND_ENGINE_3
+	zval separate_object;
+#else
+	zval *separate_object;
+#endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -483,24 +638,26 @@ PHP_METHOD(imagickkernel, separate)
 	array_init(return_value);
 
 	while (kernel_info != NULL) {
-		MAKE_STD_ZVAL(separate_object);
-
-		kernel_info_copy = AcquireKernelInfo(NULL);
-		if (kernel_info_copy->values != NULL) {
-			RelinquishAlignedMemory(kernel_info_copy->values);
-		}
-
 		number_values = kernel_info->width * kernel_info->height;
-		memcpy(kernel_info_copy, kernel_info, sizeof(KernelInfo));
+		values_copy = (double *)AcquireAlignedMemory(kernel_info->width, kernel_info->height*sizeof(double));
+		memcpy(values_copy, kernel_info->values, number_values * sizeof(double));
 
-		kernel_info_copy->next = NULL;
-		if (kernel_info->values != NULL) {
-			kernel_info_copy->values = malloc(number_values * sizeof(double));
-			memcpy(kernel_info_copy->values, kernel_info->values, number_values * sizeof(double));
-		}
+		kernel_info_copy = imagick_createKernel(
+			values_copy,
+			kernel_info->width,
+			kernel_info->height,
+			kernel_info->x,
+			kernel_info->y
+		);
 
+#ifdef ZEND_ENGINE_3
+		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
+		add_next_index_zval(return_value, &separate_object);
+#else 
+		MAKE_STD_ZVAL(separate_object);
 		createKernelZval(separate_object, kernel_info_copy TSRMLS_CC);
 		add_next_index_zval(return_value, separate_object);
+#endif
 		kernel_info = kernel_info->next;
 	}
 
@@ -509,11 +666,11 @@ PHP_METHOD(imagickkernel, separate)
 /* }}} */
 
 
-/* {{{ proto [] ImagickKernel::getValues(void)
+/* {{{ proto [] ImagickKernel::getMatrix(void)
 	Return the values used in the kernel. The array contains floats
 	for the elements used and false for the elements not used.
 */
-PHP_METHOD(imagickkernel, getvalues)
+PHP_METHOD(imagickkernel, getmatrix)
 {
 	php_imagickkernel_object *internp;
 
