@@ -1,7 +1,11 @@
 --TEST--
 Test Imagick, setOption
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php
+//Double-free issue in ImageMagick makes test un-runnable before 690
+$imageMagickRequiredVersion=690;
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+?>
 --FILE--
 <?php
 
