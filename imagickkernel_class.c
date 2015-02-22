@@ -261,7 +261,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			previous_num_columns = num_columns;
 
 			for (column=0; column<num_columns ; column++) { 
-				pzval_inner = zend_hash_index_find(inner_array, row);
+				pzval_inner = zend_hash_index_find(inner_array, column);
 				if (pzval_inner == NULL) {
 					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 					goto cleanup;
