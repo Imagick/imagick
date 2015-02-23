@@ -2830,8 +2830,6 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 	return retval;
 }
 
-#undef object_properties_init
-
 static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
 {
 	return php_imagickpixel_object_new_ex(class_type, NULL TSRMLS_CC);
