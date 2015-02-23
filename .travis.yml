@@ -18,8 +18,6 @@ env:
 before_script:
     - for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
     - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
-    - if [[ $TRAVIS_PHP_VERSION = '5.6' ]]; then COMPILE_FLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"; else COMPILE_FLAGS="";  fi
-      
 
 script:
     - export NO_INTERACTION=1
@@ -27,12 +25,12 @@ script:
     - export TEST_PHP_EXECUTABLE=`which php`
     - export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
     - pear package
+    - . ./configure-cflags.sh
     - mkdir /tmp/php-imagick-build
     - tar xfz "imagick-${PHP_IMAGICK_VERSION}.tgz" -C /tmp/php-imagick-build
     - cp ./check-loaded.phpt /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}/check-loaded.phpt
     - cd /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}
     - phpize
-    - export CFLAGS=$COMPILE_FLAGS
     - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
     - make
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt
