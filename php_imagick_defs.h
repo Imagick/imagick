@@ -49,7 +49,11 @@
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
+#ifdef ZEND_ENGINE_3
+	zval user_callback;
+#else
 	zval *user_callback;
+#endif
 	struct _php_imagick_callback *previous_callback;
 } php_imagick_callback;
 

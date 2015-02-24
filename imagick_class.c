@@ -11238,10 +11238,11 @@ PHP_METHOD(imagick, setprogressmonitor)
 	//Add a ref and store the user's callback
 #ifdef ZEND_ENGINE_3
 	Z_TRY_ADDREF_P(user_callback);
+	ZVAL_COPY_VALUE(&callback->user_callback, user_callback);
 #else
 	Z_ADDREF_P(user_callback);
-#endif
 	callback->user_callback = user_callback;
+#endif
 
 	//The callback is now valid, store it in the global
 	IMAGICK_G(progress_callback) = callback;

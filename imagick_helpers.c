@@ -56,7 +56,7 @@ void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callba
 		}
 
 #ifdef ZEND_ENGINE_3
-		zval_ptr_dtor(progress_callback->user_callback);
+		zval_ptr_dtor(&progress_callback->user_callback);
 #else
 		zval_ptr_dtor(&progress_callback->user_callback);
 #endif
@@ -90,7 +90,8 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci.function_table = EG(function_table);
 #ifdef ZEND_ENGINE_3
 	fci.object = NULL;
-	fci.function_name = *callback->user_callback;
+	//fci.function_name = *callback->user_callback;
+	ZVAL_COPY_VALUE(&fci.function_name, &callback->user_callback);
 	fci.retval = &retval;
 #else
 	retval_ptr = NULL;

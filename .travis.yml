@@ -34,7 +34,6 @@ script:
     - cp ./check-loaded.phpt /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}/check-loaded.phpt
     - cd /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}
     - phpize
-    - export CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"
     - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
     - make
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt
