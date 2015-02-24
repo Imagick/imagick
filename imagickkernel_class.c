@@ -65,34 +65,34 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 }
 
 
-//HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /* {{{ */
-//{
-//	php_imagickkernel_object *internp;
-//	HashTable *retval;
-//	KernelInfo *kernel_info;
-//	zval *tmp, zrv;
-//	zval *matrix;
-//	zval *row;
-//
-//	internp = (php_imagickkernel_object *)zend_object_store_get_object(obj TSRMLS_CC);
-//	kernel_info = internp->kernel_info;
-//
-//	ALLOC_HASHTABLE(retval);
-//	ZEND_INIT_SYMTABLE_EX(retval, 1, 0);
-//
-//	INIT_PZVAL(&zrv);
-//	Z_ARRVAL(zrv) = retval;
-//
-//	while (kernel_info != NULL) {
-//		MAKE_STD_ZVAL(matrix);
-//		array_init(matrix);
-//		php_imagickkernelvalues_to_zval(matrix, kernel_info);
-//		add_next_index_zval(&zrv, matrix);
-//		kernel_info = kernel_info->next;
-//	}
-//
-//	return retval;
-//}
+HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /* {{{ */
+{
+	php_imagickkernel_object *internp;
+	HashTable *debug_info;
+	KernelInfo *kernel_info;
+	zval zrv;
+	zval *matrix;
+
+	*is_temp = 1; //var_dump will destroy the hashtable
+
+	internp = (php_imagickkernel_object *)zend_object_store_get_object(obj TSRMLS_CC);
+	kernel_info = internp->kernel_info;
+
+	ALLOC_HASHTABLE(debug_info);
+	ZEND_INIT_SYMTABLE_EX(debug_info, 1, 0);
+
+	INIT_PZVAL(&zrv);
+
+	while (kernel_info != NULL) {
+		MAKE_STD_ZVAL(matrix);
+		array_init(matrix);
+		php_imagickkernelvalues_to_zval(matrix, kernel_info);
+		zend_hash_next_index_insert(debug_info, &matrix, sizeof(zval *), NULL);
+		kernel_info = kernel_info->next;
+	}
+
+	return debug_info;
+}
 
 
 static void im_CalcKernelMetaData(KernelInfo *kernel) {

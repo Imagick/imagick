@@ -3194,7 +3194,7 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_SC_NAME, php_imagickkernel_class_methods);
 	ce.create_object = php_imagickkernel_object_new;
 	// Disabled until can be compiled under wall correctly
-	// imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
+	imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 #endif
