@@ -2680,9 +2680,9 @@ static void php_imagickpixel_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_D
 }
 
 #ifdef IMAGICK_WITH_KERNEL
-static void php_imagickkernel_object_free_storage(void *object TSRMLS_DC)
+static void php_imagickkernel_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_DC)
 {
-	php_imagickkernel_object *intern = (php_imagickkernel_object *)object;
+	php_imagickkernel_object *intern = php_imagickkernel_fetch_object(object);
 
 	if (!intern) {
 		return;
@@ -3479,6 +3479,11 @@ PHP_MINIT_FUNCTION(imagick)
 	// Disabled until can be compiled under wall correctly
 	// imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
+	#ifdef ZEND_ENGINE_3
+	imagickkernel_object_handlers.offset = XtOffsetOf(php_imagickkernel_object, zo);
+	imagickkernel_object_handlers.free_obj = php_imagickkernel_object_free_storage;
+    #endif
+
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 #endif
 
