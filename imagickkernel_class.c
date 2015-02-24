@@ -82,24 +82,31 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 	php_imagickkernel_object *internp;
 	HashTable *debug_info;
 	KernelInfo *kernel_info;
-	zval zrv;
+#ifdef ZEND_ENGINE_3
+	zval matrix;
+#else
 	zval *matrix;
+#endif
 
 	*is_temp = 1; //var_dump will destroy the hashtable
 
-	internp = (php_imagickkernel_object *)zend_object_store_get_object(obj TSRMLS_CC);
+	internp = Z_IMAGICKKERNEL_P(obj);
 	kernel_info = internp->kernel_info;
 
 	ALLOC_HASHTABLE(debug_info);
 	ZEND_INIT_SYMTABLE_EX(debug_info, 1, 0);
 
-	INIT_PZVAL(&zrv);
-
 	while (kernel_info != NULL) {
+#ifdef ZEND_ENGINE_3
+		array_init(&matrix);
+		php_imagickkernelvalues_to_zval(&matrix, kernel_info);
+		zend_hash_next_index_insert(debug_info, &matrix);
+#else
 		MAKE_STD_ZVAL(matrix);
 		array_init(matrix);
 		php_imagickkernelvalues_to_zval(matrix, kernel_info);
 		zend_hash_next_index_insert(debug_info, &matrix, sizeof(zval *), NULL);
+#endif
 		kernel_info = kernel_info->next;
 	}
 
@@ -189,8 +196,6 @@ static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
 #ifdef ZEND_ENGINE_3
 PHP_METHOD(imagickkernel, frommatrix)
 {
-	php_imagickkernel_object *internp;
-	php_imagickkernel_object *intern_return;
 	zval *kernel_array;
 	zval *origin_array;
 	HashTable *inner_array;
@@ -228,15 +233,12 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 
 	for (row=0 ; row<num_rows ; row++) {
-		zval tmp_zval, *tmp_pzval;
-
 		pzval_outer = zend_hash_index_find(Z_ARRVAL_P(kernel_array), row);
 		if (pzval_outer == NULL) {
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 			goto cleanup;
 		}
 
-		
 		column = 0;
 
 		if (Z_TYPE_P(pzval_outer) == IS_ARRAY ) {

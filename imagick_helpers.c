@@ -67,11 +67,11 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 {
 	int error;
 	zend_fcall_info fci;
-	zval retval;
 	zend_fcall_info_cache fci_cache;
 
 #ifdef ZEND_ENGINE_3
 	zval zargs[2];
+	zval retval;
 #else
 	zval **zargs[2];
 	zval *retval_ptr;
@@ -81,7 +81,9 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	//IMAGICK_G(progress_callback) - this should be quicker
 	php_imagick_callback *callback = (php_imagick_callback*)userData;
 
+#ifndef ZEND_ENGINE_3
 	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
+#endif
 	fci_cache = empty_fcall_info_cache;
 
 	fci.size = sizeof(fci);
@@ -233,7 +235,6 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 
 double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
-	zval **ppzval;
 	double *double_array;
 	long i = 0;
 
@@ -241,6 +242,8 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
+#else
+	zval **ppzval;
 #endif
 
 	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
@@ -284,7 +287,6 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 
 long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
-	zval **ppzval;
 	long *long_array;
 	long i = 0;
 
@@ -292,6 +294,8 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
+#else
+	zval **ppzval;
 #endif
 
 	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
@@ -305,8 +309,6 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 #ifdef ZEND_ENGINE_3
 
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
-		zval tmp_zval, *tmp_pzval;
-		long value = 0;
 		long_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -339,7 +341,6 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 
 unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_elements TSRMLS_DC)
 {
-	zval **ppzval;
 	unsigned char *char_array;
 	long i = 0;
 
@@ -347,6 +348,8 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
+#else
+	zval **ppzval;
 #endif
 
 	*num_elements = zend_hash_num_elements(Z_ARRVAL_P(param_array));
@@ -359,9 +362,6 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 
 #ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
-		zval tmp_zval, *tmp_pzval;
-		long value = 0;
-
 		char_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -493,14 +493,15 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 {
 	PointInfo *coordinates;
 	long elements, sub_elements, i;
-	HashTable *coords;
-	zval **ppzval;
 	HashTable *sub_array;
 
 #ifdef ZEND_ENGINE_3
 	zend_ulong num_key;
 	zend_string *key;
 	zval *pzvalue;
+#else
+	HashTable *coords;
+	zval **ppzval;
 #endif
 
 	i = 0;

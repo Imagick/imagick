@@ -1187,10 +1187,13 @@ PHP_METHOD(imagickdraw, clone)
 PHP_METHOD(imagickdraw, affine)
 {
 	php_imagickdraw_object *internd;
-	zval *affine_matrix, **ppzval;
+	zval *affine_matrix;
+
+#ifdef ZEND_ENGINE_3
 	zval *pzval;
-#ifndef ZEND_ENGINE_3
+#else
 	HashTable *affine;
+	zval **ppzval;
 #endif
 	char *matrix_elements[] = { "sx", "rx", "ry",
 						        "sy", "tx", "ty" };

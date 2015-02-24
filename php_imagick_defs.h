@@ -251,6 +251,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define php_imagickdraw_fetch_object(object) ((php_imagickdraw_object *)object) 
 	#define php_imagickpixel_fetch_object(object) ((php_imagickpixel_object *)object)
 	#define php_imagickpixeliterator_fetch_object(object) ((php_imagickpixeliterator_object *)object)
+	#define php_imagickkernel_fetch_object(object) ((php_imagickkernel_object *)object)
 #endif
 
 // Object access

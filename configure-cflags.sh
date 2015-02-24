@@ -46,7 +46,7 @@ echo "strictImageMagick is ${strictImageMagick}"
 echo "strictPHP is ${strictPHP}"
 
 if [[ $strictPHP = '1' ]] && [[ $strictImageMagick = '1' ]]; then 
-	CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"; 
+	CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror -Wall"; 
 else 
 	CFLAGS="-Wno-deprecated-declarations";
 fi

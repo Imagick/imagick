@@ -3416,7 +3416,6 @@ PHP_METHOD(imagick, readimages)
 	zval *value;
 	zval *files;
 	php_imagick_object *intern;
-	HashPosition pos;
 	php_imagick_rw_result_t rc;
 
 	/* Parse parameters given to function */
@@ -11237,8 +11236,11 @@ PHP_METHOD(imagick, setprogressmonitor)
 	callback->previous_callback = IMAGICK_G(progress_callback);
 
 	//Add a ref and store the user's callback
-	//Z_ADDREF_P(user_callback);
+#ifdef ZEND_ENGINE_3
 	Z_TRY_ADDREF_P(user_callback);
+#else
+	Z_ADDREF_P(user_callback);
+#endif
 	callback->user_callback = user_callback;
 
 	//The callback is now valid, store it in the global
