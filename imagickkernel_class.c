@@ -21,6 +21,20 @@
 
 #ifdef IMAGICK_WITH_KERNEL
 
+// These function defines are required currently as the functions are
+// currently not available in the public ImageMagick header files
+// This is being fixed for the next version of ImageMagick.
+Image
+  *MorphologyApply(const Image *,const ChannelType,const MorphologyMethod,
+    const ssize_t,const KernelInfo *,const CompositeOperator,const double,
+    ExceptionInfo *);
+
+void
+  ScaleKernelInfo(KernelInfo *,const double,const GeometryFlags),
+  UnityAddKernelInfo(KernelInfo *,const double),
+  ZeroKernelNans(KernelInfo *);
+
+
 static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 	int count;
 	double value;
@@ -63,47 +77,34 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 }
 
 
-HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /* {{{ */
-{
-	php_imagickkernel_object *internp;
-	HashTable *retval;
-	KernelInfo *kernel_info;
-	zval *tmp, zrv;
-	zval *row;
-#ifdef ZEND_ENGINE_3
-	zval matrix;
-#else
-	zval *matrix;
-#endif
-
-	internp = Z_IMAGICKKERNEL_P(obj);
-	kernel_info = internp->kernel_info;
-
-	ALLOC_HASHTABLE(retval);
-	ZEND_INIT_SYMTABLE_EX(retval, 1, 0);
-
-	INIT_PZVAL(&zrv);
-
-#ifndef ZEND_ENGINE_3
-	Z_ARRVAL(zrv) = retval;
-#endif
-
-	while (kernel_info != NULL) {
-#ifdef ZEND_ENGINE_3
-		array_init(&matrix);
-		php_imagickkernelvalues_to_zval(&matrix, kernel_info);
-		zend_hash_next_index_insert(retval, &matrix);
-#else
-		MAKE_STD_ZVAL(matrix);
-		array_init(matrix);
-		php_imagickkernelvalues_to_zval(matrix, kernel_info);
-		add_next_index_zval(&zrv, matrix);
-#endif
-		kernel_info = kernel_info->next;
-	}
-
-	return retval;
-}
+//HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /* {{{ */
+//{
+//	php_imagickkernel_object *internp;
+//	HashTable *retval;
+//	KernelInfo *kernel_info;
+//	zval *tmp, zrv;
+//	zval *matrix;
+//	zval *row;
+//
+//	internp = (php_imagickkernel_object *)zend_object_store_get_object(obj TSRMLS_CC);
+//	kernel_info = internp->kernel_info;
+//
+//	ALLOC_HASHTABLE(retval);
+//	ZEND_INIT_SYMTABLE_EX(retval, 1, 0);
+//
+//	INIT_PZVAL(&zrv);
+//	Z_ARRVAL(zrv) = retval;
+//
+//	while (kernel_info != NULL) {
+//		MAKE_STD_ZVAL(matrix);
+//		array_init(matrix);
+//		php_imagickkernelvalues_to_zval(matrix, kernel_info);
+//		add_next_index_zval(&zrv, matrix);
+//		kernel_info = kernel_info->next;
+//	}
+//
+//	return retval;
+//}
 
 
 static void im_CalcKernelMetaData(KernelInfo *kernel) {
@@ -164,9 +165,7 @@ static KernelInfo *imagick_createKernel(double *values, size_t width, size_t hei
 #endif
 
 static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
-
 	php_imagickkernel_object *intern_return;
-	php_imagickkernel_object *internp;
 
 	object_init_ex(pzval, php_imagickkernel_sc_entry);
 	intern_return = Z_IMAGICKKERNEL_P(pzval);
@@ -339,8 +338,6 @@ cleanup:
 
 PHP_METHOD(imagickkernel, frommatrix)
 {
-	php_imagickkernel_object *internp;
-	php_imagickkernel_object *intern_return;
 	zval *kernel_array;
 	zval *origin_array;
 	HashTable *inner_array;
@@ -383,7 +380,6 @@ PHP_METHOD(imagickkernel, frommatrix)
 			goto cleanup;
 		}
 
-		zval tmp_zval, *tmp_pzval;
 		column = 0;
 
 		if (Z_TYPE_PP(ppzval_outer) == IS_ARRAY ) {
@@ -551,7 +547,6 @@ static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags,
 */
 PHP_METHOD(imagickkernel, frombuiltin)
 {
-	php_imagickkernel_object *intern_return;
 	long kernel_type;
 	GeometryInfo geometry_info = {0};
 	KernelInfo *kernel_info;
@@ -580,7 +575,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 PHP_METHOD(imagickkernel, addkernel)
 {
 	zval *objvar;
-	KernelInfo *kernel_info_this_clone;
+//	KernelInfo *kernel_info_this_clone;
 	KernelInfo *kernel_info_add_clone;
 
 	KernelInfo *kernel_info;
@@ -597,7 +592,7 @@ PHP_METHOD(imagickkernel, addkernel)
 	internp = Z_IMAGICKKERNEL_P(getThis());
 	kernel_info = internp->kernel_info;
 
-	createKernelZval(return_value, kernel_info_this_clone TSRMLS_CC);
+	//createKernelZval(return_value, kernel_info_this_clone TSRMLS_CC);
 
 	while (kernel_info != NULL) {
 		kernel_info_target = kernel_info;
@@ -617,7 +612,6 @@ PHP_METHOD(imagickkernel, addkernel)
 */
 PHP_METHOD(imagickkernel, separate)
 {
-	php_imagickkernel_object *separate_kernel;
 	php_imagickkernel_object *internp;
 	KernelInfo *kernel_info;
 	KernelInfo *kernel_info_copy;

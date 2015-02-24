@@ -437,7 +437,7 @@ PHP_METHOD(imagick, shadeimage)
 PHP_METHOD(imagick, getsizeoffset)
 {
 	php_imagick_object *intern;
-	size_t offset;
+	ssize_t offset;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -923,7 +923,6 @@ PHP_METHOD(imagick, deleteimageproperty)
 	IM_LEN_TYPE name_len;
 	MagickBooleanType status;
 
-	ImageInfo *image_info;
 	Image *image;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
@@ -1250,7 +1249,7 @@ PHP_METHOD(imagick, clutimage)
 	long channel = DefaultChannels;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|d", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
 		return;
 	}
 
@@ -1357,7 +1356,8 @@ PHP_METHOD(imagick, getimageprofiles)
 	if (values) {
 
 		for (i = 0; i < profiles_count; i++) {
-			profile = MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
+
+			profile = (char *)MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
 #ifdef ZEND_ENGINE_3
 			add_assoc_stringl(return_value, profiles[i], profile, length);
 #else
@@ -6826,7 +6826,7 @@ PHP_METHOD(imagick, getimagepage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	size_t width, height;
-	size_t x, y;
+	ssize_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10739,7 +10739,7 @@ PHP_METHOD(imagick, getpage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	size_t width, height;
-	size_t x, y;
+	ssize_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -11712,7 +11712,6 @@ PHP_METHOD(imagick, setregistry)
 */
 PHP_METHOD(imagick, getregistry)
 {
-	MagickBooleanType status;
 	char *key, *value;
 	IM_LEN_TYPE key_len;
 
@@ -11744,7 +11743,7 @@ PHP_METHOD(imagick, listregistry)
 	array_init(return_value);
 
 	ResetImageRegistryIterator();
-	while (registry = GetNextImageRegistry()) {
+	while ((registry = GetNextImageRegistry())) {
 		value = GetImageRegistry(StringRegistryType, registry, NULL);
 		//should this be add_assoc_string(return_value, estrdup(registry), value, 1);
 		IM_add_assoc_string(return_value, registry, value);

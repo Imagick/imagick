@@ -2928,8 +2928,6 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 
 }
 
-#undef object_properties_init
-
 #ifdef ZEND_ENGINE_3
 static zend_object * php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
 #else
@@ -3478,7 +3476,8 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_SC_NAME, php_imagickkernel_class_methods);
 	ce.create_object = php_imagickkernel_object_new;
-	imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
+	// Disabled until can be compiled under wall correctly
+	// imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 #endif
