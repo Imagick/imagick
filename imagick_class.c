@@ -2980,8 +2980,6 @@ PHP_METHOD(imagick, __construct)
 	php_imagick_object *intern;
 	zval *files = NULL;
 
-	ulong num_key;
-	zend_string *key;
 	zval *pzval;
 	php_imagick_rw_result_t rc;
 
@@ -3019,7 +3017,7 @@ PHP_METHOD(imagick, __construct)
 	/* an array of filenames was given */
 	else
 	if (Z_TYPE_P(files) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(files), num_key, key, pzval) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(files), pzval) {
 			struct php_imagick_file_t file = {0};
 
 			if (!php_imagick_file_init(&file, Z_STRVAL_P(pzval), Z_STRLEN_P(pzval) TSRMLS_CC)) {
@@ -3411,8 +3409,6 @@ PHP_METHOD(imagick, readimage)
 PHP_METHOD(imagick, readimages)
 {
 
-	ulong num_key;
-	zend_string *key;
 	zval *value;
 	zval *files;
 	php_imagick_object *intern;
@@ -3424,7 +3420,7 @@ PHP_METHOD(imagick, readimages)
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(files), num_key, key, value) {
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(files), value) {
 		struct php_imagick_file_t file = {0};
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(value), Z_STRLEN_P(value) TSRMLS_CC)) {
