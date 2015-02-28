@@ -1,3 +1,71 @@
+3.3.0b1
+- Compatibility with PHP 5.6
+- Added ImagickKernel class #73
+- Added methods:
+  * Imagick::morphology() #73
+  * Imagick::setRegistry() #64
+  * Imagick::getRegistry() #64
+  * Imagick::litsRegistry() #64
+  * Imagick::setImageBiasQuantum() #58
+  * Imagick::identifyFormat()
+  * Imagick::deleteImageProperty()
+  * Imagick::isPixelSimilarQuantum()
+  * Imagick::getImageCompression()
+  * Imagick::setProgressMonitor() #28
+  * Imagick::subImageMatch() 
+  * Imagick::rotationalBlurImage()
+  * Imagick::statisticImage()
+  * Imagick::brightnessContrastImage()
+  * Imagick::colorMatrixImage()
+  * Imagick::selectiveBlurImage()
+  * Imagick::forwardFourierTransformImage()
+  * Imagick::inverseFourierTransformImage()
+  * ImagickPixel::getColorQuantum()
+- Added constants:
+  * Imagick::RESOURCETYPE_TIME #63
+  * Imagick::RESOURCETYPE_THROTTLE #63
+  * Imagick::CHANNEL_RGBA
+  * Imagick::ALPHACHANNEL_BACKGROUND #34
+  * Imagick::FUNCTION_ARCSIN
+  * Imagick::FUNCTION_ARCTAN #15
+- Added spec to build rpm #48
+- Added test for PHP bug 59378 #61
+- Fixed Imagick::clutImage() parameter parsing
+- Fixed tint image bug #27
+- Fixed ImageMagick compiled with HDRI having quantum values as floats #32
+- Fixed potential memory leaks (#24) in:
+  * Imagick::identifyImage()
+  * Imagick::getImageChannelStatistics()
+  * Imagick::getSamplingFactors()
+  * Imagick::getImageBlob()
+  * Imagick::getImagesBlob()
+  * Imagick::getImageFormat()
+  * Imagick::getImageMimetype()
+- Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator() #21
+- Fixed compilation to look for headers in the user specified location first
+- Fixed compilation error #22
+- Fixed segfault when compiling statically #36 #37 #18
+- Removed Zend MM support
+- Excluded deprecated methods:
+  * Imagick::getImageMatte()
+  * Imagick::colorFloodfillImage()
+  * Imagick::matteFloodfillImage()
+  * Imagick::paintFloodfillImage()
+  * Imagick::paintOpaqueImage()
+  * Imagick::paintTransparentImage()
+  * Imagick::mapImage()
+  * Imagick::recolorImage()
+  * Imagick::setImageIndex()
+  * Imagick::getImageIndex()
+  * Imagick::getImageSize()
+  * Imagick::setImageAttribute()
+  * Imagick::getImageAttribute()
+  * Imagick::mosaicImages()
+  * Imagick::averageImages()
+  * Imagick::flattenImages()
+  * Imagick::getImageChannelExtrema()
+  * Imagick::getImageExtrema()
+
 3.2.0RC1
 - Fix bug #66098: Segfault in zval_addref_p
 
