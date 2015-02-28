@@ -5,7 +5,7 @@
   * Imagick::morphology() #73
   * Imagick::setRegistry() #64
   * Imagick::getRegistry() #64
-  * Imagick::litsRegistry() #64
+  * Imagick::listRegistry() #64
   * Imagick::setImageBiasQuantum() #58
   * Imagick::identifyFormat()
   * Imagick::deleteImageProperty()
