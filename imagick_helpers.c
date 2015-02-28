@@ -240,8 +240,6 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 	long i = 0;
 
 #ifdef ZEND_ENGINE_3
-	zend_ulong num_key;
-	zend_string *key;
 	zval *pzvalue;
 #else
 	zval **ppzval;
@@ -256,7 +254,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements T
 	double_array = ecalloc(*num_elements, sizeof(double));
 
 #ifdef ZEND_ENGINE_3
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
 		double_array[i] = zval_get_double(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -292,8 +290,6 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 	long i = 0;
 
 #ifdef ZEND_ENGINE_3
-	zend_ulong num_key;
-	zend_string *key;
 	zval *pzvalue;
 #else
 	zval **ppzval;
@@ -308,8 +304,7 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 	long_array = ecalloc(*num_elements, sizeof(long));
 
 #ifdef ZEND_ENGINE_3
-
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
 		long_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -346,8 +341,6 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 	long i = 0;
 
 #ifdef ZEND_ENGINE_3
-	zend_ulong num_key;
-	zend_string *key;
 	zval *pzvalue;
 #else
 	zval **ppzval;
@@ -362,7 +355,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 	char_array = ecalloc(*num_elements, sizeof(unsigned char));
 
 #ifdef ZEND_ENGINE_3
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(param_array), num_key, key, pzvalue) {
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
 		char_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -497,8 +490,6 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	HashTable *sub_array;
 
 #ifdef ZEND_ENGINE_3
-	zend_ulong num_key;
-	zend_string *key;
 	zval *pzvalue;
 #else
 	HashTable *coords;
@@ -519,7 +510,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	coordinates = emalloc(sizeof(PointInfo) * elements);
 
 #ifdef ZEND_ENGINE_3
-	ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(coordinate_array), num_key, key, pzvalue) {
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(coordinate_array), pzvalue) {
 		zval *pz_x, *pz_y;
 
 		/* If its something than array lets error here */
