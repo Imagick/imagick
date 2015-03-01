@@ -12,6 +12,56 @@ Examples
 Almost all of the functions in the library have an example at [www.phpimagick.com](http://www.phpimagick.com/), where you can see the example code to call the function, as well as the generated image or output.
 
 
+Security
+--------
+
+The PHP extension Imagick works by calling the ImageMagick library. Although the ImageMagick developers take good care in avoiding bugs it is inevitable that some bugs will be present in the code. ImageMagick also uses a lot of third party libraries to open, read and manipulate files. The writers of these libraries also take care when writing their code. However everyone makes mistakes and there will inevitably be some bugs present.
+
+Because ImageMagick is used to process images it is feasibly possible for hackers to create images that contain invalid data to attempt to exploit these bugs. Because of this we recommend the following:
+
+1) Do not run Imagick in a server that is directly accessible from outside your network. It is better to either use it as a background task using something like SupervisorD or to run it in a separate server that is not directly access on the internet. 
+
+Doing this will make it difficult for hackers to exploit a bug, even if one should exist in the libraries that ImageMagick is using. 
+
+2) Run it as a very low privileged process. As much as possible the files and system resources accessible to the PHP script that Imagick is being called from should be locked down. 
+
+3) Check the result of the image processing is a valid image file before displaying it to the user. In the extremely unlikely event that a hacker is able to pipe arbitrary files to the output of Imagick, checking that it is an image file, and not the source code of your application that is being sent, is a sensible precaution. This can be accomplished by the following code:
+
+
+```
+<?php
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mimeType = finfo_file($finfo, $filename);
+
+$allowedMimeTypes = [
+    'image/gif',
+    'image/jpg',
+    'image/png'
+];
+
+if (in_array($mimeType, $allowedMimeTypes) == false) {
+    throw new \SecurityException("Was going to send file '$filename' to the user, but it is not an image file.");
+}
+```
+
+These recommendations do not guarantee any security, but they should limit your exposure to any ImageMagick related security issue.
+
+
+OpenMP
+------
+
+ImageMagick has the ability to use the Open Multi-Processing API to be able to use multiple threads to process an image at once. Some implementations of OpenMP are known to have stability issues when they are used in certain environments. 
+
+We recommend doing one of the following:
+
+* Disabling OpenMP support in ImageMagick by compiling it with the compile flag "--disable-openmp" set.
+
+* Disable the use of threads in ImageMagick by calling: `Imagick::setResourceLimit(\Imagick::RESOURCETYPE_THREAD, 1);` or `Imagick::setResourceLimit(6, 1);` if your version of Imagick does not contain the RESOURCETYPE_THREAD constant.
+
+* If you do want to use OpenMP in ImageMagick when it's called through Imagick, you should test thoroughly that it behaves correctly on your server.
+
+
+
 TODO
 ----
 
