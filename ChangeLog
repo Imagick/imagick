@@ -1,17 +1,17 @@
-3.3.0b1
-- Compatibility with PHP 5.6
-- Added ImagickKernel class #73
+3.3.0
+- Added ImagickKernel class. These can be used with the Imagick::morphology or 
+    Imagick::filter functions.
 - Added methods:
-  * Imagick::morphology() #73
-  * Imagick::setRegistry() #64
-  * Imagick::getRegistry() #64
-  * Imagick::listRegistry() #64
-  * Imagick::setImageBiasQuantum() #58
+  * Imagick::morphology()
+  * Imagick::setRegistry()
+  * Imagick::getRegistry()
+  * Imagick::listRegistry()
+  * Imagick::setImageBiasQuantum()
   * Imagick::identifyFormat()
   * Imagick::deleteImageProperty()
   * Imagick::isPixelSimilarQuantum()
   * Imagick::getImageCompression()
-  * Imagick::setProgressMonitor() #28
+  * Imagick::setProgressMonitor()
   * Imagick::subImageMatch() 
   * Imagick::rotationalBlurImage()
   * Imagick::statisticImage()
@@ -22,18 +22,17 @@
   * Imagick::inverseFourierTransformImage()
   * ImagickPixel::getColorQuantum()
 - Added constants:
-  * Imagick::RESOURCETYPE_TIME #63
-  * Imagick::RESOURCETYPE_THROTTLE #63
+  * Imagick::RESOURCETYPE_TIME
+  * Imagick::RESOURCETYPE_THROTTLE
   * Imagick::CHANNEL_RGBA
-  * Imagick::ALPHACHANNEL_BACKGROUND #34
+  * Imagick::ALPHACHANNEL_BACKGROUND
   * Imagick::FUNCTION_ARCSIN
-  * Imagick::FUNCTION_ARCTAN #15
-- Added spec to build rpm #48
-- Added test for PHP bug 59378 #61
+  * Imagick::FUNCTION_ARCTAN
+- Added spec to build rpm
 - Fixed Imagick::clutImage() parameter parsing
-- Fixed tint image bug #27
-- Fixed ImageMagick compiled with HDRI having quantum values as floats #32
-- Fixed potential memory leaks (#24) in:
+- Fixed tint image bug
+- Fixed ImageMagick compiled with HDRI having quantum values as floats
+- Fixed potential memory leaks in:
   * Imagick::identifyImage()
   * Imagick::getImageChannelStatistics()
   * Imagick::getSamplingFactors()
@@ -41,10 +40,10 @@
   * Imagick::getImagesBlob()
   * Imagick::getImageFormat()
   * Imagick::getImageMimetype()
-- Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator() #21
+- Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator()
 - Fixed compilation to look for headers in the user specified location first
-- Fixed compilation error #22
-- Fixed segfault when compiling statically #36 #37 #18
+- Fixed compilation error
+- Fixed segfault when compiling statically
 - Removed Zend MM support
 - Excluded deprecated methods:
   * Imagick::getImageMatte()
@@ -65,6 +64,8 @@
   * Imagick::flattenImages()
   * Imagick::getImageChannelExtrema()
   * Imagick::getImageExtrema()
+- Misc:
+  * CI now compiles with CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"
 
 3.2.0RC1
 - Fix bug #66098: Segfault in zval_addref_p
