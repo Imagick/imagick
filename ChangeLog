@@ -2,24 +2,26 @@
 - Added ImagickKernel class. These can be used with the Imagick::morphology or 
     Imagick::filter functions.
 - Added methods:
-  * Imagick::morphology()
-  * Imagick::setRegistry()
-  * Imagick::getRegistry()
-  * Imagick::listRegistry()
-  * Imagick::setImageBiasQuantum()
-  * Imagick::identifyFormat()
-  * Imagick::deleteImageProperty()
-  * Imagick::isPixelSimilarQuantum()
-  * Imagick::getImageCompression()
-  * Imagick::setProgressMonitor()
-  * Imagick::subImageMatch() 
-  * Imagick::rotationalBlurImage()
-  * Imagick::statisticImage()
   * Imagick::brightnessContrastImage()
   * Imagick::colorMatrixImage()
-  * Imagick::selectiveBlurImage()
+  * Imagick::deleteImageProperty()
+  * Imagick::filter()
   * Imagick::forwardFourierTransformImage()
+  * Imagick::getImageCompression()
+  * Imagick::getRegistry()
+  * Imagick::getQuantum()
+  * Imagick::identifyFormat()
   * Imagick::inverseFourierTransformImage()
+  * Imagick::isPixelSimilarQuantum()
+  * Imagick::listRegistry()
+  * Imagick::morphology()
+  * Imagick::rotationalBlurImage()
+  * Imagick::selectiveBlurImage()
+  * Imagick::setImageBiasQuantum()
+  * Imagick::setProgressMonitor()
+  * Imagick::setRegistry() 
+  * Imagick::statisticImage()
+  * Imagick::subImageMatch()
   * ImagickPixel::getColorQuantum()
 - Added constants:
   * Imagick::RESOURCETYPE_TIME
@@ -32,14 +34,15 @@
 - Fixed Imagick::clutImage() parameter parsing
 - Fixed tint image bug
 - Fixed ImageMagick compiled with HDRI having quantum values as floats
-- Fixed potential memory leaks in:
-  * Imagick::identifyImage()
-  * Imagick::getImageChannelStatistics()
-  * Imagick::getSamplingFactors()
+- Fixed memory leaks in:
   * Imagick::getImageBlob()
   * Imagick::getImagesBlob()
+  * Imagick::getImageChannelStatistics()
   * Imagick::getImageFormat()
   * Imagick::getImageMimetype()
+  * Imagick::getSamplingFactors()
+  * Imagick::identifyImage()
+  * Imagick::tintImage
 - Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator()
 - Fixed compilation to look for headers in the user specified location first
 - Fixed compilation error

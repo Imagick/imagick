@@ -11476,7 +11476,7 @@ PHP_METHOD(imagick, getregistry)
 /* }}} */
 
 
-/* {{{ proto array Imagick::setRegistry()
+/* {{{ proto array Imagick::listRegistry()
 	List all the registry settings calls GetImageRegistry. returns an array of all the key/value pairs in the registry 
 */
 PHP_METHOD(imagick, listregistry)
