@@ -64,7 +64,8 @@
   * Imagick::getImageAttribute()
   * Imagick::mosaicImages()
   * Imagick::averageImages()
-  * Imagick::flattenImages()
+  * Imagick::flattenImages() 
+    This is replaced by $im = $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN)
   * Imagick::getImageChannelExtrema()
   * Imagick::getImageExtrema()
 - Misc:
