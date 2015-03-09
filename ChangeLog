@@ -1,3 +1,72 @@
+3.3.0
+- Added ImagickKernel class. These can be used with the Imagick::morphology or 
+    Imagick::filter functions.
+- Added methods:
+  * Imagick::morphology()
+  * Imagick::setRegistry()
+  * Imagick::getRegistry()
+  * Imagick::listRegistry()
+  * Imagick::setImageBiasQuantum()
+  * Imagick::identifyFormat()
+  * Imagick::deleteImageProperty()
+  * Imagick::isPixelSimilarQuantum()
+  * Imagick::getImageCompression()
+  * Imagick::setProgressMonitor()
+  * Imagick::subImageMatch() 
+  * Imagick::rotationalBlurImage()
+  * Imagick::statisticImage()
+  * Imagick::brightnessContrastImage()
+  * Imagick::colorMatrixImage()
+  * Imagick::selectiveBlurImage()
+  * Imagick::forwardFourierTransformImage()
+  * Imagick::inverseFourierTransformImage()
+  * ImagickPixel::getColorQuantum()
+- Added constants:
+  * Imagick::RESOURCETYPE_TIME
+  * Imagick::RESOURCETYPE_THROTTLE
+  * Imagick::CHANNEL_RGBA
+  * Imagick::ALPHACHANNEL_BACKGROUND
+  * Imagick::FUNCTION_ARCSIN
+  * Imagick::FUNCTION_ARCTAN
+- Added spec to build rpm
+- Fixed Imagick::clutImage() parameter parsing
+- Fixed tint image bug
+- Fixed ImageMagick compiled with HDRI having quantum values as floats
+- Fixed potential memory leaks in:
+  * Imagick::identifyImage()
+  * Imagick::getImageChannelStatistics()
+  * Imagick::getSamplingFactors()
+  * Imagick::getImageBlob()
+  * Imagick::getImagesBlob()
+  * Imagick::getImageFormat()
+  * Imagick::getImageMimetype()
+- Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator()
+- Fixed compilation to look for headers in the user specified location first
+- Fixed compilation error
+- Fixed segfault when compiling statically
+- Removed Zend MM support
+- Excluded deprecated methods:
+  * Imagick::getImageMatte()
+  * Imagick::colorFloodfillImage()
+  * Imagick::matteFloodfillImage()
+  * Imagick::paintFloodfillImage()
+  * Imagick::paintOpaqueImage()
+  * Imagick::paintTransparentImage()
+  * Imagick::mapImage()
+  * Imagick::recolorImage()
+  * Imagick::setImageIndex()
+  * Imagick::getImageIndex()
+  * Imagick::getImageSize()
+  * Imagick::setImageAttribute()
+  * Imagick::getImageAttribute()
+  * Imagick::mosaicImages()
+  * Imagick::averageImages()
+  * Imagick::flattenImages()
+  * Imagick::getImageChannelExtrema()
+  * Imagick::getImageExtrema()
+- Misc:
+  * CI now compiles with CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"
+
 3.2.0RC1
 - Fix bug #66098: Segfault in zval_addref_p
 
