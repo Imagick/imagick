@@ -1,4 +1,4 @@
-3.3.0
+3.3.0RC1
 - Added ImagickKernel class. These can be used with the Imagick::morphology or 
     Imagick::filter functions.
 - Added methods:

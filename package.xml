@@ -29,8 +29,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</lead>
 	<date>2013-11-25</date>
 	<version>
-		<release>3.2.0RC1</release>
-		<api>3.2.0</api>
+		<release>3.3.0RC1</release>
+		<api>3.3.0</api>
 	</version>
 	<stability>
 		<release>beta</release>
