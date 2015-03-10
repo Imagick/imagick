@@ -7986,7 +7986,7 @@ PHP_METHOD(imagick, setimagecompose)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::getImageCompression()
+/* {{{ proto int Imagick::getImageCompression()
         Gets the image compression type
 */
 PHP_METHOD(imagick, getimagecompression)
