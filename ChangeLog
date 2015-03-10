@@ -19,7 +19,7 @@
   * Imagick::selectiveBlurImage()
   * Imagick::setImageBiasQuantum()
   * Imagick::setProgressMonitor()
-  * Imagick::setRegistry() 
+  * Imagick::setRegistry() - which allows setting the "temporary-path" used by ImageMagick
   * Imagick::statisticImage()
   * Imagick::subImageMatch()
   * ImagickPixel::getColorQuantum()
@@ -30,7 +30,6 @@
   * Imagick::ALPHACHANNEL_BACKGROUND
   * Imagick::FUNCTION_ARCSIN
   * Imagick::FUNCTION_ARCTAN
-- Added spec to build rpm
 - Fixed Imagick::clutImage() parameter parsing
 - Fixed tint image bug
 - Fixed ImageMagick compiled with HDRI having quantum values as floats
@@ -43,9 +42,6 @@
   * Imagick::getSamplingFactors()
   * Imagick::identifyImage()
   * Imagick::tintImage
-- Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator()
-- Fixed compilation to look for headers in the user specified location first
-- Fixed compilation error
 - Fixed segfault when compiling statically
 - ImagickDraw::setFontFamily no longer checks whether the font is available. This allows a 
   font family to be set where the family name is not the same as the font name. However it also
@@ -72,6 +68,11 @@
     This is replaced by $im = $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN)
   * Imagick::getImageChannelExtrema()
   * Imagick::getImageExtrema()
+- Ini file changes
+  * Added imagick.skip_version_check. Imagick now checks that it was compiled against the same version of
+  ImageMagick that it is being run with, and will give a warning if it was compiled against a different
+  version of ImageMagick. The skip_version_check setting allows you to suppress this warning. However
+  it is strongly recommended to use the version of ImageMagick that Imagick was compiled against.
 - Misc:
   * CI now compiles with CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"
 
