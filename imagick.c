@@ -1398,6 +1398,10 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setantialias_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, antialias)
+	ZEND_END_ARG_INFO()
+
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
@@ -2574,7 +2578,8 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, morphology, imagick_morphology_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, filter, imagick_filter_args, ZEND_ACC_PUBLIC)
 #endif
-
+	PHP_ME(imagick, setantialias, imagick_setantialias_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getantialias, imagick_zero_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 

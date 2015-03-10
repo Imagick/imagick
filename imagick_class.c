@@ -11580,4 +11580,54 @@ PHP_METHOD(imagick, filter)
 #endif
 
 
+/* {{{ proto int Imagick::setAntiAlias(bool antialias)
+	Set whether antialiasing should be used for operations. On by default.
+*/
+PHP_METHOD(imagick, setantialias)
+{
+	php_imagick_object *intern;
+	zend_bool antialias;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	status = MagickSetAntialias(intern->magick_wand, antialias);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setAntiAlias" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto int Imagick::getAntiAlias()
+	get whether antialiasing would be used for operations.
+*/
+PHP_METHOD(imagick, getantialias)
+{
+	php_imagick_object *intern;
+	MagickBooleanType antialias;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	antialias = MagickGetAntialias(intern->magick_wand);
+
+	if (antialias == MagickTrue) {
+		RETURN_TRUE;
+	} else {
+		RETURN_FALSE;
+	}
+}
+/* }}} */
+
+
 /* end of Imagick */

@@ -638,6 +638,8 @@ PHP_METHOD(imagick, getregistry);
 PHP_METHOD(imagick, listregistry);
 PHP_METHOD(imagick, morphology);
 PHP_METHOD(imagick, filter);
+PHP_METHOD(imagick, setantialias);
+PHP_METHOD(imagick, getantialias);
 
 
 /* Forward declarations (ImagickDraw) */
