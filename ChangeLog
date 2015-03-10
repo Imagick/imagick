@@ -47,6 +47,10 @@
 - Fixed compilation to look for headers in the user specified location first
 - Fixed compilation error
 - Fixed segfault when compiling statically
+- ImagickDraw::setFontFamily no longer checks whether the font is available. This allows a 
+  font family to be set where the family name is not the same as the font name. However it also
+  means an invalid family name can be set, leading to the default font being used, instead of an
+  exception being thrown. See https://github.com/mkoppanen/imagick/issues/77
 - Removed Zend MM support
 - Excluded deprecated methods:
   * Imagick::getImageMatte()

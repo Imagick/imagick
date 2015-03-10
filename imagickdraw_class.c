@@ -581,11 +581,6 @@ PHP_METHOD(imagickdraw, setfontfamily)
 		return;
 	}
 
-	if (!php_imagick_check_font(font_family, font_family_len TSRMLS_CC )) {
-		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Unable to set font family; parameter not found in the list of configured fonts" TSRMLS_CC);
-		return;
-	}
-
 	internd = (php_imagickdraw_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 	status = DrawSetFontFamily(internd->drawing_wand, font_family);
 
