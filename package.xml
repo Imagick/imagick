@@ -38,7 +38,84 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fix bug #66098: Segfault in zval_addref_p
+    - Added ImagickKernel class. These can be used with the Imagick::morphology or
+    Imagick::filter functions.
+    - Added methods:
+    * Imagick::brightnessContrastImage()
+    * Imagick::colorMatrixImage()
+    * Imagick::deleteImageProperty()
+    * Imagick::filter()
+    * Imagick::forwardFourierTransformImage()
+    * Imagick::getAntiAlias()
+    * Imagick::getImageCompression()
+    * Imagick::getRegistry()
+    * Imagick::getQuantum()
+    * Imagick::identifyFormat()
+    * Imagick::inverseFourierTransformImage()
+    * Imagick::isPixelSimilarQuantum()
+    * Imagick::listRegistry()
+    * Imagick::morphology()
+    * Imagick::rotationalBlurImage()
+    * Imagick::selectiveBlurImage()
+    * Imagick::setAntiAlias()
+    * Imagick::setImageBiasQuantum()
+    * Imagick::setProgressMonitor()
+    * Imagick::setRegistry() - which allows setting the "temporary-path" used by ImageMagick
+    * Imagick::statisticImage()
+    * Imagick::subImageMatch()
+    * ImagickPixel::getColorQuantum()
+    - Added constants:
+    * Imagick::RESOURCETYPE_TIME
+    * Imagick::RESOURCETYPE_THROTTLE
+    * Imagick::CHANNEL_RGBA
+    * Imagick::ALPHACHANNEL_BACKGROUND
+    * Imagick::FUNCTION_ARCSIN
+    * Imagick::FUNCTION_ARCTAN
+    - Fixed Imagick::clutImage() parameter parsing
+    - Fixed tint image bug
+    - Fixed ImageMagick compiled with HDRI having quantum values as floats
+    - Fixed memory leaks in:
+    * Imagick::getImageBlob()
+    * Imagick::getImagesBlob()
+    * Imagick::getImageChannelStatistics()
+    * Imagick::getImageFormat()
+    * Imagick::getImageMimetype()
+    * Imagick::getSamplingFactors()
+    * Imagick::identifyImage()
+    * Imagick::tintImage
+    - Fixed segfault when compiling statically
+    - ImagickDraw::setFontFamily no longer checks whether the font is available. This allows a
+    font family to be set where the family name is not the same as the font name. However it also
+    means an invalid family name can be set, leading to the default font being used, instead of an
+    exception being thrown. See https://github.com/mkoppanen/imagick/issues/77
+    - Removed Zend MM support
+    - Excluded deprecated methods:
+    * Imagick::getImageMatte()
+    * Imagick::colorFloodfillImage()
+    * Imagick::matteFloodfillImage()
+    * Imagick::paintFloodfillImage()
+    * Imagick::paintOpaqueImage()
+    * Imagick::paintTransparentImage()
+    * Imagick::mapImage()
+    * Imagick::recolorImage()
+    * Imagick::setImageIndex()
+    * Imagick::getImageIndex()
+    * Imagick::getImageSize()
+    * Imagick::setImageAttribute()
+    * Imagick::getImageAttribute()
+    * Imagick::mosaicImages()
+    * Imagick::averageImages()
+    * Imagick::flattenImages()
+    This is replaced by $im = $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN)
+    * Imagick::getImageChannelExtrema()
+    * Imagick::getImageExtrema()
+    - Ini file changes
+    * Added imagick.skip_version_check. Imagick now checks that it was compiled against the same version of
+    ImageMagick that it is being run with, and will give a warning if it was compiled against a different
+    version of ImageMagick. The skip_version_check setting allows you to suppress this warning. However
+    it is strongly recommended to use the version of ImageMagick that Imagick was compiled against.
+    - Misc:
+    * CI now compiles with CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"
 </notes>
 	<contents>
 		<dir name="/">

@@ -7,6 +7,7 @@
   * Imagick::deleteImageProperty()
   * Imagick::filter()
   * Imagick::forwardFourierTransformImage()
+  * Imagick::getAntiAlias()
   * Imagick::getImageCompression()
   * Imagick::getRegistry()
   * Imagick::getQuantum()
@@ -17,6 +18,7 @@
   * Imagick::morphology()
   * Imagick::rotationalBlurImage()
   * Imagick::selectiveBlurImage()
+  * Imagick::setAntiAlias()
   * Imagick::setImageBiasQuantum()
   * Imagick::setProgressMonitor()
   * Imagick::setRegistry() - which allows setting the "temporary-path" used by ImageMagick
