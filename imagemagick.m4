@@ -9,6 +9,7 @@
 #  IM_IMAGEMAGICK_PREFIX
 #  IM_IMAGEMAGICK_VERSION
 #  IM_IMAGEMAGICK_VERSION_MASK
+#  IM_USE_PKG_CONFIG
 #
 # Usage:
 #   IM_FIND_IMAGEMAGICK (MINIMUM_VERSION, EXTRA_SEARCH_PREFIX)
@@ -110,8 +111,14 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
     done
   fi
 
+  IM_USE_PKG_CONFIG=0
   if test "x" = "x$IM_WAND_BINARY"; then
-    AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
+    if eval '$PKG_CONFIG --exists MagickWand'; then
+      IM_USE_PKG_CONFIG=1
+      IM_WAND_BINARY=$PKG_CONFIG
+    else
+      AC_MSG_ERROR(not found. Please provide a path to MagickWand-config or Wand-config program.)
+    fi
   fi
   AC_MSG_RESULT([found in $IM_WAND_BINARY])
 
@@ -120,7 +127,11 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   
 # Check version
 #
-  IM_IMAGEMAGICK_VERSION=`$IM_WAND_BINARY --version`
+  if test "$IM_USE_PKG_CONFIG" = "1"; then
+    IM_IMAGEMAGICK_VERSION=`$IM_WAND_BINARY --modversion MagickWand`
+  else
+    IM_IMAGEMAGICK_VERSION=`$IM_WAND_BINARY --version`
+  fi
   IM_IMAGEMAGICK_VERSION_MASK=`echo $IM_IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
 
   IM_MIMIMUM_VERSION_MASK=`echo $IM_MINIMUM_VERSION | $AWK 'BEGIN { FS = "."; } { printf "%d", ($[1] * 1000 + $[2]) * 1000 + $[3];}'`
@@ -140,7 +151,11 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
 
   AC_MSG_CHECKING(for MagickWand.h or magick-wand.h header)
 
-  IM_PREFIX=`$IM_WAND_BINARY --prefix`
+  if test "$IM_USE_PKG_CONFIG" = "1"; then
+    IM_PREFIX=`$IM_WAND_BINARY --variable prefix MagickWand`
+  else
+    IM_PREFIX=`$IM_WAND_BINARY --prefix`
+  fi
   IM_MAJOR_VERSION=`echo $IM_IMAGEMAGICK_VERSION | $AWK 'BEGIN { FS = "."; } {print $[1]}'`
 
   # Try the header formats from newest to oldest
@@ -191,15 +206,20 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
 #
 # The cflags and libs
 #
-  IM_IMAGEMAGICK_LIBS=`$IM_WAND_BINARY --libs`
-  IM_IMAGEMAGICK_CFLAGS=`$IM_WAND_BINARY --cflags`
-
+  if test "$IM_USE_PKG_CONFIG" = "1"; then
+    IM_IMAGEMAGICK_LIBS=`$IM_WAND_BINARY --libs MagickWand`
+    IM_IMAGEMAGICK_CFLAGS=`$IM_WAND_BINARY --cflags MagickWand`
+  else
+    IM_IMAGEMAGICK_LIBS=`$IM_WAND_BINARY --libs`
+    IM_IMAGEMAGICK_CFLAGS=`$IM_WAND_BINARY --cflags`
+  fi
   export IM_IMAGEMAGICK_PREFIX
   export IM_WAND_BINARY
   export IM_IMAGEMAGICK_VERSION
   export IM_IMAGEMAGICK_VERSION_MASK
   export IM_INCLUDE_FORMAT
   export IM_HEADER_STYLE
+  export IM_USE_PKG_CONFIG
 
   export IM_IMAGEMAGICK_LIBS
   export IM_IMAGEMAGICK_CFLAGS
