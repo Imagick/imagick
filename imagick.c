@@ -1406,6 +1406,10 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setantialias_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, antialias)
+	ZEND_END_ARG_INFO()
+
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
@@ -2582,7 +2586,8 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, morphology, imagick_morphology_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, filter, imagick_filter_args, ZEND_ACC_PUBLIC)
 #endif
-
+	PHP_ME(imagick, setantialias, imagick_setantialias_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getantialias, imagick_zero_args, ZEND_ACC_PUBLIC)
 	{ NULL, NULL, NULL }
 };
 
@@ -3000,6 +3005,7 @@ static zend_object_value php_imagickkernel_object_new(zend_class_entry *class_ty
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY("imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals)
+	STD_PHP_INI_ENTRY("imagick.skip_version_check", "0", PHP_INI_ALL, OnUpdateBool, skip_version_check, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.progress_monitor", "0", PHP_INI_SYSTEM, OnUpdateBool, progress_monitor, zend_imagick_globals, imagick_globals)
 PHP_INI_END()
 
@@ -3007,6 +3013,7 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 {
 	imagick_globals->locale_fix = 0;
 	imagick_globals->progress_monitor = 0;
+	imagick_globals->skip_version_check = 0;
 }
 
 static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{{ */
@@ -3294,7 +3301,7 @@ static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr T
 #endif
 
 
-static int checkImagickVersion()
+static void checkImagickVersion()
 {
 	//This gets the version that Imagick was compiled against.
 	size_t imagickVersion = MagickLibVersion;
@@ -3305,36 +3312,20 @@ static int checkImagickVersion()
 	GetMagickVersion(&imageMagickLibraryVersion);
 
 	if (imagickVersion == imageMagickLibraryVersion) {
-		return SUCCESS;
-	}
-
-	if ((imagickVersion & imageMagickLibraryVersion & 0xfff0) != 0) {
-		zend_error(
-			E_WARNING,
-			"Version warning: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will run but may behave surprisingly.",
-			(unsigned long)imagickVersion,
-			(unsigned long)imageMagickLibraryVersion
-		);
-		return SUCCESS;
+		return;
 	}
 
 	zend_error(
-		E_ERROR,
-		"Version error: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will not run.",
-		(long)imagickVersion,
-		(long)imageMagickLibraryVersion
+		E_WARNING,
+		"Version warning: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will run but may behave surprisingly",
+		(unsigned long)imagickVersion,
+		(unsigned long)imageMagickLibraryVersion
 	);
-
-	return FAILURE;
 }
 
 PHP_MINIT_FUNCTION(imagick)
 {
 	zend_class_entry ce;
-
-	if (checkImagickVersion() != SUCCESS) {
-		return FAILURE;
-	}
 
 	/* Initialize globals */
 	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
@@ -3494,6 +3485,11 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	REGISTER_INI_ENTRIES();
+
+	if (!IMAGICK_G(skip_version_check)) {
+		checkImagickVersion();
+	}
+
 	return SUCCESS;
 }
 

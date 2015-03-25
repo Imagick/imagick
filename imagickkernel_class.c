@@ -185,13 +185,10 @@ static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
 #define MATRIX_ORIGIN_REQUIRED "For kernels with even numbered rows or columns, the origin position must be specified."
 
 /* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array matrix, [array origin])
-	Returns a new Kernel from a 2d array of values. The matrix should contain: 
-	i) float values where the kernel element should be used 
-	ii) false where the element should be skipped
-	Each row should have the same number of columns.
-	For matrixes with odd number of rows and columns the second parameter can 
-	be skipped - the origin will default to the centre of the matrix. For other
-	matrixes or if desired the origin co-ordinate can be specified.
+	Create a kernel from an 2d matrix of values. Each value should either be a float 
+	(if the element should be used) or 'false' if the element should be skipped. For 
+	matrixes that are odd sizes in both dimensions the the origin pixel will default 
+	to the centre of the kernel. For all other kernel sizes the origin pixel must be specified.
 */
 #ifdef ZEND_ENGINE_3
 PHP_METHOD(imagickkernel, frommatrix)
@@ -546,6 +543,8 @@ static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags,
 }
 
 /* {{{ proto ImagickKernel ImagickKernel::fromBuiltin(type, string)
+ Create a kernel from a builtin in kernel. See http://www.imagemagick.org/Usage/morphology/#kernel for examples. Currently the 'rotation' symbols are not supported. Example:
+ $diamondKernel = ImagickKernel::fromBuiltIn(\Imagick::KERNEL_DIAMOND, "2");
 */
 PHP_METHOD(imagickkernel, frombuiltin)
 {
@@ -572,7 +571,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 
 
 /* {{{ proto void ImagickKernel::addKernel(ImagickKernel kernel)
-    Attach a kernel to another kernel. Returns the new combined kernel 
+	Attach another kernel to this kernel to allow them to both be applied in a single morphology or filter function. Returns the new combined kernel.
 */
 PHP_METHOD(imagickkernel, addkernel)
 {
@@ -610,7 +609,7 @@ PHP_METHOD(imagickkernel, addkernel)
 
 
 /* {{{ proto ImagickKernel[] ImagickKernel::separate(void)
-	Separate a linked set of kernels into individual kernels
+	Separates a linked set of kernels and returns an array of ImagickKernels.
 */
 PHP_METHOD(imagickkernel, separate)
 {
@@ -665,8 +664,8 @@ PHP_METHOD(imagickkernel, separate)
 
 
 /* {{{ proto [] ImagickKernel::getMatrix(void)
-	Return the values used in the kernel. The array contains floats
-	for the elements used and false for the elements not used.
+	Get the 2d matrix of values used in this kernel. The elements are either 
+	float for elements that are used or 'false' if the element should be skipped.
 */
 PHP_METHOD(imagickkernel, getmatrix)
 {
@@ -690,7 +689,14 @@ PHP_METHOD(imagickkernel, getmatrix)
 
 
 /* {{{ proto [] ImagickKernel::scale(float scaling_factor[, int NORMALIZE_KERNEL_FLAG])
-	 Adds a given amount of the 'Unity' Convolution Kernel to the given pre-scaled and normalized Kernel. This in effect adds that amount of the original image into the resulting convolution kernel. The resulting effect is to convert the defined kernels into blended soft-blurs, unsharp kernels or into sharpening kernels.
+	ScaleKernelInfo() scales the given kernel list by the given amount, with or without 
+	normalization of the sum of the kernel values (as per given flags).
+
+	The exact behaviour of this function depends on the normalization type being used 
+	please see http://www.imagemagick.org/api/morphology.php#ScaleKernelInfo for details.
+
+	Flag should be one of NORMALIZE_KERNEL_VALUE, NORMALIZE_KERNEL_CORRELATE, 
+	NORMALIZE_KERNEL_PERCENT or not set.
 */
 PHP_METHOD(imagickkernel, scale)
 {
@@ -713,7 +719,10 @@ PHP_METHOD(imagickkernel, scale)
 
 
 /* {{{ proto [] ImagickKernel::addUnityKernel(float scale)
-	 Adds a given amount of the 'Unity' Convolution Kernel to the given pre-scaled and normalized Kernel. This in effect adds that amount of the original image into the resulting convolution kernel. The resulting effect is to convert the defined kernels into blended soft-blurs, unsharp kernels or into sharpening kernels.
+	Adds a given amount of the 'Unity' Convolution Kernel to the given pre-scaled
+	and normalized Kernel. This in effect adds that amount of the original image 
+	into the resulting convolution kernel. The resulting effect is to convert the
+	defined kernels into blended soft-blurs, unsharp kernels or into sharpening kernels.
 */
 PHP_METHOD(imagickkernel, addunitykernel)
 {

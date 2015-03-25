@@ -61,6 +61,7 @@ typedef struct _php_imagick_callback {
 ZEND_BEGIN_MODULE_GLOBALS(imagick)
 	zend_bool locale_fix;
 	zend_bool progress_monitor;
+	zend_bool skip_version_check;
 	php_imagick_callback *progress_callback;
 #ifdef PHP_IMAGICK_ZEND_MM
 	MagickWand *keep_alive;
@@ -800,6 +801,8 @@ PHP_METHOD(imagick, getregistry);
 PHP_METHOD(imagick, listregistry);
 PHP_METHOD(imagick, morphology);
 PHP_METHOD(imagick, filter);
+PHP_METHOD(imagick, setantialias);
+PHP_METHOD(imagick, getantialias);
 
 
 /* Forward declarations (ImagickDraw) */

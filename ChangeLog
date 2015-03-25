@@ -1,25 +1,29 @@
-3.3.0
+3.3.0RC1
 - Added ImagickKernel class. These can be used with the Imagick::morphology or 
     Imagick::filter functions.
 - Added methods:
-  * Imagick::morphology()
-  * Imagick::setRegistry()
-  * Imagick::getRegistry()
-  * Imagick::listRegistry()
-  * Imagick::setImageBiasQuantum()
-  * Imagick::identifyFormat()
-  * Imagick::deleteImageProperty()
-  * Imagick::isPixelSimilarQuantum()
-  * Imagick::getImageCompression()
-  * Imagick::setProgressMonitor()
-  * Imagick::subImageMatch() 
-  * Imagick::rotationalBlurImage()
-  * Imagick::statisticImage()
   * Imagick::brightnessContrastImage()
   * Imagick::colorMatrixImage()
-  * Imagick::selectiveBlurImage()
+  * Imagick::deleteImageProperty()
+  * Imagick::filter()
   * Imagick::forwardFourierTransformImage()
+  * Imagick::getAntiAlias()
+  * Imagick::getImageCompression()
+  * Imagick::getRegistry()
+  * Imagick::getQuantum()
+  * Imagick::identifyFormat()
   * Imagick::inverseFourierTransformImage()
+  * Imagick::isPixelSimilarQuantum()
+  * Imagick::listRegistry()
+  * Imagick::morphology()
+  * Imagick::rotationalBlurImage()
+  * Imagick::selectiveBlurImage()
+  * Imagick::setAntiAlias()
+  * Imagick::setImageBiasQuantum()
+  * Imagick::setProgressMonitor()
+  * Imagick::setRegistry() - which allows setting the "temporary-path" used by ImageMagick
+  * Imagick::statisticImage()
+  * Imagick::subImageMatch()
   * ImagickPixel::getColorQuantum()
 - Added constants:
   * Imagick::RESOURCETYPE_TIME
@@ -28,22 +32,23 @@
   * Imagick::ALPHACHANNEL_BACKGROUND
   * Imagick::FUNCTION_ARCSIN
   * Imagick::FUNCTION_ARCTAN
-- Added spec to build rpm
 - Fixed Imagick::clutImage() parameter parsing
 - Fixed tint image bug
 - Fixed ImageMagick compiled with HDRI having quantum values as floats
-- Fixed potential memory leaks in:
-  * Imagick::identifyImage()
-  * Imagick::getImageChannelStatistics()
-  * Imagick::getSamplingFactors()
+- Fixed memory leaks in:
   * Imagick::getImageBlob()
   * Imagick::getImagesBlob()
+  * Imagick::getImageChannelStatistics()
   * Imagick::getImageFormat()
   * Imagick::getImageMimetype()
-- Fixed wrong type_spec in ImagickPixelIterator::getPixelRegionIterator()
-- Fixed compilation to look for headers in the user specified location first
-- Fixed compilation error
+  * Imagick::getSamplingFactors()
+  * Imagick::identifyImage()
+  * Imagick::tintImage
 - Fixed segfault when compiling statically
+- ImagickDraw::setFontFamily no longer checks whether the font is available. This allows a 
+  font family to be set where the family name is not the same as the font name. However it also
+  means an invalid family name can be set, leading to the default font being used, instead of an
+  exception being thrown. See https://github.com/mkoppanen/imagick/issues/77
 - Removed Zend MM support
 - Excluded deprecated methods:
   * Imagick::getImageMatte()
@@ -61,9 +66,15 @@
   * Imagick::getImageAttribute()
   * Imagick::mosaicImages()
   * Imagick::averageImages()
-  * Imagick::flattenImages()
+  * Imagick::flattenImages() 
+    This is replaced by $im = $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN)
   * Imagick::getImageChannelExtrema()
   * Imagick::getImageExtrema()
+- Ini file changes
+  * Added imagick.skip_version_check. Imagick now checks that it was compiled against the same version of
+  ImageMagick that it is being run with, and will give a warning if it was compiled against a different
+  version of ImageMagick. The skip_version_check setting allows you to suppress this warning. However
+  it is strongly recommended to use the version of ImageMagick that Imagick was compiled against.
 - Misc:
   * CI now compiles with CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror"
 

@@ -3,13 +3,28 @@
 Imagick
 -------
 
-ImageMagick extension for PHP.
+Imagick is a PHP extension to create and modify images using the ImageMagick library. There is also a version of Imagick available for HHVM. Although the two extensions are mostly compatible in their API, and they both call the ImageMagick library, the two extensions are completely separate code-bases.
+
+PHP Imagick
+    Source code + issues - https://github.com/mkoppanen/imagick
+    Releases - http://pecl.php.net/package/imagick
+    Documentation - http://php.net/manual/en/book.imagick.php
+    
+Bugs can also be reported at https://bugs.php.net but may have a slower response time.
+
+HHVM Imagick - https://github.com/facebook/hhvm/tree/master/hphp/runtime/ext/imagick
 
 
 Examples
 --------
 
 Almost all of the functions in the library have an example at [www.phpimagick.com](http://www.phpimagick.com/), where you can see the example code to call the function, as well as the generated image or output.
+
+
+ImageMagick 
+------------
+
+ImageMagick, the library that the Imagick extension exposes to PHP has had many bug fixes, that have fixed many image corruption issues. We _strongly_ recommend upgrading to the latest version (currently 6.9.1) if at all possible.
 
 
 Security
