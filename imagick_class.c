@@ -11849,7 +11849,7 @@ PHP_METHOD(imagick, setantialias)
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
 	status = MagickSetAntialias(intern->magick_wand, antialias);
 
 	if (status == MagickFalse) {
@@ -11873,7 +11873,7 @@ PHP_METHOD(imagick, getantialias)
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
 	antialias = MagickGetAntialias(intern->magick_wand);
 
 	if (antialias == MagickTrue) {
