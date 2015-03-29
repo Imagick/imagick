@@ -59,7 +59,7 @@ if (in_array($mimeType, $allowedMimeTypes) == false) {
 }
 ```
 
-These recommendations do not guarantee any security, but they should limit your exposure to any ImageMagick related security issue.
+These recommendations do not guarantee any security, but they should limit your exposure to any Imagick/ImageMagick related security issue.
 
 
 OpenMP
