@@ -15,19 +15,19 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 		<email>mkoppanen@php.net</email>
 		<active>yes</active>
 	</lead>
-    <developer>
+    <lead>
         <name>Dan Ackroyd</name>
         <user>danack</user>
-        <email>danack@basereality.com</email>
+        <email>danack@php.net</email>
         <active>yes</active>
-    </developer>
+    </lead>
 	<lead>
 		<name>Scott MacVicar</name>
 		<user>scottmac</user>
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2013-11-25</date>
+	<date>2015-03-29</date>
 	<version>
 		<release>3.3.0RC1</release>
 		<api>3.3.0</api>
