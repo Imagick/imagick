@@ -190,7 +190,11 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct 
 	IMAGICK_INIT_ERROR_HANDLING;
 	IMAGICK_SET_ERROR_HANDLING_THROW;
 
+#ifdef ZEND_ENGINE_3
+	stream = php_stream_open_wrapper(file->filename, "rb", (IGNORE_PATH) & ~REPORT_ERRORS, NULL);
+#else
 	stream = php_stream_open_wrapper(file->filename, "rb", (ENFORCE_SAFE_MODE|IGNORE_PATH) & ~REPORT_ERRORS, NULL);
+#endif
 
 	if (!stream) {
 		return IMAGICK_RW_UNDERLYING_LIBRARY;
