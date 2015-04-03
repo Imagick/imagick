@@ -2099,7 +2099,7 @@ static zend_function_entry php_imagickpixel_class_methods[] =
 #if MagickLibVersion > 0x628
 	PHP_ME(imagickpixel, gethsl, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, sethsl, imagickpixel_sethsl_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickpixel, getcolorvaluequantum, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickpixel, getcolorvaluequantum, imagickpixel_getcolorvalue_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorvaluequantum, imagickpixel_setcolorvaluequantum_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, getindex, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setindex, imagickpixel_setindex_args, ZEND_ACC_PUBLIC)
