@@ -11500,7 +11500,7 @@ PHP_METHOD(imagick, listregistry)
 
 #if MagickLibVersion >= 0x680
 /* {{{ proto bool Imagick::morphology(int morphologyMethod, int iterations, kernel, [int CHANNEL]  )
-	Applies a user supplied kernel to the image according to the given mophology method.
+	Applies a user supplied kernel to the image according to the given morphology method.
 	iterations - A value of -1 means loop until no change found. How this is applied may depend on the morphology method. Typically this is a value of 1.
 */
 PHP_METHOD(imagick, morphology)
