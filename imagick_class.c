@@ -11633,18 +11633,16 @@ PHP_METHOD(imagick, subimagematch)
 	//http://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zvals/
 	MagickWand *new_wand;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|zz", &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity) == FAILURE) {
+#ifdef ZEND_ENGINE_3
+	char *param_string = "O|z/z/";
+#else
+	char *param_string = "O|zz";
+#endif
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, param_string, &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity) == FAILURE) {
 		return;
 	}
 	reference_intern = Z_IMAGICK_P(reference_obj);
-
-//	if (zSimilarity) {
-//		// check for parameter being passed by reference - is there _ANY_ point to this?
-//		if (!Z_ISREF_P(zSimilarity)) {
-//			zend_error(E_WARNING, "Parameter similarity wasn't passed by reference");
-//			RETURN_NULL();
-//		}
-//    }
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
