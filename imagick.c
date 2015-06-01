@@ -3225,7 +3225,10 @@ PHP_MINFO_FUNCTION(imagick)
 #else
 	php_info_print_table_row(2, "imagick classes", "Imagick, ImagickDraw, ImagickPixel, ImagickPixelIterator");
 #endif
-	php_info_print_table_row(2, "ImageMagick version", MagickGetVersion(&version_number));
+#ifdef MagickVersion
+	php_info_print_table_row(2, "Imagick compiled with ImageMagick version", MagickVersion);
+#endif
+	php_info_print_table_row(2, "Imagick using ImageMagick library version", MagickGetVersion(&version_number));
 	php_info_print_table_row(2, "ImageMagick copyright", MagickGetCopyright());
 	php_info_print_table_row(2, "ImageMagick release date", MagickGetReleaseDate());
 	php_info_print_table_row(2, "ImageMagick number of supported formats: ", buffer);
