@@ -80,5 +80,6 @@ We recommend doing one of the following:
 TODO
 ----
 
-Documentation needs a lot of work. There is an online editor here: [https://edit.php.net/](https://edit.php.net/)
-Contributions are more than welcome.
+Documentation needs a lot of work. There is an online editor here: [https://edit.php.net/](https://edit.php.net/) Contributions are more than welcome.
+
+Please refer to http://upstream-tracker.org/versions/imagemagick.html for exact version changes of the underlying ImageMagick library.
