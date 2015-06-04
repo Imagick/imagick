@@ -196,7 +196,8 @@ PHP_METHOD(imagickpixeliterator, setiteratorlastrow)
 /* }}} */
 
 /* {{{ proto ImagickPixelIterator ImagickPixelIterator::getPixelIterator(Imagick source)
-	Returns a new pixel iterator, static method
+	Returns a new pixel iterator, static method. This is equivalent to Imagick::getPixelIterator
+	which probably ought to be used in preference to this method.
 */
 PHP_METHOD(imagickpixeliterator, getpixeliterator)
 {
@@ -279,7 +280,8 @@ PHP_METHOD(imagickpixeliterator, newpixeliterator)
 /* }}} */
 
 /* {{{ proto ImagickPixelIterator ImagickPixelIterator::getPixelRegionIterator(Imagick source, int x, int y, int columns, int rows)
-	Returns a new pixel region iterator, static method
+	Returns a new pixel region iterator, static method. This is equivalent to the non-static
+	Imagick::getPixelRegionIterator which ought to be used in preference to this method.
 */
 PHP_METHOD(imagickpixeliterator, getpixelregioniterator)
 {
