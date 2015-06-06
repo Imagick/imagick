@@ -7142,12 +7142,17 @@ zend_bool s_crop_thumbnail_image(MagickWand *magick_wand, long desired_width, lo
 	ratio_x = ((double) desired_width / (double) orig_width);
 	ratio_y = ((double) desired_height / (double) orig_height);
 
-	if (ratio_x > ratio_y) {
+	if (desired_width == desired_height) {
 		new_width  = desired_width;
-		new_height = ceil(ratio_x * (double)orig_height);
+		new_height = desired_height;
+	} else if (ratio_x > ratio_y) {
+		new_width  = desired_width;
+		//TODO - this should be round() when we target C99
+		new_height = ratio_x * (double)orig_height;
 	} else {
 		new_height = desired_height;
-		new_width  = ceil(ratio_y * (double)orig_width);
+		//TODO - this should be round() when we target C99
+		new_width  = ratio_y * (double)orig_width;
 	}
 
 	if (MagickThumbnailImage(magick_wand, new_width, new_height) == MagickFalse) {
