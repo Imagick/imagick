@@ -1029,6 +1029,8 @@ PHP_METHOD(imagickdraw, arc)
 }
 /* }}} */
 
+
+#if MagickLibVersion < 0x700
 /* {{{ proto bool ImagickDraw::matte(float x, float y, int paintMethod)
 	Paints on the image's opacity channel in order to set effected pixels to transparent. to influence the opacity of pixels. The available paint methods are:
 */
@@ -1049,6 +1051,38 @@ PHP_METHOD(imagickdraw, matte)
 	RETURN_TRUE;
 }
 /* }}} */
+
+#else
+
+/* {{{ proto bool ImagickDraw::matte(float x, float y, int paintMethod)
+	Paints on the image's alpha channel in order to set effected pixels to transparent. to influence the alpha of pixels. The available paint methods are:
+    PointMethod: Select the target pixel
+    ReplaceMethod: Select any pixel that matches the target pixel.
+    FloodfillMethod: Select the target pixel and matching neighbors.
+    FillToBorderMethod: Select the target pixel and neighbors not matching
+border color.
+    ResetMethod: Select all pixels.
+*/
+PHP_METHOD(imagickdraw, alpha)
+{
+	double x, y;
+	php_imagickdraw_object *internd;
+	long paint_method;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method) == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());;
+
+	DrawAlpha(internd->drawing_wand, x, y, paint_method);
+	RETURN_TRUE;
+}
+/* }}} */
+
+#endif
+
 
 /* {{{ proto bool ImagickDraw::polygon(array coordinates)
 	Draws a polygon using the current stroke, stroke width, and fill color or texture, using the specified array of coordinates.

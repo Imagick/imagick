@@ -3,7 +3,7 @@ Test Imagick, setOption
 --SKIPIF--
 <?php
 //Double-free issue in ImageMagick makes test un-runnable before 690
-$imageMagickRequiredVersion=690;
+$imageMagickRequiredVersion=0x690;
 require_once(dirname(__FILE__) . '/skipif.inc'); 
 ?>
 --FILE--

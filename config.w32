@@ -8,7 +8,7 @@ if (PHP_IMAGICK != "no") {
 			)
 	{
 		ADD_FLAG("CFLAGS_IMAGICK", "/D IMAGICK_USE_NEW_HEADER /D _MAGICKMOD_ /D _VISUALC_ /D NeedFunctionPrototypes /D _LIB");
-		EXTENSION('imagick', 'imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_file.c imagick.c imagickkernel_class.c');
+		EXTENSION('imagick', 'imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick_file.c imagick.c imagickkernel_class.c shim_im6_to_im7.c');
 		AC_DEFINE('HAVE_IMAGICK', 1);
 		AC_DEFINE('IMAGICK_EXPORTS', 1);
 	} else {

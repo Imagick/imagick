@@ -148,7 +148,14 @@ static KernelInfo *imagick_createKernel(double *values, size_t width, size_t hei
 {
 	KernelInfo *kernel_info;
 
+#if MagickLibVersion >= 0x700
+	int i;
+	ExceptionInfo *exception_info = NULL;
+	//TODO - inspect exception info
+	kernel_info=AcquireKernelInfo(NULL, exception_info);
+#else
 	kernel_info=AcquireKernelInfo(NULL);
+#endif
 	if (kernel_info == (KernelInfo *) NULL) {
 		return NULL;
 	}
@@ -164,7 +171,19 @@ static KernelInfo *imagick_createKernel(double *values, size_t width, size_t hei
 		RelinquishAlignedMemory(kernel_info->values);
 	}
 
+#if MagickLibVersion >= 0x700
+	kernel_info->values = (MagickRealType *)AcquireAlignedMemory(width*height, sizeof(MagickRealType));
+
+	for (i=0; i<width*height;i++) {
+		kernel_info->values[i] = (MagickRealType)values[i];
+	}
+	
+#else
 	kernel_info->values = values;
+#endif
+
+
+	
 	im_CalcKernelMetaData(kernel_info);
 
 	return kernel_info;
@@ -561,7 +580,15 @@ PHP_METHOD(imagickkernel, frombuiltin)
 
 	flags = ParseGeometry(string, &geometry_info);
 	imagick_fiddle_with_geometry_info(kernel_type, flags, &geometry_info);
+	
+#if MagickLibVersion >= 0x700
+
+	ExceptionInfo *exception_info = NULL;
+	//TODO - inspect exception info
+	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info, exception_info);
+#else
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info);
+#endif
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
 	return;

@@ -1,7 +1,11 @@
 --TEST--
 Test ImagickDraw, matte
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+checkClassMethods('ImagickDraw', array('matte'));
+?>
+
 --FILE--
 <?php
 

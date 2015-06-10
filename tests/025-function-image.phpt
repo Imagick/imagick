@@ -1,7 +1,10 @@
 --TEST--
 Test functionimage
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc');
+<?php
+$imageMagickBelowVersion = 0x700;
+require_once(dirname(__FILE__) . '/skipif.inc');
+
 ?>
 --FILE--
 <?php

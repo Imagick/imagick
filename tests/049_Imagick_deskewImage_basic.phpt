@@ -2,7 +2,7 @@
 Test Imagick, deskewImage
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=675;
+$imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--

@@ -1,7 +1,10 @@
 --TEST--
 Test Imagick, setImageBias
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+    require_once(dirname(__FILE__) . '/skipif.inc'); 
+    checkClassMethods('Imagick', array('setImageBias'));
+?>
 --FILE--
 <?php
 

@@ -782,7 +782,13 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 			if (!pixel_wand) {
 				zend_error(E_ERROR, "Failed to allocate PixelWand structure");
 			}
+#if MagickLibVersion >= 0x700
+			//TOOD - this should be one minus? Or should we just make a BC break
+			// and make users do it in user land?
+			PixelSetAlpha(pixel_wand, Z_DVAL_P(param));
+#else
 			PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
+#endif
 			*allocated = 1;
 		}
 		break;
@@ -931,7 +937,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_DEFAULT", OverCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_UNDEFINED", UndefinedCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_NO", NoCompositeOp);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_ADD", AddCompositeOp);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_ATOP", AtopCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_BLEND", BlendCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_BUMPMAP", BumpmapCompositeOp);
@@ -945,7 +953,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYCYAN", CopyCyanCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYGREEN", CopyGreenCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYMAGENTA", CopyMagentaCompositeOp);
+#if MagickLibVersion >= 0x700
+	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYALPHA", CopyAlphaCompositeOp);
+	//TOOD - is this semantically correct?
+	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYOPACITY", CopyAlphaCompositeOp);
+#else
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYOPACITY", CopyOpacityCompositeOp);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYRED", CopyRedCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_COPYYELLOW", CopyYellowCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_DARKEN", DarkenCompositeOp);
@@ -963,7 +977,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_IN", InCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_LIGHTEN", LightenCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_LUMINIZE", LuminizeCompositeOp);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_MINUS", MinusCompositeOp);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_MODULATE", ModulateCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_MULTIPLY", MultiplyCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_OUT", OutCompositeOp);
@@ -979,7 +995,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SRCIN", SrcInCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SRCOUT", SrcOutCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SRCOVER", SrcOverCompositeOp);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SUBTRACT", SubtractCompositeOp);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_THRESHOLD", ThresholdCompositeOp);
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_XOR", XorCompositeOp);
 #if MagickLibVersion >= 0x634
@@ -987,7 +1005,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 #if MagickLibVersion >= 0x636
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_LINEARLIGHT", LinearLightCompositeOp);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_DIVIDE", DivideCompositeOp);
+#endif
 #endif
 #if MagickLibVersion >= 0x654
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_DISTORT", DistortCompositeOp);
@@ -1068,15 +1088,25 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_UNDEFINED", UndefinedType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_BILEVEL", BilevelType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_GRAYSCALE", GrayscaleType);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_GRAYSCALEMATTE", GrayscaleMatteType);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_PALETTE",  PaletteType);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_PALETTEMATTE", PaletteMatteType);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_TRUECOLOR", TrueColorType);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_TRUECOLORMATTE", TrueColorMatteType);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_COLORSEPARATION", ColorSeparationType);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_COLORSEPARATIONMATTE", ColorSeparationMatteType);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_OPTIMIZE", OptimizeType);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_PALETTEBILEVELMATTE", PaletteBilevelMatteType);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("RESOLUTION_UNDEFINED", UndefinedResolution);
 	IMAGICK_REGISTER_CONST_LONG("RESOLUTION_PIXELSPERINCH", PixelsPerInchResolution);
 	IMAGICK_REGISTER_CONST_LONG("RESOLUTION_PIXELSPERCENTIMETER", PixelsPerCentimeterResolution);
@@ -1161,7 +1191,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_YELLOW", YellowChannel);
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_ALPHA", AlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_OPACITY", OpacityChannel);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_MATTE", MatteChannel); /* deprecated, needs to throw E_STRICT if used */
+#endif
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_BLACK", BlackChannel);
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_INDEX", IndexChannel);
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_ALL", AllChannels);
@@ -1180,16 +1212,22 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x670
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_COMPOSITES", CompositeChannels);
 #endif
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("METRIC_UNDEFINED", UndefinedMetric);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("METRIC_MEANABSOLUTEERROR", MeanAbsoluteErrorMetric);
 	IMAGICK_REGISTER_CONST_LONG("METRIC_MEANSQUAREERROR", MeanSquaredErrorMetric);
 	IMAGICK_REGISTER_CONST_LONG("METRIC_PEAKABSOLUTEERROR", PeakAbsoluteErrorMetric);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("METRIC_PEAKSIGNALTONOISERATIO", PeakSignalToNoiseRatioMetric);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("METRIC_ROOTMEANSQUAREDERROR", RootMeanSquaredErrorMetric);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_CHAR", CharPixel);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_DOUBLE", DoublePixel);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_FLOAT", FloatPixel);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_INTEGER", IntegerPixel);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_LONG", LongPixel);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_QUANTUM", QuantumPixel);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_SHORT", ShortPixel);
@@ -1242,8 +1280,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_GRAY", GRAYColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_TRANSPARENT", TransparentColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OHTA", OHTAColorspace);
+#if MagickLibVersion < 0x700
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LAB", LABColorspace);
+#endif
 #endif
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_XYZ", XYZColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_YCBCR", YCbCrColorspace);
@@ -1256,8 +1296,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_HSB", HSBColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_HSL", HSLColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_HWB", HWBColorspace);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_REC601LUMA", Rec601LumaColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_REC709LUMA", Rec709LumaColorspace);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LOG", LogColorspace);
 #if MagickLibVersion >= 0x642
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_CMY", CMYColorspace);
@@ -1281,7 +1323,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_CONSTANT", ConstantVirtualPixelMethod);  /* deprecated */
+#endif
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_EDGE", EdgeVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_MIRROR", MirrorVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_TILE", TileVirtualPixelMethod);
@@ -1382,12 +1426,18 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion > 0x631
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_UNDEFINED", UndefinedInterpolatePixel);
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_AVERAGE", AverageInterpolatePixel);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_BICUBIC", BicubicInterpolatePixel);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_BILINEAR", BilinearInterpolatePixel);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_FILTER", FilterInterpolatePixel);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_INTEGER", IntegerInterpolatePixel);
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_MESH", MeshInterpolatePixel);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_NEARESTNEIGHBOR", NearestNeighborInterpolatePixel);
+#endif
 #endif
 #if MagickLibVersion > 0x634
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_SPLINE", SplineInterpolatePixel);
@@ -1474,7 +1524,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion > 0x637
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_ACTIVATE", ActivateAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DEACTIVATE", DeactivateAlphaChannel);
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_RESET", ResetAlphaChannel);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_SET", SetAlphaChannel);
 #endif
 #if MagickLibVersion > 0x645
@@ -1507,7 +1559,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_ARCTAN", ArctanFunction);
 #endif
 #if MagickLibVersion >= 0x680
+#if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_FLATTEN", FlattenAlphaChannel);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_REMOVE", RemoveAlphaChannel);
 #endif
 

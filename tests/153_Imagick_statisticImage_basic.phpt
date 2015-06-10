@@ -3,11 +3,7 @@ Test Imagick, statisticImage
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); 
 
-$requiredMethods = array(
-	'statisticImage',
-);
-
-require_once(dirname(__FILE__) . '/skipmethod.inc');
+checkClassMethods('Imagick', array('statisticImage'));
 
 ?>
 --FILE--

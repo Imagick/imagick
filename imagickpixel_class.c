@@ -115,9 +115,11 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 			color_value = PixelGetMagentaQuantum(internp->pixel_wand);
 		break;
 
+#if MagickLibVersion < 0x700
 		case PHP_IMAGICK_COLOR_OPACITY:
 			color_value = PixelGetOpacityQuantum(internp->pixel_wand);
 		break;
+#endif
 
 		case PHP_IMAGICK_COLOR_ALPHA:
 			color_value = PixelGetAlphaQuantum(internp->pixel_wand);
@@ -192,9 +194,11 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 			PixelSetMagentaQuantum(internp->pixel_wand, color_value);
 		break;
 
+#if MagickLibVersion < 0x700
 		case PHP_IMAGICK_COLOR_OPACITY:
 			PixelSetOpacityQuantum(internp->pixel_wand, color_value);
 		break;
+#endif
 
 		case PHP_IMAGICK_COLOR_ALPHA:
 			PixelSetAlphaQuantum(internp->pixel_wand, color_value);
@@ -436,9 +440,11 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 			color_value = PixelGetMagenta(internp->pixel_wand);
 		break;
 
+#if MagickLibVersion < 0x700
 		case PHP_IMAGICK_COLOR_OPACITY:
 			color_value = PixelGetOpacity(internp->pixel_wand);
 		break;
+#endif
 
 		case PHP_IMAGICK_COLOR_ALPHA:
 			color_value = PixelGetAlpha(internp->pixel_wand);
@@ -513,9 +519,11 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 			PixelSetMagenta(internp->pixel_wand, color_value);
 		break;
 
+#if MagickLibVersion < 0x700
 		case PHP_IMAGICK_COLOR_OPACITY:
 			PixelSetOpacity(internp->pixel_wand, color_value);
 		break;
+#endif
 
 		case PHP_IMAGICK_COLOR_ALPHA:
 			PixelSetAlpha(internp->pixel_wand, color_value);

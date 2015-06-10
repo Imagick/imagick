@@ -2,7 +2,7 @@
 Test Imagick, sparseColorImage
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=653;
+$imageMagickRequiredVersion=0x653;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--

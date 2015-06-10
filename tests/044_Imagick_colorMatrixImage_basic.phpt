@@ -2,7 +2,7 @@
 Test Imagick, colorMatrixImage
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=675;
+$imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--
@@ -39,7 +39,7 @@ $colorMatrix = array (
 function colorMatrixImage($colorMatrix) {
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
-    $imagick->setImageOpacity(1);
+    //$imagick->setImageOpacity(1);
 
     //A color matrix should look like:
     //    $colorMatrix = [

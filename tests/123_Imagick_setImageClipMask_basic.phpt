@@ -2,8 +2,10 @@
 Test Imagick, setImageClipMask
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=675;
+$imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
+checkClassMethods('imagick', array('setImageClipMask'));
+
 ?>
 --FILE--
 <?php

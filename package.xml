@@ -387,7 +387,6 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="bug_66098.phpt" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
-				<file name="skipmethod.inc" role="test" />
 				<file name="skipprobefourier.inc" role="test" />
 				<file name="anonymous_pro_minus.ttf" role="test" />
 				<file name="OFL.txt" role="doc" />

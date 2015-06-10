@@ -3,7 +3,7 @@ ImagickKernel::fromMatrix test
 --SKIPIF--
 <?php 
 
-$imageMagickRequiredVersion = 680;
+$imageMagickRequiredVersion = 0x680;
 require_once(dirname(__FILE__) . '/skipif.inc');
  
 ?>
@@ -11,11 +11,11 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 <?php
 
 
-$kernel = [
-	[1, 0, -1],
-	[1, 0, -1],
-	[1, 0, -1],
-];
+$kernel = array(
+	array(1, 0, -1),
+	array(1, 0, -1),
+	array(1, 0, -1),
+);
 
 $kernel = ImagickKernel::fromMatrix($kernel);
 $kernel->scale(1, \Imagick::NORMALIZE_KERNEL_VALUE);
@@ -29,45 +29,74 @@ $imagick->morphology(
 );
 
 
-$testValues = [];
+$tests = [];
 
-$testValues[] = array(); //Should fail, not a 2d matrix
+$tests[] = array( 
+	"Cannot create kernel, matrix is empty.",
+	array()
+);
 
-$testValues[] = array(0, 1, 1); //Should fail, not a 2d matrix
+$tests[] = array(
+	"Values must be matrix, with the same number of columns in each row.",
+	array(0, 1, 1)
+);
 
 //Should fail, matrix needs to have same number columns in each row
-$testValues[] = array(
-	array(1, 0, 1),
-	array(1, 0, 1),
-	array(1, 0),
+$tests[] = array(
+	"Values must be matrix, with the same number of columns in each row.",
+	array(
+		array(1, 0, 1),
+		array(1, 0, 1),
+		array(1, 0),
+	)
 );
 
 //Should fail, value instead of second row
-$testValues[] = array(
-	array(0, 1),
-	1
+$tests[] = array(
+	"Values must be matrix, with the same number of columns in each row.",
+	array(
+		array(0, 1),
+		1
+	)
 );
 
 //Should fail, value instead of second row
-$testValues[] = array(
-	array(0, 1),
-	array(0, new StdClass),
+$tests[] = array( 
+	"Only numbers or false are valid values in a kernel matrix.",
+	array(
+		array(0, 1),
+		array(0, new StdClass),
+	)
 );
 
-foreach ($testValues as $testValue) {
+$tests[] = array(
+	"For kernels with even numbered rows or columns, the origin position must be specified."
+	array(
+		array(1, 0),
+	),
+);
+
+
+foreach ($tests as $test) {
+
+	list($expectedMessage, $testValue) = $test;
+
 	try {
 		$kernel = ImagickKernel::fromMatrix($testValue);
 		echo "Failed to throw exception".PHP_EOL;
 	}
 	catch(ImagickKernelException $e) {
-		echo $e->getMessage().PHP_EOL;
+		if ($e->getMessage() != $expectedMessage) {
+			echo "Unexpected message ".$e->getMessage()." for test:".PHP_EOL;
+			var_dump($test);
+		}
 	}
 }
 
 
 try {
 	$kernel = ImagickKernel::fromBuiltin(\Imagick::KERNEL_DIAMOND, "CestNestPasUneKernel");
-	echo "builtIn OK".PHP_EOL;
+	//echo "builtIn OK".PHP_EOL;
 }
 catch(Exception $e) {
 	echo "Unexpected exception: ".$e->getMessage().PHP_EOL;
@@ -88,7 +117,7 @@ if ($matrix[1][1] != 0.5) {
 	echo "center point should be 0.5 but is actually ".$matrix[1][1].PHP_EOL;
 	var_dump($matrix);
 }
-echo "Adding unity kernel ok".PHP_EOL;
+//echo "Adding unity kernel ok".PHP_EOL;
 
 // Test adding kernel works and you can get the values back
 $matrix1 = array(
@@ -117,7 +146,6 @@ else {
 		var_dump($kernelList[1]);
 	}
 }
-echo "getMatrix OK".PHP_EOL;
 
 //Test Scaling
 $matrixIn = array(
@@ -133,19 +161,8 @@ if ($matrixOut[1][1] != 2) {
 	echo "Matrix was not normalised correctly.";
 	var_dump($matrixOut);
 }
-echo "Scaling OK".PHP_EOL;
 
-//Test single line kernel missing origin exception
-$matrixIn = array(
-	array(1, 0),
-);
-try {
-	$kernel = ImagickKernel::fromMatrix($matrixIn);
-	echo "No exception thrown?";
-}
-catch(ImagickKernelException $e) {
-	echo $e->getMessage().PHP_EOL;
-}
+
 
 //Test single line kernel works
 $matrixIn = array(
@@ -195,9 +212,5 @@ Values must be matrix, with the same number of columns in each row.
 Values must be matrix, with the same number of columns in each row.
 Values must be matrix, with the same number of columns in each row.
 Only numbers or false are valid values in a kernel matrix.
-builtIn OK
-Adding unity kernel ok
-getMatrix OK
-Scaling OK
 For kernels with even numbered rows or columns, the origin position must be specified.
 Complete

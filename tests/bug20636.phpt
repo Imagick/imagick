@@ -1,7 +1,12 @@
 --TEST--
 Test PECL bug #20636
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+
+checkClassMethods('Imagick', array('roundCorners'));
+
+?>
 --FILE--
 <?php
 // This test fails to work as expected on 32bit Ubuntu. Instead of the
