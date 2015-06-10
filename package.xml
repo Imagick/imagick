@@ -194,7 +194,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="044_Imagick_colorMatrixImage_basic.phpt" role="test" />
 				<file name="045_Imagick_compositeImage_basic.phpt" role="test" />
 				<file name="046_Imagick_contrastImage_basic.phpt" role="test" />
-				<file name="047_Imagick_convolveImage_basic.phpt" role="test" />
+				<file name="047_Imagick_convolveImage_6.phpt" role="test" />
+				<file name="047_Imagick_convolveImage_7.phpt" role="test" />
 				<file name="048_Imagick_cropImage_basic.phpt" role="test" />
 				<file name="049_Imagick_deskewImage_basic.phpt" role="test" />
 				<file name="050_Imagick_distortImage_Affine.phpt" role="test" />
