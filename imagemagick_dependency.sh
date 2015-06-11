@@ -1,5 +1,6 @@
 #!/bin/sh
 
+#give an error if the download fails.
 set -e
 
 imagemagick_fetch_and_build () {
@@ -29,6 +30,10 @@ imagemagick_fetch_and_build () {
         cd ImageMagick-*
         ;;
     esac
+
+#ignore compile warnings/errors
+set +e
+
     ./configure --prefix="${HOME}/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp
     make -j 8
     make install

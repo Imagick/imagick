@@ -11390,6 +11390,7 @@ PHP_METHOD(imagick, setimageprogressmonitor)
 /* {{{ proto bool Imagick::setProgressMonitor(callable callback)
 	Set a callback that will be called during the processing of the Imagick image.
 */
+#if MagickLibVersion > 0x653
 PHP_METHOD(imagick, setprogressmonitor)
 {
 	zval *user_callback;
@@ -11432,6 +11433,7 @@ PHP_METHOD(imagick, setprogressmonitor)
 	MagickSetImageProgressMonitor(intern->magick_wand, php_imagick_progress_monitor_callable, callback);
 	RETURN_TRUE;
 }
+#endif
 
 /* {{{ proto bool Imagick::setResourceLimit(RESOURCETYPE type, int limit)
 	Sets the limit for a particular resource in megabytes.

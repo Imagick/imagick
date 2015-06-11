@@ -618,7 +618,9 @@ PHP_METHOD(imagick, setimageiterations);
 PHP_METHOD(imagick, setimagemattecolor);
 PHP_METHOD(imagick, setimagepage);
 PHP_METHOD(imagick, setimageprogressmonitor);
+#if MagickLibVersion > 0x653
 PHP_METHOD(imagick, setprogressmonitor);
+#endif
 PHP_METHOD(imagick, setimageresolution);
 PHP_METHOD(imagick, setimagescene);
 PHP_METHOD(imagick, setimagetickspersecond);

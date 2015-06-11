@@ -16,12 +16,12 @@ env:
     - IMAGEMAGICK_VERSION=6.5.3-10
     - IMAGEMAGICK_VERSION=6.4.0-11
     - IMAGEMAGICK_VERSION=6.3.4-10
-    - IMAGEMAGICK_VERSION=6.2.3-6
+    - IMAGEMAGICK_VERSION=6.2.4-6
 
 before_script:
-#    - sudo add-apt-repository ppa:dns/gnu --yes
-#    - sudo apt-get update -q
-#    - sudo apt-get install --only-upgrade autoconf
+    - sudo add-apt-repository ppa:dns/gnu --yes
+    - sudo apt-get update -q
+    - sudo apt-get install --only-upgrade autoconf
     - for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
     - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
 

@@ -1,7 +1,11 @@
 --TEST--
 Test Imagick, progressMonitor
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php
+
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+checkClassMethods('Imagick', array('setProgressMonitor'));
+?>
 --FILE--
 <?php
 
