@@ -5,6 +5,8 @@ set -e
 imagemagick_fetch_and_build () {
     local version=$1
 
+    echo "version is ${version}"
+
     case $version in
     
     git7)

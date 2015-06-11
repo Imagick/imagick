@@ -139,6 +139,8 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 			<file name="php_imagick_macros.h" role="src" />
 			<file name="php_imagick_shared.h" role="src" />
 			<file name="php_imagick_file.h" role="src" />
+			<file name="shim_im6_to_im7.c" role="src" />
+			<file name="shim_im6_to_im7.h" role="src" />
 			<file name="ChangeLog" role="doc" />
 			<file name="LICENSE" role="doc" />
 			<dir name="examples">
@@ -272,6 +274,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="123_Imagick_setImageClipMask_basic.phpt" role="test" />
 				<file name="125_Imagick_setImageOrientation_basic.phpt" role="test" />
 				<file name="126_Imagick_getImageChannelStats_basic.phpt" role="test" />
+				<file name="127_Imagick_progressMonitor_basic.phpt" role="test" />
 				<file name="130_Imagick_setOption_case1.phpt" role="test" />
 				<file name="131_Imagick_setOption_case2.phpt" role="test" />
 				<file name="132_Imagick_setOption_case3.phpt" role="test" />
@@ -286,6 +289,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="142_Imagick_solarizeImage_basic.phpt" role="test" />
 				<file name="143_Imagick_spreadImage_basic.phpt" role="test" />
 				<file name="144_Imagick_spliceImage_basic.phpt" role="test" />
+				<file name="145_imagickkernel_coverage.phpt" role="test" />
 				<file name="149_Imagick_sparseColorImage.phpt" role="test" />
 				<file name="150_Imagick_setregistry.phpt" role="test" />
 				<file name="151_Imagick_subImageMatch_basic.phpt" role="test" />
@@ -368,6 +372,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="229_Tutorial_fxAnalyzeImage_case1.phpt" role="test" />
 				<file name="234_Tutorial_edgeExtend_basic.phpt" role="test" />
 				<file name="235_ImagickDraw_translate_basic.phpt" role="test" />
+				<file name="236_Imagick_identify_basic.phpt" role="test" />
 				<file name="237_Tutorial_deconstructGif_basic.phpt" role="test" />
 				<file name="239_Tutorial_gradientReflection_basic.phpt" role="test" />
 				<file name="240_Tutorial_imagickCompositeGen_basic.phpt" role="test" />
@@ -376,6 +381,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="243_Tutorial_svgExample_basic.phpt" role="test" />
 				<file name="244_Tutorial_psychedelicFontGif_basic.phpt" role="test" />
 				<file name="245_Tutorial_screenEmbed_basic.phpt" role="test" />
+				<file name="246_antialias_image.phpt" role="test" />
 				<file name="247_ImagickPixelIterator_construct_basic.phpt" role="test" />
 				<file name="248_ImagickPixelIterator_clear_basic.phpt" role="test" />
 				<file name="249_ImagickPixelIterator_getNextIteratorRow_basic.phpt" role="test" />
@@ -384,6 +390,7 @@ IMPORTANT: Version 2.x API is not compatible with earlier versions.
 				<file name="252_ImagickPixelIterator_construct_basic.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
+				<file name="bug59378.phpt" role="test" />
 				<file name="bug64015.phpt" role="test" />
 				<file name="bug_66098.phpt" role="test" />
 				<file name="php.gif" role="test" />

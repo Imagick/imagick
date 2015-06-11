@@ -6,11 +6,6 @@ php:
     - 5.4
     - 5.3
 
-matrix:
-  allow_failures:
-    - env: IMAGEMAGICK_VERSION=git6
-    - env: IMAGEMAGICK_VERSION=git7
-
 env:
     - IMAGEMAGICK_VERSION=git7
     - IMAGEMAGICK_VERSION=git6
@@ -48,3 +43,7 @@ script:
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
     - for i in `ls tests/*.out 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
 
+matrix:
+  allow_failures:
+    - env: IMAGEMAGICK_VERSION=git6
+    - env: IMAGEMAGICK_VERSION=git7
