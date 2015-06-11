@@ -4,6 +4,7 @@ Test Imagick, deskewImage
 <?php
 $imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
+checkFormatPresent('jpg');
 ?>
 --FILE--
 <?php

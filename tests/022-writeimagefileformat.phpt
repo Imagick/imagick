@@ -1,7 +1,11 @@
 --TEST--
 Test format support in writeImageFile
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+	require_once(dirname(__FILE__) . '/skipif.inc'); 
+	checkFormatPresent('png');
+	checkFormatPresent('jpg');
+?>
 --FILE--
 <?php
 

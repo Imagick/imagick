@@ -1,7 +1,9 @@
 --TEST--
 Test ImagickDraw->setResolution
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); 
+<?php 
+	require_once(dirname(__FILE__) . '/skipif.inc');
+	checkFormatPresent('png');
 ?>
 --FILE--
 <?php

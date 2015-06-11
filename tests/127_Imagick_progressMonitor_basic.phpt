@@ -8,16 +8,23 @@ Test Imagick, progressMonitor
 $radius = 5;
 $sigma = 1;
 
+$debug = "";
 $status = 'Not cancelled';
 $startTime = time();
 
-$callback = function ($offset, $span) use (&$status, $startTime) {
+$callback = function ($offset, $span) use (&$status, $startTime, $debug) {
+
+	static $x = 0;
+
 	if (((100 * $offset) / $span)  > 20) {
 		$status = "Processing cancelled";
 		return false;
 	}
 
 	$nowTime = time();
+
+	$debug .= "$x: nowTime $nowTime - startTime $startTime".PHP_EOL;
+	$x++;
 
 	if ($nowTime - $startTime > 5) {
 		$status = "Processing cancelled";
@@ -36,7 +43,8 @@ try {
 
 	$imagick->charcoalImage($radius, $sigma);
 	$bytes = $imagick->getImageBlob();
-	echo "Progress monitor failed to interrupt.";
+	echo "Progress monitor failed to interrupt.".PHP_EOL;
+	echo $debug;
 }
 catch(\Exception $e) {
 	echo $status.PHP_EOL;

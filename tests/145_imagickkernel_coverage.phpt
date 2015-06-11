@@ -207,10 +207,4 @@ if ($kernelMatrix !== $matrix) {
 echo "Complete".PHP_EOL;
 ?>
 --EXPECTF--
-Cannot create kernel, matrix is empty.
-Values must be matrix, with the same number of columns in each row.
-Values must be matrix, with the same number of columns in each row.
-Values must be matrix, with the same number of columns in each row.
-Only numbers or false are valid values in a kernel matrix.
-For kernels with even numbered rows or columns, the origin position must be specified.
 Complete

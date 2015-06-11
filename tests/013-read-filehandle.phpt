@@ -1,7 +1,10 @@
 --TEST--
 Imagick::readImageFile test
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+	require_once(dirname(__FILE__) . '/skipif.inc');
+	checkFormatPresent('jpg');
+?>
 --FILE--
 <?php
 

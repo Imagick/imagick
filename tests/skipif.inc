@@ -13,7 +13,12 @@ if (isset($imageMagickRequiredVersion)) {
 	$versionInstalled = $versionInfo["versionNumber"];
 
 	if ($versionInstalled < $imageMagickRequiredVersion) {
-		die("skip ImageMagick installed $versionInstalled <= required $imageMagickRequiredVersion");
+		$message = sprintf(
+			"skip ImageMagick installed %x <= required %x",
+			$versionInstalled,
+			$imageMagickRequiredVersion
+		);
+		die($message);
 	}
 }
 
@@ -27,7 +32,12 @@ if (isset($imageMagickBelowVersion)) {
 	$versionInstalled = $versionInfo["versionNumber"];
 
 	if ($versionInstalled >= $imageMagickBelowVersion) {
-		die("skip ImageMagick installed $versionInstalled >= $imageMagickBelowVersion");
+		$message = sprintf(
+			"skip ImageMagick installed %x >= %x",
+			$versionInstalled,
+			$imageMagickBelowVersion
+		);
+		die($message);
 	}
 }
 
@@ -39,6 +49,15 @@ function checkClassMethods($class, $methods)
 		}
 	}
 }
+
+function checkFormatPresent($format)
+{
+	$result = Imagick::queryFormats(strtoupper($format));
+	if (count($result) == false) {
+		die("skip format $format not supported by ImageMagick as compiled.");
+	}
+}
+
 
 
 ?>

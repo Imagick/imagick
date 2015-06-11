@@ -4,6 +4,7 @@ Test Imagick, colorMatrixImage
 <?php
 $imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
+checkFormatPresent('png');
 ?>
 --FILE--
 <?php

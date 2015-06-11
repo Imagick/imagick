@@ -1,7 +1,10 @@
 --TEST--
 Test clone length, this is expected upstream behaviour
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc');
+<?php 
+require_once(dirname(__FILE__) . '/skipif.inc');
+
+checkFormatPresent('png');
 
 $v = imagick::getversion ();
 

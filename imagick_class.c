@@ -10931,6 +10931,18 @@ PHP_METHOD(imagick, getpage)
 }
 /* }}} */
 
+//Not implemented yet
+///* {{{ proto int Imagick::getHdriEnabled()
+//	Returns the ImageMagick quantum range as an integer.
+//*/
+//PHP_METHOD(imagick, gethdrienabled)
+//{
+//	RETURN_BOOL(MagickGetHdriEnabled());
+//}
+///* }}} */
+//
+
+
 /* {{{ proto int Imagick::getQuantum()
 	Returns the ImageMagick quantum range as an integer.
 */
