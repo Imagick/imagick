@@ -70,7 +70,7 @@ $tests[] = array(
 );
 
 $tests[] = array(
-	"For kernels with even numbered rows or columns, the origin position must be specified."
+	"For kernels with even numbered rows or columns, the origin position must be specified.",
 	array(
 		array(1, 0),
 	),
