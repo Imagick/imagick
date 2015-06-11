@@ -3215,7 +3215,7 @@ PHP_METHOD(imagick, queryformats)
 	char **supported_formats;
 	unsigned long i;
 	char *pattern = "*";
-	int pattern_len = 1;
+	IM_LEN_TYPE pattern_len = 1;
 	size_t num_formats = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
