@@ -11634,5 +11634,38 @@ PHP_METHOD(imagick, getantialias)
 }
 /* }}} */
 
+/* {{{ proto int Imagick::setAntiAlias(bool antialias)
+	Set whether antialiasing should be used for operations. On by default.
+*/
+#if MagickLibVersion > 0x676
+PHP_METHOD(imagick, colordecisionlistimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	char *color_correction_collection;
+	int ccc_len;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_correction_collection, &ccc_len) == FAILURE) {
+		return;
+	}
+
+	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	status = MagickColorDecisionListImage(intern->magick_wand, color_correction_collection);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to colorDecisionListImage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+#endif
+/* }}} */
+
+
+
+
 
 /* end of Imagick */

@@ -641,6 +641,9 @@ PHP_METHOD(imagick, morphology);
 PHP_METHOD(imagick, filter);
 PHP_METHOD(imagick, setantialias);
 PHP_METHOD(imagick, getantialias);
+#if MagickLibVersion > 0x676
+PHP_METHOD(imagick, colordecisionlistimage);
+#endif
 
 
 /* Forward declarations (ImagickDraw) */
