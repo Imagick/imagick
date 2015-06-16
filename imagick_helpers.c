@@ -1077,8 +1077,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("METRIC_PEAKABSOLUTEERROR", PeakAbsoluteErrorMetric);
 	IMAGICK_REGISTER_CONST_LONG("METRIC_PEAKSIGNALTONOISERATIO", PeakSignalToNoiseRatioMetric);
 	IMAGICK_REGISTER_CONST_LONG("METRIC_ROOTMEANSQUAREDERROR", RootMeanSquaredErrorMetric);
+#if MagickLibVersion >= 0x687
 	IMAGICK_REGISTER_CONST_LONG("METRIC_NORMALIZEDCROSSCORRELATIONERRORMETRIC", NormalizedCrossCorrelationErrorMetric);
 	IMAGICK_REGISTER_CONST_LONG("METRIC_FUZZERROR", FuzzErrorMetric);
+#endif
 #if MagickLibVersion >= 0x690
 	IMAGICK_REGISTER_CONST_LONG("METRIC_PERCEPTUALHASH_ERROR", PerceptualHashErrorMetric);
 #endif
@@ -1301,11 +1303,15 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion > 0x634
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_SPLINE", SplineInterpolatePixel); /* Cubic Spline (blurred) interpolation */
 #endif
+#if MagickLibVersion > 0x690
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_AVERAGE_9", Average9InterpolatePixel); /* Average 9 nearest neighbours */
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_AVERAGE_16", Average16InterpolatePixel); /* Average 16 nearest neighbours */
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_BLEND", BlendInterpolatePixel); /* blend of nearest 1, 2 or 4 pixels */
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_BACKGROUND_COLOR", BackgroundInterpolatePixel); /* just return background color */
+#if MagickLibVersion >= 0x687
 	IMAGICK_REGISTER_CONST_LONG("INTERPOLATE_CATROM", CatromInterpolatePixel); /* Catmull-Rom interpolation */
+#endif
+#endif
 
 #if MagickLibVersion > 0x628
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_UNDEFINED", UndefinedLayer);
@@ -1407,8 +1413,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_POLYNOMIAL", PolynomialColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_SPEPARDS", ShepardsColorInterpolate);
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_VORONOI", VoronoiColorInterpolate);
+#if MagickLibVersion >= 0x687
 	IMAGICK_REGISTER_CONST_LONG("SPARSECOLORMETHOD_INVERSE", InverseColorInterpolate);
-	
+#endif
 	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_UNDEFINED", UndefinedDitherMethod);
 	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_NO", NoDitherMethod);
 	IMAGICK_REGISTER_CONST_LONG("DITHERMETHOD_RIEMERSMA", RiemersmaDitherMethod);

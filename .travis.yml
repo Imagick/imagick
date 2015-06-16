@@ -27,6 +27,22 @@ matrix:
       env: IMAGEMAGICK_VERSION=6.4.0-11
     - php: 5.3
       env: IMAGEMAGICK_VERSION=6.3.4-10
+    - php: 5.4
+      env: IMAGEMAGICK_VERSION=6.8.7-0
+    - php: 5.4
+      env: IMAGEMAGICK_VERSION=6.7.5-3
+    - php: 5.4
+      env: IMAGEMAGICK_VERSION=6.6.0-9
+    - php: 5.4
+      env: IMAGEMAGICK_VERSION=6.4.0-11
+    - php: 5.4
+      env: IMAGEMAGICK_VERSION=6.3.4-10
+    - php: 5.5
+      env: IMAGEMAGICK_VERSION=6.7.5-3
+    - php: 5.5
+      env: IMAGEMAGICK_VERSION=6.6.0-9
+    - php: 5.5
+      env: IMAGEMAGICK_VERSION=6.4.0-11
 
 before_script:
     - for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
