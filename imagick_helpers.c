@@ -77,6 +77,12 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	zval *retval_ptr;
 #endif
 
+#if defined(ZEND_ENGINE_3) && defined(ZTS)
+	if( NULL == tsrm_get_ls_cache() ) {
+		return MagickTrue;
+	}
+#endif
+
 	//We can get the data both via the passed param and via
 	//IMAGICK_G(progress_callback) - this should be quicker
 	php_imagick_callback *callback = (php_imagick_callback*)userData;
