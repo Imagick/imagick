@@ -29,7 +29,7 @@ $imagick->morphology(
 );
 
 
-$tests = [];
+$tests = array();
 
 $tests[] = array( 
 	"Cannot create kernel, matrix is empty.",
