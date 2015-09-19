@@ -12,6 +12,8 @@ checkClassMethods('Imagick', array('setProgressMonitor'));
 $radius = 5;
 $sigma = 1;
 
+Imagick::setResourceLimit(\Imagick::RESOURCETYPE_THREAD, 8);
+
 $debug = "";
 $status = 'Not cancelled';
 $startTime = time();
