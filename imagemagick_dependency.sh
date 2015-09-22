@@ -8,7 +8,7 @@ imagemagick_fetch_and_build () {
 
     echo "version is ${version}"
     im_dir=${HOME}/im/imagemagick-${version}
-    cacheable="true" 
+    cacheable="true"
 
     case $version in
 
@@ -39,8 +39,8 @@ imagemagick_fetch_and_build () {
 #ignore compile warnings/errors
 set +e
 
-    if if [ "$cacheable" -eq "false" ] || [ ! -d "${im_dir}" ]; then
-        ./configure --prefix="${HOME}/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp
+    if [ "$cacheable" -eq "false" ] || [ ! -d "${im_dir}" ]; then
+        ./configure --prefix="${HOME}/im/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp --with-gvc=no
         make -j 8
         make install
         cd ..

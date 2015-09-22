@@ -55,9 +55,6 @@ matrix:
       env: IMAGEMAGICK_VERSION=6.4.0-11
 
 before_script:
-    - sudo add-apt-repository ppa:dns/gnu --yes
-    - sudo apt-get update -q
-    - sudo apt-get install --only-upgrade autoconf
     - for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
     - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
 
@@ -73,7 +70,7 @@ script:
     - cp ./check-loaded.phpt /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}/check-loaded.phpt
     - cd /tmp/php-imagick-build/imagick-${PHP_IMAGICK_VERSION}
     - phpize
-    - ./configure --with-imagick="${HOME}/imagemagick-${IMAGEMAGICK_VERSION}"
+    - ./configure --with-imagick="${HOME}/im/imagemagick-${IMAGEMAGICK_VERSION}"
     - make
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt

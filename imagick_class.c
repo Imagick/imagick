@@ -12119,7 +12119,7 @@ PHP_METHOD(imagick, colordecisionlistimage)
 		return;
 	}
 
-	intern = (php_imagick_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+	intern = Z_IMAGICK_P(getThis());
 	status = MagickColorDecisionListImage(intern->magick_wand, color_correction_collection);
 
 	if (status == MagickFalse) {
