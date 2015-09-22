@@ -146,7 +146,7 @@ static void im_CalcKernelMetaData(KernelInfo *kernel) {
 
 
 #if MagickLibVersion > 0x661
-static KernelInfo *imagick_createKernel(double *values, size_t width, size_t height, size_t origin_x, size_t origin_y)
+static KernelInfo *imagick_createKernel(KernelValueType *values, size_t width, size_t height, size_t origin_x, size_t origin_y)
 {
 	KernelInfo *kernel_info;
 
@@ -184,8 +184,6 @@ static KernelInfo *imagick_createKernel(double *values, size_t width, size_t hei
 	kernel_info->values = values;
 #endif
 
-
-	
 	im_CalcKernelMetaData(kernel_info);
 
 	return kernel_info;
@@ -374,7 +372,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	size_t origin_x, origin_y;
 	zval **tmp;
 
-	double *values = NULL;
+	KernelValueType *values = NULL;
 	double notanumber = sqrt((double)-1.0);  /* Special Value : Not A Number */
 
 	previous_num_columns = -1;
@@ -413,7 +411,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			}
 
 			if (values == NULL) {
-				values = (double *)AcquireAlignedMemory(num_columns, num_rows*sizeof(double));
+				values = (KernelValueType *)AcquireAlignedMemory(num_columns, num_rows*sizeof(KernelValueType));
 			}
 
 			if (previous_num_columns != -1) {
@@ -646,7 +644,7 @@ PHP_METHOD(imagickkernel, separate)
 	KernelInfo *kernel_info;
 	KernelInfo *kernel_info_copy;
 	int number_values;
-	double * values_copy;
+	KernelValueType * values_copy;
 
 #ifdef ZEND_ENGINE_3
 	zval separate_object;
@@ -665,8 +663,8 @@ PHP_METHOD(imagickkernel, separate)
 
 	while (kernel_info != NULL) {
 		number_values = kernel_info->width * kernel_info->height;
-		values_copy = (double *)AcquireAlignedMemory(kernel_info->width, kernel_info->height*sizeof(double));
-		memcpy(values_copy, kernel_info->values, number_values * sizeof(double));
+		values_copy = (KernelValueType *)AcquireAlignedMemory(kernel_info->width, kernel_info->height*sizeof(KernelValueType));
+		memcpy(values_copy, kernel_info->values, number_values * sizeof(KernelValueType));
 
 		kernel_info_copy = imagick_createKernel(
 			values_copy,

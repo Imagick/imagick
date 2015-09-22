@@ -1046,5 +1046,10 @@ PHP_METHOD(imagickkernel, scale);
 PHP_METHOD(imagickkernel, addunitykernel);
 #endif
 
+#if MagickLibVersion < 0x700
+#define KernelValueType double
+#else
+#define KernelValueType MagickRealType
+#endif
 
 #endif /* PHP_IMAGICK_DEFS_H */
