@@ -59,5 +59,22 @@ function checkFormatPresent($format)
 }
 
 
+function requireFormat($requiredFormat)
+{
+	$formats = \Imagick::queryformats();
+
+	foreach ($formats as $format) {
+		if (strcasecmp($format, $requiredFormat) === 0) {
+			return;
+		}
+	}
+
+	die("skip test suite requires format $requiredFormat but not available");
+
+}
+
+requireFormat("png");
+requireFormat("jpg");
+
 
 ?>

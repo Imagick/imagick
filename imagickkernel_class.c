@@ -21,6 +21,7 @@
 
 #ifdef IMAGICK_WITH_KERNEL
 
+#if MagickLibVersion < 0x691
 // These function defines are required currently as the functions are
 // currently not available in the public ImageMagick header files
 // This is being fixed for the next version of ImageMagick.
@@ -33,6 +34,7 @@ void
   ScaleKernelInfo(KernelInfo *,const double,const GeometryFlags),
   UnityAddKernelInfo(KernelInfo *,const double),
   ZeroKernelNans(KernelInfo *);
+#endif
 
 
 static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
