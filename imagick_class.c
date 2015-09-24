@@ -7708,7 +7708,12 @@ PHP_METHOD(imagick, setimageindex)
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+#if MagickLibVersion > 0x628
+	/* Get the current iterator position */
+	status = MagickSetIteratorIndex(intern->magick_wand, index);
+#else
 	status = MagickSetImageIndex(intern->magick_wand, index);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -10780,6 +10785,57 @@ PHP_METHOD(imagick, getcopyright)
 }
 /* }}} */
 
+
+/* {{{ proto string Imagick::getConfigureOptions()
+	Returns any ImageMagick  configure options that match the specified pattern (e.g. "*" for all). Options include NAME, VERSION, LIB_VERSION, etc.
+*/
+PHP_METHOD(imagick, getconfigureoptions)
+{
+	char *copyright;
+	size_t number_options;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	char *pattern = "*";
+	char **result;
+	char *option_value;
+	int i;
+
+	result = MagickQueryConfigureOptions(pattern, &number_options);
+
+	array_init(return_value);
+
+	for (i=0; i<number_options; i++) {
+		option_value = MagickQueryConfigureOption(result[i]);
+		IM_add_assoc_string(return_value, result[i], option_value);
+//		add_next_index_string(return_value, result[i], 1);
+	}
+}
+/* }}} */
+
+
+/* {{{ proto string Imagick::getFeatures()
+	GetFeatures() returns the ImageMagick features that have been compiled into the runtime.
+*/
+PHP_METHOD(imagick, getfeatures)
+{
+	char *features;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	features = GetMagickFeatures();
+
+	IM_ZVAL_STRING(return_value, features);
+}
+/* }}} */
+
+
+
+
 /* {{{ proto string Imagick::getFilename()
 	Returns the filename associated with an image sequence.
 */
@@ -10961,6 +11017,12 @@ PHP_METHOD(imagick, getquantum)
 
 	MagickGetQuantumRange(&range);
 	ZVAL_LONG(return_value, range);
+	
+//#ifdef MAGICKCORE_HDRI_ENABLE
+//	RETVAL_DOUBLE(color_value);
+//#else
+//	RETVAL_LONG(color_value);
+//#endif
 	return;
 }
 /* }}} */

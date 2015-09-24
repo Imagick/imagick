@@ -798,6 +798,8 @@ PHP_METHOD(imagick, newpseudoimage);
 PHP_METHOD(imagick, getcompression);
 PHP_METHOD(imagick, getcompressionquality);
 PHP_METHOD(imagick, getcopyright);
+PHP_METHOD(imagick, getconfigureoptions);
+PHP_METHOD(imagick, getfeatures);
 PHP_METHOD(imagick, getfilename);
 PHP_METHOD(imagick, getformat);
 PHP_METHOD(imagick, gethomeurl);
