@@ -1,7 +1,11 @@
 --TEST--
 Test getColor and getColorQuantum
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc');
+<?php 
+
+require_once(dirname(__FILE__) . '/skipif.inc');
+
+
 ?>
 --FILE--
 <?php
@@ -56,22 +60,6 @@ $tests = array(
 		),
 	),
 	array(
-		'green',
-		QUANTUM,  
-		array(
-			'g' => getExpectedValue(\Imagick::getQuantum() * (128 / 255)),
-			'a' => getExpectedValue(\Imagick::getQuantum())
-		),
-	),
-	array(
-		'rgb(0, 50%, 0)',
-		QUANTUM,  
-		array(
-			'g' => getExpectedValue(\Imagick::getQuantum() / 2),
-			'a' => getExpectedValue(\Imagick::getQuantum())
-		),
-	),
-	array(
 		'rgb(25%, 25%, 25%)',
 		QUANTUM,
 		array(
@@ -81,6 +69,29 @@ $tests = array(
 		)
 	)
 );
+
+$version = Imagick::getVersion();
+// The following don't seem stable in lesser versions.
+if ($version['versionNumber'] >= 0x687) {
+	$tests[] = array(
+		'green',
+		QUANTUM,  
+		array(
+			'g' => getExpectedValue(\Imagick::getQuantum() * (128 / 255)),
+			'a' => getExpectedValue(\Imagick::getQuantum())
+		),
+	);
+
+	$tests[] = array(
+		'rgb(0, 50%, 0)',
+		QUANTUM,  
+		array(
+			'g' => getExpectedValue(\Imagick::getQuantum() / 2),
+			'a' => getExpectedValue(\Imagick::getQuantum())
+		),
+	);
+}
+
 
 foreach ($tests as $test) {
 
