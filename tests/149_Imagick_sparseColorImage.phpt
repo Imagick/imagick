@@ -112,10 +112,30 @@ function renderImageBilinear() {
     echo "Ok".PHP_EOL;
 }
 
-renderImageBilinear() ;
-renderImageShepards();
-renderImageVoronoi();
-renderImageBarycentric();
+try {
+	renderImageBilinear() ;
+}
+catch (\Exception $e) {
+	echo "renderImageBilinear failed ".$e->getMessage().PHP_EOL;
+}
+try {
+	renderImageShepards();
+}
+catch (\Exception $e) {
+	echo "renderImageShepards failed ".$e->getMessage().PHP_EOL;
+}
+try {
+	renderImageVoronoi();
+}
+catch (\Exception $e) {
+	echo "renderImageVoronoi failed ".$e->getMessage().PHP_EOL;
+}
+try {
+	renderImageBarycentric();
+}
+catch (\Exception $e) {
+	echo "renderImageBarycentric failed ".$e->getMessage().PHP_EOL;
+}
 
 ?>
 --EXPECTF--
