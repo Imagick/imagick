@@ -1281,7 +1281,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
 
-	ZEND_BEGIN_ARG_INFO_EX(imagick_getconfigureoptions_args, 0, 0, 1)
+	ZEND_BEGIN_ARG_INFO_EX(imagick_getconfigureoptions_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, pattern)
 	ZEND_END_ARG_INFO()
 

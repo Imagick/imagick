@@ -10791,15 +10791,15 @@ PHP_METHOD(imagick, getcopyright)
 */
 PHP_METHOD(imagick, getconfigureoptions)
 {
-	char *copyright;
 	size_t number_options;
 
 	char *pattern = "*";
+	IM_LEN_TYPE pattern_len;
 	char **result;
 	char *option_value;
 	int i;
 
-	if (zend_parse_parameters_none() == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
 	}
 
