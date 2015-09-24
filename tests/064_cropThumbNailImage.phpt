@@ -1,7 +1,10 @@
 --TEST--
 Test for round issues
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+if (getenv('SKIP_SLOW_TESTS')) die('skip slow tests excluded by request');
+?>
 --FILE--
 <?php
 
