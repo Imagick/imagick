@@ -39,8 +39,10 @@ imagemagick_fetch_and_build () {
 #ignore compile warnings/errors
 set +e
 
+# If something segfaults on travis try with --with-gvc=no
+
     if [ "$cacheable" -eq "false" ] || [ ! -d "${im_dir}" ]; then
-        ./configure --prefix="${HOME}/im/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp --with-gvc=no
+        ./configure --prefix="${HOME}/im/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp 
         make -j 8
         make install
         cd ..
