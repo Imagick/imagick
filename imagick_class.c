@@ -10794,14 +10794,14 @@ PHP_METHOD(imagick, getconfigureoptions)
 	char *copyright;
 	size_t number_options;
 
-	if (zend_parse_parameters_none() == FAILURE) {
-		return;
-	}
-
 	char *pattern = "*";
 	char **result;
 	char *option_value;
 	int i;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
 
 	result = MagickQueryConfigureOptions(pattern, &number_options);
 
@@ -10810,7 +10810,6 @@ PHP_METHOD(imagick, getconfigureoptions)
 	for (i=0; i<number_options; i++) {
 		option_value = MagickQueryConfigureOption(result[i]);
 		IM_add_assoc_string(return_value, result[i], option_value);
-//		add_next_index_string(return_value, result[i], 1);
 	}
 }
 /* }}} */
@@ -10821,7 +10820,7 @@ PHP_METHOD(imagick, getconfigureoptions)
 */
 PHP_METHOD(imagick, getfeatures)
 {
-	char *features;
+	const char *features;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
