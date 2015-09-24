@@ -21,9 +21,6 @@ env:
     - IMAGEMAGICK_VERSION=6.7.5-3
     - IMAGEMAGICK_VERSION=6.6.0-9
     - IMAGEMAGICK_VERSION=6.5.3-10
-    - IMAGEMAGICK_VERSION=6.4.0-11
-    - IMAGEMAGICK_VERSION=6.3.4-10
-    - IMAGEMAGICK_VERSION=6.2.4-6
 
 matrix:
   exclude:
@@ -35,8 +32,6 @@ matrix:
       env: IMAGEMAGICK_VERSION=6.6.0-9
     - php: 5.3
       env: IMAGEMAGICK_VERSION=6.4.0-11
-    - php: 5.3
-      env: IMAGEMAGICK_VERSION=6.3.4-10
     - php: 5.4
       env: IMAGEMAGICK_VERSION=6.8.7-0
     - php: 5.4
@@ -45,8 +40,6 @@ matrix:
       env: IMAGEMAGICK_VERSION=6.6.0-9
     - php: 5.4
       env: IMAGEMAGICK_VERSION=6.4.0-11
-    - php: 5.4
-      env: IMAGEMAGICK_VERSION=6.3.4-10
     - php: 5.5
       env: IMAGEMAGICK_VERSION=6.7.5-3
     - php: 5.5
