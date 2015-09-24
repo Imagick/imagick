@@ -131,7 +131,7 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 		break;
 	}
 	
-#ifdef MAGICKCORE_HDRI_ENABLE
+#if MAGICKCORE_HDRI_ENABLE
 	RETVAL_DOUBLE(color_value);
 #else
 	RETVAL_LONG(color_value);
@@ -147,8 +147,7 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 	php_imagickpixel_object *internp;
 	long color;
 
-
-#ifdef MAGICKCORE_HDRI_ENABLE
+#if MAGICKCORE_HDRI_ENABLE
 	double color_value;
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value) == FAILURE) {
@@ -639,7 +638,7 @@ PHP_METHOD(imagickpixel, getcolorquantum)
 	alpha = PixelGetAlphaQuantum(internp->pixel_wand);
 
 
-#ifdef MAGICKCORE_HDRI_ENABLE
+#if MAGICKCORE_HDRI_ENABLE
 	add_assoc_double(return_value, "r", red);
 	add_assoc_double(return_value, "g", green);
 	add_assoc_double(return_value, "b", blue);

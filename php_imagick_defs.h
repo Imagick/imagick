@@ -799,7 +799,9 @@ PHP_METHOD(imagick, getcompression);
 PHP_METHOD(imagick, getcompressionquality);
 PHP_METHOD(imagick, getcopyright);
 PHP_METHOD(imagick, getconfigureoptions);
+#if MagickLibVersion > 0x660
 PHP_METHOD(imagick, getfeatures);
+#endif
 PHP_METHOD(imagick, getfilename);
 PHP_METHOD(imagick, getformat);
 PHP_METHOD(imagick, gethomeurl);
@@ -807,7 +809,7 @@ PHP_METHOD(imagick, getinterlacescheme);
 PHP_METHOD(imagick, getoption);
 PHP_METHOD(imagick, getpackagename);
 PHP_METHOD(imagick, getpage);
-// not implemented yet PHP_METHOD(imagick, gethdrienabled);
+PHP_METHOD(imagick, gethdrienabled);
 PHP_METHOD(imagick, getquantum);
 PHP_METHOD(imagick, getquantumdepth);
 PHP_METHOD(imagick, getquantumrange);

@@ -10814,7 +10814,7 @@ PHP_METHOD(imagick, getconfigureoptions)
 }
 /* }}} */
 
-
+#if MagickLibVersion > 0x660
 /* {{{ proto string Imagick::getFeatures()
 	GetFeatures() returns the ImageMagick features that have been compiled into the runtime.
 */
@@ -10831,7 +10831,7 @@ PHP_METHOD(imagick, getfeatures)
 	IM_ZVAL_STRING(return_value, features);
 }
 /* }}} */
-
+#endif
 
 
 
@@ -10991,16 +10991,23 @@ PHP_METHOD(imagick, getpage)
 }
 /* }}} */
 
-//Not implemented yet
-///* {{{ proto int Imagick::getHdriEnabled()
-//	Returns the ImageMagick quantum range as an integer.
-//*/
-//PHP_METHOD(imagick, gethdrienabled)
-//{
-//	RETURN_BOOL(MagickGetHdriEnabled());
-//}
-///* }}} */
-//
+/* {{{ proto int Imagick::getHDRIEnabled()
+	Returns true if Imagick was compiled against a HDRI verison of ImageMagick.
+*/
+PHP_METHOD(imagick, gethdrienabled)
+{
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+#if MAGICKCORE_HDRI_ENABLE
+	RETURN_TRUE;
+#else
+	RETURN_FALSE;
+#endif
+	return;
+}
+/* }}} */
 
 
 /* {{{ proto int Imagick::getQuantum()

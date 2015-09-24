@@ -2562,7 +2562,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getcompressionquality, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getcopyright, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getconfigureoptions, imagick_getconfigureoptions_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#if MagickLibVersion > 0x660
 	PHP_ME(imagick, getfeatures, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(imagick, getfilename, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getformat, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, gethomeurl, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
@@ -2571,7 +2573,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getpackagename, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getpage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantum, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
-//	PHP_ME(imagick, gethdrienabled, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, gethdrienabled, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantumdepth, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getquantumrange, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getreleasedate, imagick_zero_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)

@@ -2,6 +2,10 @@
 - Added methods:
   * Imagick::getConfigureOptions
   * Imagick::getFeatures
+  * Imagick::getHDRIEnabled
+- Fixes:
+  * getcolorquantum, getcolorvaluequantum and setcolorvaluequantum use floats
+    when Imagick was compiled against a HDRI version of ImageMagick
 3.3.0RC1
 - Corrected package versioning to exclude PHP7
 - Correct params for Imagick::getColorValueQuantum

@@ -16,11 +16,9 @@ define('NORMALISED_INCLUDING_ALPHA', 'NORMALISED_INCLUDING_ALPHA');
 define('QUANTUM', 'QUANTUM');
 
 function checkExpectedValue($expectedValue, $actualValue) {
-	$features = Imagick::getFeatures();
-	$features = strtolower($features);
 
-	if (strpos($features, 'hdri') !== false) {
-		return fabs($expectedValue - $actualValue) < 0.01;
+	if (Imagick::getHDRIEnabled()) {
+		return abs($expectedValue - $actualValue) < 0.01;
 	}
 
 	if ($expectedValue == $actualValue) {
@@ -31,10 +29,7 @@ function checkExpectedValue($expectedValue, $actualValue) {
 }
 
 function getExpectedValue($someValue) {
-	$features = Imagick::getFeatures();
-	$features = strtolower($features);
-
-	if (strpos($features, 'hdri') !== false) {
+	if (Imagick::getHDRIEnabled()) {
 		return $someValue;
 	}
 

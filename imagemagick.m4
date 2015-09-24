@@ -70,7 +70,7 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   AC_MSG_CHECKING(ImageMagick MagickWand API configuration program)
 
   if test "$IM_EXTRA_SEARCH_PREFIX" != "yes"; then
-    for i in "$IM_EXTRA_SEARCH_PREFIX" /usr/local /usr /opt /opt/local;
+    for i in "$IM_EXTRA_SEARCH_PREFIX" /usr/local /usr /usr/sbin /opt /opt/local;
     do
       AC_MSG_CHECKING([Testing ${i}/bin/MagickWand-config])
       if test -r "${i}/bin/MagickWand-config"; then
@@ -91,7 +91,7 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
       AC_MSG_RESULT([Doesn't exist])
     done
   else
-    for i in /usr/local /usr /opt /opt/local;
+    for i in /usr/local /usr /usr/sbin /opt /opt/local;
     do
       AC_MSG_CHECKING([Testing ${i}/bin/MagickWand-config])
       if test -r "${i}/bin/MagickWand-config"; then
