@@ -227,7 +227,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	size_t origin_x, origin_y;
 	zval *tmp;
 
-	double *values = NULL;
+	KernelValueType *values = NULL;
 	double notanumber = sqrt((double)-1.0);  /* Special Value : Not A Number */
 
 	previous_num_columns = -1;
@@ -267,7 +267,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			}
 
 			if (values == NULL) {
-				values = (double *)AcquireAlignedMemory(num_columns, num_rows*sizeof(double));
+				values = (KernelValueType *)AcquireAlignedMemory(num_columns, num_rows*sizeof(KernelValueType));
 			}
 
 			if (previous_num_columns != -1) {
