@@ -2538,7 +2538,6 @@ PHP_METHOD(imagick, remapimage)
 
 #if MagickLibVersion > 0x646
 /* {{{ proto bool Imagick::exportImagePixels(int x, int y, int width, int height, string map, INT STORAGE)
-	TODO: IMPLEMENTATION
 */
 PHP_METHOD(imagick, exportimagepixels)
 {
@@ -2549,8 +2548,14 @@ PHP_METHOD(imagick, exportimagepixels)
 	int map_size, i = 0;
 	IM_LEN_TYPE map_len;
 	double *double_array;
-	long *long_array;
-	char *char_array;
+	float *float_array;
+	unsigned char *char_array;
+	unsigned short *short_array;
+	unsigned long *long_array;
+	Quantum *quantum_array;
+#if MagickLibVersion >= 0x700
+	unsigned long long int longlong_array;
+#endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsl", &x, &y, &width, &height, &map, &map_len, &storage) == FAILURE) {
 		return;
@@ -2579,6 +2584,19 @@ PHP_METHOD(imagick, exportimagepixels)
 
 	switch (storage) {
 		case FloatPixel:
+			float_array = emalloc(map_size * sizeof(float));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, FloatPixel, (void *)float_array);
+
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+					add_next_index_double(return_value, float_array[i]);
+				}
+				efree(float_array);
+				return;
+			}
+		break;
+
 		case DoublePixel:
 			double_array = emalloc(map_size * sizeof(double));
 			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, DoublePixel, (void *)double_array);
@@ -2594,6 +2612,41 @@ PHP_METHOD(imagick, exportimagepixels)
 		break;
 
 		case ShortPixel:
+			short_array = emalloc(map_size * sizeof(unsigned short));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, ShortPixel, (void *)short_array);
+
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+					add_next_index_long(return_value, short_array[i]);
+				}
+				efree(short_array);
+				return;
+			}
+		break;
+
+#if MagickLibVersion >= 0x700
+		case LongLongPixel:
+unsigned long long int longlong_array;
+			longlong_array = emalloc(map_size * sizeof(unsigned long long int));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, LongLongPixel, (void *)longlong_array);
+
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+					//TODO - think about this.
+					// on 32bit platforms this will be truncating data
+					// on 64bit platforms where sizeof(longlong) > 64bits, it will be truncating
+					// on 64bit platforms where sizeof(longlong) = 64bits, PHP will be
+					// converting values close to 64bit to be floats...
+					add_next_index_long(return_value, longlong_array[i]);
+				}
+				efree(longlong_array);
+				return;
+			}
+		break;
+#endif
+
 #if MagickLibVersion < 0x700
 		case IntegerPixel:
 #endif
@@ -2618,15 +2671,33 @@ PHP_METHOD(imagick, exportimagepixels)
 			if (status != MagickFalse) {
 				array_init(return_value);
 				for (i = 0; i < map_size; i++) {
-					 add_next_index_long(return_value, (int)char_array[i]);
+					add_next_index_long(return_value, (int)char_array[i]);
 				}
 				efree(char_array);
 				return;
 			}
 		break;
 
+		case QuantumPixel:
+			quantum_array = emalloc(map_size * sizeof(Quantum));
+			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, QuantumPixel, (void *)quantum_array);
+
+			if (status != MagickFalse) {
+				array_init(return_value);
+				for (i = 0; i < map_size; i++) {
+#if MAGICKCORE_HDRI_ENABLE
+					add_next_index_double(return_value, quantum_array[i]);
+#else
+					add_next_index_long(return_value, quantum_array[i]);
+#endif
+				}
+				efree(quantum_array);
+				return;
+			}
+		break;
+
 		default:
-			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format" TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown pixel type " TSRMLS_CC);
 			return;
 		break;
 	}
