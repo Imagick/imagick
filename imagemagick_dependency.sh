@@ -30,16 +30,31 @@ imagemagick_fetch_and_build () {
         cd imagemagick-dev
         ;;
     *)
-        wget "https://launchpad.net/imagemagick/main/${version}/+download/ImageMagick-${version}.tar.gz"
-        tar xvfz ImageMagick-${version}.tar.gz
-        cd ImageMagick-*
+        echo "version is ${version}"
+        set +e
+        #this can error
+        start_str=${version:0:6}
+        set -e
+        
+        if [ "${start_str}" == "commit" ]; then
+        
+            sha=${version:7:47}
+            wget -O "ImageMagick-${sha}.tar.gz" "https://github.com/ImageMagick/ImageMagick/archive/${sha}.tar.gz"
+            tar xvfz ImageMagick-${sha}.tar.gz
+            
+            cd "ImageMagick-${sha}"
+        else
+           wget "https://launchpad.net/imagemagick/main/${version}/+download/ImageMagick-${version}.tar.gz"
+           tar xvfz ImageMagick-${version}.tar.gz
+           cd ImageMagick-*
+        fi
         ;;
     esac
 
 #ignore compile warnings/errors
 set +e
 
-    if [ "$cacheable" -eq "false" ] || [ ! -d "${im_dir}" ]; then
+    if [ "${cacheable}" == "false" ] || [ ! -d "${im_dir}" ]; then
         ./configure --prefix="${HOME}/im/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp --with-gvc=no
         make -j 8
         make install
@@ -48,4 +63,5 @@ set +e
         echo "Using cached directory ${im_dir}";
     fi
 }
+
 imagemagick_fetch_and_build $1

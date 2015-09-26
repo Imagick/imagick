@@ -21,6 +21,9 @@ env:
     - IMAGEMAGICK_VERSION=6.7.5-3
     - IMAGEMAGICK_VERSION=6.6.0-9
     - IMAGEMAGICK_VERSION=6.5.3-10
+    
+    # Include individual commits like this:
+    # - IMAGEMAGICK_VERSION=commit_25553302a6d5f736b55e60109600dfbce5fbea48
 
 matrix:
   exclude:
