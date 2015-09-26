@@ -1261,6 +1261,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_LONG", LongPixel);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_QUANTUM", QuantumPixel);
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_SHORT", ShortPixel);
+	//For now we deliberately DO NOT support the longlong pixel type.
+	//64 bit integers and PHP do not play nicely.
+	//IMAGICK_REGISTER_CONST_LONG("PIXEL_LONGLONG", ..);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_UNDEFINED", UndefinedEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_ADD", AddEvaluateOperator);
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_AND", AndEvaluateOperator);
