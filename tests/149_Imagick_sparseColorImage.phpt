@@ -14,7 +14,7 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 function createGradientImage($width, $height, $colorPoints, $sparseMethod, $absolute = false) {
 
     $imagick = new \Imagick();
-    $imagick->newImage($width, $height, "white");
+    $imagick->newImage($width, $height, "rgba(255, 255, 255, 1)");
     $imagick->setImageFormat("png");
 
     $barycentricPoints = array();
@@ -89,8 +89,8 @@ function renderImageVoronoi() {
 function renderImageShepards() {
     $points = array(
             array(0.30, 0.10, 'red'),
-            array(0.10, 0.80, 'blue'),
-            array(0.70, 0.60, 'lime'),
+            array(0.10, 0.80, "RGBA(0, 255, 0, 0.5)"),
+            array(0.70, 0.60, "RGBA(0, 255, 0, 1)"),
             array(0.80, 0.20, 'yellow'),
         );
     $imagick = createGradientImage(600, 600, $points, \Imagick::SPARSECOLORMETHOD_SPEPARDS);
