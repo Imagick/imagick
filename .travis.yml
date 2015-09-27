@@ -52,7 +52,7 @@ matrix:
 
 before_script:
     - for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-    - ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
+    - bash ./imagemagick_dependency.sh "${IMAGEMAGICK_VERSION}"
 
 script:
     - export NO_INTERACTION=1
