@@ -2627,7 +2627,6 @@ PHP_METHOD(imagick, exportimagepixels)
 
 #if MagickLibVersion >= 0x700
 		case LongLongPixel:
-unsigned long long int longlong_array;
 			longlong_array = emalloc(map_size * sizeof(unsigned long long int));
 			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, LongLongPixel, (void *)longlong_array);
 
