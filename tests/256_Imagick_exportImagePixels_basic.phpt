@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, frameImage
+Test Imagick, Imagick::exportImagePixels
 --SKIPIF--
 <?php
 $imageMagickRequiredVersion=0x675;
