@@ -2554,7 +2554,7 @@ PHP_METHOD(imagick, exportimagepixels)
 	unsigned long *long_array;
 	Quantum *quantum_array;
 #if MagickLibVersion >= 0x700
-	unsigned long long int longlong_array;
+	unsigned long long int *longlong_array;
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsl", &x, &y, &width, &height, &map, &map_len, &storage) == FAILURE) {
