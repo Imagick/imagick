@@ -20,7 +20,7 @@ catch(\Exception $e) {
 ob_end_clean();
 
 if ($canCallFourier == false) {
-	die("skip fourier function seems unavaiable");
+	die("skip fourier function seems unavailable");
 }
 
 ?>
