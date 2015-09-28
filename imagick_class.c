@@ -2538,6 +2538,18 @@ PHP_METHOD(imagick, remapimage)
 
 #if MagickLibVersion > 0x646
 /* {{{ proto bool Imagick::exportImagePixels(int x, int y, int width, int height, string map, INT STORAGE)
+
+The types for the PixelStorage types are:
+
+CharPixel - unsigned 1 byte integer
+DoublePixel - 8 byte floating point
+FloatPixel - 4 byte floating point
+IntegerPixel - Removed in IM7 unsigned 4 byte integer
+LongPixel - unsigned 4 byte integer
+QuantumPixel - Quantum, use the defined type from the IM headers.
+ShortPixel - unsigned 2 byte integer
+
+
 */
 PHP_METHOD(imagick, exportimagepixels)
 {
@@ -2551,11 +2563,18 @@ PHP_METHOD(imagick, exportimagepixels)
 	float *float_array;
 	unsigned char *char_array;
 	unsigned short *short_array;
-	unsigned long *long_array;
+	unsigned int *long_array; // The long pixel type is implemented in ImageMagick as 'unsigned int'
 	Quantum *quantum_array;
 #if MagickLibVersion >= 0x700
 	unsigned long long int *longlong_array;
 #endif
+
+#if INT_MAX != 0x7FFFFFFF
+	#error "INT_MAX is not 0x7FFFFFFF, the code below assumes it is, as does the ImageMagick code"
+	// If this happens, you will need to figure out how to make long_array be an array of
+	// 4 byte unsigned ints
+#endif
+
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsl", &x, &y, &width, &height, &map, &map_len, &storage) == FAILURE) {
 		return;
@@ -2650,7 +2669,7 @@ PHP_METHOD(imagick, exportimagepixels)
 		case IntegerPixel:
 #endif
 		case LongPixel:
-			long_array = emalloc(map_size * sizeof(long));
+			long_array = emalloc(map_size * sizeof(unsigned int));
 			status = MagickExportImagePixels(intern->magick_wand, x, y, width, height, map, LongPixel, (void *)long_array);
 
 			if (status != MagickFalse) {
