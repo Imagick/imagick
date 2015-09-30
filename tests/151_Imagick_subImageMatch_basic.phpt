@@ -3,6 +3,7 @@ Test Imagick, subImageMatch
 --SKIPIF--
 <?php
 $imageMagickRequiredVersion=0x675;
+$imageMagickBelowVersion=0x700;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--

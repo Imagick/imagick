@@ -1227,6 +1227,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x656
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_SYNC", SyncChannels);
 #endif
+
+#if MagickLibVersion >= 0x700
+	IMAGICK_REGISTER_CONST_LONG("CHANNEL_READ_MASK", ReadMaskChannel);          /* Pixel is Not Readable? */
+	IMAGICK_REGISTER_CONST_LONG("CHANNEL_WRITE_MASK", WriteMaskChannel);         /* Pixel is Write Protected? */
+	IMAGICK_REGISTER_CONST_LONG("CHANNEL_META", MetaChannel);              /* ???? */
+#endif
+
 #if MagickLibVersion >= 0x670
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_COMPOSITES", CompositeChannels);
 #endif

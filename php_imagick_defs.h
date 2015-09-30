@@ -609,6 +609,9 @@ PHP_METHOD(imagick, shadowimage);
 PHP_METHOD(imagick, setimageattribute);
 #endif
 PHP_METHOD(imagick, setimagebackgroundcolor);
+#if MagickLibVersion >= 0x700
+PHP_METHOD(imagick, setimagechannelmask);
+#endif
 PHP_METHOD(imagick, setimagecompose);
 PHP_METHOD(imagick, setimagecompression);
 PHP_METHOD(imagick, setimagedelay);
@@ -1054,6 +1057,12 @@ PHP_METHOD(imagickkernel, addunitykernel);
 #define KernelValueType double
 #else
 #define KernelValueType MagickRealType
+#endif
+
+#if MagickLibVersion >= 0x700
+#define IM_DEFAULT_CHANNEL UndefinedChannel
+#else
+#define IM_DEFAULT_CHANNEL DefaultChannels
 #endif
 
 #endif /* PHP_IMAGICK_DEFS_H */

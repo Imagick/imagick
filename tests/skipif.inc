@@ -22,6 +22,27 @@ if (isset($imageMagickRequiredVersion)) {
 	}
 }
 
+
+if (isset($imageMagickBelowVersion)) {
+	$versionInfo = \Imagick::getVersion();
+
+	if (array_key_exists("versionNumber", $versionInfo) == false) {
+		die("skip unable to determine ImageMagick version.");
+	}
+
+	$versionInstalled = $versionInfo["versionNumber"];
+
+	if ($versionInstalled >= $imageMagickBelowVersion) {
+		$message = sprintf(
+			"skip ImageMagick installed %x >= limit check %x",
+			$versionInstalled,
+			$imageMagickBelowVersion
+		);
+		die($message);
+	}
+}
+
+
 if (isset($imageMagickBelowVersion)) {
 	$versionInfo = \Imagick::getVersion();
 

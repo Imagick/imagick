@@ -3,9 +3,17 @@
   * Imagick::getConfigureOptions
   * Imagick::getFeatures
   * Imagick::getHDRIEnabled
+  * Imagick::setImageChannelMask (IM7 only)
+  
+- Added IM7 constants:
+  * Imagick::CHANNEL_READ_MASK
+  * Imagick::CHANNEL_WRITE_MASK
+  * Imagick::CHANNEL_META
+
 - Fixes:
   * getcolorquantum, getcolorvaluequantum and setcolorvaluequantum use floats
     when Imagick was compiled against a HDRI version of ImageMagick
+  * exportImagePixels works for all storage types 
 3.3.0RC1
 - Corrected package versioning to exclude PHP7
 - Correct params for Imagick::getColorValueQuantum

@@ -756,6 +756,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x700
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagechannelmask_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, channel)
+	ZEND_END_ARG_INFO()
+#endif
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagecompose_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, COMPOSITE)
 	ZEND_END_ARG_INFO()
@@ -2365,6 +2371,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageattribute, imagick_setimageattribute_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, setimagebackgroundcolor, imagick_setimagebackgroundcolor_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
+	PHP_ME(imagick, setimagechannelmask, imagick_setimagechannelmask_args, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(imagick, setimagecompose, imagick_setimagecompose_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagedelay, imagick_setimagedelay_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, setimagedepth, imagick_setimagedepth_args, ZEND_ACC_PUBLIC)
@@ -3063,7 +3072,11 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->skip_version_check = 0;
 }
 
+#ifdef ZEND_ENGINE_3
+static int php_imagick_count_elements(zval *object, zend_long *count TSRMLS_DC) /* {{{ */
+#else
 static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{{ */
+#endif
 {
 	php_imagick_object *intern= Z_IMAGICK_P(object);
 

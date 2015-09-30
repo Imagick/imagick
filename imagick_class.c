@@ -195,7 +195,7 @@ PHP_METHOD(imagick, adaptiveblurimage)
 	double radius, sigma;
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
@@ -253,7 +253,7 @@ PHP_METHOD(imagick, contraststretchimage)
 	php_imagick_object *intern;
 	double black_point, white_point;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &black_point, &white_point, &channel) == FAILURE) {
@@ -490,7 +490,7 @@ PHP_METHOD(imagick, adaptivesharpenimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double radius, sigma;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
 		return;
@@ -520,7 +520,7 @@ PHP_METHOD(imagick, randomthresholdimage)
 	php_imagick_object *intern;
 	double low, high;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &low, &high, &channel) == FAILURE) {
 		return;
@@ -804,7 +804,7 @@ PHP_METHOD(imagick, orderedposterizeimage)
 	IM_LEN_TYPE map_len;
 	MagickBooleanType status;
 	php_imagick_object *intern;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &map, &map_len, &channel) == FAILURE) {
 		return;
@@ -1270,7 +1270,7 @@ PHP_METHOD(imagick, clutimage)
 	zval *objvar;
 	php_imagick_object *intern, *lookup;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
@@ -1885,7 +1885,7 @@ PHP_METHOD(imagick, floodfillpaintimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	zval *fill_param, *border_param;
-	long x, y, channel = DefaultChannels;
+	long x, y, channel = IM_DEFAULT_CHANNEL;
 	zend_bool invert;
 	double fuzz;
 	PixelWand *fill_wand, *border_wand;
@@ -1943,7 +1943,7 @@ PHP_METHOD(imagick, opaquepaintimage)
 	zval *fill_param, *target_param;
 	zend_bool invert;
 	double fuzz;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 	PixelWand *fill_wand, *target_wand;
 	zend_bool fill_allocated = 0, target_allocated = 0;
 
@@ -2467,7 +2467,7 @@ PHP_METHOD(imagick, sparsecolorimage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long num_elements, sparse_method, channel = DefaultChannels;
+	long num_elements, sparse_method, channel = IM_DEFAULT_CHANNEL;
 	zval *arguments;
 	double *double_array;
 
@@ -2770,7 +2770,7 @@ PHP_METHOD(imagick, functionimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	zval *arguments;
-	long func, num_elements, channel = DefaultChannels;
+	long func, num_elements, channel = IM_DEFAULT_CHANNEL;
 	double *array;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|l", &func, &arguments, &channel) == FAILURE) {
@@ -2841,7 +2841,7 @@ PHP_METHOD(imagick, haldclutimage)
 	zval *objvar;
 	MagickBooleanType status;
 	php_imagick_object *intern, *hald;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
@@ -2876,7 +2876,7 @@ PHP_METHOD(imagick, autolevelimage)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
 		return;
@@ -3047,7 +3047,7 @@ PHP_METHOD(imagick, setcolorspace)
 PHP_METHOD(imagick, clampimage) 
 {
 	php_imagick_object *intern;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
@@ -3800,7 +3800,7 @@ PHP_METHOD(imagick, blurimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	/* Initialize channel type to all channels*/
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
@@ -4600,7 +4600,7 @@ PHP_METHOD(imagick, levelimage)
 	php_imagick_object *intern;
 	double black_point, gamma, white_point;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &black_point, &gamma, &white_point, &channel) == FAILURE) {
@@ -4769,7 +4769,7 @@ PHP_METHOD(imagick, negateimage)
 	php_imagick_object *intern;
 	zend_bool gray;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b|l", &gray, &channel) == FAILURE) {
@@ -5674,7 +5674,7 @@ PHP_METHOD(imagick, sigmoidalcontrastimage)
 	zend_bool sharpen;
 	double contrast, midpoint;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &contrast, &midpoint, &channel) == FAILURE) {
@@ -5826,7 +5826,7 @@ PHP_METHOD(imagick, unsharpmaskimage)
 	php_imagick_object *intern;
 	double radius, sigma, amount, threshold;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd|l", &radius, &sigma, &amount, &threshold, &channel) == FAILURE) {
@@ -5862,7 +5862,7 @@ PHP_METHOD(imagick, convolveimage)
 	php_imagick_object *intern;
 	php_imagickkernel_object *kernel;
 	MagickBooleanType status;
-	long channel = 0;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
 		return;
@@ -6177,7 +6177,7 @@ PHP_METHOD(imagick, evaluateimage)
 	long evaluate_operator;
 	double constant;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld|l", &evaluate_operator, &constant, &channel) == FAILURE) {
@@ -6569,9 +6569,44 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	statistics = MagickGetImageStatistics(intern->magick_wand);
+#else
 	statistics = MagickGetImageChannelStatistics(intern->magick_wand);
+#endif
+
 	array_init(return_value);
 
+#if MagickLibVersion >= 0x700
+	for (i=0; i < (ssize_t) MaxPixelChannels; i++) {
+
+#ifdef ZEND_ENGINE_3
+		ZVAL_NEW_ARR(&tmp);
+		array_init(&tmp);
+		add_assoc_double(&tmp, "mean", statistics[i].mean);
+		add_assoc_double(&tmp, "minima", statistics[i].minima);
+		add_assoc_double(&tmp, "maxima", statistics[i].maxima);
+		add_assoc_double(&tmp, "standardDeviation", statistics[i].standard_deviation);
+#if MagickLibVersion < 0x635
+		add_assoc_long(&tmp, "scale", statistics[i].scale);
+#endif
+		add_assoc_long(&tmp, "depth", statistics[i].depth);
+		add_index_zval(return_value, i, &tmp);
+#else
+		MAKE_STD_ZVAL(tmp);
+		array_init(tmp);
+		add_assoc_double(tmp, "mean", statistics[i].mean);
+		add_assoc_double(tmp, "minima", statistics[i].minima);
+		add_assoc_double(tmp, "maxima", statistics[i]].maxima);
+		add_assoc_double(tmp, "standardDeviation", statistics[i].standard_deviation);
+#if MagickLibVersion < 0x635
+		add_assoc_long(&tmp, "scale", statistics[i].scale);
+#endif
+		add_assoc_long(tmp, "depth", statistics[i].depth);
+		add_index_zval(return_value, channels[i], tmp);
+#endif
+	}
+#else
 	for (i = 0; i < elements ; i++) {
 #ifdef ZEND_ENGINE_3
 		ZVAL_NEW_ARR(&tmp);
@@ -6599,8 +6634,14 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 		add_index_zval(return_value, channels[i], tmp);
 #endif
 
-
 	}
+#endif
+
+//etc.
+//    channel_statistics[i].sum_squared*=area;
+//    channel_statistics[i].sum_cubed*=area;
+//    channel_statistics[i].sum_fourth_power*=area;
+
 	MagickRelinquishMemory(statistics);
 	return;
 }
@@ -8411,6 +8452,33 @@ PHP_METHOD(imagick, setimagebackgroundcolor)
 }
 /* }}} */
 
+#if MagickLibVersion >= 0x700
+/* {{{ proto int Imagick::setImageChannelMask(int channel)
+	Sets the image channel mask. Returns the previous set channel mask.
+*/
+PHP_METHOD(imagick, setimagechannelmask)
+{
+	php_imagick_object *intern;
+	long channel;
+	ChannelType previous_channel_type;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	previous_channel_type = MagickSetImageChannelMask(intern->magick_wand, channel);
+
+	RETURN_LONG(previous_channel_type);
+}
+/* }}} */
+#endif
+
+
 /* {{{ proto bool Imagick::setImageCompose(int compose)
 	Sets the image composite operator, useful for specifying how to composite the image thumbnail when using the Imagick::montageImage() method.
 */
@@ -8823,7 +8891,7 @@ PHP_METHOD(imagick, fximage)
 	php_imagick_object *intern, *intern_return;
 	char *expression;
 	IM_LEN_TYPE expression_len;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &expression, &expression_len, &channel) == FAILURE) {
@@ -8857,7 +8925,7 @@ PHP_METHOD(imagick, gammaimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double gamma;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &gamma, &channel) == FAILURE) {
 		return;
@@ -8887,7 +8955,7 @@ PHP_METHOD(imagick, gaussianblurimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double radius, sigma;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
 		return;
@@ -9398,7 +9466,7 @@ PHP_METHOD(imagick, normalizeimage)
 {
 	MagickBooleanType status;
 	php_imagick_object *intern;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
@@ -9698,7 +9766,7 @@ PHP_METHOD(imagick, compositeimage)
 	php_imagick_object *intern_second;
 	long x, y;
 	long composite_id = 0;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Olll|l", &objvar, php_imagick_sc_entry, &composite_id, &x, &y, &channel) == FAILURE) {
 		return;
@@ -9758,7 +9826,7 @@ PHP_METHOD(imagick, addnoiseimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	long noise;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l|l", &noise, &channel) == FAILURE) {
 		return;
@@ -10009,7 +10077,7 @@ PHP_METHOD(imagick, sharpenimage)
 	double sigma, radius;
 	MagickBooleanType status;
 	php_imagick_object *intern;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
@@ -10329,7 +10397,7 @@ PHP_METHOD(imagick, motionblurimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double radius, sigma, angle;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &radius, &sigma, &angle, &channel) == FAILURE) {
 		return;
@@ -11745,7 +11813,7 @@ PHP_METHOD(imagick, brightnesscontrastimage)
 	php_imagick_object *intern;
 	double brightness, contrast;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &brightness, &contrast, &channel) == FAILURE) {
@@ -11880,7 +11948,7 @@ PHP_METHOD(imagick, selectiveblurimage)
 	php_imagick_object *intern;
 	double brightness, contrast, threshold;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &brightness, &contrast, &threshold, &channel) == FAILURE) {
@@ -11914,7 +11982,7 @@ PHP_METHOD(imagick, rotationalblurimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double angle;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &angle, &channel) == FAILURE) {
 		return;
@@ -11956,7 +12024,7 @@ PHP_METHOD(imagick, statisticimage)
 	MagickBooleanType status;
 	long type;
 	long width, height;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &type, &width, &height, &channel) == FAILURE) {
 		return;
@@ -12140,7 +12208,7 @@ PHP_METHOD(imagick, morphology)
 	php_imagickkernel_object *kernel;
 	long morphologyMethod, iterations;
 	MagickBooleanType status;
-	long channel = DefaultChannels;
+	long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llO|l", &morphologyMethod, &iterations, &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
 		return;

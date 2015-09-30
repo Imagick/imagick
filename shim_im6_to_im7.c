@@ -38,13 +38,13 @@ MagickBooleanType MagickAdaptiveBlurImageChannel(MagickWand *wand,const ChannelT
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickAdaptiveBlurImage(wand, radius, sigma);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -55,13 +55,13 @@ MagickBooleanType MagickAdaptiveSharpenImageChannel(MagickWand *wand, const Chan
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickAdaptiveSharpenImage(wand, radius, sigma);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -72,14 +72,14 @@ MagickBooleanType MagickAddNoiseImageChannel(MagickWand *wand,const ChannelType 
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	//TODO - what is the value meant to be?
 	status = MagickAddNoiseImage(wand, noise_type, 1.0);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -90,13 +90,13 @@ MagickBooleanType MagickAutoGammaImageChannel(MagickWand *wand, const ChannelTyp
   	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickAutoGammaImage(wand);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -108,13 +108,13 @@ MagickBooleanType MagickAutoLevelImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickAutoLevelImage(wand);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -126,13 +126,13 @@ MagickBooleanType MagickBlurImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickBlurImage(wand, radius,sigma);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -143,13 +143,13 @@ MagickBooleanType MagickBrightnessContrastImageChannel(MagickWand *wand,const Ch
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickBrightnessContrastImage(wand, brightness, contrast);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -160,13 +160,13 @@ MagickBooleanType MagickClampImageChannel(MagickWand *wand, const ChannelType ch
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickClampImage(wand);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -178,13 +178,13 @@ MagickBooleanType MagickClutImageChannel(MagickWand *wand, const ChannelType cha
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 	//TODO - need to take parameter
 	status = MagickClutImage(wand, clut_wand, AverageInterpolatePixel);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -199,13 +199,13 @@ MagickBooleanType MagickCompositeImageChannel(MagickWand *wand,
 
 	long clip_to_self = 1;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickCompositeImage(wand, source_wand, compose, clip_to_self, x,y);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -218,13 +218,13 @@ MagickWand *MagickCompareImageChannels(MagickWand *wand, const MagickWand *refer
 	MagickWand *tmp_wand;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	tmp_wand = MagickCompareImages(wand, reference, metric, distortion);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 	return tmp_wand;
@@ -237,13 +237,13 @@ MagickBooleanType MagickContrastStretchImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickContrastStretchImage(wand, black_point, white_point);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -256,13 +256,13 @@ MagickBooleanType MagickConvolveImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickConvolveImage(wand, kernel);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -275,13 +275,13 @@ MagickBooleanType MagickEqualizeImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickEqualizeImage(wand);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -294,13 +294,13 @@ MagickBooleanType MagickEvaluateImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickEvaluateImage(wand,op,value);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -312,13 +312,13 @@ MagickBooleanType MagickFilterImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickFilterImage(wand, kernel);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -333,13 +333,13 @@ MagickBooleanType MagickFloodfillPaintImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickFloodfillPaintImage(wand, fill, fuzz, bordercolor, x, y, invert);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -352,13 +352,13 @@ MagickBooleanType MagickFunctionImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickFunctionImage(wand,function,number_arguments,arguments);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -371,13 +371,13 @@ MagickWand *MagickFxImageChannel(MagickWand *wand, const ChannelType channel,con
 	MagickWand *result_wand;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	result_wand = MagickFxImage(wand, expression);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -390,13 +390,13 @@ MagickBooleanType MagickGammaImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickGammaImage(wand,gamma);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -408,13 +408,13 @@ MagickBooleanType MagickGaussianBlurImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickGaussianBlurImage(wand,radius,sigma);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -429,13 +429,13 @@ MagickBooleanType MagickHaldClutImageChannel(MagickWand *wand, const ChannelType
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickHaldClutImage(wand, hald_wand);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -448,13 +448,13 @@ MagickBooleanType MagickLevelImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickLevelImage(wand,black_point,gamma, white_point);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -467,13 +467,13 @@ MagickBooleanType MagickMorphologyImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickMorphologyImage(wand, method, iterations, kernel);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -486,13 +486,13 @@ MagickBooleanType MagickMotionBlurImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickMotionBlurImage(wand, radius, sigma,angle);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -505,13 +505,13 @@ MagickBooleanType MagickNegateImageChannel(MagickWand *wand,const ChannelType ch
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickNegateImage(wand, gray);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -523,13 +523,13 @@ MagickBooleanType MagickNormalizeImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickNormalizeImage(wand);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -542,13 +542,13 @@ MagickBooleanType MagickOpaquePaintImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickOpaquePaintImage(wand, target, fill, fuzz, invert);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -560,13 +560,13 @@ MagickBooleanType MagickOrderedPosterizeImageChannel(
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickOrderedPosterizeImage(wand, threshold_map);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -580,13 +580,13 @@ MagickBooleanType MagickRandomThresholdImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickRandomThresholdImage(wand, low, high);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -598,13 +598,13 @@ MagickBooleanType MagickRotationalBlurImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickRotationalBlurImage(wand, angle);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -617,13 +617,13 @@ MagickBooleanType MagickSelectiveBlurImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickSelectiveBlurImage(wand, radius, sigma, threshold);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -639,13 +639,13 @@ MagickBooleanType MagickSharpenImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickSharpenImage(wand, radius, sigma);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -658,13 +658,13 @@ MagickBooleanType MagickSigmoidalContrastImageChannel(
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickSigmoidalContrastImage(wand, sharpen, alpha, beta);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -675,13 +675,13 @@ MagickBooleanType MagickSolarizeImageChannel(MagickWand *wand, const ChannelType
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickSolarizeImage(wand, threshold);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -694,13 +694,13 @@ MagickBooleanType MagickSparseColorImageChannel(MagickWand *wand, const ChannelT
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickSparseColorImage(wand, method, number_arguments, arguments);
 
-   	if (channel != UndefinedPixelChannel) {
+   	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -715,13 +715,13 @@ MagickBooleanType MagickStatisticImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickStatisticImage(wand, type, width, height);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
@@ -733,13 +733,13 @@ MagickBooleanType MagickStatisticImageChannel(MagickWand *wand,
 //	MagickBooleanType status;
 //	ChannelType previous_channel_mask;
 //
-//	if (channel != UndefinedPixelChannel) {
+//	if (channel != UndefinedChannel) {
 //		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 //	}
 //
 //	status = MagickThresholdImage(wand, threshold);
 //
-//	if (channel != UndefinedPixelChannel) {
+//	if (channel != UndefinedChannel) {
 //		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 //	}
 //
@@ -753,13 +753,13 @@ MagickBooleanType MagickUnsharpMaskImageChannel(MagickWand *wand,
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
 
 	status = MagickUnsharpMaskImage(wand, radius, sigma, amount, threshold);
 
-	if (channel != UndefinedPixelChannel) {
+	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
 	}
 
