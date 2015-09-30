@@ -6589,22 +6589,22 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 		add_assoc_double(&tmp, "standardDeviation", statistics[i].standard_deviation);
 #if MagickLibVersion < 0x635
 		add_assoc_long(&tmp, "scale", statistics[i].scale);
-#endif
+#endif //0x635
 		add_assoc_long(&tmp, "depth", statistics[i].depth);
 		add_index_zval(return_value, i, &tmp);
-#else
+#else //not ZE3
 		MAKE_STD_ZVAL(tmp);
 		array_init(tmp);
 		add_assoc_double(tmp, "mean", statistics[i].mean);
 		add_assoc_double(tmp, "minima", statistics[i].minima);
-		add_assoc_double(tmp, "maxima", statistics[i]].maxima);
+		add_assoc_double(tmp, "maxima", statistics[i].maxima);
 		add_assoc_double(tmp, "standardDeviation", statistics[i].standard_deviation);
 #if MagickLibVersion < 0x635
 		add_assoc_long(&tmp, "scale", statistics[i].scale);
-#endif
+#endif //0x635
 		add_assoc_long(tmp, "depth", statistics[i].depth);
 		add_index_zval(return_value, channels[i], tmp);
-#endif
+#endif //end ZE3
 	}
 #else
 	for (i = 0; i < elements ; i++) {
