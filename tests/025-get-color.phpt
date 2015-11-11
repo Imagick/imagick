@@ -15,13 +15,36 @@ define('NORMALISED', 'NORMALISED');
 define('NORMALISED_INCLUDING_ALPHA', 'NORMALISED_INCLUDING_ALPHA');
 define('QUANTUM', 'QUANTUM');
 
-function checkExpectedValue($expectedValue, $actualValue) {
+function checkExpectedValue($expectedValue, $actualValue, $hasVariance) {
 
-	if (Imagick::getHDRIEnabled()) {
-		return abs($expectedValue - $actualValue) < 0.01;
+	$variance = 0; 
+
+	// Behaviour of 50% pixel was changed in 
+	// key = version
+	// value = variance expected in result
+	$troubledVersions = array(
+		0x692 => 1
+	);
+	$v = Imagick::getVersion();
+	$versionNumber = $v['versionNumber'];
+
+	if (array_key_exists($versionNumber, $troubledVersions)) {
+		$variance = $troubledVersions[$versionNumber];
 	}
 
-	if ($expectedValue == $actualValue) {
+	if (Imagick::getHDRIEnabled()) {
+		return abs($expectedValue - $actualValue) < (0.01 + $variance);
+	}
+
+	if ($hasVariance) {
+		$difference = abs($expectedValue - $actualValue);
+		if ($difference < 1 + $variance) {
+			return true;
+		}
+		echo "difference $difference not < 1 + variance $variance\n";
+		return false;
+	}
+	else if($expectedValue == $actualValue) {
 		return true;
 	}
 
@@ -33,7 +56,15 @@ function getExpectedValue($someValue) {
 		return $someValue;
 	}
 
-	return (intval(round($someValue, 0, PHP_ROUND_HALF_DOWN)));
+	$v = Imagick::getVersion();
+	if ($v['versionNumber'] >= 0x692) {
+		//this is the new correct behaviour
+		return (intval(round($someValue, 0, PHP_ROUND_HALF_UP)));
+	}
+	else {
+		//old behaviour had wrong rounding.
+		return (intval(round($someValue, 0, PHP_ROUND_HALF_DOWN)));
+	}
 }
 
 
@@ -42,25 +73,24 @@ $tests = array(
 		'red',
 		ORIGINAL,  
 		array(
-			'r' => getExpectedValue(255),
-			'a' => getExpectedValue(1.0)
+			array('r', getExpectedValue(255), 0),
+			array('a', getExpectedValue(1.0), 0)
 		),
 	),
 	array(
 		'red',
 		QUANTUM,  
 		array(
-			'r' => getExpectedValue(\Imagick::getQuantum()),
-			'a' => getExpectedValue(\Imagick::getQuantum())
+			array('r', getExpectedValue(\Imagick::getQuantum()), 0),
+			array('a', getExpectedValue(\Imagick::getQuantum()), 0)
 		),
 	),
 	array(
 		'rgb(25%, 25%, 25%)',
 		QUANTUM,
 		array(
-//			'r' => (intval(round(\Imagick::getQuantum() / 4))),
-			'r' => getExpectedValue(\Imagick::getQuantum() / 4),
-			'a' => getExpectedValue(\Imagick::getQuantum())
+			array('r', getExpectedValue(\Imagick::getQuantum() / 4), 0),
+			array('a', getExpectedValue(\Imagick::getQuantum()), 0),
 		)
 	)
 );
@@ -72,8 +102,8 @@ if ($version['versionNumber'] >= 0x687) {
 		'green',
 		QUANTUM,  
 		array(
-			'g' => getExpectedValue(\Imagick::getQuantum() * (128 / 255)),
-			'a' => getExpectedValue(\Imagick::getQuantum())
+			array('g', getExpectedValue(\Imagick::getQuantum() * (128 / 255)), 1),
+			array('a', getExpectedValue(\Imagick::getQuantum()), 1)
 		),
 	);
 
@@ -81,8 +111,8 @@ if ($version['versionNumber'] >= 0x687) {
 		'rgb(0, 50%, 0)',
 		QUANTUM,  
 		array(
-			'g' => getExpectedValue(\Imagick::getQuantum() / 2),
-			'a' => getExpectedValue(\Imagick::getQuantum())
+			array('g', getExpectedValue(\Imagick::getQuantum() / 2), 1),
+			array('a', getExpectedValue(\Imagick::getQuantum()), 0)
 		),
 	);
 }
@@ -121,8 +151,9 @@ foreach ($tests as $test) {
 		}
 	}
 
-	foreach ($expectations as $key => $expectedValue) {
-		if (!checkExpectedValue($expectedValue, $color[$key])) {
+	foreach ($expectations as $test) {
+		list($key, $expectedValue, $hasVariance) = $test;
+		if (!checkExpectedValue($expectedValue, $color[$key], $hasVariance)) {
 			printf( 
 				"%s %s is wrong for colorString '%s': actual %s != expected %s"  . PHP_EOL,
 				$type,
