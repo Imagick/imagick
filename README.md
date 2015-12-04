@@ -1,43 +1,45 @@
 [![Build Status](https://travis-ci.org/mkoppanen/imagick.png)](https://travis-ci.org/mkoppanen/imagick)
 
-Imagick
--------
+# Imagick
+
 
 Imagick is a PHP extension to create and modify images using the ImageMagick library. There is also a version of Imagick available for HHVM. Although the two extensions are mostly compatible in their API, and they both call the ImageMagick library, the two extensions are completely separate code-bases.
 
-PHP Imagick
-    Source code + issues - https://github.com/mkoppanen/imagick
-    Releases - http://pecl.php.net/package/imagick
-    Documentation - http://php.net/manual/en/book.imagick.php
+## PHP Imagick
+
+* Source code + issues - https://github.com/mkoppanen/imagick
+* Releases - http://pecl.php.net/package/imagick
+* Documentation - http://php.net/manual/en/book.imagick.php
     
 Bugs can also be reported at https://bugs.php.net but may have a slower response time.
 
-HHVM Imagick - https://github.com/facebook/hhvm/tree/master/hphp/runtime/ext/imagick
+## HHVM Imagick
+
+* https://github.com/facebook/hhvm/tree/master/hphp/runtime/ext/imagick
 
 
-Installing on Windows
----------------------
+# Installing on Windows
+
 
 For Windows please install both Imagick and the underlying ImageMagick library from:
-http://windows.php.net/downloads/pecl/releases/imagick/
-http://windows.php.net/downloads/pecl/deps/
+* http://windows.php.net/downloads/pecl/releases/imagick/
+* http://windows.php.net/downloads/pecl/deps/
 
 Once compiled, Imagick should be run with the same version of ImageMagick that it was compiled against. Running against a different version of ImageMagick is known to cause stability issues, and so is not recommended or supported.
 
-Examples
---------
+# Examples
+
 
 Almost all of the functions in the library have an example at [www.phpimagick.com](http://www.phpimagick.com/), where you can see the example code to call the function, as well as the generated image or output.
 
 
-ImageMagick 
-------------
+# ImageMagick
+
 
 ImageMagick, the library that the Imagick extension exposes to PHP has had many bug fixes, that have fixed many image corruption issues. We _strongly_ recommend upgrading to the latest version (currently 6.9.1) if at all possible.
 
 
-Security
---------
+# Security
 
 The PHP extension Imagick works by calling the ImageMagick library. Although the ImageMagick developers take good care in avoiding bugs it is inevitable that some bugs will be present in the code. ImageMagick also uses a lot of third party libraries to open, read and manipulate files. The writers of these libraries also take care when writing their code. However everyone makes mistakes and there will inevitably be some bugs present.
 
@@ -71,8 +73,7 @@ if (in_array($mimeType, $allowedMimeTypes) == false) {
 These recommendations do not guarantee any security, but they should limit your exposure to any Imagick/ImageMagick related security issue.
 
 
-OpenMP
-------
+# OpenMP
 
 ImageMagick has the ability to use the Open Multi-Processing API to be able to use multiple threads to process an image at once. Some implementations of OpenMP are known to have stability issues when they are used in certain environments. 
 
@@ -86,8 +87,8 @@ We recommend doing one of the following:
 
 
 
-TODO
-----
+# TODO
+
 
 Documentation needs a lot of work. There is an online editor here: [https://edit.php.net/](https://edit.php.net/) Contributions are more than welcome.
 
