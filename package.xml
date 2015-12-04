@@ -59,6 +59,8 @@ This extension requires ImageMagick version 6.5.4+ and PHP 5.4.0+.
         ImagickPixel::setColorValueQuantum now correctly use floats when Imagick 
         was compiled against a HDRI version of ImageMagick
       * Imagick::exportImagePixels works for all storage types
+      * Version number in extension header
+    
 </notes>
 	<contents>
 		<dir name="/">

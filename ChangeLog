@@ -1,3 +1,7 @@
+3.4.0RC2
+- Fixes:
+  * Version number in extension header.
+
 3.4.0RC1
 - Added support:
   * PHP 7
