@@ -1,22 +1,35 @@
-3.3.Next
+3.4.0RC1
+- Added support:
+  * PHP 7
+  * ImageMagick 7. Imagick can be compiled against either ImageMagick 6 or ImageMagick 7
+    However it must be run with the exact same version it was compiled against. Trying
+    to run Imagick with a different version of ImageMagick than it was compiled against 
+    is not supported. Please see http://nextgen.imagemagick.org/script/porting.php for
+    more information about ImageMagick 7.
+- Minimum versions supported are now PHP >= 5.4.0 and ImageMagick >= 6.5.3-10.
+    Earlier versions may continue to work, but they are no longer supported.
 - Added methods:
   * Imagick::getConfigureOptions
   * Imagick::getFeatures
   * Imagick::getHDRIEnabled
   * Imagick::setImageChannelMask (IM7 only)
-  
 - Added IM7 constants:
   * Imagick::CHANNEL_READ_MASK
   * Imagick::CHANNEL_WRITE_MASK
   * Imagick::CHANNEL_META
-
 - Fixes:
-  * getcolorquantum, getcolorvaluequantum and setcolorvaluequantum use floats
-    when Imagick was compiled against a HDRI version of ImageMagick
-  * exportImagePixels works for all storage types 
-3.3.0RC1
+  * ImagickPixel::getColorQuantum, ImagickPixel::getColorValueQuantum and 
+    ImagickPixel::setColorValueQuantum now correctly use floats when Imagick 
+    was compiled against a HDRI version of ImageMagick
+  * Imagick::exportImagePixels works for all storage types
+
+3.3.0
+  No changes
+
+3.3.0RC2
 - Corrected package versioning to exclude PHP7
 - Correct params for Imagick::getColorValueQuantum
+
 3.3.0RC1
 - Added ImagickKernel class. These can be used with the Imagick::morphology or 
     Imagick::filter functions.
