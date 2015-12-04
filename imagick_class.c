@@ -8594,9 +8594,10 @@ PHP_METHOD(imagick, colorizeimage)
 	MagickBooleanType status;
 	PixelWand *color_wand, *opacity_wand;
 	zend_bool color_allocated, opacity_allocated;
+	zend_bool legacy = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &color_param, &opacity_param) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz|b", &color_param, &opacity_param, &legacy) == FAILURE) {
 		return;
 	}
 
@@ -8608,7 +8609,13 @@ PHP_METHOD(imagick, colorizeimage)
 	if (!color_wand)
 		return;
 
-	opacity_wand = php_imagick_zval_to_opacity (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	if (legacy) {
+		opacity_wand = php_imagick_zval_to_opacity (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	}
+	else {
+		opacity_wand = php_imagick_zval_to_pixelwand(opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	}
+
 	if (!opacity_wand) {
 		if (color_allocated)
 			color_wand = DestroyPixelWand (color_wand);
@@ -8616,20 +8623,22 @@ PHP_METHOD(imagick, colorizeimage)
 		return;
 	}
 
-	/* Colorize wants both wands to be of same instance */
-	param_wand = php_imagick_clone_pixelwand (color_wand);
-	if (!param_wand) {
-		php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate" TSRMLS_CC);
-		return;
-	}
-
+	if (legacy) {
+		/* Colorize wants both wands to be of same instance */
+		param_wand = php_imagick_clone_pixelwand (color_wand);
+		if (!param_wand) {
+			php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate" TSRMLS_CC);
+			return;
+		}
 #if MagickLibVersion < 0x700
-	PixelSetOpacity(param_wand, PixelGetOpacity(opacity_wand));
+		PixelSetOpacity(param_wand, PixelGetOpacity(opacity_wand));
 #endif
-	PixelSetAlpha(param_wand, PixelGetAlpha(opacity_wand));
-
-	status = MagickColorizeImage(intern->magick_wand, param_wand, param_wand);
-	param_wand = DestroyPixelWand(param_wand);
+		PixelSetAlpha(param_wand, PixelGetAlpha(opacity_wand));
+		status = MagickColorizeImage(intern->magick_wand, param_wand, param_wand);
+		param_wand = DestroyPixelWand(param_wand);
+	} else {
+		status = MagickColorizeImage(intern->magick_wand, color_wand, opacity_wand);
+	}
 
 	if (color_allocated)
 		color_wand = DestroyPixelWand (color_wand);
