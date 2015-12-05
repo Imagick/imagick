@@ -1,8 +1,9 @@
 3.4.0RC3
 - Fixes:
-  * Imagick::colorizeImage() was using the wrong behaviour. It is now fixed but the 
-    legacy behaviour can be used by passing a 3rd parameter of `true` to the function
-    to indicate that the legacy behaviour is desired.
+  * Imagick::colorizeImage() and Imagick::tintImage were using the wrong behaviour. 
+    It is now fixed and the legacy behaviour can still be used by passing a 3rd 
+    parameter of `true` to the function to indicate that the legacy behaviour is 
+    desired.
 
 3.4.0RC2
 - Fixes:

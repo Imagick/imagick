@@ -5770,8 +5770,10 @@ PHP_METHOD(imagick, textureimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::tintImage(ImagickPixel tint, ImagickPixel opacity)
-	Applies a color vector to each pixel in the image
+/* {{{ proto bool Imagick::tintImage(ImagickPixel tint, ImagickPixel opacity, bool legacy = false)
+	Applies a color vector to each pixel in the image. The 'opacity' color is a per channel
+	strength factor for how strongly the color should be applied. If legacy is true, the behaviour
+	of this function is incorrect, but consistent with how it behaved before Imagick version 3.4.0
 */
 PHP_METHOD(imagick, tintimage)
 {
@@ -5780,9 +5782,10 @@ PHP_METHOD(imagick, tintimage)
 	MagickBooleanType status;
 	PixelWand *tint_wand, *opacity_wand;
 	zend_bool tint_allocated, opacity_allocated;
+	zend_bool legacy = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &tint_param, &opacity_param) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz|b", &tint_param, &opacity_param, &legacy) == FAILURE) {
 		return;
 	}
 
@@ -5794,7 +5797,14 @@ PHP_METHOD(imagick, tintimage)
 	if (!tint_wand)
 		return;
 
-	opacity_wand = php_imagick_zval_to_opacity (opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	if (legacy) {
+		opacity_wand = php_imagick_zval_to_opacity(opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+		}
+	else {
+		opacity_wand = php_imagick_zval_to_pixelwand(opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
+	}
+	
+	
 	if (!opacity_wand) {
 		if (tint_allocated)
 			tint_wand = DestroyPixelWand (tint_wand);
@@ -8583,8 +8593,11 @@ PHP_METHOD(imagick, setimagedelay)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::colorizeImage(ImagickPixel colorize, ImagickPixel opacity)
-	Blends the fill color with each pixel in the image.
+/* {{{ proto bool Imagick::colorizeImage(ImagickPixel colorize, ImagickPixel opacity, bool legacy)
+	Blends the fill color with each pixel in the image. The 'opacity' color is a 
+	per channel strength factor for how strongly the color should be applied. If
+	legacy is true, the behaviour of this function is incorrect, but consistent 
+	with how it behaved before Imagick version 3.4.0
 */
 PHP_METHOD(imagick, colorizeimage)
 {
