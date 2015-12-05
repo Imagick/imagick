@@ -4,6 +4,7 @@
     It is now fixed and the legacy behaviour can still be used by passing a 3rd 
     parameter of `true` to the function to indicate that the legacy behaviour is 
     desired.
+  * Imagick::importImagePixels regression fixed.
 
 3.4.0RC2
 - Fixes:

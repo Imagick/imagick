@@ -329,7 +329,7 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 			tmp_zval = **ppzval;
 			zval_copy_ctor(&tmp_zval);
 			tmp_pzval = &tmp_zval;
-			convert_to_double(tmp_pzval);
+			convert_to_long(tmp_pzval);
 
 			value = Z_LVAL_P(tmp_pzval);
 			zval_dtor (tmp_pzval);
@@ -379,7 +379,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 			tmp_zval = **ppzval;
 			zval_copy_ctor(&tmp_zval);
 			tmp_pzval = &tmp_zval;
-			convert_to_double(tmp_pzval);
+			convert_to_long(tmp_pzval);
 
 			value = Z_LVAL_P(tmp_pzval);
 			zval_dtor (tmp_pzval);
