@@ -12108,7 +12108,7 @@ PHP_METHOD(imagick, subimagematch)
 		return;
 
 #if MagickLibVersion >= 0x700
-	MetricType metric = AbsoluteErrorMetric;
+	MetricType metric = RootMeanSquaredErrorMetric;
 	double similarity_threshold = 1.0;
 	new_wand = MagickSimilarityImage(intern->magick_wand, reference_intern->magick_wand,
 	metric, similarity_threshold,
