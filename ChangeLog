@@ -5,6 +5,9 @@
     parameter of `true` to the function to indicate that the legacy behaviour is 
     desired.
   * Imagick::importImagePixels regression fixed.
+  * Imagick::subImageMatch use correct error metric in IM7
+- Added methods:
+  * Imagick::similarityImage() which is an alias to Imagick::subImageMatch()
 
 3.4.0RC2
 - Fixes:
