@@ -62,7 +62,8 @@ AC_DEFUN([IM_EVAL_LIBLINE_DEFER],[
     ;;
     -L*[)]
       ac_ii=`echo $ac_i|cut -c 3-`
-      PHP_ADD_LIBPATH_DEFER($ac_ii,$2)
+      AC_MSG_NOTICE(cut var is $ac_ii)
+      PHP_ADD_LIBPATH($ac_ii,$2)
     ;;
     esac
   done
@@ -197,12 +198,12 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
 
   AC_MSG_NOTICE(Trying to locate ImageMagick MagickWand API configuration program)
 
-  IM_LOCATIONS=("/usr/local" "/usr" "/usr/sbin" "/opt" "/opt/local")
-  if test "$IM_EXTRA_SEARCH_PREFIX" != "yes"; then
-    IM_LOCATIONS=("$IM_EXTRA_SEARCH_PREFIX" "/usr/local" "/usr" "/usr/sbin" "/opt" "/opt/local")
-  fi
+  #IM_LOCATIONS=("/usr/local" "/usr" "/usr/sbin" "/opt" "/opt/local")
+  #if test "$IM_EXTRA_SEARCH_PREFIX" != "yes"; then
+  #  IM_LOCATIONS=("$IM_EXTRA_SEARCH_PREFIX" "/usr/local" "/usr" "/usr/sbin" "/opt" "/opt/local")
+  #fi
 
-  for i in "${IM_LOCATIONS[@]}";
+  for i in /usr/local /usr /usr/sbin /opt /opt/local;
   do  
     AC_MSG_CHECKING([Testing ${i}/bin/MagickWand-config])
     if test -r "${i}/bin/MagickWand-config"; then
@@ -301,7 +302,7 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
     PHP_IMAGICK_STATIC=yes
   fi
  
-  m4_include(ifdef('PHP_IMAGICK_STATIC',PHP_EXT_BUILDDIR(imagick)[/],)[imagemagick.m4])
+  #m4_include(ifdef('PHP_IMAGICK_STATIC',PHP_EXT_BUILDDIR(imagick)[/],)[imagemagick.m4])
 
   # Find where ImageMagick is located.
   IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
@@ -314,15 +315,17 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   AC_MSG_RESULT(IMAGICK_SHARED_LIBADD found $IMAGICK_SHARED_LIBADD)
   
   # Pass the libs and include strings to PHP
-  PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  # PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
   
-#  if test $PHP_IMAGICK_STATIC == "yes"; then
-#    AC_MSG_NOTICE([Imagick compiling statically - add libs to link path])
-#    IM_EVAL_LIBLINE_DEFER($IM_IMAGEMAGICK_LIBS, $PHP_IMAGICK)
-#  else 
-#    AC_MSG_NOTICE([Imagick compiling as extension - add libs everything])
-#    PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
-#  fi
+  if test $PHP_IMAGICK_STATIC = "yes"; then
+    # We don't want the imagick libs added to the probe programs compiled
+    # by configure
+    AC_MSG_NOTICE([Imagick compiling statically, adding libs to link path])
+    IM_EVAL_LIBLINE_DEFER($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  else 
+    AC_MSG_NOTICE([Imagick compiling as extension - add libs everything])
+    PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
+  fi
   
   PHP_EVAL_INCLINE($IM_IMAGEMAGICK_CFLAGS)
 
