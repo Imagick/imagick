@@ -11826,7 +11826,7 @@ PHP_METHOD(imagick, settype)
 }
 /* }}} */
 
-
+#if MagickLibVersion >= 0x659
 /* {{{ proto bool Imagick::brightnessContrastImage(float brigthness, float contrast[, int channel])
 	Change the brightness and/or contrast of an image. It converts the brightness and contrast parameters into slope and intercept and calls a polynomical function to apply to the image.
 */
@@ -11857,6 +11857,7 @@ PHP_METHOD(imagick, brightnesscontrastimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 
 #if MagickLibVersion > 0x661

@@ -1358,11 +1358,13 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, IMGTYPE)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x659
 	ZEND_BEGIN_ARG_INFO_EX(imagick_brightnesscontrastimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, brightness)
 		ZEND_ARG_INFO(0, contrast)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 
 #if MagickLibVersion > 0x661
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colormatriximage_args, 0, 0, 1)
@@ -2617,7 +2619,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_MALIAS(imagick, rewind, setfirstiterator, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, valid, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, current, imagick_zero_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x659
 	PHP_ME(imagick, brightnesscontrastimage, imagick_brightnesscontrastimage_args, ZEND_ACC_PUBLIC)
+#endif
 #if MagickLibVersion > 0x661
 	PHP_ME(imagick, colormatriximage, imagick_colormatriximage_args, ZEND_ACC_PUBLIC)
 #endif
