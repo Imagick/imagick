@@ -656,6 +656,7 @@ PHP_METHOD(imagick, averageimages);
 #endif
 #endif
 PHP_METHOD(imagick, borderimage);
+PHP_METHOD(imagick, calculatecrop);
 PHP_METHOD(imagick, chopimage);
 PHP_METHOD(imagick, clipimage);
 PHP_METHOD(imagick, clippathimage);
