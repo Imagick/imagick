@@ -83,6 +83,31 @@ catch ( ImagickException $e )
 {
 	echo $e->getMessage() . "\n";
 }
+
+// Legacy version
+$imagick = new Imagick();
+$imagick->newImage(2961, 2592, "white" );
+$imagick->thumbnailImage(300, 0, false, false, true);
+
+if ($imagick->getImageWidth() != 300) {
+	echo "Error in height for 2961, 2592: actual is ".$image->getImageWidth()." not 300.".PHP_EOL;
+}
+if ($imagick->getImageHeight() != 262) {
+	echo "Error in height for 2961, 2592: actual is ".$image->getImageHeight()." not 262.".PHP_EOL;
+}
+
+// Correct version
+$imagick = new Imagick();
+$imagick->newImage(2961, 2592, "white" );
+$imagick->thumbnailImage(300, 0);
+
+if ($imagick->getImageWidth() != 300) {
+	echo "Error in height for 2961, 2592: actual is ".$image->getImageWidth()." not 300.".PHP_EOL;
+}
+if ($imagick->getImageHeight() != 263) {
+	echo "Error in height for 2961, 2592: actual is ".$image->getImageHeight()." not 263.".PHP_EOL;
+}
+
 ?>
 --EXPECTF--
 --- Source Image: 400x200, Imagick::thumbnailImage( 100, null, false )

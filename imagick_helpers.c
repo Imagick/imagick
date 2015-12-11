@@ -152,7 +152,19 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	return MagickTrue;
 }
 
-zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height)
+/* This is not universally safe to use, but is safe enough for values that will 
+   be encountered for image dimensions.
+*/
+static inline double im_round_helper(double value) {
+	if (value >= 0.0) {
+		return floor(value + 0.5);
+	} else {
+		return ceil(value - 0.5);
+	}
+}
+
+
+zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height, zend_bool legacy)
 {
 	long orig_width, orig_height;
 
@@ -181,10 +193,20 @@ zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool be
 			*new_height = desired_height;
 		} else if (ratio_x < ratio_y) {
 			*new_width  = desired_width;
-			*new_height = ratio_x * ((double) orig_height);
+			if (legacy) {
+				*new_height = ratio_x * ((double) orig_height);
+			}
+			else {
+				*new_height = im_round_helper(ratio_x * ((double) orig_height));
+			}
 		} else {
 			*new_height = desired_height;
-			*new_width  = ratio_y * ((double) orig_width);
+			if (legacy) {
+				*new_width  = ratio_y * ((double) orig_width);
+			}
+			else {
+				*new_width  = im_round_helper(ratio_y * ((double) orig_width));
+			}
 		}
 		*new_width  = (*new_width < 1)  ? 1 : *new_width;
 		*new_height = (*new_height < 1) ? 1 : *new_height;
@@ -199,11 +221,21 @@ zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool be
 		if (desired_width <= 0 || desired_height <= 0) {
 			if (desired_width <= 0) {
 				ratio       = (double) orig_height / (double) desired_height;
-				*new_width  = ((double) orig_width) / ratio;
+				if (legacy) {
+					*new_width  = ((double) orig_width) / ratio;
+				}
+				else {
+					*new_width  = im_round_helper(((double) orig_width) / ratio);
+				}
 				*new_height = desired_height;
 			} else {
 				ratio       = (double) orig_width / (double) desired_width;
-				*new_height = ((double) orig_height) / ratio;
+				if (legacy) {
+					*new_height = ((double) orig_height) / ratio;
+				}
+				else {
+					*new_height = im_round_helper(((double) orig_height) / ratio);
+				}
 				*new_width  = desired_width;
 			}
 		} else {

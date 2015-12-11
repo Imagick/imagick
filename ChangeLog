@@ -1,5 +1,11 @@
 3.4.0RC3
 - Fixes:
+  * Imagick::adaptiveResizeImage, Imagick::cropThumbnailImage Imagick::resizeImage, 
+    Imagick::scaleImage, and Imagick::thumbnailImage have all had a rounding bug fixed. 
+    An additional parameter has been added to each of them, 'bool $legacy'. If legacy 
+    is true, the calculations are done with the small rounding bug that existed in
+    Imagick before 3.4.0. If false, the calculations should produce the same results as 
+    ImageMagick CLI does.
   * Imagick::colorizeImage() and Imagick::tintImage were using the wrong behaviour. 
     It is now fixed and the legacy behaviour can still be used by passing a 3rd 
     parameter of `true` to the function to indicate that the legacy behaviour is 

@@ -338,8 +338,11 @@ PHP_METHOD(imagick, setimagematte)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::adaptiveResizeImage(int width, int height[, bool bestfit])
+/* {{{ proto bool Imagick::adaptiveResizeImage(int width, int height[, bool bestfit[, bool legacy]]])
 	Adaptively resize image with data dependent triangulation
+	If legacy is true, the calculations are done with the small rounding bug that existed in
+	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, adaptiveresizeimage)
 {
@@ -347,8 +350,9 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 	MagickBooleanType status;
 	long width, height, new_width, new_height;
 	zend_bool bestfit = 0;
+	zend_bool legacy = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &width, &height, &bestfit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bb", &width, &height, &bestfit, &legacy) == FAILURE) {
 		return;
 	}
 
@@ -356,7 +360,7 @@ PHP_METHOD(imagick, adaptiveresizeimage)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 		return;
 	}
@@ -3883,9 +3887,12 @@ PHP_METHOD(imagick, clear)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::scaleImage(int width, int height[, bool bestfit = false] )
+/* {{{ proto bool Imagick::scaleImage(int width, int height[, bool bestfit = false[, bool legacy]] )
 	Scales the size of an image to the given dimensions. Passing zero as either of
 	the arguments will preserve dimension while scaling.
+	If legacy is true, the calculations are done with the small rounding bug that existed in
+	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, scaleimage)
 {
@@ -3893,9 +3900,10 @@ PHP_METHOD(imagick, scaleimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	zend_bool bestfit = 0;
+	zend_bool legacy = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &width, &height, &bestfit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bb", &width, &height, &bestfit, &legacy) == FAILURE) {
 		return;
 	}
 
@@ -3903,7 +3911,7 @@ PHP_METHOD(imagick, scaleimage)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 		return;
 	}
@@ -7486,13 +7494,13 @@ PHP_METHOD(imagick, getnumberimages)
 */
 #if MagickLibVersion > 0x631
 static
-zend_bool s_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill)
+zend_bool s_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill, zend_bool legacy)
 {
 	long new_width, new_height;
 	long extent_x, extent_y;
 
 	/* Calculate dimensions */
-	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height)) {
+	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height, legacy)) {
 		return 0;
 	}
 
@@ -7517,17 +7525,21 @@ zend_bool s_resize_bounding_box(MagickWand *magick_wand, long box_width, long bo
 }
 #endif
 
-/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false, bool fill = false])
-	 Changes the size of an image to the given dimensions and removes any associated profiles
+/* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false[, bool fill = false[, bool legacy = false]]])
+	Changes the size of an image to the given dimensions and removes any associated profiles.
+	If legacy is true, the calculations are done with the small rounding bug that existed in
+	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, thumbnailimage)
 {
 	long width, height, new_width, new_height;
 	php_imagick_object *intern;
 	zend_bool bestfit = 0, fill = 0;
+	zend_bool legacy = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bb", &width, &height, &bestfit, &fill) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bbb", &width, &height, &bestfit, &fill, &legacy) == FAILURE) {
 		return;
 	}
 
@@ -7537,7 +7549,7 @@ PHP_METHOD(imagick, thumbnailimage)
 
 	if (bestfit && fill) {
 #if MagickLibVersion > 0x631
-		if (!s_resize_bounding_box(intern->magick_wand, width, height, fill)) {
+		if (!s_resize_bounding_box(intern->magick_wand, width, height, fill, legacy)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to resize and fill image" TSRMLS_CC);
 		return;
 		}
@@ -7546,7 +7558,7 @@ PHP_METHOD(imagick, thumbnailimage)
 		return;
 #endif
 	} else {
-		if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+		if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 			return;
 		}
@@ -7560,19 +7572,16 @@ PHP_METHOD(imagick, thumbnailimage)
 }
 /* }}} */
 
-
-
-static inline double im_round_helper(double value) {
-	double tmp_value;
-
+/* This is not universally safe to use, but is safe enough for values that will 
+   be encountered for image dimensions.
+*/
+static inline double im_round_helper_class(double value) {
 	if (value >= 0.0) {
 		return floor(value + 0.5);
-
 	} else {
 		return ceil(value - 0.5);
 	}
 }
-
 
 static
 void s_calculate_crop(
@@ -7595,7 +7604,7 @@ void s_calculate_crop(
 			temp_new_height = (long)(ratio_x * (double)orig_height);
 		}
 		else {
-			temp_new_height = im_round_helper(ratio_x * (double)orig_height);
+			temp_new_height = im_round_helper_class(ratio_x * (double)orig_height);
 		}
 	} else {
 		temp_new_height = desired_height;
@@ -7603,7 +7612,7 @@ void s_calculate_crop(
 			temp_new_width  = (long)(ratio_y * (double)orig_width);
 		}
 		else {
-			temp_new_width  = im_round_helper(ratio_y * (double)orig_width);
+			temp_new_width  = im_round_helper_class(ratio_y * (double)orig_width);
 		}
 	}
 
@@ -10802,8 +10811,11 @@ PHP_METHOD(imagick, resampleimage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::resizeImage(int width, int height, int filter, float blur[, bool bestfit = false])
+/* {{{ proto bool Imagick::resizeImage(int width, int height, int filter, float blur[, bool bestfit = false[, bool legacy]])
 	Scales an image to the desired dimensions with one of these filters:
+	If legacy is true, the calculations are done with the small rounding bug that existed in
+	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, resizeimage)
 {
@@ -10812,8 +10824,9 @@ PHP_METHOD(imagick, resizeimage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	zend_bool bestfit = 0;
+	zend_bool legacy = 0;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld|b", &width, &height, &filter, &blur, &bestfit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld|bb", &width, &height, &filter, &blur, &bestfit, &legacy) == FAILURE) {
 		return;
 	}
 
@@ -10821,7 +10834,7 @@ PHP_METHOD(imagick, resizeimage)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height)) {
+	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
 		return;
 	}

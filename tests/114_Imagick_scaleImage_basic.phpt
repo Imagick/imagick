@@ -9,15 +9,40 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 <?php
 
 
-function scaleImage() {
+$tests = [
+    [200, 200, true, 200, 150],
+    [200, 200, false, 200, 200],
+    [200, 0, false, 200, 150],
+];
+
+foreach ($tests as $test) {
+    list($width, $height, $bestFit, $expectedWidth, $expectedHeight) = $test;
+
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
-    $imagick->scaleImage(150, 150, true);
-    $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
+    $imagick->scaleImage($width, $height, $bestFit);
+
+	$imageWidth = $imagick->getImageWidth();
+	$imageHeight = $imagick->getImageHeight();
+
+	$error = false;
+
+	if ($imageWidth != $expectedWidth) {
+		echo "Width $imageWidth does not match expected.\n";
+		$error = true;
+	}
+
+	if ($imageHeight != $expectedHeight) {
+		echo "Height $imageHeight does not match expected.\n";
+		$error = true;
+	}
+
+	if ($error) {
+		echo "test was ".var_export($test, true)."\n";
+	};
 }
 
-scaleImage() ;
+
 echo "Ok";
 ?>
 --EXPECTF--

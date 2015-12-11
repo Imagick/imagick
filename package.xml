@@ -5,7 +5,7 @@
 	<summary>Provides a wrapper to the ImageMagick library.</summary>
 <description>
 Imagick is a native php extension to create and modify images using the ImageMagick API.
-This extension requires ImageMagick version 6.5.4+ and PHP 5.4.0+.
+This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 </description>
 	<lead>
 		<name>Mikko Koppanen</name>
@@ -25,9 +25,9 @@ This extension requires ImageMagick version 6.5.4+ and PHP 5.4.0+.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2015-12-04</date>
+	<date>2015-12-11</date>
 	<version>
-		<release>3.4.0RC2</release>
+		<release>3.4.0RC3</release>
 		<api>3.4.0</api>
 	</version>
 	<stability>
@@ -36,31 +36,21 @@ This extension requires ImageMagick version 6.5.4+ and PHP 5.4.0+.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-    - Added support:
-      * PHP 7
-      * ImageMagick 7. Imagick can be compiled against either ImageMagick 6 or ImageMagick 7
-        However it must be run with the exact same version it was compiled against. Trying
-        to run Imagick with a different version of ImageMagick than it was compiled against 
-        is not supported. Please see http://nextgen.imagemagick.org/script/porting.php for
-        more information about ImageMagick 7.
-    - Minimum versions supported are now PHP >= 5.4.0 and ImageMagick >= 6.5.3-10.
-        Earlier versions may continue to work, but they are no longer supported.
-    - Added methods:
-      * Imagick::getConfigureOptions
-      * Imagick::getFeatures
-      * Imagick::getHDRIEnabled
-      * Imagick::setImageChannelMask (IM7 only)
-    - Added IM7 constants:
-      * Imagick::CHANNEL_READ_MASK
-      * Imagick::CHANNEL_WRITE_MASK
-      * Imagick::CHANNEL_META
-    - Fixes:
-      * ImagickPixel::getColorQuantum, ImagickPixel::getColorValueQuantum and 
-        ImagickPixel::setColorValueQuantum now correctly use floats when Imagick 
-        was compiled against a HDRI version of ImageMagick
-      * Imagick::exportImagePixels works for all storage types
-      * Version number in extension header
-    
+- Fixes:
+  * Imagick::adaptiveResizeImage, Imagick::cropThumbnailImage Imagick::resizeImage, 
+    Imagick::scaleImage, and Imagick::thumbnailImage have all had a rounding bug fixed. 
+    An additional parameter has been added to each of them, 'bool $legacy'. If legacy 
+    is true, the calculations are done with the small rounding bug that existed in
+    Imagick before 3.4.0. If false, the calculations should produce the same results as 
+    ImageMagick CLI does.
+  * Imagick::colorizeImage() and Imagick::tintImage were using the wrong behaviour. 
+    It is now fixed and the legacy behaviour can still be used by passing a 3rd 
+    parameter of `true` to the function to indicate that the legacy behaviour is 
+    desired.
+  * Imagick::importImagePixels regression fixed.
+  * Imagick::subImageMatch use correct error metric in IM7
+- Added methods:
+  * Imagick::similarityImage() which is an alias to Imagick::subImageMatch()
 </notes>
 	<contents>
 		<dir name="/">
