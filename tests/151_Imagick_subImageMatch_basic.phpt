@@ -12,7 +12,8 @@ function subImageMatch() {
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
     $imagick->adaptiveResizeImage(100, 100, true);
-    $imagick->setImageAlphaChannel(\Imagick::ALPHACHANNEL_DEACTIVATE);
+    //This makes the test fall over on some versions of ImageMagick
+    //$imagick->setImageAlphaChannel(\Imagick::ALPHACHANNEL_DEACTIVATE);
     $imagick2 = clone $imagick;
     $imagick2->cropimage(25, 25, 50, 50);
     $imagick2->setImageFormat('png');
