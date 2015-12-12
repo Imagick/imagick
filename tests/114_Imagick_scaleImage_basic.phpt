@@ -9,11 +9,11 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 <?php
 
 
-$tests = [
-    [200, 200, true, 200, 150],
-    [200, 200, false, 200, 200],
-    [200, 0, false, 200, 150],
-];
+$tests = array(
+    array(200, 200, true, 200, 150),
+    array(200, 200, false, 200, 200),
+    array(200, 0, false, 200, 150),
+);
 
 foreach ($tests as $test) {
     list($width, $height, $bestFit, $expectedWidth, $expectedHeight) = $test;

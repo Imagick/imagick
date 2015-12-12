@@ -17,7 +17,7 @@ $desired_height = 250;
 $imageWidth = 1128;
 $imageHeight = 1128;
 
-$legacySettings = [0, 1];
+$legacySettings = array(0, 1);
 
 foreach($legacySettings as $legacy) {
 	for ($desired_width = 245; $desired_width < 255; $desired_width++) {
