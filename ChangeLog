@@ -1,3 +1,7 @@
+3.4.0RC4
+- Fixes:
+  * Remove duplicated definitions of class constants.
+
 3.4.0RC3
 - Fixes:
   * Imagick::adaptiveResizeImage, Imagick::cropThumbnailImage Imagick::resizeImage, 
