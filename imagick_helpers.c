@@ -1254,7 +1254,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_RGBS", RGBChannels);
 #endif
 #if MagickLibVersion >= 0x655
-	IMAGICK_REGISTER_CONST_LONG("CHANNEL_GRAY", GrayChannels);
+	IMAGICK_REGISTER_CONST_LONG("CHANNEL_GRAY_CHANNELS", GrayChannels);
 #endif
 #if MagickLibVersion >= 0x656
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_SYNC", SyncChannels);
@@ -1559,12 +1559,6 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_REMOVEDUPS", RemoveDupsLayer);
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_REMOVEZERO", RemoveZeroLayer);
 #endif
-#if MagickLibVersion >= 0x637
-	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_COMPOSITE", CompositeLayer);
-	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_MERGE", MergeLayer);
-	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_FLATTEN", FlattenLayer);
-	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_MOSAIC", MosaicLayer);
-#endif
 #if MagickLibVersion >= 0x644
 	IMAGICK_REGISTER_CONST_LONG("LAYERMETHOD_TRIMBOUNDS", TrimBoundsLayer);
 #endif
@@ -1594,7 +1588,6 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_POLAR", PolarDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_DEPOLAR", DePolarDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARREL", BarrelDistortion);
-	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARRELINVERSE", BarrelInverseDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SHEPARDS", ShepardsDistortion);
 
 	// SentinelDistortion is not a real distortion type. It is a guard value 
@@ -1623,7 +1616,6 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 #if MagickLibVersion > 0x637
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_ACTIVATE", ActivateAlphaChannel);
-	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DEACTIVATE", DeactivateAlphaChannel);
 #if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_RESET", ResetAlphaChannel);
 #endif
