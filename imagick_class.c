@@ -1493,6 +1493,7 @@ PHP_METHOD(imagick, writeimagefile)
 	}
 
 	if (result == 0) {
+		/* php_stream_cast returns warning on some streams but still does not return FAILURE */
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to write image to the filehandle" TSRMLS_CC);
 			return;

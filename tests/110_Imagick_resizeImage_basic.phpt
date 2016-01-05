@@ -12,7 +12,7 @@ $filterType = 22;
 $width = 200;
 $height = 200;
 $blur = 1;
-$bestFit = 1;
+$bestFitSettings = array(0, 1);
 $cropZoom = 1;
 
 function resizeImage($width, $height, $filterType, $blur, $bestFit, $cropZoom) {
@@ -47,7 +47,9 @@ function resizeImage($width, $height, $filterType, $blur, $bestFit, $cropZoom) {
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
 }
 
-resizeImage($width, $height, $filterType, $blur, $bestFit, $cropZoom) ;
+foreach ($bestFitSettings as $bestFit) {
+	resizeImage($width, $height, $filterType, $blur, $bestFit, $cropZoom);
+}
 echo "Ok";
 ?>
 --EXPECTF--
