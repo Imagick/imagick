@@ -81,14 +81,14 @@ We recommend doing one of the following:
 
 * Disabling OpenMP support in ImageMagick by compiling it with the compile flag "--disable-openmp" set.
 
-* Disable the use of threads in ImageMagick by calling: `Imagick::setResourceLimit(\Imagick::RESOURCETYPE_THREAD, 1);` or `Imagick::setResourceLimit(6, 1);` if your version of Imagick does not contain the RESOURCETYPE_THREAD constant.
+* Disable the use of threads in ImageMagick via Imagick by calling: `Imagick::setResourceLimit(\Imagick::RESOURCETYPE_THREAD, 1);` or `Imagick::setResourceLimit(6, 1);` if your version of Imagick does not contain the RESOURCETYPE_THREAD constant.
+
+* Disable the use of threads in ImageMagick by setting the thread resource limit in ImageMagick' policy.xml file with `<policy domain="resource" name="thread" value="1"/>` This file is possibly located at /etc/ImageMagick-6/policy.xml or similar location.
 
 * If you do want to use OpenMP in ImageMagick when it's called through Imagick, you should test thoroughly that it behaves correctly on your server.
 
 
-
 # TODO
-
 
 Documentation needs a lot of work. There is an online editor here: [https://edit.php.net/](https://edit.php.net/) Contributions are more than welcome.
 
