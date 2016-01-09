@@ -61,6 +61,12 @@
 #endif
 
 
+#ifdef ZEND_ENGINE_3
+	#define im_long zend_long
+#else
+	#define im_long long
+#endif
+
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;

@@ -3093,11 +3093,8 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->skip_version_check = 0;
 }
 
-#ifdef ZEND_ENGINE_3
-static int php_imagick_count_elements(zval *object, zend_long *count TSRMLS_DC) /* {{{ */
-#else
-static int php_imagick_count_elements(zval *object, long *count TSRMLS_DC) /* {{{ */
-#endif
+
+static int php_imagick_count_elements(zval *object, im_long *count TSRMLS_DC) /* {{{ */
 {
 	php_imagick_object *intern= Z_IMAGICK_P(object);
 

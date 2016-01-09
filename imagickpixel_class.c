@@ -75,7 +75,7 @@ PHP_METHOD(imagickpixel, sethsl)
 PHP_METHOD(imagickpixel, getcolorvaluequantum)
 {
 	php_imagickpixel_object *internp;
-	zend_long color;
+	im_long color;
 	Quantum color_value;
 
 	/* Parse parameters given to function */
@@ -145,7 +145,7 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 PHP_METHOD(imagickpixel, setcolorvaluequantum)
 {
 	php_imagickpixel_object *internp;
-	zend_long color;
+	im_long color;
 
 #if MAGICKCORE_HDRI_ENABLE
 	double color_value;
@@ -154,7 +154,7 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 		return;
 	}
 #else
-	zend_long color_value;
+	im_long color_value;
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &color, &color_value) == FAILURE) {
 		return;
@@ -234,7 +234,7 @@ PHP_METHOD(imagickpixel, getindex)
 PHP_METHOD(imagickpixel, setindex)
 {
 	php_imagickpixel_object *internp;
-	zend_long index;
+	im_long index;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
@@ -392,7 +392,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 {
 	php_imagick_color_t color_enum;
 	php_imagickpixel_object *internp;
-	zend_long color;
+	im_long color;
 	double color_value = 0;
 
 	/* Parse parameters given to function */
@@ -471,7 +471,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 {
 	php_imagick_color_t color_enum;
 	php_imagickpixel_object *internp;
-	zend_long color;
+	im_long color;
 	double color_value;
 
 	/* Parse parameters given to function */
@@ -554,7 +554,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 PHP_METHOD(imagickpixel, getcolor)
 {
 	php_imagickpixel_object *internp;
-	zend_long normalization = 0;
+	im_long normalization = 0;
 	double red, green, blue, alpha;
 
 	/* Parse parameters given to function */
@@ -730,7 +730,7 @@ PHP_METHOD(imagickpixel, getcolorcount)
 PHP_METHOD(imagickpixel, setcolorcount)
 {
 	php_imagickpixel_object *internp;
-	zend_long color_count;
+	im_long color_count;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color_count) == FAILURE) {

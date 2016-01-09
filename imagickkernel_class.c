@@ -567,7 +567,7 @@ static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags,
 */
 PHP_METHOD(imagickkernel, frombuiltin)
 {
-	zend_long kernel_type;
+	im_long kernel_type;
 	GeometryInfo geometry_info = {0};
 	KernelInfo *kernel_info;
 	char *string;
@@ -729,7 +729,7 @@ PHP_METHOD(imagickkernel, scale)
 {
 	php_imagickkernel_object *internp;
 	double scale;
-	zend_long normalize_flag;
+	im_long normalize_flag;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &scale, &normalize_flag) == FAILURE) {
 		return;
