@@ -164,9 +164,9 @@ static inline double im_round_helper(double value) {
 }
 
 
-zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, long desired_width, long desired_height, long *new_width, long *new_height, zend_bool legacy)
+zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, zend_long desired_width, zend_long desired_height, zend_long *new_width, zend_long *new_height, zend_bool legacy)
 {
-	long orig_width, orig_height;
+	zend_long orig_width, orig_height;
 
 	orig_width  = MagickGetImageWidth(magick_wand);
 	orig_height = MagickGetImageHeight(magick_wand);
@@ -272,7 +272,7 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 	return 1;
 }
 
-double *php_imagick_zval_to_double_array(zval *param_array, long *num_elements TSRMLS_DC)
+double *php_imagick_zval_to_double_array(zval *param_array, zend_long *num_elements TSRMLS_DC)
 {
 	double *double_array;
 	long i = 0;

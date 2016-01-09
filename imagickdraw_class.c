@@ -624,7 +624,7 @@ PHP_METHOD(imagickdraw, setfontsize)
 PHP_METHOD(imagickdraw, setfontstyle)
 {
 	php_imagickdraw_object *internd;
-	long style_id = AnyStyle;
+	zend_long style_id = AnyStyle;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &style_id) == FAILURE) {
@@ -644,7 +644,7 @@ PHP_METHOD(imagickdraw, setfontstyle)
 PHP_METHOD(imagickdraw, setfontweight)
 {
 	php_imagickdraw_object *internd;
-	long weight;
+	zend_long weight;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &weight) == FAILURE) {
@@ -679,7 +679,7 @@ PHP_METHOD(imagickdraw, getfontstretch)
 PHP_METHOD(imagickdraw, setfontstretch)
 {
 	php_imagickdraw_object *internd;
-	long stretch;
+	zend_long stretch;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &stretch) == FAILURE) {
@@ -720,7 +720,7 @@ PHP_METHOD(imagickdraw, setstrokeantialias)
 PHP_METHOD(imagickdraw, settextalignment)
 {
 	php_imagickdraw_object *internd;
-	long align;
+	zend_long align;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &align) == FAILURE) {
@@ -741,7 +741,7 @@ PHP_METHOD(imagickdraw, settextalignment)
 PHP_METHOD(imagickdraw, settextdecoration)
 {
 	php_imagickdraw_object *internd;
-	long decoration;
+	zend_long decoration;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &decoration) == FAILURE) {
@@ -789,7 +789,7 @@ PHP_METHOD(imagickdraw, settextundercolor)
 PHP_METHOD(imagickdraw, setviewbox)
 {
 	php_imagickdraw_object *internd;
-	long x1, y1, x2, y2;
+	zend_long x1, y1, x2, y2;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x1, &y1, &x2, &y2) == FAILURE) {
@@ -1038,7 +1038,7 @@ PHP_METHOD(imagickdraw, matte)
 {
 	double x, y;
 	php_imagickdraw_object *internd;
-	long paint_method;
+	zend_long paint_method;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method) == FAILURE) {
@@ -1067,7 +1067,7 @@ PHP_METHOD(imagickdraw, alpha)
 {
 	double x, y;
 	php_imagickdraw_object *internd;
-	long paint_method;
+	zend_long paint_method;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method) == FAILURE) {
@@ -1302,7 +1302,7 @@ PHP_METHOD(imagickdraw, composite)
 	php_imagickdraw_object *internd;
 	php_imagick_object *intern;
 	zval *magick_obj;
-	long compose;
+	zend_long compose;
 	double x, y, width, height;
 	MagickBooleanType status;
 
@@ -1335,7 +1335,7 @@ PHP_METHOD(imagickdraw, color)
 {
 	php_imagickdraw_object *internd;
 	double x, y;
-	long paint_method;
+	zend_long paint_method;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &x, &y, &paint_method) == FAILURE) {
@@ -1600,7 +1600,7 @@ PHP_METHOD(imagickdraw, setstrokedasharray)
 {
 	zval *param_array;
 	double *double_array;
-	long elements;
+	zend_long elements;
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
@@ -2497,7 +2497,7 @@ PHP_METHOD(imagickdraw, setclippath)
 PHP_METHOD(imagickdraw, setcliprule)
 {
 	php_imagickdraw_object *internd;
-	long fill_rule;
+	zend_long fill_rule;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &fill_rule) == FAILURE) {
@@ -2517,7 +2517,7 @@ PHP_METHOD(imagickdraw, setcliprule)
 PHP_METHOD(imagickdraw, setclipunits)
 {	
 	php_imagickdraw_object *internd;
-	long units;
+	zend_long units;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &units) == FAILURE) {
@@ -2584,7 +2584,7 @@ PHP_METHOD(imagickdraw, setfillpatternurl)
 PHP_METHOD(imagickdraw, setfillrule)
 {
 	php_imagickdraw_object *internd;
-	long fill_rule;
+	zend_long fill_rule;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &fill_rule) == FAILURE) {
@@ -2604,7 +2604,7 @@ PHP_METHOD(imagickdraw, setfillrule)
 PHP_METHOD(imagickdraw, setgravity)
 {
 	php_imagickdraw_object *internd;
-	long gravity;
+	zend_long gravity;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity) == FAILURE) {
@@ -2670,7 +2670,7 @@ PHP_METHOD(imagickdraw, setstrokedashoffset)
 PHP_METHOD(imagickdraw, setstrokelinecap)
 {
 	php_imagickdraw_object *internd;
-	long line_cap;
+	zend_long line_cap;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &line_cap) == FAILURE) {
@@ -2690,7 +2690,7 @@ PHP_METHOD(imagickdraw, setstrokelinecap)
 PHP_METHOD(imagickdraw, setstrokelinejoin)
 {	
 	php_imagickdraw_object *internd;
-	long line_join;
+	zend_long line_join;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &line_join) == FAILURE) {
@@ -2710,7 +2710,7 @@ PHP_METHOD(imagickdraw, setstrokelinejoin)
 PHP_METHOD(imagickdraw, setstrokemiterlimit)
 {
 	php_imagickdraw_object *internd;
-	long miter_limit;
+	zend_long miter_limit;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &miter_limit) == FAILURE) {
