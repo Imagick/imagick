@@ -25,9 +25,9 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2015-12-22</date>
+	<date>2016-01-11</date>
 	<version>
-		<release>3.4.0RC4</release>
+		<release>3.4.0RC5</release>
 		<api>3.4.0</api>
 	</version>
 	<stability>
@@ -36,8 +36,13 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
+- Added:
+  * Imagick::subImageMatch() added parameters. The signature is now: 
+    Imagick::subimagematch(Imagick subimage[, array &amp;$bestMatch[, float &amp;similarity[, 
+      float $similarity_threshold = 0[, int $metric = ]]]])
+    These parameters are only used when compiled against ImageMagick 7.
 - Fixes:
-  * Remove duplicated definitions of class constants.
+  * wrong type for zend_parse_parameters.
 </notes>
 	<contents>
 		<dir name="/">

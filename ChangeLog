@@ -2,8 +2,8 @@
 3.4.0RC5
 - Added:
   * Imagick::subImageMatch() added parameters. The signature is now: 
-    Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity[, 
-      float similarity_threshold = 0[, int metric = ]]]])
+    Imagick::subimagematch(Imagick $subimage[, array &$bestMatch[, float &similarity[, 
+      float $similarity_threshold = 0[, int $metric = ]]]])
     These parameters are only used when compiled against ImageMagick 7.	
 - Fixes:
   * wrong type for zend_parse_parameters.
