@@ -12171,7 +12171,7 @@ PHP_METHOD(imagick, statisticimage)
 #endif
 
 #if MagickLibVersion >= 0x652
-/* {{{ proto Imagick Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity]])
+/* {{{ proto Imagick Imagick::subimagematch(Imagick subimage[, array &$bestMatch[, float &similarity[, float similarity_threshold = 0[, int metric = ]]]])
 	Searches for a subimage in the current image and returns a similarity image such that an exact match location is completely white and if none of the pixels match, black, otherwise some gray level in-between.
 	You can also pass in the optional parameters bestMatch and similarity. After calling the function similarity will be
 	set to the 'score' of the similarity between the subimage and the matching position in the larger image, bestMatch will
@@ -12182,6 +12182,7 @@ PHP_METHOD(imagick, subimagematch)
 	php_imagick_object *intern;
 	RectangleInfo best_match_offset;
 	double similarity;
+	double similarity_threshold = 0.0;
 
 	zval *reference_obj;
 	php_imagick_object *reference_intern;
@@ -12192,13 +12193,21 @@ PHP_METHOD(imagick, subimagematch)
 	//http://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zvals/
 	MagickWand *new_wand;
 
-#ifdef ZEND_ENGINE_3
-	char *param_string = "O|z/z/";
+	
+#if MagickLibVersion >= 0x700
+	im_long metric = RootMeanSquaredErrorMetric;
 #else
-	char *param_string = "O|zz";
+	im_long metric = 0;
 #endif
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, param_string, &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity) == FAILURE) {
+#ifdef ZEND_ENGINE_3
+	char *param_string = "O|z/z/dl";
+#else
+	char *param_string = "O|zzdl";
+	
+#endif
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, param_string, &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity, &similarity_threshold, &metric) == FAILURE) {
 		return;
 	}
 	reference_intern = Z_IMAGICK_P(reference_obj);
@@ -12209,7 +12218,6 @@ PHP_METHOD(imagick, subimagematch)
 
 #if MagickLibVersion >= 0x700
 	MetricType metric = RootMeanSquaredErrorMetric;
-	double similarity_threshold = 1.0;
 	new_wand = MagickSimilarityImage(intern->magick_wand, reference_intern->magick_wand,
 	metric, similarity_threshold,
   &best_match_offset, &similarity);

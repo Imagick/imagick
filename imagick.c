@@ -1415,6 +1415,8 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(1, offset)
 		ZEND_ARG_INFO(1, similarity)
+		ZEND_ARG_INFO(1, similarity_threshold) // the minimum similarity to match?
+		ZEND_ARG_INFO(1, metric) //Which comparison to use METRIC_*
 	ZEND_END_ARG_INFO()
 #endif
 
