@@ -354,7 +354,8 @@ PHP_METHOD(imagickdraw, setresolution)
 	draw_info          = PeekDrawingWand(internd->drawing_wand);
 	draw_info->density = density;
 
-#if defined(AcquireDrawingWand)
+
+#if MagickLibVersion >= 0x693
 	d_wand = AcquireDrawingWand(draw_info, NULL);
 #else
 	d_wand = (DrawingWand *) DrawAllocateWand(draw_info, NULL);
