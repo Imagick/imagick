@@ -354,7 +354,11 @@ PHP_METHOD(imagickdraw, setresolution)
 	draw_info          = PeekDrawingWand(internd->drawing_wand);
 	draw_info->density = density;
 
+#if defined(AcquireDrawingWand)
+	d_wand = AcquireDrawingWand(draw_info, NULL);
+#else
 	d_wand = (DrawingWand *) DrawAllocateWand(draw_info, NULL);
+#endif
 
 	if (!d_wand) {
 		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to allocate new DrawingWand structure" TSRMLS_CC);
