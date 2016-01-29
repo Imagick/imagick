@@ -5255,16 +5255,26 @@ PHP_METHOD(imagick, setimagebias)
 
 
 /* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
+For IM7 the prototype is 
+proto bool Imagick::setImageBluePrimary(float x, float y, float z)
+
 	Sets the image chromaticity blue primary point
 */
 PHP_METHOD(imagick, setimageblueprimary)
 {
 	php_imagick_object *intern;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
+#if MagickLibVersion >= 0x700
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &x, &y, &z) == FAILURE) {
+#else 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
+#endif
 		return;
 	}
 
@@ -5272,7 +5282,11 @@ PHP_METHOD(imagick, setimageblueprimary)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickSetImageBluePrimary(intern->magick_wand, x, y, z);
+#else
 	status = MagickSetImageBluePrimary(intern->magick_wand, x, y);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -5478,16 +5492,26 @@ PHP_METHOD(imagick, setimageextent)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageGreenPrimary(float x, float y)
+For IM7 the prototype is 
+proto bool Imagick::setImageGreenPrimary(float x, float y, float z)
 	Sets the image chromaticity green primary point
 */
 PHP_METHOD(imagick, setimagegreenprimary)
 {
 	php_imagick_object *intern;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 	MagickBooleanType status;
 
+
 	/* Parse parameters given to function */
+#if MagickLibVersion >= 0x700
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &x, &y, &z) == FAILURE) {
+#else
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
+#endif
 		return;
 	}
 
@@ -5495,7 +5519,11 @@ PHP_METHOD(imagick, setimagegreenprimary)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickSetImageGreenPrimary(intern->magick_wand, x, y, z);
+#else
 	status = MagickSetImageGreenPrimary(intern->magick_wand, x, y);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -5566,16 +5594,26 @@ PHP_METHOD(imagick, setimageprofile)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageRedPrimary(float x,float y)
+For IM7 the prototype is 
+proto bool Imagick::setImageRedPrimary(float x, float y, float z)
+
 	Sets the image chromaticity red primary point.
 */
 PHP_METHOD(imagick, setimageredprimary)
 {
 	php_imagick_object *intern;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
+#if MagickLibVersion >= 0x700
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &x, &y, &z) == FAILURE) {
+#else 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
+#endif
 		return;
 	}
 
@@ -5583,7 +5621,11 @@ PHP_METHOD(imagick, setimageredprimary)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickSetImageRedPrimary(intern->magick_wand, x, y, z);
+#else
 	status = MagickSetImageRedPrimary(intern->magick_wand, x, y);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -5645,17 +5687,28 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::setImageWhitePoint(float x,float y)
+/* {{{ proto bool Imagick::setImageWhitePoint(float x, float y)
+
+For IM7 the prototype is 
+proto bool Imagick::setImageWhitePoint(float x, float y, float z)
+
 	Sets the image chromaticity white point.
 */
 PHP_METHOD(imagick, setimagewhitepoint)
 {
 	php_imagick_object *intern;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
+#if MagickLibVersion >= 0x700
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &x, &y, &z) == FAILURE) {
+#else
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
+#endif
 		return;
 	}
 
@@ -5663,7 +5716,11 @@ PHP_METHOD(imagick, setimagewhitepoint)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickSetImageWhitePoint(intern->magick_wand, x, y, z);
+#else
 	status = MagickSetImageWhitePoint(intern->magick_wand, x, y);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -6403,14 +6460,18 @@ PHP_METHOD(imagick, getimagebackgroundcolor)
 }
 /* }}} */
 
-/* {{{ proto ImagickPixel Imagick::getImageBluePrimary(float x, float y)
-	Returns the chromaticy blue primary point for the image.
+/* {{{ proto array Imagick::getImageBluePrimary()
+	Returns the chromaticy green primary point. IM6: Returns an array with the keys "x" and "y".
+	IM7: Returns an array with the keys "x", "y" and "z".
 */
 PHP_METHOD(imagick, getimageblueprimary)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -6420,7 +6481,11 @@ PHP_METHOD(imagick, getimageblueprimary)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickGetImageBluePrimary(intern->magick_wand, &x, &y, &z);
+#else
 	status = MagickGetImageBluePrimary(intern->magick_wand, &x, &y);
+#endif
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image blue primary" TSRMLS_CC);
@@ -6430,6 +6495,9 @@ PHP_METHOD(imagick, getimageblueprimary)
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
 	add_assoc_double(return_value, "y", y);
+#if MagickLibVersion >= 0x700
+	add_assoc_double(return_value, "z", z);
+#endif
 
 	return;
 }
@@ -6949,12 +7017,16 @@ PHP_METHOD(imagick, getimagegamma)
 /* }}} */
 
 /* {{{ proto array Imagick::getImageGreenPrimary()
-	Returns the chromaticy green primary point. Returns an array with the keys "x" and "y".
+	Returns the chromaticy green primary point. IM6: Returns an array with the keys "x" and "y".
+	IM7: Returns an array with the keys "x", "y" and "z".
 */
 PHP_METHOD(imagick, getimagegreenprimary)
 {
 	php_imagick_object *intern;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -6965,7 +7037,11 @@ PHP_METHOD(imagick, getimagegreenprimary)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickGetImageGreenPrimary(intern->magick_wand, &x, &y, &z);
+#else
 	status = MagickGetImageGreenPrimary(intern->magick_wand, &x, &y);
+#endif
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image green primary" TSRMLS_CC);
@@ -6975,6 +7051,9 @@ PHP_METHOD(imagick, getimagegreenprimary)
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
 	add_assoc_double(return_value, "y", y);
+#if MagickLibVersion >= 0x700
+	add_assoc_double(return_value, "z", z);
+#endif
 
 	return;
 }
@@ -7249,13 +7328,17 @@ PHP_METHOD(imagick, getimageprofile)
 /* }}} */
 
 /* {{{ proto array Imagick::getImageRedPrimary()
-	Returns the chromaticy red primary point as an array with the keys "x" and "y".
+	Returns the chromaticy red primary point as an array. IM6: with the keys "x" and "y".
+	IM7: Returns an array with the keys "x", "y" and "z".
 */
 PHP_METHOD(imagick, getimageredprimary)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -7265,7 +7348,11 @@ PHP_METHOD(imagick, getimageredprimary)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickGetImageRedPrimary(intern->magick_wand, &x, &y, &z);
+#else
 	status = MagickGetImageRedPrimary(intern->magick_wand, &x, &y);
+#endif
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image red primary" TSRMLS_CC);
@@ -7275,6 +7362,9 @@ PHP_METHOD(imagick, getimageredprimary)
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
 	add_assoc_double(return_value, "y", y);
+#if MagickLibVersion >= 0x700
+	add_assoc_double(return_value, "z", z);
+#endif
 
 	return;
 }
@@ -7462,13 +7552,17 @@ PHP_METHOD(imagick, getimagevirtualpixelmethod)
 /* }}} */
 
 /* {{{ proto array Imagick::getImageWhitePoint()
-	Returns the chromaticy white point as an associative array with the keys "x" and "y".
+	Returns the chromaticy white point as an associative array. IM6: with the keys "x" and "y".
+	IM7: with the keys "x", "y" and "z".
 */
 PHP_METHOD(imagick, getimagewhitepoint)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double x, y;
+#if MagickLibVersion >= 0x700
+	double z;
+#endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -7478,7 +7572,11 @@ PHP_METHOD(imagick, getimagewhitepoint)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickGetImageWhitePoint(intern->magick_wand, &x, &y, &z);
+#else
 	status = MagickGetImageWhitePoint(intern->magick_wand, &x, &y);
+#endif
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image white point" TSRMLS_CC);
@@ -7488,6 +7586,9 @@ PHP_METHOD(imagick, getimagewhitepoint)
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
 	add_assoc_double(return_value, "y", y);
+#if MagickLibVersion >= 0x700
+	add_assoc_double(return_value, "z", z);
+#endif
 
 	return;
 }

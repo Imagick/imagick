@@ -24,6 +24,12 @@ function setClipPath($strokeColor, $fillColor, $backgroundColor) {
     $draw->popClipPath();
     $draw->setClipPath($clipPathName);
     $draw->rectangle(100, 100, 400, 400);
+    
+    $storedPathName = $draw->getClipPath();
+    
+    if (strcmp($storedPathName, $clipPathName) != 0) {
+        echo "Error retrieving clipPath: $storedPathName != $clipPathName\n";
+    }
 
     $imagick = new \Imagick();
     $imagick->newImage(500, 500, $backgroundColor);
