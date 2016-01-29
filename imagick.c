@@ -999,6 +999,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x687
+	ZEND_BEGIN_ARG_INFO_EX(imagick_evaluateimages_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, EVALUATE)
+	ZEND_END_ARG_INFO()
+#endif //MagickLibVersion >= 0x687
+
 #if MagickLibVersion >= 0x655
 	ZEND_BEGIN_ARG_INFO_EX(imagick_forwardfouriertransformimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, magnitude)
@@ -2464,6 +2470,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, enhanceimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, equalizeimage, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, evaluateimage, imagick_evaluateimage_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x687
+	PHP_ME(imagick, evaluateimages, imagick_evaluateimages_args, ZEND_ACC_PUBLIC)
+#endif // MagickLibVersion >= 0x687
 #if MagickLibVersion < 0x700
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 	PHP_ME(imagick, flattenimages, imagick_zero_args, ZEND_ACC_PUBLIC)

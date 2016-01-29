@@ -1,3 +1,6 @@
+3.4.0
+- Added:
+  * Imagick::evaluateImages(int EVALUATE_CONSTANT) : Imagick
 
 3.4.0RC5
 - Added:

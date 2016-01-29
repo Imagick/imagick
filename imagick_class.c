@@ -6220,6 +6220,51 @@ PHP_METHOD(imagick, evaluateimage)
 /* }}} */
 
 
+#if MagickLibVersion >= 0x687
+/* {{{ proto bool Imagick::evaluateImages(int EVALUATE_CONSTANT)
+	Merge multiple images of the same size together with the selected operator.
+http://www.imagemagick.org/Usage/layers/#evaluate-sequence
+*/
+PHP_METHOD(imagick, evaluateimages)
+{
+	php_imagick_object *intern, *intern_return;
+	im_long evaluate_operator;
+	MagickBooleanType status;
+	MagickWand *evaluated_wand;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &evaluate_operator) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+// MagickEvaluateImages appears to crash if index is not zero.
+#if MagickLibVersion > 0x628
+	/* Get the current iterator position */
+	status = MagickSetIteratorIndex(intern->magick_wand, 0);
+#else
+	status = MagickSetImageIndex(intern->magick_wand, 0);
+#endif
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set iterator index" TSRMLS_CC);
+		return;
+	}
+
+	evaluated_wand = MagickEvaluateImages(intern->magick_wand, evaluate_operator);
+
+	object_init_ex(return_value, php_imagick_sc_entry);
+	intern_return = Z_IMAGICK_P(return_value);
+	php_imagick_replace_magickwand(intern_return, evaluated_wand);
+	return;
+}
+/* }}} */
+#endif //MagickLibVersion >= 0x687
+
 #if MagickLibVersion > 0x655
 
 /* {{{ proto bool Imagick::forwardfouriertransformimage(bool magnitude)

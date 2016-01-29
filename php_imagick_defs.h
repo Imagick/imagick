@@ -684,6 +684,9 @@ PHP_METHOD(imagick, embossimage);
 PHP_METHOD(imagick, enhanceimage);
 PHP_METHOD(imagick, equalizeimage);
 PHP_METHOD(imagick, evaluateimage);
+#if MagickLibVersion >= 0x687
+PHP_METHOD(imagick, evaluateimages);
+#endif
 #if MagickLibVersion < 0x700
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 PHP_METHOD(imagick, flattenimages);
