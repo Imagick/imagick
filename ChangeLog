@@ -1,6 +1,11 @@
-3.4.0
+3.4.0RC6
 - Added:
   * Imagick::evaluateImages(int EVALUATE_CONSTANT) : Imagick
+- Fixes:
+  * Imagick::setImageWhitePoint, Imagick::setImageRedPrimary, Imagick::setImageGreenPrimary,
+  Imagick::setImageBluePrimary now take 3 params when compiled against IM7.
+  * Imagick::getImageWhitePoint, Imagick::getImageRedPrimary, Imagick::getImageGreenPrimary,
+   Imagick::getImageBluePrimary now return 3 values when compiled against IM7.
 
 3.4.0RC5
 - Added:

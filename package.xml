@@ -27,7 +27,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</lead>
 	<date>2016-01-11</date>
 	<version>
-		<release>3.4.0RC5</release>
+		<release>3.4.0RC6</release>
 		<api>3.4.0</api>
 	</version>
 	<stability>
@@ -37,12 +37,12 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Added:
-  * Imagick::subImageMatch() added parameters. The signature is now: 
-    Imagick::subimagematch(Imagick subimage[, array &amp;$bestMatch[, float &amp;similarity[, 
-      float $similarity_threshold = 0[, int $metric = ]]]])
-    These parameters are only used when compiled against ImageMagick 7.
+  * Imagick::evaluateImages(int EVALUATE_CONSTANT) : Imagick
 - Fixes:
-  * wrong type for zend_parse_parameters.
+  * Imagick::setImageWhitePoint, Imagick::setImageRedPrimary, Imagick::setImageGreenPrimary,
+  Imagick::setImageBluePrimary now take 3 params when compiled against IM7.
+  * Imagick::getImageWhitePoint, Imagick::getImageRedPrimary, Imagick::getImageGreenPrimary,
+   Imagick::getImageBluePrimary now return 3 values when compiled against IM7.
 </notes>
 	<contents>
 		<dir name="/">
@@ -315,6 +315,14 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="250_ImagickPixelIterator_resetIterator_basic.phpt" role="test" />
 				<file name="251_ImagickPixelIterator_setIteratorRow_basic.phpt" role="test" />
 				<file name="252_ImagickPixelIterator_construct_basic.phpt" role="test" />
+				<file name="064_cropThumbNailImage.phpt" role="test" />
+				<file name="253_getHdri.phpt" role="test" />
+				<file name="254_getConfigureOptions.phpt" role="test" />
+				<file name="255_getFeatures.phpt" role="test" />
+				<file name="256_Imagick_exportImagePixels_basic.phpt" role="test" />
+				<file name="257_Imagick_setImageChannelMask_basic.phpt" role="test" />
+				<file name="258_Imagick_evaluateImages_basic.phpt" role="test" />
+				<file name="259_Imagick_colorPoints_basic.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
