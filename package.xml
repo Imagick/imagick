@@ -25,24 +25,18 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2016-01-30</date>
+	<date>2016-03-04</date>
 	<version>
-		<release>3.4.0RC6</release>
+		<release>3.4.0</release>
 		<api>3.4.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Added:
-  * Imagick::evaluateImages(int EVALUATE_CONSTANT) : Imagick
-- Fixes:
-  * Imagick::setImageWhitePoint, Imagick::setImageRedPrimary, Imagick::setImageGreenPrimary,
-  Imagick::setImageBluePrimary now take 3 params when compiled against IM7.
-  * Imagick::getImageWhitePoint, Imagick::getImageRedPrimary, Imagick::getImageGreenPrimary,
-   Imagick::getImageBluePrimary now return 3 values when compiled against IM7.
+No changes from 3.4.0RC6.
 </notes>
 	<contents>
 		<dir name="/">
