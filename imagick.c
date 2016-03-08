@@ -1449,6 +1449,21 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, antialias)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_autogammaimage_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, CHANNEL)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_compositeimagegravity_args, 0, 0, 3)
+		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+		ZEND_ARG_INFO(0, COMPOSITE)
+		ZEND_ARG_INFO(0, GRAVITY)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagick_localContrastImage_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, radius)
+		ZEND_ARG_INFO(0, strength)
+	ZEND_END_ARG_INFO()
+
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
 	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextkerning_args, 0, 0, 1)
@@ -1853,6 +1868,27 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, dashArray)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setopacity_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, opacity)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setfontresolution_args, 0, 0, 2)
+		ZEND_ARG_INFO(0, x)
+		ZEND_ARG_INFO(0, y)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setbordercolor_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, bordercolor)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_settextdirection_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, direction)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickdraw_setdensity_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, density)
+	ZEND_END_ARG_INFO()
+
 /* ImagickPixel */
 #if MagickLibVersion > 0x628
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_sethsl_args, 0, 0, 3)
@@ -1906,6 +1942,10 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 
 	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_getcolor_args, 0, 0, 0)
 		ZEND_ARG_INFO(0, normalized)
+	ZEND_END_ARG_INFO()
+
+	ZEND_BEGIN_ARG_INFO_EX(imagickpixel_setcolorfrompixel_args, 0, 0, 1)
+		ZEND_ARG_OBJ_INFO(0, srcPixel, ImagickPixel, 0)
 	ZEND_END_ARG_INFO()
 
 /* ImagickPixelIterator */
@@ -2090,6 +2130,25 @@ static zend_function_entry php_imagickdraw_class_methods[] =
 	PHP_ME(imagickdraw, pop, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, push, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickdraw, setstrokedasharray, imagickdraw_setstrokedasharray_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, getopacity, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, setopacity, imagickdraw_setopacity_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x675
+	PHP_ME(imagickdraw, getfontresolution, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, setfontresolution, imagickdraw_setfontresolution_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, getbordercolor, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, setbordercolor, imagickdraw_setbordercolor_args, ZEND_ACC_PUBLIC)
+#endif //#if MagickLibVersion >= 0x675
+
+#if MagickLibVersion >= 0x693
+	PHP_ME(imagickdraw, setdensity, imagickdraw_setdensity_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, getdensity, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+#endif// #if MagickLibVersion >= 0x693
+
+#if MagickLibVersion >= 0x692
+	PHP_ME(imagickdraw, gettextdirection, imagickdraw_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickdraw, settextdirection, imagickdraw_settextdirection_args, ZEND_ACC_PUBLIC)
+#endif //#if MagickLibVersion >= 0x692
+	
 	{ NULL, NULL, NULL }
 };
 
@@ -2162,6 +2221,10 @@ static zend_function_entry php_imagickpixel_class_methods[] =
 	PHP_ME(imagickpixel, getcolorcount, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, setcolorcount, imagickpixel_setcolorcount_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickpixel, clone, imagickpixel_zero_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x693
+	PHP_ME(imagickpixel, setcolorfrompixel, imagickpixel_setcolorfrompixel_args, ZEND_ACC_PUBLIC)
+#endif //#if MagickLibVersion >= 0x693
+
 	{ NULL, NULL, NULL }
 };
 
@@ -2675,6 +2738,17 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x676
 	PHP_ME(imagick, colordecisionlistimage, imagick_colordecisionlistimage_args, ZEND_ACC_PUBLIC)
 #endif
+
+#if MagickLibVersion >= 0x660
+	PHP_ME(imagick, autogammaimage, imagick_autogammaimage_args, ZEND_ACC_PUBLIC)
+#endif //#if MagickLibVersion >= 0x660
+#if MagickLibVersion >= 0x692
+	PHP_ME(imagick, autoorient, imagick_zero_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, compositeimagegravity, imagick_compositeimagegravity_args, ZEND_ACC_PUBLIC)
+#endif // #if MagickLibVersion >= 0x692
+#if MagickLibVersion >= 0x692
+	PHP_ME(imagick, localcontrastimage, imagick_localContrastImage_args, ZEND_ACC_PUBLIC)
+#endif // #if MagickLibVersion >= 0x692
 
 	{ NULL, NULL, NULL }
 };

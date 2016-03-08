@@ -313,7 +313,7 @@ PHP_METHOD(imagickdraw, setfillcolor)
 
 	internd = Z_IMAGICKDRAW_P(getThis());;
 
-	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICKDRAW_CLASS, &allocated TSRMLS_CC);
+	color_wand = php_imagick_zval_to_pixelwand(param, IMAGICKDRAW_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
 		return;
 
@@ -2820,5 +2820,266 @@ PHP_METHOD(imagickdraw, push)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+/* {{{ proto float ImagickDraw::getOpacity()
+	Returns the opacity used when drawing with the fill or stroke color or texture. Fully opaque is 1.0.
+*/
+PHP_METHOD(imagickdraw, getopacity)
+{
+	php_imagickdraw_object *internd;
+	double opacity;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());
+	opacity = DrawGetOpacity(internd->drawing_wand);
+	
+	printf("retrieved opacity of %f\n", opacity);
+
+	RETURN_DOUBLE(opacity);
+}
+/* }}} */
+
+/* {{{ proto bool ImagickDraw::setOpacity(float opacity)
+	Sets the opacity to use when drawing using the fill or stroke color or texture. Fully opaque is 1.0.
+*/
+PHP_METHOD(imagickdraw, setopacity)
+{
+	php_imagickdraw_object *internd;
+	double opacity;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &opacity) == FAILURE) {
+		return;
+	}
+
+	printf("setting opacity to %f\n", opacity);
+
+	internd = Z_IMAGICKDRAW_P(getThis());;
+	DrawSetOpacity(internd->drawing_wand, opacity);
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+#if MagickLibVersion >= 0x675
+/* {{{ proto array ImagickDraw::getFontResolution() 
+	Gets the image X and Y resolution.
+*/
+PHP_METHOD(imagickdraw, getfontresolution)
+{
+	php_imagickdraw_object *internd;
+	double x, y;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());
+	status = DrawGetFontResolution(internd->drawing_wand, &x, &y);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to push the current ImagickDraw object" TSRMLS_CC);
+		return;
+	}
+
+	array_init(return_value);
+	add_assoc_double(return_value, "x", x);
+	add_assoc_double(return_value, "y", y);
+
+	return;
+}
+/* }}} */
+#endif //#if MagickLibVersion >= 0x675
+
+
+#if MagickLibVersion >= 0x675
+/* {{{ proto bool ImagickDraw::setFontResolution(float x, float y)
+	Sets the image font resolution.
+*/
+PHP_METHOD(imagickdraw, setfontresolution)
+{
+	php_imagickdraw_object *internd;
+	double x, y;
+
+	MagickBooleanType status;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());;
+	status = DrawSetFontResolution(internd->drawing_wand, x, y);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to push the current ImagickDraw object" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //#if MagickLibVersion >= 0x675
+
+
+#if MagickLibVersion >= 0x675
+/* {{{ proto ImagickPixel ImagickDraw::getBorderColor()
+	Returns the border color used for drawing bordered objects.
+*/
+PHP_METHOD(imagickdraw, getbordercolor)
+{
+	php_imagickpixel_object *internp;
+	php_imagickdraw_object *internd;
+	PixelWand *tmp_wand;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+	
+	internd = Z_IMAGICKDRAW_P(getThis());
+
+	tmp_wand = NewPixelWand();
+	DrawGetBorderColor(internd->drawing_wand, tmp_wand);
+
+	object_init_ex(return_value, php_imagickpixel_sc_entry);
+	internp = Z_IMAGICKPIXEL_P(return_value);
+	php_imagick_replace_pixelwand(internp, tmp_wand);
+	return;
+}
+/* }}} */
+#endif //#if MagickLibVersion >= 0x675
+
+
+
+#if MagickLibVersion >= 0x675
+/* {{{ proto bool ImagickDraw::setBorderColor(ImagickPixel color)
+	Sets the border color to be used for drawing bordered objects.
+*/
+PHP_METHOD(imagickdraw, setbordercolor)
+{
+	zval *param;
+	php_imagickdraw_object *internd;
+	PixelWand *color_wand;
+	zend_bool allocated;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());;
+
+	color_wand = php_imagick_zval_to_pixelwand(param, IMAGICKDRAW_CLASS, &allocated TSRMLS_CC);
+	if (!color_wand)
+		return;
+
+	DrawSetBorderColor(internd->drawing_wand, color_wand);
+	if (allocated)
+		color_wand = DestroyPixelWand (color_wand);
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //#if MagickLibVersion >= 0x675
+
+#if MagickLibVersion >= 0x692
+/* {{{ proto bool ImagickDraw::getTextDirection()
+	Returns the direction that will be used when annotating with text.
+*/
+PHP_METHOD(imagickdraw, gettextdirection)
+{
+	php_imagickdraw_object *internd;
+	im_long direction;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());
+	direction = DrawGetTextDirection(internd->drawing_wand);
+
+	RETURN_LONG(direction);
+}
+
+/* }}} */
+
+
+/* {{{ proto bool ImagickDraw::setTextDirection(int direction)
+	Sets the font style to use when annotating with text. The AnyStyle enumeration acts as a wild-card "don't care" option.
+*/
+PHP_METHOD(imagickdraw, settextdirection)
+{
+	php_imagickdraw_object *internd;
+	im_long direction;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &direction) == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());
+
+	DrawSetTextDirection(internd->drawing_wand, direction);
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //#if MagickLibVersion >= 0x692
+
+#if MagickLibVersion >= 0x692
+/* {{{ proto bool ImagickDraw::setDensity(string density_string)
+	Sets the vertical and horizontal resolution.
+*/
+PHP_METHOD(imagickdraw, setdensity)
+{
+	php_imagickdraw_object *internd;
+	char *density;
+	IM_LEN_TYPE density_len;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &density, &density_len) == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());
+	status = DrawSetDensity(internd->drawing_wand, density);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to setdensity for ImagickDraw object" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto string|null ImagickDraw::getDensity()
+	Obtains the vertical and horizontal resolution. 
+*/
+PHP_METHOD(imagickdraw, getdensity)
+{
+	php_imagickdraw_object *internd;
+	char *density;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internd = Z_IMAGICKDRAW_P(getThis());
+	density = DrawGetDensity(internd->drawing_wand);
+
+//	printf("String is at %x\n", density);
+
+	if (density == NULL) {
+		RETURN_NULL();
+	}
+	else {
+		IM_RETURN_STRING(density);
+	}
+}
+/* }}} */
+#endif// #if MagickLibVersion >= 0x692
+
 
 /* END OF DRAWINGWAND METHODS */

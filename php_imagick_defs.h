@@ -300,8 +300,11 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 // String access
 #ifdef ZEND_ENGINE_3
 	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar);
+	#define IM_RETURN_STRING(s) RETURN_STRING(s)
 #else
 	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar, 1);
+	//RETURN_STRING(s, duplicate) 
+	#define IM_RETURN_STRING(s) RETURN_STRING(s, 0)
 #endif
 
 #ifdef ZEND_ENGINE_3
@@ -310,6 +313,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define IM_add_next_index_string(zv, charstr) add_next_index_string(zv, charstr)
 	#define IM_LEN_TYPE size_t
 #else
+	#define IM_add_assoc_string(zv, key, charstr) add_assoc_string(zv, key, charstr, 1)
 	#define IM_add_assoc_string(zv, key, charstr) add_assoc_string(zv, key, charstr, 1)
 	#define IM_ZVAL_STRINGL(zv, charstr, length) ZVAL_STRINGL(zv, charstr, length, 1)
 	#define IM_add_next_index_string(zv, charstr) add_next_index_string(zv, charstr, 1)
@@ -871,6 +875,16 @@ PHP_METHOD(imagick, getantialias);
 PHP_METHOD(imagick, colordecisionlistimage);
 #endif
 
+#if MagickLibVersion >= 0x660
+PHP_METHOD(imagick, autogammaimage);
+#endif //#if MagickLibVersion >= 0x660
+#if MagickLibVersion >= 0x692
+PHP_METHOD(imagick, autoorient);
+PHP_METHOD(imagick, compositeimagegravity);
+#endif // #if MagickLibVersion >= 0x692
+#if MagickLibVersion >= 0x692
+PHP_METHOD(imagick, localcontrastimage);
+#endif // #if MagickLibVersion >= 0x692
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
@@ -1009,6 +1023,25 @@ PHP_METHOD(imagickdraw, setstrokeopacity);
 PHP_METHOD(imagickdraw, setvectorgraphics);
 PHP_METHOD(imagickdraw, pop);
 PHP_METHOD(imagickdraw, push);
+PHP_METHOD(imagickdraw, getopacity);
+PHP_METHOD(imagickdraw, setopacity);
+
+#if MagickLibVersion >= 0x675
+PHP_METHOD(imagickdraw, getfontresolution);
+PHP_METHOD(imagickdraw, setfontresolution);
+PHP_METHOD(imagickdraw, getbordercolor);
+PHP_METHOD(imagickdraw, setbordercolor);
+#endif //#if MagickLibVersion >= 0x675
+
+#if MagickLibVersion >= 0x693
+PHP_METHOD(imagickdraw, setdensity);
+PHP_METHOD(imagickdraw, getdensity);
+#endif// #if MagickLibVersion >= 0x693
+
+#if MagickLibVersion >= 0x692
+PHP_METHOD(imagickdraw, gettextdirection);
+PHP_METHOD(imagickdraw, settextdirection);
+#endif //#if MagickLibVersion >= 0x692
 
 /* Imagick Pixel iterator */
 PHP_METHOD(imagickpixeliterator, __construct);
@@ -1052,6 +1085,9 @@ PHP_METHOD(imagickpixel, getcolorasstring);
 PHP_METHOD(imagickpixel, getcolorcount);
 PHP_METHOD(imagickpixel, setcolorcount);
 PHP_METHOD(imagickpixel, clone);
+#if MagickLibVersion >= 0x693
+PHP_METHOD(imagickpixel, setcolorfrompixel);
+#endif //#if MagickLibVersion >= 0x693
 
 #ifdef IMAGICK_WITH_KERNEL
 PHP_METHOD(imagickkernel, frommatrix);

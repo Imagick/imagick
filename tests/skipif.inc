@@ -79,6 +79,12 @@ function checkFormatPresent($format)
 	}
 }
 
+function requirePHP($required)
+{
+	if (version_compare(PHP_VERSION, $required) < 0) {
+		die("skip PHP version $required required, but have ".PHP_VERSION.".");
+	}
+}
 
 function requireFormat($requiredFormat)
 {

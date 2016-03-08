@@ -1,3 +1,24 @@
+3.4.1-dev
+  - Added:
+  * Imagick::autoGammaImage([int channel = CHANNEL_ALL])
+  * Imagick::autoOrient()
+  * Imagick::compositeImageGravity(Imagick $image, int COMPOSITE_CONSTANT, int GRAVITY_CONSTANT)
+  * Imagick::localContrastImage(float radius, float strength)
+  * Imagick::DIRECTION_LEFT_TO_RIGHT
+  * Imagick::DIRECTION_RIGHT_TO_LEFT
+  * Imagick::SPARSECOLORMETHOD_MANHATTAN
+  * ImagickDraw::getOpacity() : float
+  * ImagickDraw::setOpacity(float opacity) :bool 
+  * ImagickDraw::getFontResolution() : array
+  * ImagickDraw::setFontResolution(float x, float y) : bool
+  * ImagickDraw::getTextDirection() : bool
+  * ImagickDraw::setTextDirection(int direction) : bool
+  * ImagickDraw::getBorderColor() : ImagickPixel
+  * ImagickDraw::setBorderColor(ImagickPixel color) : bool
+  * ImagickDraw::getDensity() : string|null
+  * ImagickDraw::setDensity(string density_string) : bool
+  * ImagickPixel::setColorFromPixel(ImagickPixel $srcPixel) : bool
+
 3.4.0
   No changes from 3.4.0RC6.
 

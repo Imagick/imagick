@@ -12633,7 +12633,137 @@ PHP_METHOD(imagick, colordecisionlistimage)
 /* }}} */
 
 
+#if MagickLibVersion >= 0x660
+/* {{{ proto bool Imagick::autoGammaImage([int channel = CHANNEL_ALL])
+	Extracts the 'mean' from the image and adjust the image to try make set its gamma appropriately.
+*/
+PHP_METHOD(imagick, autogammaimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long channel = IM_DEFAULT_CHANNEL;
 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickAutoGammaImageChannel(intern->magick_wand, channel);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "autoGammaImage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //#if MagickLibVersion >= 0x660
+
+#if MagickLibVersion >= 0x692
+/* {{{ proto bool Imagick::autoOrient()
+	Adjusts an image so that its orientation is suitable $ for viewing (i.e. top-left orientation).
+*/
+PHP_METHOD(imagick, autoorient)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickAutoOrientImage(intern->magick_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable autoOrient image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // #if MagickLibVersion >= 0x692
+
+#if MagickLibVersion >= 0x692
+/* {{{ proto bool Imagick::compositeImageGravity(Imagick $image, COMPOSITE_CONSTANT, int GRAVITY_CONSTANT)
+	Composite one image onto another using the specified gravity.
+*/
+PHP_METHOD(imagick, compositeimagegravity)
+{
+	zval *objvar;
+	php_imagick_object *intern, *image_to_composite;
+	MagickBooleanType status;
+	im_long composite, gravity;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &composite, &gravity) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	image_to_composite = Z_IMAGICK_P(objvar);
+	if (php_imagick_ensure_not_empty (image_to_composite->magick_wand) == 0)
+		return;
+
+	status = MagickCompositeImageGravity(intern->magick_wand, image_to_composite->magick_wand, composite, gravity);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to compositeImageGravity" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // #if MagickLibVersion >= 0x692
+
+#if MagickLibVersion >= 0x692
+/* {{{ proto bool Imagick::localContrastImage(float radius, float strength)
+Attempts to increase the appearance of large-scale light-dark transitions. 
+Local contrast enhancement works similarly to sharpening with an unsharp mask,
+however the mask is instead created using an image with a greater blur distance.
+*/
+PHP_METHOD(imagick, localcontrastimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double radius, strength;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &strength) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickLocalContrastImage(intern->magick_wand, radius, strength);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to localContrastImage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // #if MagickLibVersion >= 0x692
 
 
 /* end of Imagick */

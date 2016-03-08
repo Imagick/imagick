@@ -4,7 +4,7 @@
 
 $directory = false; 
 // Either pass in the directory to scan or set it here.
-// $directory = "/documents/projects/github/BastionRPM/zips/ImageMagick/ImageMagick-6.9.2-0";
+$directory = "/documents/projects/github/BastionRPM/zips/ImageMagick/ImageMagick-6.9.3-6";
 
 if ($directory) {
 	$pathToImageMagick = $directory;
@@ -166,7 +166,7 @@ function getEnumList($enum, $filename)
 		','
 	];
 
-	$pregString = "#\{([^\{\}]*)\}\s*$enum#sU";
+	$pregString = '#\{([^\{\}]*)\}\s*'.$enum.'#sU';
 
 	preg_match($pregString, $fileContents, $matches);
 
