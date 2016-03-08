@@ -8,7 +8,10 @@ Bug #71742	polyline touched by array_walk
 $coordinates = [];
 
 foreach (range (0, 100) as $index) {
-	$coordinates[] = ['x' => 2 * $index, 'y' => pow($index, 2)];
+	$coordinates[] = array(
+		'x' => 2 * $index,
+		'y' => pow($index, 2)
+	);
 }
 
 $callback = function (&$coordinate) {
@@ -28,14 +31,16 @@ $draw->setStrokeColor("black");
 $draw->polyline($coordinates);
 
 $draw->translate(0, -20);
-////Works in PHP 7, even if $pb == array_values ($pb) is true
-$draw->polyline (array_values ($coordinates));
-$imagick->drawImage ($draw);
-$imagick->writeImage (getcwd (). "/test.png");
+////Works in PHP 7
+$draw->polyline (array_values($coordinates));
+$imagick->drawImage($draw);
+$imagick->writeImage(getcwd(). "/test.png");
 $imagick->setImageFormat('png');
 $bytes = $imagick->getImageBlob();
 
-if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
+if (strlen($bytes) <= 0) { 
+	echo "Failed to generate image.";
+}
 
 //$imagick->writeImage("./bugTest.png");
 
