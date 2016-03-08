@@ -5,7 +5,7 @@ Bug #71742	polyline touched by array_walk
 --FILE--
 <?php
 
-$coordinates = [];
+$coordinates = array();
 
 foreach (range (0, 100) as $index) {
 	$coordinates[] = array(
@@ -34,7 +34,7 @@ $draw->translate(0, -20);
 ////Works in PHP 7
 $draw->polyline (array_values($coordinates));
 $imagick->drawImage($draw);
-$imagick->writeImage(getcwd(). "/test.png");
+//$imagick->writeImage(getcwd()."/test.png");
 $imagick->setImageFormat('png');
 $bytes = $imagick->getImageBlob();
 
