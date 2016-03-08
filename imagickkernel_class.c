@@ -254,6 +254,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 			goto cleanup;
 		}
+		ZVAL_DEREF(pzval_outer);
 
 		column = 0;
 
@@ -286,6 +287,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 					goto cleanup;
 				}
 
+				ZVAL_DEREF(pzval_inner);
 				if (Z_TYPE_P(pzval_inner) == IS_DOUBLE) {
 					//It's a float lets use it.
 					values[count] = Z_DVAL_P(pzval_inner);
@@ -324,6 +326,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		origin_array_ht = Z_ARRVAL_P(origin_array);
 		tmp = zend_hash_index_find(origin_array_ht, 0);
 		if (tmp != NULL) {
+			ZVAL_DEREF(tmp);
 			origin_x = Z_LVAL_P(tmp);
 		}
 		else {
@@ -332,6 +335,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		}
 		tmp = zend_hash_index_find(origin_array_ht, 1);
 		if (tmp != NULL) {
+			ZVAL_DEREF(tmp);
 			origin_y = Z_LVAL_P(tmp);
 		}
 		else {

@@ -293,6 +293,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_element
 
 #ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
+		ZVAL_DEREF(pzvalue);
 		double_array[i] = zval_get_double(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -343,6 +344,7 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 
 #ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
+		ZVAL_DEREF(pzvalue);
 		long_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -394,6 +396,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 
 #ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
+		ZVAL_DEREF(pzvalue);
 		char_array[i] = zval_get_long(pzvalue);
 		i++;
 	} ZEND_HASH_FOREACH_END();
@@ -550,6 +553,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 #ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(coordinate_array), pzvalue) {
 		zval *pz_x, *pz_y;
+		ZVAL_DEREF(pzvalue);
 
 		/* If its something than array lets error here */
 		if(Z_TYPE_P(pzvalue) != IS_ARRAY) {

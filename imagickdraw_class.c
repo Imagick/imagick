@@ -1254,6 +1254,7 @@ PHP_METHOD(imagickdraw, affine)
 	for (i = 0; i < 6 ; i++) {
 #ifdef ZEND_ENGINE_3
 		pzval = zend_hash_str_find(HASH_OF(affine_matrix), matrix_elements[i], 2);
+		ZVAL_DEREF(pzval);
 		if (pzval == NULL) {
 			php_imagick_throw_exception(IMAGICKDRAW_CLASS, "AffineMatrix must contain keys: sx, rx, ry, sy, tx and ty" TSRMLS_CC);
 			return;

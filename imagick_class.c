@@ -3158,6 +3158,7 @@ PHP_METHOD(imagick, __construct)
 	if (Z_TYPE_P(files) == IS_ARRAY) {
 		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(files), pzval) {
 			struct php_imagick_file_t file = {0};
+			ZVAL_DEREF(pzval);
 
 			if (!php_imagick_file_init(&file, Z_STRVAL_P(pzval), Z_STRLEN_P(pzval) TSRMLS_CC)) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
@@ -3561,6 +3562,7 @@ PHP_METHOD(imagick, readimages)
 	intern = Z_IMAGICK_P(getThis());
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(files), value) {
 		struct php_imagick_file_t file = {0};
+		ZVAL_DEREF(value);
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(value), Z_STRLEN_P(value) TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
