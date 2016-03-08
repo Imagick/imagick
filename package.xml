@@ -322,6 +322,7 @@ No changes from 3.4.0RC6.
 				<file name="bug59378.phpt" role="test" />
 				<file name="bug64015.phpt" role="test" />
 				<file name="bug_66098.phpt" role="test" />
+				<file name="bug_71742.phpt" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
 				<file name="skipprobefourier.inc" role="test" />
