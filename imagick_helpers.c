@@ -810,7 +810,9 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
 
+#ifdef ZEND_ENGINE_3
 	ZVAL_DEREF(param);
+#endif
 	if (Z_TYPE_P (param) == IS_STRING) {
 		zval var;
 		var = *param;
