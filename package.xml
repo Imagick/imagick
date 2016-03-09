@@ -25,18 +25,38 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2016-03-04</date>
+	<date>2016-03-09</date>
 	<version>
 		<release>3.4.1</release>
 		<api>3.4.1</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-No changes from 3.4.0RC6.
+- Fixes:
+  * Bug 71742 - arrays that contain data that is held by reference gives error.
+- Added:
+  * Imagick::autoGammaImage([int channel = CHANNEL_ALL])
+  * Imagick::autoOrient()
+  * Imagick::compositeImageGravity(Imagick $image, int COMPOSITE_CONSTANT, int GRAVITY_CONSTANT)
+  * Imagick::localContrastImage(float radius, float strength)
+  * Imagick::DIRECTION_LEFT_TO_RIGHT
+  * Imagick::DIRECTION_RIGHT_TO_LEFT
+  * Imagick::SPARSECOLORMETHOD_MANHATTAN
+  * ImagickDraw::getOpacity() : float
+  * ImagickDraw::setOpacity(float opacity) :bool 
+  * ImagickDraw::getFontResolution() : array
+  * ImagickDraw::setFontResolution(float x, float y) : bool
+  * ImagickDraw::getTextDirection() : bool
+  * ImagickDraw::setTextDirection(int direction) : bool
+  * ImagickDraw::getBorderColor() : ImagickPixel
+  * ImagickDraw::setBorderColor(ImagickPixel color) : bool
+  * ImagickDraw::getDensity() : string|null
+  * ImagickDraw::setDensity(string density_string) : bool
+  * ImagickPixel::setColorFromPixel(ImagickPixel $srcPixel) : bool
 </notes>
 	<contents>
 		<dir name="/">

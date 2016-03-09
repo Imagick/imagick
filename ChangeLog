@@ -1,5 +1,7 @@
-3.4.1-dev
-  - Added:
+3.4.1
+- Fixes:
+  * Bug 71742 - arrays that contain data that is held by reference gives error.
+- Added:
   * Imagick::autoGammaImage([int channel = CHANNEL_ALL])
   * Imagick::autoOrient()
   * Imagick::compositeImageGravity(Imagick $image, int COMPOSITE_CONSTANT, int GRAVITY_CONSTANT)
