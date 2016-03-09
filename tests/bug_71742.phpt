@@ -1,7 +1,9 @@
 --TEST--
 Bug #71742	polyline touched by array_walk
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc');
+<?php 
+require_once(dirname(__FILE__) . '/skipif.inc');
+?>
 --FILE--
 <?php
 

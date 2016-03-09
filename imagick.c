@@ -3199,6 +3199,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 	zval tmp_member;
     zend_object_handlers *std_hnd;
 
+	ZVAL_DEREF(member);
 	if (Z_TYPE_P(member) != IS_STRING) {
 		tmp_member = *member;
 		zval_copy_ctor(&tmp_member);
