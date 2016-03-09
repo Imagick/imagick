@@ -762,7 +762,9 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
 
+#ifdef ZEND_ENGINE_3
 	ZVAL_DEREF(param);
+#endif 
 	if (Z_TYPE_P (param) == IS_LONG || Z_TYPE_P (param) == IS_DOUBLE) {
 		zval var;
 		var = *param;
