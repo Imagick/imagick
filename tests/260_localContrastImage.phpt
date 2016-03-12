@@ -4,8 +4,7 @@ Test localContrastImage
 <?php require_once(dirname(__FILE__) . '/skipif.inc');
 
 $v = Imagick::getVersion();
-if ($v['versionNumber'] < 0x693)
-	die ('skip too old ImageMagick');
+checkClassMethods('Imagick', array('localContrastImage'));
 
 ?>
 --FILE--
