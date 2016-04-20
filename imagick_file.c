@@ -197,6 +197,7 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct 
 #endif
 
 	if (!stream) {
+		IMAGICK_RESTORE_ERROR_HANDLING;
 		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
 
@@ -204,6 +205,7 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct 
 		php_stream_cast(stream, PHP_STREAM_AS_STDIO|PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
 
 		php_stream_close(stream);
+		IMAGICK_RESTORE_ERROR_HANDLING;
 		return IMAGICK_RW_UNDERLYING_LIBRARY;
 	}
 
