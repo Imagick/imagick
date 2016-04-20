@@ -1459,10 +1459,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, GRAVITY)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x693
 	ZEND_BEGIN_ARG_INFO_EX(imagick_localContrastImage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, radius)
 		ZEND_ARG_INFO(0, strength)
 	ZEND_END_ARG_INFO()
+#endif // MagickLibVersion >= 0x693
 
 /* ImagickDraw */
 #if MagickLibVersion > 0x649
@@ -2746,7 +2748,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, autoorient, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, compositeimagegravity, imagick_compositeimagegravity_args, ZEND_ACC_PUBLIC)
 #endif // #if MagickLibVersion >= 0x692
-#if MagickLibVersion >= 0x692
+#if MagickLibVersion >= 0x693
 	PHP_ME(imagick, localcontrastimage, imagick_localContrastImage_args, ZEND_ACC_PUBLIC)
 #endif // #if MagickLibVersion >= 0x692
 
