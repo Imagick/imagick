@@ -1,3 +1,8 @@
+3.4.2
+- Fixes:
+  * Bug: IM143 Correct ifdef around setOpacity, getOpacity and localContrastImage.
+  * Bug: IM147 Imagick was Borging PHP's error handler.
+
 3.4.1
 - Fixes:
   * Bug 71742 - arrays that contain data that is held by reference gives error.

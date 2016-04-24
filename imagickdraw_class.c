@@ -2822,7 +2822,7 @@ PHP_METHOD(imagickdraw, push)
 }
 /* }}} */
 
-
+#if MagickLibVersion >= 0x693
 /* {{{ proto float ImagickDraw::getOpacity()
 	Returns the opacity used when drawing with the fill or stroke color or texture. Fully opaque is 1.0.
 */
@@ -2837,8 +2837,6 @@ PHP_METHOD(imagickdraw, getopacity)
 
 	internd = Z_IMAGICKDRAW_P(getThis());
 	opacity = DrawGetOpacity(internd->drawing_wand);
-	
-	printf("retrieved opacity of %f\n", opacity);
 
 	RETURN_DOUBLE(opacity);
 }
@@ -2856,14 +2854,13 @@ PHP_METHOD(imagickdraw, setopacity)
 		return;
 	}
 
-	printf("setting opacity to %f\n", opacity);
-
 	internd = Z_IMAGICKDRAW_P(getThis());;
 	DrawSetOpacity(internd->drawing_wand, opacity);
 
 	RETURN_TRUE;
 }
 /* }}} */
+#endif //#if MagickLibVersion >= 0x693
 
 #if MagickLibVersion >= 0x675
 /* {{{ proto array ImagickDraw::getFontResolution() 
@@ -3069,8 +3066,6 @@ PHP_METHOD(imagickdraw, getdensity)
 
 	internd = Z_IMAGICKDRAW_P(getThis());
 	density = DrawGetDensity(internd->drawing_wand);
-
-//	printf("String is at %x\n", density);
 
 	if (density == NULL) {
 		RETURN_NULL();

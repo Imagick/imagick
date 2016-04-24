@@ -2,11 +2,11 @@
 Test ImagickDraw, getOpacity
 --SKIPIF--
 <?php 
-require_once(dirname(__FILE__) . '/skipif.inc'); 
+require_once(dirname(__FILE__) . '/skipif.inc');
+checkClassMethods('ImagickDraw', ['setOpacity']);
 requirePHP("5.5.0");
 ?>
---XFAIL--
-Issue with setOpacity reported upstream https://github.com/ImageMagick/ImageMagick/issues/147
+
 --FILE--
 <?php
 

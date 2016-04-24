@@ -1023,8 +1023,10 @@ PHP_METHOD(imagickdraw, setstrokeopacity);
 PHP_METHOD(imagickdraw, setvectorgraphics);
 PHP_METHOD(imagickdraw, pop);
 PHP_METHOD(imagickdraw, push);
+#if MagickLibVersion >= 0x693
 PHP_METHOD(imagickdraw, getopacity);
 PHP_METHOD(imagickdraw, setopacity);
+#endif //MagickLibVersion >= 0x693
 
 #if MagickLibVersion >= 0x675
 PHP_METHOD(imagickdraw, getfontresolution);
