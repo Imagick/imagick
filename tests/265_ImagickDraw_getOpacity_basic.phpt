@@ -3,7 +3,7 @@ Test ImagickDraw, getOpacity
 --SKIPIF--
 <?php 
 require_once(dirname(__FILE__) . '/skipif.inc');
-checkClassMethods('ImagickDraw', ['setOpacity']);
+checkClassMethods('ImagickDraw', array('setOpacity'));
 requirePHP("5.5.0");
 ?>
 
