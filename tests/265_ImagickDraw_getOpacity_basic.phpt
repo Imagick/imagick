@@ -29,8 +29,9 @@ $opacityToSet = 0.1;
 $draw->setOpacity($opacityToSet);
 $opacity = $draw->getOpacity();
 
-if (abs($opacity - $opacityToSet) > 0.000001) {
-	echo "Failed to get correct opacity, it should be $opacityToSet but got $opacity\n";
+$delta = abs($opacity - $opacityToSet);
+if ($delta > 0.0001) {
+	echo "Failed to get correct opacity, it should be $opacityToSet but got $opacity, which is a delta of $delta\n";
 }
 
 $draw->line(125, 70, 100, 50);
