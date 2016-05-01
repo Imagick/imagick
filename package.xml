@@ -27,12 +27,12 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</lead>
 	<date>2016-04-24</date>
 	<version>
-		<release>3.4.2</release>
-		<api>3.4.2</api>
+		<release>3.4.3RC1</release>
+		<api>3.4.3</api>
 	</version>
 	<stability>
-		<release>beta</release>
-		<api>beta</api>
+		<release>stable</release>
+		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>

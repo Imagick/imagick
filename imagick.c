@@ -2267,14 +2267,18 @@ static zend_function_entry php_imagick_class_methods[] =
 #endif
 	PHP_ME(imagick, setiteratorindex, imagick_setiteratorindex_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getiteratorindex, imagick_zero_args, ZEND_ACC_PUBLIC)
+#if MagickLibVersion < 0x700
 	PHP_ME(imagick, transformimage, imagick_transformimage_args, ZEND_ACC_PUBLIC)
+#endif // #if MagickLibVersion < 0x700
 #endif
 #if MagickLibVersion > 0x630
 #if MagickLibVersion < 0x700
 	PHP_ME(imagick, setimageopacity, imagick_setimageopacity_args, ZEND_ACC_PUBLIC)
 #endif
+#if MagickLibVersion < 0x700
 	PHP_ME(imagick, orderedposterizeimage, imagick_orderedposterizeimage_args, ZEND_ACC_PUBLIC)
-#endif
+#endif //#if MagickLibVersion < 0x700
+#endif //#if MagickLibVersion > 0x630
 #if MagickLibVersion > 0x631
 	PHP_ME(imagick, polaroidimage, imagick_polaroidimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageproperty, imagick_getimageproperty_args, ZEND_ACC_PUBLIC)

@@ -418,13 +418,17 @@ PHP_METHOD(imagick, roundcornersimage);
 #endif
 PHP_METHOD(imagick, setiteratorindex);
 PHP_METHOD(imagick, getiteratorindex);
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, transformimage);
+#endif // #if MagickLibVersion < 0x700
 #endif
 #if MagickLibVersion > 0x630
 #if MagickLibVersion < 0x700
 PHP_METHOD(imagick, setimageopacity);
 #endif
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, orderedposterizeimage);
+#endif //#if MagickLibVersion < 0x700
 #endif
 #if MagickLibVersion > 0x631
 PHP_METHOD(imagick, polaroidimage);

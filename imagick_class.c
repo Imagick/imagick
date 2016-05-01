@@ -731,6 +731,7 @@ PHP_METHOD(imagick, setiteratorindex)
 }
 /* }}} */
 
+#if MagickLibVersion < 0x700
 /* {{{ proto Imagick Imagick::transformimage(string crop, string geometry )
 	Comfortability method for crop and resize
 */
@@ -763,6 +764,8 @@ PHP_METHOD(imagick, transformimage)
 	php_imagick_replace_magickwand(intern_return, transformed);
 	return;
 }
+#endif //#if MagickLibVersion < 0x700
+
 /* }}} */
 #endif
 
@@ -799,6 +802,7 @@ PHP_METHOD(imagick, setimageopacity)
 /* }}} */
 #endif
 
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::orderedposterizeImage(string threshold_map[, int CHANNEL])
 	Performs an ordered dither
 */
@@ -828,7 +832,8 @@ PHP_METHOD(imagick, orderedposterizeimage)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif
+#endif //#if MagickLibVersion < 0x700
+#endif //#if MagickLibVersion > 0x630
 
 #if MagickLibVersion > 0x631
 /* {{{ proto bool Imagick::polaroidImage(ImagickDraw properties, double angle )

@@ -4,6 +4,7 @@ Test Imagick, transformImage
 <?php
 $imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
+checkClassMethods('Imagick', array('transformimage'));
 ?>
 --FILE--
 <?php

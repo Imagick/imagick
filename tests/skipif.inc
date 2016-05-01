@@ -65,7 +65,7 @@ if (isset($imageMagickBelowVersion)) {
 function checkClassMethods($class, $methods)
 {
 	foreach ($methods as $method) {
-		if (method_exists('Imagick', $method) == false) {
+		if (method_exists($class, $method) == false) {
 			die("skip Class method $class::$method not present");
 		}
 	}
