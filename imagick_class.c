@@ -277,7 +277,7 @@ PHP_METHOD(imagick, contraststretchimage)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-
+#if MagickLibVersion < 0x700
 /* {{{ proto int Imagick::getImageMatte()
 	Returns true if the image has a matte channel otherwise false
 */
@@ -305,7 +305,7 @@ PHP_METHOD(imagick, getimagematte)
 	}
 }
 /* }}} */
-
+#endif //#if MagickLibVersion < 0x700
 #endif
 
 /* {{{ proto bool Imagick::setImageMatte(bool matte)
@@ -1213,6 +1213,7 @@ PHP_METHOD(imagick, setimageorientation)
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 #if MagickLibVersion > 0x634
+#if MagickLibVersion < 0x700
 /* {{{ proto Imagick Imagick::paintFloodfillImage(mixed fill, float fuzz, mixed bordercolor, int x, int y[, int channel])
    Sets the image orientation
 */
@@ -1267,6 +1268,7 @@ PHP_METHOD(imagick, paintfloodfillimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 #endif
 #endif
 
@@ -4226,6 +4228,7 @@ PHP_METHOD(imagick, coalesceimages)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::colorFloodfillImage(ImagickPixel fill, double fuzz, ImagickPixel bordercolor, int x, int y)
 	Changes the color value of any pixel that matches target and is an immediate neighbor.
 */
@@ -4278,6 +4281,7 @@ PHP_METHOD(imagick, colorfloodfillimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 #endif
 
 /* {{{ proto Imagick Imagick::combineImages()
@@ -4666,6 +4670,7 @@ PHP_METHOD(imagick, magnifyimage)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::cycleColormapImage(Imagick map, bool dither)
 	Replaces the colors of an image with the closest color from a reference image.
 */
@@ -4698,7 +4703,9 @@ PHP_METHOD(imagick, mapimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::matteFloodfillImage(float alpha,float fuzz,ImagickPixel bordercolor, int x, int y)
 	Changes the transparency value of any pixel that matches target and is an immediate neighbor
 */
@@ -4740,6 +4747,7 @@ PHP_METHOD(imagick, mattefloodfillimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 #endif
 
 #if MagickLibVersion < 0x700
@@ -4808,6 +4816,7 @@ PHP_METHOD(imagick, negateimage)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::paintOpaqueImage(ImagickPixel target, ImagickPixel fill, float fuzz[, int channel])
 	Changes any pixel that matches color with the color defined by fill. Channel argument is supported in ImageMagick 6.2.8+.
 */
@@ -4864,6 +4873,7 @@ PHP_METHOD(imagick, paintopaqueimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 #endif
 
 #if MagickLibVersion > 0x628
@@ -4899,6 +4909,7 @@ PHP_METHOD(imagick, optimizeimagelayers)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::paintTransparentImage(ImagickPixel target, float alpha, float fuzz)
 	Changes any pixel that matches color with the color defined by fill.
 */
@@ -4939,6 +4950,7 @@ PHP_METHOD(imagick, painttransparentimage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 #endif
 #endif
 
@@ -5157,7 +5169,11 @@ PHP_METHOD(imagick, separateimagechannel)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickSeparateImage(intern->magick_wand, channel);
+#else
 	status = MagickSeparateImageChannel(intern->magick_wand, channel);
+#endif
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -5200,6 +5216,7 @@ PHP_METHOD(imagick, sepiatoneimage)
 }
 /* }}} */
 
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::setImageBias(float bias)
 	Sets the image bias
 */
@@ -5233,6 +5250,7 @@ void s_set_image_bias(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 
 
 /* {{{ proto bool Imagick::setImageBiasQuantum(float bias)
@@ -6608,6 +6626,7 @@ PHP_METHOD(imagick, getimagechanneldistortion)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto array Imagick::getImageChannelExtrema(int channel)
 	Gets the extrema for one or more image channels.  Return value is an associative array with the keys "minima" and "maxima".
 */
@@ -6642,6 +6661,7 @@ PHP_METHOD(imagick, getimagechannelextrema)
 	return;
 }
 /* }}} */
+#endif //#if MagickLibVersion < 0x700
 #endif
 
 /* {{{ proto array Imagick::getImageChannelMean(int channel)
@@ -6698,7 +6718,10 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	};
 	php_imagick_object *intern;
 	ChannelStatistics *statistics;
-	int elements = 10, i;
+	int i;
+#if MagickLibVersion < 0x700
+	int elements = 10;
+#endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -6946,6 +6969,7 @@ PHP_METHOD(imagick, getimagedistortion)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto array Imagick::getImageExtrema()
 	Gets the extrema for the image.  Returns an associative array with the keys "min" and "max".
 */
@@ -6979,6 +7003,7 @@ PHP_METHOD(imagick, getimageextrema)
 	return;
 }
 /* }}} */
+#endif //#if MagickLibVersion < 0x700
 #endif
 
 /* {{{ proto long Imagick::getImageDispose()
@@ -7181,6 +7206,7 @@ PHP_METHOD(imagick, getimageiterations)
 }
 /* }}} */
 
+#if MagickLibVersion < 0x700
 /* {{{ proto ImagickPixel Imagick::getImageMatteColor()
 	Returns the image matte color.
 */
@@ -7220,6 +7246,7 @@ PHP_METHOD(imagick, getimagemattecolor)
 	return;
 }
 /* }}} */
+#endif //#if MagickLibVersion < 0x700
 
 /* {{{ proto array Imagick::getImagePage()
 	Returns the page geometry associated with the image in an array with the keys "width", "height", "x", and "y".
@@ -8055,6 +8082,7 @@ PHP_METHOD(imagick, hasnextimage)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto int Imagick::getImageIndex()
 	Returns the index of the current active image, within the Imagick object.
 */
@@ -8078,6 +8106,10 @@ PHP_METHOD(imagick, getimageindex)
 	return;
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
+
+
+#if MagickLibVersion < 0x700
 
 /* {{{ proto bool Imagick::setImageIndex(int index)
 	Returns the index of the current active image, within the Imagick object.
@@ -8115,6 +8147,7 @@ PHP_METHOD(imagick, setimageindex)
 
 }
 /* }}} */
+#endif // #if MagickLibVersion < 0x700
 #endif
 
 /* {{{ proto bool Imagick::removeImage()
@@ -8175,6 +8208,7 @@ PHP_METHOD(imagick, getimagefilename)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* {{{ proto int Imagick::getImageSize()
 	returns the image length in bytes
 */
@@ -8192,6 +8226,7 @@ PHP_METHOD(imagick, getimagesize)
 	return;
 }
 /* }}} */
+#endif
 #endif
 
 static
@@ -8640,6 +8675,7 @@ PHP_METHOD(imagick, setimagefilename)
 /* }}} */
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 /* PS, DEPRECATED please remove: http://www.imagemagick.org/discourse-server/viewtopic.php?f=6&t=8196 */
 PHP_METHOD(imagick, setimageattribute)
 {
@@ -8669,6 +8705,7 @@ PHP_METHOD(imagick, setimageattribute)
 	}
 	RETURN_TRUE;
 }
+#endif // #if MagickLibVersion < 0x700
 #endif
 
 /* {{{ proto bool Imagick::setImageBackgroundColor(ImagickPixel background)
@@ -9419,6 +9456,7 @@ PHP_METHOD(imagick, setimageiterations)
 }
 /* }}} */
 
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::setImageMatteColor(ImagickPixel matte)
 	Sets the image matte color.
 */
@@ -9457,6 +9495,7 @@ PHP_METHOD(imagick, setimagemattecolor)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif //#if MagickLibVersion < 0x700
 
 /* {{{ proto bool Imagick::setImagePage(int width, int height, int x, int y)
 	Sets the page geometry of the image.
@@ -9701,6 +9740,10 @@ PHP_METHOD(imagick, oilpaintimage)
 	double radius;
 	MagickBooleanType status;
 	php_imagick_object *intern;
+#if MagickLibVersion >= 0x700
+	float sigma = 1.0;
+	//TODO - allow sigma to be set.
+#endif // #if MagickLibVersion >= 0x700
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
@@ -9712,8 +9755,6 @@ PHP_METHOD(imagick, oilpaintimage)
 		return;
 
 #if MagickLibVersion >= 0x700
-	float sigma = 1.0;
-	//TODO - allow sigma to be set.
 	status = MagickOilPaintImage(intern->magick_wand, radius, sigma);
 #else
 	status = MagickOilPaintImage(intern->magick_wand, radius);
@@ -10244,6 +10285,11 @@ PHP_METHOD(imagick, borderimage)
 	im_long width, height;
 	PixelWand *color_wand;
 	zend_bool allocated;
+	
+#if MagickLibVersion >= 0x700
+	//TODO - understand and allow compose to be set.
+	CompositeOperator compose = AtopCompositeOp; 
+#endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll", &param, &width, &height) == FAILURE) {
 		return;
@@ -10258,9 +10304,7 @@ PHP_METHOD(imagick, borderimage)
 	if (!color_wand)
 		return;
 
-#if MagickLibVersion >= 0x700
-	//TODO - understand and allow compose to be set.
-	CompositeOperator compose = AtopCompositeOp; 
+#if MagickLibVersion >= 0x700 
 	status = MagickBorderImage(intern->magick_wand, color_wand, width, height, compose);
 #else
 	status = MagickBorderImage(intern->magick_wand, color_wand, width, height);
@@ -12512,7 +12556,7 @@ PHP_METHOD(imagick, morphology)
 }
 /* }}} */
 
-
+#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::filter(ImagickKernel kernel, [int CHANNEL] )
 	Applies a custom convolution kernel to the image.
 */
@@ -12522,7 +12566,7 @@ PHP_METHOD(imagick, filter)
 	php_imagick_object *intern;
 	php_imagickkernel_object *kernel;
 	MagickBooleanType status;
-	im_long channel = 0;
+	ChannelType channel = UndefinedChannel;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
 		return;
@@ -12557,6 +12601,7 @@ PHP_METHOD(imagick, filter)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif //#if MagickLibVersion < 0x700
 #endif
 
 

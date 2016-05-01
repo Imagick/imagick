@@ -401,7 +401,9 @@ PHP_METHOD(imagick, compareimagelayers);
 PHP_METHOD(imagick, optimizeimagelayers);
 PHP_METHOD(imagick, uniqueimagecolors);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimagematte);
+#endif //#if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, setimagematte);
 PHP_METHOD(imagick, adaptiveresizeimage);
@@ -564,8 +566,10 @@ PHP_METHOD(imagick, nextimage);
 PHP_METHOD(imagick, haspreviousimage);
 PHP_METHOD(imagick, hasnextimage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, setimageindex);
 PHP_METHOD(imagick, getimageindex);
+#endif // #if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, setimageformat);
 PHP_METHOD(imagick, setimagefilename);
@@ -573,7 +577,9 @@ PHP_METHOD(imagick, getimagefilename);
 PHP_METHOD(imagick, getimageformat);
 PHP_METHOD(imagick, getimagemimetype);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimagesize);
+#endif
 #endif
 PHP_METHOD(imagick, getimagegeometry);
 PHP_METHOD(imagick, getimagecolors);
@@ -620,7 +626,9 @@ PHP_METHOD(imagick, sampleimage);
 PHP_METHOD(imagick, solarizeimage);
 PHP_METHOD(imagick, shadowimage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, setimageattribute);
+#endif // #if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, setimagebackgroundcolor);
 #if MagickLibVersion >= 0x700
@@ -632,7 +640,9 @@ PHP_METHOD(imagick, setimagedelay);
 PHP_METHOD(imagick, setimagedepth);
 PHP_METHOD(imagick, setimagegamma);
 PHP_METHOD(imagick, setimageiterations);
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, setimagemattecolor);
+#endif // #if MagickLibVersion < 0x700
 PHP_METHOD(imagick, setimagepage);
 PHP_METHOD(imagick, setimageprogressmonitor);
 #if MagickLibVersion > 0x653
@@ -676,7 +686,9 @@ PHP_METHOD(imagick, clipimage);
 PHP_METHOD(imagick, clippathimage);
 PHP_METHOD(imagick, coalesceimages);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, colorfloodfillimage);
+#endif //#if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, colorizeimage);
 PHP_METHOD(imagick, compareimagechannels);
@@ -720,7 +732,9 @@ PHP_METHOD(imagick, getimagebordercolor);
 PHP_METHOD(imagick, getimagechanneldepth);
 PHP_METHOD(imagick, getimagechanneldistortion);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimagechannelextrema);
+#endif // #if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, getimagechannelmean);
 PHP_METHOD(imagick, getimagechannelstatistics);
@@ -731,7 +745,9 @@ PHP_METHOD(imagick, getimagedelay);
 PHP_METHOD(imagick, getimagedepth);
 PHP_METHOD(imagick, getimagedistortion);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimageextrema);
+#endif // #if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, getimagedispose);
 PHP_METHOD(imagick, getimagegamma);
@@ -740,7 +756,9 @@ PHP_METHOD(imagick, getimageheight);
 PHP_METHOD(imagick, getimagehistogram);
 PHP_METHOD(imagick, getimageinterlacescheme);
 PHP_METHOD(imagick, getimageiterations);
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimagemattecolor);
+#endif //#if MagickLibVersion < 0x700 
 PHP_METHOD(imagick, getimagepage);
 PHP_METHOD(imagick, getimagepixelcolor);
 PHP_METHOD(imagick, getimageprofile);
@@ -765,16 +783,20 @@ PHP_METHOD(imagick, inversefouriertransformimage);
 PHP_METHOD(imagick, levelimage);
 PHP_METHOD(imagick, magnifyimage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, mapimage);
 PHP_METHOD(imagick, mattefloodfillimage);
+#endif // #if MagickLibVersion < 0x700
 #endif
 #if MagickLibVersion < 0x700
 PHP_METHOD(imagick, medianfilterimage);
 #endif
 PHP_METHOD(imagick, negateimage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, paintopaqueimage);
 PHP_METHOD(imagick, painttransparentimage);
+#endif //#if MagickLibVersion < 0x700
 #endif
 PHP_METHOD(imagick, previewimages);
 PHP_METHOD(imagick, profileimage);
@@ -872,7 +894,9 @@ PHP_METHOD(imagick, setregistry);
 PHP_METHOD(imagick, getregistry);
 PHP_METHOD(imagick, listregistry);
 PHP_METHOD(imagick, morphology);
+#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, filter);
+#endif // #if MagickLibVersion < 0x700
 PHP_METHOD(imagick, setantialias);
 PHP_METHOD(imagick, getantialias);
 #if MagickLibVersion > 0x676

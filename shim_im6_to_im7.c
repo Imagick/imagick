@@ -307,23 +307,23 @@ MagickBooleanType MagickEvaluateImageChannel(MagickWand *wand,
 	return status;
 }
 
-MagickBooleanType MagickFilterImageChannel(MagickWand *wand,
-  const ChannelType channel,const KernelInfo *kernel) {
-	MagickBooleanType status;
-	ChannelType previous_channel_mask;
-
-	if (channel != UndefinedChannel) {
-		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
-	}
-
-	status = MagickFilterImage(wand, kernel);
-
-	if (channel != UndefinedChannel) {
-		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
-	}
-
-	return status; 
-}
+//MagickBooleanType MagickFilterImageChannel(MagickWand *wand,
+//  const ChannelType channel,const KernelInfo *kernel) {
+//	MagickBooleanType status;
+//	ChannelType previous_channel_mask;
+//
+//	if (channel != UndefinedChannel) {
+//		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+//	}
+//
+//	status = MagickFilterImage(wand, kernel);
+//
+//	if (channel != UndefinedChannel) {
+//		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+//	}
+//
+//	return status; 
+//}
 
 MagickBooleanType MagickFloodfillPaintImageChannel(MagickWand *wand,
   const ChannelType channel,const PixelWand *fill,const double fuzz,
@@ -413,6 +413,133 @@ MagickBooleanType MagickGaussianBlurImageChannel(MagickWand *wand,
 	}
 
 	status = MagickGaussianBlurImage(wand,radius,sigma);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+
+size_t MagickGetImageChannelDepth(MagickWand *wand, const ChannelType channel) {
+	size_t depth;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	depth = MagickGetImageDepth(wand);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return depth;
+}
+
+MagickBooleanType MagickGetImageChannelMean(MagickWand *wand, const ChannelType channel,double *mean,
+  double *standard_deviation) {
+  	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickGetImageMean(wand, mean, standard_deviation);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+
+
+MagickBooleanType MagickSetImageChannelDepth(MagickWand *wand, const ChannelType channel,
+  const size_t depth) {
+	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickSetImageDepth(wand, depth);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+  
+MagickBooleanType MagickGetImageChannelDistortion(MagickWand *wand,
+  const MagickWand *reference,const ChannelType channel,const MetricType metric,
+  double *distortion) {
+  	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickGetImageDistortion(wand, reference, metric, distortion);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+  
+MagickBooleanType MagickGetImageChannelKurtosis(MagickWand *wand,const ChannelType channel,
+  double *kurtosis,double *skewness) {
+  	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickGetImageKurtosis(wand,kurtosis,skewness);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+
+MagickBooleanType MagickGetImageChannelRange(MagickWand *wand,const ChannelType channel,double *minima,
+  double *maxima) {
+  	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickGetImageRange(wand, minima, maxima);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+
+MagickBooleanType MagickOrderedPosterizeImageChannel(MagickWand *wand,const ChannelType channel,
+  const char *threshold_map) {
+	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickOrderedDitherImage(wand, threshold_map);
 
 	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
@@ -554,25 +681,6 @@ MagickBooleanType MagickOpaquePaintImageChannel(MagickWand *wand,
 
 	return status;
 }
-
-MagickBooleanType MagickOrderedPosterizeImageChannel(
-  MagickWand *wand,const ChannelType channel,const char *threshold_map) {
-	MagickBooleanType status;
-	ChannelType previous_channel_mask;
-
-	if (channel != UndefinedChannel) {
-		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
-	}
-
-	status = MagickOrderedPosterizeImage(wand, threshold_map);
-
-	if (channel != UndefinedChannel) {
-		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
-	}
-
-	return status;
-}
-
 
 
 MagickBooleanType MagickRandomThresholdImageChannel(MagickWand *wand,

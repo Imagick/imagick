@@ -67,8 +67,23 @@ MagickBooleanType MagickEqualizeImageChannel(MagickWand *wand,
 MagickBooleanType MagickEvaluateImageChannel(MagickWand *wand,
   const ChannelType channel,const MagickEvaluateOperator op,
   const double value);
-MagickBooleanType MagickFilterImageChannel(MagickWand *wand,
-  const ChannelType channel,const KernelInfo *kernel);
+MagickBooleanType MagickGetImageChannelDistortion(MagickWand *wand,
+  const MagickWand *reference,const ChannelType channel,const MetricType metric,
+  double *distortion);
+MagickBooleanType MagickGetImageChannelKurtosis(MagickWand *wand,const ChannelType channel,
+  double *kurtosis,double *skewness);
+MagickBooleanType MagickGetImageChannelRange(MagickWand *wand,const ChannelType channel,double *minima,
+  double *maxima);
+size_t MagickGetImageChannelDepth(MagickWand *wand, const ChannelType channel);
+MagickBooleanType MagickSetImageChannelDepth(MagickWand *wand, const ChannelType channel,
+  const size_t depth);
+MagickBooleanType MagickGetImageChannelMean(MagickWand *wand, const ChannelType channel,double *mean,
+  double *standard_deviation);  
+//MagickBooleanType MagickFilterImageChannel(MagickWand *wand,
+//  const ChannelType channel,const KernelInfo *kernel);
+MagickBooleanType MagickOrderedPosterizeImageChannel(MagickWand *wand,const ChannelType channel,
+  const char *threshold_map);
+
 MagickBooleanType MagickFloodfillPaintImageChannel(
 	MagickWand *wand,
 	const ChannelType channel, const PixelWand *fill,const double fuzz,
@@ -109,8 +124,8 @@ MagickBooleanType MagickOpaquePaintImageChannel(MagickWand *wand,
   const PixelWand *fill,const double fuzz,const MagickBooleanType invert);
 MagickBooleanType MagickOrderedPosterizeImageChannel(MagickWand *wand,
   const ChannelType channel,const char *threshold_map);
-//MagickBooleanType MagickRandomThresholdImageChannel(MagickWand *wand,
-//  const ChannelType channel,const double low,const double high);
+MagickBooleanType MagickRandomThresholdImageChannel(MagickWand *wand,
+  const ChannelType channel,const double low,const double high);
 MagickBooleanType MagickRotationalBlurImageChannel(MagickWand *wand,
   const ChannelType channel,const double angle);
 MagickBooleanType MagickSelectiveBlurImageChannel(MagickWand *wand,
@@ -132,9 +147,10 @@ MagickBooleanType MagickUnsharpMaskImageChannel(MagickWand *wand,
   const ChannelType channel,const double radius,const double sigma,
   const double amount,const double threshold);
   
-  
+PixelInterpolateMethod MagickGetImageInterpolateMethod(MagickWand *);
 
-
-
+MagickBooleanType MagickSetImageInterpolateMethod(MagickWand *wand,
+  const PixelInterpolateMethod method);
+double DrawGetStrokeOpacity(const DrawingWand *wand);
 
 #endif
