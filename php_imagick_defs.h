@@ -438,7 +438,9 @@ PHP_METHOD(imagick, getimageproperty);
 PHP_METHOD(imagick, setimageproperty);
 PHP_METHOD(imagick, deleteimageproperty);
 PHP_METHOD(imagick, identifyformat);
+#ifdef HAVE_MAGICKSETIMAGEINTERPOLATEMETHOD
 PHP_METHOD(imagick, setimageinterpolatemethod);
+#endif // #ifdef HAVE_MAGICKSETIMAGEINTERPOLATEMETHOD
 PHP_METHOD(imagick, getimageinterpolatemethod);
 PHP_METHOD(imagick, linearstretchimage);
 PHP_METHOD(imagick, getimagelength);

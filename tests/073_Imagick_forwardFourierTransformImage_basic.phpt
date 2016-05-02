@@ -42,10 +42,10 @@ function forwardFourierTransformImage() {
     $mask = createMask();
     $imagick->forwardFourierTransformImage(true);
 
-    @$imagick->setimageindex(0);
+    $imagick->setIteratorIndex(0);
     $magnitude = $imagick->getimage();
 
-    @$imagick->setimageindex(1);
+    $imagick->setIteratorIndex(1);
     $imagickPhase = $imagick->getimage();
 
     if (true) {

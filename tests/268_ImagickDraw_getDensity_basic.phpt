@@ -24,9 +24,15 @@ $draw->setFontSize(72);
 
 $opacityToSet = 0.1;
 
-$density = $draw->getDensity();
+$densitySet = "200";
 
-// What to test for density?
+
+$draw->setDensity($densitySet);
+$densityGet = $draw->getDensity();
+
+if (strcmp($densitySet, $densityGet) !== 0) {
+	echo "Density retrieved [$densityGet] is not the value set [$densitySet].";
+}
 
 $draw->line(125, 70, 100, 50);
 $draw->line(350, 170, 100, 150);
@@ -36,13 +42,9 @@ $imagick->newImage(500, 500, $backgroundColor);
 $imagick->setImageFormat("png");
 $imagick->drawImage($draw);
 
-
-
-
 $bytes = $imagick->getImageBlob();
 if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
 
-echo "This test is not working yet.";
 ?>
 --EXPECTF--
 Ok
