@@ -45,6 +45,8 @@ $imagick->drawImage($draw);
 $bytes = $imagick->getImageBlob();
 if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
 
+echo "Ok";
+
 ?>
 --EXPECTF--
 Ok
