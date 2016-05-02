@@ -22,11 +22,11 @@ $draw->setFillColor($fillColor);
 $draw->setStrokeWidth(2);
 $draw->setFontSize(56);
 
-$directions = [
+$directions = array(
 	\Imagick::DIRECTION_LEFT_TO_RIGHT,
 	\Imagick::DIRECTION_RIGHT_TO_LEFT,
 	\Imagick::DIRECTION_LEFT_TO_RIGHT,
-];
+);
 
 $i = 0;
 foreach ($directions as $directionToSet) {
