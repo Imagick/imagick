@@ -42,13 +42,15 @@ The PHP extension Imagick works by calling the ImageMagick library. Although the
 
 Because ImageMagick is used to process images it is feasibly possible for hackers to create images that contain invalid data to attempt to exploit these bugs. Because of this we recommend the following:
 
-1) Do not run Imagick in a server that is directly accessible from outside your network. It is better to either use it as a background task using something like SupervisorD or to run it in a separate server that is not directly access on the internet. 
+1) Do not run Imagick in a server that is directly accessible from outside your network. It is better to either use it as a background task using something like SupervisorD or to run it in a separate server that is not directly accessible on the internet. 
 
-Doing this will make it difficult for hackers to exploit a bug, even if one should exist in the libraries that ImageMagick is using. 
+Doing this will make it more difficult for hackers to exploit a bug, if one should exist in the libraries that ImageMagick is using. 
 
 2) Run it as a very low privileged process. As much as possible the files and system resources accessible to the PHP script that Imagick is being called from should be locked down. 
 
-3) Check the result of the image processing is a valid image file before displaying it to the user. In the extremely unlikely event that a hacker is able to pipe arbitrary files to the output of Imagick, checking that it is an image file, and not the source code of your application that is being sent, is a sensible precaution. This can be accomplished by the following code:
+3) Verify that all image files begin with the expected "magic bytes" corresponding to the image file types you support before sending them to ImageMagick for processing. This an be be done with finfo_file() - see below.
+
+4) Check the result of the image processing is a valid image file before displaying it to the user. In the extremely unlikely event that a hacker is able to pipe arbitrary files to the output of Imagick, checking that it is an image file, and not the source code of your application that is being sent, is a sensible precaution. This can be accomplished by the following code:
 
 
 ```
@@ -58,6 +60,7 @@ $mimeType = finfo_file($finfo, $filename);
 
 $allowedMimeTypes = [
     'image/gif',
+    'image/jpeg',
     'image/jpg',
     'image/png'
 ];
@@ -67,8 +70,9 @@ if (in_array($mimeType, $allowedMimeTypes) == false) {
 }
 ```
 
-These recommendations do not guarantee any security, but they should limit your exposure to any Imagick/ImageMagick related security issue.
+5) NEVER directly serve any files that have been uploaded by users directly through PHP, instead either serve them through the webserver, without invoking PHP, or use [readfile](http://php.net/manual/en/function.readfile.php) to serve them within PHP.
 
+These recommendations do not guarantee any security, but they should limit your exposure to any Imagick/ImageMagick related security issue.
 
 # OpenMP
 
