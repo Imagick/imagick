@@ -93,7 +93,9 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci_cache = empty_fcall_info_cache;
 
 	fci.size = sizeof(fci);
+#if PHP_VERSION_ID < 70100
 	fci.function_table = EG(function_table);
+#endif
 #ifdef ZEND_ENGINE_3
 	fci.object = NULL;
 	//fci.function_name = *callback->user_callback;
@@ -108,7 +110,9 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci.param_count = 2;
 	fci.params = zargs;
 	fci.no_separation = 0;
+#if PHP_VERSION_ID < 70100
 	fci.symbol_table = NULL;
+#endif
 
 #ifdef ZEND_ENGINE_3
 	ZVAL_LONG(&zargs[0], offset);

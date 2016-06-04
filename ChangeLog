@@ -1,3 +1,7 @@
+3.4.4
+- Fixes:
+  * Fix bug compiling against PHP 7.1.
+
 3.4.3
 - Fixes:
   * Imagick::transformImage and Imagick::orderedPosterizeImage now correctly excluded from 
