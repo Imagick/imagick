@@ -1,6 +1,7 @@
 3.4.4
 - Fixes:
-  * Fix bug compiling against PHP 7.1.
+  * Bug 72311 - compiling against PHP 7.1.
+  * Bug 72226 - regression for Imagick Exception classes being final on 7.x 
 
 3.4.3
 - Fixes:

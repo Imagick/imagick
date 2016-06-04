@@ -3556,8 +3556,6 @@ PHP_MINIT_FUNCTION(imagick)
 	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
 
-	php_imagick_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
-
 	/*
 	Initialize exceptions (ImagickDraw exception)
 	*/
@@ -3567,7 +3565,6 @@ PHP_MINIT_FUNCTION(imagick)
 #else
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
-	php_imagickdraw_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
 	Initialize exceptions (ImagickPixelIterator exception)
@@ -3578,7 +3575,6 @@ PHP_MINIT_FUNCTION(imagick)
 #else
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
-	php_imagickpixeliterator_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	/*
 	Initialize exceptions (ImagickPixel exception)
@@ -3589,7 +3585,6 @@ PHP_MINIT_FUNCTION(imagick)
 #else
 	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
-	php_imagickpixel_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 #ifdef IMAGICK_WITH_KERNEL
 	/*
@@ -3602,7 +3597,6 @@ PHP_MINIT_FUNCTION(imagick)
 	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
     #endif
 
-	php_imagickkernel_exception_class_entry->ce_flags |= ZEND_ACC_FINAL;
 #endif
 
 	/*
