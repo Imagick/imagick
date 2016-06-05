@@ -11,7 +11,12 @@ ini_set( "display_errors", true );
 class UserlandImagickException extends ImagickException {}
 class UserlandImagickDrawException extends ImagickDrawException {}
 class UserlandImagickPixelException extends ImagickPixelException {}
-class UserlandImagickKernelException extends ImagickKernelException {}
+
+if (class_exists('ImagickKernelException', false) == true) {
+	class UserlandImagickKernelException extends ImagickKernelException
+	{
+	}
+}
 
 ?>
 --EXPECTF--
