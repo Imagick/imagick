@@ -4,7 +4,7 @@ Test identifyImageType
 <?php 
 
 require_once(dirname(__FILE__) . '/skipif.inc');
-checkClassMethods('Imagick', ['identifyImageType']);
+checkClassMethods('Imagick', array('identifyImageType'));
 
 ?>
 --FILE--
