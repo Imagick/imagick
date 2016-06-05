@@ -915,6 +915,9 @@ PHP_METHOD(imagick, compositeimagegravity);
 #if MagickLibVersion >= 0x692
 PHP_METHOD(imagick, localcontrastimage);
 #endif // #if MagickLibVersion >= 0x692
+#if MagickLibVersion >= 0x700
+PHP_METHOD(imagick, identifyimagetype);
+#endif // #if MagickLibVersion >= 0x700
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628

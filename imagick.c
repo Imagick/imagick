@@ -2787,6 +2787,9 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion >= 0x693
 	PHP_ME(imagick, localcontrastimage, imagick_localContrastImage_args, ZEND_ACC_PUBLIC)
 #endif // #if MagickLibVersion >= 0x692
+#if MagickLibVersion >= 0x700
+	PHP_ME(imagick, identifyimagetype, imagick_zero_args, ZEND_ACC_PUBLIC)
+#endif // #if MagickLibVersion >= 0x700
 
 	{ NULL, NULL, NULL }
 };

@@ -4,7 +4,8 @@
   * Bug 72226 - regression for Imagick Exception classes being final on 7.x
   * Corrected reference of constants. Imagick::METRIC_MEANERRORPERPIXELMETRIC from MeanErrorPerPixelMetric to MeanErrorPerPixelErrorMetric. Imagick::METRIC_PEAKSIGNALTONOISERATIO from PeakSignalToNoiseRatioMetric to PeakSignalToNoiseRatioErrorMetric
 - Added:
-  * Imagick::INTERPOLATE_NEAREST_PIXEL
+  * function Imagick::identifyImageType() : int returns one of the Imagick::IMGTYPE_* constants
+  * Imagick::INTERPOLATE_NEAREST_PIXEL for ImageMagick >= 7
   * In ImageMagick, the names of two filter constants were corrected to the standard spelling. Support for the new spelling has been added. The old constants are left in place for legacy support.
     Legacy: FILTER_HANNING, new name: FILTER_HANN
     Legacy: FILTER_WELSH,  new name: FILTER_WELCH

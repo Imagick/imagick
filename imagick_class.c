@@ -12820,4 +12820,28 @@ PHP_METHOD(imagick, localcontrastimage)
 #endif // #if MagickLibVersion >= 0x693
 
 
+#if MagickLibVersion >= 0x700
+/* {{{ proto int Imagick::identifyImageType()
+	Identifies the potential image type, returns one of the Imagick::IMGTYPE_* constants
+*/
+PHP_METHOD(imagick, identifyimagetype)
+{
+	php_imagick_object *intern;
+	long imageType;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	imageType = MagickIdentifyImageType(intern->magick_wand);
+
+	RETVAL_LONG(imageType);
+}
+/* }}} */
+#endif // #if MagickLibVersion >= 0x700
+
 /* end of Imagick */
