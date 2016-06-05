@@ -55,19 +55,19 @@ Doing this will make it more difficult for hackers to exploit a bug, if one shou
 
 ```
 <?php
-$finfo = finfo_open(FILEINFO_MIME_TYPE);
-$mimeType = finfo_file($finfo, $filename);
-
-$allowedMimeTypes = [
-    'image/gif',
-    'image/jpeg',
-    'image/jpg',
-    'image/png'
-];
-
-if (in_array($mimeType, $allowedMimeTypes) == false) {
-    throw new \SecurityException("Was going to send file '$filename' to the user, but it is not an image file.");
-}
+	$finfo = finfo_open(FILEINFO_MIME_TYPE);
+	$mimeType = finfo_file($finfo, $filename);
+	
+	$allowedMimeTypes = [
+		'image/gif',
+		'image/jpeg',
+		'image/jpg',
+		'image/png'
+	];
+	
+	if (in_array($mimeType, $allowedMimeTypes) == false) {
+		throw new \SecurityException("Was going to send file '$filename' to the user, but it is not an image file.");
+	}
 ```
 
 5) NEVER directly serve any files that have been uploaded by users directly through PHP, instead either serve them through the webserver, without invoking PHP, or use [readfile](http://php.net/manual/en/function.readfile.php) to serve them within PHP.
