@@ -12,7 +12,6 @@ $bias = 0.5;
 
 //requires ImageMagick version 6.9.0-1 to have an effect on convolveImage
 function setImageBias($bias) {
-    $imagick = new \Imagick(realpath("images/stack.jpg"));
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
 
