@@ -3183,6 +3183,10 @@ PHP_METHOD(imagick, __construct)
 			}
 		} ZEND_HASH_FOREACH_END();
 	}
+	if (Z_TYPE_P(files) == IS_FALSE || Z_TYPE_P(files) == IS_TRUE) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Constructor shouldn't be called with a boolean as the filename");
+	}
+
 	RETURN_TRUE;
 }
 #else
@@ -3252,6 +3256,11 @@ PHP_METHOD(imagick, __construct)
 			}
 		}
 	}
+
+	if (Z_TYPE_P(files) == IS_BOOL) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Constructor shouldn't be called with a boolean as the filename" TSRMLS_CC);
+	}
+
 	RETURN_TRUE;
 }
 #endif
