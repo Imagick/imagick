@@ -25,10 +25,10 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>scottmac@php.net</email>
 		<active>no</active>
 	</lead>
-	<date>2016-04-24</date>
+	<date>2016-06-09</date>
 	<version>
-		<release>3.4.4RC1</release>
-		<api>3.4.4</api>
+		<release>3.4.3RC1</release>
+		<api>3.4.3</api>
 	</version>
 	<stability>
 		<release>stable</release>
@@ -37,6 +37,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Fixes:
+  * Imagick::transformImage and Imagick::orderedPosterizeImage now correctly excluded from
   * Bug 72311 - compiling against PHP 7.1.
   * Bug 72226 - regression for Imagick Exception classes being final on 7.x
   * Corrected reference of constants. Imagick::METRIC_MEANERRORPERPIXELMETRIC from MeanErrorPerPixelMetric to MeanErrorPerPixelErrorMetric. Imagick::METRIC_PEAKSIGNALTONOISERATIO from PeakSignalToNoiseRatioMetric to PeakSignalToNoiseRatioErrorMetric

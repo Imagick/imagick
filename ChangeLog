@@ -1,5 +1,7 @@
-3.4.4
+3.4.3
 - Fixes:
+  * Imagick::transformImage and Imagick::orderedPosterizeImage now correctly excluded from 
+  IM7 build.
   * Bug 72311 - compiling against PHP 7.1.
   * Bug 72226 - regression for Imagick Exception classes being final on 7.x
   * Corrected reference of constants. Imagick::METRIC_MEANERRORPERPIXELMETRIC from MeanErrorPerPixelMetric to MeanErrorPerPixelErrorMetric. Imagick::METRIC_PEAKSIGNALTONOISERATIO from PeakSignalToNoiseRatioMetric to PeakSignalToNoiseRatioErrorMetric
@@ -23,11 +25,6 @@
     IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_ON", OnAlphaChannel);
     IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF", OffAlphaChannel);
     IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DISCRETE", DiscreteAlphaChannel);
-
-3.4.3
-- Fixes:
-  * Imagick::transformImage and Imagick::orderedPosterizeImage now correctly excluded from 
-  IM7 build.
 
 3.4.2
 - Fixes:
