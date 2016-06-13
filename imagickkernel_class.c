@@ -216,7 +216,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	zval *origin_array;
 	HashTable *inner_array;
 	KernelInfo *kernel_info;
-	long num_rows, num_columns;
+	long num_rows, num_columns = 0;
 	int previous_num_columns;
 	int row, column;
 
@@ -364,7 +364,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	zval *origin_array;
 	HashTable *inner_array;
 	KernelInfo *kernel_info;
-	long num_rows, num_columns;
+	long num_rows, num_columns = 0;
 	int previous_num_columns;
 	int row, column;
 
@@ -627,10 +627,10 @@ PHP_METHOD(imagickkernel, addkernel)
 
 	//createKernelZval(return_value, kernel_info_this_clone TSRMLS_CC);
 
-	while (kernel_info != NULL) {
+	do {
 		kernel_info_target = kernel_info;
 		kernel_info = kernel_info->next;
-	};
+	} while (kernel_info != NULL);
 
 	kernel_info_add_clone = CloneKernelInfo(kernel->kernel_info);
 	kernel_info_target->next = kernel_info_add_clone;
