@@ -2797,6 +2797,7 @@ static zend_function_entry php_imagick_class_methods[] =
 #ifdef IMAGICK_WITH_KERNEL
 static zend_function_entry php_imagickkernel_class_methods[] =
 {
+	PHP_ME(imagickkernel, __construct, imagick_zero_args, ZEND_ACC_PRIVATE|ZEND_ACC_CTOR)
 	PHP_ME(imagickkernel, frommatrix, imagickkernel_frommatrix_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, frombuiltin, imagickkernel_frombuiltin_args, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, addkernel, imagickkernel_addkernel_args, ZEND_ACC_PUBLIC)
@@ -3493,14 +3494,17 @@ static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr T
 	zend_objects_clone_members(&new_obj->zo, new_zo, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
 #endif
 
-	kernel_info_copy = CloneKernelInfo(old_obj->kernel_info);
+	if (old_obj->kernel_info != NULL) {
+		kernel_info_copy = CloneKernelInfo(old_obj->kernel_info);
 
-	if (!kernel_info_copy) {
-		zend_error(E_ERROR, "Failed to clone ImagickKernel object");
-	} else {
-		new_obj->kernel_info = kernel_info_copy;
-
+		if (!kernel_info_copy) {
+			zend_error(E_ERROR, "Failed to clone ImagickKernel object");
+		}
+		else {
+			new_obj->kernel_info = kernel_info_copy;
+		}
 	}
+
 	return new_zo;
 }
 #endif

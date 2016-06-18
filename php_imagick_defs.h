@@ -1125,6 +1125,7 @@ PHP_METHOD(imagickpixel, setcolorfrompixel);
 #endif //#if MagickLibVersion >= 0x693
 
 #ifdef IMAGICK_WITH_KERNEL
+PHP_METHOD(imagickkernel, __construct);
 PHP_METHOD(imagickkernel, frommatrix);
 PHP_METHOD(imagickkernel, frombuiltin);
 PHP_METHOD(imagickkernel, addkernel);

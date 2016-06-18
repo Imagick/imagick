@@ -5983,6 +5983,7 @@ PHP_METHOD(imagick, convolveimage)
 	intern = Z_IMAGICK_P(getThis());
 	kernel = Z_IMAGICKKERNEL_P(objvar);
 
+	IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel);
 	status = MagickConvolveImageChannel(intern->magick_wand, channel, kernel->kernel_info);
 
 	// No magick is going to happen
@@ -6751,8 +6752,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	array_init(return_value);
 
 #if MagickLibVersion >= 0x700
-	for (i=0; i < (ssize_t) MaxPixelChannels; i++) {
-
+	for (i=0; i < sizeof(channels)/sizeof(channels[0]); i++) {
 #ifdef ZEND_ENGINE_3
 		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
@@ -6779,7 +6779,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 		add_index_zval(return_value, channels[i], tmp);
 #endif //end ZE3
 	}
-#else
+#else //below MagickLibVersion>= 0x700
 	for (i = 0; i < elements ; i++) {
 #ifdef ZEND_ENGINE_3
 		ZVAL_NEW_ARR(&tmp);
@@ -12553,6 +12553,7 @@ PHP_METHOD(imagick, morphology)
 
 	intern = Z_IMAGICK_P(getThis());
 	kernel = Z_IMAGICKKERNEL_P(objvar);
+	IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel);
 
 	status = MagickMorphologyImageChannel(intern->magick_wand,
 			DefaultChannels, morphologyMethod, iterations, kernel->kernel_info);

@@ -39,4 +39,11 @@
 #define IMAGICK_METHOD_DEPRECATED_USE_INSTEAD(class_name, method_name, new_class, new_method) \
 	php_error(E_DEPRECATED, "%s::%s is deprecated. %s::%s should be used instead", class_name, method_name, new_class, new_method);
 
+
+#define IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel) \
+	if (kernel->kernel_info == NULL) { \
+		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0 TSRMLS_CC); \
+		RETURN_NULL(); \
+	}
+
 #endif /* PHP_IMAGICK_MACROS_H */
