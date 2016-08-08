@@ -366,6 +366,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="skipprobefourier.inc" role="test" />
 				<file name="anonymous_pro_minus.ttf" role="test" />
 				<file name="OFL.txt" role="doc" />
+				<file name="issue174.phpt" role="test" />
 			</dir>
 		</dir>
 	</contents>
