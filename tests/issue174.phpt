@@ -5,7 +5,7 @@ Never try to resize an image to 0 width/height
 --FILE--
 <?php
 $i = new Imagick;
-$i->newPseudoImage(1, 1000, "canvas:red");
+$i->newPseudoImage(1, 1000, "xc:red");
 /* throws NegativeOrZeroImageSize */
 $i->resizeImage(0, 250, 0, 1);
 echo $i->getImageWidth(); // should be 1
