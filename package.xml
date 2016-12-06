@@ -354,6 +354,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="270_imagick_restoreErrorHandler.phpt" role="test" />
 				<file name="271_imagick_constants.phpt" role="test" />
 				<file name="272_imagick_identifyimagetype.phpt" role="test" />
+				<file name="273_imagick_falsyimage.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
@@ -361,12 +362,12 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="bug_66098.phpt" role="test" />
 				<file name="bug_71742.phpt" role="test" />
 				<file name="bug_72226.phpt" role="test" />
+				<file name="github_174.phpt" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
 				<file name="skipprobefourier.inc" role="test" />
 				<file name="anonymous_pro_minus.ttf" role="test" />
 				<file name="OFL.txt" role="doc" />
-				<file name="issue174.phpt" role="test" />
 			</dir>
 		</dir>
 	</contents>
