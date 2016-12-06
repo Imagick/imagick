@@ -161,6 +161,10 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 */
 static inline double im_round_helper(double value) {
 	if (value >= 0.0) {
+		// Prevent zero width/height images
+		if (value < 1) {
+			return 1;
+		}
 		return floor(value + 0.5);
 	} else {
 		return ceil(value - 0.5);
