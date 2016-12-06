@@ -3558,7 +3558,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICK_EXCEPTION_SC_NAME, NULL);
 #ifdef ZEND_ENGINE_3
-	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception TSRMLS_CC);
+	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
@@ -3568,7 +3568,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_EXCEPTION_SC_NAME, NULL);
 #ifdef ZEND_ENGINE_3
-	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception TSRMLS_CC);
+	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
@@ -3578,7 +3578,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME, NULL);
 #ifdef ZEND_ENGINE_3
-	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception TSRMLS_CC);
+	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
@@ -3588,7 +3588,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXEL_EXCEPTION_SC_NAME, NULL);
 #ifdef ZEND_ENGINE_3
-	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception TSRMLS_CC);
+	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 #endif
@@ -3599,7 +3599,7 @@ PHP_MINIT_FUNCTION(imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_EXCEPTION_SC_NAME, NULL);
 	#ifdef ZEND_ENGINE_3
-	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception TSRMLS_CC);
+	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
     #else
 	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
     #endif
