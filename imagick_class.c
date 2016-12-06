@@ -802,6 +802,42 @@ PHP_METHOD(imagick, setimageopacity)
 /* }}} */
 #endif
 
+
+
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::setImageAlpha(float alpha)
+	Sets the image to the specified alpha level
+*/
+PHP_METHOD(imagick, setimagealpha)
+{
+	double alpha;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &alpha) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSetImageAlpha(intern->magick_wand, alpha);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image alpha" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif 
+
+
+
 #if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::orderedposterizeImage(string threshold_map[, int CHANNEL])
 	Performs an ordered dither

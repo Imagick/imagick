@@ -257,6 +257,13 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x700
+	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagealpha_args, 0, 0, 1)
+		ZEND_ARG_INFO(0, alpha)
+	ZEND_END_ARG_INFO()
+#endif
+
+
 #if MagickLibVersion > 0x635
 	ZEND_BEGIN_ARG_INFO_EX(imagick_clutimage_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
@@ -2276,6 +2283,9 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x630
 #if MagickLibVersion < 0x700
 	PHP_ME(imagick, setimageopacity, imagick_setimageopacity_args, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion >= 0x700
+	PHP_ME(imagick, setimagealpha, imagick_setimagealpha_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion < 0x700
 	PHP_ME(imagick, orderedposterizeimage, imagick_orderedposterizeimage_args, ZEND_ACC_PUBLIC)
