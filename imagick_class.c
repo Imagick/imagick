@@ -12493,12 +12493,23 @@ PHP_METHOD(imagick, getregistry)
 {
 	char *key, *value;
 	IM_LEN_TYPE key_len;
+	ExceptionInfo *exception_info;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
 		return;
 	}
 
-	value = GetImageRegistry(StringRegistryType, key, NULL);
+	exception_info = AcquireExceptionInfo();
+
+	value = GetImageRegistry(StringRegistryType, key, exception_info);
+
+	if (exception_info->severity != 0) {
+		zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Imagick::getRegistry exception (%s) ", exception_info->reason);
+		exception_info = DestroyExceptionInfo(exception_info);
+		return;
+	}
+
+	exception_info = DestroyExceptionInfo(exception_info);
 
 	if (value != NULL) {
 		IM_ZVAL_STRING(return_value, value);
