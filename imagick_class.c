@@ -12210,9 +12210,9 @@ static KernelInfo *php_imagick_getKernelInfo(const double *color_matrix, const s
 	KernelInfo *kernel_info;
 
 #if MagickLibVersion >= 0x700
-	ExceptionInfo *exception_info = NULL;
+	ExceptionInfo *ex_info = NULL;
 	//TODO - inspect exception info
-	kernel_info=AcquireKernelInfo(NULL, exception_info);
+	kernel_info=AcquireKernelInfo(NULL, ex_info);
 #else
 	kernel_info=AcquireKernelInfo(NULL);
 #endif
@@ -12529,23 +12529,23 @@ PHP_METHOD(imagick, getregistry)
 {
 	char *key, *value;
 	IM_LEN_TYPE key_len;
-	ExceptionInfo *exception_info;
+	ExceptionInfo *ex_info;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
 		return;
 	}
 
-	exception_info = AcquireExceptionInfo();
+	ex_info = AcquireExceptionInfo();
 
-	value = GetImageRegistry(StringRegistryType, key, exception_info);
+	value = GetImageRegistry(StringRegistryType, key, ex_info);
 
-	if (exception_info->severity != 0) {
-		zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Imagick::getRegistry exception (%s) ", exception_info->reason);
-		exception_info = DestroyExceptionInfo(exception_info);
+	if (ex_info->severity != 0) {
+		zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Imagick::getRegistry exception (%s) ", ex_info->reason);
+		ex_info = DestroyExceptionInfo(ex_info);
 		return;
 	}
 
-	exception_info = DestroyExceptionInfo(exception_info);
+	ex_info = DestroyExceptionInfo(ex_info);
 
 	if (value != NULL) {
 		IM_ZVAL_STRING(return_value, value);
