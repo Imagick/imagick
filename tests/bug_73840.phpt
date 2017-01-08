@@ -41,4 +41,4 @@ echo "Not ok";
 
 ?>
 --EXPECTF--
-Ok
+Not ok
