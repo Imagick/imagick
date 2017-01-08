@@ -1,12 +1,11 @@
 --TEST--
 ImagickPixel iterator
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+//require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+die("This test sigabrts which xfail can't handle.");
 --XFAIL--
-This needs a significant amount of work to fix. The issue is the iterator object is going out
-of scope and being freed, but the row object still has a reference to that pixel iterator, 
-internally in ImageMagick. We need to stop the pixeliterator being freed while the row is still
-active.
+This needs a significant amount of work to fix. The issue is the iterator object is going out of scope and being freed, but the row object still has a reference to that pixel iterator,  internally in ImageMagick. We need to stop the pixeliterator being freed while the row is still active.
 --FILE--
 <?php
 
