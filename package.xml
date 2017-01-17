@@ -22,12 +22,12 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	<lead>
 		<name>Scott MacVicar</name>
 		<user>scottmac</user>
-		<email>scottmac@php.net</email>
+		<email>scottmac@php.net</email> 
 		<active>no</active>
 	</lead>
-	<date>2016-06-09</date>
+	<date>2017-01-17</date>
 	<version>
-		<release>3.4.3RC1</release>
+		<release>3.4.3RC2</release>
 		<api>3.4.3</api>
 	</version>
 	<stability>
@@ -37,30 +37,11 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Fixes:
-  * Imagick::transformImage and Imagick::orderedPosterizeImage now correctly excluded from
-  * Bug 72311 - compiling against PHP 7.1.
-  * Bug 72226 - regression for Imagick Exception classes being final on 7.x
-  * Corrected reference of constants. Imagick::METRIC_MEANERRORPERPIXELMETRIC from MeanErrorPerPixelMetric to MeanErrorPerPixelErrorMetric. Imagick::METRIC_PEAKSIGNALTONOISERATIO from PeakSignalToNoiseRatioMetric to PeakSignalToNoiseRatioErrorMetric
+  * Imagick::getRegistry() now throws an exception if the key does not exist, rather than terminating the program.
+  * Prevent attempts to resize image to zero width or height, which is not supported by ImageMagick.
+  * Fix compiling on Windows issue.
 - Added:
-  * function Imagick::identifyImageType() : int returns one of the Imagick::IMGTYPE_* constants
-  * Imagick::INTERPOLATE_NEAREST_PIXEL for ImageMagick &gt;= 7
-  * In ImageMagick, the names of two filter constants were corrected to the standard spelling. Support for the new spelling has been added. The old constants are left in place for legacy support.
-    Legacy: FILTER_HANNING, new name: FILTER_HANN
-    Legacy: FILTER_WELSH,  new name: FILTER_WELCH
-  * The Imagick::IMGTYPE_*MATTE* constants are deprecated for ImageMagick 7. Instead an appropriate Imagick::IMGTYPE_*MATTE* should be used.
-    IMGTYPE_GRAYSCALEMATTE =&gt; IMGTYPE_GRAYSCALEALPHA
-    IMGTYPE_PALETTEMATTE =&gt; IMGTYPE_PALETTEALPHA
-    IMGTYPE_TRUECOLORALPHA =&gt; IMGTYPE_TRUECOLORMATTE
-    IMGTYPE_COLORSEPARATIONALPHA =&gt;  IMGTYPE_COLORSEPARATIONMATTE
-    IMGTYPE_PALETTEBILEVELALPHA =&gt; IMGTYPE_PALETTEBILEVELMATTE
-  * Several ALPHACHANNEL_* constants are only available in ImageMagick &lt; 7 
-    IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_RESET", ResetAlphaChannel);
-    IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_COPY", CopyAlphaChannel);
-    IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OPAQUE", OpaqueAlphaChannel);
-  * Several ALPHACHANNEL_* constants are only available in ImageMagick &gt;= 7. These constants re-use the values of the constants removed.
-    IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_ON", OnAlphaChannel);
-    IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF", OffAlphaChannel);
-    IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DISCRETE", DiscreteAlphaChannel);
+  * function Imagick::setImageAlpha() which replaces Imagick::setOpacity()
 </notes>
 	<contents>
 		<dir name="/">

@@ -1,8 +1,12 @@
-3.4.4
+3.4.3RC2
 - Fixes:
   * Imagick::getRegistry() now throws an exception if the key does not exist, rather than terminating the program.
+  * Prevent attempts to resize image to zero width or height, which is not supported by ImageMagick.
+  * Fix compiling on Windows issue.
+- Added:
+  * function Imagick::setImageAlpha() which replaces Imagick::setOpacity()
 
-3.4.3
+3.4.3RC1
 - Fixes:
   * Imagick::transformImage and Imagick::orderedPosterizeImage now correctly excluded from 
   IM7 build.
