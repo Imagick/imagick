@@ -23,6 +23,8 @@
 
 /* Define Extension Properties */
 #define PHP_IMAGICK_EXTNAME    "imagick"
+// The version is deliberately left as 'PACKAGE_VERSION' in source code.
+// It is only replaced with the actual version number that packaged through pecl.php.net
 #define PHP_IMAGICK_VERSION    "@PACKAGE_VERSION@"
 #define PHP_IMAGICK_EXTNUM     30403
 
