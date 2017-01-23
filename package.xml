@@ -37,11 +37,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Fixes:
-  * Imagick::getRegistry() now throws an exception if the key does not exist, rather than terminating the program.
-  * Prevent attempts to resize image to zero width or height, which is not supported by ImageMagick.
-  * Fix compiling on Windows issue.
-- Added:
-  * function Imagick::setImageAlpha() which replaces Imagick::setOpacity()
+  * Correct file permissions in built package.
 </notes>
 	<contents>
 		<dir name="/">
