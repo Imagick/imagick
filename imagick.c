@@ -2945,7 +2945,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 #ifdef ZEND_ENGINE_3
 	intern = ecalloc(1,
 		sizeof(php_imagick_object) +
-		sizeof(zval) * (class_type->default_properties_count - 1));
+		zend_object_properties_size(class_type));
 #else
 	zend_object_value retval;
 
@@ -3013,7 +3013,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	/* Allocate memory for it */
 	intern = ecalloc(1,
 		sizeof(php_imagickdraw_object) +
-		sizeof(zval) * (class_type->default_properties_count - 1));
+		zend_object_properties_size(class_type));
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
@@ -3074,7 +3074,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 #ifdef ZEND_ENGINE_3
 	intern = ecalloc(1,
 			sizeof(php_imagickpixeliterator_object) +
-			sizeof(zval) * (class_type->default_properties_count - 1));
+			zend_object_properties_size(class_type));
 #else
 	zend_object_value retval;
 	intern = (php_imagickpixeliterator_object *) emalloc(sizeof(php_imagickpixeliterator_object));
@@ -3117,7 +3117,7 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 	/* Allocate memory for it */
 	intern = ecalloc(1,
 		sizeof(php_imagickpixel_object) +
-		sizeof(zval) * (class_type->default_properties_count - 1));
+		zend_object_properties_size(class_type));
 #else
 	zend_object_value retval;
 	intern = (php_imagickpixel_object *) emalloc(sizeof(php_imagickpixel_object));
@@ -3171,7 +3171,7 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 #ifdef ZEND_ENGINE_3
 	intern = ecalloc(1,
 		sizeof(php_imagickkernel_object) +
-		sizeof(zval) * (class_type->default_properties_count - 1));
+		zend_object_properties_size(class_type));
 #else
 	zend_object_value retval;
 	intern = (php_imagickkernel_object *) emalloc(sizeof(php_imagickkernel_object));
