@@ -1,3 +1,6 @@
+3.4.3RC4
+- Fixes:
+  * Avoid internal segfault.
 3.4.3RC3
 - Fixes:
   * Correct file permissions in built package.
