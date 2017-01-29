@@ -3525,7 +3525,7 @@ static void checkImagickVersion()
 	//This gets the version that Imagick was compiled against.
 	size_t imagickVersion = MagickLibVersion;
 
-	//This gets the version of Image Magick that has been loaded
+	//This gets the version of ImageMagick that has been loaded
 	size_t imageMagickLibraryVersion;
 
 	GetMagickVersion(&imageMagickLibraryVersion);
@@ -3536,7 +3536,7 @@ static void checkImagickVersion()
 
 	zend_error(
 		E_WARNING,
-		"Version warning: Imagick was compiled against Image Magick version %lu but version %lu is loaded. Imagick will run but may behave surprisingly",
+		"Version warning: Imagick was compiled against ImageMagick version %lu but version %lu is loaded. Imagick will run but may behave surprisingly",
 		(unsigned long)imagickVersion,
 		(unsigned long)imageMagickLibraryVersion
 	);
