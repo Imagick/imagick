@@ -719,7 +719,7 @@ void s_convert_exception (char *description, const char *default_message, long s
 }
 
 /**
-	Convert image magick MagickWand exception to PHP exception
+	Convert ImageMagick MagickWand exception to PHP exception
 */
 void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message TSRMLS_DC)
 {
