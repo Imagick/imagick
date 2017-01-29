@@ -360,6 +360,6 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</dependencies>
 	<providesextension>imagick</providesextension>
 	<extsrcrelease>
-  		<configureoption default="autodetect" name="with-imagick" prompt="Please provide the prefix of Imagemagick installation" />
+  		<configureoption default="autodetect" name="with-imagick" prompt="Please provide the prefix of ImageMagick installation" />
  	</extsrcrelease>
 </package>

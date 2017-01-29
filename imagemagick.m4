@@ -140,7 +140,7 @@ AC_DEFUN([IM_FIND_IMAGEMAGICK],[
   if test "$IM_IMAGEMAGICK_VERSION_MASK" -ge $IM_MIMIMUM_VERSION_MASK; then
     AC_MSG_RESULT(found version $IM_IMAGEMAGICK_VERSION)
   else
-    AC_MSG_ERROR(no. You need at least Imagemagick version $IM_MINIMUM_VERSION to use this extension.)
+    AC_MSG_ERROR(no. You need at least ImageMagick version $IM_MINIMUM_VERSION to use this extension.)
   fi
 
 # Potential locations for the header
