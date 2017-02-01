@@ -1,3 +1,5 @@
+3.4.3
+  No changes from 3.4.3RC4.
 3.4.3RC4
 - Fixes:
   * Avoid internal segfault.

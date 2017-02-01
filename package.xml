@@ -25,9 +25,9 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>scottmac@php.net</email> 
 		<active>no</active>
 	</lead>
-	<date>2017-01-25</date>
+	<date>2017-02-01</date>
 	<version>
-		<release>3.4.3RC4</release>
+		<release>3.4.3</release>
 		<api>3.4.3</api>
 	</version>
 	<stability>
@@ -36,8 +36,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes:
-  * Avoid internal segfault.
+No changes from 3.4.3RC4.
 </notes>
 	<contents>
 		<dir name="/">
