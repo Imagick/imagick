@@ -359,6 +359,6 @@ No changes from 3.4.3RC4.
 	</dependencies>
 	<providesextension>imagick</providesextension>
 	<extsrcrelease>
-  		<configureoption default="autodetect" name="with-imagick" prompt="Please provide the prefix of Imagemagick installation" />
+  		<configureoption default="autodetect" name="with-imagick" prompt="Please provide the prefix of ImageMagick installation" />
  	</extsrcrelease>
 </package>

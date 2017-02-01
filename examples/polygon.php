@@ -1,6 +1,6 @@
 <?php
 /*
-	This examples was ported from Imagemagick C examples.
+	This examples was ported from ImageMagick C examples.
 */
 
 /* Create Imagick objects */

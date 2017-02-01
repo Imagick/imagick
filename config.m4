@@ -1,5 +1,5 @@
 PHP_ARG_WITH(imagick, whether to enable the imagick extension,
-[ --with-imagick[=DIR]	Enables the imagick extension. DIR is the prefix to Imagemagick installation directory.], no)
+[ --with-imagick[=DIR]	Enables the imagick extension. DIR is the prefix to ImageMagick installation directory.], no)
 
 
 if test $PHP_IMAGICK != "no"; then

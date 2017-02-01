@@ -3,7 +3,7 @@
    | PHP Version 5 / Imagick											  |
    +----------------------------------------------------------------------+
    | Copyright (c) 2006-2013 Mikko Koppanen, Scott MacVicar				  |
-   | Imagemagick (c) ImageMagick Studio LLC								  |
+   | ImageMagick (c) ImageMagick Studio LLC								  |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,	  |
    | that is bundled with this package in the file LICENSE, and is		  |
@@ -719,7 +719,7 @@ void s_convert_exception (char *description, const char *default_message, long s
 }
 
 /**
-	Convert image magick MagickWand exception to PHP exception
+	Convert ImageMagick MagickWand exception to PHP exception
 */
 void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message TSRMLS_DC)
 {

@@ -3,7 +3,7 @@
    | PHP Version 5 / Imagick	                                          |
    +----------------------------------------------------------------------+
    | Copyright (c) 2006-2013 Mikko Koppanen, Scott MacVicar               |
-   | Imagemagick (c) ImageMagick Studio LLC                               |
+   | ImageMagick (c) ImageMagick Studio LLC                               |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
