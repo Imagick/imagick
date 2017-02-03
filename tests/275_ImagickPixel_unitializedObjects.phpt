@@ -1,7 +1,10 @@
 --TEST--
 Testing ImagickPixel with unitialized pixel_wand
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php
+require_once(dirname(__FILE__) . '/skipif.inc');
+requirePHP("5.6");
+?>
 --FILE--
 <?php
 
