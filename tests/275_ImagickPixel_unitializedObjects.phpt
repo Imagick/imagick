@@ -1,5 +1,5 @@
 --TEST--
-Extending ImagickPixel with __get
+Testing ImagickPixel with unitialized pixel_wand
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
 --FILE--
