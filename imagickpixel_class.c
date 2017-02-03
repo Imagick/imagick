@@ -282,6 +282,11 @@ PHP_METHOD(imagickpixel, __construct)
 	}
 
 	internp = Z_IMAGICKPIXEL_P(getThis());
+
+	if (internp->pixel_wand != NULL) {
+		DestroyPixelWand(internp->pixel_wand);
+	}
+
 	internp->pixel_wand = NewPixelWand();
 
 	if (!internp->pixel_wand) {
