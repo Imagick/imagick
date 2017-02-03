@@ -11,7 +11,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<name>Mikko Koppanen</name>
 		<user>mkoppanen</user>
 		<email>mkoppanen@php.net</email>
-		<active>yes</active>
+		<active>no</active>
 	</lead>
     <lead>
         <name>Dan Ackroyd</name>

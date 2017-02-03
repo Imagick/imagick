@@ -61,6 +61,7 @@ void php_imagick_replace_drawingwand (php_imagickdraw_object *obj, DrawingWand *
 void php_imagick_replace_pixelwand (php_imagickpixel_object *obj, PixelWand *new_wand);
 
 zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand);
+zend_bool php_imagickpixel_ensure_not_null(PixelWand *pixel_wand);
 
 /* Defined in imagickpixeliterator_class.c */
 void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value TSRMLS_DC);

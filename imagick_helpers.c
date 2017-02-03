@@ -954,6 +954,16 @@ zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand)
 	return 1;
 }
 
+zend_bool php_imagickpixel_ensure_not_null(PixelWand *pixel_wand)
+{
+	if (pixel_wand == NULL) {
+		TSRMLS_FETCH ();
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Can not process empty ImagickPixel object" TSRMLS_CC);
+		return 0;
+	}
+	return 1;
+}
+
 void php_imagick_initialize_constants(TSRMLS_D)
 {
 #define IMAGICK_REGISTER_CONST_LONG(const_name, value)\
