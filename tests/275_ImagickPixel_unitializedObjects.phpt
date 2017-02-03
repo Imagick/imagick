@@ -50,7 +50,6 @@ foreach ($methodsAndParams as $methodName => $params) {
 	}
 
     try {
-        echo $methodName . "\n";
         call_user_func_array([$instance, $methodName], $params);
         echo "failed to throw an exception.\n";
     }
@@ -85,24 +84,4 @@ echo "Ok"
 ?>
 --EXPECTF--
 
-clear
-destroy
-getColor
-getColorAsString
-getColorCount
-getColorQuantum
-getColorValue
-getColorValueQuantum
-getHSL
-getIndex
-isPixelSimilar
-isPixelSimilarQuantum
-isSimilar
-setColor
-setcolorcount
-setColorValue
-setColorValueQuantum
-setHSL
-setIndex
-setcolorfrompixel
 Ok
