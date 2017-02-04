@@ -1,11 +1,19 @@
+3.4.4RC1
+- Fixes:
+  * Prevent memory leak when ImagickPixel::__construct called after object instantiation.
+  * Prevent segfaul when ImagickPixel internal constructor not called.
+
 3.4.3
   No changes from 3.4.3RC4.
+
 3.4.3RC4
 - Fixes:
   * Avoid internal segfault.
+
 3.4.3RC3
 - Fixes:
   * Correct file permissions in built package.
+
 3.4.3RC2
 - Fixes:
   * Imagick::getRegistry() now throws an exception if the key does not exist, rather than terminating the program.
