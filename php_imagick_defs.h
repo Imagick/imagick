@@ -181,6 +181,11 @@ typedef struct _php_imagickpixeliterator_object  {
 	PixelIterator *pixel_iterator;
 	zend_bool initialized;
 
+	// We need to record pixelwand array that are returned by get*Row Methods
+	// to ensure the pixel iterator is not garbage collected before the pixelwand arrays
+	// are destroyed.
+	zval pixelwand_array_children;
+
 #if MagickLibVersion <= 0x628
 	long rows;
 	long iterator_position;

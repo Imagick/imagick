@@ -3090,6 +3090,9 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	intern->iterator_position = 0;
 #endif
 
+	//MAKE_STD_ZVAL(&intern->pixelwand_array_children);
+	array_init(&intern->pixelwand_array_children);
+
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
@@ -3520,6 +3523,26 @@ static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr T
 #endif
 
 
+static HashTable *php_imagickpixeliterator_get_gc(zval *obj, zval **gc_data, int *gc_data_count) /* {{{ */
+{
+	php_imagickpixeliterator_object *internpix = Z_IMAGICKPIXELITERATOR_P(obj);
+	size_t pixelwands_active = 0;
+	zval *pzval;
+	// iterate over internpix->pixelwand_array_children and set the children.
+	//ZEND_HASH_FOREACH_VAL(internpix->pixelwand_array_children, pzval) {
+		// TODO make this work.
+		// ZVAL_DEREF(pzval);
+		// *(gc_data + pixelwands_active) = pzval;
+	//	pixelwands_active++;
+	//} ZEND_HASH_FOREACH_END();
+	*gc_data = NULL;
+	*gc_data_count = 0;//pixelwands_active;
+
+	return zend_std_get_properties(obj);
+}
+/* }}} */
+
+
 static void checkImagickVersion()
 {
 	//This gets the version that Imagick was compiled against.
@@ -3658,6 +3681,8 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickpixeliterator_object_handlers.offset = XtOffsetOf(php_imagickpixeliterator_object, zo);
 	imagickpixeliterator_object_handlers.free_obj = php_imagickpixeliterator_object_free_storage;
 #endif
+	imagickpixeliterator_object_handlers.get_gc = php_imagickpixeliterator_get_gc;
+
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
 	zend_class_implements(php_imagickpixeliterator_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
 

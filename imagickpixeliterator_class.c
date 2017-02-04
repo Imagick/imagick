@@ -494,6 +494,9 @@ PHP_METHOD(imagickpixeliterator, getpreviousiteratorrow)
 	}
 
 	s_pixelwands_to_zval (wand_array, num_wands, return_value TSRMLS_CC);
+	// record which pixelwands this iterator needs to be kept for.
+	//add_next_index_zval(internpix->pixelwand_array_children, return_value);
+
 	return;
 }
 /* }}} */
@@ -536,6 +539,9 @@ PHP_METHOD(imagickpixeliterator, getcurrentiteratorrow)
 	}
 
 	s_pixelwands_to_zval (wand_array, num_wands, return_value TSRMLS_CC);
+	// record which pixelwands this iterator needs to be kept for.
+	//add_next_index_zval(internpix->pixelwand_array_children, return_value);
+
 	return;
 }
 /* }}} */
@@ -571,6 +577,9 @@ PHP_METHOD(imagickpixeliterator, getnextiteratorrow)
 	}
 
 	s_pixelwands_to_zval (wand_array, num_wands, return_value TSRMLS_CC);
+	// record which pixelwands this iterator needs to be kept for.
+	//add_next_index_zval(internpix->pixelwand_array_children, return_value);
+
 	return;
 }
 /* }}} */
