@@ -1,7 +1,10 @@
 --TEST--
 Imagick::setResourceLimit test
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
+<?php 
+$imageMagickRequiredVersion=0x692;
+require_once(dirname(__FILE__) . '/skipif.inc'); 
+?>
 --FILE--
 <?php
 
