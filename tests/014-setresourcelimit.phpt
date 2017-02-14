@@ -30,13 +30,24 @@ $tests = array(
 	
 	// Set maximum amount of memory in bytes to allocate for the pixel cache from the heap. When this limit is exceeded, the image pixels are cached to memory-mapped disk
 	Imagick::RESOURCETYPE_MEMORY => 10 * $g,
-	Imagick::RESOURCETYPE_TIME  => 30,
-	Imagick::RESOURCETYPE_THROTTLE => 1,
-	Imagick::RESOURCETYPE_THREAD  => 1,
-	Imagick::RESOURCETYPE_WIDTH  => $g,
-	Imagick::RESOURCETYPE_HEIGHT  => $g,
 );
 
+if (defined('Imagick::RESOURCETYPE_TIME')) {
+	$tests[Imagick::RESOURCETYPE_TIME] = 30; 
+}
+
+if (defined('Imagick::RESOURCETYPE_THROTTLE')) {
+	$tests[Imagick::RESOURCETYPE_THROTTLE] = 1; 
+}
+if (defined('Imagick::RESOURCETYPE_THREAD')) {
+	$tests[Imagick::RESOURCETYPE_THREAD] = 1; 
+}
+if (defined('Imagick::RESOURCETYPE_WIDTH')) {
+	$tests[Imagick::RESOURCETYPE_WIDTH] = $g; 
+}
+if (defined('Imagick::RESOURCETYPE_HEIGHT')) {
+	$tests[Imagick::RESOURCETYPE_HEIGHT] = $g; 
+}
 
 foreach ($tests as $resourceType => $value) {
 
