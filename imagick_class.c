@@ -12036,14 +12036,15 @@ PHP_METHOD(imagick, setprogressmonitor)
 PHP_METHOD(imagick, setresourcelimit)
 {
 	MagickBooleanType status;
-	im_long type, limit;
+	im_long type;
+	double limit;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &type, &limit) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &type, &limit) == FAILURE) {
 		return;
 	}
 
-	status = MagickSetResourceLimit(type, limit);
+	status = MagickSetResourceLimit(type, (MagickSizeType)limit);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {

@@ -1,7 +1,8 @@
 3.4.4RC1
 - Fixes:
   * Prevent memory leak when ImagickPixel::__construct called after object instantiation.
-  * Prevent segfaul when ImagickPixel internal constructor not called.
+  * Prevent segfault when ImagickPixel internal constructor not called.
+  * Imagick::setResourceLimit support for values larger than 2GB (2^31) on 32bit platforms.
 
 3.4.3
   No changes from 3.4.3RC4.
