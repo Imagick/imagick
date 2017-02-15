@@ -11642,7 +11642,7 @@ PHP_METHOD(imagick, getresourcelimit)
 		return;
 	}
 
-	RETVAL_LONG(MagickGetResourceLimit(resource_type));
+	RETVAL_DOUBLE(MagickGetResourceLimit(resource_type));
 }
 /* }}} */
 
