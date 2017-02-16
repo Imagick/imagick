@@ -53,13 +53,10 @@ if (defined('Imagick::RESOURCETYPE_HEIGHT')) {
 }
 
 foreach ($tests as $resourceType => $value) {
-	//Typecast to flaot since this is what setResourceLimit expects, and what is returned by getResourceLimit
-	$value = (float)$value;
-
 	Imagick::setResourceLimit($resourceType, $value);
 	$actualValue = Imagick::getResourceLimit($resourceType);
 
-	if ($actualValue !== $value) {
+	if (intval($actualValue) !== $value) {
 		echo "Error testing $resourceType, value returned $actualValue is not $value \n";
 	}
 }
