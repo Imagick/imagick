@@ -3001,7 +3001,7 @@ PHP_METHOD(imagick, getimageartifact)
 {
 	php_imagick_object *intern;
 	char *artifact, *value;
-	int artifact_len;
+	IM_LEN_TYPE artifact_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &artifact, &artifact_len) == FAILURE) {
 		return;
@@ -3034,7 +3034,7 @@ PHP_METHOD(imagick, deleteimageartifact)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	char *artifact;
-	int artifact_len;
+	IM_LEN_TYPE artifact_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &artifact, &artifact_len) == FAILURE) {
 		return;
