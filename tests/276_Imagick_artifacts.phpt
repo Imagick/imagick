@@ -1,7 +1,10 @@
 --TEST--
 Test artifacts
 --SKIPIF--
-<?php require_once(dirname(__FILE__) . '/skipif.inc');
+<?php
+
+require_once(dirname(__FILE__) . '/skipif.inc');
+checkClassMethods('Imagick', array('setImageArtifact', 'getImageArtifact', 'deleteImageArtifact'));
 
 /* See imagick_class.c */
 if (Imagick::getVersion()['versionNumber'] < 0x656) {
