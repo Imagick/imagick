@@ -6,8 +6,9 @@ Test artifacts
 require_once(dirname(__FILE__) . '/skipif.inc');
 checkClassMethods('Imagick', array('setImageArtifact', 'getImageArtifact', 'deleteImageArtifact'));
 
+$v = Imagick::getVersion();
 /* See imagick_class.c */
-if (Imagick::getVersion()['versionNumber'] < 0x656) {
+if ($v['versionNumber'] <= 0x656) {
 	die ('skip too old ImageMagick');
 }
 
