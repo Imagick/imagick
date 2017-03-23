@@ -12724,7 +12724,7 @@ PHP_METHOD(imagick, colordecisionlistimage)
 	MagickBooleanType status;
 
 	char *color_correction_collection;
-	int ccc_len;
+	IM_LEN_TYPE ccc_len;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_correction_collection, &ccc_len) == FAILURE) {

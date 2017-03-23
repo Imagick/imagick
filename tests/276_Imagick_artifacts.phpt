@@ -1,16 +1,12 @@
 --TEST--
-Test artifacts
+Test Imagick::setImageArtifact and Imagick::getImageArtifact
 --SKIPIF--
 <?php
 
+$imageMagickRequiredVersion = 0x656;
+
 require_once(dirname(__FILE__) . '/skipif.inc');
 checkClassMethods('Imagick', array('setImageArtifact', 'getImageArtifact', 'deleteImageArtifact'));
-
-$v = Imagick::getVersion();
-/* See imagick_class.c */
-if ($v['versionNumber'] <= 0x656) {
-	die ('skip too old ImageMagick');
-}
 
 ?>
 --FILE--
