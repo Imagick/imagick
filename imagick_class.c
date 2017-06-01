@@ -4960,7 +4960,6 @@ PHP_METHOD(imagick, optimizeimagelayers)
 */
 PHP_METHOD(imagick, optimizeimagetransparency)
 {
-       MagickWand *tmp_wand;
        php_imagick_object *intern;
        MagickBooleanType status;
 
