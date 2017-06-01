@@ -399,6 +399,7 @@ PHP_METHOD(imagick, waveimage);
 PHP_METHOD(imagick, vignetteimage);
 PHP_METHOD(imagick, compareimagelayers);
 PHP_METHOD(imagick, optimizeimagelayers);
+PHP_METHOD(imagick, optimizeimagetransparency);
 PHP_METHOD(imagick, uniqueimagecolors);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 #if MagickLibVersion < 0x700
