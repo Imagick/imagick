@@ -4976,7 +4976,7 @@ PHP_METHOD(imagick, optimizeimagetransparency)
 
        /* No magick is going to happen */
        if (status == MagickFalse) {
-               php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_C
+               php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
                return;
        }
        RETURN_TRUE;
