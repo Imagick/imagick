@@ -399,7 +399,6 @@ PHP_METHOD(imagick, waveimage);
 PHP_METHOD(imagick, vignetteimage);
 PHP_METHOD(imagick, compareimagelayers);
 PHP_METHOD(imagick, optimizeimagelayers);
-PHP_METHOD(imagick, optimizeimagetransparency);
 PHP_METHOD(imagick, uniqueimagecolors);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 #if MagickLibVersion < 0x700
@@ -907,6 +906,7 @@ PHP_METHOD(imagick, setantialias);
 PHP_METHOD(imagick, getantialias);
 #if MagickLibVersion > 0x676
 PHP_METHOD(imagick, colordecisionlistimage);
+PHP_METHOD(imagick, optimizeimagetransparency);
 #endif
 
 #if MagickLibVersion >= 0x660

@@ -4955,33 +4955,6 @@ PHP_METHOD(imagick, optimizeimagelayers)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::optimizeimagetransparency()
-       Takes a frame optimized GIF animation, and compares the overlayed pixels against the disposal image resulting fr
-*/
-PHP_METHOD(imagick, optimizeimagetransparency)
-{
-       php_imagick_object *intern;
-       MagickBooleanType status;
-
-       if (zend_parse_parameters_none() == FAILURE) {
-               return;
-       }
-
-       intern = Z_IMAGICK_P(getThis());
-       if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-               return;
-
-       status = MagickOptimizeImageTransparency(intern->magick_wand);
-
-       /* No magick is going to happen */
-       if (status == MagickFalse) {
-               php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
-               return;
-       }
-       RETURN_TRUE;
-}
-/* }}} */
-
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 #if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::paintTransparentImage(ImagickPixel target, float alpha, float fuzz)
@@ -5027,6 +5000,7 @@ PHP_METHOD(imagick, painttransparentimage)
 #endif // #if MagickLibVersion < 0x700
 #endif
 #endif
+
 
 /* {{{ proto Imagick Imagick::previewImages(int preview )
 	Tiles 9 thumbnails of the specified image with an image processing operation applied at varying strengths.
@@ -12768,6 +12742,33 @@ PHP_METHOD(imagick, colordecisionlistimage)
 
 	RETURN_TRUE;
 }
+
+/* {{{ proto Imagick Imagick::optimizeimagetransparency()
+       Takes a frame optimized GIF animation, and compares the overlayed pixels against the disposal image resulting fr
+*/
+PHP_METHOD(imagick, optimizeimagetransparency)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickOptimizeImageTransparency(intern->magick_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
 #endif
 /* }}} */
 

@@ -2245,7 +2245,6 @@ static zend_function_entry php_imagick_class_methods[] =
 {
 #if MagickLibVersion > 0x628
 	PHP_ME(imagick, optimizeimagelayers, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, optimizeimagetransparency, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, compareimagelayers, imagick_compareimagelayers_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, pingimageblob, imagick_pingimageblob_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, pingimagefile, imagick_pingimagefile_args, ZEND_ACC_PUBLIC)
@@ -2785,6 +2784,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setantialias, imagick_setantialias_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getantialias, imagick_zero_args, ZEND_ACC_PUBLIC)
 #if MagickLibVersion > 0x676
+	PHP_ME(imagick, optimizeimagetransparency, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, colordecisionlistimage, imagick_colordecisionlistimage_args, ZEND_ACC_PUBLIC)
 #endif
 
