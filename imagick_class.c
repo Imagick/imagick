@@ -12663,7 +12663,7 @@ PHP_METHOD(imagick, filter)
 }
 /* }}} */
 #endif //#if MagickLibVersion < 0x700
-#endif
+#endif //#if MagickLibVersion >= 0x680
 
 
 /* {{{ proto int Imagick::setAntiAlias(bool antialias)
@@ -12715,10 +12715,10 @@ PHP_METHOD(imagick, getantialias)
 }
 /* }}} */
 
+#if MagickLibVersion > 0x676
 /* {{{ proto int Imagick::setAntiAlias(bool antialias)
 	Set whether antialiasing should be used for operations. On by default.
 */
-#if MagickLibVersion > 0x676
 PHP_METHOD(imagick, colordecisionlistimage)
 {
 	php_imagick_object *intern;
@@ -12742,7 +12742,10 @@ PHP_METHOD(imagick, colordecisionlistimage)
 
 	RETURN_TRUE;
 }
+/* }}} */
+#endif //#if MagickLibVersion > 0x676
 
+#if MagickLibVersion >= 0x686
 /* {{{ proto Imagick Imagick::optimizeimagetransparency()
        Takes a frame optimized GIF animation, and compares the overlayed pixels against the disposal image resulting fr
 */
@@ -12769,9 +12772,7 @@ PHP_METHOD(imagick, optimizeimagetransparency)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif
-/* }}} */
-
+#endif //#if MagickLibVersion >= 0x686
 
 #if MagickLibVersion >= 0x660
 /* {{{ proto bool Imagick::autoGammaImage([int channel = CHANNEL_ALL])

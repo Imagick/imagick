@@ -888,6 +888,9 @@ PHP_METHOD(imagick, selectiveblurimage);
 #if MagickLibVersion >= 0x689
 PHP_METHOD(imagick, rotationalblurimage);
 #endif
+#if MagickLibVersion >= 0x686
+PHP_METHOD(imagick, optimizeimagetransparency);
+#endif
 #if MagickLibVersion >= 0x683
 PHP_METHOD(imagick, statisticimage);
 #endif
@@ -906,7 +909,6 @@ PHP_METHOD(imagick, setantialias);
 PHP_METHOD(imagick, getantialias);
 #if MagickLibVersion > 0x676
 PHP_METHOD(imagick, colordecisionlistimage);
-PHP_METHOD(imagick, optimizeimagetransparency);
 #endif
 
 #if MagickLibVersion >= 0x660
