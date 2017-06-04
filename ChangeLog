@@ -1,4 +1,6 @@
 3.4.4RC1
+- Added:
+  * function Imagick::optimizeImageTransparency()
 - Fixes:
   * Prevent memory leak when ImagickPixel::__construct called after object instantiation.
   * Prevent segfault when ImagickPixel internal constructor not called.
