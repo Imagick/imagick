@@ -888,7 +888,7 @@ PHP_METHOD(imagick, selectiveblurimage);
 #if MagickLibVersion >= 0x689
 PHP_METHOD(imagick, rotationalblurimage);
 #endif
-#if MagickLibVersion >= 0x686
+#if MagickLibVersion >= 0x687
 PHP_METHOD(imagick, optimizeimagetransparency);
 #endif
 #if MagickLibVersion >= 0x683

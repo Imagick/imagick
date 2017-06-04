@@ -2786,9 +2786,9 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x676
 	PHP_ME(imagick, colordecisionlistimage, imagick_colordecisionlistimage_args, ZEND_ACC_PUBLIC)
 #endif // #if MagickLibVersion > 0x676
-#if MagickLibVersion >= 0x686
+#if MagickLibVersion >= 0x687
 	PHP_ME(imagick, optimizeimagetransparency, imagick_zero_args, ZEND_ACC_PUBLIC)
-#endif // #if MagickLibVersion >= 0x686
+#endif // #if MagickLibVersion >= 0x687
 #if MagickLibVersion >= 0x660
 	PHP_ME(imagick, autogammaimage, imagick_autogammaimage_args, ZEND_ACC_PUBLIC)
 #endif // #if MagickLibVersion >= 0x660

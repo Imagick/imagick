@@ -5001,7 +5001,6 @@ PHP_METHOD(imagick, painttransparentimage)
 #endif
 #endif
 
-
 /* {{{ proto Imagick Imagick::previewImages(int preview )
 	Tiles 9 thumbnails of the specified image with an image processing operation applied at varying strengths.
 	This is helpful to quickly pin-point an appropriate parameter for an image processing operation.
@@ -12743,9 +12742,9 @@ PHP_METHOD(imagick, colordecisionlistimage)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif //#if MagickLibVersion > 0x676
+#endif
 
-#if MagickLibVersion >= 0x686
+#if MagickLibVersion >= 0x687
 /* {{{ proto Imagick Imagick::optimizeimagetransparency()
        Takes a frame optimized GIF animation, and compares the overlayed pixels against the disposal image resulting fr
 */
@@ -12769,10 +12768,11 @@ PHP_METHOD(imagick, optimizeimagetransparency)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
 		return;
 	}
+
 	RETURN_TRUE;
 }
 /* }}} */
-#endif //#if MagickLibVersion >= 0x686
+#endif
 
 #if MagickLibVersion >= 0x660
 /* {{{ proto bool Imagick::autoGammaImage([int channel = CHANNEL_ALL])
@@ -12870,7 +12870,7 @@ PHP_METHOD(imagick, compositeimagegravity)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif // #if MagickLibVersion >= 0x692
+#endif
 
 #if MagickLibVersion >= 0x693
 /* {{{ proto bool Imagick::localContrastImage(float radius, float strength)
