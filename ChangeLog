@@ -1,3 +1,43 @@
+
+
+3.4.5RC1
+- Deprecated:
+  * The following functions have been deprecated:
+    ImagickDraw, matte
+    Imagick::averageimages
+    Imagick::colorfloodfillimage
+    Imagick::filter
+    Imagick::flattenimages
+    Imagick::getimageattribute
+    Imagick::getimagechannelextrema
+    Imagick::getimageclipmask
+    Imagick::getimageextrema
+    Imagick::getimageindex
+    Imagick::getimagematte
+    Imagick::getimagemattecolor
+    Imagick::getimagesize
+    Imagick::mapimage
+    Imagick::mattefloodfillimage
+    Imagick::medianfilterimage
+    Imagick::mosaicimages
+    Imagick::orderedposterizeimage
+    Imagick::paintfloodfillimage
+    Imagick::paintopaqueimage
+    Imagick::painttransparentimage
+    Imagick::radialblurimage
+    Imagick::recolorimage
+    Imagick::reducenoiseimage
+    Imagick::roundcornersimage
+    Imagick::roundcorners
+    Imagick::setimageattribute
+    Imagick::setimagebias
+    Imagick::setimageclipmask
+    Imagick::setimageindex
+    Imagick::setimagemattecolor
+    Imagick::setimagebiasquantum
+    Imagick::setimageopacity
+    Imagick::transformimage
+
 3.4.4RC1
 - Added:
   * function Imagick::optimizeImageTransparency()
