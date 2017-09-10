@@ -47,6 +47,9 @@ strictPHP=$(contains "${strictPHPVersions[@]}" "${TRAVIS_PHP_VERSION}" )
 echo "strictImageMagick is ${strictImageMagick}"
 echo "strictPHP is ${strictPHP}"
 
+# TODO - test if this flag is usable for the tests on all appropriate platforms
+# -Wmaybe-uninitialized
+
 if [[ $strictPHP = '1' ]] && [[ $strictImageMagick = '1' ]]; then 
 	CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror -Wall -Wimplicit-function-declaration"; 
 else 
