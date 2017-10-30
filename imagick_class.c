@@ -12496,7 +12496,7 @@ PHP_METHOD(imagick, subimagematch)
 #endif
 
 
-/* {{{ proto array Imagick::setRegistry(string key, string value)
+/* {{{ proto bool Imagick::setRegistry(string key, string value)
 	Sets the ImageMagick registry entry named key to value. This is most
 	useful for setting "temporary-path" which controls where ImageMagick
 	creates temporary images e.g. while processing PDFs.
@@ -12523,7 +12523,7 @@ PHP_METHOD(imagick, setregistry)
 /* }}} */
 
 
-/* {{{ proto array Imagick::getRegistry(string key)
+/* {{{ proto string Imagick::getRegistry(string key)
 	Get the StringRegistry entry for the named key or false if not set.
 */
 PHP_METHOD(imagick, getregistry)
@@ -12691,7 +12691,7 @@ PHP_METHOD(imagick, setantialias)
 }
 /* }}} */
 
-/* {{{ proto int Imagick::getAntiAlias()
+/* {{{ proto bool Imagick::getAntiAlias()
 	get whether antialiasing would be used for operations.
 */
 PHP_METHOD(imagick, getantialias)
@@ -12836,7 +12836,7 @@ PHP_METHOD(imagick, autoorient)
 #endif // #if MagickLibVersion >= 0x692
 
 #if MagickLibVersion >= 0x692
-/* {{{ proto bool Imagick::compositeImageGravity(Imagick $image, COMPOSITE_CONSTANT, int GRAVITY_CONSTANT)
+/* {{{ proto bool Imagick::compositeImageGravity(Imagick $image, int COMPOSITE_CONSTANT, int GRAVITY_CONSTANT)
 	Composite one image onto another using the specified gravity.
 */
 PHP_METHOD(imagick, compositeimagegravity)

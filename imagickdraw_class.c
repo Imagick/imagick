@@ -2982,7 +2982,7 @@ PHP_METHOD(imagickdraw, setbordercolor)
 #endif //#if MagickLibVersion >= 0x675
 
 #if MagickLibVersion >= 0x692
-/* {{{ proto bool ImagickDraw::getTextDirection()
+/* {{{ proto integer ImagickDraw::getTextDirection()
 	Returns the direction that will be used when annotating with text.
 */
 PHP_METHOD(imagickdraw, gettextdirection)
