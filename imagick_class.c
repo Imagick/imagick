@@ -2369,7 +2369,7 @@ PHP_METHOD(imagick, setimagegravity)
 PHP_METHOD(imagick, importimagepixels) 
 {
 	double        *double_array;
-	long          *long_array;
+	im_long       *long_array;
 	unsigned char *char_array;
 
 	php_imagick_object *intern;
@@ -7722,10 +7722,10 @@ PHP_METHOD(imagick, getnumberimages)
 */
 #if MagickLibVersion > 0x631
 static
-zend_bool s_resize_bounding_box(MagickWand *magick_wand, long box_width, long box_height, zend_bool fill, zend_bool legacy)
+zend_bool s_resize_bounding_box(MagickWand *magick_wand, im_long box_width, im_long box_height, zend_bool fill, zend_bool legacy)
 {
-	long new_width, new_height;
-	long extent_x, extent_y;
+	im_long new_width, new_height;
+	im_long extent_x, extent_y;
 
 	/* Calculate dimensions */
 	if (!php_imagick_thumbnail_dimensions(magick_wand, 1, box_width, box_height, &new_width, &new_height, legacy)) {
