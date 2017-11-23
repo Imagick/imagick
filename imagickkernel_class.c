@@ -152,9 +152,9 @@ static KernelInfo *imagick_createKernel(KernelValueType *values, size_t width, s
 
 #if MagickLibVersion >= 0x700
 	int i;
-	ExceptionInfo *exception_info = NULL;
+	ExceptionInfo *_exception_info = (ExceptionInfo *) NULL;
 	//TODO - inspect exception info
-	kernel_info=AcquireKernelInfo(NULL, exception_info);
+	kernel_info=AcquireKernelInfo(NULL, _exception_info);
 #else
 	kernel_info=AcquireKernelInfo(NULL);
 #endif
@@ -591,7 +591,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 	IM_LEN_TYPE string_len;
 	GeometryFlags flags;
 #if MagickLibVersion >= 0x700
-	ExceptionInfo *exception_info = NULL;
+	ExceptionInfo *_exception_info = NULL;
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &kernel_type, &string, &string_len) == FAILURE) {
@@ -603,7 +603,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 	
 #if MagickLibVersion >= 0x700
 	//TODO - inspect exception info
-	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info, exception_info);
+	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info, _exception_info);
 #else
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info);
 #endif
