@@ -331,10 +331,10 @@ double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_element
 	return double_array;
 }
 
-long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRMLS_DC)
+im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements TSRMLS_DC)
 {
-	long *long_array;
-	long i = 0;
+	im_long *long_array;
+	im_long i = 0;
 
 #ifdef ZEND_ENGINE_3
 	zval *pzvalue;
@@ -348,7 +348,7 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 		return NULL;
 	}
 
-	long_array = ecalloc(*num_elements, sizeof(long));
+	long_array = ecalloc(*num_elements, sizeof(im_long));
 
 #ifdef ZEND_ENGINE_3
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
@@ -362,7 +362,7 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
 	{
 		zval tmp_zval, *tmp_pzval;
- 		long value = 0;
+ 		im_long value = 0;
 
 		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
 			value = Z_LVAL_PP(ppzval);
@@ -383,10 +383,10 @@ long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRML
 	return long_array;
 }
 
-unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_elements TSRMLS_DC)
+unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_elements TSRMLS_DC)
 {
 	unsigned char *char_array;
-	long i = 0;
+	im_long i = 0;
 
 #ifdef ZEND_ENGINE_3
 	zval *pzvalue;
@@ -414,7 +414,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_eleme
 			zend_hash_move_forward(Z_ARRVAL_P(param_array)), i++)
 	{
 		zval tmp_zval, *tmp_pzval;
-		long value = 0;
+		im_long value = 0;
 		if (Z_TYPE_PP(ppzval) == IS_DOUBLE) {
 			value = Z_LVAL_PP(ppzval);
 		}

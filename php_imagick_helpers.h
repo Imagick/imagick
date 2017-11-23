@@ -30,9 +30,9 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 
 double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_elements TSRMLS_DC);
 
-long *php_imagick_zval_to_long_array(zval *param_array, long *num_elements TSRMLS_DC);
+im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements TSRMLS_DC);
 
-unsigned char *php_imagick_zval_to_char_array(zval *param_array, long *num_elements TSRMLS_DC);
+unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_elements TSRMLS_DC);
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
 
