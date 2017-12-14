@@ -35,10 +35,10 @@ if (array_key_exists("temporary-path", $registry) == true) {
 
 try {
 	$tmpPath = Imagick::getRegistry("non-existent string");
-	echo "Expected exception not thrown.\n";
+	var_dump($tmpPath == false); // Since 6.9.9-26, no exception raised
 }
 catch (\ImagickException $ie) {
-	echo $ie->getMessage() . "\n";
+	var_dump(true);
 }
 
 
@@ -47,4 +47,4 @@ catch (\ImagickException $ie) {
 Temporary-path was empty at start.
 Temporary path was set correctly.
 Temporary path was listed correctly.
-Imagick::getRegistry exception (%s)
+bool(true)
