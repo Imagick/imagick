@@ -3818,6 +3818,8 @@ PHP_RSHUTDOWN_FUNCTION(imagick)
 
 #if ZEND_MODULE_API_NO >= 20050922
 static const zend_module_dep imagick_deps[] = {
+    ZEND_MOD_CONFLICTS("gmagick")
+    ZEND_MOD_REQUIRED("standard")
 #ifdef HAVE_SPL
 	ZEND_MOD_REQUIRED("spl")
 #endif
