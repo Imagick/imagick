@@ -14,7 +14,7 @@ function affineTransformImage() {
     $imagick->newPseudoImage(640, 480, "magick:logo");
     $draw = new \ImagickDraw();
 
-    $angle = 40 ;
+    $angle = deg2rad(40);
 
     $affineRotate = array(
         "sx" => cos($angle), "sy" => cos($angle), 
