@@ -23,5 +23,5 @@ function segmentImage($colorSpace, $clusterThreshold, $smoothThreshold) {
 segmentImage($colorSpace, $clusterThreshold, $smoothThreshold) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

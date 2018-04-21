@@ -22,5 +22,5 @@ function setImageOrientation($orientationType) {
 setImageOrientation($orientationType) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -33,5 +33,5 @@ function setFillAlpha($strokeColor, $fillColor, $backgroundColor) {
 setFillAlpha($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -24,5 +24,5 @@ function cropImage($startX, $startY, $width, $height) {
 cropImage($startX, $startY, $width, $height) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

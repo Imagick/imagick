@@ -42,5 +42,5 @@ function setStrokeDashArray($strokeColor, $fillColor, $backgroundColor) {
 setStrokeDashArray($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

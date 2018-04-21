@@ -38,5 +38,5 @@ function clear() {
 clear() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

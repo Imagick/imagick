@@ -24,5 +24,5 @@ function vignetteImage($blackPoint, $whitePoint, $x, $y) {
 vignetteImage($blackPoint, $whitePoint, $x, $y) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -27,5 +27,5 @@ function raiseImage($width, $height, $x, $y, $raise) {
 raiseImage($width, $height, $x, $y, $raise) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

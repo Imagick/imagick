@@ -22,5 +22,5 @@ function reduceNoiseImage($reduceNoise) {
 reduceNoiseImage($reduceNoise) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

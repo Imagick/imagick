@@ -23,5 +23,5 @@ function rotationalBlurImage() {
 rotationalBlurImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

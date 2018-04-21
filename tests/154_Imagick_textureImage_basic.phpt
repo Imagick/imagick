@@ -22,5 +22,5 @@ function textureImage() {
 textureImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

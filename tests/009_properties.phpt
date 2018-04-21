@@ -16,6 +16,6 @@ echo $im->width . "x" . $im->height . "\n";
 echo $im->format;
 
 ?>
---EXPECTF--
+--EXPECT--
 100x100
 png

@@ -19,5 +19,5 @@ function getImageGeometry() {
 getImageGeometry() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

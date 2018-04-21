@@ -20,5 +20,5 @@ function flipImage() {
 flipImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

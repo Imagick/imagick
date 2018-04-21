@@ -20,6 +20,6 @@ try {
 	echo "Cloning failed\n";
 }
 ?>
---EXPECTF--
+--EXPECT--
 --- Testing clone keyword
 Cloning succeeded

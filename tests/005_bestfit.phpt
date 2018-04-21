@@ -12,7 +12,7 @@ $im->thumbnailImage(100, 50, true);
 var_dump($im->getImageGeometry());
 
 ?>
---EXPECTF--
+--EXPECT--
 array(2) {
   ["width"]=>
   int(25)

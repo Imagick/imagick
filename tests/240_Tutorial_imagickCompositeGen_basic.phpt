@@ -151,5 +151,5 @@ function imagickCompositeGen($contrast = 10, $blendMidpoint = 0.5) {
 imagickCompositeGen($contrast = 10, $blendMidpoint = 0.5) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -33,5 +33,5 @@ function readImageBlob() {
 readImageBlob() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -33,5 +33,5 @@ function annotateImage($strokeColor, $fillColor) {
 annotateImage($strokeColor, $fillColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

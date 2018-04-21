@@ -31,5 +31,5 @@ function point($fillColor, $backgroundColor) {
 point($fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

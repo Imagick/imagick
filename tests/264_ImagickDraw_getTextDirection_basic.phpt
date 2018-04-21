@@ -59,5 +59,5 @@ $imagick->writeImage('./directionTest.png');
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

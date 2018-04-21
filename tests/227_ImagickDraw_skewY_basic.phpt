@@ -41,5 +41,5 @@ skewY($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor,
 	$startX, $startY, $endX, $endY, $skew);
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

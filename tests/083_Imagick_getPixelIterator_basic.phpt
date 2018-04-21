@@ -32,5 +32,5 @@ function getPixelIterator() {
 getPixelIterator() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

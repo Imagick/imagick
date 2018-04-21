@@ -21,5 +21,5 @@ if ($type !== Imagick::IMGTYPE_PALETTE) {
 echo "Ok";
 
 ?>
---EXPECTF--
+--EXPECT--
 Ok

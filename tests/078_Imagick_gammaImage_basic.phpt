@@ -22,5 +22,5 @@ function gammaImage($gamma, $channel) {
 gammaImage($gamma, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

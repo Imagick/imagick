@@ -39,5 +39,5 @@ function setFontStyle($fillColor, $strokeColor, $backgroundColor) {
 setFontStyle($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

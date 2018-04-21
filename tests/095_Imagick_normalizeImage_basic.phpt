@@ -24,5 +24,5 @@ function normalizeImage($channel) {
 normalizeImage($channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

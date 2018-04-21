@@ -23,5 +23,5 @@ function uniqueImageColors() {
 uniqueImageColors() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

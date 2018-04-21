@@ -20,5 +20,5 @@ function despeckleImage() {
 despeckleImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

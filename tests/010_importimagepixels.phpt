@@ -37,7 +37,7 @@ var_dump($width, $height);
 var_dump($im->getImageGeometry());
 
 ?>
---EXPECTF--
+--EXPECT--
 int(100)
 int(100)
 array(2) {

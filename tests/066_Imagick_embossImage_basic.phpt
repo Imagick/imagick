@@ -22,5 +22,5 @@ function embossImage($radius, $sigma) {
 embossImage($radius, $sigma) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

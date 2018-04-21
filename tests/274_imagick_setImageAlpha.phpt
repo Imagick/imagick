@@ -39,5 +39,5 @@ foreach ($pixelTypes as $pixelType => $expectedValues) {
 echo "Ok";
 
 ?>
---EXPECTF--
+--EXPECT--
 Ok

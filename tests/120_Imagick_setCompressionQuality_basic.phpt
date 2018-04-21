@@ -38,5 +38,5 @@ function setCompressionQuality($quality) {
 setCompressionQuality($quality) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

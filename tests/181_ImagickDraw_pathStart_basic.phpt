@@ -55,5 +55,5 @@ function pathStart($strokeColor, $fillColor, $backgroundColor) {
 pathStart($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

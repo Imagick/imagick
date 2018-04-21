@@ -32,5 +32,5 @@ function rotate($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor) 
 rotate($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

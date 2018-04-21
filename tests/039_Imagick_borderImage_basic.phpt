@@ -23,5 +23,5 @@ function borderImage($color, $width, $height) {
 borderImage($color, $width, $height) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

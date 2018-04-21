@@ -32,5 +32,5 @@ function getPixelRegionIterator() {
 getPixelRegionIterator() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

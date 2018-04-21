@@ -64,5 +64,5 @@ foreach ($tests as $resourceType => $value) {
 echo 'success';
 
 ?>
---EXPECTF--
+--EXPECT--
 success

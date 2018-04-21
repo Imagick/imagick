@@ -38,5 +38,5 @@ function popDefs($strokeColor, $fillColor, $backgroundColor) {
 popDefs($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

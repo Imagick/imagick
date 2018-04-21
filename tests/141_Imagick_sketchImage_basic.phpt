@@ -23,5 +23,5 @@ function sketchImage($radius, $sigma, $angle) {
 sketchImage($radius, $sigma, $angle) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

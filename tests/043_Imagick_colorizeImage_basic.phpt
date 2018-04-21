@@ -24,5 +24,5 @@ function colorizeImage($color, $opacity) {
 colorizeImage($color, $opacity) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

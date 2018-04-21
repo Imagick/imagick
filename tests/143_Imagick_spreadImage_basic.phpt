@@ -21,5 +21,5 @@ function spreadImage($radius) {
 spreadImage($radius) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

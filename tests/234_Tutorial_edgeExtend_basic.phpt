@@ -53,5 +53,5 @@ function edgeExtend($virtualPixelType) {
 edgeExtend($virtualPixelType) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

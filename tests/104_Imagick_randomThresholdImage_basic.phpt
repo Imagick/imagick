@@ -28,5 +28,5 @@ function randomThresholdimage($lowThreshold, $highThreshold, $channel) {
 randomThresholdimage($lowThreshold, $highThreshold, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

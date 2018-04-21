@@ -206,5 +206,5 @@ if ($kernelMatrix !== $matrix) {
 
 echo "Complete".PHP_EOL;
 ?>
---EXPECTF--
+--EXPECT--
 Complete

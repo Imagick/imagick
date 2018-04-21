@@ -34,5 +34,5 @@ function setSamplingFactors() {
 setSamplingFactors() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

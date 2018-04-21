@@ -40,5 +40,5 @@ function setTextAntialias($fillColor, $backgroundColor) {
 setTextAntialias($fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

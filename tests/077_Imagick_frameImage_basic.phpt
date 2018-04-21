@@ -35,5 +35,5 @@ function frameImage($color, $width, $height, $innerBevel, $outerBevel) {
 frameImage($color, $width, $height, $innerBevel, $outerBevel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

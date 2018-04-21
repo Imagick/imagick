@@ -41,5 +41,5 @@ function setClipUnits($strokeColor, $fillColor, $backgroundColor) {
 setClipUnits($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

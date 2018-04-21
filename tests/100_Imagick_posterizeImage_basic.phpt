@@ -20,5 +20,5 @@ function posterizeImage($posterizeType, $numberLevels) {
 posterizeImage($posterizeType, $numberLevels) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -12,5 +12,5 @@ $identifyInfo = $imagick->getImageChannelStatistics();
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

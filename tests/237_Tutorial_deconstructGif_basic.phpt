@@ -63,7 +63,7 @@ function makeSimpleGif($deconstruct) {
 makeSimpleGif($deconstruct) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Frame: 0
 Frame: 1
 Frame: 2

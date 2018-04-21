@@ -42,5 +42,5 @@ function circle($strokeColor, $fillColor, $backgroundColor, $originX, $originY, 
 circle($strokeColor, $fillColor, $backgroundColor, $originX, $originY, $endX, $endY) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

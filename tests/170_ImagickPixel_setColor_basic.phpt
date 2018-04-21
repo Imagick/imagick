@@ -31,5 +31,5 @@ function setColor() {
 setColor() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

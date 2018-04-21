@@ -25,5 +25,5 @@ function unsharpMaskImage($radius, $sigma, $amount, $unsharpThreshold) {
 unsharpMaskImage($radius, $sigma, $amount, $unsharpThreshold) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

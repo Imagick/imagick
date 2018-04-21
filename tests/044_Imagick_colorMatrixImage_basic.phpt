@@ -69,5 +69,5 @@ function colorMatrixImage($colorMatrix) {
 colorMatrixImage($colorMatrix) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -85,6 +85,6 @@ if (count($missedMethods) !== 0) {
 echo "Ok"
 
 ?>
---EXPECTF--
+--EXPECT--
 
 Ok

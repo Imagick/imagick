@@ -32,5 +32,5 @@ function levelizeImage($blackPoint, $gamma,  $whitePoint) {
 levelizeImage($blackPoint, $gamma,  $whitePoint) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

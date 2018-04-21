@@ -21,5 +21,5 @@ function resampleImage() {
 resampleImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

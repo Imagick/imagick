@@ -42,5 +42,5 @@ function setFontStretch($fillColor, $strokeColor, $backgroundColor) {
 setFontStretch($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

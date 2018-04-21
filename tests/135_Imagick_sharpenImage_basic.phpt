@@ -23,5 +23,5 @@ function sharpenImage($radius, $sigma, $channel) {
 sharpenImage($radius, $sigma, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -56,5 +56,5 @@ foreach ($pixelTypes as $pixelType => $scaleFn) {
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

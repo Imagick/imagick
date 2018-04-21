@@ -70,5 +70,5 @@ function affine($strokeColor, $fillColor, $backgroundColor) {
 affine($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -22,5 +22,5 @@ function quantizeImage($numberColors, $colorSpace, $treeDepth, $dither) {
 quantizeImage($numberColors, $colorSpace, $treeDepth, $dither) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

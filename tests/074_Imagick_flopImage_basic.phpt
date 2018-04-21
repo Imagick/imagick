@@ -20,5 +20,5 @@ function flopImage() {
 flopImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

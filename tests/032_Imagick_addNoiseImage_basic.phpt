@@ -22,5 +22,5 @@ function addNoiseImage($noiseType, $channel) {
 addNoiseImage($noiseType, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

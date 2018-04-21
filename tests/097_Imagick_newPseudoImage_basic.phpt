@@ -18,5 +18,5 @@ function newPseudoImage($canvasType) {
 newPseudoImage($canvasType) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

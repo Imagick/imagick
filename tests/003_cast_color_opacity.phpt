@@ -27,7 +27,7 @@ try {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 --- Testing casts
 Casting color and opacity succeeded
 Setting color and opacity without cast succeeded

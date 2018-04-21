@@ -19,4 +19,4 @@ if (class_exists('ImagickKernelException', false) == true) {
 }
 
 ?>
---EXPECTF--
+--EXPECT--

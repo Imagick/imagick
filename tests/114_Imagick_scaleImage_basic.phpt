@@ -45,5 +45,5 @@ foreach ($tests as $test) {
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

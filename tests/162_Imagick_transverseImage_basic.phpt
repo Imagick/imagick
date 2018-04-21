@@ -20,5 +20,5 @@ function transverseImage() {
 transverseImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

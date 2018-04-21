@@ -35,5 +35,5 @@ function mergeImageLayers($layerMethodType) {
 mergeImageLayers($layerMethodType);
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

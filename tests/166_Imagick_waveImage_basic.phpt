@@ -22,5 +22,5 @@ function waveImage($amplitude, $length) {
 waveImage($amplitude, $length) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -21,5 +21,5 @@ function setImageCompressionQuality($quality) {
 setImageCompressionQuality($quality) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

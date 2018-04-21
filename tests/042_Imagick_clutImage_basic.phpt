@@ -24,5 +24,5 @@ function clutImage() {
 clutImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

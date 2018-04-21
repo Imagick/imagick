@@ -33,5 +33,5 @@ function rectangle($strokeColor, $fillColor, $backgroundColor) {
 rectangle($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

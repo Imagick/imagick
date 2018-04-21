@@ -40,5 +40,5 @@ This needs a significant amount of work to fix. The issue is the iterator object
 echo "Not ok";
 
 ?>
---EXPECTF--
+--EXPECT--
 Not ok

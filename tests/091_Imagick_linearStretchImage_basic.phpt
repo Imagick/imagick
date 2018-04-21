@@ -24,5 +24,5 @@ function linearStretchImage($blackThreshold, $whiteThreshold) {
 linearStretchImage($blackThreshold, $whiteThreshold) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

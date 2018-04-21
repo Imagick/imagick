@@ -37,5 +37,5 @@ function setTextUnderColor($strokeColor, $fillColor, $backgroundColor, $textUnde
 setTextUnderColor($strokeColor, $fillColor, $backgroundColor, $textUnderColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

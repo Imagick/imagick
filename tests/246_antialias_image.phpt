@@ -22,7 +22,7 @@ var_export($im->getAntiAlias());
 echo PHP_EOL;
 
 ?>
---EXPECTF--
+--EXPECT--
 true
 false
 true

@@ -20,5 +20,5 @@ function transposeImage() {
 transposeImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

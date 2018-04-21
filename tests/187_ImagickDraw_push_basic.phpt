@@ -37,5 +37,5 @@ function push($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor) {
 push($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

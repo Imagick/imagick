@@ -42,5 +42,5 @@ function screenEmbed() {
 screenEmbed() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

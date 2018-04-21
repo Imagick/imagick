@@ -34,5 +34,5 @@ function setImageBias($bias) {
 setImageBias($bias) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -23,5 +23,5 @@ function adaptiveBlurImage($radius, $sigma, $channel) {
 adaptiveBlurImage($radius, $sigma, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

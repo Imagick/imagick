@@ -65,5 +65,5 @@ function setFillRule($fillColor, $strokeColor, $backgroundColor) {
 setFillRule($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

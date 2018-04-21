@@ -28,5 +28,5 @@ function sigmoidalContrastImage($sharpening, $midpoint, $sigmoidalContrast) {
 sigmoidalContrastImage($sharpening, $midpoint, $sigmoidalContrast) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

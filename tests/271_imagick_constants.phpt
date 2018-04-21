@@ -16,5 +16,5 @@ foreach ($constants as $key => $value) {
 echo "Ok";
 
 ?>
---EXPECTF--
+--EXPECT--
 Ok

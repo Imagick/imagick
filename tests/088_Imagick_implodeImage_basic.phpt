@@ -21,5 +21,5 @@ function implodeImage() {
 implodeImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -35,5 +35,5 @@ function floodFillPaintImage($fillColor, $fuzz, $targetColor, $x, $y, $inverse, 
 floodFillPaintImage($fillColor, $fuzz, $targetColor, $x, $y, $inverse, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -56,5 +56,5 @@ function construct() {
 construct() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -27,5 +27,5 @@ function tintImage($r, $g, $b, $a) {
 tintImage($r, $g, $b, $a) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

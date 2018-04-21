@@ -30,5 +30,5 @@ function transparentPaintImage($color, $alpha, $fuzz) {
 transparentPaintImage($color, $alpha, $fuzz) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

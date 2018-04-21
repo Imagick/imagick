@@ -21,5 +21,5 @@ function sepiaToneImage($sepia) {
 sepiaToneImage($sepia) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

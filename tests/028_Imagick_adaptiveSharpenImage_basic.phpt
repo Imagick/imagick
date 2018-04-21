@@ -23,5 +23,5 @@ function adaptiveSharpenImage($radius, $sigma, $channel) {
 adaptiveSharpenImage($radius, $sigma, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -55,5 +55,5 @@ function resetIterator() {
 resetIterator() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

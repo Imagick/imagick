@@ -23,5 +23,5 @@ else {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 Ok

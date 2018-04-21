@@ -24,5 +24,5 @@ function selectiveBlurImage($radius, $sigma, $threshold, $channel) {
 selectiveBlurImage($radius, $sigma, $threshold, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

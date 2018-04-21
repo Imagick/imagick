@@ -28,5 +28,5 @@ function recolorImage() {
 recolorImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

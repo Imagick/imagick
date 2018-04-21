@@ -28,5 +28,5 @@ function setImageArtifact() {
 setImageArtifact() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

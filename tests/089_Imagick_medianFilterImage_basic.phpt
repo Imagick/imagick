@@ -22,5 +22,5 @@ function medianFilterImage($radius) {
 medianFilterImage($radius) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

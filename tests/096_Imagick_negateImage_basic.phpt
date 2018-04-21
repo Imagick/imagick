@@ -22,5 +22,5 @@ function negateImage($grayOnly, $channel) {
 negateImage($grayOnly, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -38,5 +38,5 @@ function setStrokeAntialias($strokeColor, $fillColor, $backgroundColor) {
 setStrokeAntialias($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

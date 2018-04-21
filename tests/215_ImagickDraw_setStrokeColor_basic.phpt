@@ -38,5 +38,5 @@ function setStrokeColor($strokeColor, $fillColor, $backgroundColor) {
 setStrokeColor($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

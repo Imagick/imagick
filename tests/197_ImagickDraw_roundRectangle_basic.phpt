@@ -39,5 +39,5 @@ function roundRectangle($strokeColor, $fillColor, $backgroundColor, $startX, $st
 roundRectangle($strokeColor, $fillColor, $backgroundColor, $startX, $startY, $endX, $endY, $roundX, $roundY) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

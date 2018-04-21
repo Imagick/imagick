@@ -21,5 +21,5 @@ function blackThresholdImage($thresholdColor) {
 blackThresholdImage($thresholdColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

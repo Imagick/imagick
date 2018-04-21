@@ -39,5 +39,5 @@ function polyline($strokeColor, $fillColor, $backgroundColor) {
 polyline($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

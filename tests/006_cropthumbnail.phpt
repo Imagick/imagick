@@ -30,7 +30,7 @@ $im->cropThumbnailImage(200, 10);
 var_dump($im->getImageGeometry());
 
 ?>
---EXPECTF--
+--EXPECT--
 array(2) {
   ["width"]=>
   int(200)

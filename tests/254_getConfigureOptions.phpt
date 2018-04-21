@@ -50,5 +50,5 @@ foreach ($optionsStartingWithC as $key => $value) {
 echo "Ok";
 
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -24,5 +24,5 @@ function chopImage($startX, $startY, $width, $height) {
 chopImage($startX, $startY, $width, $height) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

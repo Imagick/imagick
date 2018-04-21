@@ -55,5 +55,5 @@ function pushPattern($strokeColor, $fillColor, $backgroundColor) {
 pushPattern($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

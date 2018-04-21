@@ -99,5 +99,5 @@ function getImageHistogram() {
 getImageHistogram();
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

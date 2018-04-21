@@ -25,5 +25,5 @@ function fxImage() {
 fxImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

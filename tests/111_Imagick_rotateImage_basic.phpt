@@ -22,5 +22,5 @@ function rotateImage($angle, $color) {
 rotateImage($angle, $color) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

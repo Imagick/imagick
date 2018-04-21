@@ -44,5 +44,5 @@ function setViewBox($strokeColor, $fillColor, $backgroundColor) {
 setViewBox($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

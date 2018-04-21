@@ -24,5 +24,5 @@ function adaptiveThresholdImage($width, $height, $adaptiveOffset) {
 adaptiveThresholdImage($width, $height, $adaptiveOffset) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

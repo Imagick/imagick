@@ -14,5 +14,5 @@ catch (\ImagickException $ie) {
 
 
 ?>
---EXPECTF--
+--EXPECT--
 Constructor shouldn't be called with a boolean as the filename

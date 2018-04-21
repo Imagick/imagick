@@ -54,5 +54,5 @@ END;
 svgExample() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

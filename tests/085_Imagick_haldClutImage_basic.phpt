@@ -24,5 +24,5 @@ function haldClutImage() {
 haldClutImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

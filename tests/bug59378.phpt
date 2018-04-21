@@ -36,5 +36,5 @@ else {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 Reopened images are identical.

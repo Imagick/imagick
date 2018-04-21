@@ -28,5 +28,5 @@ if ($redMask != \Imagick::CHANNEL_RED) {
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

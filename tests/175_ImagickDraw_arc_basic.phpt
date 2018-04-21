@@ -43,5 +43,5 @@ function arc($strokeColor, $fillColor, $backgroundColor, $startX, $startY, $endX
 arc($strokeColor, $fillColor, $backgroundColor, $startX, $startY, $endX, $endY, $startAngle, $endAngle) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -21,5 +21,5 @@ function transformimage() {
 transformimage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

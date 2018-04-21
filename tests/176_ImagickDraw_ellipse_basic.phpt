@@ -46,5 +46,5 @@ function ellipse($strokeColor, $fillColor, $backgroundColor) {
 ellipse($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

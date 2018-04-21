@@ -29,5 +29,5 @@ function setColorValue() {
 setColorValue() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

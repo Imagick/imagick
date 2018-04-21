@@ -23,5 +23,5 @@ function renderJPG($extent) {
 renderJPG($extent) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

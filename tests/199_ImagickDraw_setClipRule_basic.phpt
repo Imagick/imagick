@@ -48,5 +48,5 @@ function setClipRule($strokeColor, $fillColor, $backgroundColor) {
 setClipRule($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

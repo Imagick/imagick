@@ -23,5 +23,5 @@ function brightnessContrastImage($brightness, $contrast, $channel) {
 brightnessContrastImage($brightness, $contrast, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

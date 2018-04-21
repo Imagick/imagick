@@ -35,5 +35,5 @@ function setFillOpacity($strokeColor, $fillColor, $backgroundColor) {
 setFillOpacity($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

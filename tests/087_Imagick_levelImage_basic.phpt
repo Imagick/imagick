@@ -24,5 +24,5 @@ function levelImage($blackPoint, $gamma, $whitePoint) {
 levelImage($blackPoint, $gamma, $whitePoint) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

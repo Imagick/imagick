@@ -29,5 +29,5 @@ $height = 150;
 extentImage($startX, $startY, $width, $height) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

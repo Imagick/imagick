@@ -21,5 +21,5 @@ function swirlImage($swirl) {
 swirlImage($swirl) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

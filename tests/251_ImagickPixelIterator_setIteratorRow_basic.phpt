@@ -35,5 +35,5 @@ function setIteratorRow() {
 setIteratorRow() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

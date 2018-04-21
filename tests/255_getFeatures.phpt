@@ -21,5 +21,5 @@ if (!is_string($features)) {
 echo "Ok";
 
 ?>
---EXPECTF--
+--EXPECT--
 Ok

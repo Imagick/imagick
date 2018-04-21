@@ -46,5 +46,5 @@ function gradientReflection() {
 gradientReflection() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -53,5 +53,5 @@ function composite($strokeColor, $fillColor, $backgroundColor) {
 composite($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -51,5 +51,5 @@ function setFontFamily($fillColor, $strokeColor, $backgroundColor) {
 setFontFamily($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

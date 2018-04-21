@@ -40,5 +40,5 @@ function polygon($strokeColor, $fillColor, $backgroundColor) {
 polygon($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

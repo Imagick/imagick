@@ -20,5 +20,5 @@ function equalizeImage() {
 equalizeImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

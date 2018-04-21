@@ -65,5 +65,5 @@ function psychedelicFontGif($name = 'Danack') {
 psychedelicFontGif($name = 'Danack') ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

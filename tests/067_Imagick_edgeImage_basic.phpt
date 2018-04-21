@@ -21,5 +21,5 @@ function edgeImage($radius) {
 edgeImage($radius) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

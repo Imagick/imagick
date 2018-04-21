@@ -58,5 +58,5 @@ catch(\Exception $e) {
 	echo $status.PHP_EOL;
 }
 ?>
---EXPECTF--
+--EXPECT--
 Processing cancelled

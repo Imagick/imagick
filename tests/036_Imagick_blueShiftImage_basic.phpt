@@ -21,5 +21,5 @@ function blueShiftImage($blueShift) {
 blueShiftImage($blueShift) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

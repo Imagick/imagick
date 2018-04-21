@@ -9,5 +9,5 @@ $i->newPseudoImage(1, 1000, "xc:red");
 $i->resizeImage(0, 250, 0, 1);
 echo $i->getImageWidth(); // should be 1
 ?>
---EXPECTF--
+--EXPECT--
 1

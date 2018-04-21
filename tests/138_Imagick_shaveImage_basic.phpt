@@ -20,5 +20,5 @@ function shaveImage() {
 shaveImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

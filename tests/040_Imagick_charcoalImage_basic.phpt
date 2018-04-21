@@ -22,5 +22,5 @@ function charcoalImage($radius, $sigma) {
 charcoalImage($radius, $sigma) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -23,5 +23,5 @@ function radialBlurImage() {
 radialBlurImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

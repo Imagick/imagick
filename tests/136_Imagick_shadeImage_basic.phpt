@@ -20,5 +20,5 @@ function shadeImage() {
 shadeImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

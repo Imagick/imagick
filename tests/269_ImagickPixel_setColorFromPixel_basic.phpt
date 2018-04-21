@@ -32,5 +32,5 @@ if ($actualColor != $expected) {
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

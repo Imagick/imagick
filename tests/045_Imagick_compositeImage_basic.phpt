@@ -45,5 +45,5 @@ function compositeImage() {
 compositeImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -52,5 +52,5 @@ foreach ($bestFitSettings as $bestFit) {
 }
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

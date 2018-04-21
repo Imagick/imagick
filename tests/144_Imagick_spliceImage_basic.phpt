@@ -24,5 +24,5 @@ function spliceImage($startX, $startY, $width, $height) {
 spliceImage($startX, $startY, $width, $height) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

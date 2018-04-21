@@ -33,5 +33,5 @@ function scale($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor) {
 scale($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

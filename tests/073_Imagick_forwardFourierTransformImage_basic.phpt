@@ -69,5 +69,5 @@ function forwardFourierTransformImage() {
 forwardFourierTransformImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -20,5 +20,5 @@ function shadowImage() {
 shadowImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

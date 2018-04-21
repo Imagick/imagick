@@ -47,5 +47,5 @@ function setFontWeight($fillColor, $strokeColor, $backgroundColor) {
 setFontWeight($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

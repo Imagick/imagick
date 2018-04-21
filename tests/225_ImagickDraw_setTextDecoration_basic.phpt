@@ -36,5 +36,5 @@ function setTextDecoration($strokeColor, $fillColor, $backgroundColor, $textDeco
 setTextDecoration($strokeColor, $fillColor, $backgroundColor, $textDecoration) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

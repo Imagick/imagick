@@ -32,5 +32,5 @@ function setColorValueQuantum() {
 setColorValueQuantum() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

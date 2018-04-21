@@ -23,5 +23,5 @@ function thresholdimage($threshold, $channel) {
 thresholdimage($threshold, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

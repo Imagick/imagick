@@ -21,5 +21,5 @@ function solarizeImage($solarizeThreshold) {
 solarizeImage($solarizeThreshold) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

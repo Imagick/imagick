@@ -31,5 +31,5 @@ if (strlen($data) < 50) {
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

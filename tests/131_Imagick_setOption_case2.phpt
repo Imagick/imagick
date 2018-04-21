@@ -20,5 +20,5 @@ function renderPNG($format) {
 renderPNG($format) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

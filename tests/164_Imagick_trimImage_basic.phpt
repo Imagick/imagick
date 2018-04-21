@@ -25,5 +25,5 @@ function trimImage($color, $fuzz) {
 trimImage($color, $fuzz) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

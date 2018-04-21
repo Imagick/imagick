@@ -32,5 +32,5 @@ function statisticImage($statisticType, $w20, $h20, $channel) {
 statisticImage($statisticType, $w20, $h20, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

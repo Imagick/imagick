@@ -20,5 +20,5 @@ function magnifyImage() {
 magnifyImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -23,5 +23,5 @@ function adaptiveResizeImage($width, $height, $bestFit) {
 adaptiveResizeImage($width, $height, $bestFit) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

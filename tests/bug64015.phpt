@@ -19,7 +19,7 @@ echo "OK" , PHP_EOL;
 
 
 ?>
---EXPECTF--
+--EXPECT--
 int(2523)
 int(2523)
 int(2523)

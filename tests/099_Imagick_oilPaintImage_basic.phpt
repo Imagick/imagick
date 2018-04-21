@@ -21,5 +21,5 @@ function oilPaintImage($radius) {
 oilPaintImage($radius) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -47,5 +47,5 @@ function setStrokeLineJoin($strokeColor, $fillColor, $backgroundColor) {
 setStrokeLineJoin($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

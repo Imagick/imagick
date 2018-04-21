@@ -34,5 +34,5 @@ function line($strokeColor, $fillColor, $backgroundColor) {
 line($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

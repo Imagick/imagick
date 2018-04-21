@@ -23,5 +23,5 @@ function modulateImage($hue, $brightness, $saturation) {
 modulateImage($hue, $brightness, $saturation) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -44,5 +44,5 @@ function setClipPath($strokeColor, $fillColor, $backgroundColor) {
 setClipPath($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

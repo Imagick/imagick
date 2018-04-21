@@ -34,5 +34,5 @@ function setStrokeWidth($strokeColor, $fillColor, $backgroundColor) {
 setStrokeWidth($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

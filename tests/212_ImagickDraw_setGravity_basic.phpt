@@ -40,5 +40,5 @@ function setGravity($fillColor, $strokeColor, $backgroundColor) {
 setGravity($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

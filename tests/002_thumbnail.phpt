@@ -109,7 +109,7 @@ if ($imagick->getImageHeight() != 263) {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 --- Source Image: 400x200, Imagick::thumbnailImage( 100, null, false )
 100x50
 --- Source Image: 400x200, Imagick::thumbnailImage( null, 100, false )

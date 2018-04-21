@@ -43,5 +43,5 @@ translate($strokeColor, $fillColor, $backgroundColor, $fillModifiedColor,
     $startX, $startY, $endX, $endY, $translateX, $translateY);
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

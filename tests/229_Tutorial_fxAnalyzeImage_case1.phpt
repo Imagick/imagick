@@ -83,5 +83,5 @@ fxAnalyzeImage($imagick);
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

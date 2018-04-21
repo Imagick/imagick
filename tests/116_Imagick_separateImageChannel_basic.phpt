@@ -21,5 +21,5 @@ function separateImageChannel($channel) {
 separateImageChannel($channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

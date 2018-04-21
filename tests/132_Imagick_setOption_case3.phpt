@@ -20,5 +20,5 @@ function renderCustomBitDepthPNG() {
 renderCustomBitDepthPNG() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

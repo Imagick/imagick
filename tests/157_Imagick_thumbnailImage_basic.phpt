@@ -21,5 +21,5 @@ function thumbnailImage() {
 thumbnailImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -20,5 +20,5 @@ function enhanceImage() {
 enhanceImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

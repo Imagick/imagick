@@ -56,7 +56,7 @@ subImageMatch() ;
 echo "Ok";
 ?>
 
---EXPECTF--
+--EXPECT--
 height : 25
 width : 25
 x : 50

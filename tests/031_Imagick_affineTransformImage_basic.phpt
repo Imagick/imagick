@@ -33,5 +33,5 @@ function affineTransformImage() {
 affineTransformImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

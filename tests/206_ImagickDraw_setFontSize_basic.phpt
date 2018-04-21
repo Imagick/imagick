@@ -40,5 +40,5 @@ function setFontSize($fillColor, $strokeColor, $backgroundColor) {
 setFontSize($fillColor, $strokeColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

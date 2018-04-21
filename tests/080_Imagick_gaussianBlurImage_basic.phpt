@@ -23,5 +23,5 @@ function gaussianBlurImage($radius, $sigma, $channel) {
 gaussianBlurImage($radius, $sigma, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

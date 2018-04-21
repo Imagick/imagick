@@ -40,5 +40,5 @@ function matte($strokeColor, $fillColor, $backgroundColor, $paintType) {
 matte($strokeColor, $fillColor, $backgroundColor, $paintType) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

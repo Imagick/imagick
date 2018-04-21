@@ -42,5 +42,5 @@ function setStrokeDashOffset($strokeColor, $fillColor, $backgroundColor) {
 setStrokeDashOffset($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

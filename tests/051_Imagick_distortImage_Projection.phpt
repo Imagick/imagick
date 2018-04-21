@@ -26,5 +26,5 @@ $distortion = 1;
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

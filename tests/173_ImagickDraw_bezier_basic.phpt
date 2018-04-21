@@ -79,5 +79,5 @@ function bezier($strokeColor, $fillColor, $backgroundColor) {
 bezier($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

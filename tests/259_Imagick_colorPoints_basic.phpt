@@ -64,5 +64,5 @@ else {
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

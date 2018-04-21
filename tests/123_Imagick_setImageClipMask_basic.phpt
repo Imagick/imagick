@@ -47,5 +47,5 @@ function setImageClipMask() {
 setImageClipMask() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

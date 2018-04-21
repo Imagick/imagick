@@ -39,5 +39,5 @@ function roundCorners() {
 roundCorners() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

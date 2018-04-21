@@ -26,5 +26,5 @@ try {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 success

@@ -28,6 +28,6 @@ try {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 pass
 pass

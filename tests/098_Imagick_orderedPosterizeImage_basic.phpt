@@ -27,5 +27,5 @@ function orderedPosterizeImage($orderedPosterizeType) {
 orderedPosterizeImage($orderedPosterizeType) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

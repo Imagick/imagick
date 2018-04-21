@@ -25,6 +25,6 @@ catch(\Exception $e) {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 Normal exception
 Normal warning is suppressed

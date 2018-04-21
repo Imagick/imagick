@@ -52,5 +52,5 @@ function setStrokeMiterLimit($strokeColor, $fillColor, $backgroundColor) {
 setStrokeMiterLimit($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

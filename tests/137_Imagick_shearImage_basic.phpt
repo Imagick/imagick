@@ -23,5 +23,5 @@ function shearImage($color, $shearX, $shearY) {
 shearImage($color, $shearX, $shearY) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

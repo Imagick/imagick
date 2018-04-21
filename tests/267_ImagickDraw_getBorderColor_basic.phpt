@@ -55,5 +55,5 @@ if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
 
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -24,5 +24,5 @@ function contrastImage($contrastType) {
 contrastImage($contrastType) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

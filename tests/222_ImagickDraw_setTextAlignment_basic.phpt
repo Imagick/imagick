@@ -39,5 +39,5 @@ function setTextAlignment($strokeColor, $fillColor, $backgroundColor) {
 setTextAlignment($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

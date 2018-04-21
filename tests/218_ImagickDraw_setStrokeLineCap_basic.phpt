@@ -38,5 +38,5 @@ function setStrokeLineCap($strokeColor, $fillColor, $backgroundColor) {
 setStrokeLineCap($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

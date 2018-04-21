@@ -39,5 +39,5 @@ function deskewImage($threshold) {
 deskewImage($threshold) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

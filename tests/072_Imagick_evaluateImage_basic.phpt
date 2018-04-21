@@ -107,5 +107,5 @@ foreach ($evaluateTypes as $evaluateType) {
 }
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

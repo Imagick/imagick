@@ -13,6 +13,6 @@ try {
 }
 
 ?>
---EXPECTF--
+--EXPECT--
 --- Catch exception with try/catch
 got exception

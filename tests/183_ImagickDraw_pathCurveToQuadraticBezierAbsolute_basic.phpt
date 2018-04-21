@@ -60,5 +60,5 @@ function pathCurveToQuadraticBezierAbsolute($strokeColor, $fillColor, $backgroun
 pathCurveToQuadraticBezierAbsolute($strokeColor, $fillColor, $backgroundColor) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

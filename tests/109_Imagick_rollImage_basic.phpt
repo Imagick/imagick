@@ -22,5 +22,5 @@ function rollImage($rollX, $rollY) {
 rollImage($rollX, $rollY) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

@@ -23,5 +23,5 @@ function blurImage($radius, $sigma, $channel) {
 blurImage($radius, $sigma, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

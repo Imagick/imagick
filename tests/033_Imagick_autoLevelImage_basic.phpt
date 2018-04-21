@@ -21,5 +21,5 @@ function autoLevelImage() {
 autoLevelImage() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

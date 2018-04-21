@@ -42,5 +42,5 @@ function psychedelicFont() {
 psychedelicFont() ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

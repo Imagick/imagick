@@ -27,5 +27,5 @@ function convolveImage($bias, $kernelMatrix) {
 convolveImage($bias, $kernelMatrix) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

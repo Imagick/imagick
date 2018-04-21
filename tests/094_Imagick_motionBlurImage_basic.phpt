@@ -24,5 +24,5 @@ function motionBlurImage($radius, $sigma, $angle, $channel) {
 motionBlurImage($radius, $sigma, $angle, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok

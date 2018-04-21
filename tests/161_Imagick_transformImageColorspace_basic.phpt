@@ -23,5 +23,5 @@ function transformImageColorspace($colorSpace, $channel) {
 transformImageColorspace($colorSpace, $channel) ;
 echo "Ok";
 ?>
---EXPECTF--
+--EXPECT--
 Ok
