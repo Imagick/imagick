@@ -53,7 +53,7 @@ Doing this will make it more difficult for hackers to exploit a bug, if one shou
 4) Check the result of the image processing is a valid image file before displaying it to the user. In the extremely unlikely event that a hacker is able to pipe arbitrary files to the output of Imagick, checking that it is an image file, and not the source code of your application that is being sent, is a sensible precaution. This can be accomplished by the following code:
 
 
-```
+```php
 <?php
 	$finfo = finfo_open(FILEINFO_MIME_TYPE);
 	$mimeType = finfo_file($finfo, $filename);
