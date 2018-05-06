@@ -641,11 +641,11 @@ PHP_METHOD(imagickkernel, addkernel)
 		RETURN_NULL();
 	}
 
-	kernel_info = internp->kernel_info;
-	while (kernel_info != NULL) {
-		kernel_info_target = kernel_info;
-		kernel_info = kernel_info->next;
-	};
+    kernel_info = internp->kernel_info;
+	do {
+ 		kernel_info_target = kernel_info;
+ 		kernel_info = kernel_info->next;
+	} while (kernel_info != NULL);
 
 	kernel_info_add_clone = CloneKernelInfo(kernel->kernel_info);
 	kernel_info_target->next = kernel_info_add_clone;
