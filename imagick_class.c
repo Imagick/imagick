@@ -12715,7 +12715,7 @@ PHP_METHOD(imagick, getantialias)
 /* }}} */
 
 #if MagickLibVersion > 0x676
-/* {{{ proto int Imagick::setAntiAlias(bool antialias)
+/* {{{ proto bool Imagick::colorDecisionListImage(string color_correction_collection)
 	Set whether antialiasing should be used for operations. On by default.
 */
 PHP_METHOD(imagick, colordecisionlistimage)
