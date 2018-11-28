@@ -13,48 +13,27 @@ php:
     - 5.6
     - 5.5
     - 5.4
-    - 5.3
 
 env:
     - IMAGEMAGICK_VERSION=git7
     - IMAGEMAGICK_VERSION=git6
+    - IMAGEMAGICK_VERSION=7.0.8-14
     - IMAGEMAGICK_VERSION=7.0.1-0
     - IMAGEMAGICK_VERSION=6.9.2-0
     - IMAGEMAGICK_VERSION=6.8.7-0
-    - IMAGEMAGICK_VERSION=6.7.5-3
-    - IMAGEMAGICK_VERSION=6.6.0-9
-    - IMAGEMAGICK_VERSION=6.5.3-10
-    
+
     # Include individual commits like this:
     # - IMAGEMAGICK_VERSION=commit_25553302a6d5f736b55e60109600dfbce5fbea48
 
 matrix:
   exclude:
-    - php: 5.3
-      env: IMAGEMAGICK_VERSION=6.8.7-0
-    - php: 5.3
-      env: IMAGEMAGICK_VERSION=6.7.5-3
-    - php: 5.3
-      env: IMAGEMAGICK_VERSION=6.6.0-9
-    - php: 5.3
-      env: IMAGEMAGICK_VERSION=6.4.0-11
     - php: 5.4
       env: IMAGEMAGICK_VERSION=6.8.7-0
-    - php: 5.4
-      env: IMAGEMAGICK_VERSION=6.7.5-3
-    - php: 5.4
-      env: IMAGEMAGICK_VERSION=6.6.0-9
-    - php: 5.4
-      env: IMAGEMAGICK_VERSION=6.4.0-11
-    - php: 5.5
-      env: IMAGEMAGICK_VERSION=6.7.5-3
-    - php: 5.5
-      env: IMAGEMAGICK_VERSION=6.6.0-9
-    - php: 5.5
-      env: IMAGEMAGICK_VERSION=6.4.0-11
 
 before_install:
+    - sudo apt search freetype
     - sudo apt-get install -y fonts-urw-base35 || true
+    - sudo apt-get install -y libfreetype6-dev || true
     - sudo apt-get install -y texlive-fonts-recommended || true
 
 before_script:
