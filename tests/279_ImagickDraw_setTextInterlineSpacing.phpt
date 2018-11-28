@@ -3,6 +3,11 @@ Test ImagickDraw, getTextDirection
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');
+require_once(dirname(__FILE__) . '/functions.inc');
+
+if (isVersionGreaterEqual('6.9.8-6', '7.0.5-7') !== true) {
+    die("either version '6.9.8-6', '7.0.5-7' is minimum reliable setTextInterlineSpacing.");
+}
 
 ?>
 --FILE--
