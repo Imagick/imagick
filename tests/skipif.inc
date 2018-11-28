@@ -97,11 +97,11 @@ function requireFormat($requiredFormat)
 	}
 
 	die("skip test suite requires format $requiredFormat but not available");
-
 }
 
 requireFormat("png");
 requireFormat("jpg");
+
 
 
 ?>

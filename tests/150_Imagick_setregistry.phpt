@@ -5,6 +5,8 @@ Test Imagick, setRegistry and getRegistry
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
+
 $tmpPath = Imagick::getRegistry("temporary-path");
 if ($tmpPath == null) {
 	//I am unsure if this is guaranteed - it might be set via policy.xml
@@ -32,13 +34,30 @@ if (array_key_exists("temporary-path", $registry) == true) {
 	}
 }
 
+// Since 6.9.9-26, no exception raised
+$exceptionExpected = true;
+
+if (isVersionGreaterEqual('6.9.9-26', '7.0.0-0')) {
+    $exceptionExpected = false;
+}
 
 try {
 	$tmpPath = Imagick::getRegistry("non-existent string");
-	echo "Expected exception not thrown.\n";
+
+	if ($exceptionExpected === true) {
+		echo "Expected exception not thrown.\n";
+	}
+	else {
+		echo "This is fine.";
+	}
 }
 catch (\ImagickException $ie) {
-	echo $ie->getMessage() . "\n";
+	if ($exceptionExpected === true) {
+		echo "This is fine.";
+	}
+	else {
+		echo "Unexpected exception" . $ie->getMessage() . "\n";
+	}
 }
 
 
@@ -47,4 +66,4 @@ catch (\ImagickException $ie) {
 Temporary-path was empty at start.
 Temporary path was set correctly.
 Temporary path was listed correctly.
-Imagick::getRegistry exception (%s)
+This is fine.
