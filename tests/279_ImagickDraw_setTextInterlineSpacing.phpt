@@ -5,9 +5,7 @@ Test ImagickDraw, getTextDirection
 require_once(dirname(__FILE__) . '/skipif.inc');
 require_once(dirname(__FILE__) . '/functions.inc');
 
-if (isVersionGreaterEqual('6.9.8-6', '7.0.5-7') !== true) {
-    die("either version '6.9.8-6', '7.0.5-7' is minimum reliable setTextInterlineSpacing.");
-}
+$minimumVersions = ['6.9.8-6', '7.0.5-7'];
 
 ?>
 --FILE--
@@ -18,14 +16,6 @@ require_once(dirname(__FILE__) . '/functions.inc');
 $backgroundColor = 'rgb(225, 225, 225)';
 $strokeColor = 'rgb(0, 0, 0)';
 $fillColor = 'DodgerBlue2';
-
-
-if (isVersionGreaterEqual('6.9.8-6', '7.0.5-7') !== true) {
-    die("either version '6.9.8-6', '7.0.5-7' is minimum reliable setTextInterlineSpacing.");
-}
-else {
-    echo "Tests think version is okay.\n";
-}
 
 $interlineSpacings = [0, 16, 24, 36];
 

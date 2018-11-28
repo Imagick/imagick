@@ -102,6 +102,11 @@ function requireFormat($requiredFormat)
 requireFormat("png");
 requireFormat("jpg");
 
+if (isset($minimumVersions) === true) {
+    if (isVersionGreaterEqual($minimumVersions[0], $minimumVersions[1]) !== true) {
+        die("either version '6.9.8-6', '7.0.5-7' is minimum reliable setTextInterlineSpacing.");
+    }
+}
 
 
 ?>

@@ -29,10 +29,8 @@ function version_compare_imagemagick($testIm6Version, $im7Version)
         die("Failed to understand version string [$versionInstalledStringComplete] - finding second space");
     }
 
-
     $versionInstalledString = substr($versionInstalledStringComplete, $firstSpace + 1, $secondSpace - $firstSpace - 1);
-
-    echo "versionInstalledString is $versionInstalledString \n";
+    // echo "versionInstalledString is $versionInstalledString \n";
 
     $versionToCompare = $im7Version;
     if (substr($versionInstalledString, 0, 1) === '6') {
@@ -54,8 +52,7 @@ function version_compare_imagemagick($testIm6Version, $im7Version)
 function isVersionGreaterEqual($testIm6Version, $im7Version)
 {
     $versionCompare = version_compare_imagemagick($testIm6Version, $im7Version);
-
-    echo "version compare for $testIm6Version, $im7Version is $versionCompare \n";
+    // echo "version compare for $testIm6Version, $im7Version is $versionCompare \n";
 
     if ($versionCompare >= 0) {
         return true;
