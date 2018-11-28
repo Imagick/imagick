@@ -37,7 +37,7 @@ if (array_key_exists("temporary-path", $registry) == true) {
 // Since 6.9.9-26, no exception raised
 $exceptionExpected = true;
 
-if (isVersionGreaterEqual('6.9.9-26', '7.0.0-0')) {
+if (isVersionGreaterEqual('6.9.9-26', '7.0.7-15')) {
     $exceptionExpected = false;
 }
 
