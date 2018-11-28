@@ -75,7 +75,7 @@ function fxAnalyzeImage(\Imagick $imagick) {
 $arguments = array(5, 1, 0.5);
 
 $imagick = new \Imagick();
-$imagick->newPseudoImage(500, 500, 'gradient:black-white');
+$imagick->newPseudoImage(200, 200, 'gradient:black-white');
 $imagick->functionImage(\Imagick::FUNCTION_POLYNOMIAL, $arguments);
 $imagick->setimageformat('png');
 
