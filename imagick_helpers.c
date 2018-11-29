@@ -1468,9 +1468,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_XYY", xyYColorspace);
 #endif
 
-#if MagickLibVersion >= 0x699
-	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LINEARGRAY", LinearGRAYColorspace);
-#endif
+
+// This needs a 3 way comparison.
+// #if MagickLibVersion >= 0x699
+// 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LINEARGRAY", LinearGRAYColorspace);
+// #endif
 
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
