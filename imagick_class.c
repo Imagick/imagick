@@ -12567,8 +12567,9 @@ PHP_METHOD(imagick, listregistry)
 	char *registry = NULL;
 	char *value = NULL;
 
-    // This suppresses an 'unused parameter' warning.
-	(void)execute_data;
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
 
 	array_init(return_value);
 
