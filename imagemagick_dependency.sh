@@ -57,9 +57,18 @@ imagemagick_fetch_and_build () {
             
             cd "ImageMagick-${sha}"
         else
-           wget "https://launchpad.net/imagemagick/main/${version}/+download/ImageMagick-${version}.tar.gz"
-           tar xvfz ImageMagick-${version}.tar.gz
-           cd ImageMagick-*
+
+            if [ $version > 7 ]; then
+                echo "Fetching from IM7 repo"
+                wget "https://github.com/ImageMagick/ImageMagick/archive/${version}.tar.gz" -o ImageMagick-${version}.tar.gz
+            else
+            echo "Fetching from IM6 repo"
+                wget "https://github.com/ImageMagick/ImageMagick6/archive/${version}.tar.gz" -o ImageMagick-${version}.tar.gz
+            fi
+
+            tar xvfz ImageMagick-${version}.tar.gz
+            ls -l
+            cd ImageMagick-*
         fi
         ;;
     esac
