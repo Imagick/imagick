@@ -3251,7 +3251,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 	php_imagick_object *intern;
 	zval *retval = NULL;
 	zval tmp_member;
-    zend_object_handlers *std_hnd;
+    const zend_object_handlers *std_hnd;
 
 	ZVAL_DEREF(member);
 	if (Z_TYPE_P(member) != IS_STRING) {
