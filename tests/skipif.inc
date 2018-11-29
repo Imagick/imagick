@@ -1,7 +1,8 @@
 <?php
 
-if (!extension_loaded("imagick")) die("skip");
+if (!extension_loaded("imagick")) die("skip imagick not loaded");
 
+require_once(dirname(__FILE__) . '/functions.inc');
 
 if (isset($imageMagickRequiredVersion)) {
 	$versionInfo = \Imagick::getVersion();
@@ -104,9 +105,15 @@ requireFormat("jpg");
 
 if (isset($minimumVersions) === true) {
     if (isVersionGreaterEqual($minimumVersions[0], $minimumVersions[1]) !== true) {
-        die("either version '6.9.8-6', '7.0.5-7' is minimum reliable setTextInterlineSpacing.");
+
+        $message = sprintf(
+            "skip either version '%s' or '%s' is minimum reliable for test.\n",
+            $minimumVersions[0],
+            $minimumVersions[1]
+        );
+
+        die($message);
     }
 }
-
 
 ?>

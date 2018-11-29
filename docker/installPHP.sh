@@ -6,10 +6,13 @@ set -x
 
 # git clone https://github.com/php/php-src
 
-mkdir -p /var/php_src/php-7.2.11
-tar -xzf /var/app/php_src/php-7.2.11.tar.gz -C /var/php_src/php-7.2.11 --strip-components=1
+SRCFILE="php-7.2.11"
+SRCFILE="php-7.1.24"
 
-cd /var/php_src/php-7.2.11
+mkdir -p /var/app/php_src/${SRCFILE}
+tar -xzf /var/app/php_src/${SRCFILE}.tar.gz -C /var/app/php_src/${SRCFILE} --strip-components=1
+
+cd /var/app/php_src/${SRCFILE}
 
 # ./buildconf
 # ./configure --disable-all --without-pear
@@ -19,3 +22,8 @@ cd /var/php_src/php-7.2.11
 make -j 4
 
 make install
+
+
+export TEST_PHP_EXECUTABLE=`which php`
+
+# echo "extension=imagick.so" > /usr/local/lib/php.ini

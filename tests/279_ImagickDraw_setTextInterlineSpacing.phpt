@@ -1,13 +1,9 @@
 --TEST--
-Test ImagickDraw, getTextDirection
+Test ImagickDraw:: setTextInterlineSpacing
 --SKIPIF--
 <?php
-
 $minimumVersions = ['6.9.8-6', '7.0.5-7'];
-
 require_once(dirname(__FILE__) . '/skipif.inc');
-require_once(dirname(__FILE__) . '/functions.inc');
-
 
 ?>
 --FILE--
