@@ -588,7 +588,13 @@ static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags,
 PHP_METHOD(imagickkernel, frombuiltin)
 {
 	im_long kernel_type;
-	GeometryInfo geometry_info = {0};
+	GeometryInfo geometry_info = {
+		0, //rho,
+		0, //sigma,
+		0, //xi,
+		0, //psi,
+		0, //chi;
+	};
 	KernelInfo *kernel_info;
 	char *string;
 	IM_LEN_TYPE string_len;
