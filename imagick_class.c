@@ -6768,7 +6768,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	ChannelStatistics *statistics;
 	unsigned int i;
 #if MagickLibVersion < 0x700
-	int elements = 10;
+	unsigned int elements = 10;
 #endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters_none() == FAILURE) {
