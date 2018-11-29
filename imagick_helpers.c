@@ -1105,6 +1105,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPOSITE_HARDMIX", HardMixCompositeOp);
 #endif
 
+#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x708) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x69A)
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_STEREO", StereoCompositeOp);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("MONTAGEMODE_FRAME", FrameMode);
 	IMAGICK_REGISTER_CONST_LONG("MONTAGEMODE_UNFRAME", UnframeMode);
 	IMAGICK_REGISTER_CONST_LONG("MONTAGEMODE_CONCATENATE", ConcatenateMode);
@@ -1112,6 +1116,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("STYLE_ITALIC", ItalicStyle);
 	IMAGICK_REGISTER_CONST_LONG("STYLE_OBLIQUE", ObliqueStyle);
 	IMAGICK_REGISTER_CONST_LONG("STYLE_ANY", AnyStyle);
+#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x709) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x69B)
+    IMAGICK_REGISTER_CONST_LONG("STYLE_BOLD", BoldStyle);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("FILTER_UNDEFINED", UndefinedFilter);
 	IMAGICK_REGISTER_CONST_LONG("FILTER_POINT", PointFilter);
 	IMAGICK_REGISTER_CONST_LONG("FILTER_BOX", BoxFilter);
@@ -1469,10 +1477,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 
 
-// This needs a 3 way comparison.
-// #if MagickLibVersion >= 0x699
-// 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LINEARGRAY", LinearGRAYColorspace);
-// #endif
+#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x708) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x699)
+	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LINEARGRAY", LinearGRAYColorspace);
+#endif
 
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
@@ -1574,6 +1581,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion > 0x691
 	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_WIDTH", WidthResource);
 	IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_HEIGHT", HeightResource);
+#endif
+
+#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x708) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x69A)
+    IMAGICK_REGISTER_CONST_LONG("RESOURCETYPE_LISTLENGTH", ListLengthResource);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("DISPOSE_UNRECOGNIZED", UnrecognizedDispose);
