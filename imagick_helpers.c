@@ -81,6 +81,10 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	//IMAGICK_G(progress_callback) - this should be quicker
 	php_imagick_callback *callback = (php_imagick_callback*)userData;
 
+	// This suppresses an 'unused parameter' warning.
+	// We could maybe use text.
+	(void)text;
+
 #if defined(ZEND_ENGINE_3) && defined(ZTS)
 	if( NULL == tsrm_get_ls_cache() ) {
 		return MagickTrue;

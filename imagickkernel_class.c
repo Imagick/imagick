@@ -40,7 +40,7 @@ void
 static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 	int count;
 	double value;
-	int x, y;
+	unsigned int x, y;
 #ifdef ZEND_ENGINE_3
 	zval row;
 #else
@@ -151,7 +151,7 @@ static KernelInfo *imagick_createKernel(KernelValueType *values, size_t width, s
 	KernelInfo *kernel_info;
 
 #if MagickLibVersion >= 0x700
-	int i;
+	unsigned int i;
 	ExceptionInfo *_exception_info = (ExceptionInfo *) NULL;
 	//TODO - inspect exception info
 	kernel_info=AcquireKernelInfo(NULL, _exception_info);
@@ -204,6 +204,9 @@ static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
 */
 PHP_METHOD(imagickkernel, __construct)
 {
+	// This suppresses an 'unused parameter' warning.
+	(void)return_value;
+
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}

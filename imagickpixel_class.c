@@ -277,6 +277,9 @@ PHP_METHOD(imagickpixel, __construct)
 	char *color_name = NULL;
 	IM_LEN_TYPE color_name_len = 0;
 
+	// This suppresses an 'unused parameter' warning.
+	(void)return_value;
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len) == FAILURE) {
 		return;
 	}

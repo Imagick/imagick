@@ -6766,7 +6766,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
 	};
 	php_imagick_object *intern;
 	ChannelStatistics *statistics;
-	int i;
+	unsigned int i;
 #if MagickLibVersion < 0x700
 	int elements = 10;
 #endif // #if MagickLibVersion >= 0x700
@@ -8450,7 +8450,7 @@ PHP_METHOD(imagick, getimagemimetype)
 
 
 static
-void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
+void s_add_assoc_str (zval *array, const char *key, const char *value)
 {
     //add_assoc_string (array, key, (char *)(value ? value : ""), copy);
     IM_add_assoc_string (array, key, (char *)(value ? value : ""));
@@ -8460,7 +8460,7 @@ void s_add_assoc_str (zval *array, const char *key, const char *value, int copy)
 static
 void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 {
-	int i, found;
+	unsigned int i, found;
 	char *last_ptr = NULL, *buffer;
 	size_t num_keys;
 
@@ -8572,22 +8572,22 @@ PHP_METHOD(imagick, identifyimage)
 
     // Name of the image
 	filename = MagickGetImageFilename (intern->magick_wand);
-	s_add_assoc_str (return_value, "imageName", filename, 1);
+	s_add_assoc_str (return_value, "imageName", filename);
 	IMAGICK_FREE_MAGICK_MEMORY(filename);
 
 	format = MagickGetImageFormat (intern->magick_wand);
 	if (format) {
 		char *mime_type = MagickToMime(format);
 		if (mime_type) {
-			s_add_assoc_str (return_value, "mimetype", mime_type, 1);
+			s_add_assoc_str (return_value, "mimetype", mime_type);
 			IMAGICK_FREE_MAGICK_MEMORY(mime_type);
 		} else
-			s_add_assoc_str (return_value, "mimetype", "unknown", 1);
+			s_add_assoc_str (return_value, "mimetype", "unknown");
 
 		IMAGICK_FREE_MAGICK_MEMORY(format);
 	}
 	else
-		s_add_assoc_str (return_value, "mimetype", "unknown", 1);
+		s_add_assoc_str (return_value, "mimetype", "unknown");
 
 	s_add_named_strings (return_value, identify TSRMLS_CC);
 
@@ -8625,7 +8625,7 @@ PHP_METHOD(imagick, identifyimage)
 	}
 
 	signature = MagickGetImageSignature(intern->magick_wand);
-	s_add_assoc_str (return_value, "signature", signature, 1);
+	s_add_assoc_str (return_value, "signature", signature);
 	IMAGICK_FREE_MAGICK_MEMORY(signature);
 
 	if (append_raw_string == 1)
@@ -11319,7 +11319,7 @@ PHP_METHOD(imagick, getconfigureoptions)
 	IM_LEN_TYPE pattern_len;
 	char **result;
 	char *option_value;
-	int i;
+	unsigned int i;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
 		return;
@@ -12225,7 +12225,7 @@ static KernelInfo *php_imagick_getKernelInfo(const double *color_matrix, const s
 	kernel_info->height = order;
 #if MagickLibVersion >= 0x700
 	{
-		int i;
+		unsigned int i;
 		kernel_info->values = (MagickRealType *)AcquireAlignedMemory(order, order*sizeof(MagickRealType));
 		for (i=0 ; i<order*order ; i++) {
 			kernel_info->values[i] = color_matrix[i];
@@ -12566,6 +12566,9 @@ PHP_METHOD(imagick, listregistry)
 {
 	char *registry = NULL;
 	char *value = NULL;
+
+    // This suppresses an 'unused parameter' warning.
+	(void)execute_data;
 
 	array_init(return_value);
 

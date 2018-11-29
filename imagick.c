@@ -171,6 +171,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, LAYER)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_roundcornersimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, xRounding)
 		ZEND_ARG_INFO(0, yRounding)
@@ -178,15 +179,18 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, displace)
 		ZEND_ARG_INFO(0, sizeCorrection)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setiteratorindex_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_transformimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, crop)
 		ZEND_ARG_INFO(0, geometry)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 #if MagickLibVersion > 0x631
@@ -235,7 +239,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion > 0x634
+#if MagickLibVersion > 0x634 && MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_paintfloodfillimage_args, 0, 0, 6)
 		ZEND_ARG_INFO(0, CHANNEL)
 		ZEND_ARG_INFO(0, fill)
@@ -247,14 +251,18 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 #endif
 
 #if MagickLibVersion > 0x630
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageopacity_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, opacity)
 	ZEND_END_ARG_INFO()
+#endif
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_orderedposterizeimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, threshold_map)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 #if MagickLibVersion > 0x700
@@ -302,17 +310,21 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, page)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageclipmask_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_animateimages_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, server_name)
 	ZEND_END_ARG_INFO()
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_recolorimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, matrix)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 #endif
 
@@ -580,9 +592,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, filename)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageindex_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, index)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_commentimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, comment)
@@ -645,10 +659,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_filter_args, 0, 0, 1)
 		ZEND_ARG_OBJ_INFO(0, ImagickKernel, ImagickKernel, 0)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_identifyimage_args, 0, 0, 0)
@@ -697,10 +713,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_radialblurimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, angle)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_raiseimage_args, 0, 0, 5)
@@ -754,14 +772,18 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageattribute_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, key)
 		ZEND_ARG_INFO(0, value)
 	ZEND_END_ARG_INFO()
+#endif
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimageattribute_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, key)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebackgroundcolor_args, 0, 0, 1)
@@ -798,9 +820,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, iterations)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagemattecolor_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, color)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagepage_args, 0, 0, 4)
 		ZEND_ARG_INFO(0, width)
@@ -952,6 +976,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colorfloodfillimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, fill_color)
 		ZEND_ARG_INFO(0, fuzz)
@@ -959,6 +984,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, y)
 		ZEND_ARG_INFO(0, x)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_colorizeimage_args, 0, 0, 2)
@@ -1053,9 +1079,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelextrema_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_getimagechannelmean_args, 0, 0, 1)
@@ -1106,11 +1134,14 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_mapimage_args, 0, 0, 2)
 		ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
 		ZEND_ARG_INFO(0, dither)
 	ZEND_END_ARG_INFO()
+#endif
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_mattefloodfillimage_args, 0, 0, 5)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, fuzz)
@@ -1119,11 +1150,14 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, y)
 	ZEND_END_ARG_INFO()
 #endif
+#endif
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_medianfilterimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_negateimage_args, 0, 0, 1)
@@ -1132,18 +1166,22 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_paintopaqueimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, target_color)
 		ZEND_ARG_INFO(0, fill_color)
 		ZEND_ARG_INFO(0, fuzz)
 		ZEND_ARG_INFO(0, CHANNEL)
 	ZEND_END_ARG_INFO()
+#endif
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_painttransparentimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, target_color)
 		ZEND_ARG_INFO(0, alpha)
 		ZEND_ARG_INFO(0, fuzz)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_previewimages_args, 0, 0, 1)
@@ -1172,9 +1210,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_reducenoiseimage_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, radius)
 	ZEND_END_ARG_INFO()
+#endif
 #endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_removeimageprofile_args, 0, 0, 1)
@@ -1189,13 +1229,17 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
 
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebias_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, bias)
 	ZEND_END_ARG_INFO()
-	
+#endif
+
+#if MagickLibVersion < 0x700
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimagebiasquantum_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, bias)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageblueprimary_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, x)
@@ -1973,9 +2017,6 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 	ZEND_END_ARG_INFO()
 
 #ifdef IMAGICK_WITH_KERNEL
-	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_zero_args, 0, 0, 0)
-	ZEND_END_ARG_INFO()
-
 	ZEND_BEGIN_ARG_INFO_EX(imagickkernel_frommatrix_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, array)
 		ZEND_ARG_INFO(0, array)
@@ -2002,7 +2043,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 
 static zend_function_entry php_imagick_functions[] =
 {
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL, 0, 0 }
 };
 
 static zend_function_entry php_imagickdraw_class_methods[] =
@@ -2162,7 +2203,7 @@ static zend_function_entry php_imagickdraw_class_methods[] =
 	PHP_ME(imagickdraw, settextdirection, imagickdraw_settextdirection_args, ZEND_ACC_PUBLIC)
 #endif //#if MagickLibVersion >= 0x692
 	
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL, 0, 0 }
 };
 
 ZEND_BEGIN_ARG_INFO_EX(imagickpixeliterator_getpixeliterator_args, 0, 0, 6)
@@ -2205,7 +2246,7 @@ zend_function_entry php_imagickpixeliterator_class_methods[] =
 	PHP_MALIAS(imagickpixeliterator, current, getcurrentiteratorrow, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
 
 	PHP_ME(imagickpixeliterator, valid, imagickpixeliterator_zero_args, ZEND_ACC_PUBLIC)
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL, 0, 0 }
 };
 
 
@@ -2238,7 +2279,7 @@ static zend_function_entry php_imagickpixel_class_methods[] =
 	PHP_ME(imagickpixel, setcolorfrompixel, imagickpixel_setcolorfrompixel_args, ZEND_ACC_PUBLIC)
 #endif //#if MagickLibVersion >= 0x693
 
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL, 0, 0 }
 };
 
 static zend_function_entry php_imagick_class_methods[] =
@@ -2803,7 +2844,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, identifyimagetype, imagick_zero_args, ZEND_ACC_PUBLIC)
 #endif // #if MagickLibVersion >= 0x700
 
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL, 0, 0 }
 };
 
 #ifdef IMAGICK_WITH_KERNEL
@@ -2815,9 +2856,9 @@ static zend_function_entry php_imagickkernel_class_methods[] =
 	PHP_ME(imagickkernel, addkernel, imagickkernel_addkernel_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, getmatrix, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagickkernel, separate, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickkernel, scale, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagickkernel, addunitykernel, imagick_zero_args, ZEND_ACC_PUBLIC)
-	{ NULL, NULL, NULL }
+	PHP_ME(imagickkernel, scale, imagickkernel_scale_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagickkernel, addunitykernel, imagickkernel_addunitykernel_args, ZEND_ACC_PUBLIC)
+	{ NULL, NULL, NULL, 0, 0 }
 };
 #endif
 
@@ -3551,6 +3592,10 @@ PHP_MINIT_FUNCTION(imagick)
 	/* Initialize globals */
 	ZEND_INIT_MODULE_GLOBALS(imagick, php_imagick_init_globals, NULL);
 
+
+	// This suppresses an 'unused parameter' warning.
+	(void)type;
+
 	/*
 		Allocate some memory
 	*/
@@ -3781,6 +3826,10 @@ PHP_MINFO_FUNCTION(imagick)
 
 PHP_MSHUTDOWN_FUNCTION(imagick)
 {
+// This suppresses an 'unused parameter' warning.
+	(void)type;
+
+
 	MagickWandTerminus();
 
 #if defined(ZTS) && defined(PHP_WIN32)
@@ -3792,13 +3841,20 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 
 PHP_RINIT_FUNCTION(imagick)
 {
+	// This suppresses an 'unused parameter' warning.
+	(void)type;
+	(void)module_number;
+
 	IMAGICK_G(progress_callback) = NULL;
 	return SUCCESS;
 }
 
 PHP_RSHUTDOWN_FUNCTION(imagick)
 {
-	php_imagick_callback* progress_callback = IMAGICK_G(progress_callback); 
+	php_imagick_callback* progress_callback = IMAGICK_G(progress_callback);
+	// This suppresses an 'unused parameter' warning.
+	(void)type;
+	(void)module_number;
 
 	if (progress_callback) {
 		php_imagick_cleanup_progress_callback(progress_callback TSRMLS_CC);

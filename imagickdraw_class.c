@@ -154,6 +154,9 @@ PHP_METHOD(imagickdraw, settextinterlinespacing)
 PHP_METHOD(imagickdraw, __construct)
 {
 	/* Empty constructor for possible future uses */
+	// This suppresses an 'unused parameter' warning.
+	(void)execute_data;
+	(void)return_value;
 }
 /* }}} */
 

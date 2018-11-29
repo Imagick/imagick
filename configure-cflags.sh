@@ -37,6 +37,9 @@ strictImageMagickVersions+=("dev")
 strictImageMagickVersions+=("6.8.7-0")
 strictImageMagickVersions+=("6.7.5-3")
 strictImageMagickVersions+=("6.6.0-9")
+strictImageMagickVersions+=("7.0.8-4")
+strictImageMagickVersions+=("7.0.1-0")
+
 
 echo "TRAVIS_PHP_VERSION is ${TRAVIS_PHP_VERSION}"
 echo "IMAGEMAGICK_VERSION is ${IMAGEMAGICK_VERSION}"
@@ -51,7 +54,7 @@ echo "strictPHP is ${strictPHP}"
 # -Wmaybe-uninitialized
 
 if [[ $strictPHP = '1' ]] && [[ $strictImageMagick = '1' ]]; then 
-	CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror -Wall -Wimplicit-function-declaration"; 
+	CFLAGS="-Wno-deprecated-declarations -Wdeclaration-after-statement -Werror -Wall -Wextra -Wimplicit-function-declaration";
 else 
 	CFLAGS="-Wno-deprecated-declarations";
 fi
