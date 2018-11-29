@@ -59,13 +59,22 @@ imagemagick_fetch_and_build () {
             
             cd "ImageMagick-${sha}"
         else
+            set +e
+            #this can error
+            major_version=${version:0:1}
+            set -e
 
-            if [ $version > 7 ]; then
+            echo "Major version is ${major_version}"
+
+            if [ $major_version == "7" ]; then
                 echo "Fetching from IM7 repo"
                 wget "https://github.com/ImageMagick/ImageMagick/archive/${version}.tar.gz" -O ImageMagick-${version}.tar.gz
             else
-            echo "Fetching from IM6 repo"
-                wget "https://github.com/ImageMagick/ImageMagick6/archive/${version}.tar.gz" -O ImageMagick-${version}.tar.gz
+                echo "Fetching from IM6 repo"
+                wget "https://launchpad.net/imagemagick/main/${version}/+download/ImageMagick-${version}.tar.gz"
+                # Not all of the old releases are available through github, as some releases pre-date
+                # ImageMagick being available on Github.
+                # wget "https://github.com/ImageMagick/ImageMagick6/archive/${version}.tar.gz" -O ImageMagick-${version}.tar.gz
             fi
 
             tar xvfz ImageMagick-${version}.tar.gz
