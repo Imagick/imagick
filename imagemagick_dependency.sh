@@ -43,7 +43,6 @@ imagemagick_fetch_and_build () {
         cd imagemagick-dev
         ;;
     *)
-        echo "version is ${version}"
         set +e
         #this can error
         start_str=${version:0:6}
@@ -60,10 +59,10 @@ imagemagick_fetch_and_build () {
 
             if [ $version > 7 ]; then
                 echo "Fetching from IM7 repo"
-                wget "https://github.com/ImageMagick/ImageMagick/archive/${version}.tar.gz" -o ImageMagick-${version}.tar.gz
+                wget "https://github.com/ImageMagick/ImageMagick/archive/${version}.tar.gz" -O ImageMagick-${version}.tar.gz
             else
             echo "Fetching from IM6 repo"
-                wget "https://github.com/ImageMagick/ImageMagick6/archive/${version}.tar.gz" -o ImageMagick-${version}.tar.gz
+                wget "https://github.com/ImageMagick/ImageMagick6/archive/${version}.tar.gz" -O ImageMagick-${version}.tar.gz
             fi
 
             tar xvfz ImageMagick-${version}.tar.gz
