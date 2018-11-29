@@ -6,8 +6,9 @@ set -e
 imagemagick_fetch_and_build () {
     local version=$1
 
-    echo "version is ${version}"
     im_dir=${HOME}/im/imagemagick-${version}
+
+    echo "version is ${version}, im_dir=${im_dir}"
 
     case $version in
         git7)
@@ -20,7 +21,9 @@ imagemagick_fetch_and_build () {
     # Both individual commits, and tagged versions are cacheable
         if [ -d "${im_dir}" ]; then
             echo "Using cached directory ${im_dir}"
-            return  
+            return
+        else
+            echo "No cache available. Need to download and compile IM."
         fi
         ;;
     esac
