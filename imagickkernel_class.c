@@ -377,7 +377,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		}
 		// origin_y is unsigned, so checking for > num_columns, also
 		// checks for < 0
-		if (origin_y<0 || origin_y>=num_columns) {
+		if (origin_y>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
 				5 TSRMLS_CC,
