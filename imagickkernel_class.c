@@ -218,8 +218,6 @@ PHP_METHOD(imagickkernel, __construct)
 #define MATRIX_ERROR_UNEVEN "Values must be matrix, with the same number of columns in each row."
 #define MATRIX_ERROR_BAD_VALUE "Only numbers or false are valid values in a kernel matrix."
 #define MATRIX_ORIGIN_REQUIRED "For kernels with even numbered rows or columns, the origin position must be specified."
-#define MATRIX_ORIGIN_OUT_OF_BOUNDS_X "Matrix origin_x is out of bounds"
-#define MATRIX_ORIGIN_OUT_OF_BOUNDS_Y "Matrix origin_y is out of bounds"
 
 /* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array matrix, [array origin])
 	Create a kernel from an 2d matrix of values. Each value should either be a float 
@@ -234,7 +232,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	zval *origin_array;
 	HashTable *inner_array;
 	KernelInfo *kernel_info;
-	long num_rows, num_columns = 0;
+	unsigned long num_rows, num_columns = 0;
 	int previous_num_columns;
 	int row, column;
 
@@ -408,7 +406,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	zval *origin_array;
 	HashTable *inner_array;
 	KernelInfo *kernel_info;
-	long num_rows, num_columns = 0;
+	unsigned long num_rows, num_columns = 0;
 	int previous_num_columns;
 	int row, column;
 
