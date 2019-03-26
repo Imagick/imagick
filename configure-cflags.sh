@@ -27,7 +27,7 @@ function contains() {
 
 
 strictPHPVersions=()
-strictPHPVersions+=("5.6")
+# strictPHPVersions+=("5.6")
 strictPHPVersions+=("7")
 strictPHPVersions+=("7.0")
 strictPHPVersions+=("7.1")
