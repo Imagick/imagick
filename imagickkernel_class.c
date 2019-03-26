@@ -218,6 +218,8 @@ PHP_METHOD(imagickkernel, __construct)
 #define MATRIX_ERROR_UNEVEN "Values must be matrix, with the same number of columns in each row."
 #define MATRIX_ERROR_BAD_VALUE "Only numbers or false are valid values in a kernel matrix."
 #define MATRIX_ORIGIN_REQUIRED "For kernels with even numbered rows or columns, the origin position must be specified."
+#define MATRIX_ORIGIN_OUT_OF_BOUNDS_X "Matrix origin_x is out of bounds"
+#define MATRIX_ORIGIN_OUT_OF_BOUNDS_Y "Matrix origin_y is out of bounds"
 
 /* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array matrix, [array origin])
 	Create a kernel from an 2d matrix of values. Each value should either be a float 
@@ -340,6 +342,8 @@ PHP_METHOD(imagickkernel, frommatrix)
 	else {
 		HashTable *origin_array_ht;
 		origin_array_ht = Z_ARRVAL_P(origin_array);
+
+		// parse the origin_x
 		tmp = zend_hash_index_find(origin_array_ht, 0);
 		if (tmp != NULL) {
 			ZVAL_DEREF(tmp);
@@ -349,6 +353,17 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
 			goto cleanup;
 		}
+		if (origin_x<0 || origin_x>=num_columns) {
+			zend_throw_exception_ex(
+				php_imagickkernel_exception_class_entry,
+				5 TSRMLS_CC,
+				"origin_x for matrix is outside bounds of columns: " ZEND_LONG_FMT,
+				origin_x
+			);
+			goto cleanup;
+		}
+
+		// parse the origin_y
 		tmp = zend_hash_index_find(origin_array_ht, 1);
 		if (tmp != NULL) {
 			ZVAL_DEREF(tmp);
@@ -356,6 +371,15 @@ PHP_METHOD(imagickkernel, frommatrix)
 		}
 		else {
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+		if (origin_y<0 || origin_y>=num_columns) {
+			zend_throw_exception_ex(
+				php_imagickkernel_exception_class_entry,
+				5 TSRMLS_CC,
+				"origin_y for matrix is outside bounds of rows: " ZEND_LONG_FMT,
+				origin_x
+			);
 			goto cleanup;
 		}
 	}
@@ -484,6 +508,8 @@ PHP_METHOD(imagickkernel, frommatrix)
 	}
 	else {
 		origin_array_ht = Z_ARRVAL_P(origin_array);
+
+		// parse and check the origin_x
 		if (zend_hash_index_find(origin_array_ht, 0, (void**)&tmp) == SUCCESS) {
 			origin_x = Z_LVAL_PP(tmp);
 		}
@@ -491,12 +517,31 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
 			goto cleanup;
 		}
+		if (origin_x<0 || origin_x>=num_columns) {
+			zend_throw_exception_ex(
+				php_imagickkernel_exception_class_entry,
+				5 TSRMLS_CC,
+				"origin_x for matrix is outside bounds of columns: %d",
+				origin_x
+			);
+			goto cleanup;
+		}
 
+        // parse and check the origin_y
 		if (zend_hash_index_find(origin_array_ht, 1, (void**)&tmp) == SUCCESS) {
 			origin_y = Z_LVAL_PP(tmp);
 		}
 		else {
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			goto cleanup;
+		}
+		if (origin_y<0 || origin_y>=num_columns) {
+			zend_throw_exception_ex(
+				php_imagickkernel_exception_class_entry,
+				5 TSRMLS_CC,
+				"origin_y for matrix is outside bounds of rows: %d",
+				origin_y
+			);
 			goto cleanup;
 		}
 	}
