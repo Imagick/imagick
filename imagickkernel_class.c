@@ -233,8 +233,8 @@ PHP_METHOD(imagickkernel, frommatrix)
 	HashTable *inner_array;
 	KernelInfo *kernel_info;
 	unsigned long num_rows, num_columns = 0;
-	int previous_num_columns;
-	int row, column;
+	unsigned int previous_num_columns = (unsigned int)-1;
+	unsigned int row, column;
 
 	zval *pzval_outer;
 	zval *pzval_inner;
@@ -246,7 +246,6 @@ PHP_METHOD(imagickkernel, frommatrix)
 	KernelValueType *values = NULL;
 	double notanumber = sqrt((double)-1.0);  /* Special Value : Not A Number */
 
-	previous_num_columns = -1;
 	count = 0;
 	row = 0;
 	origin_array = NULL;
@@ -287,7 +286,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 				values = (KernelValueType *)AcquireAlignedMemory(num_columns, num_rows*sizeof(KernelValueType));
 			}
 
-			if (previous_num_columns != -1) {
+			if (previous_num_columns != ((unsigned int)-1)) {
 				if (previous_num_columns != num_columns) {
 					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 					goto cleanup;
