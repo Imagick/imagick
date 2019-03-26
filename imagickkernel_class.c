@@ -353,7 +353,9 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
 			goto cleanup;
 		}
-		if (origin_x<0 || origin_x>=num_columns) {
+		// origin_x is unsigned, so checking for > num_columns, also
+		// checks for < 0
+		if (origin_x>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
 				5 TSRMLS_CC,
@@ -373,6 +375,8 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
 			goto cleanup;
 		}
+		// origin_y is unsigned, so checking for > num_columns, also
+		// checks for < 0
 		if (origin_y<0 || origin_y>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
@@ -517,7 +521,10 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
 			goto cleanup;
 		}
-		if (origin_x<0 || origin_x>=num_columns) {
+
+		// origin_x is unsigned, so checking for > num_columns, also
+		// checks for < 0
+		if (origin_x>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
 				5 TSRMLS_CC,
@@ -535,7 +542,10 @@ PHP_METHOD(imagickkernel, frommatrix)
 			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
 			goto cleanup;
 		}
-		if (origin_y<0 || origin_y>=num_columns) {
+
+		// origin_y is unsigned, so checking for > num_columns, also
+		// checks for < 0
+		if (origin_y>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
 				5 TSRMLS_CC,
