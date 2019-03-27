@@ -63,6 +63,52 @@ foreach ($invalidOrigins as $invalidOrigin) {
     }
 }
 
+$flatKernelArray = array(
+	array(1, 0, -2, 0, 1),
+);
+
+try {
+    $kernel = ImagickKernel::fromMatrix($flatKernelArray, [1, 4]);
+    echo "Exception wasn't thrown for case: \n";
+    var_dump($invalidOrigin);
+}
+catch (\ImagickKernelException $e) {
+    $message = $e->getMessage();
+    if (strpos($message, "origin_y for matrix is outside bounds of rows") === 0) {
+        // this is fine.
+    }
+    else {
+        echo "Unexpected message: " . $message . "\n";
+    }
+}
+
+
+$tallKernelArray = array(
+	array(1),
+	array(0),
+	array(-2),
+	array(0),
+	array(1),
+);
+
+
+try {
+    $kernel = ImagickKernel::fromMatrix($tallKernelArray, [4, 1]);
+    echo "Exception wasn't thrown for case: \n";
+    var_dump($invalidOrigin);
+}
+catch (\ImagickKernelException $e) {
+    $message = $e->getMessage();
+    if (strpos($message, "origin_x for matrix is outside bounds of columns") === 0) {
+        // this is fine.
+    }
+    else {
+        echo "Unexpected message: " . $message . "\n";
+    }
+}
+
+
+
 echo "Complete".PHP_EOL;
 ?>
 --EXPECTF--
