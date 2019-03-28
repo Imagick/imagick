@@ -25,8 +25,7 @@ function setImageBias($bias) {
     $imagick->convolveImage($xKernel, \Imagick::CHANNEL_ALL);
 
     $imagick->setImageFormat('png');
-    
-    header('Content-type: image/png');
+
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
 }
@@ -35,4 +34,5 @@ setImageBias($bias) ;
 echo "Ok";
 ?>
 --EXPECTF--
+Deprecated: Function Imagick::setimagebias() is deprecated in %s
 Ok

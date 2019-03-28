@@ -28,4 +28,5 @@ orderedPosterizeImage($orderedPosterizeType) ;
 echo "Ok";
 ?>
 --EXPECTF--
+Deprecated: Function Imagick::orderedposterizeimage() is deprecated in %S
 Ok
