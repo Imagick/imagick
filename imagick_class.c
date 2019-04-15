@@ -12523,7 +12523,7 @@ PHP_METHOD(imagick, setregistry)
 /* }}} */
 
 
-/* {{{ proto string Imagick::getRegistry(string key)
+/* {{{ proto string|false Imagick::getRegistry(string key)
 	Get the StringRegistry entry for the named key or false if not set.
 */
 PHP_METHOD(imagick, getregistry)
