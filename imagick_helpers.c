@@ -1179,6 +1179,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x681
 	IMAGICK_REGISTER_CONST_LONG("FILTER_LANCZOSRADIUS", LanczosRadiusFilter);
 #endif
+#if MagickLibVersion >= 0x707
+	IMAGICK_REGISTER_CONST_LONG("FILTER_CUBIC_SPLINE", CubicSplineFilter);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_UNDEFINED", UndefinedType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_BILEVEL", BilevelType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_GRAYSCALE", GrayscaleType);
@@ -1255,6 +1258,12 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_JBIG1", JBIG1Compression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_JBIG2", JBIG2Compression);
 #endif
+
+#if MagickLibVersion >= 0x709
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_ZSTD", ZstdCompression);
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_WEBP", WebPCompression);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("PAINT_POINT", PointMethod);
 	IMAGICK_REGISTER_CONST_LONG("PAINT_REPLACE", ReplaceMethod);
 	IMAGICK_REGISTER_CONST_LONG("PAINT_FLOODFILL", FloodfillMethod);
@@ -1337,6 +1346,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_META", MetaChannel);              /* ???? */
 #endif
 
+#if MagickLibVersion >= 0x708
+	IMAGICK_REGISTER_CONST_LONG("CHANNEL_COMPOSITE_MASK", CompositeMaskChannel);              /* SVG mask */
+#endif
+
 #if MagickLibVersion >= 0x670
 	IMAGICK_REGISTER_CONST_LONG("CHANNEL_COMPOSITES", CompositeChannels);
 #endif
@@ -1365,6 +1378,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 #if MagickLibVersion >= 0x690
 	IMAGICK_REGISTER_CONST_LONG("METRIC_PERCEPTUALHASH_ERROR", PerceptualHashErrorMetric);
+#endif
+
+#if MagickLibVersion >= 0x707
+	IMAGICK_REGISTER_CONST_LONG("METRIC_STRUCTURAL_SIMILARITY_ERROR", StructuralSimilarityErrorMetric);
+	IMAGICK_REGISTER_CONST_LONG("METRIC_STRUCTURAL_DISSIMILARITY_ERROR", StructuralDissimilarityErrorMetric);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_CHAR", CharPixel);

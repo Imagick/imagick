@@ -1,4 +1,13 @@
 
+3.4.6RC1
+- Added:
+  * METRIC_STRUCTURAL_SIMILARITY_ERROR
+  * METRIC_STRUCTURAL_DISSIMILARITY_ERROR
+  * COMPRESSION_ZSTD - https://github.com/facebook/zstd
+  * COMPRESSION_WEBP
+  * CHANNEL_COMPOSITE_MASK
+  * FILTER_CUBIC_SPLINE - "Define the lobes with the -define filter:lobes={2,3,4} (reference https://imagemagick.org/discourse-server/viewtopic.php?f=2&t=32506)."
+
 
 3.4.5RC1
 - Deprecated:

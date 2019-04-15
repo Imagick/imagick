@@ -4,7 +4,8 @@
 
 $directory = false; 
 // Either pass in the directory to scan or set it here.
-$directory = "/home/github/BastionRPM/zips/ImageMagick/ImageMagick-7.0.1-9";
+// $directory = "/home/github/BastionRPM/zips/ImageMagick/ImageMagick-7.0.1-9";
+// 'php ./scanHeaders.php ../imagemagick_src/ImageMagick-7.0.8-40'
 
 if ($directory) {
 	$pathToImageMagick = $directory;
@@ -20,6 +21,8 @@ else {
 
 $pathToImageMagick .= '/';
 
+
+
 if (file_exists($pathToImageMagick) == false || 
 	is_dir($pathToImageMagick) == false) {
 	echo "Path $pathToImageMagick is not accessible.\n";
@@ -28,7 +31,7 @@ if (file_exists($pathToImageMagick) == false ||
 
 $includeDir = null;
 
-
+$directory = realpath($pathToImageMagick);
 
 
 if (file_exists($directory.'/'.'magick') == true) {
@@ -182,7 +185,11 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 			'StyleType',
 		],
 	];
-
+}
+else {
+    echo "oops - couldn't figure out enums to check.\n";
+    echo "Check what directories exist in $directory \n";
+    exit(-1);
 }
 
 
