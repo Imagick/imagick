@@ -55,7 +55,6 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
   LIBS="$LIBS $IM_IMAGEMAGICK_LIBS"
 
   PHP_CHECK_FUNC(MagickGetVersion)
-  PHP_CHECK_FUNC(MagickSetImageInterpolateMethod)
 
   LIBS=$old_LIBS
 
