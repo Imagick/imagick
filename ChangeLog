@@ -1,15 +1,22 @@
 
-3.4.6RC1
+3.4.4RC1
+- The 3.4.4 release is intended to be the last release (other than small bug fixes) that will support either PHP 5.x, or ImageMagick 6.x. The next planned release will be PHP > 7.0 and ImageMagick > 7.0 at least, if not higher.
 - Added:
+  * function Imagick::optimizeImageTransparency()
   * METRIC_STRUCTURAL_SIMILARITY_ERROR
   * METRIC_STRUCTURAL_DISSIMILARITY_ERROR
   * COMPRESSION_ZSTD - https://github.com/facebook/zstd
   * COMPRESSION_WEBP
   * CHANNEL_COMPOSITE_MASK
   * FILTER_CUBIC_SPLINE - "Define the lobes with the -define filter:lobes={2,3,4} (reference https://imagemagick.org/discourse-server/viewtopic.php?f=2&t=32506)."
-
-
-3.4.5RC1
+  * Imagick now explicitly conflicts with the Gmagick extension.
+- Fixes:
+  * Bug 77128 - Imagick::setImageInterpolateMethod() not available on Windows
+  * Prevent memory leak when ImagickPixel::__construct called after object instantiation.
+  * Prevent segfault when ImagickPixel internal constructor not called.
+  * Imagick::setResourceLimit support for values larger than 2GB (2^31) on 32bit platforms.
+  * Corrected memory overwrite in Imagick::colorDecisionListImage()
+  * Bug 77791 - ImagickKernel::fromMatrix() out of bounds write.
 - Deprecated:
   * The following functions have been deprecated:
     ImagickDraw, matte
@@ -46,14 +53,6 @@
     Imagick::setimagebiasquantum
     Imagick::setimageopacity
     Imagick::transformimage
-
-3.4.4RC1
-- Added:
-  * function Imagick::optimizeImageTransparency()
-- Fixes:
-  * Prevent memory leak when ImagickPixel::__construct called after object instantiation.
-  * Prevent segfault when ImagickPixel internal constructor not called.
-  * Imagick::setResourceLimit support for values larger than 2GB (2^31) on 32bit platforms.
 
 3.4.3
   No changes from 3.4.3RC4.

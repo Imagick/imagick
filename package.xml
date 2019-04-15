@@ -7,27 +7,17 @@
 Imagick is a native php extension to create and modify images using the ImageMagick API.
 This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 </description>
-	<lead>
-		<name>Mikko Koppanen</name>
-		<user>mkoppanen</user>
-		<email>mkoppanen@php.net</email>
-		<active>no</active>
-	</lead>
+
     <lead>
         <name>Dan Ackroyd</name>
         <user>danack</user>
         <email>danack@php.net</email>
         <active>yes</active>
     </lead>
-	<lead>
-		<name>Scott MacVicar</name>
-		<user>scottmac</user>
-		<email>scottmac@php.net</email> 
-		<active>no</active>
-	</lead>
-	<date>2017-02-01</date>
+
+	<date>2019-04-15</date>
 	<version>
-		<release>3.4.3</release>
+		<release>3.4.4RC1</release>
 		<api>3.4.3</api>
 	</version>
 	<stability>
@@ -36,7 +26,59 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-No changes from 3.4.3RC4.
+	- The 3.4.4 release is intended to be the last release (other than small bug fixes) that will support either PHP 5.x, or ImageMagick 6.x. The next planned release will be PHP > 7.0 and ImageMagick > 7.0 at least, if not higher.
+	- Added:
+	* function Imagick::optimizeImageTransparency()
+	* METRIC_STRUCTURAL_SIMILARITY_ERROR
+	* METRIC_STRUCTURAL_DISSIMILARITY_ERROR
+	* COMPRESSION_ZSTD - https://github.com/facebook/zstd
+	* COMPRESSION_WEBP
+	* CHANNEL_COMPOSITE_MASK
+	* FILTER_CUBIC_SPLINE - "Define the lobes with the -define filter:lobes={2,3,4} (reference https://imagemagick.org/discourse-server/viewtopic.php?f=2&amp;t=32506)."
+	* Imagick now explicitly conflicts with the Gmagick extension.
+	- Fixes:
+	* Bug 77128 - Imagick::setImageInterpolateMethod() not available on Windows
+	* Prevent memory leak when ImagickPixel::__construct called after object instantiation.
+	* Prevent segfault when ImagickPixel internal constructor not called.
+	* Imagick::setResourceLimit support for values larger than 2GB (2^31) on 32bit platforms.
+	* Corrected memory overwrite in Imagick::colorDecisionListImage()
+	* Bug 77791 - ImagickKernel::fromMatrix() out of bounds write.
+	- Deprecated:
+	* The following functions have been deprecated:
+	ImagickDraw, matte
+	Imagick::averageimages
+	Imagick::colorfloodfillimage
+	Imagick::filter
+	Imagick::flattenimages
+	Imagick::getimageattribute
+	Imagick::getimagechannelextrema
+	Imagick::getimageclipmask
+	Imagick::getimageextrema
+	Imagick::getimageindex
+	Imagick::getimagematte
+	Imagick::getimagemattecolor
+	Imagick::getimagesize
+	Imagick::mapimage
+	Imagick::mattefloodfillimage
+	Imagick::medianfilterimage
+	Imagick::mosaicimages
+	Imagick::orderedposterizeimage
+	Imagick::paintfloodfillimage
+	Imagick::paintopaqueimage
+	Imagick::painttransparentimage
+	Imagick::radialblurimage
+	Imagick::recolorimage
+	Imagick::reducenoiseimage
+	Imagick::roundcornersimage
+	Imagick::roundcorners
+	Imagick::setimageattribute
+	Imagick::setimagebias
+	Imagick::setimageclipmask
+	Imagick::setimageindex
+	Imagick::setimagemattecolor
+	Imagick::setimagebiasquantum
+	Imagick::setimageopacity
+	Imagick::transformimage
 </notes>
 	<contents>
 		<dir name="/">
@@ -337,6 +379,7 @@ No changes from 3.4.3RC4.
 				<file name="277_Imagick_colorDecisionListImage.phpt" role="test" />
 				<file name="278_Imagick_optimaze_gif.phpt" role="test" />
 				<file name="279_ImagickDraw_setTextInterlineSpacing.phpt" role="test" />
+				<file name="280_imagickkernel_exception_invalid_origin.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
@@ -344,6 +387,7 @@ No changes from 3.4.3RC4.
 				<file name="bug_66098.phpt" role="test" />
 				<file name="bug_71742.phpt" role="test" />
 				<file name="bug_72226.phpt" role="test" />
+				<file name="bug_73840.phpt" role="test" />
 				<file name="github_174.phpt" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
