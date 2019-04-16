@@ -30,7 +30,7 @@ $invalidOrigins = [
     [3, 0],
     [0, 3],
     [3, 3],
-    [1, 0xffff0000],
+    [1, PHP_INT_MAX - 10],
 ];
 
 
