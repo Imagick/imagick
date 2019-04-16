@@ -68,5 +68,13 @@ foreach ($imageHeights as $interlineSpacing => $imageHeight) {
 
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+$interlineSpacings = [0, 16, 24, 36];
+foreach ($interlineSpacings as $interlineSpacing) {
+    @unlink(__DIR__ . "/interline_spacing_test_$interlineSpacing.png");
+}
+
+?>
 --EXPECTF--
 Ok
