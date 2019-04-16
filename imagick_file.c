@@ -162,8 +162,10 @@ int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct 
 
 #ifndef ZEND_ENGINE_3
 #if PHP_VERSION_ID >= 50600
+#ifdef ZTS
 	// This suppresses an 'unused parameter' warning.
 	(void)tsrm_ls;
+#endif
 #endif
 #endif
 
