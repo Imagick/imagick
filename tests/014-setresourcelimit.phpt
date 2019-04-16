@@ -56,7 +56,7 @@ foreach ($tests as $resourceType => $value) {
 	Imagick::setResourceLimit($resourceType, $value);
 	$actualValue = Imagick::getResourceLimit($resourceType);
 
-	if (intval($actualValue) !== $value) {
+	if ($actualValue != $value) {
 		echo "Error testing $resourceType, value returned $actualValue is not $value \n";
 	}
 }
