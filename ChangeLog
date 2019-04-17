@@ -1,4 +1,9 @@
 
+3.4.4RC2
+- Fixes:
+  * Correct stability for RC release
+  * Fix undefined variable for ZTS build
+
 3.4.4RC1
 - The 3.4.4 release is intended to be the last release (other than small bug fixes) that will support either PHP 5.x, or ImageMagick 6.x. The next planned release will be PHP > 7.0 and ImageMagick > 7.0 at least, if not higher.
 - Added:
