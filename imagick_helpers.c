@@ -1784,7 +1784,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_ARCSIN", ArcsinFunction);
 	IMAGICK_REGISTER_CONST_LONG("FUNCTION_ARCTAN", ArctanFunction);
 #endif
-#if MagickLibVersion >= 0x680
+#if MagickLibVersion >= 0x678
 #if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_FLATTEN", FlattenAlphaChannel);
 #endif
