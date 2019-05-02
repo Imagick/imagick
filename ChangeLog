@@ -1,4 +1,8 @@
 
+3.4.4
+- Fixes:
+  * Correct version check to make RemoveAlphaChannel and FlattenAlphaChannel be available when using Imagick with ImageMagick version 6.7.8-x
+
 3.4.4RC2
 - Fixes:
   * Correct stability for RC release

@@ -13,13 +13,13 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2019-04-16</date>
+	<date>2019-05-02</date>
 	<version>
-		<release>3.4.4RC2</release>
+		<release>3.4.4</release>
 		<api>3.4.4</api>
 	</version>
 	<stability>
-		<release>beta</release>
+		<release>stable</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
@@ -35,6 +35,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	* FILTER_CUBIC_SPLINE - "Define the lobes with the -define filter:lobes={2,3,4} (reference https://imagemagick.org/discourse-server/viewtopic.php?f=2&amp;t=32506)."
 	* Imagick now explicitly conflicts with the Gmagick extension.
 	- Fixes:
+	* Correct version check to make RemoveAlphaChannel and FlattenAlphaChannel be available when using Imagick with ImageMagick version 6.7.8-x
 	* Bug 77128 - Imagick::setImageInterpolateMethod() not available on Windows
 	* Prevent memory leak when ImagickPixel::__construct called after object instantiation.
 	* Prevent segfault when ImagickPixel internal constructor not called.
