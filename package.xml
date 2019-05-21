@@ -8,22 +8,10 @@ Imagick is a native php extension to create and modify images using the ImageMag
 This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 </description>
 	<lead>
-		<name>Mikko Koppanen</name>
-		<user>mkoppanen</user>
-		<email>mkoppanen@php.net</email>
-		<active>no</active>
-	</lead>
-	<lead>
 		<name>Dan Ackroyd</name>
 		<user>danack</user>
 		<email>danack@php.net</email>
 		<active>yes</active>
-	</lead>
-	<lead>
-		<name>Scott MacVicar</name>
-		<user>scottmac</user>
-		<email>scottmac@php.net</email>
-		<active>no</active>
 	</lead>
 	<date>2019-05-02</date>
 	<version>
