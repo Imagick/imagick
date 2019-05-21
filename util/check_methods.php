@@ -1,5 +1,56 @@
 <?php
 
+$cache = false;
+
+$urls = [
+    "drawing_wand" => "https://imagemagick.org/api/drawing-wand.php",
+    "pixel_iterator" => "https://imagemagick.org/api/pixel-iterator.php",
+    "pixel_wand" => "https://imagemagick.org/api/pixel-wand.php",
+    "wand_view" => "https://imagemagick.org/api/wand-view.php",
+    "magick_image" => "https://imagemagick.org/api/magick-image.php",
+    "magick_property" => "https://imagemagick.org/api/magick-property.php",
+    "magick_wand" => "https://imagemagick.org/api/magick-wand.php",
+];
+
+function getFileName($type)
+{
+    return __DIR__ . "/found_" . $type . "_methods.txt";
+}
+
+$methods = [];
+
+if ($cache === false) {
+
+    foreach ($urls as $type => $url) {
+        $html = file_get_contents($url);
+
+        $pattern = '#<a href=".+" id="(.+)">\1</a>#iu';
+        $count = preg_match_all($pattern, $html, $matches);
+
+        foreach ($matches[1] as $matchDetail) {
+            $methods[$matchDetail] = false;
+        }
+
+        file_put_contents(getFileName($type), implode("\n", $matches[1]));
+    }
+}
+else {
+    foreach ($urls as $type => $url) {
+        $filename = getFileName($type);
+        $lines = file($filename);
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (strlen($line) > 0) {
+                $methods[$line] = false;
+            }
+        }
+    }
+
+}
+
+
+
 $tests = [
 	"draw",
 	"pixel",
@@ -35,22 +86,52 @@ $unsupportedMethods = [
 	// Draw
 	"DrawAllocateWand", // not a user function
 	"IsDrawingWand", //Not needed
+
+
+    // TODO - add these when someone asks for them or they are required
+    "SetWandViewIterator",
+    "TransferWandViewIterator",
+    "UpdateWandViewIterator",
+    "ClonePixelIterator",
+    "CloneWandView",
+    "DestroyWandView",
+    "GetWandViewException",
+    "GetWandViewExtent",
+    "GetWandViewIterator",
+    "GetWandViewPixels",
+    "GetWandViewWand",
+    "DrawCloneExceptionInfo",
+    "DrawGetExceptionType",
+
+
+
+
+    // TODO - these should not be needed in PHP land
+    "IsMagickWand",
+    "IsMagickWandInstantiated",
+    "IsPixelIterator",
+    "IsWandView",
+
+
+
+
+
 ];
 
 
-$methods = [];
-
-foreach ($tests as $test) {
-	$lines = file($test."_methods.txt");
-	if ($lines === false) {
-		echo "Couldn't read file for $test \n"; 
-		exit(-1);
-	}
-
-	foreach ($lines as $line) {
-		$methods[trim($line)] = false;
-	}
-}
+//$methods = [];
+//
+//foreach ($tests as $test) {
+//	$lines = file($test."_methods.txt");
+//	if ($lines === false) {
+//		echo "Couldn't read file for $test \n";
+//		exit(-1);
+//	}
+//
+//	foreach ($lines as $line) {
+//		$methods[trim($line)] = false;
+//	}
+//}
 
 
 
@@ -94,7 +175,7 @@ foreach ($files as $file) {
 }
 
 //exit(0);
-
+ksort($methods);
 foreach ($methods as $name => $found) {
 	if (in_array($name, $unsupportedMethods) == true) {
 		continue;
