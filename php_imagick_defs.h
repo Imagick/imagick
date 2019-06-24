@@ -43,9 +43,7 @@
 #include "Zend/zend.h"
 
 /* Include locale header */
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
-#endif
+#include <locale.h>
 
 #if MagickLibVersion >= 0x680
 	#define IMAGICK_WITH_KERNEL
@@ -97,12 +95,10 @@ ZEND_END_MODULE_GLOBALS(imagick)
 
 ZEND_EXTERN_MODULE_GLOBALS(imagick)
 
-#ifdef HAVE_LOCALE_H
-# if defined(PHP_WIN32)
-#  define IMAGICK_LC_NUMERIC_LOCALE "English"
-# else
-#  define IMAGICK_LC_NUMERIC_LOCALE "C"
-# endif
+#if defined(PHP_WIN32)
+# define IMAGICK_LC_NUMERIC_LOCALE "English"
+#else
+# define IMAGICK_LC_NUMERIC_LOCALE "C"
 #endif
 
 #if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 3
