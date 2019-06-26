@@ -33,9 +33,7 @@
 
 
 /* For the countable interface */
-#if defined(HAVE_SPL)
 #include "ext/spl/spl_iterators.h"
-#endif
 
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
@@ -3675,11 +3673,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
-#if defined(HAVE_SPL)
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, spl_ce_Countable);
-#else
-	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
-#endif
 
 	/*
 		Initialize the class (ImagickDraw)
@@ -3874,9 +3868,7 @@ PHP_RSHUTDOWN_FUNCTION(imagick)
 static const zend_module_dep imagick_deps[] = {
     ZEND_MOD_CONFLICTS("gmagick")
     ZEND_MOD_REQUIRED("standard")
-#ifdef HAVE_SPL
 	ZEND_MOD_REQUIRED("spl")
-#endif
 	ZEND_MOD_END
 };
 #endif
