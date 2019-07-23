@@ -3844,6 +3844,8 @@ PHP_RINIT_FUNCTION(imagick)
 	(void)module_number;
 
 	IMAGICK_G(progress_callback) = NULL;
+	MagickSetResourceLimit(ThreadResource, 1);
+
 	return SUCCESS;
 }
 
