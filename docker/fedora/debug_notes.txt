@@ -1,0 +1,16 @@
+Hey there.
+
+The fedora debugging box is up and running.
+You can 'ssh' into by running:
+    docker exec -it imagick_fedora_1 bash
+
+In a separate cli window.
+Or if you checked imagick out into a different directory, then find the box name with `docker ps`
+
+Once inside if you run
+    sh docker/fedora/compileImagick.sh
+
+Imagick should get compiled, and then you can run:
+    sh docker/fedora/runGdb.sh
+
+to see if fail, eventually.

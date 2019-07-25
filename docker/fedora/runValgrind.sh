@@ -1,0 +1,1 @@
+valgrind /opt/remi/php74/root/usr/bin/php -d extension=/opt/remi/php74/root/usr/lib64/php/modules/imagick.so /home/app/tests/003_cast_color_opacity.php

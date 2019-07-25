@@ -4,3 +4,28 @@ services:
     build: docker/developing
     volumes:
       - .:/var/app
+    depends_on:
+      - db
+  fedora:
+    build: docker/fedora
+    image: imagick_fedora
+    volumes:
+      - .:/home/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: pass12345
+      MYSQL_DATABASE: phptest
+      MYSQL_USER: phptest
+      MYSQL_PASSWORD: pass1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/config/my.cnf:/etc/mysql/my.cnf
+      - ./data/mysql:/var/lib/mysql
+      - ./data/mysql_import:/docker-entrypoint-initdb.d
