@@ -3266,6 +3266,10 @@ PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY("imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.skip_version_check", "0", PHP_INI_ALL, OnUpdateBool, skip_version_check, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.progress_monitor", "0", PHP_INI_SYSTEM, OnUpdateBool, progress_monitor, zend_imagick_globals, imagick_globals)
+
+	STD_PHP_INI_ENTRY("imagick.set_single_thread", "0", PHP_INI_SYSTEM, OnUpdateBool, set_single_thread, zend_imagick_globals, imagick_globals)
+	STD_PHP_INI_ENTRY("imagick.shutdown_sleep_count",  "10", PHP_INI_ALL, OnUpdateLong, shutdown_sleep_count, zend_imagick_globals, imagick_globals)
+
 PHP_INI_END()
 
 static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
@@ -3273,6 +3277,9 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->locale_fix = 0;
 	imagick_globals->progress_monitor = 0;
 	imagick_globals->skip_version_check = 0;
+	imagick_globals->set_single_thread = 0;
+	// 10 is magick number, that seems to be enough.
+	imagick_globals->shutdown_sleep_count = 10;
 }
 
 
@@ -3801,6 +3808,10 @@ PHP_MINIT_FUNCTION(imagick)
 		checkImagickVersion();
 	}
 
+	if (IMAGICK_G(set_single_thread)) {
+		MagickSetResourceLimit(ThreadResource, 1);
+	}
+
 	return SUCCESS;
 }
 
@@ -3877,11 +3888,20 @@ PHP_MINFO_FUNCTION(imagick)
 
 PHP_MSHUTDOWN_FUNCTION(imagick)
 {
+    int i;
+
 // This suppresses an 'unused parameter' warning.
 	(void)type;
 
-
 	MagickWandTerminus();
+
+    // Sleep for a bit to hopefully allow OpenMP to
+    // shut down the threads it created, and avoid a segfault
+    // This hack won't be needed once everyone is compiling ImageMagick
+    // against a version of OpenMP that has omp_pause_resource_all()
+	for (i = 0; i < 100 && i < IMAGICK_G(shutdown_sleep_count); i += 1) {
+		usleep(1000);
+	}
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	tsrm_mutex_free(imagick_mutex);

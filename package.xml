@@ -379,6 +379,11 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="278_Imagick_optimaze_gif.phpt" role="test" />
 				<file name="279_ImagickDraw_setTextInterlineSpacing.phpt" role="test" />
 				<file name="280_imagickkernel_exception_invalid_origin.phpt" role="test" />
+				<file name="281_ini_settings_default.phpt" role="test" />
+				<file name="282_ini_settings_set_falsy_string.phpt" role="test" />
+				<file name="283_ini_settings_set_falsy_zero.phpt" role="test" />
+				<file name="284_ini_settings_set_truthy_number.phpt" role="test" />
+				<file name="285_ini_settings_set_truthy_string.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
