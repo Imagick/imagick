@@ -5,7 +5,7 @@ Test Imagick, newPseudoImage
 --FILE--
 <?php
 
-$canvasType = 'gradient:';
+$canvasType = 'gradient:red';
 
 function newPseudoImage($canvasType) {
     $imagick = new \Imagick();
