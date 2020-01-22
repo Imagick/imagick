@@ -33,7 +33,7 @@ Almost all of the functions in the library have an example at [www.phpimagick.co
 # ImageMagick
 
 
-ImageMagick, the library that the Imagick extension exposes to PHP has had many bug fixes, that have fixed many image corruption issues. We _strongly_ recommend upgrading to the latest version (currently 6.9.1) if at all possible.
+ImageMagick, the library that the Imagick extension exposes to PHP has had many bug fixes, that have fixed many image corruption issues. We _strongly_ recommend upgrading to the latest version (greater than 6.9.1 or 7.x) if at all possible.
 
 
 # Security
