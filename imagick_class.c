@@ -2488,6 +2488,29 @@ PHP_METHOD(imagick, deskewimage)
 	RETURN_TRUE;
 }
 
+PHP_METHOD(imagick, houghlineimage)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double threshold;
+	im_long width, height;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &threshold) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickHoughLineImage(intern->magick_wand, width, height, threshold);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to Hough line image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+
 PHP_METHOD(imagick, segmentimage)
 {
 	php_imagick_object *intern;

@@ -482,6 +482,7 @@
 * Imagick::importImagePixels
 * Imagick::sparseColorImage
 * Imagick::deskewImage
+* Imagick::houghLineImage
 * Imagick::segmentImage
 
 * Imagickdraw::gettextkerning
