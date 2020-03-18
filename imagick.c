@@ -429,6 +429,12 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
 
+	ZEND_BEGIN_ARG_INFO_EX(imagick_houghlineimage_args, 0, 0, 3)
+		ZEND_ARG_INFO(0, width)
+		ZEND_ARG_INFO(0, height)
+	    ZEND_ARG_INFO(0, threshold)
+	ZEND_END_ARG_INFO()
+
 	ZEND_BEGIN_ARG_INFO_EX(imagick_segmentimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, COLORSPACE)
 		ZEND_ARG_INFO(0, cluster_threshold)
@@ -2408,6 +2414,7 @@ static zend_function_entry php_imagick_class_methods[] =
 #if MagickLibVersion > 0x645
 	PHP_ME(imagick, importimagepixels, imagick_importimagepixels_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, deskewimage, imagick_deskewimage_args, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, houghlineimage, imagick_houghlineimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, segmentimage, imagick_segmentimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, sparsecolorimage, imagick_sparsecolorimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, remapimage, imagick_remapimage_args, ZEND_ACC_PUBLIC)
