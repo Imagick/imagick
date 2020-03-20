@@ -2488,28 +2488,33 @@ PHP_METHOD(imagick, deskewimage)
 	RETURN_TRUE;
 }
 
+/* {{{ proto bool Imagick::houghLineImage(int width, int height, float threshold)
+        Draw hough lines for the image
+
+*/
 PHP_METHOD(imagick, houghlineimage)
 {
-	php_imagick_object *intern;
-	MagickBooleanType status;
-	double threshold;
-	im_long width, height;
+        php_imagick_object *intern;
+        MagickBooleanType status;
+        double threshold;
+        im_long width, height;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &threshold) == FAILURE) {
-		return;
-	}
+        if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lld", &width, &height, &threshold) == FAILURE) {
+                return;
+        }
 
-	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+        intern = Z_IMAGICK_P(getThis());
+        if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+                return;
 
-	status = MagickHoughLineImage(intern->magick_wand, width, height, threshold);
-	if (status == MagickFalse) {
-		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to Hough line image" TSRMLS_CC);
-		return;
-	}
-	RETURN_TRUE;
+        status = MagickHoughLineImage(intern->magick_wand, width, height, threshold);
+        if (status == MagickFalse) {
+                php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to Hough line image" TSRMLS_CC);
+                return;
+        }
+        RETURN_TRUE;
 }
+/* }}} */
 
 PHP_METHOD(imagick, segmentimage)
 {
