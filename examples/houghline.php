@@ -10,10 +10,10 @@ $im = new Imagick();
 /* Read the image file */
 $im->readImage( '/tmp/test.png' );
 
-/* Thumbnail the image ( width 100, preserve dimensions ) */
+/* Houghline the image ( width 9, height 9, threshold 40 ) */
 $im->houghLineImage( 9, 9, 40 );
 
-/* Write the thumbail to disk */
+/* Write the houghline image to disk */
 $im->writeImage( '/tmp/hough_test.png' );
 
 /* Free resources associated to the Imagick object */
