@@ -10,12 +10,12 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 
 
 function houghLineImage() {
-    $imagick = new \Imagick();
-    $imagick->newPseudoImage(640, 480, "magick:logo");
-    $imagick->setbackgroundcolor('rgb(64, 64, 64)');
-    $imagick->houghLinelImage(20,40, 40);
-    $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
+	$imagick = new \Imagick();
+        $imagick->readImage('houghline_input_image.png');
+        $imagick->setbackgroundcolor('rgb(64, 64, 64)');
+        $imagick->houghLineImage(20,40, 40);
+        $imagick->writeImage('houghline_output_image.png');
+
 }
 
 houghLineImage() ;
