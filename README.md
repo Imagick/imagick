@@ -6,7 +6,7 @@ Imagick is a PHP extension to create and modify images using the ImageMagick lib
 
 ## PHP Imagick
 
-* Source code + issues - https://github.com/mkoppanen/imagick
+* Source code + issues - https://github.com/imagick/imagick
 * Releases - http://pecl.php.net/package/imagick
 * Documentation - http://php.net/manual/en/book.imagick.php
     
