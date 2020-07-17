@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/mkoppanen/imagick.png)](https://travis-ci.org/mkoppanen/imagick)
 
-# Imagick
+# 🌈🌈 Imagick 🌈🌈
 
 Imagick is a PHP extension to create and modify images using the ImageMagick library. There is also a version of Imagick available for HHVM. Although the two extensions are mostly compatible in their API, and they both call the ImageMagick library, the two extensions are completely separate code-bases.
 
