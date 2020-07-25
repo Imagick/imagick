@@ -3615,7 +3615,7 @@ PHP_MINIT_FUNCTION(imagick)
 #ifdef ZEND_ENGINE_3
 	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
-	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL);
+	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(), NULL);
 #endif
 
 	/*
@@ -3625,7 +3625,7 @@ PHP_MINIT_FUNCTION(imagick)
 #ifdef ZEND_ENGINE_3
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
-	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL);
+	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(), NULL);
 #endif
 
 	/*
@@ -3635,7 +3635,7 @@ PHP_MINIT_FUNCTION(imagick)
 #ifdef ZEND_ENGINE_3
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
-	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL);
+	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(), NULL);
 #endif
 
 	/*
@@ -3645,7 +3645,7 @@ PHP_MINIT_FUNCTION(imagick)
 #ifdef ZEND_ENGINE_3
 	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
-	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL);
+	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(), NULL);
 #endif
 
 #ifdef IMAGICK_WITH_KERNEL
@@ -3656,7 +3656,7 @@ PHP_MINIT_FUNCTION(imagick)
 	#ifdef ZEND_ENGINE_3
 	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
     #else
-	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL);
+	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(), NULL);
     #endif
 
 #endif
@@ -3736,7 +3736,7 @@ PHP_MINIT_FUNCTION(imagick)
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce);
 #endif
 
-	php_imagick_initialize_constants (TSRMLS_C);
+	php_imagick_initialize_constants ();
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	imagick_mutex = tsrm_mutex_alloc();

@@ -2420,7 +2420,7 @@ PHP_METHOD(imagickdraw, render)
 
 	internd = Z_IMAGICKDRAW_P(getThis());;
 
-	old_locale = php_imagick_set_locale (TSRMLS_C);
+	old_locale = php_imagick_set_locale ();
 
 	status = DrawRender(internd->drawing_wand);
 

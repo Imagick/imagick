@@ -653,7 +653,7 @@ PHP_METHOD(imagick, roundcornersimage)
 	DrawSetStrokeWidth(draw, stroke_width);
 	DrawRoundRectangle(draw, displace, displace, image_width + correction, image_height + correction, x_rounding, y_rounding);
 
-	old_locale = php_imagick_set_locale (TSRMLS_C);
+	old_locale = php_imagick_set_locale ();
 
 	status = MagickDrawImage(mask_image, draw);
 
@@ -10001,7 +10001,7 @@ PHP_METHOD(imagick, drawimage)
 
 	internd = Z_IMAGICKDRAW_P(objvar);
 
-	old_locale = php_imagick_set_locale (TSRMLS_C);
+	old_locale = php_imagick_set_locale ();
 
 	status = MagickDrawImage(intern->magick_wand, internd->drawing_wand);
 
