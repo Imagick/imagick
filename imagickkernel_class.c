@@ -79,7 +79,7 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 }
 
 
-HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /* {{{ */
+HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp) /* {{{ */
 {
 	php_imagickkernel_object *internp;
 	HashTable *debug_info;
@@ -135,7 +135,7 @@ static void im_CalcKernelMetaData(KernelInfo *kernel) {
 		if (kernel->values[i] < kernel->minimum) {
 			kernel->minimum = kernel->values[i];
 		}
-		
+
 		if (kernel->values[i] > kernel->maximum) {
 			kernel->maximum = kernel->values[i];
 		}
@@ -179,7 +179,7 @@ static KernelInfo *imagick_createKernel(KernelValueType *values, size_t width, s
 	for (i=0; i<width*height;i++) {
 		kernel_info->values[i] = (MagickRealType)values[i];
 	}
-	
+
 #else
 	kernel_info->values = values;
 #endif
@@ -190,7 +190,7 @@ static KernelInfo *imagick_createKernel(KernelValueType *values, size_t width, s
 }
 #endif
 
-static void createKernelZval(zval *pzval, KernelInfo *kernel_info TSRMLS_DC) {
+static void createKernelZval(zval *pzval, KernelInfo *kernel_info) {
 	php_imagickkernel_object *intern_return;
 
 	object_init_ex(pzval, php_imagickkernel_sc_entry);
@@ -220,9 +220,9 @@ PHP_METHOD(imagickkernel, __construct)
 #define MATRIX_ORIGIN_REQUIRED "For kernels with even numbered rows or columns, the origin position must be specified."
 
 /* {{{ proto ImagickKernel ImagickKernel::fromMatrix(array matrix, [array origin])
-	Create a kernel from an 2d matrix of values. Each value should either be a float 
-	(if the element should be used) or 'false' if the element should be skipped. For 
-	matrixes that are odd sizes in both dimensions the the origin pixel will default 
+	Create a kernel from an 2d matrix of values. Each value should either be a float
+	(if the element should be used) or 'false' if the element should be skipped. For
+	matrixes that are odd sizes in both dimensions the the origin pixel will default
 	to the centre of the kernel. For all other kernel sizes the origin pixel must be specified.
 */
 #ifdef ZEND_ENGINE_3
@@ -295,7 +295,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 			previous_num_columns = num_columns;
 
-			for (column=0; column<num_columns ; column++) { 
+			for (column=0; column<num_columns ; column++) {
 				pzval_inner = zend_hash_index_find(inner_array, column);
 				if (pzval_inner == NULL) {
 					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
@@ -311,7 +311,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 					//It's a long lets use it.
 					values[count] = (float)Z_LVAL_P(pzval_inner);
 				}
-				else if (Z_TYPE_P(pzval_inner) == IS_FALSE) { 
+				else if (Z_TYPE_P(pzval_inner) == IS_FALSE) {
 					//It's false, use nan
 					values[count] = notanumber;
 				}
@@ -468,7 +468,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 			previous_num_columns = num_columns;
 
-			for (column=0; column<num_columns ; column++) { 
+			for (column=0; column<num_columns ; column++) {
 				if (zend_hash_index_find(inner_array, column, (void **) &ppzval_inner) != SUCCESS) {
 					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
 					goto cleanup;
@@ -482,7 +482,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 					//It's a long lets use it.
 					values[count] = (float)Z_LVAL_PP(ppzval_inner);
 				}
-				else if (Z_TYPE_PP(ppzval_inner) == IS_BOOL && Z_BVAL_PP(ppzval_inner) == 0) { 
+				else if (Z_TYPE_PP(ppzval_inner) == IS_BOOL && Z_BVAL_PP(ppzval_inner) == 0) {
 					//It's false, use nan
 					values[count] = notanumber;
 				}
@@ -563,7 +563,7 @@ cleanup:
 		RelinquishAlignedMemory(values);
 	}
 }
-#endif //end of zend_engine_3 
+#endif //end of zend_engine_3
 /* }}} */
 
 static void imagick_fiddle_with_geometry_info(ssize_t type, GeometryFlags flags, GeometryInfo *geometry_info) {
@@ -661,7 +661,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 
 	flags = ParseGeometry(string, &geometry_info);
 	imagick_fiddle_with_geometry_info(kernel_type, flags, &geometry_info);
-	
+
 #if MagickLibVersion >= 0x700
 	//TODO - inspect exception info
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info, _exception_info);
@@ -759,7 +759,7 @@ PHP_METHOD(imagickkernel, separate)
 #ifdef ZEND_ENGINE_3
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
 		add_next_index_zval(return_value, &separate_object);
-#else 
+#else
 		MAKE_STD_ZVAL(separate_object);
 		createKernelZval(separate_object, kernel_info_copy TSRMLS_CC);
 		add_next_index_zval(return_value, separate_object);
@@ -773,7 +773,7 @@ PHP_METHOD(imagickkernel, separate)
 
 
 /* {{{ proto [] ImagickKernel::getMatrix(void)
-	Get the 2d matrix of values used in this kernel. The elements are either 
+	Get the 2d matrix of values used in this kernel. The elements are either
 	float for elements that are used or 'false' if the element should be skipped.
 */
 PHP_METHOD(imagickkernel, getmatrix)
@@ -799,13 +799,13 @@ PHP_METHOD(imagickkernel, getmatrix)
 
 
 /* {{{ proto [] ImagickKernel::scale(float scaling_factor[, int NORMALIZE_KERNEL_FLAG])
-	ScaleKernelInfo() scales the given kernel list by the given amount, with or without 
+	ScaleKernelInfo() scales the given kernel list by the given amount, with or without
 	normalization of the sum of the kernel values (as per given flags).
 
-	The exact behaviour of this function depends on the normalization type being used 
+	The exact behaviour of this function depends on the normalization type being used
 	please see http://www.imagemagick.org/api/morphology.php#ScaleKernelInfo for details.
 
-	Flag should be one of NORMALIZE_KERNEL_VALUE, NORMALIZE_KERNEL_CORRELATE, 
+	Flag should be one of NORMALIZE_KERNEL_VALUE, NORMALIZE_KERNEL_CORRELATE,
 	NORMALIZE_KERNEL_PERCENT or not set.
 */
 PHP_METHOD(imagickkernel, scale)
@@ -831,7 +831,7 @@ PHP_METHOD(imagickkernel, scale)
 
 /* {{{ proto [] ImagickKernel::addUnityKernel(float scale)
 	Adds a given amount of the 'Unity' Convolution Kernel to the given pre-scaled
-	and normalized Kernel. This in effect adds that amount of the original image 
+	and normalized Kernel. This in effect adds that amount of the original image
 	into the resulting convolution kernel. The resulting effect is to convert the
 	defined kernels into blended soft-blurs, unsharp kernels or into sharpening kernels.
 */

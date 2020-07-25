@@ -38,7 +38,7 @@ long s_count_pixeliterator_rows(php_imagickpixeliterator_object *internpix)
 }
 #endif
 
-void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value TSRMLS_DC)
+void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value)
 {
 	php_imagickpixeliterator_object *internpix;
 
@@ -426,7 +426,7 @@ PHP_METHOD(imagickpixeliterator, setiteratorrow)
 /* }}} */
 
 static
-void s_pixelwands_to_zval (PixelWand **wand_array, unsigned long num_wands, zval *return_value TSRMLS_DC)
+void s_pixelwands_to_zval (PixelWand **wand_array, unsigned long num_wands, zval *return_value)
 {
 	php_imagickpixel_object *internp;
 #ifdef ZEND_ENGINE_3
@@ -443,7 +443,7 @@ void s_pixelwands_to_zval (PixelWand **wand_array, unsigned long num_wands, zval
 #ifdef ZEND_ENGINE_3
 		object_init_ex(&obj, php_imagickpixel_sc_entry);
 		internp = Z_IMAGICKPIXEL_P(&obj);
-#else 
+#else
 		MAKE_STD_ZVAL(obj);
 		object_init_ex(obj, php_imagickpixel_sc_entry);
 		internp = Z_IMAGICKPIXEL_P(obj);

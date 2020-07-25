@@ -47,7 +47,7 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 	return MagickTrue;
 }
 
-void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callback TSRMLS_DC) {
+void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callback) {
 
 	if (progress_callback) {
 		if (progress_callback->previous_callback) {
@@ -160,7 +160,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	return MagickTrue;
 }
 
-/* This is not universally safe to use, but is safe enough for values that will 
+/* This is not universally safe to use, but is safe enough for values that will
    be encountered for image dimensions.
 */
 static inline double im_round_helper(double value) {
@@ -258,7 +258,7 @@ zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool be
 	return 1;
 }
 
-zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
+zend_bool php_imagick_validate_map(const char *map)
 {
 	zend_bool match;
 	const char *p = map;
@@ -284,7 +284,7 @@ zend_bool php_imagick_validate_map(const char *map TSRMLS_DC)
 	return 1;
 }
 
-double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_elements TSRMLS_DC)
+double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_elements)
 {
 	double *double_array;
 	long i = 0;
@@ -335,7 +335,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_element
 	return double_array;
 }
 
-im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements TSRMLS_DC)
+im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements)
 {
 	im_long *long_array;
 	im_long i = 0;
@@ -387,7 +387,7 @@ im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements
 	return long_array;
 }
 
-unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_elements TSRMLS_DC)
+unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_elements)
 {
 	unsigned char *char_array;
 	im_long i = 0;
@@ -438,7 +438,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_el
 	return char_array;
 }
 
-zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
+zend_bool php_imagick_check_font(char *font, int font_len)
 {
 	zend_bool retval = 0;
 	char **fonts;
@@ -460,7 +460,7 @@ zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
 	return retval;
 }
 
-php_imagick_rw_result_t php_imagick_file_access_check (const char *filename TSRMLS_DC)
+php_imagick_rw_result_t php_imagick_file_access_check (const char *filename)
 {
 	if (strlen(filename) >= MAXPATHLEN)
 		return IMAGICK_RW_FILENAME_TOO_LONG;
@@ -483,7 +483,7 @@ php_imagick_rw_result_t php_imagick_file_access_check (const char *filename TSRM
 }
 
 static
-void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename TSRMLS_DC)
+void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename)
 {
 	switch (rc) {
 
@@ -517,7 +517,7 @@ void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename TS
 	}
 }
 
-void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_result_t rc, const char *filename TSRMLS_DC)
+void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_result_t rc, const char *filename)
 {
 	if (rc == IMAGICK_RW_UNDERLYING_LIBRARY) {
 		php_imagick_convert_imagick_exception (magick_wand, "Failed to read the file" TSRMLS_CC);
@@ -526,7 +526,7 @@ void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_r
 	s_rw_fail_to_exception (rc, filename TSRMLS_CC);
 }
 
-void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, php_imagick_rw_result_t rc, const char *filename TSRMLS_DC)
+void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, php_imagick_rw_result_t rc, const char *filename)
 {
 	if (rc == IMAGICK_RW_UNDERLYING_LIBRARY) {
 		php_imagick_convert_imagickdraw_exception (drawing_wand, "Failed to read the file" TSRMLS_CC);
@@ -536,7 +536,7 @@ void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, ph
 }
 
 
-PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC)
+PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements)
 {
 	PointInfo *coordinates;
 	long elements, sub_elements, i;
@@ -606,7 +606,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 		coordinates[i].y = zval_get_double(pz_y);
 		i++;
 	} ZEND_HASH_FOREACH_END();
-	
+
 #else
 	coords = Z_ARRVAL_P(coordinate_array);
 	zend_hash_internal_pointer_reset_ex(coords, (HashPosition *) 0);
@@ -671,7 +671,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	return coordinates;
 }
 
-void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description TSRMLS_DC)
+void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description)
 {
 	int code;
 	zend_class_entry *ce = NULL;
@@ -708,7 +708,7 @@ void php_imagick_throw_exception (php_imagick_class_type_t type, const char *des
 }
 
 static
-void s_convert_exception (char *description, const char *default_message, long severity, int code TSRMLS_DC)
+void s_convert_exception (char *description, const char *default_message, long severity, int code)
 {
 	// No description provided or empty one
 	if (!description || (strlen (description) == 0)) {
@@ -725,7 +725,7 @@ void s_convert_exception (char *description, const char *default_message, long s
 /**
 	Convert ImageMagick MagickWand exception to PHP exception
 */
-void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message TSRMLS_DC)
+void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message)
 {
 	ExceptionType severity;
 	char *description;
@@ -736,7 +736,7 @@ void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char 
 	s_convert_exception (description, default_message, severity, 1 TSRMLS_CC);
 }
 
-void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message TSRMLS_DC)
+void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message)
 {
 	ExceptionType severity;
 	char *description;
@@ -747,7 +747,7 @@ void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const
 	s_convert_exception (description, default_message, severity, 2 TSRMLS_CC);
 }
 
-void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message TSRMLS_DC)
+void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message)
 {
 	ExceptionType severity;
 	char *description;
@@ -758,7 +758,7 @@ void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_it
 	s_convert_exception (description, default_message, severity, 3 TSRMLS_CC);
 }
 
-void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const char *default_message TSRMLS_DC)
+void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const char *default_message)
 {
 	ExceptionType severity;
 	char *description;
@@ -769,14 +769,14 @@ void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const ch
 	s_convert_exception (description, default_message, severity, 4 TSRMLS_CC);
 }
 
-PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC)
+PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated)
 {
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
 
 #ifdef ZEND_ENGINE_3
 	ZVAL_DEREF(param);
-#endif 
+#endif
 	if (Z_TYPE_P (param) == IS_LONG || Z_TYPE_P (param) == IS_DOUBLE) {
 		zval var;
 		var = *param;
@@ -817,7 +817,7 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 	return pixel_wand;
 }
 
-PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC)
+PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t caller, zend_bool *allocated)
 {
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
@@ -1207,7 +1207,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_TRUECOLORALPHA", TrueColorAlphaType);
 	//@TODO - this is only here for legacy support
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_TRUECOLORMATTE", TrueColorAlphaType);
-	
+
 #endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_COLORSEPARATION", ColorSeparationType);
 #if MagickLibVersion < 0x700
@@ -1360,7 +1360,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("METRIC_MEANABSOLUTEERROR", MeanAbsoluteErrorMetric);
 #if MagickLibVersion < 0x700
 	IMAGICK_REGISTER_CONST_LONG("METRIC_MEANERRORPERPIXELMETRIC", MeanErrorPerPixelMetric);
-#else 
+#else
 	IMAGICK_REGISTER_CONST_LONG("METRIC_MEANERRORPERPIXELMETRIC", MeanErrorPerPixelErrorMetric);
 #endif
 
@@ -1696,7 +1696,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARREL", BarrelDistortion);
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SHEPARDS", ShepardsDistortion);
 
-	// SentinelDistortion is not a real distortion type. It is a guard value 
+	// SentinelDistortion is not a real distortion type. It is a guard value
 	// that shouldn't have been exposed in Imagick. TODO remove at next
 	// minor version.
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SENTINEL", SentinelDistortion);
@@ -1845,7 +1845,7 @@ IMAGICK_REGISTER_CONST_LONG("KERNEL_LAPLACIAN_OF_GAUSSIANS", LoGKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_BLUR", BlurKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_COMET", CometKernel);
 /* Convolution Kernels, by Name */
-IMAGICK_REGISTER_CONST_LONG("KERNEL_LAPLACIAN", LaplacianKernel);    
+IMAGICK_REGISTER_CONST_LONG("KERNEL_LAPLACIAN", LaplacianKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_SOBEL", SobelKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_FREI_CHEN", FreiChenKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_ROBERTS", RobertsKernel);
@@ -1853,7 +1853,7 @@ IMAGICK_REGISTER_CONST_LONG("KERNEL_PREWITT", PrewittKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_COMPASS", CompassKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_KIRSCH", KirschKernel);
 /* Shape Kernels */
-IMAGICK_REGISTER_CONST_LONG("KERNEL_DIAMOND", DiamondKernel); 
+IMAGICK_REGISTER_CONST_LONG("KERNEL_DIAMOND", DiamondKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_SQUARE", SquareKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_RECTANGLE", RectangleKernel);
 IMAGICK_REGISTER_CONST_LONG("KERNEL_OCTAGON", OctagonKernel);
@@ -1887,14 +1887,14 @@ IMAGICK_REGISTER_CONST_LONG("DIRECTION_RIGHT_TO_LEFT", RightToLeftDirection);
 
 // The kernel is scaled directly using given scaling factor without change.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_NONE", 0);
-// Kernel normalization ('normalize_flags' given) is designed to ensure 
-// that any use of the kernel scaling factor with 'Convolve' or 'Correlate' 
+// Kernel normalization ('normalize_flags' given) is designed to ensure
+// that any use of the kernel scaling factor with 'Convolve' or 'Correlate'
 // morphology methods will fall into -1.0 to +1.0 range.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_VALUE", NormalizeValue);
-// For special kernels designed for locating shapes using 'Correlate', (often 
-// only containing +1 and -1 values, representing foreground/brackground 
+// For special kernels designed for locating shapes using 'Correlate', (often
+// only containing +1 and -1 values, representing foreground/brackground
 // matching) a special normalization method is provided to scale the positive
-// values separately to those of the negative values, so the kernel will be 
+// values separately to those of the negative values, so the kernel will be
 // forced to become a zero-sum kernel better suited to such searches.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_CORRELATE", CorrelateNormalizeValue);
 // Scale the kernel by a percent.

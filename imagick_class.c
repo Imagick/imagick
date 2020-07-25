@@ -341,7 +341,7 @@ PHP_METHOD(imagick, setimagematte)
 /* {{{ proto bool Imagick::adaptiveResizeImage(int width, int height[, bool bestfit[, bool legacy]]])
 	Adaptively resize image with data dependent triangulation
 	If legacy is true, the calculations are done with the small rounding bug that existed in
-	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	Imagick before 3.4.0. If false, the calculations should produce the same results as
 	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, adaptiveresizeimage)
@@ -834,7 +834,7 @@ PHP_METHOD(imagick, setimagealpha)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif 
+#endif
 
 
 
@@ -889,7 +889,7 @@ PHP_METHOD(imagick, polaroidimage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;	
+		return;
 
 	internd = Z_IMAGICKDRAW_P(objvar);
 #if MagickLibVersion >= 0x700
@@ -902,8 +902,8 @@ PHP_METHOD(imagick, polaroidimage)
 	status = MagickPolaroidImage(intern->magick_wand, internd->drawing_wand, angle);
 #endif
 
-	
-	
+
+
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -1031,7 +1031,7 @@ PHP_METHOD(imagick, identifyformat)
 
 	image_info = AcquireImageInfo();
 	image = GetImageFromMagickWand(intern->magick_wand);
-	
+
 #if MagickLibVersion >= 0x700
 	{
 		//TODO - handle exception info.
@@ -1044,7 +1044,7 @@ PHP_METHOD(imagick, identifyformat)
 	image_info = DestroyImageInfo(image_info);
 
 	if (result) {
-#ifdef ZEND_ENGINE_3 
+#ifdef ZEND_ENGINE_3
 		RETVAL_STRING(result);
 #else
 		RETVAL_STRING(result, 1);
@@ -1906,7 +1906,7 @@ PHP_METHOD(imagick, mergeimagelayers)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	/* TODO: SHOULD THIS BE HERE? 
+	/* TODO: SHOULD THIS BE HERE?
 	   Reset the iterator */
 	(void)MagickSetFirstIterator(intern->magick_wand);
 
@@ -1961,7 +1961,7 @@ PHP_METHOD(imagick, floodfillpaintimage)
 
 		return;
 	}
-	
+
 #if MagickLibVersion >= 0x700
 	status = MagickFloodfillPaintImageChannel(intern->magick_wand, channel, fill_wand, fuzz, border_wand, x, y, invert);
 #else
@@ -2366,7 +2366,7 @@ PHP_METHOD(imagick, setimagegravity)
 /* {{ proto Imagick Imagick::importImagePixels(int x, int y, int width, int height, string map, int STORAGE, array pixels)
 	Accepts pixel data and stores it in the image at the location you specify
  */
-PHP_METHOD(imagick, importimagepixels) 
+PHP_METHOD(imagick, importimagepixels)
 {
 	double        *double_array;
 	im_long       *long_array;
@@ -2535,13 +2535,13 @@ PHP_METHOD(imagick, sparsecolorimage)
 		php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
 		return;
 	}
-	
+
 #if MagickLibVersion >= 0x700
 	status = MagickSparseColorImageChannel(intern->magick_wand, channel, sparse_method, num_elements, double_array);
 #else
 	status = MagickSparseColorImage(intern->magick_wand, channel, sparse_method, num_elements, double_array);
 #endif
-	
+
 	efree(double_array);
 
 	if (status == MagickFalse) {
@@ -2997,7 +2997,7 @@ PHP_METHOD(imagick, setimageartifact)
 }
 
 
-PHP_METHOD(imagick, getimageartifact) 
+PHP_METHOD(imagick, getimageartifact)
 {
 	php_imagick_object *intern;
 	char *artifact, *value;
@@ -3017,7 +3017,7 @@ PHP_METHOD(imagick, getimageartifact)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image artifact" TSRMLS_CC);
 		return;
 	}
-#ifdef ZEND_ENGINE_3 
+#ifdef ZEND_ENGINE_3
 	RETVAL_STRING(value);
 #else
 	RETVAL_STRING(value, 1);
@@ -3029,7 +3029,7 @@ PHP_METHOD(imagick, getimageartifact)
 /* {{{ proto boolean Imagick::deleteImageArtifact(string $artifact)
    Delete image artifact
 */
-PHP_METHOD(imagick, deleteimageartifact) 
+PHP_METHOD(imagick, deleteimageartifact)
 {
 	php_imagick_object *intern;
 	MagickBooleanType status;
@@ -3058,7 +3058,7 @@ PHP_METHOD(imagick, deleteimageartifact)
 /* {{{ proto integer Imagick::getColorspace()
    Get the object colorspace property
 */
-PHP_METHOD(imagick, getcolorspace) 
+PHP_METHOD(imagick, getcolorspace)
 {
 	php_imagick_object *intern;
 
@@ -3074,7 +3074,7 @@ PHP_METHOD(imagick, getcolorspace)
 /* {{{ proto boolean Imagick::setColorspace([int COLORSPACE])
    Set the object colorspace property
 */
-PHP_METHOD(imagick, setcolorspace) 
+PHP_METHOD(imagick, setcolorspace)
 {
 	php_imagick_object *intern;
 	im_long colorspace;
@@ -3094,7 +3094,7 @@ PHP_METHOD(imagick, setcolorspace)
 /* {{{ proto boolean Imagick::clampImage([int CHANNEL])
    Restricts the color range from 0 to the quantum depth.
 */
-PHP_METHOD(imagick, clampimage) 
+PHP_METHOD(imagick, clampimage)
 {
 	php_imagick_object *intern;
 	im_long channel = IM_DEFAULT_CHANNEL;
@@ -3948,7 +3948,7 @@ PHP_METHOD(imagick, clear)
 	Scales the size of an image to the given dimensions. Passing zero as either of
 	the arguments will preserve dimension while scaling.
 	If legacy is true, the calculations are done with the small rounding bug that existed in
-	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	Imagick before 3.4.0. If false, the calculations should produce the same results as
 	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, scaleimage)
@@ -4706,7 +4706,7 @@ PHP_METHOD(imagick, magnifyimage)
 		return;
 
 	status = MagickMagnifyImage(intern->magick_wand);
-		
+
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to magnify image" TSRMLS_CC);
@@ -5327,7 +5327,7 @@ PHP_METHOD(imagick, setimagebias)
 
 
 /* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
-For IM7 the prototype is 
+For IM7 the prototype is
 proto bool Imagick::setImageBluePrimary(float x, float y, float z)
 
 	Sets the image chromaticity blue primary point
@@ -5344,7 +5344,7 @@ PHP_METHOD(imagick, setimageblueprimary)
 	/* Parse parameters given to function */
 #if MagickLibVersion >= 0x700
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &x, &y, &z) == FAILURE) {
-#else 
+#else
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 #endif
 		return;
@@ -5564,7 +5564,7 @@ PHP_METHOD(imagick, setimageextent)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageGreenPrimary(float x, float y)
-For IM7 the prototype is 
+For IM7 the prototype is
 proto bool Imagick::setImageGreenPrimary(float x, float y, float z)
 	Sets the image chromaticity green primary point
 */
@@ -5666,7 +5666,7 @@ PHP_METHOD(imagick, setimageprofile)
 /* }}} */
 
 /* {{{ proto bool Imagick::setImageRedPrimary(float x,float y)
-For IM7 the prototype is 
+For IM7 the prototype is
 proto bool Imagick::setImageRedPrimary(float x, float y, float z)
 
 	Sets the image chromaticity red primary point.
@@ -5683,7 +5683,7 @@ PHP_METHOD(imagick, setimageredprimary)
 	/* Parse parameters given to function */
 #if MagickLibVersion >= 0x700
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &x, &y, &z) == FAILURE) {
-#else 
+#else
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 #endif
 		return;
@@ -5761,7 +5761,7 @@ PHP_METHOD(imagick, setimagevirtualpixelmethod)
 
 /* {{{ proto bool Imagick::setImageWhitePoint(float x, float y)
 
-For IM7 the prototype is 
+For IM7 the prototype is
 proto bool Imagick::setImageWhitePoint(float x, float y, float z)
 
 	Sets the image chromaticity white point.
@@ -5941,8 +5941,8 @@ PHP_METHOD(imagick, tintimage)
 	else {
 		opacity_wand = php_imagick_zval_to_pixelwand(opacity_param, IMAGICK_CLASS, &opacity_allocated TSRMLS_CC);
 	}
-	
-	
+
+
 	if (!opacity_wand) {
 		if (tint_allocated)
 			tint_wand = DestroyPixelWand (tint_wand);
@@ -5996,7 +5996,7 @@ PHP_METHOD(imagick, unsharpmaskimage)
 }
 /* }}} */
 
-	
+
 
 
 #if MagickLibVersion >= 0x700
@@ -6756,7 +6756,7 @@ PHP_METHOD(imagick, getimagechannelstatistics)
  	zval *tmp;
 #endif
 
-	const long channels[] = { 
+	const long channels[] = {
 		UndefinedChannel, RedChannel, CyanChannel,
 		GreenChannel, MagentaChannel, BlueChannel,
 		YellowChannel, OpacityChannel, BlackChannel,
@@ -7756,7 +7756,7 @@ zend_bool s_resize_bounding_box(MagickWand *magick_wand, im_long box_width, im_l
 /* {{{ proto bool Imagick::thumbnailImage(int columns, int rows[, bool bestfit = false[, bool fill = false[, bool legacy = false]]])
 	Changes the size of an image to the given dimensions and removes any associated profiles.
 	If legacy is true, the calculations are done with the small rounding bug that existed in
-	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	Imagick before 3.4.0. If false, the calculations should produce the same results as
 	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, thumbnailimage)
@@ -7781,7 +7781,7 @@ PHP_METHOD(imagick, thumbnailimage)
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to resize and fill image" TSRMLS_CC);
 		return;
 		}
-#else 
+#else
 		php_imagick_throw_exception(IMAGICK_CLASS, "Fill parameter is only supported with ImageMagick 6.3.2+" TSRMLS_CC);
 		return;
 #endif
@@ -7800,7 +7800,7 @@ PHP_METHOD(imagick, thumbnailimage)
 }
 /* }}} */
 
-/* This is not universally safe to use, but is safe enough for values that will 
+/* This is not universally safe to use, but is safe enough for values that will
    be encountered for image dimensions.
 */
 static inline double im_round_helper_class(double value) {
@@ -7864,7 +7864,7 @@ PHP_METHOD(imagick, calculatecrop)
 	zend_bool legacy = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll|b", 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll|b",
 		&orig_width, &orig_height, &desired_width, &desired_height, &legacy) == FAILURE) {
 		return;
 	}
@@ -7895,7 +7895,7 @@ PHP_METHOD(imagick, calculatecrop)
 
 
 static
-zend_bool s_crop_thumbnail_image(MagickWand *magick_wand, im_long desired_width, im_long desired_height, zend_bool legacy TSRMLS_DC)
+zend_bool s_crop_thumbnail_image(MagickWand *magick_wand, im_long desired_width, im_long desired_height, zend_bool legacy)
 {
 	im_long offset_x = 0, offset_y = 0, new_width, new_height;
 	im_long orig_width  = (im_long)MagickGetImageWidth(magick_wand);
@@ -7934,9 +7934,9 @@ zend_bool s_crop_thumbnail_image(MagickWand *magick_wand, im_long desired_width,
 	return 1;
 }
 
-// 
+//
 /* {{{ proto bool Imagick::cropthumbnailImage(int columns, int rows[, bool legacy = false] )
-	Creates a cropped thumbnail at the requested size. If legacy is true, uses the 
+	Creates a cropped thumbnail at the requested size. If legacy is true, uses the
 	incorrect behaviour that was present until Imagick 3.4.0. If false it uses the correct
 	behaviour.
 */
@@ -8458,7 +8458,7 @@ void s_add_assoc_str (zval *array, const char *key, const char *value)
 }
 
 static
-void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
+void s_add_named_strings (zval *array, const char *haystack)
 {
 	unsigned int i, found;
 	char *last_ptr = NULL, *buffer;
@@ -8550,7 +8550,7 @@ PHP_METHOD(imagick, identifyimage)
 #else
 	zval *array;
 #endif
-    
+
     zval *pArray;
 
 	/* Parse parameters given to function */
@@ -8592,7 +8592,7 @@ PHP_METHOD(imagick, identifyimage)
 	s_add_named_strings (return_value, identify TSRMLS_CC);
 
 	// Geometry is an associative array
-	
+
 #ifdef ZEND_ENGINE_3
 	ZVAL_NEW_ARR(&array);
 	pArray = &array;
@@ -8926,9 +8926,9 @@ PHP_METHOD(imagick, setimagedelay)
 /* }}} */
 
 /* {{{ proto bool Imagick::colorizeImage(ImagickPixel colorize, ImagickPixel opacity, bool legacy)
-	Blends the fill color with each pixel in the image. The 'opacity' color is a 
+	Blends the fill color with each pixel in the image. The 'opacity' color is a
 	per channel strength factor for how strongly the color should be applied. If
-	legacy is true, the behaviour of this function is incorrect, but consistent 
+	legacy is true, the behaviour of this function is incorrect, but consistent
 	with how it behaved before Imagick version 3.4.0
 */
 PHP_METHOD(imagick, colorizeimage)
@@ -10069,7 +10069,7 @@ PHP_METHOD(imagick, annotateimage)
 /* }}} */
 
 /* {{{ proto bool Imagick::getImageCompressionQuality(int quality)
-        Gets the image compression quality 
+        Gets the image compression quality
 */
 PHP_METHOD(imagick, getimagecompressionquality)
 {
@@ -10332,10 +10332,10 @@ PHP_METHOD(imagick, borderimage)
 	im_long width, height;
 	PixelWand *color_wand;
 	zend_bool allocated;
-	
+
 #if MagickLibVersion >= 0x700
 	//TODO - understand and allow compose to be set.
-	CompositeOperator compose = AtopCompositeOp; 
+	CompositeOperator compose = AtopCompositeOp;
 #endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll", &param, &width, &height) == FAILURE) {
@@ -10351,7 +10351,7 @@ PHP_METHOD(imagick, borderimage)
 	if (!color_wand)
 		return;
 
-#if MagickLibVersion >= 0x700 
+#if MagickLibVersion >= 0x700
 	status = MagickBorderImage(intern->magick_wand, color_wand, width, height, compose);
 #else
 	status = MagickBorderImage(intern->magick_wand, color_wand, width, height);
@@ -11037,7 +11037,7 @@ PHP_METHOD(imagick, resampleimage)
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
-		
+
 #if MagickLibVersion >= 0x700
 	//TODO - allow filter to be set.
 	//TODO - figure out what to do about blur.
@@ -11059,7 +11059,7 @@ PHP_METHOD(imagick, resampleimage)
 /* {{{ proto bool Imagick::resizeImage(int width, int height, int filter, float blur[, bool bestfit = false[, bool legacy]])
 	Scales an image to the desired dimensions with one of these filters:
 	If legacy is true, the calculations are done with the small rounding bug that existed in
-	Imagick before 3.4.0. If false, the calculations should produce the same results as 
+	Imagick before 3.4.0. If false, the calculations should produce the same results as
 	ImageMagick CLI does.
 */
 PHP_METHOD(imagick, resizeimage)
@@ -11268,7 +11268,7 @@ PHP_METHOD(imagick, getcompression)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-		
+
 	intern = Z_IMAGICK_P(getThis());
 	RETVAL_LONG(MagickGetCompression(intern->magick_wand));
 }
@@ -11456,7 +11456,7 @@ PHP_METHOD(imagick, getoption)
 
 	value = MagickGetOption(intern->magick_wand, key);
 
-	if (value) {	
+	if (value) {
 		IM_ZVAL_STRING(return_value, value);
 		IMAGICK_FREE_MAGICK_MEMORY(value);
 	}
@@ -11545,7 +11545,7 @@ PHP_METHOD(imagick, getquantum)
 
 	MagickGetQuantumRange(&range);
 	ZVAL_LONG(return_value, range);
-	
+
 //#ifdef MAGICKCORE_HDRI_ENABLE
 //	RETVAL_DOUBLE(color_value);
 //#else
@@ -12268,7 +12268,7 @@ PHP_METHOD(imagick, colormatriximage)
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read color matrix array" TSRMLS_CC);
 		return;
 	}
-	
+
 	if (num_elements == 25) {
 		order = 5;
 	}
@@ -12283,7 +12283,7 @@ PHP_METHOD(imagick, colormatriximage)
 
 	kernel_color_matrix = php_imagick_getKernelInfo(colors, order);
 
-	//TODO - add check that matrix is 5x5 or 6x6? 
+	//TODO - add check that matrix is 5x5 or 6x6?
 	status = MagickColorMatrixImage(intern->magick_wand, kernel_color_matrix);
 
 	//Free the memory
@@ -12374,11 +12374,11 @@ PHP_METHOD(imagick, rotationalblurimage)
 
 #if MagickLibVersion >= 0x683
 
-//Technically, this version is available in 0x682. However there was an incompatible 
+//Technically, this version is available in 0x682. However there was an incompatible
 //change to the methods signature in a bug release. So only expose it for stable
 //versions.
 //
-//6.8.2.8 - MagickStatisticImage ( MagickWand* p1, enum ChannelType const p2, enum StatisticType const p3, size_t const p4, size_t const p5 ) (6) 
+//6.8.2.8 - MagickStatisticImage ( MagickWand* p1, enum ChannelType const p2, enum StatisticType const p3, size_t const p4, size_t const p5 ) (6)
 //6.8.2.9 - MagickStatisticImage ( MagickWand* p1, enum StatisticType const p2, size_t const p3, size_t const p4 )
 
 
@@ -12438,7 +12438,7 @@ PHP_METHOD(imagick, subimagematch)
 	//http://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zvals/
 	MagickWand *new_wand;
 
-	
+
 #if MagickLibVersion >= 0x700
 	im_long metric = RootMeanSquaredErrorMetric;
 #else
@@ -12449,7 +12449,7 @@ PHP_METHOD(imagick, subimagematch)
 	char *param_string = "O|z/z/dl";
 #else
 	char *param_string = "O|zzdl";
-	
+
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, param_string, &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity, &similarity_threshold, &metric) == FAILURE) {
@@ -12560,7 +12560,7 @@ PHP_METHOD(imagick, getregistry)
 
 
 /* {{{ proto array Imagick::listRegistry()
-	List all the registry settings calls GetImageRegistry. returns an array of all the key/value pairs in the registry 
+	List all the registry settings calls GetImageRegistry. returns an array of all the key/value pairs in the registry
 */
 PHP_METHOD(imagick, listregistry)
 {
@@ -12878,7 +12878,7 @@ PHP_METHOD(imagick, compositeimagegravity)
 
 #if MagickLibVersion >= 0x693
 /* {{{ proto bool Imagick::localContrastImage(float radius, float strength)
-Attempts to increase the appearance of large-scale light-dark transitions. 
+Attempts to increase the appearance of large-scale light-dark transitions.
 Local contrast enhancement works similarly to sharpening with an unsharp mask,
 however the mask is instead created using an image with a greater blur distance.
 */

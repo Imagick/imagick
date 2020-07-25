@@ -17,36 +17,36 @@
    |         Scott MacVicar <scottmac@php.net>                            |
    +----------------------------------------------------------------------+
 */
-#ifndef PHP_IMAGICK_HELPERS_H 
+#ifndef PHP_IMAGICK_HELPERS_H
 # define PHP_IMAGICK_HELPERS_H
 
 void php_imagick_initialize_constants(TSRMLS_D);
 
-zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC);
+zend_bool php_imagick_check_font(char *font, int font_len);
 
 zend_bool php_imagick_thumbnail_dimensions(MagickWand *magick_wand, zend_bool bestfit, im_long desired_width, im_long desired_height, im_long *new_width, im_long *new_height, zend_bool legacy);
 
-PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements TSRMLS_DC);
+PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_elements);
 
-double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_elements TSRMLS_DC);
+double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_elements);
 
-im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements TSRMLS_DC);
+im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements);
 
-unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_elements TSRMLS_DC);
+unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_elements);
 
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
 
-void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callback TSRMLS_DC);
+void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callback);
 
 MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data);
 
-zend_bool php_imagick_validate_map(const char *map TSRMLS_DC);
+zend_bool php_imagick_validate_map(const char *map);
 
-php_imagick_rw_result_t php_imagick_file_access_check (const char *filename TSRMLS_DC);
+php_imagick_rw_result_t php_imagick_file_access_check (const char *filename);
 
 
-PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC);
-PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t caller, zend_bool *allocated TSRMLS_DC);
+PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated);
+PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t caller, zend_bool *allocated);
 
 
 char *php_imagick_set_locale (TSRMLS_D);
@@ -64,25 +64,25 @@ zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand);
 zend_bool php_imagickpixel_ensure_not_null(PixelWand *pixel_wand);
 
 /* Defined in imagickpixeliterator_class.c */
-void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value TSRMLS_DC);
+void php_imagick_pixel_iterator_new (PixelIterator *pixel_it, zval *return_value);
 
 /*
   Convert ImageMagick exception types to PHP exceptions
 */
-void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message TSRMLS_DC);
-void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message TSRMLS_DC);
-void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message TSRMLS_DC);
-void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const char *default_message TSRMLS_DC);
+void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char *default_message);
+void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message);
+void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message);
+void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const char *default_message);
 
 /*
   Convert read or write failure to PHP exception
 */
-void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_result_t rc, const char *filename TSRMLS_DC);
-void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, php_imagick_rw_result_t rc, const char *filename TSRMLS_DC);
+void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_result_t rc, const char *filename);
+void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, php_imagick_rw_result_t rc, const char *filename);
 
 /*
   Throw an exception with message
 */
-void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description TSRMLS_DC);
+void php_imagick_throw_exception (php_imagick_class_type_t type, const char *description);
 
 #endif /* PHP_IMAGICK_HELPERS_H */
