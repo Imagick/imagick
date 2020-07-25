@@ -7,6 +7,8 @@ cache:
         - $HOME/im
 
 php:
+    - nightly
+    - 7.4
     - 7.3
     - 7.2
     - 7.1
@@ -60,3 +62,4 @@ matrix:
   allow_failures:
     - env: IMAGEMAGICK_VERSION=git6
     - env: IMAGEMAGICK_VERSION=git7
+    - php: nightly
