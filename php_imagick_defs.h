@@ -106,7 +106,7 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #endif
 
 #if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 3
-#define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
+#define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS(), "")
 #endif
 
 
@@ -161,7 +161,7 @@ typedef struct _php_imagickdraw_object  {
 } php_imagickdraw_object;
 
 
-#else 
+#else
 
 
 /* Structure for ImagickDraw object. */
@@ -177,7 +177,7 @@ typedef struct _php_imagickdraw_object  {
 
 /* Structure for ImagickPixelIterator object. */
 typedef struct _php_imagickpixeliterator_object  {
-	
+
 	PixelIterator *pixel_iterator;
 	zend_bool initialized;
 
@@ -248,7 +248,7 @@ typedef struct _php_imagickkernel_object  {
 #endif
 
 //Object fetching.
-#ifdef ZEND_ENGINE_3 
+#ifdef ZEND_ENGINE_3
 
 static inline php_imagick_object *php_imagick_fetch_object(zend_object *obj) {
 	return (php_imagick_object *)((char*)(obj) - XtOffsetOf(php_imagick_object, zo));
@@ -272,9 +272,9 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 }
 #endif
 
-#else 
+#else
 	#define php_imagick_fetch_object(object) ((php_imagick_object *)object)
-	#define php_imagickdraw_fetch_object(object) ((php_imagickdraw_object *)object) 
+	#define php_imagickdraw_fetch_object(object) ((php_imagickdraw_object *)object)
 	#define php_imagickpixel_fetch_object(object) ((php_imagickpixel_object *)object)
 	#define php_imagickpixeliterator_fetch_object(object) ((php_imagickpixeliterator_object *)object)
 	#define php_imagickkernel_fetch_object(object) ((php_imagickkernel_object *)object)
@@ -290,11 +290,11 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define Z_IMAGICKKERNEL_P(zv) php_imagickkernel_fetch_object(Z_OBJ_P((zv)))
 #endif
 #else
-	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKPIXEL_P(zv) (php_imagickpixel_object *) zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKPIXELITERATOR_P(zv) (php_imagickpixeliterator_object *)zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKKERNEL_P(zv) (php_imagickkernel_object *)zend_object_store_get_object(zv TSRMLS_CC)
+	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv)
+	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv)
+	#define Z_IMAGICKPIXEL_P(zv) (php_imagickpixel_object *) zend_object_store_get_object(zv)
+	#define Z_IMAGICKPIXELITERATOR_P(zv) (php_imagickpixeliterator_object *)zend_object_store_get_object(zv)
+	#define Z_IMAGICKKERNEL_P(zv) (php_imagickkernel_object *)zend_object_store_get_object(zv)
 #endif
 
 // String access
@@ -303,7 +303,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define IM_RETURN_STRING(s) RETURN_STRING(s)
 #else
 	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar, 1);
-	//RETURN_STRING(s, duplicate) 
+	//RETURN_STRING(s, duplicate)
 	#define IM_RETURN_STRING(s) RETURN_STRING(s, 0)
 #endif
 
@@ -323,7 +323,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 
 #ifdef ZEND_ENGINE_3
 	#define IM_ZEND_OBJECT zend_object
-#else 
+#else
 	#define IM_ZEND_OBJECT void
 #endif
 
@@ -761,7 +761,7 @@ PHP_METHOD(imagick, getimageinterlacescheme);
 PHP_METHOD(imagick, getimageiterations);
 #if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimagemattecolor);
-#endif //#if MagickLibVersion < 0x700 
+#endif //#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, getimagepage);
 PHP_METHOD(imagick, getimagepixelcolor);
 PHP_METHOD(imagick, getimageprofile);

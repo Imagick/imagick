@@ -25,12 +25,12 @@
 
 #if ZEND_MODULE_API_NO > 20060613
 #  define IMAGICK_INIT_ERROR_HANDLING  zend_error_handling error_handling
-#  define IMAGICK_SET_ERROR_HANDLING_THROW zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling TSRMLS_CC)
-#  define IMAGICK_RESTORE_ERROR_HANDLING   zend_restore_error_handling(&error_handling TSRMLS_CC)
+#  define IMAGICK_SET_ERROR_HANDLING_THROW zend_replace_error_handling(EH_THROW, php_imagick_exception_class_entry, &error_handling)
+#  define IMAGICK_RESTORE_ERROR_HANDLING   zend_restore_error_handling(&error_handling)
 #else
 #  define IMAGICK_INIT_ERROR_HANDLING
-#  define IMAGICK_SET_ERROR_HANDLING_THROW php_set_error_handling(EH_THROW, php_imagick_exception_class_entry TSRMLS_CC)
-#  define IMAGICK_RESTORE_ERROR_HANDLING   php_set_error_handling(EH_NORMAL, NULL TSRMLS_CC)
+#  define IMAGICK_SET_ERROR_HANDLING_THROW php_set_error_handling(EH_THROW, php_imagick_exception_class_entry)
+#  define IMAGICK_RESTORE_ERROR_HANDLING   php_set_error_handling(EH_NORMAL, NULL)
 #endif
 
 #ifndef S_ISDIR
@@ -82,7 +82,7 @@ zend_bool php_imagick_is_url(const char *filename)
 {
 	const char *path_for_open;
 
-	if (php_stream_locate_url_wrapper(filename, &path_for_open, STREAM_LOCATE_WRAPPERS_ONLY TSRMLS_CC)) {
+	if (php_stream_locate_url_wrapper(filename, &path_for_open, STREAM_LOCATE_WRAPPERS_ONLY)) {
 		return 1;
 	}
 	return 0;
@@ -120,7 +120,7 @@ zend_bool php_imagick_file_init(struct php_imagick_file_t *file, const char *fil
 			return 1;
 		}
 		/* Is it an url? */
-		else if (php_imagick_is_url(filename TSRMLS_CC)) {
+		else if (php_imagick_is_url(filename)) {
 			file->type          = ImagickUri;
 			file->absolute_path = estrdup("");
 			return 1;
@@ -139,7 +139,7 @@ zend_bool php_imagick_file_init(struct php_imagick_file_t *file, const char *fil
 	(void) snprintf(buffer, MaxTextExtent, "%s/%s", head_path, tail_path);
 
 	/* The full path to the file */
-	file->absolute_path = expand_filepath(buffer, NULL TSRMLS_CC);
+	file->absolute_path = expand_filepath(buffer, NULL);
 
 	/* Failed to resolve absolute path */
 	if (!file->absolute_path) {
@@ -259,7 +259,7 @@ int php_imagick_safe_mode_check(const char *filename)
 		return IMAGICK_RW_SAFE_MODE_ERROR;
 	}
 #endif
-	if (PG(open_basedir) && php_check_open_basedir_ex(filename, 0 TSRMLS_CC)) {
+	if (PG(open_basedir) && php_check_open_basedir_ex(filename, 0)) {
 		return IMAGICK_RW_OPEN_BASEDIR_ERROR;
 	}
 
@@ -271,7 +271,7 @@ php_imagick_rw_result_t php_imagick_read_file(php_imagick_object *intern, struct
 	php_imagick_rw_result_t rc;
 
 	if (file->type == ImagickFile) {
-		rc = php_imagick_safe_mode_check(file->absolute_path TSRMLS_CC);
+		rc = php_imagick_safe_mode_check(file->absolute_path);
 
 		if (rc != IMAGICK_RW_OK) {
 			return rc;
@@ -279,9 +279,9 @@ php_imagick_rw_result_t php_imagick_read_file(php_imagick_object *intern, struct
 	}
 
 	if (file->type == ImagickUri) {
-		return php_imagick_read_image_using_php_streams(intern, file, type TSRMLS_CC);
+		return php_imagick_read_image_using_php_streams(intern, file, type);
 	} else {
-		return php_imagick_read_image_using_imagemagick(intern, file, type TSRMLS_CC);
+		return php_imagick_read_image_using_imagemagick(intern, file, type);
 	}
 }
 
@@ -291,7 +291,7 @@ php_imagick_rw_result_t php_imagick_write_file(php_imagick_object *intern, struc
 	MagickBooleanType status = MagickFalse;
 
 	if (file->type == ImagickFile) {
-		rc = php_imagick_safe_mode_check(file->absolute_path TSRMLS_CC);
+		rc = php_imagick_safe_mode_check(file->absolute_path);
 		if (rc != IMAGICK_RW_OK) {
 			return rc;
 		}

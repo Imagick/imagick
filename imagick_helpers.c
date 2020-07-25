@@ -51,7 +51,7 @@ void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callba
 
 	if (progress_callback) {
 		if (progress_callback->previous_callback) {
-			php_imagick_cleanup_progress_callback(progress_callback->previous_callback TSRMLS_CC);
+			php_imagick_cleanup_progress_callback(progress_callback->previous_callback);
 			efree(progress_callback->previous_callback);
 		}
 
@@ -131,10 +131,10 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	ZVAL_LONG(*zargs[1], span);
 #endif
 
-	error = zend_call_function(&fci, &fci_cache TSRMLS_CC);
+	error = zend_call_function(&fci, &fci_cache);
 
 	if (error == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "An error occurred while invoking the callback");
+		php_error_docref(NULL, E_WARNING, "An error occurred while invoking the callback");
 		//Abort processing as user callback is no longer callable
 		return MagickFalse;
 	}
@@ -470,7 +470,7 @@ php_imagick_rw_result_t php_imagick_file_access_check (const char *filename)
 	 	return IMAGICK_RW_SAFE_MODE_ERROR;
 #endif
 
-	if (php_check_open_basedir_ex(filename, 0 TSRMLS_CC))
+	if (php_check_open_basedir_ex(filename, 0))
 		return IMAGICK_RW_OPEN_BASEDIR_ERROR;
 
 	if (VCWD_ACCESS(filename, F_OK) != 0)
@@ -488,31 +488,31 @@ void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename)
 	switch (rc) {
 
 		case IMAGICK_RW_SAFE_MODE_ERROR:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Safe mode restricts user to read the file: %s", filename);
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "Safe mode restricts user to read the file: %s", filename);
 		break;
 
 		case IMAGICK_RW_OPEN_BASEDIR_ERROR:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "open_basedir restriction in effect. File(%s) is not within the allowed path(s)", filename);
 		break;
 
 		case IMAGICK_RW_PERMISSION_DENIED:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Permission denied to: %s", filename);
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "Permission denied to: %s", filename);
 		break;
 
 		case IMAGICK_RW_FILENAME_TOO_LONG:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Filename too long: %s", filename);
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "Filename too long: %s", filename);
 		break;
 
 		case IMAGICK_RW_PATH_DOES_NOT_EXIST:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path does not exist: %s", filename);
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "The path does not exist: %s", filename);
 		break;
 
 		case IMAGICK_RW_PATH_IS_DIR:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "The path is a directory: %s", filename);
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "The path is a directory: %s", filename);
 		break;
 
 		default:
-			zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Unknown error");
+			zend_throw_exception_ex(php_imagick_exception_class_entry, 1, "Unknown error");
 		break;
 	}
 }
@@ -520,19 +520,19 @@ void s_rw_fail_to_exception (php_imagick_rw_result_t rc, const char *filename)
 void php_imagick_rw_fail_to_exception (MagickWand *magick_wand, php_imagick_rw_result_t rc, const char *filename)
 {
 	if (rc == IMAGICK_RW_UNDERLYING_LIBRARY) {
-		php_imagick_convert_imagick_exception (magick_wand, "Failed to read the file" TSRMLS_CC);
+		php_imagick_convert_imagick_exception (magick_wand, "Failed to read the file");
 		return;
 	}
-	s_rw_fail_to_exception (rc, filename TSRMLS_CC);
+	s_rw_fail_to_exception (rc, filename);
 }
 
 void php_imagick_imagickdraw_rw_fail_to_exception (DrawingWand *drawing_wand, php_imagick_rw_result_t rc, const char *filename)
 {
 	if (rc == IMAGICK_RW_UNDERLYING_LIBRARY) {
-		php_imagick_convert_imagickdraw_exception (drawing_wand, "Failed to read the file" TSRMLS_CC);
+		php_imagick_convert_imagickdraw_exception (drawing_wand, "Failed to read the file");
 		return;
 	}
-	s_rw_fail_to_exception (rc, filename TSRMLS_CC);
+	s_rw_fail_to_exception (rc, filename);
 }
 
 
@@ -704,7 +704,7 @@ void php_imagick_throw_exception (php_imagick_class_type_t type, const char *des
 		break;
 #endif
 	}
-	zend_throw_exception(ce, description, code TSRMLS_CC);
+	zend_throw_exception(ce, description, code);
 }
 
 static
@@ -715,10 +715,10 @@ void s_convert_exception (char *description, const char *default_message, long s
 		if (description) {
 			description = MagickRelinquishMemory (description);
 		}
-		zend_throw_exception(php_imagick_exception_class_entry, default_message, code TSRMLS_CC);
+		zend_throw_exception(php_imagick_exception_class_entry, default_message, code);
 		return;
 	}
-	zend_throw_exception(php_imagick_exception_class_entry, description, severity TSRMLS_CC);
+	zend_throw_exception(php_imagick_exception_class_entry, description, severity);
 	MagickRelinquishMemory (description);
 }
 
@@ -733,7 +733,7 @@ void php_imagick_convert_imagick_exception (MagickWand *magick_wand, const char 
 	description = MagickGetException(magick_wand, &severity);
 	MagickClearException (magick_wand);
 
-	s_convert_exception (description, default_message, severity, 1 TSRMLS_CC);
+	s_convert_exception (description, default_message, severity, 1);
 }
 
 void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const char *default_message)
@@ -744,7 +744,7 @@ void php_imagick_convert_imagickdraw_exception (DrawingWand *drawing_wand, const
 	description = DrawGetException(drawing_wand, &severity);
 	DrawClearException (drawing_wand);
 
-	s_convert_exception (description, default_message, severity, 2 TSRMLS_CC);
+	s_convert_exception (description, default_message, severity, 2);
 }
 
 void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_iterator, const char *default_message)
@@ -755,7 +755,7 @@ void php_imagick_convert_imagickpixeliterator_exception (PixelIterator *pixel_it
 	description = PixelGetIteratorException(pixel_iterator, &severity);
 	PixelClearIteratorException (pixel_iterator);
 
-	s_convert_exception (description, default_message, severity, 3 TSRMLS_CC);
+	s_convert_exception (description, default_message, severity, 3);
 }
 
 void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const char *default_message)
@@ -766,7 +766,7 @@ void php_imagick_convert_imagickpixel_exception (PixelWand *pixel_wand, const ch
 	description = PixelGetException(pixel_wand, &severity);
 	PixelClearException (pixel_wand);
 
-	s_convert_exception (description, default_message, severity, 4 TSRMLS_CC);
+	s_convert_exception (description, default_message, severity, 4);
 }
 
 PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t caller, zend_bool *allocated)
@@ -797,22 +797,22 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 
 			if (PixelSetColor (pixel_wand, Z_STRVAL_P(param)) == MagickFalse) {
 				pixel_wand = DestroyPixelWand(pixel_wand);
-				php_imagick_throw_exception (caller, "Unrecognized color string" TSRMLS_CC);
+				php_imagick_throw_exception (caller, "Unrecognized color string");
 				return NULL;
 			}
 		}
 		break;
 
 		case IS_OBJECT:
-			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) {
+			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0)) {
 				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
 				pixel_wand = intern->pixel_wand;
 			} else
-				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string" TSRMLS_CC);
+				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string");
 		break;
 
 		default:
-			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
+			php_imagick_throw_exception(caller, "Invalid color parameter provided");
 	}
 	return pixel_wand;
 }
@@ -854,15 +854,15 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 		break;
 
 		case IS_OBJECT:
-			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) {
+			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0)) {
 				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
 				pixel_wand = intern->pixel_wand;
 			} else
-				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string"  TSRMLS_CC);
+				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string" );
 		break;
 
 		default:
-			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
+			php_imagick_throw_exception(caller, "Invalid color parameter provided");
 	}
 	return pixel_wand;
 }
@@ -952,7 +952,7 @@ zend_bool php_imagick_ensure_not_empty (MagickWand *magick_wand)
 {
 	if (MagickGetNumberImages(magick_wand) == 0) {
 		TSRMLS_FETCH ();
-		php_imagick_throw_exception (IMAGICK_CLASS, "Can not process empty Imagick object" TSRMLS_CC);
+		php_imagick_throw_exception (IMAGICK_CLASS, "Can not process empty Imagick object");
 		return 0;
 	}
 	return 1;
@@ -962,7 +962,7 @@ zend_bool php_imagickpixel_ensure_not_null(PixelWand *pixel_wand)
 {
 	if (pixel_wand == NULL) {
 		TSRMLS_FETCH ();
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Can not process empty ImagickPixel object" TSRMLS_CC);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Can not process empty ImagickPixel object");
 		return 0;
 	}
 	return 1;
@@ -971,10 +971,10 @@ zend_bool php_imagickpixel_ensure_not_null(PixelWand *pixel_wand)
 void php_imagick_initialize_constants(TSRMLS_D)
 {
 #define IMAGICK_REGISTER_CONST_LONG(const_name, value)\
-	zend_declare_class_constant_long(php_imagick_sc_entry, const_name, sizeof(const_name)-1, (long)value TSRMLS_CC);
+	zend_declare_class_constant_long(php_imagick_sc_entry, const_name, sizeof(const_name)-1, (long)value);
 
 #define IMAGICK_REGISTER_CONST_STRING(const_name, value)\
-	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value TSRMLS_CC);
+	zend_declare_class_constant_string(php_imagick_sc_entry, const_name, sizeof(const_name)-1, value);
 
 	/* Constants defined in php_imagick.h */
 	IMAGICK_REGISTER_CONST_LONG("COLOR_BLACK", PHP_IMAGICK_COLOR_BLACK);
