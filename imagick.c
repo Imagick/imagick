@@ -40,7 +40,11 @@
 ZEND_DECLARE_MODULE_GLOBALS(imagick)
 
 #ifdef IMAGICK_WITH_KERNEL
-HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC); /* {{{ */
+	#if PHP_VERSION_ID >= 80000
+	HashTable* php_imagickkernel_get_debug_info(zend_object *obj, int *is_temp TSRMLS_DC); /* {{{ */
+	#else
+	HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC); /* {{{ */
+	#endif
 #endif
 
 zend_class_entry *php_imagick_sc_entry;
@@ -3272,9 +3276,15 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 }
 
 
+#if PHP_VERSION_ID >= 80000
+static int php_imagick_count_elements(zend_object *object, im_long *count) /* {{{ */
+{
+	php_imagick_object *intern= php_imagick_fetch_object(object);
+#else
 static int php_imagick_count_elements(zval *object, im_long *count TSRMLS_DC) /* {{{ */
 {
 	php_imagick_object *intern= Z_IMAGICK_P(object);
+#endif
 
 	if (intern->magick_wand) {
 		*count = MagickGetNumberImages(intern->magick_wand);
@@ -3284,7 +3294,11 @@ static int php_imagick_count_elements(zval *object, im_long *count TSRMLS_DC) /*
 }
 
 #ifdef ZEND_ENGINE_3
-static zval *php_imagick_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv TSRMLS_DC)
+#if PHP_VERSION_ID >= 80000
+static zval *php_imagick_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv)
+#else
+static zval *php_imagick_read_property(zval *object, zval *member_val, int type, void **cache_slot, zval *rv TSRMLS_DC)
+#endif
 {
 	int ret;
 	php_imagick_object *intern;
@@ -3292,13 +3306,17 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 	zval tmp_member;
     const zend_object_handlers *std_hnd;
 
-	ZVAL_DEREF(member);
-	if (Z_TYPE_P(member) != IS_STRING) {
-		tmp_member = *member;
+#if PHP_VERSION_ID < 80000
+	zend_string *member;
+	ZVAL_DEREF(member_val);
+	if (Z_TYPE_P(member_val) != IS_STRING) {
+		tmp_member = *member_val;
 		zval_copy_ctor(&tmp_member);
 		convert_to_string(&tmp_member);
-		member = &tmp_member;
-    }
+		member_val = &tmp_member;
+	}
+	member = Z_STRVAL_P(member_val);
+#endif
 
 	std_hnd = zend_get_std_object_handlers();
 
@@ -3311,23 +3329,27 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 	}
 	else {
 
+		#if PHP_VERSION_ID < 80000
 		intern = Z_IMAGICK_P(object);
+		#else
+		intern = php_imagick_fetch_object(object);
+		#endif
 		/* Do we have any images? */
 		if (MagickGetNumberImages(intern->magick_wand)) {
 
 			//TODO - this seems redundant
 			/* Is this overloaded? */
-			if (!strcmp(Z_STRVAL_P(member), "width") ||
-				!strcmp(Z_STRVAL_P(member), "height") ||
-				!strcmp(Z_STRVAL_P(member), "format")) {
+			if (!strcmp(ZSTR_VAL(member), "width") ||
+				!strcmp(ZSTR_VAL(member), "height") ||
+				!strcmp(ZSTR_VAL(member), "format")) {
 
-				if (!strcmp(Z_STRVAL_P(member), "width")) {
+				if (!strcmp(ZSTR_VAL(member), "width")) {
 					retval = rv;
 					ZVAL_LONG(retval, MagickGetImageWidth(intern->magick_wand));
-				} else if (!strcmp(Z_STRVAL_P(member), "height")) {
+				} else if (!strcmp(ZSTR_VAL(member), "height")) {
 					retval = rv;
 					ZVAL_LONG(retval, MagickGetImageHeight(intern->magick_wand));
-				} else if (!strcmp(Z_STRVAL_P(member), "format")) {
+				} else if (!strcmp(ZSTR_VAL(member), "format")) {
 					char *format = MagickGetImageFormat(intern->magick_wand);
 
 					if (format) {
@@ -3350,9 +3372,11 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 		retval = &EG(uninitialized_zval);
 	}
 
-	if (member == &tmp_member) {
+	#if PHP_VERSION_ID < 80000
+	if (member_val == &tmp_member) {
 		zval_dtor(member);
 	}
+	#endif
 
 	return retval;
 }
@@ -3434,7 +3458,9 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 }
 #endif
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 80000
+static zend_object * php_imagick_clone_imagick_object(zend_object *this_ptr)
+#elif PHP_VERSION_ID >= 70000
 static zend_object * php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
 #else
 static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_DC)
@@ -3442,7 +3468,11 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 {
 	MagickWand *wand_copy = NULL;
 	php_imagick_object *new_obj = NULL;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 80000
+	php_imagick_object *old_obj = php_imagick_fetch_object(this_ptr);
+	zend_object * new_zo = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
+#elif PHP_VERSION_ID >= 70000
 	php_imagick_object *old_obj = Z_IMAGICK_P(this_ptr);
 	zend_object * new_zo = php_imagick_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
 	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
@@ -3466,7 +3496,9 @@ static zend_object_value php_imagick_clone_imagick_object(zval *this_ptr TSRMLS_
 	return new_zo;
 }
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 80000
+static zend_object * php_imagick_clone_imagickdraw_object(zend_object *this_ptr)
+#elif PHP_VERSION_ID >= 70000
 static zend_object * php_imagick_clone_imagickdraw_object(zval *this_ptr TSRMLS_DC)
 #else
 static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSRMLS_DC)
@@ -3474,7 +3506,11 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 {
 	DrawingWand *wand_copy = NULL;
 	php_imagickdraw_object *new_obj = NULL;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 80000
+	php_imagickdraw_object *old_obj = php_imagickdraw_fetch_object(this_ptr);
+	zend_object * new_zo = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
+#elif PHP_VERSION_ID >= 70000
 	php_imagickdraw_object *old_obj = Z_IMAGICKDRAW_P(this_ptr);
 	zend_object * new_zo = php_imagickdraw_object_new_ex(old_obj->zo.ce, &new_obj, 0 TSRMLS_CC);
 	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
@@ -3494,7 +3530,10 @@ static zend_object_value php_imagick_clone_imagickdraw_object(zval *this_ptr TSR
 	return new_zo;
 }
 
-#ifdef ZEND_ENGINE_3
+
+#if PHP_VERSION_ID >= 80000
+static zend_object * php_imagick_clone_imagickpixel_object(zend_object *this_ptr)
+#elif PHP_VERSION_ID >= 70000
 static zend_object * php_imagick_clone_imagickpixel_object(zval *this_ptr TSRMLS_DC)
 #else
 static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TSRMLS_DC)
@@ -3502,12 +3541,18 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 {
 	PixelWand *wand_copy = NULL;
 	php_imagickpixel_object *new_obj = NULL;
-#ifdef ZEND_ENGINE_3
+
+#if PHP_VERSION_ID >= 80000
+	zend_object *new_zo;
+	php_imagickpixel_object *old_obj = php_imagickpixel_fetch_object(this_ptr);
+	new_zo = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
+#elif PHP_VERSION_ID >= 70000
 	zend_object *new_zo;
 	php_imagickpixel_object *old_obj = Z_IMAGICKPIXEL_P(this_ptr);
 	new_zo = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
-#else 
+#else
 	php_imagickpixel_object *old_obj = (php_imagickpixel_object *) zend_object_store_get_object(this_ptr TSRMLS_CC);
 	zend_object_value new_zo = php_imagickpixel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
 	zend_objects_clone_members(&new_obj->zo, new_zo, &old_obj->zo, Z_OBJ_HANDLE_P(this_ptr) TSRMLS_CC);
@@ -3524,7 +3569,10 @@ static zend_object_value php_imagick_clone_imagickpixel_object(zval *this_ptr TS
 }
 
 #ifdef IMAGICK_WITH_KERNEL
-#ifdef ZEND_ENGINE_3
+
+#if PHP_VERSION_ID >= 80000
+static zend_object * php_imagick_clone_imagickkernel_object(zend_object *this_ptr TSRMLS_DC)
+#elif PHP_VERSION_ID >= 70000
 static zend_object * php_imagick_clone_imagickkernel_object(zval *this_ptr TSRMLS_DC)
 #else
 static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr TSRMLS_DC)
@@ -3533,7 +3581,12 @@ static zend_object_value php_imagick_clone_imagickkernel_object(zval *this_ptr T
 	KernelInfo *kernel_info_copy = NULL;
 	php_imagickkernel_object *new_obj = NULL;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 80000
+	zend_object *new_zo;
+	php_imagickkernel_object *old_obj = php_imagickkernel_fetch_object(this_ptr);
+	new_zo = php_imagickkernel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
+	zend_objects_clone_members(&new_obj->zo, &old_obj->zo TSRMLS_CC);
+#elif PHP_VERSION_ID >= 70000
 	zend_object *new_zo;
 	php_imagickkernel_object *old_obj = Z_IMAGICKKERNEL_P(this_ptr);
 	new_zo = php_imagickkernel_object_new_ex(old_obj->zo.ce, &new_obj TSRMLS_CC);
@@ -3757,7 +3810,7 @@ PHP_MINFO_FUNCTION(imagick)
 
 #ifdef ZEND_ENGINE_3
 	smart_string formats = {0};
-#else 
+#else
 	smart_str formats = {0};
 #endif
 

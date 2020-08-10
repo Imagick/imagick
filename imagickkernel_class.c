@@ -79,7 +79,11 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 }
 
 
+#if PHP_VERSION_ID >= 80000
+HashTable* php_imagickkernel_get_debug_info(zend_object *obj, int *is_temp TSRMLS_DC) /* {{{ */
+#else
 HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /* {{{ */
+#endif
 {
 	php_imagickkernel_object *internp;
 	HashTable *debug_info;
@@ -92,7 +96,11 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 
 	*is_temp = 1; //var_dump will destroy the hashtable
 
+#if PHP_VERSION_ID >= 80000
+	internp = php_imagickkernel_fetch_object(obj);
+#else
 	internp = Z_IMAGICKKERNEL_P(obj);
+#endif
 	kernel_info = internp->kernel_info;
 
 	ALLOC_HASHTABLE(debug_info);
