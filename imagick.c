@@ -2445,7 +2445,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, smushimages, imagick_smushimages_args, ZEND_ACC_PUBLIC)
 #endif
 	PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-	PHP_ME(imagick, __tostring, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, __tostring, imagick_zero_args, ZEND_ACC_PUBLIC)
 #if PHP_VERSION_ID >= 50600
 	PHP_ME(imagick, count, imagick_count_args, ZEND_ACC_PUBLIC)
 #else
@@ -2661,7 +2661,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, getimagegamma, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagegreenprimary, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageheight, imagick_zero_args, ZEND_ACC_PUBLIC)
-	PHP_ME(imagick, getimagehistogram, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(imagick, getimagehistogram, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageinterlacescheme, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimageiterations, imagick_zero_args, ZEND_ACC_PUBLIC)
 #if MagickLibVersion < 0x700
