@@ -806,7 +806,7 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 		break;
 
 		case IS_OBJECT:
-			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) {
+			if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
 				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
 				pixel_wand = intern->pixel_wand;
 			} else
@@ -856,7 +856,7 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 		break;
 
 		case IS_OBJECT:
-			if (instanceof_function_ex(Z_OBJCE_P(param), php_imagickpixel_sc_entry, 0 TSRMLS_CC)) {
+			if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
 				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
 				pixel_wand = intern->pixel_wand;
 			} else
