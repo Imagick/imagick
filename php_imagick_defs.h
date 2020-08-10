@@ -42,6 +42,16 @@
 #include "php_ini.h"
 #include "Zend/zend.h"
 
+#if PHP_VERSION_ID >= 80000
+	#define HAVE_LOCALE_H
+	#define TSRMLS_C
+	#define TSRMLS_CC
+	#define TSRMLS_D
+	#define TSRMLS_DC
+	#define TSRMLS_FETCH()
+	#define TSRMLS_SET_CTX(ctx)
+#endif
+
 /* Include locale header */
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
