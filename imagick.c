@@ -2424,7 +2424,7 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, sparsecolorimage, imagick_sparsecolorimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, remapimage, imagick_remapimage_args, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x68A
+#if PHP_IMAGICK_HAVE_HOUGHLINE
 	PHP_ME(imagick, houghlineimage, imagick_houghlineimage_args, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x646
