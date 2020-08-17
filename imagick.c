@@ -3311,30 +3311,15 @@ static int php_imagick_count_elements(zval *object, im_long *count TSRMLS_DC) /*
 	return FAILURE;
 }
 
-#ifdef ZEND_ENGINE_3
+
 #if PHP_VERSION_ID >= 80000
 static zval *php_imagick_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv)
-#else
-static zval *php_imagick_read_property(zval *object, zval *member_val, int type, void **cache_slot, zval *rv TSRMLS_DC)
-#endif
 {
 	int ret;
 	php_imagick_object *intern;
 	zval *retval = NULL;
-	zval tmp_member;
     const zend_object_handlers *std_hnd;
 
-#if PHP_VERSION_ID < 80000
-	zend_string *member;
-	ZVAL_DEREF(member_val);
-	if (Z_TYPE_P(member_val) != IS_STRING) {
-		tmp_member = *member_val;
-		zval_copy_ctor(&tmp_member);
-		convert_to_string(&tmp_member);
-		member_val = &tmp_member;
-	}
-	member = Z_STRVAL_P(member_val);
-#endif
 
 	std_hnd = zend_get_std_object_handlers();
 
@@ -3347,11 +3332,7 @@ static zval *php_imagick_read_property(zval *object, zval *member_val, int type,
 	}
 	else {
 
-		#if PHP_VERSION_ID < 80000
-		intern = Z_IMAGICK_P(object);
-		#else
 		intern = php_imagick_fetch_object(object);
-		#endif
 		/* Do we have any images? */
 		if (MagickGetNumberImages(intern->magick_wand)) {
 
@@ -3390,11 +3371,81 @@ static zval *php_imagick_read_property(zval *object, zval *member_val, int type,
 		retval = &EG(uninitialized_zval);
 	}
 
-	#if PHP_VERSION_ID < 80000
-	if (member_val == &tmp_member) {
+	return retval;
+}
+
+#else // PHP_VERSION_ID >= 80000
+
+#ifdef ZEND_ENGINE_3
+static zval *php_imagick_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv TSRMLS_DC)
+{
+	int ret;
+	php_imagick_object *intern;
+	zval *retval = NULL;
+	zval tmp_member;
+    const zend_object_handlers *std_hnd;
+
+	ZVAL_DEREF(member);
+	if (Z_TYPE_P(member) != IS_STRING) {
+		tmp_member = *member;
+		zval_copy_ctor(&tmp_member);
+		convert_to_string(&tmp_member);
+		member = &tmp_member;
+    }
+
+	std_hnd = zend_get_std_object_handlers();
+
+	ret = std_hnd->has_property(object, member, type, cache_slot TSRMLS_CC);
+
+	if (ret) {
+		//TODO - this would allow better immutability
+		//ZVAL_COPY_VALUE(retval, std_hnd->read_property(object, member, type, cache_slot, rv TSRMLS_CC));
+		retval = std_hnd->read_property(object, member, type, cache_slot, rv TSRMLS_CC);
+	}
+	else {
+
+		intern = Z_IMAGICK_P(object);
+		/* Do we have any images? */
+		if (MagickGetNumberImages(intern->magick_wand)) {
+
+			//TODO - this seems redundant
+			/* Is this overloaded? */
+			if (!strcmp(Z_STRVAL_P(member), "width") ||
+				!strcmp(Z_STRVAL_P(member), "height") ||
+				!strcmp(Z_STRVAL_P(member), "format")) {
+
+				if (!strcmp(Z_STRVAL_P(member), "width")) {
+					retval = rv;
+					ZVAL_LONG(retval, MagickGetImageWidth(intern->magick_wand));
+				} else if (!strcmp(Z_STRVAL_P(member), "height")) {
+					retval = rv;
+					ZVAL_LONG(retval, MagickGetImageHeight(intern->magick_wand));
+				} else if (!strcmp(Z_STRVAL_P(member), "format")) {
+					char *format = MagickGetImageFormat(intern->magick_wand);
+
+					if (format) {
+						retval = rv;
+						ZVAL_STRING(retval, format);
+						IMAGICK_FREE_MAGICK_MEMORY(format);
+					} else {
+						retval = rv;
+						ZVAL_STRING(retval, "");
+					}
+				}
+			}
+		}
+	}
+
+	if (!retval) {
+		//TODO - why is the error silent - it would be a small BC break
+		//to enable the warning. I think it would be the correct thing to do though.
+		//zend_error(E_NOTICE,"Undefined property: \Imagick::$%s", Z_STRVAL_P(member));
+		retval = &EG(uninitialized_zval);
+	}
+
+	if (member == &tmp_member) {
 		zval_dtor(member);
 	}
-	#endif
 
 	return retval;
 }
@@ -3474,6 +3525,8 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 	}
 	return retval;
 }
+#endif
+
 #endif
 
 #if PHP_VERSION_ID >= 80000
