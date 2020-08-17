@@ -2,8 +2,8 @@
 Test Imagick, houghLineImage
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
+checkClassMethods('Imagick', array('houghLineImage'));
 ?>
 --FILE--
 <?php
