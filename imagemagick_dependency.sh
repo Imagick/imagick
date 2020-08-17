@@ -88,7 +88,13 @@ imagemagick_fetch_and_build () {
 set +e
 
 
-    ./configure --prefix="${HOME}/im/imagemagick-${version}" --without-magick-plus-plus --without-perl --disable-openmp --with-gvc=no
+./configure \
+  --prefix="${HOME}/im/imagemagick-${version}" \
+  --without-magick-plus-plus \
+  --without-perl \
+  --disable-openmp \
+  --with-gvc=no \
+  --with-urw-base35-font-dir=/usr/share/fonts/type1/urw-base35/
     make -j 8
     make install
     cd ..
