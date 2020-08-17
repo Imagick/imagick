@@ -2488,6 +2488,8 @@ PHP_METHOD(imagick, deskewimage)
 	RETURN_TRUE;
 }
 
+
+#if MagickLibVersion > 0x68A
 /* {{{ proto bool Imagick::houghLineImage(int width, int height, float threshold)
         Draw hough lines for the image
 
@@ -2515,6 +2517,7 @@ PHP_METHOD(imagick, houghlineimage)
         RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 PHP_METHOD(imagick, segmentimage)
 {
