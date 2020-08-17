@@ -524,7 +524,9 @@ PHP_METHOD(imagick, setimagegravity);
 #if MagickLibVersion > 0x645
 PHP_METHOD(imagick, importimagepixels);
 PHP_METHOD(imagick, deskewimage);
+#if MagickLibVersion > 0x68A
 PHP_METHOD(imagick, houghlineimage);
+#endif
 PHP_METHOD(imagick, segmentimage);
 PHP_METHOD(imagick, sparsecolorimage);
 PHP_METHOD(imagick, remapimage);
