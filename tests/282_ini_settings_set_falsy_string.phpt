@@ -28,8 +28,10 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 
 $setSingleThread = ini_get('imagick.set_single_thread');
 
-if ($setSingleThread !== 0) {
-    echo "imagick.set_single_thread setting is not 0 but instead " . var_export($sleepCount, true) ."\n";
+// This should be a strict compare but can't be because
+// it's stored as a string...
+if ($setSingleThread != 0) {
+    echo "imagick.set_single_thread setting is not 0 but instead " . var_export($setSingleThread, true) ."\n";
 }
 
 
