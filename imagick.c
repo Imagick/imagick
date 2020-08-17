@@ -433,7 +433,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, threshold)
 	ZEND_END_ARG_INFO()
 
-#if MagickLibVersion > 0x68A
+#if PHP_IMAGICK_HAVE_HOUGHLINE
 	ZEND_BEGIN_ARG_INFO_EX(imagick_houghlineimage_args, 0, 0, 3)
 		ZEND_ARG_INFO(0, width)
 		ZEND_ARG_INFO(0, height)

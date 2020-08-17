@@ -402,6 +402,12 @@ extern zend_class_entry *php_imagickkernel_exception_class_entry;
 
 /* Forward declarations (Imagick) */
 
+#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x709) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x68A)
+  #define PHP_IMAGICK_HAVE_HOUGHLINE 1
+#else
+  #define PHP_IMAGICK_HAVE_HOUGHLINE 0
+#endif
+
 /* The conditional methods */
 #if MagickLibVersion > 0x628
 PHP_METHOD(imagick, pingimageblob);
@@ -524,7 +530,9 @@ PHP_METHOD(imagick, setimagegravity);
 #if MagickLibVersion > 0x645
 PHP_METHOD(imagick, importimagepixels);
 PHP_METHOD(imagick, deskewimage);
-#if MagickLibVersion > 0x68A
+
+
+#if PHP_IMAGICK_HAVE_HOUGHLINE
 PHP_METHOD(imagick, houghlineimage);
 #endif
 PHP_METHOD(imagick, segmentimage);

@@ -2489,7 +2489,7 @@ PHP_METHOD(imagick, deskewimage)
 }
 
 
-#if MagickLibVersion > 0x68A
+#if PHP_IMAGICK_HAVE_HOUGHLINE
 /* {{{ proto bool Imagick::houghLineImage(int width, int height, float threshold)
         Draw hough lines for the image
 
