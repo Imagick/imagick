@@ -2,6 +2,7 @@
 
 #give an error if the download fails.
 set -e
+set -x
 
 imagemagick_fetch_and_build () {
     local version=$1
@@ -79,7 +80,7 @@ imagemagick_fetch_and_build () {
 
             tar xvfz ImageMagick-${version}.tar.gz
             ls -l
-            cd ImageMagick-*
+            cd "ImageMagick-${version}"
         fi
         ;;
     esac
