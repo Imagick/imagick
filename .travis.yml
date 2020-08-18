@@ -57,7 +57,7 @@ script:
     - . ./configure-cflags.sh
     - phpize
     - ./configure --with-imagick="${HOME}/im/imagemagick-${IMAGEMAGICK_VERSION}"
-    - make
+    - make install
     - php -d extension=imagick.so util/check_fonts.php
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
