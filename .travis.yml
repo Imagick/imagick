@@ -9,25 +9,25 @@ cache:
 dist: bionic
 
 php:
-    - nightly
+  #  - nightly
     - 7.4
     - 7.3
     - 7.2
-    - 7.1
-    - 7.0
-    - 5.6
-    - 5.5
-    - 5.4
+  #  - 7.1
+  #  - 7.0
+  #  - 5.6
+  #  - 5.5
+  #  - 5.4
 
 env:
-    - IMAGEMAGICK_VERSION=git7
-    - IMAGEMAGICK_VERSION=git6
+  #  - IMAGEMAGICK_VERSION=git7
+  #  - IMAGEMAGICK_VERSION=git6
     - IMAGEMAGICK_VERSION=7.0.10-27
-    - IMAGEMAGICK_VERSION=7.0.8-4
+  #  - IMAGEMAGICK_VERSION=7.0.8-4
     - IMAGEMAGICK_VERSION=7.0.1-0
-    - IMAGEMAGICK_VERSION=6.9.2-0
-    - IMAGEMAGICK_VERSION=6.8.7-0
-    - IMAGEMAGICK_VERSION=6.7.8-0
+  #  - IMAGEMAGICK_VERSION=6.9.2-0
+  #  - IMAGEMAGICK_VERSION=6.8.7-0
+  #  - IMAGEMAGICK_VERSION=6.7.8-0
 
     # Include individual commits like this:
     # - IMAGEMAGICK_VERSION=commit_25553302a6d5f736b55e60109600dfbce5fbea48
@@ -58,6 +58,7 @@ script:
     - phpize
     - ./configure --with-imagick="${HOME}/im/imagemagick-${IMAGEMAGICK_VERSION}"
     - make
+    - php -d extension=imagick.so util/check_fonts.php
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt
     - php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
     - for i in `ls tests/*.out 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done

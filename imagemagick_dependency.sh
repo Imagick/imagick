@@ -78,7 +78,9 @@ imagemagick_fetch_and_build () {
                 # wget "https://github.com/ImageMagick/ImageMagick6/archive/${version}.tar.gz" -O ImageMagick-${version}.tar.gz
             fi
 
-            tar xvfz ImageMagick-${version}.tar.gz
+            tar xfz ImageMagick-${version}.tar.gz
+            # verbose version for debugging
+            # tar xvfz ImageMagick-${version}.tar.gz
             ls -l
             cd "ImageMagick-${version}"
         fi
@@ -94,6 +96,7 @@ set +e
   --without-magick-plus-plus \
   --without-perl \
   --disable-openmp \
+  --disable-docs \
   --with-gvc=no \
   --with-urw-base35-font-dir=/usr/share/fonts/type1/urw-base35/
     make -j 8
