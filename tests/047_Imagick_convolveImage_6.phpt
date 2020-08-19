@@ -9,6 +9,9 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+$current_error_level = error_reporting();
+error_reporting($current_error_level & ~E_DEPRECATED);
+
 $bias = 0.5;
 $kernelMatrix = array (
   0 => -1,
