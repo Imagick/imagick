@@ -95,7 +95,7 @@ function findDefaultFont()
     throw new \Exception("No fonts available on system, apparently.");
 }
 
-
+echo "setFontForImagick before.\n";
 
 function setFontForImagick(\Imagick $imagick)
 {
@@ -110,3 +110,5 @@ function setFontForImagickDraw(\ImagickDraw $imagick)
 
     $imagick->setFont($font);
 }
+
+echo "setFontForImagick after.\n";
