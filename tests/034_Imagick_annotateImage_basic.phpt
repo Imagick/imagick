@@ -8,7 +8,6 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
-echo "before require_once functions.inc.\n";
 require_once(dirname(__FILE__) . '/functions.inc');
 
 $strokeColor = 'rgb(0, 0, 0)';
