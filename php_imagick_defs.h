@@ -402,7 +402,7 @@ extern zend_class_entry *php_imagickkernel_exception_class_entry;
 
 /* Forward declarations (Imagick) */
 
-#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x709) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x68A)
+#if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x709)
   #define PHP_IMAGICK_HAVE_HOUGHLINE 1
 #else
   #define PHP_IMAGICK_HAVE_HOUGHLINE 0
