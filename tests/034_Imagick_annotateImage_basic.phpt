@@ -8,6 +8,8 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
+
 $strokeColor = 'rgb(0, 0, 0)';
 $fillColor = 'rgb(232, 227, 232)';
 
