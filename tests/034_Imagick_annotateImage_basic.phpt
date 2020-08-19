@@ -27,6 +27,7 @@ function annotateImage($strokeColor, $fillColor) {
     $text = "Imagick is a native php \nextension to create and \nmodify images using the\nImageMagick API.";
 
     setFontForImagick($imagick);
+    setFontForImagickDraw($draw);
     $imagick->annotateimage($draw, 40, 40, 0, $text);
 
     $bytes = $imagick->getImageBlob();
