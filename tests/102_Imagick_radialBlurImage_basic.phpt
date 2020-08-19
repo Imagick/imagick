@@ -24,9 +24,9 @@ radialBlurImage() ;
 echo "Ok";
 ?>
 --EXPECTF--
-Deprecated: Function Imagick::radialblurimage() is deprecated in %s
+Deprecated: %s Imagick::radialblurimage() is deprecated in %s
 
-Deprecated: Function Imagick::radialblurimage() is deprecated in %s
+Deprecated: %s Imagick::radialblurimage() is deprecated in %s
 
-Deprecated: Function Imagick::radialblurimage() is deprecated in %s
+Deprecated: %s Imagick::radialblurimage() is deprecated in %s
 Ok

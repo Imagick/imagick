@@ -41,5 +41,5 @@ matte($strokeColor, $fillColor, $backgroundColor, $paintType) ;
 echo "Ok";
 ?>
 --EXPECTF--
-Deprecated: Function ImagickDraw::matte() is deprecated in %s
+Deprecated: %s ImagickDraw::matte() is deprecated in %s
 Ok

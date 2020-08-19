@@ -22,5 +22,5 @@ transformimage() ;
 echo "Ok";
 ?>
 --EXPECTF--
-Deprecated: Function Imagick::transformimage() is deprecated in %s
+Deprecated: %s Imagick::transformimage() is deprecated in %s
 Ok

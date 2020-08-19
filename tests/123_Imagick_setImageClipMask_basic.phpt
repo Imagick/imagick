@@ -48,5 +48,5 @@ setImageClipMask() ;
 echo "Ok";
 ?>
 --EXPECTF--
-Deprecated: Function Imagick::setimageclipmask() is deprecated in %s
+Deprecated: %s Imagick::setimageclipmask() is deprecated in %s
 Ok

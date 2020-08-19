@@ -34,5 +34,5 @@ setImageBias($bias) ;
 echo "Ok";
 ?>
 --EXPECTF--
-Deprecated: Function Imagick::setimagebias() is deprecated in %s
+Deprecated: %s Imagick::setimagebias() is deprecated in %s
 Ok
