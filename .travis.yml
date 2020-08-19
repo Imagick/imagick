@@ -6,7 +6,7 @@ cache:
     directories:
         - $HOME/im
 
-dist: bionic
+# dist: bionic
 
 php:
     - nightly
