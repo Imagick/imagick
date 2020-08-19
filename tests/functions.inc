@@ -61,5 +61,52 @@ function isVersionGreaterEqual($testIm6Version, $im7Version)
     return false;
 }
 
+/**
+ * On some systems, where the standard fonts aren't available, trying
+ * to draw any text fails as the ImageMagick default font is null.
+ *
+ * This function just find a 'sensible' font to use, either from the
+ * preferred list, or just the first one from queryFonts(). That 'probably'
+ * is the right thing to do, as it makes the tests more stable.
+ */
+function findDefaultFont()
+{
+    $knownFonts = [
+        'Courier',
+        'Helvetica',
+        'Times-Roman',
+        'Liberation-Mono',
+        'Utopia',
+    ];
+
+    $fontList = \Imagick::queryFonts();
+
+    foreach ($knownFonts as $knownFont) {
+
+        if (in_array($knownFont, $fontList, true) === true) {
+            return $knownFont;
+        }
+    }
+
+    if (count($fontList) !== 0) {
+        return $fontList[0];
+    }
+
+    throw new \Exception("No fonts available on system, apparently.");
+}
 
 
+
+function setFontForImagick(\Imagick $imagick)
+{
+    $font = findDefaultFont();
+
+    $imagick->setFont($font);
+}
+
+function setFontForImagickDraw(\ImagickDraw $imagick)
+{
+    $font = findDefaultFont();
+
+    $imagick->setFont($font);
+}
