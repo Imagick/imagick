@@ -8,9 +8,11 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
 
 function psychedelicFont() {
     $draw = new \ImagickDraw();
+    setFontForImagickDraw($draw);
     $name = 'Danack';
 
     $draw->setStrokeOpacity(1);

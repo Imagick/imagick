@@ -8,6 +8,8 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
+
 $backgroundColor = 'rgb(225, 225, 225)';
 $strokeColor = 'rgb(0, 0, 0)';
 $fillColor = 'DodgerBlue2';
@@ -15,6 +17,7 @@ $fillColor = 'DodgerBlue2';
 function setTextAntialias($fillColor, $backgroundColor) {
 
     $draw = new \ImagickDraw();
+    setFontForImagickDraw($draw);
     $draw->setStrokeColor('none');
     $draw->setFillColor($fillColor);
     $draw->setStrokeWidth(1);

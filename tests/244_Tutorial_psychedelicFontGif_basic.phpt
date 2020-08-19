@@ -8,6 +8,7 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
 
 function psychedelicFontGif($name = 'Danack') {
 
@@ -22,6 +23,7 @@ function psychedelicFontGif($name = 'Danack') {
     for ($frame = 0; $frame < $maxFrames; $frame++) {
 
         $draw = new \ImagickDraw();
+        setFontForImagickDraw($draw);
 
         $draw->setStrokeOpacity(1);
         $draw->setfontsize(150 * $scale);
