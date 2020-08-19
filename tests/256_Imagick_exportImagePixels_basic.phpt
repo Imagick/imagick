@@ -2,7 +2,7 @@
 Test Imagick, Imagick::exportImagePixels
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=0x675;
+$imageMagickRequiredVersion=0x687;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--
