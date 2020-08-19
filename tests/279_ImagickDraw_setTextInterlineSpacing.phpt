@@ -23,6 +23,8 @@ foreach ($interlineSpacings as $interlineSpacing) {
 
     $draw = new \ImagickDraw();
 
+    setFontForImagickDraw($draw);
+
     $draw->setStrokeColor($strokeColor);
     $draw->setFillColor($fillColor);
 
