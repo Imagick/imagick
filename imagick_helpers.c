@@ -97,6 +97,11 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci_cache = empty_fcall_info_cache;
 
 	fci.size = sizeof(fci);
+
+#if PHP_VERSION_ID >= 80000
+	fci.named_params = NULL;
+#endif
+
 #if PHP_VERSION_ID < 70100
 	fci.function_table = EG(function_table);
 #endif
