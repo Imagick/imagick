@@ -29,7 +29,7 @@ env:
   - IMAGEMAGICK_VERSION=6.8.7-0
   - IMAGEMAGICK_VERSION=6.7.8-0
 
-  # Include individual commits like this:
+# Include individual commits like this:
   # - IMAGEMAGICK_VERSION=commit_25553302a6d5f736b55e60109600dfbce5fbea48
 
 matrix:
@@ -54,7 +54,9 @@ script:
     - export SKIP_SLOW_TESTS=1
     - export TEST_PHP_EXECUTABLE=`which php`
     - export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
-    - . ./configure-cflags.sh
+    - export CFLAGS=$(php util/calculate_cflags.php $TRAVIS_PHP_VERSION $IMAGEMAGICK_VERSION)
+    - echo "CFLAGS are ${CFLAGS}"
+    # - . ./configure-cflags.sh
     - phpize
     - ./configure --with-imagick="${HOME}/im/imagemagick-${IMAGEMAGICK_VERSION}"
     - make install
