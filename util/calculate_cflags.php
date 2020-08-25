@@ -29,7 +29,11 @@ $CFLAGS = array(
     "-Wimplicit-function-declaration",
     "-Wno-variadic-macros",
     "-Wno-sign-compare",
+
+    //Errors in IM6.9.2-0
+    "-Wno-error=unused-parameter",
 );
+
 
 
 
