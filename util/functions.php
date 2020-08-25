@@ -123,7 +123,7 @@ function float_info_32(float $num)
     return new Float32Info(
         $sign,
         $exponent,
-        $mantissa,
+        $mantissa
     );
 }
 
