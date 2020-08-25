@@ -77,7 +77,7 @@ function float_info(float $num)
     return new FloatInfo(
         $sign,
         $exponent,
-        $mantissa,
+        $mantissa
     );
 }
 
