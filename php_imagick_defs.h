@@ -95,7 +95,7 @@ ZEND_BEGIN_MODULE_GLOBALS(imagick)
 	zend_bool skip_version_check;
 
 	zend_bool set_single_thread;
-	zend_long shutdown_sleep_count;
+	im_long shutdown_sleep_count;
 
 	php_imagick_callback *progress_callback;
 #ifdef PHP_IMAGICK_ZEND_MM
