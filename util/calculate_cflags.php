@@ -40,8 +40,8 @@ if ($PHP_VERSION == "5.4" || $PHP_VERSION == "5.5") {
     $CFLAGS = array("-Wno-deprecated-declarations");
 }
 else if ($PHP_VERSION == "5.6") {
-	$CFLAGS = array(
-	    "-Wno-deprecated-declarations",
+    $CFLAGS = array(
+        "-Wno-deprecated-declarations",
         "-Wdeclaration-after-statement",
         "-Werror",
         "-Wall",
