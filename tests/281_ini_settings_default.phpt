@@ -18,8 +18,8 @@ if ($sleepCount != 10) {
     echo "imagick.shutdown_sleep_count is not set to 10 but instead " . var_export($sleepCount, true) ."\n";
 }
 
-if ($setSingleThread != 0) {
-    echo "imagick.set_single_thread setting is not false but instead " . var_export($setSingleThread, true) ."\n";
+if ($setSingleThread != 1) {
+    echo "imagick.set_single_thread setting is not true but instead " . var_export($setSingleThread, true) ."\n";
 }
 
 
