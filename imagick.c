@@ -3872,10 +3872,6 @@ PHP_MINIT_FUNCTION(imagick)
 		checkImagickVersion();
 	}
 
-	if (IMAGICK_G(set_single_thread)) {
-		MagickSetResourceLimit(ThreadResource, 1);
-	}
-
 	return SUCCESS;
 }
 
@@ -3981,6 +3977,11 @@ PHP_RINIT_FUNCTION(imagick)
 	(void)module_number;
 
 	IMAGICK_G(progress_callback) = NULL;
+
+	if (IMAGICK_G(set_single_thread)) {
+		MagickSetResourceLimit(ThreadResource, 1);
+	}
+
 	return SUCCESS;
 }
 
