@@ -3311,7 +3311,7 @@ PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY("imagick.skip_version_check", "0", PHP_INI_ALL, OnUpdateBool, skip_version_check, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.progress_monitor", "0", PHP_INI_SYSTEM, OnUpdateBool, progress_monitor, zend_imagick_globals, imagick_globals)
 
-	STD_PHP_INI_ENTRY("imagick.set_single_thread", "0", PHP_INI_SYSTEM, OnUpdateBool, set_single_thread, zend_imagick_globals, imagick_globals)
+	STD_PHP_INI_ENTRY("imagick.set_single_thread", "1", PHP_INI_SYSTEM, OnUpdateBool, set_single_thread, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.shutdown_sleep_count",  "10", PHP_INI_ALL, OnUpdateLong, shutdown_sleep_count, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.allow_zero_dimension_images", "0", PHP_INI_ALL, OnUpdateBool, allow_zero_dimension_images, zend_imagick_globals, imagick_globals)
 PHP_INI_END()
@@ -3321,7 +3321,7 @@ static void php_imagick_init_globals(zend_imagick_globals *imagick_globals)
 	imagick_globals->locale_fix = 0;
 	imagick_globals->progress_monitor = 0;
 	imagick_globals->skip_version_check = 0;
-	imagick_globals->set_single_thread = 0;
+	imagick_globals->set_single_thread = 1;
 	imagick_globals->allow_zero_dimension_images = 0;
 	// 10 is magick number, that seems to be enough.
 	imagick_globals->shutdown_sleep_count = 10;
