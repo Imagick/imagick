@@ -29,7 +29,7 @@ $CFLAGS = array(
     "-Wno-sign-compare",
 
     //Errors in IM6.9.2-0
-    "-Wno-error=unused-parameter",
+    "-Wno-unused-parameter",
 );
 
 
