@@ -30,10 +30,13 @@ $CFLAGS = array(
 
     //Errors in IM6.9.2-0
     "-Wno-unused-parameter",
+    "-Wno-unused-variable"
 );
 
 
-
+if (strpos($IMAGEMAGICK_VERSION, "6.8") === 0) {
+    $CFLAGS = array("-Wno-deprecated-declarations");
+}
 
 
 if ($PHP_VERSION == "5.4" || $PHP_VERSION == "5.5") {
