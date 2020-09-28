@@ -96,34 +96,23 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 #endif
 	fci_cache = empty_fcall_info_cache;
 
+	fci = empty_fcall_info;
 	fci.size = sizeof(fci);
-
-#if PHP_VERSION_ID >= 80000
-	fci.named_params = NULL;
-#endif
 
 #if PHP_VERSION_ID < 70100
 	fci.function_table = EG(function_table);
 #endif
 #ifdef ZEND_ENGINE_3
-	fci.object = NULL;
 	//fci.function_name = *callback->user_callback;
 	ZVAL_COPY_VALUE(&fci.function_name, &callback->user_callback);
 	fci.retval = &retval;
 #else
 	retval_ptr = NULL;
-	fci.object_ptr = NULL;
 	fci.function_name = callback->user_callback;
 	fci.retval_ptr_ptr = &retval_ptr;
 #endif
 	fci.param_count = 2;
 	fci.params = zargs;
-#if PHP_VERSION_ID < 80000
-	fci.no_separation = 0;
-#endif
-#if PHP_VERSION_ID < 70100
-	fci.symbol_table = NULL;
-#endif
 
 #ifdef ZEND_ENGINE_3
 	ZVAL_LONG(&zargs[0], offset);
