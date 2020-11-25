@@ -10,6 +10,8 @@ RUN apt-get update -qq \
     libpng-dev libjpeg-dev ghostscript libxml2-dev libfreetype6-dev \
     libonig-dev libssl1.0-dev libcurl4-openssl-dev libwebp-dev vim strace
 
+# libssl1.0-dev libonig-dev
+
 
 # Make the default directory you
 WORKDIR /var/app
