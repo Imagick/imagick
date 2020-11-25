@@ -4,6 +4,15 @@ services:
     build: docker/developing
     volumes:
       - .:/var/app
+  testing7_2:
+    build: docker/testing7_2
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
   fedora:
     build: docker/fedora
     image: imagick_fedora
