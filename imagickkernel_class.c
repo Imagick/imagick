@@ -41,7 +41,7 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 	int count;
 	double value;
 	unsigned int x, y;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval row;
 #else
 	zval *row;
@@ -52,7 +52,7 @@ static void php_imagickkernelvalues_to_zval(zval *zv, KernelInfo *kernel_info) {
 	count = 0;
 
 	for (y=0; y<kernel_info->height ; y++) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		p_row = &row;
 #else
 		MAKE_STD_ZVAL(row);
@@ -88,7 +88,7 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 	php_imagickkernel_object *internp;
 	HashTable *debug_info;
 	KernelInfo *kernel_info;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval matrix;
 #else
 	zval *matrix;
@@ -107,7 +107,7 @@ HashTable* php_imagickkernel_get_debug_info(zval *obj, int *is_temp TSRMLS_DC) /
 	ZEND_INIT_SYMTABLE_EX(debug_info, 1, 0);
 
 	while (kernel_info != NULL) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		array_init(&matrix);
 		php_imagickkernelvalues_to_zval(&matrix, kernel_info);
 		zend_hash_next_index_insert(debug_info, &matrix);
@@ -233,7 +233,7 @@ PHP_METHOD(imagickkernel, __construct)
 	matrixes that are odd sizes in both dimensions the the origin pixel will default 
 	to the centre of the kernel. For all other kernel sizes the origin pixel must be specified.
 */
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 PHP_METHOD(imagickkernel, frommatrix)
 {
 	zval *kernel_array;
@@ -404,7 +404,7 @@ cleanup:
 	}
 }
 
-#else //not ZEND_ENGINE_3
+#else // PHP 5
 
 
 PHP_METHOD(imagickkernel, frommatrix)
@@ -735,7 +735,7 @@ PHP_METHOD(imagickkernel, separate)
 	int number_values;
 	KernelValueType * values_copy;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval separate_object;
 #else
 	zval *separate_object;
@@ -764,7 +764,7 @@ PHP_METHOD(imagickkernel, separate)
 			kernel_info->y
 		);
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
 		add_next_index_zval(return_value, &separate_object);
 #else 

@@ -24,7 +24,7 @@
 #include "php_imagick_helpers.h"
 #include "php_imagick_shared.h"
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 #include "ext/standard/php_smart_string.h"
 #else
 #include "ext/standard/php_smart_str.h"
@@ -2891,7 +2891,7 @@ static void php_imagick_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_DC)
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-#ifndef ZEND_ENGINE_3
+#if PHP_VERSION_ID < 70000
 	efree(intern);
 #endif
 }
@@ -2911,7 +2911,7 @@ static void php_imagickdraw_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_DC
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
 
-	#ifndef ZEND_ENGINE_3
+	#if PHP_VERSION_ID < 70000
 		efree(intern);
 	#endif
 }
@@ -2929,7 +2929,7 @@ static void php_imagickpixeliterator_object_free_storage(IM_ZEND_OBJECT *object 
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	#ifndef ZEND_ENGINE_3
+	#if PHP_VERSION_ID < 70000
 		efree(intern);
 	#endif
 }
@@ -2947,7 +2947,7 @@ static void php_imagickpixel_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_D
 		intern->pixel_wand = DestroyPixelWand(intern->pixel_wand);
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-	#ifndef ZEND_ENGINE_3
+	#if PHP_VERSION_ID < 70000
 		efree(intern);
 	#endif
 }
@@ -2968,7 +2968,7 @@ static void php_imagickkernel_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_
 	}
 
 	zend_object_std_dtor(&intern->zo TSRMLS_CC);
-#ifndef ZEND_ENGINE_3
+#if PHP_VERSION_ID < 70000
 	efree(intern);
 #endif
 }
@@ -2986,7 +2986,7 @@ static void php_imagickkernel_object_free_storage(IM_ZEND_OBJECT *object TSRMLS_
 		 }
 #endif
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr, zend_bool init_wand TSRMLS_DC)
 #else
 static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type, php_imagick_object **ptr, zend_bool init_wand TSRMLS_DC)
@@ -2996,7 +2996,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	php_imagick_object *intern;
 
 	/* Allocate memory for it */
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern = ecalloc(1,
 		sizeof(php_imagick_object) +
 		zend_object_properties_size(class_type));
@@ -3035,7 +3035,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern->zo.handlers = &imagick_object_handlers;
 	return &intern->zo;
 #else
@@ -3046,7 +3046,7 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 }
 
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
 #else
 static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -3055,7 +3055,7 @@ static zend_object_value php_imagick_object_new(zend_class_entry *class_type TSR
 	return php_imagick_object_new_ex(class_type, NULL, 1 TSRMLS_CC);
 }
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr, zend_bool init_wand TSRMLS_DC)
 #else
 static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_type, php_imagickdraw_object **ptr, zend_bool init_wand TSRMLS_DC)
@@ -3063,7 +3063,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 {
 	php_imagickdraw_object *intern;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	/* Allocate memory for it */
 	intern = ecalloc(1,
 		sizeof(php_imagickdraw_object) +
@@ -3092,7 +3092,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 	} else {
 		intern->drawing_wand = NULL;
 	}
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern->zo.handlers = &imagickdraw_object_handlers;
 
 	return &intern->zo;
@@ -3107,7 +3107,7 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 #endif
 }
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
 #else
 static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -3116,7 +3116,7 @@ static zend_object_value php_imagickdraw_object_new(zend_class_entry *class_type
 	return php_imagickdraw_object_new_ex(class_type, NULL, 1 TSRMLS_CC);
 }
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
 #else
 static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -3125,7 +3125,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	php_imagickpixeliterator_object *intern;
 
 	/* Allocate memory for it */
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern = ecalloc(1,
 			sizeof(php_imagickpixeliterator_object) +
 			zend_object_properties_size(class_type));
@@ -3147,7 +3147,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern->zo.handlers = &imagickpixeliterator_object_handlers;
 
 	return &intern->zo;
@@ -3159,7 +3159,7 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 #endif
 }
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagickpixel_object_new_ex(zend_class_entry *class_type, php_imagickpixel_object **ptr TSRMLS_DC)
 #else
 static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_type, php_imagickpixel_object **ptr TSRMLS_DC)
@@ -3167,7 +3167,7 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 {
 	php_imagickpixel_object *intern;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	/* Allocate memory for it */
 	intern = ecalloc(1,
 		sizeof(php_imagickpixel_object) +
@@ -3188,7 +3188,7 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 	
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern->zo.handlers = &imagickpixel_object_handlers;
 
 	return &intern->zo;
@@ -3201,7 +3201,7 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 
 }
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
 #else
 static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -3212,7 +3212,7 @@ static zend_object_value php_imagickpixel_object_new(zend_class_entry *class_typ
 
 #ifdef IMAGICK_WITH_KERNEL
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object *  php_imagickkernel_object_new_ex(zend_class_entry *class_type, php_imagickkernel_object **ptr TSRMLS_DC)
 #else
 static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class_type, php_imagickkernel_object **ptr TSRMLS_DC)
@@ -3222,7 +3222,7 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 	php_imagickkernel_object *intern;
 
 	/* Allocate memory for it */
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern = ecalloc(1,
 		sizeof(php_imagickkernel_object) +
 		zend_object_properties_size(class_type));
@@ -3243,7 +3243,7 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	intern->zo.handlers = &imagickkernel_object_handlers;
 
 	return &intern->zo;
@@ -3259,7 +3259,7 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 #undef object_properties_init
 
 #ifdef IMAGICK_WITH_KERNEL
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zend_object * php_imagickkernel_object_new(zend_class_entry *class_type TSRMLS_DC)
 #else
 static zend_object_value php_imagickkernel_object_new(zend_class_entry *class_type TSRMLS_DC)
@@ -3374,7 +3374,7 @@ static zval *php_imagick_read_property(zend_object *object, zend_string *member,
 
 #else // PHP_VERSION_ID >= 80000
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 static zval *php_imagick_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv TSRMLS_DC)
 {
 	int ret;
@@ -3734,7 +3734,7 @@ PHP_MINIT_FUNCTION(imagick)
 		Initialize exceptions (Imagick exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICK_EXCEPTION_SC_NAME, NULL);
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagick_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
@@ -3744,7 +3744,7 @@ PHP_MINIT_FUNCTION(imagick)
 	Initialize exceptions (ImagickDraw exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_EXCEPTION_SC_NAME, NULL);
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagickdraw_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
@@ -3754,7 +3754,7 @@ PHP_MINIT_FUNCTION(imagick)
 	Initialize exceptions (ImagickPixelIterator exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_EXCEPTION_SC_NAME, NULL);
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagickpixeliterator_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
@@ -3764,7 +3764,7 @@ PHP_MINIT_FUNCTION(imagick)
 	Initialize exceptions (ImagickPixel exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXEL_EXCEPTION_SC_NAME, NULL);
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
 #else
 	php_imagickpixel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
@@ -3775,7 +3775,7 @@ PHP_MINIT_FUNCTION(imagick)
 	Initialize exceptions (ImagickKernel exception)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_EXCEPTION_SC_NAME, NULL);
-	#ifdef ZEND_ENGINE_3
+	#if PHP_VERSION_ID >= 70000
 	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_ce_exception);
     #else
 	php_imagickkernel_exception_class_entry = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
@@ -3791,7 +3791,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
 	imagick_object_handlers.read_property = php_imagick_read_property;
 	imagick_object_handlers.count_elements = php_imagick_count_elements;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	imagick_object_handlers.offset = XtOffsetOf(php_imagick_object, zo);
 	imagick_object_handlers.free_obj = php_imagick_object_free_storage;
 #endif
@@ -3805,7 +3805,7 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_SC_NAME, php_imagickdraw_class_methods);
 	ce.create_object = php_imagickdraw_object_new;
 	imagickdraw_object_handlers.clone_obj = php_imagick_clone_imagickdraw_object;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	imagickdraw_object_handlers.offset = XtOffsetOf(php_imagickdraw_object, zo);
 	imagickdraw_object_handlers.free_obj = php_imagickdraw_object_free_storage;
 #endif
@@ -3817,7 +3817,7 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_SC_NAME, php_imagickpixeliterator_class_methods);
 	ce.create_object = php_imagickpixeliterator_object_new;
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	imagickpixeliterator_object_handlers.offset = XtOffsetOf(php_imagickpixeliterator_object, zo);
 	imagickpixeliterator_object_handlers.free_obj = php_imagickpixeliterator_object_free_storage;
 #endif
@@ -3830,7 +3830,7 @@ PHP_MINIT_FUNCTION(imagick)
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXEL_SC_NAME, php_imagickpixel_class_methods);
 	ce.create_object = php_imagickpixel_object_new;
 	imagickpixel_object_handlers.clone_obj = php_imagick_clone_imagickpixel_object;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	imagickpixel_object_handlers.offset = XtOffsetOf(php_imagickpixel_object, zo);
 	imagickpixel_object_handlers.free_obj = php_imagickpixel_object_free_storage;
 #endif
@@ -3846,7 +3846,7 @@ PHP_MINIT_FUNCTION(imagick)
 	// Disabled until can be compiled under wall correctly
 	imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
-	#ifdef ZEND_ENGINE_3
+	#if PHP_VERSION_ID >= 70000
 	imagickkernel_object_handlers.offset = XtOffsetOf(php_imagickkernel_object, zo);
 	imagickkernel_object_handlers.free_obj = php_imagickkernel_object_free_storage;
     #endif
@@ -3877,7 +3877,7 @@ PHP_MINIT_FUNCTION(imagick)
 PHP_MINFO_FUNCTION(imagick)
 {
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	smart_string formats = {0};
 #else
 	smart_str formats = {0};
@@ -3913,7 +3913,7 @@ PHP_MINFO_FUNCTION(imagick)
 
 	if (supported_formats) {
 		for (i = 0; i < num_formats; i++) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 			if (i != 0) {
  				smart_string_appends(&formats, ", ");
 			}
@@ -3927,7 +3927,7 @@ PHP_MINFO_FUNCTION(imagick)
 			IMAGICK_FREE_MAGICK_MEMORY(supported_formats[i]);
 		}
 		
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		smart_string_0(&formats);
 		php_info_print_table_row(2, "ImageMagick supported formats", formats.c);
 		smart_string_free(&formats);

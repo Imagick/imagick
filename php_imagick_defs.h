@@ -71,7 +71,7 @@
 #endif
 
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	#define im_long zend_long
 #else
 	#define im_long long
@@ -80,7 +80,7 @@
 
 typedef struct _php_imagick_callback {
 	void ***thread_ctx;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval user_callback;
 #else
 	zval *user_callback;
@@ -143,7 +143,7 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #endif
 
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 
 /* Structure for Imagick object. */
 typedef struct _php_imagick_object  {
@@ -166,7 +166,7 @@ typedef struct _php_imagick_object  {
 #endif
 
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 
 /* Structure for ImagickDraw object. */
 typedef struct _php_imagickdraw_object  {
@@ -187,7 +187,7 @@ typedef struct _php_imagickdraw_object  {
 
 #endif
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 
 /* Structure for ImagickPixelIterator object. */
 typedef struct _php_imagickpixeliterator_object  {
@@ -221,7 +221,7 @@ typedef struct _php_imagickpixeliterator_object  {
 #endif
 
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 
 /* Structure for ImagickPixel object. */
 typedef struct _php_imagickpixel_object  {
@@ -245,7 +245,7 @@ typedef struct _php_imagickpixel_object  {
 
 
 #ifdef IMAGICK_WITH_KERNEL
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 /* Structure for ImagickKernel object. */
 typedef struct _php_imagickkernel_object  {
 	KernelInfo *kernel_info;
@@ -262,7 +262,7 @@ typedef struct _php_imagickkernel_object  {
 #endif
 
 //Object fetching.
-#ifdef ZEND_ENGINE_3 
+#if PHP_VERSION_ID >= 70000
 
 static inline php_imagick_object *php_imagick_fetch_object(zend_object *obj) {
 	return (php_imagick_object *)((char*)(obj) - XtOffsetOf(php_imagick_object, zo));
@@ -295,7 +295,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 #endif
 
 // Object access
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	#define Z_IMAGICK_P(zv) php_imagick_fetch_object(Z_OBJ_P((zv)))
 	#define Z_IMAGICKDRAW_P(zv) php_imagickdraw_fetch_object(Z_OBJ_P((zv)))
 	#define Z_IMAGICKPIXEL_P(zv) php_imagickpixel_fetch_object(Z_OBJ_P((zv)))
@@ -312,7 +312,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 #endif
 
 // String access
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar);
 	#define IM_RETURN_STRING(s) RETURN_STRING(s)
 #else
@@ -321,7 +321,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define IM_RETURN_STRING(s) RETURN_STRING(s, 0)
 #endif
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	#define IM_add_assoc_string(zv, key, charstr) add_assoc_string(zv, key, charstr)
 	#define IM_ZVAL_STRINGL(zv, charstr, length) ZVAL_STRINGL(zv, charstr, length)
 	#define IM_add_next_index_string(zv, charstr) add_next_index_string(zv, charstr)
@@ -335,7 +335,7 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define IM_LEN_TYPE int
 #endif
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	#define IM_ZEND_OBJECT zend_object
 #else 
 	#define IM_ZEND_OBJECT void

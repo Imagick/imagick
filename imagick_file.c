@@ -160,7 +160,7 @@ static
 int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct php_imagick_file_t *file, ImagickOperationType type TSRMLS_DC)
 {
 
-#ifndef ZEND_ENGINE_3
+#if PHP_VERSION_ID < 70000
 #if PHP_VERSION_ID >= 50600
 #ifdef ZTS
 	// This suppresses an 'unused parameter' warning.
@@ -172,7 +172,7 @@ int php_imagick_read_image_using_imagemagick(php_imagick_object *intern, struct 
 	if (type == ImagickReadImage) {
 		if (MagickReadImage(intern->magick_wand, file->filename) == MagickFalse) {
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 			zend_stat_t st;
 #else
 			struct stat st;
@@ -206,7 +206,7 @@ int php_imagick_read_image_using_php_streams(php_imagick_object *intern, struct 
 	IMAGICK_INIT_ERROR_HANDLING;
 	IMAGICK_SET_ERROR_HANDLING_THROW;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	stream = php_stream_open_wrapper(file->filename, "rb", (IGNORE_PATH) & ~REPORT_ERRORS, NULL);
 #else
 	stream = php_stream_open_wrapper(file->filename, "rb", (ENFORCE_SAFE_MODE|IGNORE_PATH) & ~REPORT_ERRORS, NULL);

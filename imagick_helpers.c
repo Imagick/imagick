@@ -55,7 +55,7 @@ void php_imagick_cleanup_progress_callback(php_imagick_callback* progress_callba
 			efree(progress_callback->previous_callback);
 		}
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		zval_ptr_dtor(&progress_callback->user_callback);
 #else
 		zval_ptr_dtor(&progress_callback->user_callback);
@@ -69,7 +69,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	zend_fcall_info fci;
 	zend_fcall_info_cache fci_cache;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval zargs[2];
 	zval retval;
 #else
@@ -85,13 +85,13 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	// We could maybe use text.
 	(void)text;
 
-#if defined(ZEND_ENGINE_3) && defined(ZTS)
+#if PHP_VERSION_ID >= 70000 && defined(ZTS)
 	if( NULL == tsrm_get_ls_cache() ) {
 		return MagickTrue;
 	}
 #endif
 
-#ifndef ZEND_ENGINE_3
+#if PHP_VERSION_ID < 70000
 	TSRMLS_FETCH_FROM_CTX(callback->thread_ctx);
 #endif
 	fci_cache = empty_fcall_info_cache;
@@ -102,7 +102,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 #if PHP_VERSION_ID < 70100
 	fci.function_table = EG(function_table);
 #endif
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	//fci.function_name = *callback->user_callback;
 	ZVAL_COPY_VALUE(&fci.function_name, &callback->user_callback);
 	fci.retval = &retval;
@@ -114,7 +114,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 	fci.param_count = 2;
 	fci.params = zargs;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZVAL_LONG(&zargs[0], offset);
     ZVAL_LONG(&zargs[1], span);
 #else
@@ -134,7 +134,7 @@ MagickBooleanType php_imagick_progress_monitor_callable(const char *text, const 
 		//Abort processing as user callback is no longer callable
 		return MagickFalse;
 	}
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	if (Z_TYPE(retval) == IS_FALSE) {
 		//User returned false - tell Imagick to abort processing.
 		return MagickFalse;
@@ -285,7 +285,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_element
 	double *double_array;
 	long i = 0;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval *pzvalue;
 #else
 	zval **ppzval;
@@ -299,7 +299,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_element
 
 	double_array = ecalloc(*num_elements, sizeof(double));
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
 		ZVAL_DEREF(pzvalue);
 		double_array[i] = zval_get_double(pzvalue);
@@ -336,7 +336,7 @@ im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements
 	im_long *long_array;
 	im_long i = 0;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval *pzvalue;
 #else
 	zval **ppzval;
@@ -350,7 +350,7 @@ im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements
 
 	long_array = ecalloc(*num_elements, sizeof(im_long));
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
 		ZVAL_DEREF(pzvalue);
 		long_array[i] = zval_get_long(pzvalue);
@@ -388,7 +388,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_el
 	unsigned char *char_array;
 	im_long i = 0;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval *pzvalue;
 #else
 	zval **ppzval;
@@ -402,7 +402,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_el
 
 	char_array = ecalloc(*num_elements, sizeof(unsigned char));
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(param_array), pzvalue) {
 		ZVAL_DEREF(pzvalue);
 		char_array[i] = zval_get_long(pzvalue);
@@ -538,7 +538,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	long elements, sub_elements, i;
 	HashTable *sub_array;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval *pzvalue;
 #else
 	HashTable *coords;
@@ -558,7 +558,7 @@ PointInfo *php_imagick_zval_to_pointinfo_array(zval *coordinate_array, int *num_
 	*num_elements = elements;
 	coordinates = emalloc(sizeof(PointInfo) * elements);
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(coordinate_array), pzvalue) {
 		zval *pz_x, *pz_y;
 		ZVAL_DEREF(pzvalue);
@@ -770,7 +770,7 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZVAL_DEREF(param);
 #endif 
 	if (Z_TYPE_P (param) == IS_LONG || Z_TYPE_P (param) == IS_DOUBLE) {
@@ -818,7 +818,7 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 	PixelWand *pixel_wand = NULL;
 	*allocated = 0;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZVAL_DEREF(param);
 #endif
 	if (Z_TYPE_P (param) == IS_STRING) {
