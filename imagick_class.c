@@ -44,7 +44,7 @@ PHP_METHOD(Imagick, pingImageFile)
 
 	intern = Z_IMAGICK_P(getThis());
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_stream_from_zval(stream, zstream);
 #else
 	php_stream_from_zval(stream, &zstream);
@@ -1044,7 +1044,7 @@ PHP_METHOD(Imagick, identifyFormat)
 	image_info = DestroyImageInfo(image_info);
 
 	if (result) {
-#ifdef ZEND_ENGINE_3 
+#if PHP_VERSION_ID >= 70000
 		RETVAL_STRING(result);
 #else
 		RETVAL_STRING(result, 1);
@@ -1431,7 +1431,7 @@ PHP_METHOD(Imagick, getImageProfiles)
 		for (i = 0; i < profiles_count; i++) {
 
 			profile = (char *)MagickGetImageProfile(intern->magick_wand, profiles[i], &length);
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 			add_assoc_stringl(return_value, profiles[i], profile, length);
 #else
 			add_assoc_stringl(return_value, profiles[i], profile, length, 1);
@@ -1524,7 +1524,7 @@ PHP_METHOD(Imagick, writeImageFile)
 		efree (buffer);
 	}
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_stream_from_zval(stream, zstream);
 #else
 	php_stream_from_zval(stream, &zstream);
@@ -1579,7 +1579,7 @@ PHP_METHOD(Imagick, writeImagesFile)
 		efree (buffer);
 	}
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_stream_from_zval(stream, zstream);
 #else
 	php_stream_from_zval(stream, &zstream);
@@ -3048,7 +3048,7 @@ PHP_METHOD(Imagick, getImageArtifact)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image artifact" TSRMLS_CC);
 		return;
 	}
-#ifdef ZEND_ENGINE_3 
+#if PHP_VERSION_ID >= 70000
 	RETVAL_STRING(value);
 #else
 	RETVAL_STRING(value, 1);
@@ -3189,7 +3189,7 @@ PHP_METHOD(Imagick, smushImages)
 /* {{{ proto Imagick Imagick::__construct([mixed files] )
    The Imagick constructor
 */
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 PHP_METHOD(Imagick, __construct)
 {
 	php_imagick_object *intern;
@@ -3471,7 +3471,7 @@ PHP_METHOD(Imagick, queryFontMetrics)
 		}
 	} else {
 		convert_to_boolean(multiline);
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		if (Z_TYPE_P(multiline) == IS_TRUE) {
 			query_multiline = 1;
 		}
@@ -3525,7 +3525,7 @@ PHP_METHOD(Imagick, queryFontMetrics)
 		return;
 	} else {
 		zval *pbounding;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		zval bounding;
 		pbounding = &bounding;
 #else
@@ -3630,7 +3630,7 @@ PHP_METHOD(Imagick, readImage)
 /* {{{ proto bool Imagick::readImages(array files )
     Reads image from an array of filenames
 */
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 PHP_METHOD(Imagick, readImages)
 {
 
@@ -3759,7 +3759,7 @@ PHP_METHOD(Imagick, readImageFile)
 
 	intern = Z_IMAGICK_P(getThis());
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	php_stream_from_zval(stream, zstream);
 #else
 	php_stream_from_zval(stream, &zstream);
@@ -6801,7 +6801,7 @@ PHP_METHOD(Imagick, getImageChannelMean)
 */
 PHP_METHOD(Imagick, getImageChannelStatistics)
 {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval tmp;
 #else
  	zval *tmp;
@@ -6840,7 +6840,7 @@ PHP_METHOD(Imagick, getImageChannelStatistics)
 
 #if MagickLibVersion >= 0x700
 	for (i=0; i < sizeof(channels)/sizeof(channels[0]); i++) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
 		add_assoc_double(&tmp, "mean", statistics[i].mean);
@@ -6868,7 +6868,7 @@ PHP_METHOD(Imagick, getImageChannelStatistics)
 	}
 #else //below MagickLibVersion>= 0x700
 	for (i = 0; i < elements ; i++) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
 		add_assoc_double(&tmp, "mean", statistics[channels[i]].mean);
@@ -7220,7 +7220,7 @@ PHP_METHOD(Imagick, getImageHistogram)
 	PixelWand **wand_array;
 	size_t colors = 0;
 	unsigned long i;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval tmp_pixelwand;
 #else
 	zval *tmp_pixelwand;
@@ -7240,7 +7240,7 @@ PHP_METHOD(Imagick, getImageHistogram)
 
 	for (i = 0; i < colors; i++) {
 		if (wand_array[i]) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 			object_init_ex(&tmp_pixelwand, php_imagickpixel_sc_entry);
 			internp = Z_IMAGICKPIXEL_P(&tmp_pixelwand);
 			php_imagick_replace_pixelwand(internp, wand_array[i]);
@@ -8573,7 +8573,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 	char *last_ptr = NULL, *buffer;
 	size_t num_keys;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zend_string    *trim;
 	zend_string    *line_string;
 #else
@@ -8611,7 +8611,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 	while ((found < num_keys) && line) {
 		// Break the line further into tokens
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		line_string = zend_string_init(line, strlen(line), 0);
 		//str, what, what_len, mode
 		trim = php_trim(line_string, NULL, 0, 3);
@@ -8654,7 +8654,7 @@ PHP_METHOD(Imagick, identifyImage)
 	zend_bool append_raw_string = 0;
 	double x, y;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval array;
 #else
 	zval *array;
@@ -8702,7 +8702,7 @@ PHP_METHOD(Imagick, identifyImage)
 
 	// Geometry is an associative array
 	
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	ZVAL_NEW_ARR(&array);
 	pArray = &array;
 #else
@@ -8717,7 +8717,7 @@ PHP_METHOD(Imagick, identifyImage)
 	add_assoc_zval (return_value, "geometry", pArray);
 
 	if (MagickGetImageResolution(intern->magick_wand, &x, &y) == MagickTrue) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		zval geometry_array;
 		array_init(&geometry_array);
 		add_assoc_double(&geometry_array, "x", x);
@@ -9119,7 +9119,7 @@ PHP_METHOD(Imagick, compareImageChannels)
 	php_imagick_object *intern, *intern_second, *intern_return;
 	im_long channel_type, metric_type;
 	double distortion;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval new_wand;
 #else
 	zval *new_wand;
@@ -9147,7 +9147,7 @@ PHP_METHOD(Imagick, compareImageChannels)
 		return;
 	}
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	pNewWand = &new_wand;
 #else
 	MAKE_STD_ZVAL(new_wand);
@@ -9450,7 +9450,7 @@ PHP_METHOD(Imagick, compareImages)
 	php_imagick_object *intern, *intern_second, *intern_return;
 	im_long metric_type;
 	double distortion;
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval new_wand;
 #else
 	zval *new_wand;
@@ -9470,7 +9470,7 @@ PHP_METHOD(Imagick, compareImages)
 	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
 		return;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	pNewWand = &new_wand;
 #else
 	MAKE_STD_ZVAL(new_wand);
@@ -12122,7 +12122,7 @@ PHP_METHOD(Imagick, setProgressMonitor)
 	callback->previous_callback = IMAGICK_G(progress_callback);
 
 	//Add a ref and store the user's callback
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	Z_TRY_ADDREF_P(user_callback);
 	ZVAL_COPY_VALUE(&callback->user_callback, user_callback);
 #else
@@ -12554,7 +12554,7 @@ PHP_METHOD(Imagick, subimageMatch)
 	im_long metric = 0;
 #endif
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	char *param_string = "O|z/z/dl";
 #else
 	char *param_string = "O|zzdl";

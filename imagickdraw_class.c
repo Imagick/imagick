@@ -155,7 +155,7 @@ PHP_METHOD(ImagickDraw, __construct)
 {
 	/* Empty constructor for possible future uses */
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	// This suppresses an 'unused parameter' warning.
 	(void)execute_data;
 	(void)return_value;
@@ -1234,7 +1234,7 @@ PHP_METHOD(ImagickDraw, affine)
 	php_imagickdraw_object *internd;
 	zval *affine_matrix;
 
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 	zval *pzval;
 #else
 	HashTable *affine;
@@ -1251,14 +1251,14 @@ PHP_METHOD(ImagickDraw, affine)
 		return;
 	}
 
-#ifndef ZEND_ENGINE_3
+#if PHP_VERSION_ID < 70000
 	affine = Z_ARRVAL_P(affine_matrix);
 	zend_hash_internal_pointer_reset_ex(affine, (HashPosition *) 0);
 #endif
 
 
 	for (i = 0; i < 6 ; i++) {
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 		pzval = zend_hash_str_find(HASH_OF(affine_matrix), matrix_elements[i], 2);
 		ZVAL_DEREF(pzval);
 		if (pzval == NULL) {
@@ -1271,7 +1271,7 @@ PHP_METHOD(ImagickDraw, affine)
 #endif
 		} else {
 		
-#ifdef ZEND_ENGINE_3
+#if PHP_VERSION_ID >= 70000
 			value = zval_get_double(pzval);
 #else
 			zval tmp_zval, *tmp_pzval;
