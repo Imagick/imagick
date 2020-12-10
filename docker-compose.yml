@@ -13,6 +13,15 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp:unconfined
+  testing8_0:
+    build: docker/testing8_0
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
   fedora:
     build: docker/fedora
     image: imagick_fedora
