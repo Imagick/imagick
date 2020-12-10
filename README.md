@@ -16,6 +16,24 @@ Bugs can also be reported at https://bugs.php.net but may have a slower response
 
 * https://github.com/facebook/hhvm/tree/master/hphp/runtime/ext/imagick
 
+# Installation on Linux
+
+The best way of installing Imagick is through a package manager e.g. apt, yum, brew, as they will also install ImageMagick for you.
+
+If you need to compile Imagick from source, first you should install [ImageMagick](https://github.com/ImageMagick/ImageMagick), at least version 6.2.4 but it is STRONGLY recommended to use a more recent version due to the many bug fixes in it.
+
+Once ImageMagick is installed, the following commands will compile and install Imagick:
+
+```
+git clone https://github.com/Imagick/imagick
+cd imagick
+phpize && ./configure
+make
+make install
+```
+
+You will also need to add `extension=imagick.so` to your PHP ini file to make PHP load the extension.
+
 
 # Installing on Windows
 
