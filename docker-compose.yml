@@ -32,13 +32,12 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp:unconfined
-#  ubuntu:
-#    build: docker/ubuntu
-#    volumes:
-#      - .:/var/app
-#    cap_add:
-#      - SYS_ADMIN
-#      - SYS_PTRACE
-#    security_opt:
-#      - seccomp:unconfined
-
+  nixos:
+    build: docker/nixos
+    volumes:
+      - .:/var/app
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
