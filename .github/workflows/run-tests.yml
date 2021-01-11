@@ -4,21 +4,21 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-16.04
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5, 5.4]
+        php: [5.4, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
         imagemagic: [
-          git7,
-          git6,
           7.0.10-27,
           7.0.8-4,
           7.0.1-0,
+          git7,
           6.9.2-0,
           6.8.7-0,
           6.7.8-0,
+          git6
         ]
         exclude:
           - php: 5.4
@@ -27,11 +27,16 @@ jobs:
           - imagemagic: git7
           - imagemagic: git6
 
-    name: P${{ matrix.php }} - imagemagic${{ matrix.imagemagic }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - imagemagic${{ matrix.imagemagic }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
 
       - name: Apt get commands
         run: |
@@ -50,9 +55,8 @@ jobs:
           export NO_INTERACTION=1
           export REPORT_EXIT_STATUS=1
           export SKIP_SLOW_TESTS=1
-          export TEST_PHP_EXECUTABLE=`which php`
           export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
-          export CFLAGS=$(php util/calculate_cflags.php $TRAVIS_PHP_VERSION $IMAGEMAGICK_VERSION)
+          export CFLAGS=$(php util/calculate_cflags.php "${{ matrix.php }}" "${{ matrix.imagemagic }}")
           echo "CFLAGS are ${CFLAGS}"
           phpize
           ./configure --with-imagick="${HOME}/im/imagemagick-${{ matrix.imagemagic }}"
@@ -61,7 +65,8 @@ jobs:
 
       - name: Run tests
         run: |
-          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt
-          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt
+          export TEST_PHP_EXECUTABLE=`which php`
+          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff
+          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php

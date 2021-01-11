@@ -10,12 +10,12 @@ if ($argc !== 3) {
     exit(-1);
 }
 
-$TRAVIS_PHP_VERSION = $argv[1];
+$PHP_VERSION = $argv[1];
 $IMAGEMAGICK_VERSION = $argv[2];
 
 $message = sprintf(
     "Calculating for PHP_VERSION [%s] IMAGEMAGICK_VERSION [%s]\n",
-    $TRAVIS_PHP_VERSION,
+    $PHP_VERSION,
     $IMAGEMAGICK_VERSION
 );
 fwrite(STDERR, $message);
@@ -38,10 +38,10 @@ $CFLAGS = array(
 
 
 
-if ($TRAVIS_PHP_VERSION == "5.4" || $TRAVIS_PHP_VERSION == "5.5") {
+if ($PHP_VERSION == "5.4" || $PHP_VERSION == "5.5") {
     $CFLAGS = array("-Wno-deprecated-declarations");
 }
-else if ($TRAVIS_PHP_VERSION == "5.6") {
+else if ($PHP_VERSION == "5.6") {
 	$CFLAGS = array(
 	    "-Wno-deprecated-declarations",
         "-Wdeclaration-after-statement",
