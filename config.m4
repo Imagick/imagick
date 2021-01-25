@@ -60,7 +60,18 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 
   LIBS=$old_LIBS
 
-  PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
+  AC_MSG_CHECKING(omp_pause_resource_all usability)
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    #include <omp.h>
+  ]],[[
+    omp_pause_resource_all(omp_pause_hard);
+  ]])],[
+    AC_MSG_RESULT(yes)
+    PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
+    PHP_ADD_LIBRARY(gomp,, GMAGICK_SHARED_LIBADD)
+  ],[
+    AC_MSG_RESULT(no)
+  ])
 
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
