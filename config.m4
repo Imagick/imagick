@@ -58,6 +58,8 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 
   LIBS=$old_LIBS
 
+  PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
+
   PHP_SUBST(IMAGICK_SHARED_LIBADD)
   AC_DEFINE(HAVE_IMAGICK,1,[ ])
   PHP_NEW_EXTENSION(imagick, imagick_file.c imagick_class.c imagickdraw_class.c imagickpixel_class.c imagickpixeliterator_class.c imagick_helpers.c imagick.c imagickkernel_class.c shim_im6_to_im7.c, $ext_shared,, $IM_IMAGEMAGICK_CFLAGS)
