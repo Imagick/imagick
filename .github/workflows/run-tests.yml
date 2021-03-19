@@ -10,7 +10,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [5.4, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
-        imagemagic: [
+        imagemagick: [
           7.0.10-27,
           7.0.8-4,
           7.0.1-0,
@@ -22,12 +22,12 @@ jobs:
         ]
         exclude:
           - php: 5.4
-            imagemagic: 6.8.7-0
+            imagemagick: 6.8.7-0
         allow_failures:
-          - imagemagic: git7
-          - imagemagic: git6
+          - imagemagick: git7
+          - imagemagick: git6
 
-    name: P${{ matrix.php }} - imagemagic${{ matrix.imagemagic }}
+    name: PHP ${{ matrix.php }} - I {{ matrix.imagemagick }}
 
     steps:
       - name: Checkout code
@@ -48,7 +48,7 @@ jobs:
       - name: Prepare dependencies
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh " ${{ matrix.imagemagic }}"
+          bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
 
       - name: Setup
         run: |
@@ -56,10 +56,10 @@ jobs:
           export REPORT_EXIT_STATUS=1
           export SKIP_SLOW_TESTS=1
           export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
-          export CFLAGS=$(php util/calculate_cflags.php "${{ matrix.php }}" "${{ matrix.imagemagic }}")
+          export CFLAGS=$(php util/calculate_cflags.php "${{ matrix.php }}" "${{ matrix.imagemagick }}")
           echo "CFLAGS are ${CFLAGS}"
           phpize
-          ./configure --with-imagick="${HOME}/im/imagemagick-${{ matrix.imagemagic }}"
+          ./configure --with-imagick="${HOME}/im/imagemagick-${{ matrix.imagemagick }}"
           sudo make install
           php -d extension=imagick.so util/check_fonts.php
 
