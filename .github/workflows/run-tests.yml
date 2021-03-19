@@ -27,7 +27,7 @@ jobs:
           - imagemagick: git7
           - imagemagick: git6
 
-    name: PHP ${{ matrix.php }} - I {{ matrix.imagemagick }}
+    name: PHP ${{ matrix.php }} - I ${{ matrix.imagemagick }}
 
     steps:
       - name: Checkout code
