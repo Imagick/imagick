@@ -45,7 +45,7 @@
 #if PHP_VERSION_ID >= 80000
 	#define HAVE_LOCALE_H
 	#define TSRMLS_C
-	#define TSRMLS_CC
+	#define
 	#define TSRMLS_D
 	#define TSRMLS_DC
 	#define TSRMLS_FETCH()
@@ -120,7 +120,7 @@ ZEND_EXTERN_MODULE_GLOBALS(imagick)
 #endif
 
 #if PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION < 3
-#define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "")
+#define zend_parse_parameters_none() zend_parse_parameters(ZEND_NUM_ARGS(), "")
 #endif
 
 
@@ -304,11 +304,11 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 	#define Z_IMAGICKKERNEL_P(zv) php_imagickkernel_fetch_object(Z_OBJ_P((zv)))
 #endif
 #else
-	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKPIXEL_P(zv) (php_imagickpixel_object *) zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKPIXELITERATOR_P(zv) (php_imagickpixeliterator_object *)zend_object_store_get_object(zv TSRMLS_CC)
-	#define Z_IMAGICKKERNEL_P(zv) (php_imagickkernel_object *)zend_object_store_get_object(zv TSRMLS_CC)
+	#define Z_IMAGICK_P(zv) (php_imagick_object *)zend_object_store_get_object(zv)
+	#define Z_IMAGICKDRAW_P(zv) (php_imagickdraw_object *)zend_object_store_get_object(zv)
+	#define Z_IMAGICKPIXEL_P(zv) (php_imagickpixel_object *) zend_object_store_get_object(zv)
+	#define Z_IMAGICKPIXELITERATOR_P(zv) (php_imagickpixeliterator_object *)zend_object_store_get_object(zv)
+	#define Z_IMAGICKKERNEL_P(zv) (php_imagickkernel_object *)zend_object_store_get_object(zv)
 #endif
 
 // String access

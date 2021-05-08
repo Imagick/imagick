@@ -258,7 +258,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	row = 0;
 	origin_array = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a|a", &kernel_array, &origin_array) == FAILURE) {
 		return;
 	}
 
@@ -266,7 +266,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 	if (num_rows == 0) {
 		//error - array has zero elements.
-		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY);
 		return;
 	}
 
@@ -274,7 +274,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	for (row=0 ; row<num_rows ; row++) {
 		pzval_outer = zend_hash_index_find(Z_ARRVAL_P(kernel_array), row);
 		if (pzval_outer == NULL) {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 			goto cleanup;
 		}
 		ZVAL_DEREF(pzval_outer);
@@ -286,7 +286,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			num_columns = zend_hash_num_elements(inner_array);
 
 			if (num_columns == 0) {
-				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
+				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY);
 				goto cleanup;
 			}
 
@@ -296,7 +296,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 			if (previous_num_columns != ((unsigned int)-1)) {
 				if (previous_num_columns != num_columns) {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 					goto cleanup;
 				}
 			}
@@ -306,7 +306,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			for (column=0; column<num_columns ; column++) { 
 				pzval_inner = zend_hash_index_find(inner_array, column);
 				if (pzval_inner == NULL) {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 					goto cleanup;
 				}
 
@@ -324,21 +324,21 @@ PHP_METHOD(imagickkernel, frommatrix)
 					values[count] = notanumber;
 				}
 				else {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE);
 					goto cleanup;
 				}
 				count++;
 			}
 		}
 		else {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 			goto cleanup;
 		}
 	}
 
 	if (origin_array == NULL) {
 		if (((num_columns%2) == 0) || ((num_rows%2) == 0)) {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED);
 			goto cleanup;
 		}
 		origin_x = (num_columns - 1) >> 1;
@@ -355,7 +355,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			origin_x = Z_LVAL_P(tmp);
 		}
 		else {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED);
 			goto cleanup;
 		}
 		// origin_x is unsigned, so checking for > num_columns, also
@@ -363,7 +363,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		if (origin_x>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
-				5 TSRMLS_CC,
+				5,
 				"origin_x for matrix is outside bounds of columns: " ZEND_LONG_FMT,
 				origin_x
 			);
@@ -377,7 +377,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			origin_y = Z_LVAL_P(tmp);
 		}
 		else {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED);
 			goto cleanup;
 		}
 		// origin_y is unsigned, so checking for > num_rows, also
@@ -385,7 +385,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		if (origin_y>=num_rows) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
-				5 TSRMLS_CC,
+				5,
 				"origin_y for matrix is outside bounds of rows: " ZEND_LONG_FMT,
 				origin_x
 			);
@@ -394,7 +394,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	}
 
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
-	createKernelZval(return_value, kernel_info TSRMLS_CC);
+	createKernelZval(return_value, kernel_info);
 
 	return;
 
@@ -433,7 +433,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	row = 0;
 	origin_array = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a|a", &kernel_array, &origin_array) == FAILURE) {
 		return;
 	}
 
@@ -441,13 +441,13 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 	if (num_rows == 0) {
 		//error - array has zero elements.
-		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY);
 		return;
 	}
 
 	for (row=0 ; row<num_rows ; row++) {
 		if (zend_hash_index_find(Z_ARRVAL_P(kernel_array), row, (void **) &ppzval_outer) != SUCCESS) {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 			goto cleanup;
 		}
 
@@ -459,7 +459,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			num_columns = zend_hash_num_elements(inner_array);
 
 			if (num_columns == 0) {
-				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
+				php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY);
 				goto cleanup;
 			}
 
@@ -469,7 +469,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 			if (previous_num_columns != ((unsigned int)-1)) {
 				if (previous_num_columns != num_columns) {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 					goto cleanup;
 				}
 			}
@@ -478,7 +478,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 
 			for (column=0; column<num_columns ; column++) { 
 				if (zend_hash_index_find(inner_array, column, (void **) &ppzval_inner) != SUCCESS) {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 					goto cleanup;
 				}
 
@@ -495,21 +495,21 @@ PHP_METHOD(imagickkernel, frommatrix)
 					values[count] = notanumber;
 				}
 				else {
-					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE TSRMLS_CC);
+					php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_BAD_VALUE);
 					goto cleanup;
 				}
 				count++;
 			}
 		}
 		else {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_UNEVEN);
 			goto cleanup;
 		}
 	}
 
 	if (origin_array == NULL) {
 		if (((num_columns%2) == 0) || ((num_rows%2) == 0)) {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED);
 			goto cleanup;
 		}
 		origin_x = (num_columns - 1) >> 1;
@@ -523,7 +523,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			origin_x = Z_LVAL_PP(tmp);
 		}
 		else {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED);
 			goto cleanup;
 		}
 
@@ -532,7 +532,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		if (origin_x>=num_columns) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
-				5 TSRMLS_CC,
+				5,
 				"origin_x for matrix is outside bounds of columns: %d",
 				origin_x
 			);
@@ -544,7 +544,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 			origin_y = Z_LVAL_PP(tmp);
 		}
 		else {
-			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED TSRMLS_CC);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ORIGIN_REQUIRED);
 			goto cleanup;
 		}
 
@@ -553,7 +553,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 		if (origin_y>=num_rows) {
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
-				5 TSRMLS_CC,
+				5,
 				"origin_y for matrix is outside bounds of rows: %d",
 				origin_y
 			);
@@ -562,7 +562,7 @@ PHP_METHOD(imagickkernel, frommatrix)
 	}
 
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
-	createKernelZval(return_value, kernel_info TSRMLS_CC);
+	createKernelZval(return_value, kernel_info);
 
 	return;
 
@@ -663,7 +663,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 	ExceptionInfo *_exception_info = NULL;
 #endif
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &kernel_type, &string, &string_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ls", &kernel_type, &string, &string_len) == FAILURE) {
 		return;
 	}
 
@@ -676,7 +676,7 @@ PHP_METHOD(imagickkernel, frombuiltin)
 #else
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info);
 #endif
-	createKernelZval(return_value, kernel_info TSRMLS_CC);
+	createKernelZval(return_value, kernel_info);
 
 	return;
 }
@@ -698,7 +698,7 @@ PHP_METHOD(imagickkernel, addkernel)
 	php_imagickkernel_object *kernel;
 	php_imagickkernel_object *internp;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickkernel_sc_entry) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &objvar, php_imagickkernel_sc_entry) == FAILURE) {
 		return;
 	}
 
@@ -706,7 +706,7 @@ PHP_METHOD(imagickkernel, addkernel)
 	internp = Z_IMAGICKKERNEL_P(getThis());
 
 	if (kernel->kernel_info == NULL) {
-		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0 TSRMLS_CC);
+		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0);
 		RETURN_NULL();
 	}
 
@@ -765,11 +765,11 @@ PHP_METHOD(imagickkernel, separate)
 		);
 
 #ifdef ZEND_ENGINE_3
-		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
+		createKernelZval(&separate_object, kernel_info_copy);
 		add_next_index_zval(return_value, &separate_object);
 #else 
 		MAKE_STD_ZVAL(separate_object);
-		createKernelZval(separate_object, kernel_info_copy TSRMLS_CC);
+		createKernelZval(separate_object, kernel_info_copy);
 		add_next_index_zval(return_value, separate_object);
 #endif
 		kernel_info = kernel_info->next;
@@ -822,7 +822,7 @@ PHP_METHOD(imagickkernel, scale)
 	double scale;
 	im_long normalize_flag;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &scale, &normalize_flag) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "d|l", &scale, &normalize_flag) == FAILURE) {
 		return;
 	}
 
@@ -848,7 +848,7 @@ PHP_METHOD(imagickkernel, addunitykernel)
 	php_imagickkernel_object *internp;
 	double scale;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &scale) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "d", &scale) == FAILURE) {
 		return;
 	}
 

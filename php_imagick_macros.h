@@ -42,7 +42,7 @@
 
 #define IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel) \
 	if (kernel->kernel_info == NULL) { \
-		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0 TSRMLS_CC); \
+		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0); \
 		RETURN_NULL(); \
 	}
 

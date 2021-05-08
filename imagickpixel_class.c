@@ -60,7 +60,7 @@ PHP_METHOD(imagickpixel, sethsl)
 	double hue, saturation, luminosity;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &hue, &saturation, &luminosity) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ddd", &hue, &saturation, &luminosity) == FAILURE) {
 		return;
 	}
 
@@ -85,7 +85,7 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 	Quantum color_value;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &color) == FAILURE) {
 		return;
 	}
 	
@@ -135,7 +135,7 @@ PHP_METHOD(imagickpixel, getcolorvaluequantum)
 		break;
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type");
 			return;
 		break;
 	}
@@ -159,13 +159,13 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 #if MAGICKCORE_HDRI_ENABLE
 	double color_value;
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ld", &color, &color_value) == FAILURE) {
 		return;
 	}
 #else
 	im_long color_value;
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &color, &color_value) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &color, &color_value) == FAILURE) {
 		return;
 	}
 #endif
@@ -216,7 +216,7 @@ PHP_METHOD(imagickpixel, setcolorvaluequantum)
 		break;
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type");
 			return;
 		break;
 	}
@@ -253,7 +253,7 @@ PHP_METHOD(imagickpixel, setindex)
 	im_long index;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &index) == FAILURE) {
 		return;
 	}
 
@@ -280,7 +280,7 @@ PHP_METHOD(imagickpixel, __construct)
 	// This suppresses an 'unused parameter' warning.
 	(void)return_value;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &color_name, &color_name_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|s", &color_name, &color_name_len) == FAILURE) {
 		return;
 	}
 
@@ -293,14 +293,14 @@ PHP_METHOD(imagickpixel, __construct)
 	internp->pixel_wand = NewPixelWand();
 
 	if (!internp->pixel_wand) {
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure" TSRMLS_CC);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate PixelWand structure");
 		return;
 	}
 
 	/* If color was given as parameter, set it here.*/
 	if (color_name && color_name_len) {
 		if (PixelSetColor(internp->pixel_wand, color_name) == MagickFalse) {
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to construct ImagickPixel" TSRMLS_CC);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unable to construct ImagickPixel");
 			return;
 		}
 	}
@@ -319,7 +319,7 @@ PHP_METHOD(imagickpixel, setcolor)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_name, &color_name_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &color_name, &color_name_len) == FAILURE) {
 		return;
 	}
 	
@@ -331,7 +331,7 @@ PHP_METHOD(imagickpixel, setcolor)
 	status = PixelSetColor(internp->pixel_wand, color_name);
 
 	if (status == MagickFalse) {
-		php_imagick_convert_imagickpixel_exception (internp->pixel_wand, "Unable to set ImagickPixel color" TSRMLS_CC);
+		php_imagick_convert_imagickpixel_exception (internp->pixel_wand, "Unable to set ImagickPixel color");
 		return;
 	}
 
@@ -374,7 +374,7 @@ void s_is_pixelwand_similar(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 	zend_bool allocated;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &fuzz) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "zd", &param, &fuzz) == FAILURE) {
 		return;
 	}
 
@@ -383,7 +383,7 @@ void s_is_pixelwand_similar(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 		return;
 	}
 
-	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICKPIXEL_CLASS, &allocated TSRMLS_CC);
+	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICKPIXEL_CLASS, &allocated);
 	if (!color_wand)
 		return;
 
@@ -434,7 +434,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 	double color_value = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &color) == FAILURE) {
 		return;
 	}
 
@@ -444,7 +444,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 	}
 
 	if (color <= PHP_IMAGICK_COLOR_MIN || color >= PHP_IMAGICK_COLOR_MAX) {
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type");
 		return;
 	}
 
@@ -497,7 +497,7 @@ PHP_METHOD(imagickpixel, getcolorvalue)
 #endif
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type");
 			return;
 		break;
 	}
@@ -516,7 +516,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 	double color_value;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &color, &color_value) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ld", &color, &color_value) == FAILURE) {
 		return;
 	}
 
@@ -526,7 +526,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 	}
 
 	if (color <= PHP_IMAGICK_COLOR_MIN || color >= PHP_IMAGICK_COLOR_MAX) {
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type");
 		return;
 	}
 
@@ -579,7 +579,7 @@ PHP_METHOD(imagickpixel, setcolorvalue)
 #endif
 
 		default:
-			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type" TSRMLS_CC);
+			php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Unknown color type");
 			return;
 		break;
 	}
@@ -602,7 +602,7 @@ PHP_METHOD(imagickpixel, getcolor)
 	double red, green, blue, alpha;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &normalization) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|l", &normalization) == FAILURE) {
 		return;
 	}
 
@@ -748,7 +748,7 @@ PHP_METHOD(imagickpixel, clone)
 
 	pixel_wand = php_imagick_clone_pixelwand (internp->pixel_wand);
 	if (!pixel_wand) {
-		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate" TSRMLS_CC);
+		php_imagick_throw_exception (IMAGICKPIXEL_CLASS, "Failed to allocate");
 		return;
 	}
 
@@ -789,7 +789,7 @@ PHP_METHOD(imagickpixel, setcolorcount)
 	im_long color_count;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &color_count) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &color_count) == FAILURE) {
 		return;
 	}
 
@@ -812,7 +812,7 @@ PHP_METHOD(imagickpixel, setcolorfrompixel)
 	php_imagickpixel_object *internp, *src_pixel;
 	zval *objvar;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickpixel_sc_entry) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "O", &objvar, php_imagickpixel_sc_entry) == FAILURE) {
 		return;
 	}
 
