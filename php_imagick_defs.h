@@ -45,7 +45,6 @@
 #if PHP_VERSION_ID >= 80000
 	#define HAVE_LOCALE_H
 	#define TSRMLS_C
-	#define
 	#define TSRMLS_D
 	#define TSRMLS_DC
 	#define TSRMLS_FETCH()
