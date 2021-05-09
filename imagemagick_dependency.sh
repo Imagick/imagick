@@ -33,12 +33,12 @@ imagemagick_fetch_and_build () {
     case $version in
 
     git7)
-        wget -O ImageMagick-7.tar.gz https://github.com/ImageMagick/ImageMagick/archive/master.tar.gz
+        wget -O ImageMagick-7.tar.gz https://github.com/ImageMagick/ImageMagick/archive/main.tar.gz
         tar xvfz ImageMagick-7.tar.gz
         cd ImageMagick-master
         ;;
     git6)
-        wget -O ImageMagick-6.tar.gz https://github.com/ImageMagick/ImageMagick6/archive/master.tar.gz
+        wget -O ImageMagick-6.tar.gz https://github.com/ImageMagick/ImageMagick6/archive/main.tar.gz
         tar xvfz ImageMagick-6.tar.gz
         cd ImageMagick6-master
         ;;
