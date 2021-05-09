@@ -19,7 +19,7 @@ jobs:
         os: [ ubuntu-latest ]
         php: [ 5.4 ]
         imagemagick: [
-            7.0.10-27
+            7.0.10-27,
             6.9.2-0
         ]
 #        exclude:
