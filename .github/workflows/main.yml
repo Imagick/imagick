@@ -80,16 +80,17 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [5.4, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
+        # todo re-add 8.0 when merged with code that works on 8.0
+        php: [5.4, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
         imagemagick: [
           7.0.10-27,
           7.0.8-4,
           7.0.1-0,
-          # git7, doesn't seem to work currently
+          git7,
           6.9.2-0,
           6.8.7-0,
           6.7.8-0,
-          # git6, doesn't seem to work currently
+          git6
         ]
         exclude:
           - php: 5.4
@@ -140,8 +141,3 @@ jobs:
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php
 
-#      - name: Upload artifacts
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: linux-x64-${{ matrix.php }}-${{ matrix.imagemagick }}
-#          path: modules/*.so
