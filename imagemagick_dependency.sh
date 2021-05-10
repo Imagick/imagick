@@ -35,12 +35,12 @@ imagemagick_fetch_and_build () {
     git7)
         wget -O ImageMagick-7.tar.gz https://github.com/ImageMagick/ImageMagick/archive/main.tar.gz
         tar xvfz ImageMagick-7.tar.gz
-        cd ImageMagick-master
+        cd ImageMagick-main
         ;;
     git6)
         wget -O ImageMagick-6.tar.gz https://github.com/ImageMagick/ImageMagick6/archive/main.tar.gz
         tar xvfz ImageMagick-6.tar.gz
-        cd ImageMagick6-master
+        cd ImageMagick6-main
         ;;
     dev)
         svn co https://www.imagemagick.org/subversion/ImageMagick/branches/ImageMagick-6/ imagemagick-dev

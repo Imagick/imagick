@@ -20,7 +20,9 @@ jobs:
         php: [ 5.4 ]
         imagemagick: [
             7.0.10-27,
-            6.9.2-0
+            6.9.2-0,
+            git7,
+            git6
         ]
 #        exclude:
 #          - php: 5.4
