@@ -43,6 +43,10 @@ For Windows please install both Imagick and the underlying ImageMagick library f
 
 Once compiled, Imagick should be run with the same version of ImageMagick that it was compiled against. Running against a different version of ImageMagick is known to cause stability issues, and so is not recommended or supported.
 
+# NixOS
+
+If using Imagick on NixOS, you probably [want to define](https://github.com/Imagick/imagick/blob/master/docker/nixos/shell.nix) FONTCONFIG_FILE to avoid a warning message when loading fonts, and MAGICK_CONFIGURE_PATH to have all the information available from Imagick::getConfigureOptions().
+
 # Examples
 
 Almost all of the functions in the library have an example at [www.phpimagick.com](http://www.phpimagick.com/), where you can see the example code to call the function, as well as the generated image or output.
