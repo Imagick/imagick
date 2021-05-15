@@ -1079,7 +1079,7 @@ PHP_METHOD(imagick, getimageinterpolatemethod)
 }
 /* }}} */
 
-#if MagickLibVersion >= 0x631
+#if IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 /* {{{ proto bool Imagick::setImageInterpolateMethod(int method)
 	Sets the image interpolate pixel method.
 */
@@ -1108,7 +1108,7 @@ PHP_METHOD(imagick, setimageinterpolatemethod)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif // #if MagickLibVersion >= 0x631
+#endif // #if IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 
 /* {{{ proto bool Imagick::linearStretchImage(float blackPoint, float whitePoint)
 	Stretches with saturation the image intensity.
