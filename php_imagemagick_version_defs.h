@@ -32,15 +32,15 @@
 // The above is sub-optimal as it's hard to read. It'd be better to do
 // something like the below:
 
-//#define MAGICK_LIB_RANGE(NAME, IM6_VERSION, IM7_VERSION) \
-//#if MagickLibVersion >= 0x700 \
-//  #if MagickLibVersion >= IM7_VERSION \
-//      #define IM_HAVE_##NAME 1 \
-//  #endif \
-//#elif MagickLibVersion >= 0x600 \
-//  #if MagickLibVersion >= IM6_VERSION \
-//    #define IM_HAVE_##NAME 1 \
-//  #endif \
+//#define MAGICK_LIB_RANGE(NAME, IM6_VERSION, IM7_VERSION) slash
+//#if MagickLibVersion >= 0x700 slash
+//  #if MagickLibVersion >= IM7_VERSION slash
+//      #define IM_HAVE_##NAME 1 slash
+//  #endif slash
+//#elif MagickLibVersion >= 0x600 slash
+//  #if MagickLibVersion >= IM6_VERSION slash
+//    #define IM_HAVE_##NAME 1 slash
+//  #endif slash
 //#endif
 
 // MAGICK_LIB_RANGE(IMAGICK_SETIMAGEINTERPOLATEMETHOD, 0x631, 0x702)
