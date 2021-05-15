@@ -4,8 +4,12 @@ RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
 RUN nix-channel --update
 
 # Prepare the build environment.
-COPY shell.nix /opt
-RUN nix-shell /opt/shell.nix --run 'echo OK'
+# This is appropriate for production or CI containers, but for
+# development environments, it's better to leave the shell.nix
+# where it is, so that updates to it don't require a rebuild of the
+# container, as that is annoying to do.
+# COPY shell.nix /opt
+# RUN nix-shell /opt/shell.nix --run 'echo OK'
 
 # Keep a symlink to ImageMagick headers.
 RUN nix-build '<nixpkgs>' -A imagemagick7.dev -o /opt/imagemagick
