@@ -96,6 +96,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 			<file name="php_imagick.h" role="src">
 				<tasks:replace from="@PACKAGE_VERSION@" to="version" type="package-info" />
 			</file>
+			<file name="php_imagemagick_version_defs.h" role="src" />
 			<file name="php_imagick_defs.h" role="src" />
 			<file name="php_imagick_helpers.h" role="src" />
 			<file name="php_imagick_macros.h" role="src" />

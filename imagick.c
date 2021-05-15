@@ -218,9 +218,11 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 		ZEND_ARG_INFO(0, embedText)
 	ZEND_END_ARG_INFO()
 
+#if IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 	ZEND_BEGIN_ARG_INFO_EX(imagick_setimageinterpolatemethod_args, 0, 0, 1)
 		ZEND_ARG_INFO(0, INTERPOLATE)
 	ZEND_END_ARG_INFO()
+#endif
 
 	ZEND_BEGIN_ARG_INFO_EX(imagick_linearstretchimage_args, 0, 0, 2)
 		ZEND_ARG_INFO(0, blackPoint)
@@ -2348,7 +2350,9 @@ static zend_function_entry php_imagick_class_methods[] =
 	PHP_ME(imagick, setimageproperty, imagick_setimageproperty_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, deleteimageproperty, imagick_deleteimageproperty_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, identifyformat, imagick_identifyformat_args, ZEND_ACC_PUBLIC)
+#if IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 	PHP_ME(imagick, setimageinterpolatemethod, imagick_setimageinterpolatemethod_args, ZEND_ACC_PUBLIC)
+#endif
 	PHP_ME(imagick, getimageinterpolatemethod, imagick_zero_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, linearstretchimage, imagick_linearstretchimage_args, ZEND_ACC_PUBLIC)
 	PHP_ME(imagick, getimagelength, imagick_zero_args, ZEND_ACC_PUBLIC)
