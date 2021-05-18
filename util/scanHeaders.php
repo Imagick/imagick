@@ -1,11 +1,13 @@
 <?php
 
 // A simple tool to scan for missed enum entries in the ImageMagick header files.
+// This code does not attempt to maintain BC across all ImageMagick versions. It
+// only needs to work against the latest version of ImageMagick 6 + 7.
 
 $directory = false; 
 // Either pass in the directory to scan or set it here.
 // $directory = "/home/github/BastionRPM/zips/ImageMagick/ImageMagick-7.0.1-9";
-// 'php ./scanHeaders.php ../imagemagick_src/ImageMagick-7.0.8-40'
+// 'php ./scanHeaders.php ../imagemagick_src/ImageMagick-7.0.11-12'
 
 if ($directory) {
 	$pathToImageMagick = $directory;
@@ -135,7 +137,8 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 		'MagickCore/fourier.h' => [
 			// 'ComplexOperator', // used by ComplexImages - not exposed in wand api
 		],
-		'MagickCore/fx.h' => [
+		//'MagickCore/fx.h' => [
+        'MagickCore/visual-effects.h' => [
 			'NoiseType',
 		],
 		'MagickCore/geometry.h' => [

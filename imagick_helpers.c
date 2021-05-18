@@ -1109,6 +1109,20 @@ void php_imagick_initialize_constants(TSRMLS_D)
     IMAGICK_REGISTER_CONST_LONG("COMPOSITE_STEREO", StereoCompositeOp);
 #endif
 
+#if MagickLibVersion >= 0x70A
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_FREEZE", FreezeCompositeOp);
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_INTERPOLATE", InterpolateCompositeOp);
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_NEGATE", NegateCompositeOp);
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_REFLECT", ReflectCompositeOp);
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SOFTBURN", SoftBurnCompositeOp);
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SOFTDODGE", SoftDodgeCompositeOp);
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_STAMP", StampCompositeOp);
+#endif
+
+#if MagickLibVersion >= 0x70B
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_RMSE", RMSECompositeOp);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("MONTAGEMODE_FRAME", FrameMode);
 	IMAGICK_REGISTER_CONST_LONG("MONTAGEMODE_UNFRAME", UnframeMode);
 	IMAGICK_REGISTER_CONST_LONG("MONTAGEMODE_CONCATENATE", ConcatenateMode);
@@ -1258,6 +1272,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x709
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_ZSTD", ZstdCompression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_WEBP", WebPCompression);
+#endif
+
+#if MagickLibVersion >= 0x70C
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAA", DWAACompression);
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("PAINT_POINT", PointMethod);
@@ -1441,6 +1460,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("EVALUATE_ROOT_MEAN_SQUARE", RootMeanSquareEvaluateOperator);
 #endif
 
+#if MagickLibVersion >= 0x70B
+    IMAGICK_REGISTER_CONST_LONG("EVALUATE_INVERSE_LOG", InverseLogEvaluateOperator);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_UNDEFINED", UndefinedColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_RGB", RGBColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_GRAY", GRAYColorspace);
@@ -1497,6 +1520,16 @@ void php_imagick_initialize_constants(TSRMLS_D)
 
 #if (MagickLibVersion >= 0x700 && MagickLibVersion >= 0x708) || (MagickLibVersion < 0x700 && MagickLibVersion >= 0x699)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_LINEARGRAY", LinearGRAYColorspace);
+#endif
+
+#if MagickLibVersion >= 0x70B
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_DISPLAYP3", DisplayP3Colorspace);
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_ADOBE98", Adobe98Colorspace);
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_PROPHOTO", ProPhotoColorspace);
+#endif
+
+#if MagickLibVersion >= 0x70A
+	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_JZAZBZ", JzazbzColorspace);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
@@ -1697,6 +1730,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	// minor version.
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_SENTINEL", SentinelDistortion);
 #endif
+
+#if MagickLibVersion >= 0x70B
+    IMAGICK_REGISTER_CONST_LONG("DISTORTION_RIGID_AFFINE", RigidAffineDistortion);
+#endif
+
 #if MagickLibVersion >= 0x644
 	IMAGICK_REGISTER_CONST_LONG("DISTORTION_BARRELINVERSE", BarrelInverseDistortion);
 #endif
@@ -1796,9 +1834,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_MODE", ModeStatistic);
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_NONPEAK", NonpeakStatistic);
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_STANDARD_DEVIATION", StandardDeviationStatistic);
+#endif
 #if MagickLibVersion >= 0x690
 	IMAGICK_REGISTER_CONST_LONG("STATISTIC_ROOT_MEAN_SQUARE", RootMeanSquareStatistic);
 #endif
+
+#if MagickLibVersion >= 0x70C
+	IMAGICK_REGISTER_CONST_LONG("STATISTIC_ROOT_MEAN_SQUARE", ContrastStatistic);
 #endif
 
 #ifdef IMAGICK_WITH_KERNEL
