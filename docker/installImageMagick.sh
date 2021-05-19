@@ -20,7 +20,18 @@ cd /var/app/imagemagick_src/${SRCFILE}
            --disable-static \
            --disable-docs \
            --with-jpeg=yes \
-           --with-png=yes
+           --with-png=yes \
+           --with-webp=yes
+
+
+./configure --with-quantum-depth=16 \
+           --with-magick-plus-plus=no \
+           --without-perl \
+           --disable-docs \
+           --with-jpeg=yes \
+           --with-png=yes \
+           --with-webp=yes
+
 
            # --disable-openmp \
 
