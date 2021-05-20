@@ -35,7 +35,7 @@ $includeDir = null;
 
 $directory = realpath($pathToImageMagick);
 
-
+// IM6 checks
 if (file_exists($directory.'/'.'magick') == true) {
 	$enumToCheck = [
 		'magick/compare.h' => [
@@ -113,6 +113,7 @@ if (file_exists($directory.'/'.'magick') == true) {
 		],
 	];
 }
+// IM7 checks
 else if (file_exists($directory.'/'.'MagickCore') == true) {
 	$enumToCheck = [
 		'MagickCore/compare.h' => [
@@ -165,6 +166,11 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 			'PixelInterpolateMethod',
 			// 'PixelComponent', // present in 6.9.2 but not used?
 			// 'PixelIntensityMethod', //// Used by GrayscaleImage function that is not expose in wand api
+
+            //'PixelTrait', no idea
+            'PixelMask',
+            // 'StorageType', This needs to be re-enabled, but also involves work getting 64bits to play nicely...
+
 		],
 		'MagickCore/profile.h' => [
 			'RenderingIntent',
