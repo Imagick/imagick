@@ -22,18 +22,20 @@ cd /var/app/imagemagick_src/${SRCFILE}
            --with-png=yes \
            --with-webp=yes
 
-# --disable-openmp \
-#   --libdir=/usr/local/lib \
+# --disable-openmp
 
-# --enable-hdri
-# --libdir=/usr/local/lib
-# /lib/tls/x86_64/
-# /usr/lib/tls
-# --disable-openmp \
+# ImageMagick appears to not fully respect lib paths even when
+# setting `--libdir=/usr/local/lib` running this ldconfig command
+# is needed to avoid errors like:
+# convert -v
+# convert: error while loading shared libraries: libMagickCore-7.Q16HDRI.so.9:
+# cannot open shared object file: No such file or directory
+sudo ldconfig /usr/local/lib
 
-ln -s /usr/local/lib/libMagickCore-7.Q16HDRI.so.0 /usr/lib/x86_64-linux-gnu/libMagickCore-7.Q16HDRI.so.0
-ln -s /usr/local/lib/libMagickWand-7.Q16HDRI.so.0 /usr/lib/x86_64-linux-gnu/libMagickWand-7.Q16HDRI.so.0
-
+# If for some reason you can't run ldconfig, you could also symlink
+# the files directly.
+# ln -s /usr/local/lib/libMagickCore-7.Q16HDRI.so.0 /usr/lib/x86_64-linux-gnu/libMagickCore-7.Q16HDRI.so.0
+# ln -s /usr/local/lib/libMagickWand-7.Q16HDRI.so.0 /usr/lib/x86_64-linux-gnu/libMagickWand-7.Q16HDRI.so.0
 
 make install -j 4
 
