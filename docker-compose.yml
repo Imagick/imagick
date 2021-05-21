@@ -11,7 +11,7 @@ services:
   developing:
     build: docker/developing
     volumes:
-      - .:/var/app
+      - .:/var/app:delegated
   testing7_2:
     build: docker/testing7_2
     volumes:
