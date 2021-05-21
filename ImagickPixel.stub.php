@@ -35,7 +35,7 @@ class ImagickPixel
 
     public function isPixelSimilar(ImagickPixel|string $color, float $fuzz): bool {}
 
-    //The fuzz value should be in the range 0-QuantumRange. The maximum value
+    // The fuzz value should be in the range 0-QuantumRange. The maximum value
     // represents the longest possible distance in the colorspace. e.g. from
     // RGB(0, 0, 0) to RGB(255, 255, 255) for the RGB colorspace
     public function isPixelSimilarQuantum(ImagickPixel|string $color, float $fuzz_quantum_range_scaled_by_square_root_of_three): bool {}

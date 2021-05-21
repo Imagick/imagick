@@ -116,6 +116,9 @@ if (file_exists($directory.'/'.'magick') == true) {
 // IM7 checks
 else if (file_exists($directory.'/'.'MagickCore') == true) {
 	$enumToCheck = [
+		'MagickCore/cache-view.h' => [
+			'VirtualPixelMethod',
+		],
 		'MagickCore/compare.h' => [
 			'MetricType',
 		],
@@ -132,17 +135,23 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 			'DistortMethod',
 			'SparseColorMethod',
 		],
+		'MagickCore/draw.h' => [
+			'AlignType',
+			"ClipPathUnits",
+			'DecorationType',
+			'DirectionType',
+			'FillRule',
+			'LineCap',
+			'LineJoin',
+		],
 		'MagickCore/effect.h' => [
 			'PreviewType',
 		],
 		'MagickCore/fourier.h' => [
 			// 'ComplexOperator', // used by ComplexImages - not exposed in wand api
 		],
-		//'MagickCore/fx.h' => [
-        'MagickCore/visual-effects.h' => [
-			'NoiseType',
-		],
 		'MagickCore/geometry.h' => [
+			// 'GeometryFlags', this is a nightmare of an 'enum'
 			'GravityType',
 		],
 		'MagickCore/image.h' => [
@@ -170,7 +179,6 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
             //'PixelTrait', no idea
             'PixelMask',
             // 'StorageType', This needs to be re-enabled, but also involves work getting 64bits to play nicely...
-
 		],
 		'MagickCore/profile.h' => [
 			'RenderingIntent',
@@ -192,6 +200,9 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 		'MagickCore/type.h' => [
 			'StretchType',
 			'StyleType',
+		],
+		'MagickCore/visual-effects.h' => [
+			'NoiseType',
 		],
 	];
 }
@@ -293,6 +304,12 @@ function getEnumList($enum, $filename)
 		if (strlen($entry) === 0) {
 			continue;
 		}
+
+		if (strpos($entry, '#') !== false) {
+			// skip things like '#undef EvenOddRule'
+			continue;
+		}
+
 		$trimmedVars[] = $entry;
 	}
 
