@@ -1556,6 +1556,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_VERTICALTILEEDGE", VerticalTileEdgeVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_CHECKERTILE", CheckerTileVirtualPixelMethod);
 #endif
+
+	// These were missed, but have been present for 12 years, so assuming
+	// they are going to be available in all version of ImageMagick people
+	// are using.
+	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_DITHER", DitherVirtualPixelMethod);
+	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_RANDOM", RandomVirtualPixelMethod);
+
 	IMAGICK_REGISTER_CONST_LONG("PREVIEW_UNDEFINED", UndefinedPreview);
 	IMAGICK_REGISTER_CONST_LONG("PREVIEW_ROTATE", RotatePreview);
 	IMAGICK_REGISTER_CONST_LONG("PREVIEW_SHEAR", ShearPreview);
