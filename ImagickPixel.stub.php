@@ -19,10 +19,11 @@ class ImagickPixel
 
     public function getColorQuantum(): array {}
 
+    // COLOR_*
     public function getColorValue(int $color): IMAGICK_QUANTUM_TYPE {}
 
     /**
-     * @param int $color
+     * @param int $color // COLOR_*
      * @return mixed
      * - Float if IM compiled with HDRI
      * - int if IM compiled with fixed point math
@@ -47,10 +48,11 @@ class ImagickPixel
 
     public function setColorCount(int $color_count): bool {}
 
+    // COLOR_*
     public function setColorValue(int $color, float $value): bool {}
 
     /**
-     * @param int $color
+     * @param int $color // COLOR_*
      * @param mixed $value
      * @return bool
      *
@@ -63,7 +65,9 @@ class ImagickPixel
 
     public function setHSL(float $hue, float $saturation , float $luminosity): bool{}
 
-    public function setIndex(int $index): bool {}
+    // This function could be described more clearly...
+    // https://imagemagick.org/api/pixel-wand.php#PixelSetIndex
+    public function setIndex(IMAGICK_QUANTUM_TYPE $index): bool {}
 
     //// Not in docs.
 #if MagickLibVersion >= 0x693
