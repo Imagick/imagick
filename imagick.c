@@ -3279,7 +3279,6 @@ PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY("imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.skip_version_check", "0", PHP_INI_ALL, OnUpdateBool, skip_version_check, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.progress_monitor", "0", PHP_INI_SYSTEM, OnUpdateBool, progress_monitor, zend_imagick_globals, imagick_globals)
-
 	STD_PHP_INI_ENTRY("imagick.set_single_thread", "0", PHP_INI_SYSTEM, OnUpdateBool, set_single_thread, zend_imagick_globals, imagick_globals)
 	STD_PHP_INI_ENTRY("imagick.shutdown_sleep_count",  "10", PHP_INI_ALL, OnUpdateLong, shutdown_sleep_count, zend_imagick_globals, imagick_globals)
 
