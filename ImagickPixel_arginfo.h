@@ -244,11 +244,22 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_setIndex, 0, 0, 1)
 #endif
 
 	
+#if MAGICKCORE_HDRI_ENABLE 
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, index, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, index)
+#endif
+#else
+	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
 #else
     ZEND_ARG_INFO(0, index)
 #endif
+#endif
+
 ZEND_END_ARG_INFO()
 
 #if MagickLibVersion >= 0x693
