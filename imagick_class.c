@@ -4369,6 +4369,9 @@ PHP_METHOD(Imagick, combineImages)
 {
 	MagickWand *tmp_wand;
 	php_imagick_object *intern, *intern_return;
+
+	// TODO - this is actuall ColorspaceType
+	// https://imagemagick.org/api/magick-image.php#MagickCombineImages
 	im_long channel_type;
 
 	/* Parse parameters given to function */
