@@ -519,7 +519,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_polaroidImage, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_polaroidImage, 0, 0, 2)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, properties, ImagickDraw, 0)
+	ZEND_ARG_OBJ_INFO(0, settings, ImagickDraw, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, angle, IS_DOUBLE, 0)
@@ -729,14 +729,14 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_paintFloodfillImag
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_paintFloodfillImage, 0, 0, 5)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, fill, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, fill_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, fuzz, IS_DOUBLE, 0)
 #else
     ZEND_ARG_INFO(0, fuzz)
 #endif
-	ZEND_ARG_OBJ_TYPE_MASK(0, bordercolor, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, border_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
@@ -1012,14 +1012,14 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_floodfillPaintImag
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_floodfillPaintImage, 0, 0, 6)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, fill, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, fill_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, fuzz, IS_DOUBLE, 0)
 #else
     ZEND_ARG_INFO(0, fuzz)
 #endif
-	ZEND_ARG_OBJ_TYPE_MASK(0, target, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, border_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
@@ -1050,8 +1050,8 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_opaquePaintImage, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_opaquePaintImage, 0, 0, 4)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, target, ImagickPixel, MAY_BE_STRING, NULL)
-	ZEND_ARG_OBJ_TYPE_MASK(0, fill, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, target_color, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, fill_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, fuzz, IS_DOUBLE, 0)
@@ -1076,7 +1076,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_transparentPaintIm
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_transparentPaintImage, 0, 0, 4)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, target, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, target_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, alpha, IS_DOUBLE, 0)
@@ -1211,7 +1211,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getImageChannelDis
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageChannelDistortions, 0, 0, 2)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, reference, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, reference_image, Imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, metric, IS_LONG, 0)
@@ -1290,9 +1290,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_importImagePixels, 0, 0, 7)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, storage, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, pixelstorage, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, storage)
+    ZEND_ARG_INFO(0, pixelstorage)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -1330,9 +1330,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_segmentImage, 0, 0, 3)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, color, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, colorspace, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, color)
+    ZEND_ARG_INFO(0, colorspace)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -1496,9 +1496,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_functionImage, 0, 0, 2)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, arguments, IS_ARRAY, 0)
+    ZEND_ARG_TYPE_INFO(0, parameters, IS_ARRAY, 0)
 #else
-    ZEND_ARG_INFO(0, arguments)
+    ZEND_ARG_INFO(0, parameters)
 #endif
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
 ZEND_END_ARG_INFO()
@@ -1837,9 +1837,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_scaleImage, 0, 0, 2)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, cols, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, columns, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, cols)
+    ZEND_ARG_INFO(0, columns)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -2126,7 +2126,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_drawImage, 0, 1, _
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_drawImage, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, draw, ImagickDraw, 0)
+	ZEND_ARG_OBJ_INFO(0, drawing, ImagickDraw, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -2211,7 +2211,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_compositeImage, 0,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_compositeImage, 0, 0, 4)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, composite_object, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, composite_image, Imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, composite, IS_LONG, 0)
@@ -2284,9 +2284,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_montageImage, 0, 0, 5)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, mode, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, monatgemode, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, mode)
+    ZEND_ARG_INFO(0, monatgemode)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -2807,7 +2807,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageMatteColor
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageMatteColor, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, matte, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, matte_color, ImagickPixel, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
 #endif
 
@@ -3035,7 +3035,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 0, 3)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, draw_settings, ImagickDraw, 0)
+	ZEND_ARG_OBJ_INFO(0, settings, ImagickDraw, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, text, IS_STRING, 0)
@@ -3145,7 +3145,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_affineTransformIma
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_affineTransformImage, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, matrix, ImagickDraw, 0)
+	ZEND_ARG_OBJ_INFO(0, settings, ImagickDraw, 0)
 ZEND_END_ARG_INFO()
 
 #if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
@@ -3271,7 +3271,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_colorFloodfillImage, 0, 0, 5)
 #else
     ZEND_ARG_INFO(0, fuzz)
 #endif
-	ZEND_ARG_OBJ_TYPE_MASK(0, bordercolor, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, border_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, x, IS_LONG, 0)
@@ -3295,7 +3295,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_colorizeImage, 0, 0, 2)
 #endif
 
 	ZEND_ARG_OBJ_TYPE_MASK(0, colorize_color, ImagickPixel, MAY_BE_STRING, NULL)
-	ZEND_ARG_OBJ_TYPE_MASK(0, opacity, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, opacity, ImagickPixel, MAY_BE_STRING|MAY_BE_FALSE, NULL)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 1, "false")
 ZEND_END_ARG_INFO()
 
@@ -3306,7 +3306,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_compareImageChanne
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_compareImageChannels, 0, 0, 3)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, image, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, comparison, Imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, channel, IS_LONG, 0)
@@ -4009,7 +4009,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_paintTransparentIm
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_paintTransparentImage, 0, 0, 3)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, target, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, target_color, ImagickPixel, MAY_BE_STRING, NULL)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, alpha, IS_DOUBLE, 0)
@@ -4250,7 +4250,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageColormapColor, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, index)
 #endif
-	ZEND_ARG_OBJ_INFO(0, color, ImagickPixel, 0)
+	ZEND_ARG_OBJ_TYPE_MASK(0, color, ImagickPixel, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
 
 
@@ -4373,7 +4373,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_stereoImage, 0, 1,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_stereoImage, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, offset_wand, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, offset_image, Imagick, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -4441,18 +4441,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_addImage, 0, 1, _I
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_addImage, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, source, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, image, Imagick, 0)
 ZEND_END_ARG_INFO()
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImage, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImage, 0, 0, 1)
-#endif
-
-	ZEND_ARG_OBJ_INFO(0, replace, Imagick, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_setImage arginfo_class_Imagick_addImage
 
 
 #if PHP_VERSION_ID >= 80000
@@ -4601,15 +4593,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getVersion arginfo_class_Imagick_getImageGeometry
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setBackgroundColor, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setBackgroundColor, 0, 0, 1)
-#endif
-
-	ZEND_ARG_OBJ_TYPE_MASK(0, background, ImagickPixel, MAY_BE_STRING, NULL)
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_setBackgroundColor arginfo_class_Imagick_setImageBackgroundColor
 
 #define arginfo_class_Imagick_setCompression arginfo_class_Imagick_setImageCompression
 
@@ -4848,7 +4832,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_subimageMatch, 0, 3
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_subimageMatch, 0, 0, 3)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, Imagick, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, image, Imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(1, offset, IS_ARRAY, 1)
@@ -4872,7 +4856,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_similarityimage, 0,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_similarityimage, 0, 0, 3)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, Imagick, imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, image, imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(1, offset, IS_ARRAY, 1)
@@ -4949,9 +4933,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_morphology, 0, 0, 3)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, morphologyMethod, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, morphology, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, morphologyMethod)
+    ZEND_ARG_INFO(0, morphology)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -4959,7 +4943,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_morphology, 0, 0, 3)
 #else
     ZEND_ARG_INFO(0, iterations)
 #endif
-	ZEND_ARG_OBJ_INFO(0, ImagickKernel, ImagickKernel, 0)
+	ZEND_ARG_OBJ_INFO(0, kernel, ImagickKernel, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
 ZEND_END_ARG_INFO()
 #endif
@@ -4972,7 +4956,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_filter, 0, 1, _IS_
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_filter, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, ImagickKernel, ImagickKernel, 0)
+	ZEND_ARG_OBJ_INFO(0, kernel, ImagickKernel, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_UNDEFINED")
 ZEND_END_ARG_INFO()
 #endif

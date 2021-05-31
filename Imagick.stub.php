@@ -132,7 +132,7 @@ class Imagick
 
 #if MagickLibVersion > 0x631
     // TODO - ImagickDraw ....
-    public function polaroidImage(ImagickDraw $properties, float $angle): bool  {}
+    public function polaroidImage(ImagickDraw $settings, float $angle): bool  {}
 
     public function getImageProperty(string $name): string  {}
 
@@ -168,9 +168,9 @@ class Imagick
 #if MagickLibVersion < 0x700
     /** @deprecated */
     public function paintFloodfillImage(
-        ImagickPixel|string $fill,
+        ImagickPixel|string $fill_color,
         float $fuzz,
-        ImagickPixel|string $bordercolor,
+        ImagickPixel|string $border_color,
         int $x,
         int $y,
         int $channel = Imagick::CHANNEL_DEFAULT
@@ -191,7 +191,7 @@ class Imagick
     // DISTORTION_*
     public function distortImage(int $distortion, array $arguments, bool $bestfit): bool  {}
 
-    public function writeImageFile( resource $filehandle, ?string $format): bool  {}
+    public function writeImageFile(resource $filehandle, ?string $format): bool  {}
 
     public function writeImagesFile(resource $filehandle, ?string $format): bool  {}
 
@@ -239,9 +239,9 @@ class Imagick
 //    const ssize_t x,const ssize_t y,const MagickBooleanType invert)
 
     public function floodfillPaintImage(
-        ImagickPixel|string $fill,
+        ImagickPixel|string $fill_color,
         float $fuzz,
-        ImagickPixel|string $target,
+        ImagickPixel|string $border_color,
         int $x,
         int $y,
         bool $invert,
@@ -251,14 +251,14 @@ class Imagick
 
 
     public function opaquePaintImage(
-        ImagickPixel|string $target,
-        ImagickPixel|string $fill,
+        ImagickPixel|string $target_color,
+        ImagickPixel|string $fill_color,
         float $fuzz,
         bool $invert,
         int $channel = Imagick::CHANNEL_DEFAULT): bool {}
 
     public function transparentPaintImage(
-        ImagickPixel|string $target,
+        ImagickPixel|string $target_color,
         float $alpha,
         float $fuzz,
         bool $invert
@@ -288,7 +288,7 @@ class Imagick
 
 #if MagickLibVersion > 0x642
     public function getImageChannelDistortions(
-        Imagick $reference,
+        Imagick $reference_image,
         int $metric,
         int $channel = Imagick::CHANNEL_DEFAULT
     ): float {}
@@ -308,7 +308,7 @@ class Imagick
      * @param int $width
      * @param int $height
      * @param string $map
-     * @param int $storage // PIXEL
+     * @param int $pixelstorage // PIXELSTORAGE
      * @param array $pixels
      * @return bool
      */
@@ -318,17 +318,26 @@ class Imagick
         int $width,
         int $height,
         string $map,
-        int $storage,
+        int $pixelstorage,
         array $pixels): bool {}
 
     public function deskewImage(float $threshold): bool  {}
 
+    /**
+     * @param int $colorspace // COLORSPACE
+     * @param float $cluster_threshold
+     * @param float $smooth_threshold
+     * @param bool $verbose
+     * @return bool
+     */
     public function segmentImage(
-        int $color,
+        int $colorspace,
         float $cluster_threshold,
         float $smooth_threshold,
-        bool $verbose = false): bool  {}
+        bool $verbose = false
+    ): bool  {}
 
+    // SPARSECOLORMETHOD_*
     public function sparseColorImage(
         int $sparseColorMethod,
         array $arguments,
@@ -350,7 +359,7 @@ class Imagick
      * @param int $width
      * @param int $height
      * @param string $map e.g. "RGB"
-     * @param int $pixelStorage
+     * @param int $pixelStorage // PIXELSTORAGE
      * @return array
      */
     public function exportImagePixels(
@@ -368,12 +377,13 @@ class Imagick
 
     public function functionImage(
         int $function,
-        array $arguments,
+        array $parameters,
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool {}
 #endif
 
 #if MagickLibVersion > 0x651
+    // COLORSPACE_*
     public function transformImageColorspace(int $colorspace): bool  {}
 #endif
 
@@ -446,7 +456,7 @@ class Imagick
 
     public function setImageFormat(string $format): bool  {}
 
-    public function scaleImage(int $cols, int $rows, bool $bestfit = false, bool $legacy = false): bool  {}
+    public function scaleImage(int $columns, int $rows, bool $bestfit = false, bool $legacy = false): bool  {}
 
     public function writeImage(?string $filename): bool  {}
 
@@ -523,7 +533,7 @@ class Imagick
 
     public function getImageGeometry(): array  {}
 
-    public function drawImage(ImagickDraw $draw): bool  {}
+    public function drawImage(ImagickDraw $drawing): bool  {}
 
     public function setImageCompressionQuality(int $quality): bool  {}
 
@@ -542,7 +552,7 @@ class Imagick
     ): bool  {}
 
     public function compositeImage(
-        Imagick $composite_object,
+        Imagick $composite_image,
         int $composite,
         int $x,
         int $y,
@@ -552,11 +562,23 @@ class Imagick
 
     public function getImageColors(): int  {}
 
+
+
+    /**
+     * @param ImagickDraw $settings
+     * @param string $tile_geometry  e.g. "3x2+0+0"
+     * @param string $thumbnail_geometry e.g. "200x160+3+3>"
+     * @param int $monatgemode // MONTAGEMODE_
+     * @param string $frame // "10x10+2+2"
+     * @return Imagick
+     */
     public function montageImage(
         ImagickDraw $settings,
         string $tile_geometry,
         string $thumbnail_geometry,
-        int $mode, string $frame): Imagick {}
+        int $monatgemode,
+        string $frame
+    ): Imagick {}
 
     public function identifyImage(bool $append_raw_output = false): array  {}
 
@@ -632,7 +654,7 @@ class Imagick
 
 #if MagickLibVersion < 0x700
     /** @deprecated */
-    public function setImageMatteColor(ImagickPixel|string $matte): bool  {}
+    public function setImageMatteColor(ImagickPixel|string $matte_color): bool  {}
 #endif
 
     public function setImagePage(int $width, int $height, int $x, int $y): bool  {}
@@ -683,14 +705,13 @@ class Imagick
     public static function queryFonts(string $pattern = "*"): array  {}
 
     /* TODO  $multiline == null,  means we should autodetect */
-    public function queryFontMetrics(ImagickDraw $draw_settings, string $text, ?bool $multiline): array  {}
+    public function queryFontMetrics(ImagickDraw $settings, string $text, ?bool $multiline): array  {}
 
     public function steganoImage(Imagick $watermark, int $offset): Imagick  {}
 
     // NOISE_*
     public function addNoiseImage(int $noise, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
-//    PHP_ME(imagick, motionblurimage, imagick_motionblurimage_args, ZEND_ACC_PUBLIC)
     public function motionBlurImage(
         float $radius,
         float $sigma,
@@ -709,7 +730,7 @@ class Imagick
 
     public function minifyImage(): bool  {}
 
-    public function affineTransformImage(ImagickDraw $matrix): bool  {}
+    public function affineTransformImage(ImagickDraw $settings): bool  {}
 
 #if MagickLibVersion < 0x700
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
@@ -745,7 +766,7 @@ class Imagick
     public function colorFloodfillImage(
         ImagickPixel|string $fill_color,
         float $fuzz,
-        ImagickPixel|string $bordercolor,
+        ImagickPixel|string $border_color,
         int $x,
         int $y
     ): bool  {}
@@ -755,10 +776,10 @@ class Imagick
     // TODO - opacity is actually float if legacy is true...
     public function colorizeImage(
         ImagickPixel|string $colorize_color,
-        ImagickPixel|string $opacity,
+        ImagickPixel|string|false $opacity,
         ?bool $legacy = false ): bool  {}
 
-    public function compareImageChannels(Imagick $image, int $channel, int $metric): array  {}
+    public function compareImageChannels(Imagick $comparison, int $channel, int $metric): array  {}
 
     public function compareImages(Imagick $comparison, int $metric): array  {}
 
@@ -783,13 +804,15 @@ class Imagick
 
     public function equalizeImage(): bool  {}
 
+    // EVALUATE_*
     public function evaluateImage(int $evaluate, float $constant, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
 #if MagickLibVersion >= 0x687
 //	Merge multiple images of the same size together with the selected operator.
 //http://www.imagemagick.org/Usage/layers/#evaluate-sequence
 
-    public function evaluateImages(int $EVALUATE_CONSTANT): bool {}
+    // EVALUATE_*
+    public function evaluateImages(int $evaluate): bool {}
 
 #endif
 
@@ -850,6 +873,7 @@ class Imagick
 
     public function getImageChannelStatistics(): array  {}
 
+    // index - the offset into the image colormap. I have no idea.
     public function getImageColormapColor(int $index): ImagickPixel  {}
 
     public function getImageColorspace(): int  {}
@@ -977,7 +1001,7 @@ class Imagick
     ): bool  {}
 
     /** @deprecated */
-    public function paintTransparentImage(ImagickPixel|string $target, float $alpha, float $fuzz): bool  {}
+    public function paintTransparentImage(ImagickPixel|string $target_color, float $alpha, float $fuzz): bool  {}
 #endif
 #endif
 
@@ -1032,7 +1056,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public function setImageChannelDepth(int $channel, int $depth): bool  {}
 
-    public function setImageColormapColor(int $index, ImagickPixel $color): bool  {}
+    public function setImageColormapColor(int $index, ImagickPixel|string $color): bool  {}
 
     public function setImageColorspace(int $colorspace): bool  {}
 
@@ -1065,7 +1089,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     // TODO - MagickStereoImage() composites two images and produces a single
     // image that is the composite of a left and right image of a stereo pair
-    public function stereoImage(Imagick $offset_wand): bool  {}
+    public function stereoImage(Imagick $offset_image): bool  {}
 
     public function textureImage(Imagick $texture): Imagick  {}
 
@@ -1085,9 +1109,9 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public function getImage(): Imagick  {}
 
-    public function addImage(Imagick $source): bool  {}
+    public function addImage(Imagick $image): bool  {}
 
-    public function setImage(Imagick $replace): bool  {}
+    public function setImage(Imagick $image): bool  {}
 
 
     public function newImage(
@@ -1147,7 +1171,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function getVersion(): array  {}
 
-    public function setBackgroundColor(ImagickPixel|string $background): bool  {}
+    public function setBackgroundColor(ImagickPixel|string $background_color): bool  {}
 
     public function setCompression(int $compression): bool  {}
 
@@ -1233,10 +1257,10 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x652
-    public function subimageMatch(Imagick $Imagick, ?array &$offset, ?float &$similarity): Imagick  {}
+    public function subimageMatch(Imagick $image, ?array &$offset, ?float &$similarity): Imagick  {}
 
     /** @alias Imagick::subimageMatch */
-    public function similarityimage(imagick $Imagick, ?array &$offset, ?float &$similarity): Imagick  {}
+    public function similarityimage(imagick $image, ?array &$offset, ?float &$similarity): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
@@ -1246,10 +1270,18 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     public static function listRegistry(): array {}
 
 #if MagickLibVersion >= 0x680
+
+    /**
+     * @param int $morphology MORPHOLOGY_*
+     * @param int $iterations
+     * @param ImagickKernel $kernel
+     * @param int $channel
+     * @return bool
+     */
     public function morphology(
-        int $morphologyMethod,
+        int $morphology,
         int $iterations,
-        ImagickKernel $ImagickKernel,
+        ImagickKernel $kernel,
         int $channel =  Imagick::CHANNEL_DEFAULT
     ): bool {}
 #endif
@@ -1257,7 +1289,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #ifdef IMAGICK_WITH_KERNEL
 #if MagickLibVersion < 0x700
     /** @deprecated */
-    public function filter(ImagickKernel $ImagickKernel, int $channel = Imagick::CHANNEL_UNDEFINED): bool  {}
+    public function filter(ImagickKernel $kernel, int $channel = Imagick::CHANNEL_UNDEFINED): bool  {}
 #endif
 #endif
 

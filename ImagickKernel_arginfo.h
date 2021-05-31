@@ -41,9 +41,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickKernel_fromBuiltin, 0, 0, 2)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, kernel_type, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, kernel, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, kernel_type)
+    ZEND_ARG_INFO(0, kernel)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -104,9 +104,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 0, 2)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, normalize_kernel_type, IS_LONG, 1)
+    ZEND_ARG_TYPE_INFO(0, normalize_kernel, IS_LONG, 1)
 #else
-    ZEND_ARG_INFO(0, normalize_kernel_type)
+    ZEND_ARG_INFO(0, normalize_kernel)
 #endif
 ZEND_END_ARG_INFO()
 #endif
