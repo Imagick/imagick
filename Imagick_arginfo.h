@@ -3442,9 +3442,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_evaluateImages, 0, 0, 1)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, EVALUATE_CONSTANT, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, evaluate, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, EVALUATE_CONSTANT)
+    ZEND_ARG_INFO(0, evaluate)
 #endif
 ZEND_END_ARG_INFO()
 #endif

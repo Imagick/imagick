@@ -20,11 +20,11 @@ class ImagickDraw
 
     public function __construct() {}
 
-    public function setFillColor(ImagickPixel|string $fill_pixel): bool {}
+    public function setFillColor(ImagickPixel|string $fill_color): bool {}
 
     public function setFillAlpha(float $alpha): bool {}
 
-    public function setResolution(float $resolution_x, float $resolution_): bool {}
+    public function setResolution(float $resolution_x, float $resolution_y): bool {}
 
     public function setStrokeColor(ImagickPixel|string $color): bool {}
 
@@ -173,7 +173,7 @@ class ImagickDraw
         float $y,
         float $width,
         float $height,
-        Imagick $imagick
+        Imagick $image
     ): bool {}
 
     // PAINT_*

@@ -42,7 +42,12 @@ class ImagickPixel
     public function isPixelSimilarQuantum(ImagickPixel|string $color, float $fuzz_quantum_range_scaled_by_square_root_of_three): bool {}
 
     /** @alias ImagickPixel::isPixelSimilarQuantum */
-    public function isSimilar(ImagickPixel|string $color, float $fuzz_quantum_range_scaled_by_square_root_of_three): bool{}
+
+    public function isSimilar(
+        ImagickPixel|string $color,
+        // Feel free to not use named params for this.
+        float $fuzz_quantum_range_scaled_by_square_root_of_three
+    ): bool{}
 
     public function setColor(string $color): bool {}
 
@@ -71,7 +76,7 @@ class ImagickPixel
 
     //// Not in docs.
 #if MagickLibVersion >= 0x693
-    public function setColorFromPixel(ImagickPixel $srcPixel): bool {}
+    public function setColorFromPixel(ImagickPixel $pixel): bool {}
 #endif
 }
 

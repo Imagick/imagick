@@ -776,12 +776,12 @@ class Imagick
     // TODO - opacity is actually float if legacy is true...
     public function colorizeImage(
         ImagickPixel|string $colorize_color,
-        ImagickPixel|string|false $opacity,
+        ImagickPixel|string|false $opacity_color,
         ?bool $legacy = false ): bool  {}
 
-    public function compareImageChannels(Imagick $comparison, int $channel, int $metric): array  {}
+    public function compareImageChannels(Imagick $reference, int $channel, int $metric): array  {}
 
-    public function compareImages(Imagick $comparison, int $metric): array  {}
+    public function compareImages(Imagick $reference, int $metric): array  {}
 
     public function contrastImage(bool $sharpen): bool  {}
 
