@@ -6,7 +6,7 @@ Test pseudo formats
 <?php
 
 $im = new Imagick();
-$im->newPseudoImage(0, 0, "magick:logo");
+$im->newPseudoImage(10, 10, "magick:logo");
 //On by default
 var_export($im->getAntiAlias());
 echo PHP_EOL;

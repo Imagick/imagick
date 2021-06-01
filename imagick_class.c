@@ -4568,6 +4568,25 @@ PHP_METHOD(Imagick, newPseudoImage)
 		return;
 	}
 
+	if (IMAGICK_G(allow_zero_dimension_images) == 0) {
+		if (columns == 0) {
+			php_imagick_throw_exception(
+				IMAGICK_CLASS,
+				"Cannot create image with zero columns. If you think you need to" \
+				"do this, please open an issue at https://github.com/Imagick/imagick/issues"
+				TSRMLS_CC
+			);
+		}
+		if (rows == 0) {
+			php_imagick_throw_exception(
+				IMAGICK_CLASS,
+				"Cannot create image with zero rows. If you think you need to" \
+				"do this, please open an issue at https://github.com/Imagick/imagick/issues"
+				TSRMLS_CC
+			);
+		}
+	}
+
 	/* Allow only pseudo formats in this method */
 	if (strchr (pseudo_string, ':') == NULL) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid pseudo format string" TSRMLS_CC);

@@ -9,17 +9,17 @@ $im = new Imagick();
 $im->newPseudoImage(100, 100, "XC:red");
 var_dump($im->getImageGeometry());
 
-$im->newPseudoImage(0, 0, "magick:logo");
+$im->newPseudoImage(10, 10, "magick:logo");
 var_dump($im->getImageGeometry());
 
 $im->readImage("magick:logo");
 var_dump($im->getImageGeometry());
 
-$im->newPseudoImage(0, 0, "rose:");
+$im->newPseudoImage(10, 10, "rose:");
 var_dump($im->getImageGeometry());
 
 try { 
-$im->newPseudoImage(0, 0, "png:");
+$im->newPseudoImage(10, 10, "png:");
 var_dump($im->getImageGeometry());
 } catch (Exception $e) {
 	echo "fail\n";
