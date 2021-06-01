@@ -4,10 +4,10 @@ Test Imagick, GetImageChannelRange basic
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
+--XFAIL--
+Tests are not stable across ImageMagick versions.
 --FILE--
 <?php
-
-
 
 $imagick = new \Imagick();
 $imagick->newPseudoImage(640, 480, "gradient:rgb(0,32,32)-rgb(128,255,255)");
