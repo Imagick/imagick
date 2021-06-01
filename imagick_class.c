@@ -7408,7 +7408,8 @@ PHP_METHOD(Imagick, getImagePixelColor)
 /* }}} */
 
 
-/* {{{ proto ImagickPixel Imagick::getImagePixelColor(int x, int y)
+#if IM_HAVE_IMAGICK_SETIMAGEPIXELCOLOR
+/* {{{ proto void setImagePixelColor(int $x, int $y, ImagickPixel|string $color)
 	Returns the color of the specified pixel.
 */
 PHP_METHOD(Imagick, setImagePixelColor)
@@ -7445,7 +7446,7 @@ PHP_METHOD(Imagick, setImagePixelColor)
 	return;
 }
 /* }}} */
-
+#endif
 
 /* {{{ proto string Imagick::getImageProfile(string name)
 	Returns the named image profile.

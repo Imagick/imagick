@@ -100,7 +100,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickDraw_setFillColor, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickDraw_setFillColor, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_TYPE_MASK(0, fill_pixel, ImagickPixel, MAY_BE_STRING, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, fill_color, ImagickPixel, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
 
 
@@ -133,9 +133,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickDraw_setResolution, 0, 0, 2)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, resolution_, IS_DOUBLE, 0)
+    ZEND_ARG_TYPE_INFO(0, resolution_y, IS_DOUBLE, 0)
 #else
-    ZEND_ARG_INFO(0, resolution_)
+    ZEND_ARG_INFO(0, resolution_y)
 #endif
 ZEND_END_ARG_INFO()
 
@@ -859,7 +859,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickDraw_composite, 0, 0, 6)
 #else
     ZEND_ARG_INFO(0, height)
 #endif
-	ZEND_ARG_OBJ_INFO(0, imagick, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, image, Imagick, 0)
 ZEND_END_ARG_INFO()
 
 

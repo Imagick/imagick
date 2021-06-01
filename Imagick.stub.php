@@ -917,7 +917,11 @@ class Imagick
 
     public function getImagePixelColor(int $x, int $y): ImagickPixel  {}
 
+
+#if IM_HAVE_IMAGICK_SETIMAGEPIXELCOLOR
+    // TODO - needs a test.
     public function setImagePixelColor(int $x, int $y, ImagickPixel|string $color): ImagickPixel  {}
+#endif
 
     public function getImageProfile(string $name): string  {}
 

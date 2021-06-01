@@ -3295,7 +3295,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_colorizeImage, 0, 0, 2)
 #endif
 
 	ZEND_ARG_OBJ_TYPE_MASK(0, colorize_color, ImagickPixel, MAY_BE_STRING, NULL)
-	ZEND_ARG_OBJ_TYPE_MASK(0, opacity, ImagickPixel, MAY_BE_STRING|MAY_BE_FALSE, NULL)
+	ZEND_ARG_OBJ_TYPE_MASK(0, opacity_color, ImagickPixel, MAY_BE_STRING|MAY_BE_FALSE, NULL)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 1, "false")
 ZEND_END_ARG_INFO()
 
@@ -3306,7 +3306,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_compareImageChanne
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_compareImageChannels, 0, 0, 3)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, comparison, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, reference, Imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, channel, IS_LONG, 0)
@@ -3328,7 +3328,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_compareImages, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_compareImages, 0, 0, 2)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, comparison, Imagick, 0)
+	ZEND_ARG_OBJ_INFO(0, reference, Imagick, 0)
 	
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO(0, metric, IS_LONG, 0)
@@ -3748,6 +3748,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImagePixelColor, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+#if IM_HAVE_IMAGICK_SETIMAGEPIXELCOLOR
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_setImagePixelColor, 0, 3, ImagickPixel, 0)
@@ -3769,6 +3770,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImagePixelColor, 0, 0, 3)
 #endif
 	ZEND_ARG_OBJ_TYPE_MASK(0, color, ImagickPixel, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -5607,7 +5609,9 @@ ZEND_METHOD(Imagick, getImageMatteColor);
 #endif
 ZEND_METHOD(Imagick, getImagePage);
 ZEND_METHOD(Imagick, getImagePixelColor);
+#if IM_HAVE_IMAGICK_SETIMAGEPIXELCOLOR
 ZEND_METHOD(Imagick, setImagePixelColor);
+#endif
 ZEND_METHOD(Imagick, getImageProfile);
 ZEND_METHOD(Imagick, getImageRedPrimary);
 ZEND_METHOD(Imagick, getImageRenderingIntent);
@@ -6284,7 +6288,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 #endif
 	ZEND_ME(Imagick, getImagePage, arginfo_class_Imagick_getImagePage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, getImagePixelColor, arginfo_class_Imagick_getImagePixelColor, ZEND_ACC_PUBLIC)
+#if IM_HAVE_IMAGICK_SETIMAGEPIXELCOLOR
 	ZEND_ME(Imagick, setImagePixelColor, arginfo_class_Imagick_setImagePixelColor, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, getImageProfile, arginfo_class_Imagick_getImageProfile, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, getImageRedPrimary, arginfo_class_Imagick_getImageRedPrimary, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, getImageRenderingIntent, arginfo_class_Imagick_getImageRenderingIntent, ZEND_ACC_PUBLIC)

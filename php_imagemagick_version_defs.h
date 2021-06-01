@@ -29,6 +29,11 @@
 #endif
 
 
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_SETIMAGEPIXELCOLOR 1
+#endif
+
+
 // The above is sub-optimal as it's hard to read. It'd be better to do
 // something like the below:
 

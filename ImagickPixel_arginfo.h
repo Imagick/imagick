@@ -270,7 +270,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixel_setColorFromP
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_setColorFromPixel, 0, 0, 1)
 #endif
 
-	ZEND_ARG_OBJ_INFO(0, srcPixel, ImagickPixel, 0)
+	ZEND_ARG_OBJ_INFO(0, pixel, ImagickPixel, 0)
 ZEND_END_ARG_INFO()
 #endif
 
