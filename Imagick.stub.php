@@ -146,9 +146,13 @@ class Imagick
     // -format "%m:%f %wx%h"
     public function identifyFormat(string $format): string  {}
 
+
+#if IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
     // INTERPOLATE_*
     public function setImageInterpolateMethod(int $method): bool  {}
+#endif
 
+    // why does this not need to be inside the 'if' for IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD ..?
     public function getImageInterpolateMethod(): int  {}
 
     public function linearStretchImage(float $black_point, float $white_point): bool  {}

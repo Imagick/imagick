@@ -603,7 +603,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_identifyFormat, 0, 0, 1)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion > 0x631
+#if MagickLibVersion > 0x631 && IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageInterpolateMethod, 0, 1, _IS_BOOL, 0)
@@ -5232,7 +5232,7 @@ ZEND_METHOD(Imagick, deleteImageProperty);
 #if MagickLibVersion > 0x631
 ZEND_METHOD(Imagick, identifyFormat);
 #endif
-#if MagickLibVersion > 0x631
+#if MagickLibVersion > 0x631 && IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 ZEND_METHOD(Imagick, setImageInterpolateMethod);
 #endif
 #if MagickLibVersion > 0x631
@@ -5909,7 +5909,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion > 0x631
 	ZEND_ME(Imagick, identifyFormat, arginfo_class_Imagick_identifyFormat, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x631
+#if MagickLibVersion > 0x631 && IM_HAVE_IMAGICK_SETIMAGEINTERPOLATEMETHOD
 	ZEND_ME(Imagick, setImageInterpolateMethod, arginfo_class_Imagick_setImageInterpolateMethod, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x631
