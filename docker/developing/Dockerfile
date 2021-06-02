@@ -8,7 +8,8 @@ RUN apt-get update -qq \
     apt-transport-https autoconf bison bsdmainutils ca-certificates curl \
     gcc git gnupg lsb-release make pkg-config re2c wget \
     libpng-dev libjpeg-dev ghostscript libxml2-dev libfreetype6-dev \
-    libonig-dev libssl1.0-dev libcurl4-openssl-dev libwebp-dev vim strace
+    libonig-dev libssl1.0-dev libcurl4-openssl-dev libwebp-dev vim \
+    strace valgrind
 
 # libssl1.0-dev libonig-dev
 
