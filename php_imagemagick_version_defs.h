@@ -34,6 +34,16 @@
 #endif
 
 
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GETSETIMAGEMASK 1
+
+// ImageMagick forget to export the header until about 7.0.11-14...
+WandExport MagickBooleanType MagickSetImageMask(
+	MagickWand *wand, const PixelMask type, const MagickWand *clip_mask
+);
+
+#endif
+
 // The above is sub-optimal as it's hard to read. It'd be better to do
 // something like the below:
 
@@ -58,5 +68,13 @@
 //
 // An alternative would be to use code generation to build the define file as
 // part of the build process. However that would involve looking at m4 config files.
+
+
+#if MagickLibVersion >= 0x700
+// declare symbols only defined in C source and not in header
+WandExport MagickBooleanType MagickSetImageMask(
+	MagickWand *wand, const PixelMask type, const MagickWand *clip_mask
+);
+#endif
 
 #endif /* PHP_IMAGEMAGICK_VERSION_DEFS_H */

@@ -13031,7 +13031,7 @@ PHP_METHOD(Imagick, identifyImageType)
 #endif // #if MagickLibVersion >= 0x700
 
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_GETSETIMAGEMASK
 /* {{{ proto Imagick Imagick::getImageMask()
 	returns one of the Imagick::PIXELMASK_* constants
 */
@@ -13105,6 +13105,6 @@ PHP_METHOD(Imagick, setImageMask)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif // 0x709
+#endif // IM_HAVE_IMAGICK_GETSETIMAGEMASK
 
 /* end of Imagick */

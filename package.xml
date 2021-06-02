@@ -391,6 +391,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="tests/286_Imagick_setMask_basic.phpt" role="test" />
 				<file name="tests/287_Imagick_GetImageChannelRange_basic.phpt" role="test" />
 				<file name="tests/288_imagick_prevent_zero_size_images.phpt" role="test" />
+				<file name="tests/tests/289_Imagick_setImageMask_basic.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />

@@ -5097,7 +5097,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_identifyImageType, 0, 0, 0)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_getImageMask, 0, 1, Imagick, 1)
@@ -5114,7 +5114,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageMask, 0, 0, 1)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageMask, 0, 2, IS_VOID, 0)
@@ -5798,10 +5798,10 @@ ZEND_METHOD(Imagick, localContrastImage);
 #if MagickLibVersion > 0x628 && MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, identifyImageType);
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 ZEND_METHOD(Imagick, getImageMask);
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 ZEND_METHOD(Imagick, setImageMask);
 #endif
 
@@ -6486,10 +6486,10 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion > 0x628 && MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, identifyImageType, arginfo_class_Imagick_identifyImageType, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 	ZEND_ME(Imagick, getImageMask, arginfo_class_Imagick_getImageMask, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 	ZEND_ME(Imagick, setImageMask, arginfo_class_Imagick_setImageMask, ZEND_ACC_PUBLIC)
 #endif
 	ZEND_FE_END

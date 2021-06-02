@@ -466,6 +466,7 @@ class Imagick
 
     public function writeImages(string $filename, bool $adjoin): bool  {}
 
+    // CHANNEL_
     public function blurImage(float $radius, float $sigma, ?int $channel): bool  {}
 
     public function thumbnailImage(
@@ -1355,7 +1356,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_GETSETIMAGEMASK
     // PIXELMASK_*
     public function getImageMask(int $pixelmask): ?Imagick {}
 

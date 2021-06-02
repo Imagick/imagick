@@ -2,8 +2,8 @@
 Test Imagick, setImageMask basic
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=0x709;
 require_once(dirname(__FILE__) . '/skipif.inc');
+checkClassMethods('Imagick', array('getImageMask', 'setImageMask'));
 ?>
 --FILE--
 <?php
