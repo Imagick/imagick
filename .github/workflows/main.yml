@@ -40,19 +40,19 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
 
-      - name: Apt get commands
+      - name: Apt install required packages
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-urw-base35 || true
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
 
-      - name: Prepare dependencies
+      - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
 
-      - name: Setup
+      - name: Configure and check fonts are present
         run: |
           export NO_INTERACTION=1
           export REPORT_EXIT_STATUS=1
@@ -65,7 +65,7 @@ jobs:
           sudo make install
           php -d extension=imagick.so util/check_fonts.php
 
-      - name: Run tests
+      - name: Run Imagick tests
         run: |
           export TEST_PHP_EXECUTABLE=`which php`
           php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff
@@ -110,19 +110,19 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
 
-      - name: Apt get commands
+      - name: Apt install required packages
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-urw-base35 || true
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
 
-      - name: Prepare dependencies
+      - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
 
-      - name: Setup
+      - name: Configure and check fonts are present
         run: |
           export NO_INTERACTION=1
           export REPORT_EXIT_STATUS=1
@@ -135,7 +135,7 @@ jobs:
           sudo make install
           php -d extension=imagick.so util/check_fonts.php
 
-      - name: Run tests
+      - name: Run Imagick tests
         run: |
           export TEST_PHP_EXECUTABLE=`which php`
           php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff
