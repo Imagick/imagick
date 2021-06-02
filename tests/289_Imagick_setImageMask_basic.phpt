@@ -63,7 +63,7 @@ foreach ($channel_types as $channel_type => $channel_name) {
 	}
 }
 
-echo "Ok wasd";
+echo "Ok";
 ?>
 --EXPECTF--
 Ok
