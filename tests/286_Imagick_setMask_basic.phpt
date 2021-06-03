@@ -42,7 +42,10 @@ $imagick->setImageMask($mask, Imagick::PIXELMASK_WRITE);
 //        echo "Failed to set/get Imagick::PIXELMASK_WRITE";
 //    };
 
-$imagick->setImageMask($mask, Imagick::PIXELMASK_COMPOSITE);
+// This can only be tested MagickLibVersion >= 0x708
+// so should probably be in a test by itself, once it's figured out
+// what it does.
+// $imagick->setImageMask($mask, Imagick::PIXELMASK_COMPOSITE);
 //if ($imagick->getImageMask() !== Imagick::PIXELMASK_COMPOSITE) {
 //    echo "Failed to set/get Imagick::PIXELMASK_COMPOSITE";
 //};
