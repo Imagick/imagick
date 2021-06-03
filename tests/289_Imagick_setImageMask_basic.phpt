@@ -59,7 +59,7 @@ foreach ($channel_types as $channel_type => $channel_name) {
 		$output->setImageMask($mask, $type);
 
 		$output->blurImage(15, 4, $channel_type);
-		$output->writeImage(__DIR__ . "/test_canvas" . $type_name . "_" . $channel_name .  ".png");
+//		$output->writeImage(__DIR__ . "/test_canvas" . $type_name . "_" . $channel_name .  ".png");
 	}
 }
 
