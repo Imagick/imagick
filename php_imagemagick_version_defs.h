@@ -34,7 +34,9 @@
 #endif
 
 
-#if MagickLibVersion >= 0x701
+#if MagickLibVersion >= 0x70A
+	// Technically, this may be available earlier, but the behaviour around
+	// default mask changed.
 	#define IM_HAVE_IMAGICK_GETSETIMAGEMASK 1
 
 // ImageMagick forget to export the header until about 7.0.11-14...
