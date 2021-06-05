@@ -4570,19 +4570,17 @@ PHP_METHOD(Imagick, newPseudoImage)
 
 	if (IMAGICK_G(allow_zero_dimension_images) == 0) {
 		if (columns == 0) {
-			php_imagick_throw_exception(
-				IMAGICK_CLASS,
-				"Cannot create image with zero columns. If you think you need to" \
-				"do this, please open an issue at https://github.com/Imagick/imagick/issues"
-				TSRMLS_CC
+			php_error(
+			    E_DEPRECATED,
+				"Creating images with zero columns is deprecated. If you think you need to " \
+				"do this, please open an issue at https://phpimagick.com/issues"
 			);
 		}
 		if (rows == 0) {
-			php_imagick_throw_exception(
-				IMAGICK_CLASS,
-				"Cannot create image with zero rows. If you think you need to" \
-				"do this, please open an issue at https://github.com/Imagick/imagick/issues"
-				TSRMLS_CC
+			php_error(
+            	E_DEPRECATED,
+				"Creating images with zero rows is deprecated. If you think you need to " \
+				"do this, please open an issue at https://phpimagick.com/issues"
 			);
 		}
 	}
