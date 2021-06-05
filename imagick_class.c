@@ -7860,11 +7860,16 @@ PHP_METHOD(Imagick, thumbnailImage)
 	zend_bool bestfit = 0, fill = 0;
 	zend_bool legacy = 0;
 
+#if PHP_VERSION_ID < 80100
+    // This uses an implicit conversion of null to 0 for longs
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bbb", &width, &height, &bestfit, &fill, &legacy) == FAILURE) {
+	    return;
+	}
+#else
     // Changing longs to be nullable "l!", means that zpp
     // wants to write whether they were null to a variable.
-	bool width_is_null = 1;
-	bool height_is_null = 1;
-
+	bool width_is_null = 0;
+	bool height_is_null = 0;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(
@@ -7875,6 +7880,7 @@ PHP_METHOD(Imagick, thumbnailImage)
 	    &bestfit, &fill, &legacy) == FAILURE) {
 		return;
 	}
+#endif
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
