@@ -32,8 +32,8 @@ function resizeImage($width, $height, $filterType, $blur, $bestFit, $cropZoom) {
         $imagick->cropimage(
             $newWidth,
             $newHeight,
-            ($cropWidth - $newWidth) / 2,
-            ($cropHeight - $newHeight) / 2
+            (int)(($cropWidth - $newWidth) / 2),
+            (int)(($cropHeight - $newHeight) / 2)
         );
 
         $imagick->scaleimage(

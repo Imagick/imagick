@@ -26,7 +26,12 @@ function deskewImage($threshold) {
     $deskewImagick->cropImage($deskewImagick->getImageWidth() - $trim, $deskewImagick->getImageHeight(), $trim, 0);
     $imagick->cropImage($imagick->getImageWidth() - $trim, $imagick->getImageHeight(), $trim, 0);
     $deskewImagick->resizeimage($deskewImagick->getImageWidth() / 2, $deskewImagick->getImageHeight() / 2, \Imagick::FILTER_LANCZOS, 1);
-    $imagick->resizeimage($imagick->getImageWidth() / 2, $imagick->getImageHeight() / 2, \Imagick::FILTER_LANCZOS, 1);
+    $imagick->resizeimage(
+        (int)($imagick->getImageWidth() / 2),
+        (int)($imagick->getImageHeight() / 2),
+        \Imagick::FILTER_LANCZOS,
+        1
+    );
     $newCanvas = new \Imagick();
     $newCanvas->newimage($imagick->getImageWidth() + $deskewImagick->getImageWidth() + 20, $imagick->getImageHeight(), 'red', 'jpg');
     $newCanvas->compositeimage($imagick, \Imagick::COMPOSITE_COPY, 5, 0);
