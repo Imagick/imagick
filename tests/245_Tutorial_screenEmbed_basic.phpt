@@ -33,7 +33,7 @@ function screenEmbed() {
     $overlay->modulateImage(97, 100, 0);
     $overlay->distortImage(\Imagick::DISTORTION_PERSPECTIVE, $points, true);
 
-    $imagick->compositeImage($overlay, \Imagick::COMPOSITE_OVER, 364.5 - $offset, 23.5);
+    $imagick->compositeImage($overlay, \Imagick::COMPOSITE_OVER, (int)(364.5 - $offset), 23);
 
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
