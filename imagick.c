@@ -3829,7 +3829,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
-	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, spl_ce_Countable);
+	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, im_ce_countable);
 
 	/*
 		Initialize the class (ImagickDraw)
