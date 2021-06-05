@@ -7855,13 +7855,24 @@ zend_bool s_resize_bounding_box(MagickWand *magick_wand, im_long box_width, im_l
 */
 PHP_METHOD(Imagick, thumbnailImage)
 {
-	im_long width, height, new_width, new_height;
+	im_long width = 0, height = 0, new_width, new_height;
 	php_imagick_object *intern;
 	zend_bool bestfit = 0, fill = 0;
 	zend_bool legacy = 0;
 
+    // Changing longs to be nullable "l!", means that zpp
+    // wants to write whether they were null to a variable.
+	bool width_is_null = 1;
+	bool height_is_null = 1;
+
+
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bbb", &width, &height, &bestfit, &fill, &legacy) == FAILURE) {
+	if (zend_parse_parameters(
+	    ZEND_NUM_ARGS() TSRMLS_CC,
+	    "l!l!|bbb",
+	    &width, &width_is_null,
+	    &height, &height_is_null,
+	    &bestfit, &fill, &legacy) == FAILURE) {
 		return;
 	}
 
