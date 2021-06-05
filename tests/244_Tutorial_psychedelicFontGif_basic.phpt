@@ -34,7 +34,7 @@ function psychedelicFontGif($name = 'Danack') {
             $draw->setStrokeColor($color);
             $draw->setFillColor($color);
             $draw->setStrokeWidth($strokeWidth * 3 * $scale);
-            $draw->annotation(60 * $scale, 165 * $scale, $name);
+            $draw->annotation((int)(60 * $scale), (int)(165 * $scale), $name);
         }
 
         $draw->setStrokeColor('none');
@@ -44,7 +44,7 @@ function psychedelicFontGif($name = 'Danack') {
 
         //Create an image object which the draw commands can be rendered into
         $imagick = new \Imagick();
-        $imagick->newImage(650 * $scale, 230 * $scale, "#eee");
+        $imagick->newImage((int)(650 * $scale), (int)(230 * $scale), "#eee");
         $imagick->setImageFormat("png");
 
         //Render the draw commands in the ImagickDraw object
