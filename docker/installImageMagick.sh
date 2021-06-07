@@ -21,6 +21,7 @@ cd /var/app/imagemagick_src/${SRCFILE}
            --disable-docs \
            --with-jpeg=yes \
            --with-png=yes \
+           --with-fontconfig=yes \
            --with-webp=yes
 
 # --disable-openmp
