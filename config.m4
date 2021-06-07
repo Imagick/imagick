@@ -68,7 +68,7 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
   ]])],[
     AC_MSG_RESULT(yes)
     PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
-    PHP_ADD_LIBRARY(gomp,, GMAGICK_SHARED_LIBADD)
+    PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
   ],[
     AC_MSG_RESULT(no)
   ])
