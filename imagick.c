@@ -3992,9 +3992,9 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 // TODO - re-enable this. It currently causes a problem running
 // command line scripts with bad exit code apparently.
 //
-//#if HAVE_OMP_PAUSE_RESOURCE_ALL
-//	omp_pause_resource_all(omp_pause_hard);
-//#else
+#if HAVE_OMP_PAUSE_RESOURCE_ALL
+	omp_pause_resource_all(omp_pause_hard);
+#else
     // Sleep for a bit to hopefully allow OpenMP to
     // shut down the threads it created, and avoid a segfault
     // This hack won't be needed once everyone is compiling ImageMagick
@@ -4002,7 +4002,7 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 	for (i = 0; i < 100 && i < IMAGICK_G(shutdown_sleep_count); i += 1) {
 		usleep(1000);
 	}
-//#endif
+#endif
 
 #if defined(ZTS) && defined(PHP_WIN32)
 	tsrm_mutex_free(imagick_mutex);
