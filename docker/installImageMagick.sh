@@ -22,7 +22,9 @@ cd /var/app/imagemagick_src/${SRCFILE}
            --with-jpeg=yes \
            --with-png=yes \
            --with-fontconfig=yes \
-           --with-webp=yes
+           --with-webp=yes \
+           --with-urw-base35-font-dir=/usr/share/fonts/opentype/urw-base35
+
 
 # --disable-openmp
 
