@@ -22,5 +22,5 @@ RUN echo "****************************"
 # Make the default directory you
 WORKDIR /var/app
 
-CMD tail -f /var/app/docker/repro/README.md
+CMD tail -f -n 1000 /var/app/docker/repro/README.md
 
