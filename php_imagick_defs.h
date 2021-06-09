@@ -79,7 +79,7 @@
 	#define im_long long
 #endif
 
-#if PHP_VERSION_ID >= 80100
+#if PHP_VERSION_ID >= 70200
     #define im_ce_countable zend_ce_countable
 #else
     #define im_ce_countable spl_ce_Countable
