@@ -6841,7 +6841,6 @@ PHP_METHOD(Imagick, getImageChannelStatistics)
 #if MagickLibVersion >= 0x700
 	for (i=0; i < sizeof(channels)/sizeof(channels[0]); i++) {
 #if PHP_VERSION_ID >= 70000
-		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
 		add_assoc_double(&tmp, "mean", statistics[i].mean);
 		add_assoc_double(&tmp, "minima", statistics[i].minima);
@@ -6869,7 +6868,6 @@ PHP_METHOD(Imagick, getImageChannelStatistics)
 #else //below MagickLibVersion>= 0x700
 	for (i = 0; i < elements ; i++) {
 #if PHP_VERSION_ID >= 70000
-		ZVAL_NEW_ARR(&tmp);
 		array_init(&tmp);
 		add_assoc_double(&tmp, "mean", statistics[channels[i]].mean);
 		add_assoc_double(&tmp, "minima", statistics[channels[i]].minima);
@@ -8703,7 +8701,7 @@ PHP_METHOD(Imagick, identifyImage)
 	// Geometry is an associative array
 	
 #if PHP_VERSION_ID >= 70000
-	ZVAL_NEW_ARR(&array);
+	array_init(&array);
 	pArray = &array;
 #else
 	MAKE_STD_ZVAL(array);
