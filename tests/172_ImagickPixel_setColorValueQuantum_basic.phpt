@@ -13,7 +13,7 @@ function setColorValueQuantum() {
 
     $draw = new \ImagickDraw();
     $color = new \ImagickPixel('blue');
-    $color->setcolorValueQuantum(\Imagick::COLOR_RED, 128 * $quantumRange['quantumRangeLong'] / 256);
+    $color->setcolorValueQuantum(\Imagick::COLOR_RED, (int)(128 * $quantumRange['quantumRangeLong'] / 256));
 
     $draw->setstrokewidth(1.0);
     $draw->setStrokeColor($color);
