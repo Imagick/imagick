@@ -3989,9 +3989,6 @@ PHP_MSHUTDOWN_FUNCTION(imagick)
 
 	MagickWandTerminus();
 
-// TODO - re-enable this. It currently causes a problem running
-// command line scripts with bad exit code apparently.
-//
 #if HAVE_OMP_PAUSE_RESOURCE_ALL
 	omp_pause_resource_all(omp_pause_hard);
 #else
