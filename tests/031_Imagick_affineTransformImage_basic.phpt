@@ -86,9 +86,7 @@ function affineTransformImage() {
     );
 
     $lineCheckBlack->drawImage($blackout);
-    $lineCheckBlack->writeImage(__DIR__ . '/test_031_blank.png');
-
-
+    // $lineCheckBlack->writeImage(__DIR__ . '/test_031_blank.png');
 
     $whiteout = new \ImagickDraw();
     $lineCheckWhite = clone $imagick;
@@ -108,7 +106,7 @@ function affineTransformImage() {
     );
 
     $lineCheckWhite->drawImage($whiteout);
-    $lineCheckWhite->writeImage(__DIR__ . '/test_031_white.png');
+    // $lineCheckWhite->writeImage(__DIR__ . '/test_031_white.png');
 
     $channelStatistics = $lineCheckWhite->getImageChannelStatistics();
 
