@@ -1291,7 +1291,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
         int $morphology,
         int $iterations,
         ImagickKernel $kernel,
-        int $channel =  Imagick::CHANNEL_DEFAULT
+        int $channel = Imagick::CHANNEL_DEFAULT
     ): bool {}
 #endif
 
