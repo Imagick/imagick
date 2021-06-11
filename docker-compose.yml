@@ -11,11 +11,11 @@ services:
   developing:
     build: docker/developing
     volumes:
-      - .:/var/app:delegated
+      - .:/var/app
   repro:
     build: docker/repro
     volumes:
-      - .:/var/app:delegated
+      - .:/var/app
   testing7_2:
     build: docker/testing7_2
     volumes:
