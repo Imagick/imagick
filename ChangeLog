@@ -1,3 +1,40 @@
+3.5.0RC1
+- ImageMagick 7 is still not widely available on systems. So contrary to previous plans, ImageMagick 6 support will continue for now. But users are recommeded to use ImageMagick 7 if possible.
+- Method names have been changed to not be all lower case. Both method names and parameter information is built from the Imagick*.stub.php files.
+- Prevent accidental creation of zero dimension images. ImageMagick doesn't prevent creation of zero dimension images, but will give an error when that image is used. I don't think this will affect any correctly program, but if it does, and you need to re-enable zero dimension images, please open an issue at https://phpimagick.com/issues
+- Various pieces of work have been done to make GOMP not segfault including:
+  * Call omp_pause_resource_all when available during shutdown.
+  * Added the 'imagick.shutdown_sleep_count' (default 10) and 'imagick.set_single_thread' (default On). Both of these exist to mitigate the segaults on shutdown.
+- Fixes:
+  * Correct version check to make RemoveAlphaChannel and FlattenAlphaChannel be available when using Imagick with ImageMagick version 6.7.8-x
+  * Imagick::morphology now no longer ignores channel parameter
+- Added:
+  * PHP 8.0 support.
+  * Location check for ImageMagick 7 for NixOS and Brew.
+  * Imagick::houghLineImage(int $width, int $height, float $threshold): bool {}
+  * Imagick::setImagePixelColor(int $x, int $y, ImagickPixel|string $color)
+  * Imagick::setImageMask(Imagick $clip_mask, int $pixelmask_type)
+  * Imagick::getImageMask(int $pixelmask_type)
+  * Imagick::VIRTUALPIXELMETHOD_DITHER
+  * Imagick::VIRTUALPIXELMETHOD_RANDOM
+  * Imagick::COMPOSITE_FREEZE
+  * Imagick::COMPOSITE_INTERPOLATE
+  * Imagick::COMPOSITE_NEGATE
+  * Imagick::COMPOSITE_REFLECT
+  * Imagick::COMPOSITE_SOFTBURN
+  * Imagick::COMPOSITE_SOFTDODGE
+  * Imagick::COMPOSITE_STAMP
+  * Imagick::COMPOSITE_RMSE
+  * Imagick::COMPRESSION_DWAA
+  * Imagick::COMPRESSION_DWAB
+  * Imagick::EVALUATE_INVERSE_LOG
+  * Imagick::COLORSPACE_DISPLAYP3
+  * Imagick::COLORSPACE_ADOBE98
+  * Imagick::COLORSPACE_PROPHOTO
+  * Imagick::COLORSPACE_JZAZBZ
+  * Imagick::DISTORTION_RIGID_AFFINE
+  * Imagick::DISTORTION_BARRELINVERSE
+  * Imagick::STATISTIC_ROOT_MEAN_SQUARE
 
 3.4.4
 - Fixes:
@@ -482,7 +519,6 @@
 * Imagick::importImagePixels
 * Imagick::sparseColorImage
 * Imagick::deskewImage
-* Imagick::houghLineImage
 * Imagick::segmentImage
 
 * Imagickdraw::gettextkerning

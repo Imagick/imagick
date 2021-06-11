@@ -13,71 +13,53 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2019-05-02</date>
+	<date>2021-06-14</date>
 	<version>
-		<release>3.4.4</release>
-		<api>3.4.4</api>
+		<release>3.5.0RC1</release>
+		<api>3.5.0</api>
 	</version>
 	<stability>
-		<release>stable</release>
+		<release>beta</release>
 		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-	- The 3.4.4 release is intended to be the last release (other than small bug fixes) that will support either PHP 5.x, or ImageMagick 6.x. The next planned release will be PHP > 7.0 and ImageMagick > 7.0 at least, if not higher.
-	- Added:
-	* function Imagick::optimizeImageTransparency()
-	* METRIC_STRUCTURAL_SIMILARITY_ERROR
-	* METRIC_STRUCTURAL_DISSIMILARITY_ERROR
-	* COMPRESSION_ZSTD - https://github.com/facebook/zstd
-	* COMPRESSION_WEBP
-	* CHANNEL_COMPOSITE_MASK
-	* FILTER_CUBIC_SPLINE - "Define the lobes with the -define filter:lobes={2,3,4} (reference https://imagemagick.org/discourse-server/viewtopic.php?f=2&amp;t=32506)."
-	* Imagick now explicitly conflicts with the Gmagick extension.
+	- ImageMagick 7 is still not widely available on systems. So contrary to previous plans, ImageMagick 6 support will continue for now. But users are recommeded to use ImageMagick 7 if possible.
+	- Method names have been changed to not be all lower case. Both method names and parameter information is built from the Imagick*.stub.php files.
+	- Prevent accidental creation of zero dimension images. ImageMagick doesn't prevent creation of zero dimension images, but will give an error when that image is used. I don't think this will affect any correctly program, but if it does, and you need to re-enable zero dimension images, please open an issue at https://phpimagick.com/issues
+	- Various pieces of work have been done to make GOMP not segfault including:
+	* Call omp_pause_resource_all when available during shutdown.
+	* Added the 'imagick.shutdown_sleep_count' (default 10) and 'imagick.set_single_thread' (default On). Both of these exist to mitigate the segaults on shutdown.
 	- Fixes:
 	* Correct version check to make RemoveAlphaChannel and FlattenAlphaChannel be available when using Imagick with ImageMagick version 6.7.8-x
-	* Bug 77128 - Imagick::setImageInterpolateMethod() not available on Windows
-	* Prevent memory leak when ImagickPixel::__construct called after object instantiation.
-	* Prevent segfault when ImagickPixel internal constructor not called.
-	* Imagick::setResourceLimit support for values larger than 2GB (2^31) on 32bit platforms.
-	* Corrected memory overwrite in Imagick::colorDecisionListImage()
-	* Bug 77791 - ImagickKernel::fromMatrix() out of bounds write.
-	- Deprecated:
-	* The following functions have been deprecated:
-	ImagickDraw, matte
-	Imagick::averageimages
-	Imagick::colorfloodfillimage
-	Imagick::filter
-	Imagick::flattenimages
-	Imagick::getimageattribute
-	Imagick::getimagechannelextrema
-	Imagick::getimageclipmask
-	Imagick::getimageextrema
-	Imagick::getimageindex
-	Imagick::getimagematte
-	Imagick::getimagemattecolor
-	Imagick::getimagesize
-	Imagick::mapimage
-	Imagick::mattefloodfillimage
-	Imagick::medianfilterimage
-	Imagick::mosaicimages
-	Imagick::orderedposterizeimage
-	Imagick::paintfloodfillimage
-	Imagick::paintopaqueimage
-	Imagick::painttransparentimage
-	Imagick::radialblurimage
-	Imagick::recolorimage
-	Imagick::reducenoiseimage
-	Imagick::roundcornersimage
-	Imagick::roundcorners
-	Imagick::setimageattribute
-	Imagick::setimagebias
-	Imagick::setimageclipmask
-	Imagick::setimageindex
-	Imagick::setimagemattecolor
-	Imagick::setimagebiasquantum
-	Imagick::setimageopacity
-	Imagick::transformimage
+	* Imagick::morphology now no longer ignores channel parameter
+	- Added:
+	* PHP 8.0 support.
+	* Location check for ImageMagick 7 for NixOS and Brew.
+	* Imagick::houghLineImage(int $width, int $height, float $threshold): bool {}
+	* Imagick::setImagePixelColor(int $x, int $y, ImagickPixel|string $color)
+	* Imagick::setImageMask(Imagick $clip_mask, int $pixelmask_type)
+	* Imagick::getImageMask(int $pixelmask_type)
+	* Imagick::VIRTUALPIXELMETHOD_DITHER
+	* Imagick::VIRTUALPIXELMETHOD_RANDOM
+	* Imagick::COMPOSITE_FREEZE
+	* Imagick::COMPOSITE_INTERPOLATE
+	* Imagick::COMPOSITE_NEGATE
+	* Imagick::COMPOSITE_REFLECT
+	* Imagick::COMPOSITE_SOFTBURN
+	* Imagick::COMPOSITE_SOFTDODGE
+	* Imagick::COMPOSITE_STAMP
+	* Imagick::COMPOSITE_RMSE
+	* Imagick::COMPRESSION_DWAA
+	* Imagick::COMPRESSION_DWAB
+	* Imagick::EVALUATE_INVERSE_LOG
+	* Imagick::COLORSPACE_DISPLAYP3
+	* Imagick::COLORSPACE_ADOBE98
+	* Imagick::COLORSPACE_PROPHOTO
+	* Imagick::COLORSPACE_JZAZBZ
+	* Imagick::DISTORTION_RIGID_AFFINE
+	* Imagick::DISTORTION_BARRELINVERSE
+	* Imagick::STATISTIC_ROOT_MEAN_SQUARE
 </notes>
 	<contents>
 		<dir name="/">
