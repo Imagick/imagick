@@ -12714,8 +12714,13 @@ PHP_METHOD(Imagick, morphology)
 	kernel = Z_IMAGICKKERNEL_P(objvar);
 	IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel);
 
-	status = MagickMorphologyImageChannel(intern->magick_wand,
-			DefaultChannels, morphologyMethod, iterations, kernel->kernel_info);
+	status = MagickMorphologyImageChannel(
+	    intern->magick_wand,
+		channel,
+		morphologyMethod,
+		iterations,
+		kernel->kernel_info
+	);
 
 	// No magick is going to happen
 	if (status == MagickFalse) {
