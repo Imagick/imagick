@@ -1856,7 +1856,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 
 #if MagickLibVersion >= 0x70C
-	IMAGICK_REGISTER_CONST_LONG("STATISTIC_ROOT_MEAN_SQUARE", ContrastStatistic);
+	IMAGICK_REGISTER_CONST_LONG("STATISTIC_CONTRAST", ContrastStatistic);
 #endif
 
 #ifdef IMAGICK_WITH_KERNEL
