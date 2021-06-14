@@ -64,9 +64,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_pingImageFile, 0, 0, 2)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, fileName, IS_STRING, 1)
+    ZEND_ARG_TYPE_INFO(0, filename, IS_STRING, 1)
 #else
-    ZEND_ARG_INFO(0, fileName)
+    ZEND_ARG_INFO(0, filename)
 #endif
 ZEND_END_ARG_INFO()
 #endif
@@ -1360,9 +1360,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_sparseColorImage, 0, 0, 2)
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, sparseColorMethod, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, sparsecolormethod, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, sparseColorMethod)
+    ZEND_ARG_INFO(0, sparsecolormethod)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
@@ -1461,9 +1461,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_exportImagePixels, 0, 0, 6)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, pixelStorage, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, pixelstorage, IS_LONG, 0)
 #else
-    ZEND_ARG_INFO(0, pixelStorage)
+    ZEND_ARG_INFO(0, pixelstorage)
 #endif
 ZEND_END_ARG_INFO()
 #endif

@@ -12,7 +12,7 @@ class Imagick
 
     public function pingImageBlob(string $image): bool  {}
 
-    public function pingImageFile(resource $filehandle, ?string $fileName): bool  {}
+    public function pingImageFile(resource $filehandle, ?string $filename): bool  {}
 
     public function transposeImage(): bool  {}
 
@@ -343,7 +343,7 @@ class Imagick
 
     // SPARSECOLORMETHOD_*
     public function sparseColorImage(
-        int $sparseColorMethod,
+        int $sparsecolormethod,
         array $arguments,
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool {}
@@ -363,7 +363,7 @@ class Imagick
      * @param int $width
      * @param int $height
      * @param string $map e.g. "RGB"
-     * @param int $pixelStorage // PIXELSTORAGE
+     * @param int $pixelstorage // PIXELSTORAGE
      * @return array
      */
     public function exportImagePixels(
@@ -372,7 +372,7 @@ class Imagick
         int $width,
         int $height,
         string $map,
-        int $pixelStorage
+        int $pixelstorage
     ): array {}
 #endif
 
