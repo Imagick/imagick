@@ -49,7 +49,7 @@ if (strcasecmp($extNumPackage, $extNum) !== 0) {
 }
 
 if (strcasecmp($stabilityRelease, "beta") === 0) {
-    if (strpos($versionRelease, 'b') === false && strpos($versionRelease, 'rc') === false) {
+    if (strpos($versionRelease, 'b') === false && strpos($versionRelease, 'RC') === false) {
         echo "Error: release is marked 'beta' but version [$versionRelease] doesn't include b or RC\n";
         exit(-1);
     }
@@ -59,7 +59,7 @@ else if (strcasecmp($stabilityRelease, "stable") === 0) {
         echo "Error: release is marked 'stable' but version [$versionRelease] includes b\n";
         exit(-1);
     }
-    if (strpos($versionRelease, 'rc') !== false) {
+    if (strpos($versionRelease, 'RC') !== false) {
         echo "Error: release is marked 'stable' but version [$versionRelease] includes RC \n";
         exit(-1);
     }
@@ -70,6 +70,6 @@ else {
 }
 
 if (strcmp($stabilityRelease, $stabilityApi) !== 0) {
-    echo "Warning: API and release stability differ";
+    echo "Warning: API and release stability differ\n";
     exit(-1);
 }

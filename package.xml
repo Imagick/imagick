@@ -20,7 +20,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</version>
 	<stability>
 		<release>beta</release>
-		<api>stable</api>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
