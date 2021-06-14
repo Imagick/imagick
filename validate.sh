@@ -22,7 +22,7 @@ echo ""
 echo "Validation results: "
 
 if test "${REL_STABILITY}" = "beta"; then
-	$(echo ${REL_VERSION} | egrep -i 'b|rc' >/dev/null 2>&1)
+	$(echo ${REL_VERSION} | egrep -i 'b|RC' >/dev/null 2>&1)
 
 	if test $? != 0; then
 		echo "Error: release is marked 'beta' but version doesn't include b or RC";
