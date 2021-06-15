@@ -1678,10 +1678,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_smushImages, 0, 0, 2)
 ZEND_END_ARG_INFO()
 #endif
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick___construct, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick___construct, 0, 0, 0)
 
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_MASK(0, files, MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_NULL, NULL)
+    ZEND_ARG_TYPE_MASK(0, files, MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_NULL, "null")
 #else
     ZEND_ARG_INFO(0, files)
 #endif

@@ -435,7 +435,7 @@ class Imagick
 
 //    PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
     // TODO int|float? :spocks_eyebrow.gif:
-    public function __construct(string|array|int|float|null $files) {}
+    public function __construct(string|array|int|float|null $files=null) {}
 
     public function __toString(): string  {}
 
