@@ -1127,7 +1127,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
         int $columns,
         int $rows,
         ImagickPixel|string $background_color,
-        ?string $format
+        string $format=null
     ): bool  {}
 
     // TODO - canvas? description
