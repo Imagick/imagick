@@ -195,9 +195,9 @@ class Imagick
     // DISTORTION_*
     public function distortImage(int $distortion, array $arguments, bool $bestfit): bool  {}
 
-    public function writeImageFile(resource $filehandle, ?string $format): bool  {}
+    public function writeImageFile(resource $filehandle, ?string $format=null): bool  {}
 
-    public function writeImagesFile(resource $filehandle, ?string $format): bool  {}
+    public function writeImagesFile(resource $filehandle, ?string $format=null): bool  {}
 
     public function resetImagePage(string $page): bool  {}
 
