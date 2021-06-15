@@ -710,7 +710,7 @@ class Imagick
     public static function queryFonts(string $pattern = "*"): array  {}
 
     /* TODO  $multiline == null,  means we should autodetect */
-    public function queryFontMetrics(ImagickDraw $settings, string $text, ?bool $multiline): array  {}
+    public function queryFontMetrics(ImagickDraw $settings, string $text, ?bool $multiline=null): array  {}
 
     public function steganoImage(Imagick $watermark, int $offset): Imagick  {}
 

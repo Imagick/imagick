@@ -3030,9 +3030,9 @@ ZEND_END_ARG_INFO()
 
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 3, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 2, IS_ARRAY, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 0, 2)
 #endif
 
 	ZEND_ARG_OBJ_INFO(0, settings, ImagickDraw, 0)
@@ -3044,7 +3044,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 0, 3)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, multiline, _IS_BOOL, 1)
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiline, _IS_BOOL, 1, "null")
 #else
     ZEND_ARG_INFO(0, multiline)
 #endif
