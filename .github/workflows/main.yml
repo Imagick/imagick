@@ -30,13 +30,14 @@ jobs:
           sudo apt-get install imagemagick || true
           sudo apt-get install php-dev php-pear
 
+      - name: Perform pecl install
+        run: |
+          echo "About to do sudo pecl install package.xml"
+          sudo pecl install package.xml
+
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-
-      - name: Configure and check fonts are present
-        run: |
-          sudo pecl install package.xml
 
       - name: Run Imagick tests
         run: |
