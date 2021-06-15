@@ -2312,7 +2312,7 @@ const zend_function_entry *php_imagickpixeliterator_class_methods = class_Imagic
 //	{ NULL, NULL, NULL, 0, 0 }
 //};
 
-#include "ImagickPixel_arginfo.h"
+#include "imagickpixel_class_arginfo.h"
 
 const zend_function_entry *php_imagickpixel_class_methods = class_ImagickPixel_methods;
 
