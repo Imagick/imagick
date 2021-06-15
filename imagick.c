@@ -2902,7 +2902,7 @@ const zend_function_entry *php_imagick_class_methods = class_Imagick_methods;
 //	{ NULL, NULL, NULL, 0, 0 }
 //};
 
-#include "ImagickKernel_arginfo.h"
+#include "imagickkernel_class_arginfo.h"
 
 const zend_function_entry *php_imagickkernel_class_methods = class_ImagickKernel_methods;
 
