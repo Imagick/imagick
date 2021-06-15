@@ -467,7 +467,7 @@ class Imagick
     public function writeImages(string $filename, bool $adjoin): bool  {}
 
     // CHANNEL_
-    public function blurImage(float $radius, float $sigma, ?int $channel): bool  {}
+    public function blurImage(float $radius, float $sigma, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
     public function thumbnailImage(
         ?int $columns,

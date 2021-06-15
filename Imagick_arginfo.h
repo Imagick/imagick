@@ -1889,9 +1889,9 @@ ZEND_END_ARG_INFO()
 
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_blurImage, 0, 3, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_blurImage, 0, 2, _IS_BOOL, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_blurImage, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_blurImage, 0, 0, 2)
 #endif
 
 	
@@ -1908,7 +1908,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_blurImage, 0, 0, 3)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, channel, IS_LONG, 1)
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
 #else
     ZEND_ARG_INFO(0, channel)
 #endif
