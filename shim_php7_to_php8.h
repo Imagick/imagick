@@ -14,10 +14,11 @@
 #endif
 
 #if PHP_VERSION_ID < 70200
-
+#undef  ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX
 #define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, type, allow_null) \
         ZEND_BEGIN_ARG_INFO_EX(name, 0, return_reference, required_num_args)
 
+#undef  ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX
 #define ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(name, return_reference, required_num_args, class_name, allow_null) \
         ZEND_BEGIN_ARG_INFO_EX(name, 0, return_reference, required_num_args)
 
