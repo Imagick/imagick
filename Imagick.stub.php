@@ -456,7 +456,7 @@ class Imagick
 
     public function readImages(array $filenames): bool  {}
 
-    public function readImageBlob(string $image, ?string $filename): bool  {}
+    public function readImageBlob(string $image, ?string $filename=null): bool  {}
 
     public function setImageFormat(string $format): bool  {}
 
