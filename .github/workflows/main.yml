@@ -33,7 +33,9 @@ jobs:
       - name: Perform pecl install
         run: |
           echo "About to do sudo pecl install package.xml"
-          sudo pecl install package.xml
+          ls -l
+          which pecl
+#          sudo pecl install package.xml || true
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
