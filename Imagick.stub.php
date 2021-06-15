@@ -12,7 +12,7 @@ class Imagick
 
     public function pingImageBlob(string $image): bool  {}
 
-    public function pingImageFile(resource $filehandle, ?string $filename=null): bool  {}
+    public function pingImageFile(resource $filehandle, ?string $filename = null): bool  {}
 
     public function transposeImage(): bool  {}
 
@@ -195,9 +195,9 @@ class Imagick
     // DISTORTION_*
     public function distortImage(int $distortion, array $arguments, bool $bestfit): bool  {}
 
-    public function writeImageFile(resource $filehandle, ?string $format=null): bool  {}
+    public function writeImageFile(resource $filehandle, ?string $format = null): bool  {}
 
-    public function writeImagesFile(resource $filehandle, ?string $format=null): bool  {}
+    public function writeImagesFile(resource $filehandle, ?string $format = null): bool  {}
 
     public function resetImagePage(string $page): bool  {}
 
@@ -435,7 +435,7 @@ class Imagick
 
 //    PHP_ME(imagick, __construct, imagick_construct_args, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
     // TODO int|float? :spocks_eyebrow.gif:
-    public function __construct(string|array|int|float|null $files=null) {}
+    public function __construct(string|array|int|float|null $files = null) {}
 
     public function __toString(): string  {}
 
@@ -456,13 +456,13 @@ class Imagick
 
     public function readImages(array $filenames): bool  {}
 
-    public function readImageBlob(string $image, ?string $filename=null): bool  {}
+    public function readImageBlob(string $image, ?string $filename = null): bool  {}
 
     public function setImageFormat(string $format): bool  {}
 
     public function scaleImage(int $columns, int $rows, bool $bestfit = false, bool $legacy = false): bool  {}
 
-    public function writeImage(?string $filename=null): bool  {}
+    public function writeImage(?string $filename = null): bool  {}
 
     public function writeImages(string $filename, bool $adjoin): bool  {}
 
@@ -710,7 +710,7 @@ class Imagick
     public static function queryFonts(string $pattern = "*"): array  {}
 
     /* TODO  $multiline == null,  means we should autodetect */
-    public function queryFontMetrics(ImagickDraw $settings, string $text, ?bool $multiline=null): array  {}
+    public function queryFontMetrics(ImagickDraw $settings, string $text, ?bool $multiline = null): array  {}
 
     public function steganoImage(Imagick $watermark, int $offset): Imagick  {}
 
@@ -1127,7 +1127,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
         int $columns,
         int $rows,
         ImagickPixel|string $background_color,
-        string $format=null
+        string $format = null
     ): bool  {}
 
     // TODO - canvas? description
@@ -1139,7 +1139,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function getCopyright(): string  {}
 
-    public static function getConfigureOptions(string $pattern="*"): string {}
+    public static function getConfigureOptions(string $pattern = "*"): string {}
 
 
 #if MagickLibVersion > 0x660
@@ -1266,10 +1266,10 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x652
-    public function subimageMatch(Imagick $image, ?array &$offset=null, ?float &$similarity=null, float $threshold = 0.0, int metric=0): Imagick  {}
+    public function subimageMatch(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 
     /** @alias Imagick::subimageMatch */
-    public function similarityimage(imagick $image, ?array &$offset=null, ?float &$similarity=null, float $threshold = 0.0, int metric=0): Imagick  {}
+    public function similarityimage(imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
