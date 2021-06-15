@@ -12,7 +12,7 @@ class Imagick
 
     public function pingImageBlob(string $image): bool  {}
 
-    public function pingImageFile(resource $filehandle, ?string $filename): bool  {}
+    public function pingImageFile(resource $filehandle, ?string $filename=null): bool  {}
 
     public function transposeImage(): bool  {}
 
