@@ -36,7 +36,7 @@ jobs:
 
       - name: Configure and check fonts are present
         run: |
-          pecl install package.xml
+          sudo pecl install package.xml
 
       - name: Run Imagick tests
         run: |
