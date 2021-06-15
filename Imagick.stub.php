@@ -1139,7 +1139,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function getCopyright(): string  {}
 
-    public static function getConfigureOptions(?string $pattern): string {}
+    public static function getConfigureOptions(string $pattern="*"): string {}
 
 
 #if MagickLibVersion > 0x660
