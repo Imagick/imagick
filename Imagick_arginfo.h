@@ -4511,14 +4511,14 @@ ZEND_END_ARG_INFO()
 
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getConfigureOptions, 0, 1, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getConfigureOptions, 0, 0, IS_STRING, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getConfigureOptions, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getConfigureOptions, 0, 0, 0)
 #endif
 
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, pattern, IS_STRING, 1)
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, pattern, IS_STRING, 0, "*")
 #else
     ZEND_ARG_INFO(0, pattern)
 #endif
