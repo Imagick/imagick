@@ -462,7 +462,7 @@ class Imagick
 
     public function scaleImage(int $columns, int $rows, bool $bestfit = false, bool $legacy = false): bool  {}
 
-    public function writeImage(?string $filename): bool  {}
+    public function writeImage(?string $filename=null): bool  {}
 
     public function writeImages(string $filename, bool $adjoin): bool  {}
 
