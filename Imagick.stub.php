@@ -1269,7 +1269,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     public function subimageMatch(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 
     /** @alias Imagick::subimageMatch */
-    public function similarityimage(imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+    public function similarityimage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
