@@ -33,10 +33,15 @@ jobs:
       - name: Perform pecl install
         run: |
           echo "About to do sudo pecl install package.xml"
+          date
           which pecl
+          date
           sudo pecl install package.xml || true
+          date
           echo "extension=imagick.so" > /etc/php/8.0/cli/conf.d/imagick.ini
+          date
           echo "" >> /etc/php/8.0/cli/conf.d/imagick.ini
+          date
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
