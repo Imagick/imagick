@@ -111,7 +111,7 @@ $replace[] = "
 #if PHP_VERSION_ID >= 80000
 \tZEND_ARG_OBJ_INFO($1, $2, resource, $3)
 #else
-\tZEND_ARG_INFO(0, $2)
+\tZEND_ARG_INFO($1, $2)
 #endif
 ";
 
@@ -121,7 +121,7 @@ $replace[] = "
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE($1, $2, $3, $4, $5)
 #else
-    ZEND_ARG_INFO(0, $2)
+    ZEND_ARG_INFO($1, $2)
 #endif
 ";
 
