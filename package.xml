@@ -13,7 +13,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2021-06-14</date>
+	<date>2021-06-16</date>
 	<version>
 		<release>3.5.0RC1</release>
 		<api>3.5.0</api>
@@ -401,7 +401,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="anonymous_pro_minus.ttf" role="test" />
 				<file name="OFL.txt" role="doc" />
 			</dir>
-			<dir name="utils">
+			<dir name="util">
 				<file name="Float32Info.php" role="test" />
 				<file name="FloatInfo.php" role="test" />
 				<file name="functions.php" role="test" />
