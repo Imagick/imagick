@@ -821,7 +821,7 @@ PHP_METHOD(ImagickKernel, scale)
 {
 	php_imagickkernel_object *internp;
 	double scale;
-	im_long normalize_flag;
+	im_long normalize_flag = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &scale, &normalize_flag) == FAILURE) {
 		return;

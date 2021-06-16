@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 672e93cd04e02f82ff911ab17cc6923c49a5421b */
+ * Stub hash: 2b1addfe7bec455d316aac0f8a51bac5c4c9c591 */
 
 #if defined(IMAGICK_WITH_KERNEL)
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickKernel_addKernel, 0, 1, IS_VOID, 0)
@@ -33,9 +33,9 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if defined(IMAGICK_WITH_KERNEL)
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 2, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, scale, IS_DOUBLE, 0)
-	ZEND_ARG_TYPE_INFO(0, normalize_kernel, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, normalize_kernel, IS_LONG, 1, "0")
 ZEND_END_ARG_INFO()
 #endif
 
