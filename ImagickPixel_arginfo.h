@@ -2,13 +2,14 @@
 * Stub hash: regen with 'sh regen_arginfo.sh' 
 * file has been fixedup for different versions */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel___construct, 0, 0, 1)
-	
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel___construct, 0, 0, 0)
+
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, color, IS_STRING, 1)
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, color, IS_STRING, 1, "null")
 #else
-    ZEND_ARG_INFO(0, color)
+    ZEND_ARG_INFO(0, filename)
 #endif
+
 ZEND_END_ARG_INFO()
 
 
