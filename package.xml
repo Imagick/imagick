@@ -87,13 +87,16 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 			<file name="shim_im6_to_im7.c" role="src" />
 			<file name="shim_im6_to_im7.h" role="src" />
 			<file name="shim_php7_to_php8.h" role="src" />
-			<file name="ImagickKernel_arginfo.h" role="src" />
 			<file name="ImagickPixel_arginfo.h" role="src" />
 			<file name="Imagick_arginfo.h" role="src" />
 			<file name="ImagickDraw_arginfo.h" role="src" />
 			<file name="ImagickKernel_arginfo.h" role="src" />
 			<file name="ImagickPixelIterator_arginfo.h" role="src" />
-			<file name="ImagickPixelIterator_arginfo.h" role="src" />
+			<file name="ImagickPixel.stub.php" role="src" />
+			<file name="Imagick.stub.php" role="src" />
+			<file name="ImagickDraw.stub.php" role="src" />
+			<file name="ImagickKernel.stub.php" role="src" />
+			<file name="ImagickPixelIterator.stub.php" role="src" />
 			<file name="php_imagemagick_version_defs.h" role="src" />
 			<file name="ChangeLog" role="doc" />
 			<file name="LICENSE" role="doc" />
