@@ -7,7 +7,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel___construct, 0, 0, 0)
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, color, IS_STRING, 1, "null")
 #else
-    ZEND_ARG_INFO(0, filename)
+    ZEND_ARG_INFO(0, color)
 #endif
 
 ZEND_END_ARG_INFO()
@@ -34,7 +34,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_getColor, 0, 0, 0)
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, normalized, IS_LONG, 0, "0")
 #else
-    ZEND_ARG_INFO(0, filename)
+    ZEND_ARG_INFO(0, normalized)
 #endif
 
 ZEND_END_ARG_INFO()
@@ -70,17 +70,17 @@ ZEND_END_ARG_INFO()
 #if MAGICKCORE_HDRI_ENABLE 
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 0, IS_DOUBLE, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 1, IS_DOUBLE, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 0, 1)
 #endif
 
 #else
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 0, IS_LONG, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 1, IS_LONG, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel_getColorValue, 0, 0, 1)
 #endif
 
 #endif

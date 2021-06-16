@@ -52,13 +52,12 @@ $replace[] = "
     ZEND_ARG_INFO($1, $2)
 #endif";
 
-
-$search[] = "#ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX\((\w*), 0, 1, IMAGICK_QUANTUM_TYPE, 0\)#iu";
+$search[] = "#ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX\((\w*), 0, (\w*), IMAGICK_QUANTUM_TYPE, 0\)#iu";
 $replace[] = "
 #if MAGICKCORE_HDRI_ENABLE 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX($1, 0, 0, IS_DOUBLE, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX($1, 0, $2, IS_DOUBLE, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX($1, 0, 0, IS_LONG, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX($1, 0, $2, IS_LONG, 0)
 #endif
 ";
 
@@ -122,7 +121,7 @@ $replace[] = "
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE($1, $2, $3, $4, $5)
 #else
-    ZEND_ARG_INFO(0, filename)
+    ZEND_ARG_INFO(0, $2)
 #endif
 ";
 
