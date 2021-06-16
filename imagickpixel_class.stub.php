@@ -21,7 +21,7 @@ class ImagickPixel
     public function getColorQuantum(): array {}
 
     // COLOR_*
-    public function getColorValue(int $color): int {}
+    public function getColorValue(int $color): float {}
 
     /**
      * @param int $color // COLOR_*
