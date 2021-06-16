@@ -91,9 +91,9 @@ ZEND_END_ARG_INFO()
 #if defined(IMAGICK_WITH_KERNEL)
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 2, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 1, IS_VOID, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 0, 1)
 #endif
 
 	
@@ -102,12 +102,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickKernel_scale, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, scale)
 #endif
-	
+
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, normalize_kernel, IS_LONG, 1)
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, normalize_kernel, IS_LONG, 1, "null")
 #else
     ZEND_ARG_INFO(0, normalize_kernel)
 #endif
+
 ZEND_END_ARG_INFO()
 #endif
 
