@@ -2,9 +2,10 @@
 
 /** @generate-function-entries */
 
+
 class ImagickPixel
 {
-    public function __construct(?string $color) {}
+    public function __construct(?string $color = null) {}
 
     public function clear(): bool {}
 
@@ -20,15 +21,19 @@ class ImagickPixel
     public function getColorQuantum(): array {}
 
     // COLOR_*
-    public function getColorValue(int $color): IMAGICK_QUANTUM_TYPE {}
+    public function getColorValue(int $color): float {}
 
     /**
      * @param int $color // COLOR_*
-     * @return mixed
+     * return type:
      * - Float if IM compiled with HDRI
      * - int if IM compiled with fixed point math
      */
-    public function getColorValueQuantum(int $color): IMAGICK_QUANTUM_TYPE {}
+#if MAGICKCORE_HDRI_ENABLE
+    public function getColorValueQuantum(int $color): float {}
+#else
+    public function getColorValueQuantum(int $color): int {}
+#endif
 
     public function getHSL(): array {}
 
@@ -66,13 +71,17 @@ class ImagickPixel
      * - int if IM compiled with fixed point math
      *
      */
-    public function setColorValueQuantum(int $color, IMAGICK_QUANTUM_TYPE $value): bool{}
+#if MAGICKCORE_HDRI_ENABLE
+    public function setColorValueQuantum(int $color, float $value): bool{}
+#else
+    public function setColorValueQuantum(int $color, int $value): bool{}
+#endif
 
     public function setHSL(float $hue, float $saturation , float $luminosity): bool{}
 
     // This function could be described more clearly...
     // https://imagemagick.org/api/pixel-wand.php#PixelSetIndex
-    public function setIndex(IMAGICK_QUANTUM_TYPE $index): bool {}
+    public function setIndex(int $index): bool {}
 
     //// Not in docs.
 #if MagickLibVersion >= 0x693
