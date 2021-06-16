@@ -38,7 +38,7 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 
   if test "$PHP_IMAGICK_FOUND_VERNUM" -ge "50302"; then
     AC_MSG_RESULT(yes. found $PHP_IMAGICK_FOUND_VERSION)
-  else 
+  else
     AC_MSG_ERROR(no. found $PHP_IMAGICK_FOUND_VERSION)
   fi
 
@@ -49,7 +49,7 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
 	echo $IM_IMAGEMAGICK_LIBS
 	echo ""
 	echo $IMAGICK_SHARED_LIBADD
-  
+
   PHP_EVAL_LIBLINE($IM_IMAGEMAGICK_LIBS, IMAGICK_SHARED_LIBADD)
   PHP_EVAL_INCLINE($IM_IMAGEMAGICK_CFLAGS)
 
@@ -67,8 +67,14 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
     omp_pause_resource_all(omp_pause_hard);
   ]])],[
     AC_MSG_RESULT(yes)
-    PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
-    PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
+
+    AS_IF([test "$(uname)" == "Darwin"],[
+      PHP_CHECK_FUNC(omp_pause_resource_all, omp)
+      PHP_ADD_LIBRARY(omp,, IMAGICK_SHARED_LIBADD)
+    ],[
+      PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
+      PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
+    ])
   ],[
     AC_MSG_RESULT(no)
   ])
