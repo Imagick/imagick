@@ -62,7 +62,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_pingImageFile, 0, 0, 1)
 	ZEND_ARG_INFO(0, filehandle)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -201,8 +207,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_adaptiveResizeImage, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, rows)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -400,8 +418,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_roundCornersImage, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, y_rounding)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, stroke_width, IS_DOUBLE, 0, "10")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, displace, IS_DOUBLE, 0, "5")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, stroke_width, IS_DOUBLE, 0, "10")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, displace, IS_DOUBLE, 0, "5")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, size_correction, IS_DOUBLE, 0, "-6")
 ZEND_END_ARG_INFO()
 #endif
@@ -770,7 +800,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageProperties, 0, 0, 0)
 #endif
 
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, pattern, IS_STRING, 0, "\"*\"")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, include_values, _IS_BOOL, 0, "true")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, include_values, _IS_BOOL, 0, "true")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -822,7 +858,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_writeImageFile, 0, 0, 1)
 	ZEND_ARG_INFO(0, filehandle)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -1336,7 +1378,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_segmentImage, 0, 0, 3)
 #else
     ZEND_ARG_INFO(0, smooth_threshold)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, verbose, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, verbose, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -1669,7 +1717,13 @@ ZEND_END_ARG_INFO()
 #endif
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick___construct, 0, 0, 0)
-	ZEND_ARG_TYPE_MASK(0, files, MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_NULL, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_MASK(0, files, MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_NULL, "null")
+#else
+    ZEND_ARG_INFO(0, files)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -1689,7 +1743,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_count, 0, 0, IS_LO
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_count, 0, 0, 0)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, mode, IS_LONG, 0, "0")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, mode, IS_LONG, 0, "0")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -1789,7 +1849,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_readImageBlob, 0, 0, 1)
 #else
     ZEND_ARG_INFO(0, image)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -1826,8 +1892,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_scaleImage, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, rows)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -1837,7 +1915,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_writeImage, 0, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_writeImage, 0, 0, 0)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -1902,9 +1986,27 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_thumbnailImage, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, rows)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, fill, _IS_BOOL, 0, "false")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, fill, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -1926,7 +2028,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_cropThumbnailImage, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, height)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getImageFilename arginfo_class_Imagick___toString
@@ -2272,7 +2380,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_identifyImage, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_identifyImage, 0, 0, 0)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, append_raw_output, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, append_raw_output, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -2533,8 +2647,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_resizeImage, 0, 0, 4)
 #else
     ZEND_ARG_INFO(0, blur)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bestfit, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -2926,7 +3052,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_readImageFile, 0, 0, 1)
 	ZEND_ARG_INFO(0, filehandle)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -2991,7 +3123,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_queryFontMetrics, 0, 0, 2)
 #else
     ZEND_ARG_INFO(0, text)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiline, _IS_BOOL, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiline, _IS_BOOL, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -3149,7 +3287,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_calculateCrop, 0, 0, 4)
 #else
     ZEND_ARG_INFO(0, desired_height)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_chopImage arginfo_class_Imagick_cropImage
@@ -3240,7 +3384,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_colorizeImage, 0, 0, 2)
 
 	ZEND_ARG_OBJ_TYPE_MASK(0, colorize_color, ImagickPixel, MAY_BE_STRING, NULL)
 	ZEND_ARG_OBJ_TYPE_MASK(0, opacity_color, ImagickPixel, MAY_BE_STRING|MAY_BE_FALSE, NULL)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 1, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 1, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -4341,7 +4491,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_tintImage, 0, 0, 2)
 
 	ZEND_ARG_OBJ_TYPE_MASK(0, tint_color, ImagickPixel, MAY_BE_STRING, NULL)
 	ZEND_ARG_OBJ_TYPE_MASK(0, opacity_color, ImagickPixel, MAY_BE_STRING, NULL)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, legacy, _IS_BOOL, 0, "false")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -4412,7 +4568,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_newImage, 0, 0, 3)
     ZEND_ARG_INFO(0, rows)
 #endif
 	ZEND_ARG_OBJ_TYPE_MASK(0, background_color, ImagickPixel, MAY_BE_STRING, NULL)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 0, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 0, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 
 
@@ -4769,10 +4931,28 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_subimageMatch, 0, 0, 1)
 #endif
 
 	ZEND_ARG_OBJ_INFO(0, image, Imagick, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, offset, IS_ARRAY, 1, "null")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, similarity, IS_DOUBLE, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, offset, IS_ARRAY, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, similarity, IS_DOUBLE, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, threshold, IS_DOUBLE, 0, "0.0")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metric, IS_LONG, 0, "0")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metric, IS_LONG, 0, "0")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -4785,10 +4965,28 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_similarityimage, 0, 0, 1)
 #endif
 
 	ZEND_ARG_OBJ_INFO(0, image, imagick, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, offset, IS_ARRAY, 1, "null")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, similarity, IS_DOUBLE, 1, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, offset, IS_ARRAY, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(1, similarity, IS_DOUBLE, 1, "null")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, threshold, IS_DOUBLE, 0, "0.0")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metric, IS_LONG, 0, "0")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, metric, IS_LONG, 0, "0")
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 

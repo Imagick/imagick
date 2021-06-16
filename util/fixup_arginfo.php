@@ -75,7 +75,7 @@ ZEND_BEGIN_ARG_INFO_EX($1, 0, $2, $3)
 ";
 
 //#define ZEND_ARG_TYPE_MASK(pass_by_ref, name, type_mask, default_value) \
-$search[] = "#.*ZEND_ARG_TYPE_MASK\(([\w|\|]*), ([\w|\|]*), ([\w|\|]*), ([\w|\|]*)\)#iu";
+$search[] = "#.*ZEND_ARG_TYPE_MASK\(([\w|\|]*), ([\w|\|]*), ([\w|\|]*), ([\w\|\"]*)\)#iu";
 $replace[] = "
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_MASK($1, $2, $3, $4)
@@ -115,6 +115,24 @@ $replace[] = "
 \tZEND_ARG_INFO(0, $2)
 #endif
 ";
+
+// ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
+$search[] = "#.*ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE\((\w*), (\w*), (\w*), (\w*), ([\w\"]*)\)#iu";
+$replace[] = "
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE($1, $2, $3, $4, $5)
+#else
+    ZEND_ARG_INFO(0, filename)
+#endif
+";
+
+
+//#if PHP_VERSION_ID >= 80000
+//ZEND_ARG_TYPE_MASK(0, files, MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_NULL, NULL)
+//#else
+//    ZEND_ARG_INFO(0, files)
+//#endif
+
 
 
 foreach ($input_lines as $input_line) {
