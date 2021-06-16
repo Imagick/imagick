@@ -12,6 +12,7 @@ jobs:
   test_package:
     name: basic package contents
     runs-on: ubuntu-20.04
+    timeout-minutes: 12
     strategy:
       fail-fast: false
       matrix:
@@ -32,16 +33,24 @@ jobs:
 
       - name: Perform pecl install
         run: |
-          echo "About to do sudo pecl install package.xml"
+          echo "Starting Perform pecl install"
           date
           which pecl
+          sleep 5
           date
+          sleep 5
           sudo pecl install package.xml || true
+          sleep 5
           date
+          sleep 5
           echo "extension=imagick.so" > /etc/php/8.0/cli/conf.d/imagick.ini
+          sleep 5
           date
+          sleep 5
           echo "" >> /etc/php/8.0/cli/conf.d/imagick.ini
+          sleep 5
           date
+          sleep 5
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
