@@ -39,7 +39,7 @@ jobs:
           sleep 5
           date
           sleep 5
-          sudo pecl install package.xml || true
+          sudo pecl -v 3 install package.xml || true
           sleep 5
           date
           sleep 5
