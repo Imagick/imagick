@@ -1242,7 +1242,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion > 0x661
-    public function colorMatrixImage(array $color_matrix = Imagick::CHANNEL_DEFAULT): bool  {}
+    public function colorMatrixImage(array $color_matrix): bool  {}
 #endif
 
     public function selectiveBlurImage(

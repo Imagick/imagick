@@ -4835,12 +4835,17 @@ ZEND_END_ARG_INFO()
 #if MagickLibVersion > 0x628 && MagickLibVersion > 0x661
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_colorMatrixImage, 0, 0, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_colorMatrixImage, 0, 1, _IS_BOOL, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_colorMatrixImage, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_colorMatrixImage, 0, 0, 1)
 #endif
 
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, color_matrix, IS_ARRAY, 0, "Imagick::CHANNEL_DEFAULT")
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, color_matrix, IS_ARRAY, 0)
+#else
+    ZEND_ARG_INFO(0, color_matrix)
+#endif
 ZEND_END_ARG_INFO()
 #endif
 
