@@ -5,7 +5,7 @@
 
 class ImagickPixel
 {
-    public function __construct(?string $color) {}
+    public function __construct(?string $color = null) {}
 
     public function clear(): bool {}
 

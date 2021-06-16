@@ -1,8 +1,8 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 4400394e01e253388285f3cf995981b79129c06f */
+ * Stub hash: e9f76fb33178b8f0738fdeff835472ae37a83431 */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel___construct, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, color, IS_STRING, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixel___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, color, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixel_clear, 0, 0, _IS_BOOL, 0)
