@@ -19,7 +19,6 @@ imagemagick_fetch_and_build () {
           echo "git7 cannot be cached"
             ;;
         git6)
-          git7)
           echo "git6 cannot be cached"
             ;;
         dev)
