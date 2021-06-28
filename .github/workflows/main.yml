@@ -54,8 +54,6 @@ jobs:
         with:
           path: ~/im
           key: ${{ runner.os }}-ImageMagick-${{ matrix.imagemagick }}
-        run: |
-          ls -l ~/im
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
