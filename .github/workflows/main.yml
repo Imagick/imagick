@@ -77,7 +77,7 @@ jobs:
         run: |
           export TEST_PHP_EXECUTABLE=`which php`
           php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff
-          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
+          php run-tests.php -j4 -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php
 
