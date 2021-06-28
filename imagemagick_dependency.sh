@@ -12,12 +12,15 @@ imagemagick_fetch_and_build () {
     echo "version is ${version}, im_dir=${im_dir}"
 
     echo "contents of im_dir are:"
-    ls -l ${im_dir}
+
 
     case $version in
         git7)
+          echo "git7 cannot be cached"
             ;;
         git6)
+          git7)
+          echo "git6 cannot be cached"
             ;;
         dev)
             ;;
@@ -25,6 +28,7 @@ imagemagick_fetch_and_build () {
     # Both individual commits, and tagged versions are cacheable
         if [ -d "${im_dir}" ]; then
             echo "Using cached directory ${im_dir}"
+            ls -l ${im_dir}
             return
         else
             echo "No cache available. Need to download and compile IM from scratch."

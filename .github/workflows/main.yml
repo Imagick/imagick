@@ -21,7 +21,7 @@ jobs:
         imagemagick: [
             7.0.10-27,
             # 6.9.2-0,
-            git7,
+#            git7,
             git6
         ]
 #        exclude:
