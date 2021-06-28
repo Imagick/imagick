@@ -19,7 +19,7 @@ jobs:
         os: [ ubuntu-latest ]
         php: [ 5.4 ]
         imagemagick: [
-            # 7.0.10-27,
+            7.0.10-27,
             # 6.9.2-0,
             git7,
             git6
@@ -52,14 +52,14 @@ jobs:
         env:
           cache-name: cache-ImageMagick
         with:
-          path: ~/im
+          path: ~/im/imagemagick-${{ matrix.imagemagick }}
           key: ${{ runner.os }}-ImageMagick-${{ matrix.imagemagick }}
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          ls -l ~/im
-          bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
+          ls -l ~/im/imagemagick-${{ matrix.imagemagick }}
+          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
 
       - name: Configure and check fonts are present
         run: |

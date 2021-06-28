@@ -11,6 +11,9 @@ imagemagick_fetch_and_build () {
 
     echo "version is ${version}, im_dir=${im_dir}"
 
+    echo "contents of im_dir are:"
+    ls -l ${im_dir}
+
     case $version in
         git7)
             ;;
