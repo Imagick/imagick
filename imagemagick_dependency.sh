@@ -24,7 +24,7 @@ imagemagick_fetch_and_build () {
             echo "Using cached directory ${im_dir}"
             return
         else
-            echo "No cache available. Need to download and compile IM."
+            echo "No cache available. Need to download and compile IM from scratch."
         fi
         ;;
     esac
@@ -90,6 +90,7 @@ imagemagick_fetch_and_build () {
 #ignore compile warnings/errors
 set +e
 
+echo "Configuring, regardless of whether IM was cached."
 
 ./configure \
   --prefix="${HOME}/im/imagemagick-${version}" \
