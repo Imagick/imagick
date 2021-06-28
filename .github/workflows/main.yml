@@ -54,10 +54,13 @@ jobs:
         with:
           path: ~/im
           key: ${{ runner.os }}-ImageMagick-${{ matrix.imagemagick }}
+        run: |
+          ls -l ~/im
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
+          ls -l ~/im
           bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
 
       - name: Configure and check fonts are present
