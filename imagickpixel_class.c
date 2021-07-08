@@ -250,10 +250,17 @@ PHP_METHOD(ImagickPixel, getIndex)
 PHP_METHOD(ImagickPixel, setIndex)
 {
 	php_imagickpixel_object *internp;
+#if MAGICKCORE_HDRI_ENABLE
+	double index;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &index) == FAILURE) {
+#else
 	im_long index;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
+#endif
 		return;
 	}
 

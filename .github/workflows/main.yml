@@ -19,10 +19,10 @@ jobs:
         os: [ ubuntu-latest ]
         php: [ 5.4 ]
         imagemagick: [
-            # 7.0.10-27,
-            # 6.9.2-0,
-            git7,
-            git6
+            7.0.10-27,
+            6.9.2-0,
+#            git7,
+#            git6
         ]
 #        exclude:
 #          - php: 5.4
@@ -47,10 +47,18 @@ jobs:
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
 
+      - name: Cache ImageMagick
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-ImageMagick
+        with:
+          path: ~/im/imagemagick-${{ matrix.imagemagick }}
+          key: ${{ runner.os }}-ImageMagick-${{ matrix.imagemagick }}
+
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
+          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
 
       - name: Configure and check fonts are present
         run: |
@@ -69,7 +77,8 @@ jobs:
         run: |
           export TEST_PHP_EXECUTABLE=`which php`
           php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff
-          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
+          export JOBS=$(php util/calculate_test_jobs.php)
+          php run-tests.php ${JOBS} -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php
 
@@ -116,10 +125,18 @@ jobs:
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
 
+      - name: Cache ImageMagick
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-ImageMagick
+        with:
+          path: ~/im/imagemagick-${{ matrix.imagemagick }}
+          key: ${{ runner.os }}-ImageMagick-${{ matrix.imagemagick }}
+
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh " ${{ matrix.imagemagick }}"
+          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
 
       - name: Configure and check fonts are present
         run: |
@@ -138,7 +155,8 @@ jobs:
         run: |
           export TEST_PHP_EXECUTABLE=`which php`
           php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff
-          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
+          export JOBS=$(php util/calculate_test_jobs.php)
+          php run-tests.php ${JOBS} -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php
 

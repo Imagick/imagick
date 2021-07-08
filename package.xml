@@ -13,14 +13,14 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2021-06-16</date>
+	<date>2021-06-17</date>
 	<version>
-		<release>3.5.0RC2</release>
+		<release>3.5.0</release>
 		<api>3.5.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
-		<api>beta</api>
+		<release>stable</release>
+		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
@@ -34,6 +34,8 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	- Fixes:
 	* Correct version check to make RemoveAlphaChannel and FlattenAlphaChannel be available when using Imagick with ImageMagick version 6.7.8-x
 	* Imagick::morphology now no longer ignores channel parameter
+	* ImagickPixel::setIndex() takes a Quantum value (aka float in HDRI mode, int in non-HDRI mode).
+	* ImagickPixel::getColorValue() always returns an int value.
 	- Added:
 	* PHP 8.0 support.
 	* Location check for ImageMagick 7 for NixOS and Brew.

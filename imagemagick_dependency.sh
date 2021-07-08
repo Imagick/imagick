@@ -11,10 +11,15 @@ imagemagick_fetch_and_build () {
 
     echo "version is ${version}, im_dir=${im_dir}"
 
+    echo "contents of im_dir are:"
+
+
     case $version in
         git7)
+          echo "git7 cannot be cached"
             ;;
         git6)
+          echo "git6 cannot be cached"
             ;;
         dev)
             ;;
@@ -22,9 +27,10 @@ imagemagick_fetch_and_build () {
     # Both individual commits, and tagged versions are cacheable
         if [ -d "${im_dir}" ]; then
             echo "Using cached directory ${im_dir}"
+            ls -l ${im_dir}
             return
         else
-            echo "No cache available. Need to download and compile IM."
+            echo "No cache available. Need to download and compile IM from scratch."
         fi
         ;;
     esac
@@ -90,6 +96,7 @@ imagemagick_fetch_and_build () {
 #ignore compile warnings/errors
 set +e
 
+echo "Configuring, regardless of whether IM was cached."
 
 ./configure \
   --prefix="${HOME}/im/imagemagick-${version}" \
