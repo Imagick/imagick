@@ -55,12 +55,14 @@ jobs:
 
       - name: Package and re-extract files
         run: |
-          export PACKAGE_OUTPUT=$(pear package)
-          export PACKAGE_FILENAME=$(php util/get_package_filename.php "$PACKAGE_OUTPUT")
-          tar xzf "${PACKAGE_FILENAME}.tgz"
-          cd ${PACKAGE_FILENAME}
-          echo "woot in the extracted directory?"
-          ls -l
+          pear package
+
+#          export PACKAGE_OUTPUT=$(pear package)
+#          export PACKAGE_FILENAME=$(php util/get_package_filename.php "$PACKAGE_OUTPUT")
+#          tar xzf "${PACKAGE_FILENAME}.tgz"
+#          cd ${PACKAGE_FILENAME}
+#          echo "woot in the extracted directory?"
+#          ls -l
 
       - name: Configure and check fonts are present
         run: |
