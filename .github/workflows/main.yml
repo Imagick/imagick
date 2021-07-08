@@ -21,15 +21,7 @@ jobs:
         imagemagick: [
             7.0.10-27,
             6.9.2-0,
-#            git7,
-#            git6
         ]
-#        exclude:
-#          - php: 5.4
-#            imagemagick: 6.8.7-0
-#        allow_failures:
-#         - imagemagick: git7
-#          - imagemagick: git6
 
     steps:
       - name: Checkout code
@@ -43,9 +35,10 @@ jobs:
       - name: Apt install required packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-urw-base35 || true
-          sudo apt-get install -y libfreetype6-dev || true
-          sudo apt-get install -y texlive-fonts-recommended || true
+          sudo apt-get install -y fonts-urw-base35
+          sudo apt-get install -y libfreetype6-dev
+          sudo apt-get install -y texlive-fonts-recommended
+          sudo apt-get install -y php-pear
 
       - name: Cache ImageMagick
         uses: actions/cache@v2
@@ -59,6 +52,15 @@ jobs:
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
+
+      - name: Package and re-extract files
+        run: |
+          export PACKAGE_OUTPUT=$(pear package)
+          export PACKAGE_FILENAME=$(php util/get_package_filename.php "$PACKAGE_OUTPUT")
+          tar xzf "${PACKAGE_FILENAME}.tgz"
+          cd ${PACKAGE_FILENAME}
+          echo "woot in the extracted directory?"
+          ls -l
 
       - name: Configure and check fonts are present
         run: |
