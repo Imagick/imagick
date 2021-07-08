@@ -67,14 +67,33 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
     omp_pause_resource_all(omp_pause_hard);
   ]])],[
     AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING([Which flavour of OpenMP to link])
 
-    AS_IF([test "$(uname)" == "Darwin"],[
-      PHP_CHECK_FUNC(omp_pause_resource_all, omp)
-      PHP_ADD_LIBRARY(omp,, IMAGICK_SHARED_LIBADD)
-    ],[
-      PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
-      PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
-    ])
+    if test "${GCC}" = "yes"; then
+      # Open64 (passes for GCC but uses different OpenMP implementation)
+      if test "x$GOMP_LIBS" = x ; then
+        if $CC --version 2>&1 | grep Open64 > /dev/null ; then
+         PHP_CHECK_FUNC(omp_pause_resource_all, openmp)
+         PHP_ADD_LIBRARY(openmp,, IMAGICK_SHARED_LIBADD)
+         AC_MSG_RESULT([Open64 flavoured OpenMP])
+        fi
+      fi
+      # Clang (passes for GCC but uses different OpenMP implementation)
+      if test "x$LIB_OMP" = x ; then
+        if $CC --version 2>&1 | grep clang > /dev/null ; then
+          PHP_CHECK_FUNC(omp_pause_resource_all, omp)
+          PHP_ADD_LIBRARY(omp,, IMAGICK_SHARED_LIBADD)
+          AC_MSG_RESULT([Clang flavoured OpenMP])
+        fi
+      fi
+      # GCC
+      if test "x$GOMP_LIBS" = x ; then
+         PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
+         PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
+         AC_MSG_RESULT([GCC flavoured OpenMP])
+      fi
+    fi
+
   ],[
     AC_MSG_RESULT(no)
   ])
