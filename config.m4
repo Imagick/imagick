@@ -73,24 +73,30 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
       # Open64 (passes for GCC but uses different OpenMP implementation)
       if test "x$GOMP_LIBS" = x ; then
         if $CC --version 2>&1 | grep Open64 > /dev/null ; then
-         PHP_CHECK_FUNC(omp_pause_resource_all, openmp)
-         PHP_ADD_LIBRARY(openmp,, IMAGICK_SHARED_LIBADD)
-         AC_MSG_RESULT([Open64 flavoured OpenMP])
+          PHP_CHECK_FUNC(omp_pause_resource_all, openmp)
+          if test "x$ac_cv_func_omp_pause_resource_all" = "xyes"; then
+            PHP_ADD_LIBRARY(openmp,, IMAGICK_SHARED_LIBADD)
+            AC_MSG_RESULT([Open64 flavoured OpenMP])
+          fi
         fi
       fi
       # Clang (passes for GCC but uses different OpenMP implementation)
       if test "x$LIB_OMP" = x ; then
         if $CC --version 2>&1 | grep clang > /dev/null ; then
           PHP_CHECK_FUNC(omp_pause_resource_all, omp)
-          PHP_ADD_LIBRARY(omp,, IMAGICK_SHARED_LIBADD)
-          AC_MSG_RESULT([Clang flavoured OpenMP])
+          if test "x$ac_cv_func_omp_pause_resource_all" = "xyes"; then
+            PHP_ADD_LIBRARY(omp,, IMAGICK_SHARED_LIBADD)
+            AC_MSG_RESULT([Clang flavoured OpenMP])
+          fi
         fi
       fi
       # GCC
-      if test "x$GOMP_LIBS" = x ; then
-         PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
-         PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
-         AC_MSG_RESULT([GCC flavoured OpenMP])
+      if test "x$ac_cv_func_omp_pause_resource_all" = x ; then
+        PHP_CHECK_FUNC(omp_pause_resource_all, gomp)
+        if test "x$ac_cv_func_omp_pause_resource_all" = "xyes"; then
+          PHP_ADD_LIBRARY(gomp,, IMAGICK_SHARED_LIBADD)
+          AC_MSG_RESULT([GCC flavoured OpenMP])
+        fi
       fi
     fi
 
