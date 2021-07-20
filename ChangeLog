@@ -1,3 +1,9 @@
+3.5.1RC1
+  - Better detection of appropriate OpenMP library to use, i.e. GCC or Clang.
+3.5.0
+ - Correct parameter for ImagickPixel::getColorValue and ImagickPixel::setIndex.
+3.5.0RC2
+ - Fix incorrect parameter defaults, and small fixes on arginfo generation.
 3.5.0RC1
 - ImageMagick 7 is still not widely available on systems. So contrary to previous plans, ImageMagick 6 support will continue for now. But users are recommeded to use ImageMagick 7 if possible.
 - Method names have been changed to not be all lower case. Both method names and parameter information is built from the Imagick*.stub.php files.
