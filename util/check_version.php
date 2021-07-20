@@ -30,6 +30,13 @@ $versionApi = (string) $sxe->version->api;
 $stabilityRelease =  (string) $sxe->stability->release;
 $stabilityApi = (string) $sxe->stability->api;
 
+
+$rc_position = stripos($versionApi, "RC");
+
+if ($rc_position !== false) {
+    $versionApi = substr($versionApi, 0, $rc_position);
+}
+
 $versionReleaseNumber = preg_replace('/[^\d\.]/', '', $versionApi);
 
 $parts = explode('.', $versionReleaseNumber);
