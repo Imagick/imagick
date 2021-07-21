@@ -30,11 +30,15 @@ class ImagickPixelIterator {
     /** @alias ImagickPixelIterator::getIteratorRow */
     public function key(): int {}
 
-    /** @alias ImagickPixelIterator::getNextIteratorRow */
-    public function next(): array {}
+    /** @alias ImagickPixelIterator::getNextIteratorRow
+     *  @tentative-return-type
+     */
+    public function next(): void {}
 
-    /** @alias ImagickPixelIterator::resetIterator */
-    public function rewind(): bool {}
+    /** @alias ImagickPixelIterator::resetIterator
+     *  @tentative-return-type
+     */
+    public function rewind(): void {}
 
     /** @alias ImagickPixelIterator::getCurrentIteratorRow */
     public function current(): array {}
