@@ -2,9 +2,9 @@
 
 VER=0$(php-config --vernum 2>/dev/null)
 
-if [ $VER -lt 70100 ]; then
+if [ $VER -lt 80100 ]; then
 
-	echo "You need php >= 7.1 to run this script"
+	echo "You need php >= 8.1 to run this script"
 
 elif [ ! -f build/gen_stub.php ]; then
 

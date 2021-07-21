@@ -1223,11 +1223,15 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //# endif
 //#endif
 
-    /** @alias Imagick::nextImage */
-    public function next(): bool  {}
+    /** @alias Imagick::nextImage
+     *  @tentative-return-type
+     */
+    public function next(): void  {}
 
-    /** @alias Imagick::setFirstIterator */
-    public function rewind(): bool  {}
+    /** @alias Imagick::setFirstIterator
+     *  @tentative-return-type
+     */
+    public function rewind(): void  {}
 
     public function valid(): bool  {}
 

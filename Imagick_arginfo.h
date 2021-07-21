@@ -4786,11 +4786,12 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628
-#define arginfo_class_Imagick_next arginfo_class_Imagick_optimizeImageLayers
+ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
+ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628
-#define arginfo_class_Imagick_rewind arginfo_class_Imagick_optimizeImageLayers
+#define arginfo_class_Imagick_rewind arginfo_class_Imagick_next
 #endif
 
 #if MagickLibVersion > 0x628
