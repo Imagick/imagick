@@ -1,9 +1,11 @@
 version: "3"
 services:
-  alpine:
-    build: docker/alpine
-    volumes:
-      - .:/var/app
+
+
+#  alpine:
+#    build: docker/alpine
+#    volumes:
+#      - .:/var/app
   centos6:
     build: docker/centos6
     volumes:
