@@ -11,7 +11,7 @@
  - Fix incorrect parameter defaults, and small fixes on arginfo generation.
 
 3.5.0RC1
-- ImageMagick 7 is still not widely available on systems. So contrary to previous plans, ImageMagick 6 support will continue for now. But users are recommeded to use ImageMagick 7 if possible.
+- ImageMagick 7 is still not widely available on systems. So contrary to previous plans, ImageMagick 6 support will continue for now, but users are recommended to use ImageMagick 7 if possible.
 - Method names have been changed to not be all lower case. Both method names and parameter information is built from the Imagick*.stub.php files.
 - Prevent accidental creation of zero dimension images. ImageMagick doesn't prevent creation of zero dimension images, but will give an error when that image is used. I don't think this will affect any correctly program, but if it does, and you need to re-enable zero dimension images, please open an issue at https://phpimagick.com/issues
 - Various pieces of work have been done to make GOMP not segfault including:
