@@ -44,6 +44,7 @@ zend_bool php_imagick_is_virtual_format(const char *format)
 
 	const char *virtual_fmt[] = {
 		"CAPTION",
+		"CANVAS",
 		"CLIPBOARD",
 		"FRACTAL",
 		"GRADIENT",
