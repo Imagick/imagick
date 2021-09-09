@@ -7266,8 +7266,6 @@ PHP_METHOD(Imagick, getImageInterlaceScheme)
 	php_imagick_object *intern;
 	long interlace;
 
-	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageInterlaceScheme");
-
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
