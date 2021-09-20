@@ -3388,6 +3388,7 @@ static zval *php_imagick_read_property(zend_object *object, zend_string *member,
 					if (format) {
 						retval = rv;
 						ZVAL_STRING(retval, format);
+						php_strtolower(Z_STRVAL_P(retval), Z_STRLEN_P(retval));
 						IMAGICK_FREE_MAGICK_MEMORY(format);
 					} else {
 						retval = rv;
@@ -3460,6 +3461,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 					if (format) {
 						retval = rv;
 						ZVAL_STRING(retval, format);
+						php_strtolower(Z_STRVAL_P(retval), Z_STRLEN_P(retval));
 						IMAGICK_FREE_MAGICK_MEMORY(format);
 					} else {
 						retval = rv;
@@ -3542,6 +3544,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 
 					if (format) {
 						ZVAL_STRING(retval, format, 1);
+						php_strtolower(Z_STRVAL_P(retval), Z_STRLEN_P(retval));
 						IMAGICK_FREE_MAGICK_MEMORY(format);
 					} else {
 						ZVAL_STRING(retval, "", 1);
