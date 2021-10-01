@@ -750,12 +750,14 @@ class Imagick
         int $height
     ): bool  {}
 
+#if MagickLibVersion >= 0x700
     public function borderImageWithComposite(
         ImagickPixel|string $border_color,
         int $width,
         int $height,
         int $composite = null // COMPOSITE_ // null rather than OverCompositeOp as we don't control the value
     ): bool  {}
+#endif
 
     public static function calculateCrop(
         int $original_width,

@@ -3256,6 +3256,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_borderImage, 0, 0, 3)
 #endif
 ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x700
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 3, _IS_BOOL, 0)
@@ -3284,6 +3285,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 0, 3)
 #endif
 
 ZEND_END_ARG_INFO()
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -5659,7 +5661,9 @@ ZEND_METHOD(Imagick, affineTransformImage);
 ZEND_METHOD(Imagick, averageImages);
 #endif
 ZEND_METHOD(Imagick, borderImage);
+#if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, borderImageWithComposite);
+#endif
 ZEND_METHOD(Imagick, calculateCrop);
 ZEND_METHOD(Imagick, chopImage);
 ZEND_METHOD(Imagick, clipImage);
@@ -6338,7 +6342,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, averageImages, arginfo_class_Imagick_averageImages, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
 #endif
 	ZEND_ME(Imagick, borderImage, arginfo_class_Imagick_borderImage, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, borderImageWithComposite, arginfo_class_Imagick_borderImageWithComposite, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, calculateCrop, arginfo_class_Imagick_calculateCrop, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_ME(Imagick, chopImage, arginfo_class_Imagick_chopImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, clipImage, arginfo_class_Imagick_clipImage, ZEND_ACC_PUBLIC)
