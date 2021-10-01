@@ -10485,7 +10485,7 @@ PHP_METHOD(Imagick, borderImageWithComposite)
 	im_long width, height;
 	PixelWand *color_wand;
 	zend_bool allocated;
-	zend_long composite = OverCompositeOp;
+	im_long composite = OverCompositeOp;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll|l", &param, &width, &height, &composite) == FAILURE) {
 		return;
