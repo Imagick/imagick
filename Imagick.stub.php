@@ -755,7 +755,7 @@ class Imagick
         ImagickPixel|string $border_color,
         int $width,
         int $height,
-        int $composite = null // COMPOSITE_ // null rather than OverCompositeOp as we don't control the value
+        int $composite // COMPOSITE_ // null rather than OverCompositeOp as we don't control the value
     ): bool  {}
 #endif
 
@@ -856,6 +856,16 @@ class Imagick
         int $outer_bevel
     ): bool  {}
 
+#if MagickLibVersion >= 0x700
+    public function frameImageWithComposite(
+        ImagickPixel|string $matte_color,
+        int $width,
+        int $height,
+        int $inner_bevel,
+        int $outer_bevel,
+        int $composite
+    ): bool  {}
+#endif
 
     public function fxImage(string $expression, int $channel = Imagick::CHANNEL_DEFAULT): Imagick  {}
 

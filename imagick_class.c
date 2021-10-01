@@ -9321,9 +9321,14 @@ PHP_METHOD(Imagick, frameImage)
 
 #if MagickLibVersion >= 0x700
 	{
-	//TODO - understand and allow compose to be set.
-	CompositeOperator compose = AtopCompositeOp;
-	status = MagickFrameImage(intern->magick_wand, color_wand, width, height, inner_bevel, outer_bevel, compose);
+		status = MagickFrameImage(
+			intern->magick_wand,
+			color_wand, width,
+			height,
+			inner_bevel,
+			outer_bevel,
+			OverCompositeOp // Over is the default https://imagemagick.org/script/command-line-options.php#frame
+    	);
 	}
 #else
 	status = MagickFrameImage(intern->magick_wand, color_wand, width, height, inner_bevel, outer_bevel);
@@ -9340,6 +9345,61 @@ PHP_METHOD(Imagick, frameImage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::frameImageWithComposite(ImagickPixel matte_color, int width, int height, int inner_bevel, int outer_bevel, int composite)
+	Adds a simulated three-dimensional border around the image with chosen composite option
+*/
+PHP_METHOD(Imagick, frameImageWithComposite)
+{
+	zval *param;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long width, height, inner_bevel, outer_bevel;
+	PixelWand *color_wand;
+	zend_bool allocated;
+	im_long composite = OverCompositeOp; // Over is the default https://imagemagick.org/script/command-line-options.php#frame
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zlllll", &param, &width, &height, &inner_bevel, &outer_bevel, &composite) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
+	if (!color_wand)
+		return;
+
+#if MagickLibVersion >= 0x700
+	{
+		status = MagickFrameImage(
+			intern->magick_wand,
+			color_wand, width,
+			height,
+			inner_bevel,
+			outer_bevel,
+			composite
+    	);
+	}
+#else
+	status = MagickFrameImage(intern->magick_wand, color_wand, width, height, inner_bevel, outer_bevel);
+#endif
+
+	if (allocated)
+		color_wand = DestroyPixelWand (color_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to frame image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
 
 /* {{{ proto Imagick Imagick::fxImage(string expression[, int channel])
 	Evaluate expression for each pixel in the image.
@@ -10485,9 +10545,9 @@ PHP_METHOD(Imagick, borderImageWithComposite)
 	im_long width, height;
 	PixelWand *color_wand;
 	zend_bool allocated;
-	im_long composite = OverCompositeOp;
+	im_long composite;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll|l", &param, &width, &height, &composite) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zlll", &param, &width, &height, &composite) == FAILURE) {
 		return;
 	}
 

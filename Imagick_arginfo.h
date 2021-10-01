@@ -3259,9 +3259,9 @@ ZEND_END_ARG_INFO()
 #if MagickLibVersion >= 0x700
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 3, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 4, _IS_BOOL, 0)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 0, 4)
 #endif
 
 	ZEND_ARG_OBJ_TYPE_MASK(0, border_color, ImagickPixel, MAY_BE_STRING, NULL)
@@ -3277,13 +3277,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 0, 3)
 #else
     ZEND_ARG_INFO(0, height)
 #endif
-
+	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, composite, IS_LONG, 0, "null")
+    ZEND_ARG_TYPE_INFO(0, composite, IS_LONG, 0)
 #else
     ZEND_ARG_INFO(0, composite)
 #endif
-
 ZEND_END_ARG_INFO()
 #endif
 
@@ -3632,6 +3631,48 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_frameImage, 0, 0, 5)
     ZEND_ARG_INFO(0, outer_bevel)
 #endif
 ZEND_END_ARG_INFO()
+
+#if MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_frameImageWithComposite, 0, 6, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_frameImageWithComposite, 0, 0, 6)
+#endif
+
+	ZEND_ARG_OBJ_TYPE_MASK(0, matte_color, ImagickPixel, MAY_BE_STRING, NULL)
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, width)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, height)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, inner_bevel, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, inner_bevel)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, outer_bevel, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, outer_bevel)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, composite, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, composite)
+#endif
+ZEND_END_ARG_INFO()
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -5698,6 +5739,9 @@ ZEND_METHOD(Imagick, flopImage);
 ZEND_METHOD(Imagick, forwardFourierTransformImage);
 #endif
 ZEND_METHOD(Imagick, frameImage);
+#if MagickLibVersion >= 0x700
+ZEND_METHOD(Imagick, frameImageWithComposite);
+#endif
 ZEND_METHOD(Imagick, fxImage);
 ZEND_METHOD(Imagick, gammaImage);
 ZEND_METHOD(Imagick, gaussianBlurImage);
@@ -6380,6 +6424,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, forwardFourierTransformImage, arginfo_class_Imagick_forwardFourierTransformImage, ZEND_ACC_PUBLIC)
 #endif
 	ZEND_ME(Imagick, frameImage, arginfo_class_Imagick_frameImage, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
+	ZEND_ME(Imagick, frameImageWithComposite, arginfo_class_Imagick_frameImageWithComposite, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, fxImage, arginfo_class_Imagick_fxImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, gammaImage, arginfo_class_Imagick_gammaImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, gaussianBlurImage, arginfo_class_Imagick_gaussianBlurImage, ZEND_ACC_PUBLIC)

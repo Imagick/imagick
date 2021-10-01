@@ -8,15 +8,19 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
-$color = 'rgb(127, 127, 127)';
-$width = 5;
-$height = 5;
-$innerBevel = 3;
-$outerBevel = 3;
+//$color = 'rgb(127, 127, 127)';
+
+$color = 'rgba(255,0,255,50)';
+//$color = 'rgb(255,0,255)';
+$width = 40;
+$height = 40;
+$innerBevel = 10;
+$outerBevel = 10;
 
 function frameImage($color, $width, $height, $innerBevel, $outerBevel) {
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
+    $imagick->setImageFormat('png');
 
     $width = $width + $innerBevel + $outerBevel;
     $height = $height + $innerBevel + $outerBevel;
@@ -29,10 +33,15 @@ function frameImage($color, $width, $height, $innerBevel, $outerBevel) {
         $outerBevel
     );
     $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
+    if (strlen($bytes) <= 0) {
+        echo "Failed to generate image.";
+    }
+    return $imagick;
 }
 
-frameImage($color, $width, $height, $innerBevel, $outerBevel) ;
+$imagick = frameImage($color, $width, $height, $innerBevel, $outerBevel) ;
+// $imagick->writeImage("frame_image.png");
+
 echo "Ok";
 ?>
 --EXPECTF--
