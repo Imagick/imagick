@@ -43,29 +43,37 @@ zend_bool php_imagick_is_virtual_format(const char *format)
 	int i, elements;
 
 	const char *virtual_fmt[] = {
-		"CAPTION",
 		"CANVAS",
+		"CAPTION",
 		"CLIPBOARD",
 		"FRACTAL",
 		"GRADIENT",
+		"GRANITE",
+		"HALD",  // Identity Hald CLUT Image	Select levels like this: hald:[8] for level 8.
+		"INLINE", // Base64-encoded inline image
 		"LABEL",
+		"LOGO",
+		"MAGICK",
+		"MAP", // Colormap intensities and indices	Set -depth to set the sample size of the intensities; indices are 16-bit if colors > 256.
+		"MASK",	// Image mask
 		"MATTE",
+		"NETSCAPE",
 		"NULL",
+		"PANGO",	// Image caption
 		"PLASMA",
 		"PRINT",
-		"SCAN",
 		"RADIAL-GRADIENT",
+		"RADIAL_GRADIENT",
+		"ROSE"
+		"SCAN",
 		"SCANX",
+		"TILE",	 // Tiled image
+		"UNIQUE",
 		"WIN",
 #ifndef PHP_WIN32
 		"X",
 #endif
 		"XC",
-		"MAGICK",
-		"GRANITE",
-		"LOGO",
-		"NETSCAPE",
-		"ROSE"
 	};
 
 	elements = sizeof (virtual_fmt) / sizeof (virtual_fmt [0]);
