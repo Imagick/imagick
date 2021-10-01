@@ -151,6 +151,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="075_Imagick_floodFillPaintImage_basic.phpt" role="test" />
 				<file name="076_Imagick_fxImage_basic.phpt" role="test" />
 				<file name="077_Imagick_frameImage_basic.phpt" role="test" />
+				<file name="077_Imagick_frameImage_im7.phpt" role="test" />
 				<file name="078_Imagick_gammaImage_basic.phpt" role="test" />
 				<file name="079_Imagick_getImageGeometry_basic.phpt" role="test" />
 				<file name="080_Imagick_gaussianBlurImage_basic.phpt" role="test" />
