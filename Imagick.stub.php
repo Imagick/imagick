@@ -744,7 +744,18 @@ class Imagick
 #endif
 #endif
 
-    public function borderImage(ImagickPixel|string $border_color, int $width, int $height): bool  {}
+    public function borderImage(
+        ImagickPixel|string $border_color,
+        int $width,
+        int $height
+    ): bool  {}
+
+    public function borderImageWithComposite(
+        ImagickPixel|string $border_color,
+        int $width,
+        int $height,
+        int $composite = null // COMPOSITE_ // null rather than OverCompositeOp as we don't control the value
+    ): bool  {}
 
     public static function calculateCrop(
         int $original_width,

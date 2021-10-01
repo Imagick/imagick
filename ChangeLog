@@ -1,6 +1,11 @@
 
-3.x.y
+3.6.0RC1
   - Imagick::getImageInterlaceScheme is undeprecated. It's the appropriate function to call to get the image interlace setting.
+  - Image formats are now normalised to lower case.
+- Fixes:
+  * Imagick::borderImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick>7
+- Added:
+  * Imagick::borderImageWithComposite() same as Imagick::borderImage() but allows user to set composite operator used.
 
 3.5.1
   - No change from 3.5.1RC1

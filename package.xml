@@ -112,6 +112,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="037_Imagick_blurImage_basic.phpt" role="test" />
 				<file name="038_Imagick_brightnessContrastImage_basic.phpt" role="test" />
 				<file name="039_Imagick_borderImage_basic.phpt" role="test" />
+				<file name="039_Imagick_borderImage_im7.phpt" role="test" />
 				<file name="040_Imagick_charcoalImage_basic.phpt" role="test" />
 				<file name="041_Imagick_chopImage_basic.phpt" role="test" />
 				<file name="042_Imagick_clutImage_basic.phpt" role="test" />

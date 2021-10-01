@@ -3258,6 +3258,35 @@ ZEND_END_ARG_INFO()
 
 
 #if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 3, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_borderImageWithComposite, 0, 0, 3)
+#endif
+
+	ZEND_ARG_OBJ_TYPE_MASK(0, border_color, ImagickPixel, MAY_BE_STRING, NULL)
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, width)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, height)
+#endif
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, composite, IS_LONG, 0, "null")
+#else
+    ZEND_ARG_INFO(0, composite)
+#endif
+
+ZEND_END_ARG_INFO()
+
+
+#if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_calculateCrop, 0, 4, IS_ARRAY, 0)
 #else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_calculateCrop, 0, 0, 4)
@@ -5630,6 +5659,7 @@ ZEND_METHOD(Imagick, affineTransformImage);
 ZEND_METHOD(Imagick, averageImages);
 #endif
 ZEND_METHOD(Imagick, borderImage);
+ZEND_METHOD(Imagick, borderImageWithComposite);
 ZEND_METHOD(Imagick, calculateCrop);
 ZEND_METHOD(Imagick, chopImage);
 ZEND_METHOD(Imagick, clipImage);
@@ -6308,6 +6338,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, averageImages, arginfo_class_Imagick_averageImages, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
 #endif
 	ZEND_ME(Imagick, borderImage, arginfo_class_Imagick_borderImage, ZEND_ACC_PUBLIC)
+	ZEND_ME(Imagick, borderImageWithComposite, arginfo_class_Imagick_borderImageWithComposite, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, calculateCrop, arginfo_class_Imagick_calculateCrop, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_ME(Imagick, chopImage, arginfo_class_Imagick_chopImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, clipImage, arginfo_class_Imagick_clipImage, ZEND_ACC_PUBLIC)

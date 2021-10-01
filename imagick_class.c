@@ -10437,11 +10437,6 @@ PHP_METHOD(Imagick, borderImage)
 	im_long width, height;
 	PixelWand *color_wand;
 	zend_bool allocated;
-	
-#if MagickLibVersion >= 0x700
-	//TODO - understand and allow compose to be set.
-	CompositeOperator compose = AtopCompositeOp; 
-#endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll", &param, &width, &height) == FAILURE) {
 		return;
@@ -10456,8 +10451,8 @@ PHP_METHOD(Imagick, borderImage)
 	if (!color_wand)
 		return;
 
-#if MagickLibVersion >= 0x700 
-	status = MagickBorderImage(intern->magick_wand, color_wand, width, height, compose);
+#if MagickLibVersion >= 0x700
+	status = MagickBorderImage(intern->magick_wand, color_wand, width, height, OverCompositeOp);
 #else
 	status = MagickBorderImage(intern->magick_wand, color_wand, width, height);
 #endif
@@ -10474,6 +10469,53 @@ PHP_METHOD(Imagick, borderImage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::borderImageWithComposite(ImagickPixel bordercolor, int width, int height, int composite)
+	Surrounds the image with a border of the color defined by the bordercolor pixel wand, or does a similar action with the composite operator supplied.
+
+	MagickBorderImage only allows you to set the composite operator in > IM7
+*/
+PHP_METHOD(Imagick, borderImageWithComposite)
+{
+	zval *param;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long width, height;
+	PixelWand *color_wand;
+	zend_bool allocated;
+	zend_long composite = OverCompositeOp;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll|l", &param, &width, &height, &composite) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
+	if (!color_wand)
+		return;
+
+	status = MagickBorderImage(intern->magick_wand, color_wand, width, height, composite);
+
+	if (allocated)
+		color_wand = DestroyPixelWand (color_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to border image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+#endif
 
 /* {{{ proto bool Imagick::thresholdImage(float threshold[, int channel] )
 	Changes the value of individual pixels based on the intensity of each pixel compared to threshold.  The result is a high-contrast, two color image.
