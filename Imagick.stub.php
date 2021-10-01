@@ -1040,7 +1040,7 @@ class Imagick
     // PREVIEW_*
     public function previewImages(int $preview): bool  {}
 
-    public function profileImage(string $name, string $profile): bool  {}
+    public function profileImage(string $name, ?string $profile): bool  {}
 
     public function  quantizeImage(
         int $number_colors,

@@ -4223,7 +4223,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_profileImage, 0, 0, 2)
 #endif
 	
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, profile, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, profile, IS_STRING, 1)
 #else
     ZEND_ARG_INFO(0, profile)
 #endif
@@ -4470,7 +4470,26 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageInterlaceScheme, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_setImageProfile arginfo_class_Imagick_profileImage
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageProfile, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageProfile, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+#else
+    ZEND_ARG_INFO(0, name)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, profile, IS_STRING, 0)
+#else
+    ZEND_ARG_INFO(0, profile)
+#endif
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_setImageRedPrimary arginfo_class_Imagick_setImageBluePrimary
 

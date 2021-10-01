@@ -5085,7 +5085,7 @@ PHP_METHOD(Imagick, previewImages)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::profileImage(string name,string profile)
+/* {{{ proto bool Imagick::profileImage(string name, string|null profile)
 	Adds or removes a ICC, IPTC, or generic profile from an image.  If the profile is NULL, it is removed from the image otherwise added.  Use a name of '*' and a profile of NULL to remove all profiles from the image.
 */
 PHP_METHOD(Imagick, profileImage)
@@ -5096,7 +5096,7 @@ PHP_METHOD(Imagick, profileImage)
 	MagickBooleanType status;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &name, &name_len, &profile, &profile_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss!", &name, &name_len, &profile, &profile_len) == FAILURE) {
 		return;
 	}
 
