@@ -306,44 +306,28 @@ class Imagick
 #endif
 
 #if MagickLibVersion > 0x645
-    /**
-     * @param int $x
-     * @param int $y
-     * @param int $width
-     * @param int $height
-     * @param string $map
-     * @param int $pixelstorage // PIXELSTORAGE
-     * @param array $pixels
-     * @return bool
-     */
     public function importImagePixels(
         int $x,
         int $y,
         int $width,
         int $height,
         string $map,
-        int $pixelstorage,
+        int $pixelstorage, // PIXELSTORAGE
         array $pixels): bool {}
 
     public function deskewImage(float $threshold): bool  {}
 
-    /**
-     * @param int $colorspace // COLORSPACE
-     * @param float $cluster_threshold
-     * @param float $smooth_threshold
-     * @param bool $verbose
-     * @return bool
-     */
+
     public function segmentImage(
-        int $colorspace,
+        int $colorspace, // COLORSPACE
         float $cluster_threshold,
         float $smooth_threshold,
         bool $verbose = false
     ): bool  {}
 
-    // SPARSECOLORMETHOD_*
+
     public function sparseColorImage(
-        int $sparsecolormethod,
+        int $sparsecolormethod, // SPARSECOLORMETHOD_*
         array $arguments,
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool {}
@@ -357,22 +341,13 @@ class Imagick
 #endif
 
 #if MagickLibVersion > 0x646
-    /**
-     * @param int $x
-     * @param int $y
-     * @param int $width
-     * @param int $height
-     * @param string $map e.g. "RGB"
-     * @param int $pixelstorage // PIXELSTORAGE
-     * @return array
-     */
     public function exportImagePixels(
         int $x,
         int $y,
         int $width,
         int $height,
-        string $map,
-        int $pixelstorage
+        string $map, // e.g. "RGB"
+        int $pixelstorage // PIXELSTORAGE
     ): array {}
 #endif
 
@@ -403,15 +378,15 @@ class Imagick
 
 #if MagickLibVersion > 0x656
     /**
-     * @param string $artifact example 'compose:args'
-     * @return string
+     *  $artifact example 'compose:args'
+     *
      */
     public function getImageArtifact(string $artifact): string  {}
 
     /**
-     * @param string $artifact example 'compose:args'
-     * @param string $value example  "1,0,-0.5,0.5"
-     * @return bool
+     * $artifact example 'compose:args'
+     * $value example  "1,0,-0.5,0.5"
+     *
      */
     public function setImageArtifact(string $artifact, string $value): bool  {}
 
@@ -568,21 +543,12 @@ class Imagick
     public function getImageColors(): int  {}
 
 
-
-    /**
-     * @param ImagickDraw $settings
-     * @param string $tile_geometry  e.g. "3x2+0+0"
-     * @param string $thumbnail_geometry e.g. "200x160+3+3>"
-     * @param int $monatgemode // MONTAGEMODE_
-     * @param string $frame // "10x10+2+2"
-     * @return Imagick
-     */
     public function montageImage(
         ImagickDraw $settings,
-        string $tile_geometry,
-        string $thumbnail_geometry,
-        int $monatgemode,
-        string $frame
+        string $tile_geometry, // e.g. "3x2+0+0"
+        string $thumbnail_geometry, // e.g. "200x160+3+3>"
+        int $monatgemode, // MONTAGEMODE_
+        string $frame // "10x10+2+2"
     ): Imagick {}
 
     public function identifyImage(bool $append_raw_output = false): array  {}
@@ -1307,15 +1273,8 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
 #if MagickLibVersion >= 0x680
 
-    /**
-     * @param int $morphology MORPHOLOGY_*
-     * @param int $iterations
-     * @param ImagickKernel $kernel
-     * @param int $channel
-     * @return bool
-     */
     public function morphology(
-        int $morphology,
+        int $morphology, // MORPHOLOGY_*
         int $iterations,
         ImagickKernel $kernel,
         int $channel = Imagick::CHANNEL_DEFAULT
@@ -1335,7 +1294,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
 #if MagickLibVersion > 0x676
     /**
-     * @param string $color_correction_collection
+     * $color_correction_collection example:
      * <ColorCorrectionCollection xmlns="urn:ASC:CDL:v1.2">
      * <ColorCorrection id="cc03345">
      * <SOPNode>
@@ -1349,7 +1308,6 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
      * </ColorCorrection>
      * </ColorCorrectionCollection>
      *
-     * @return bool
      */
     public function colorDecisionListImage(string $color_correction_collection): bool {}
 #endif

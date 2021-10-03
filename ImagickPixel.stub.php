@@ -23,8 +23,8 @@ class ImagickPixel
     public function getColorValue(int $color): float {}
 
     /**
-     * @param int $color // COLOR_*
-     * @return mixed
+     * $color // COLOR_*
+     * return
      * - Float if IM compiled with HDRI
      * - int if IM compiled with fixed point math
      */
@@ -57,9 +57,8 @@ class ImagickPixel
     public function setColorValue(int $color, float $value): bool {}
 
     /**
-     * @param int $color // COLOR_*
-     * @param mixed $value
-     * @return bool
+     * $color // COLOR_*
+     * $value
      *
      * Type of value depends on how ImageMagick was compiled.
      * - Float if IM compiled with HDRI

@@ -57,8 +57,7 @@ class ImagickDraw
     public function setFontStyle(int $style): bool {}
 
     /**
-     * @param int $weight font weight (valid range 100-900)
-     * @return bool
+     * $weight font weight (valid range 100-900)
      */
     public function setFontWeight(int $weight): bool {}
 
