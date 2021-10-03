@@ -16,10 +16,32 @@ imagemagick_fetch_and_build () {
 
     case $version in
         git7)
-          echo "git7 cannot be cached"
+#          echo "git7 cannot be cached"
+          if [! -d "${im_dir}" ]; then
+            echo "No cache available. Need to download and compile IM from scratch."
+          else
+            if [ "$(( $(date +"%s") - $(stat -c "%Y" ${im_dir}) ))" -gt "7200" ]; then
+              echo "cache directory is greater than two hours old, don't use"
+            else
+              echo "Using cached directory ${im_dir}"
+              ls -l ${im_dir}
+              return
+            fi
+          fi
             ;;
         git6)
-          echo "git6 cannot be cached"
+#          echo "git6 cannot be cached"
+          if [! -d "${im_dir}" ]; then
+            echo "No cache available. Need to download and compile IM from scratch."
+          else
+            if [ "$(( $(date +"%s") - $(stat -c "%Y" ${im_dir}) ))" -gt "7200" ]; then
+              echo "cache directory is greater than two hours old, don't use"
+            else
+              echo "Using cached directory ${im_dir}"
+              ls -l ${im_dir}
+              return
+            fi
+          fi
             ;;
         dev)
             ;;
@@ -48,10 +70,10 @@ imagemagick_fetch_and_build () {
         tar xvfz ImageMagick-6.tar.gz
         cd ImageMagick6-main
         ;;
-    dev)
-        svn co https://www.imagemagick.org/subversion/ImageMagick/branches/ImageMagick-6/ imagemagick-dev
-        cd imagemagick-dev
-        ;;
+#    dev)
+#        svn co https://www.imagemagick.org/subversion/ImageMagick/branches/ImageMagick-6/ imagemagick-dev
+#        cd imagemagick-dev
+#        ;;
     *)
         set +e
         #this can error
