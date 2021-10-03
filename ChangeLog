@@ -4,6 +4,7 @@
   - Image formats are now normalised to lower case.
 - Fixes:
   * Imagick::borderImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick>7
+  * Imagick::profileImage() fixed to allow null as second paramter again. If you can't upgrade to this version yet, pass in "", which has the same effect.
 - Added:
   * Imagick::borderImageWithComposite() same as Imagick::borderImage() but allows user to set composite operator used.
 
