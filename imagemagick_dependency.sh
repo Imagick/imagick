@@ -17,7 +17,7 @@ imagemagick_fetch_and_build () {
     case $version in
         git7)
 #          echo "git7 cannot be cached"
-          if [! -d "${im_dir}" ]; then
+          if [[ ! -d "${im_dir}" ]]; then
             echo "No cache available. Need to download and compile IM from scratch."
           else
             if [ "$(( $(date +"%s") - $(stat -c "%Y" ${im_dir}) ))" -gt "7200" ]; then
@@ -31,7 +31,7 @@ imagemagick_fetch_and_build () {
             ;;
         git6)
 #          echo "git6 cannot be cached"
-          if [! -d "${im_dir}" ]; then
+          if [[ ! -d "${im_dir}" ]]; then
             echo "No cache available. Need to download and compile IM from scratch."
           else
             if [ "$(( $(date +"%s") - $(stat -c "%Y" ${im_dir}) ))" -gt "7200" ]; then
