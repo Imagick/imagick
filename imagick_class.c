@@ -38,7 +38,8 @@ PHP_METHOD(Imagick, pingImageFile)
 	php_stream *stream;
 	zend_bool result;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE)
+	{
 		return;
 	}
 
@@ -3753,7 +3754,8 @@ PHP_METHOD(Imagick, readImageFile)
 	zend_bool result;
 	php_stream *stream;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE)
+	{
 		return;
 	}
 

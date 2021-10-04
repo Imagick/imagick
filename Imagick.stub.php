@@ -12,7 +12,9 @@ class Imagick
 
     public function pingImageBlob(string $image): bool  {}
 
-    public function pingImageFile(resource $filehandle, ?string $filename = null): bool  {}
+    // $filehandle should be a resource, but that is a pseudo-type
+    // which causes problems for people trying to mock the class
+    public function pingImageFile(/*resource*/mixed $filehandle, ?string $filename = null): bool  {}
 
     public function transposeImage(): bool  {}
 
@@ -195,9 +197,13 @@ class Imagick
     // DISTORTION_*
     public function distortImage(int $distortion, array $arguments, bool $bestfit): bool  {}
 
-    public function writeImageFile(resource $filehandle, ?string $format = null): bool  {}
+    // $filehandle should be a resource, but that is a pseudo-type
+    // which causes problems for people trying to mock the class
+    public function writeImageFile(/*resource*/mixed $filehandle, ?string $format = null): bool  {}
 
-    public function writeImagesFile(resource $filehandle, ?string $format = null): bool  {}
+    // $filehandle should be a resource, but that is a pseudo-type
+    // which causes problems for people trying to mock the class
+    public function writeImagesFile(/*resource*/mixed $filehandle, ?string $format = null): bool  {}
 
     public function resetImagePage(string $page): bool  {}
 
@@ -659,7 +665,9 @@ class Imagick
 
     public function pingImage(string $filename): bool  {}
 
-    public function readImageFile(resource $filehandle, ?string $filename = null): bool  {}
+    // $filehandle should be a resource, but that is a pseudo-type
+    // which causes problems for people trying to mock the class
+    public function readImageFile(/*resource*/mixed $filehandle, ?string $filename = null): bool  {}
 
     public function displayImage(string $servername): bool  {}
 

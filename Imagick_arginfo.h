@@ -55,13 +55,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_pingImageFile, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_pingImageFile, 0, 0, 1)
 #endif
 
-
+	
 #if PHP_VERSION_ID >= 80000
-	ZEND_ARG_OBJ_INFO(0, filehandle, resource, 0)
+    ZEND_ARG_TYPE_INFO(0, filehandle, IS_MIXED, 0)
 #else
-	ZEND_ARG_INFO(0, filehandle)
+    ZEND_ARG_INFO(0, filehandle)
 #endif
-
 
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
@@ -851,13 +850,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_writeImageFile, 0,
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_writeImageFile, 0, 0, 1)
 #endif
 
-
+	
 #if PHP_VERSION_ID >= 80000
-	ZEND_ARG_OBJ_INFO(0, filehandle, resource, 0)
+    ZEND_ARG_TYPE_INFO(0, filehandle, IS_MIXED, 0)
 #else
-	ZEND_ARG_INFO(0, filehandle)
+    ZEND_ARG_INFO(0, filehandle)
 #endif
-
 
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 1, "null")
@@ -3045,13 +3043,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_readImageFile, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_readImageFile, 0, 0, 1)
 #endif
 
-
+	
 #if PHP_VERSION_ID >= 80000
-	ZEND_ARG_OBJ_INFO(0, filehandle, resource, 0)
+    ZEND_ARG_TYPE_INFO(0, filehandle, IS_MIXED, 0)
 #else
-	ZEND_ARG_INFO(0, filehandle)
+    ZEND_ARG_INFO(0, filehandle)
 #endif
-
 
 #if PHP_VERSION_ID >= 80000
     ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, filename, IS_STRING, 1, "null")
