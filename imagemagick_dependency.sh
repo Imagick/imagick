@@ -21,7 +21,8 @@ imagemagick_fetch_and_build () {
             echo "No cache available. Need to download and compile IM from scratch."
           else
             if [ "$(( $(date +"%s") - $(stat -c "%Y" ${im_dir}) ))" -gt "7200" ]; then
-              echo "cache directory is greater than two hours old, don't use"
+              echo "cache directory is greater than two hours old, remove and don't use"
+              rm -rf {im_dir}
             else
               echo "Using cached directory ${im_dir}"
               ls -l ${im_dir}
@@ -35,7 +36,8 @@ imagemagick_fetch_and_build () {
             echo "No cache available. Need to download and compile IM from scratch."
           else
             if [ "$(( $(date +"%s") - $(stat -c "%Y" ${im_dir}) ))" -gt "7200" ]; then
-              echo "cache directory is greater than two hours old, don't use"
+              echo "cache directory is greater than two hours old, remove and don't use"
+              rm -rf {im_dir}
             else
               echo "Using cached directory ${im_dir}"
               ls -l ${im_dir}
