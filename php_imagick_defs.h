@@ -1182,13 +1182,13 @@ PHP_METHOD(imagickkernel, addunitykernel);
 #endif
 
 
-// TODO - delete the constant define.
-// Leaving this comment in, as I can't currently remember why it was
-// needed in the first place, which makes me nervous.
-//#if MagickLibVersion >= 0x700
-//#define IM_DEFAULT_CHANNEL UndefinedChannel
-//#else
+// This is defined as 'UndefinedChannel' so that when the functions go through
+// the shim functions in shim_im6_to_im7.c I can check for whether the user actually
+// set the channel or not.
+#if MagickLibVersion >= 0x700
+#define IM_DEFAULT_CHANNEL UndefinedChannel
+#else
 #define IM_DEFAULT_CHANNEL DefaultChannels
-// #endif
+#endif
 
 #endif /* PHP_IMAGICK_DEFS_H */
