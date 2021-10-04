@@ -1181,10 +1181,14 @@ PHP_METHOD(imagickkernel, addunitykernel);
 #define KernelValueType MagickRealType
 #endif
 
-#if MagickLibVersion >= 0x700
-#define IM_DEFAULT_CHANNEL UndefinedChannel
-#else
+
+// TODO - delete the constant define.
+// Leaving this comment in, as I can't currently remember why it was
+// needed in the first place, which makes me nervous.
+//#if MagickLibVersion >= 0x700
+//#define IM_DEFAULT_CHANNEL UndefinedChannel
+//#else
 #define IM_DEFAULT_CHANNEL DefaultChannels
-#endif
+// #endif
 
 #endif /* PHP_IMAGICK_DEFS_H */
