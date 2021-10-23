@@ -293,7 +293,7 @@ class Imagick
     // CHANNEL_
     public function getImageChannelRange(int $channel): array  {}
 
-    public function getImageAlphaChannel(): int  {}
+    public function getImageAlphaChannel(): bool  {}
 #endif
 
 #if MagickLibVersion > 0x642

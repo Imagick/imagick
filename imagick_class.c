@@ -2257,8 +2257,9 @@ PHP_METHOD(Imagick, getImageChannelRange)
 }
 /* }}} */
 
-/* {{{ proto int Imagick::getImageAlphaChannel()
-	Gets the image alpha channel value
+/* {{{ proto bool Imagick::getImageAlphaChannel()
+	Returns true if the image has an alpha channel value and false if not,
+	aka the image is RGB rather than RGBA or CMYK rather than CMYKA.
 */
 PHP_METHOD(Imagick, getImageAlphaChannel)
 {
@@ -2272,7 +2273,7 @@ PHP_METHOD(Imagick, getImageAlphaChannel)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-	RETVAL_LONG(MagickGetImageAlphaChannel(intern->magick_wand));
+	RETVAL_BOOL(MagickGetImageAlphaChannel(intern->magick_wand));
 }
 /* }}} */
 #endif

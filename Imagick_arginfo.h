@@ -1230,7 +1230,14 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x639
-#define arginfo_class_Imagick_getImageAlphaChannel arginfo_class_Imagick_getGravity
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getImageAlphaChannel, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageAlphaChannel, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x642
