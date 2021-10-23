@@ -8235,8 +8235,6 @@ PHP_METHOD(Imagick, hasNextImage)
 }
 /* }}} */
 
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#if MagickLibVersion < 0x700
 /* {{{ proto int Imagick::getImageIndex()
 	Returns the index of the current active image, within the Imagick object.
 */
@@ -8245,25 +8243,23 @@ PHP_METHOD(Imagick, getImageIndex)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
-#if MagickLibVersion > 0x628
-	IMAGICK_METHOD_DEPRECATED("Imagick", "getImageindex");
-#endif
-
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
+#if MagickLibVersion >= 0x700
+	status = MagickGetIteratorIndex(intern->magick_wand);
+#else
 	status = MagickGetImageIndex(intern->magick_wand);
+#endif
+
 	ZVAL_LONG(return_value, (long)status);
 	return;
 }
 /* }}} */
-#endif // #if MagickLibVersion < 0x700
 
-
-#if MagickLibVersion < 0x700
 
 /* {{{ proto bool Imagick::setImageIndex(int index)
 	Returns the index of the current active image, within the Imagick object.
@@ -8273,10 +8269,6 @@ PHP_METHOD(Imagick, setImageIndex)
 	im_long index;
 	MagickBooleanType status;
 	php_imagick_object *intern;
-
-#if MagickLibVersion > 0x628
-	IMAGICK_METHOD_DEPRECATED("Imagick", "setImageIndex");
-#endif
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
@@ -8301,8 +8293,6 @@ PHP_METHOD(Imagick, setImageIndex)
 
 }
 /* }}} */
-#endif // #if MagickLibVersion < 0x700
-#endif
 
 /* {{{ proto bool Imagick::removeImage()
 	Removes an image from the image list.

@@ -501,15 +501,9 @@ class Imagick
 
     public function hasNextImage(): bool  {}
 
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#if MagickLibVersion < 0x700
-    /** @deprecated */
     public function setImageIndex(int $index): bool  {}
 
-    /** @deprecated */
     public function getImageIndex(): int  {}
-#endif
-#endif
 
     public function commentImage(string $comment): bool  {}
 
