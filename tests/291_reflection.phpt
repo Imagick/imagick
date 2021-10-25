@@ -10,8 +10,11 @@ $class_list = [
     'ImagickDraw',
     'ImagickPixel',
     'ImagickPixelIterator',
-    'ImagickKernel'
 ];
+
+if (class_exists('ImagickKernel') === true) {
+    $class_list[] = 'ImagickKernel';
+}
 
 foreach ($class_list as $class) {
     $rc = new ReflectionClass($class);
