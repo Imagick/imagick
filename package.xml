@@ -354,6 +354,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="289_Imagick_setImageMask_basic.phpt" role="test" />
 				<file name="290_imagick_profileimage.phpt" role="test" />
 				<file name="291_reflection.phpt" role="test" />
+				<file name="292_index_iterator.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
