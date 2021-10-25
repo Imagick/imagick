@@ -802,12 +802,8 @@ class Imagick
 
 #endif
 
-#if MagickLibVersion < 0x700
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-    /** @deprecated */
     public function flattenImages(): Imagick  {}
-#endif
-#endif
+
     public function flipImage(): bool  {}
 
     public function flopImage(): bool  {}

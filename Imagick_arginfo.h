@@ -3573,9 +3573,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_evaluateImages, 0, 0, 1)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#define arginfo_class_Imagick_flattenImages arginfo_class_Imagick_mosaicImages
-#endif
+#define arginfo_class_Imagick_flattenImages arginfo_class_Imagick_clone
 
 #define arginfo_class_Imagick_flipImage arginfo_class_Imagick_removeImage
 
@@ -5745,9 +5743,7 @@ ZEND_METHOD(Imagick, evaluateImage);
 #if MagickLibVersion >= 0x687
 ZEND_METHOD(Imagick, evaluateImages);
 #endif
-#if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 ZEND_METHOD(Imagick, flattenImages);
-#endif
 ZEND_METHOD(Imagick, flipImage);
 ZEND_METHOD(Imagick, flopImage);
 #if MagickLibVersion >= 0x655
@@ -6426,9 +6422,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion >= 0x687
 	ZEND_ME(Imagick, evaluateImages, arginfo_class_Imagick_evaluateImages, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-	ZEND_ME(Imagick, flattenImages, arginfo_class_Imagick_flattenImages, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
-#endif
+	ZEND_ME(Imagick, flattenImages, arginfo_class_Imagick_flattenImages, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, flipImage, arginfo_class_Imagick_flipImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, flopImage, arginfo_class_Imagick_flopImage, ZEND_ACC_PUBLIC)
 #if MagickLibVersion >= 0x655

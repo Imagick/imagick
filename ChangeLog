@@ -2,7 +2,9 @@
 3.6.0RC1
   - Imagick::getImageInterlaceScheme is undeprecated. It's the appropriate function to call to get the image interlace setting.
   - Image formats are now normalised to lower case.
-  - Imagick::getImageIndex and Imagick::setImageIndex and undeprecated and work on ImageMagick 7
+  - Imagick::getImageIndex and Imagick::setImageIndex and undeprecated and work on ImageMagick 7. They call MagickGetIteratorIndex and MagickSetIteratorIndex internally.
+  - Imagick::flattenImages is undeprecated. For IM 7 it now calls MagickMergeImageLayers(intern->magick_wand, FlattenLayer); internally.
+
 - Fixes:
   * Imagick::borderImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick>7
   * Imagick::profileImage() fixed to allow null as second paramter again. If you can't upgrade to this version yet, pass in "", which has the same effect.

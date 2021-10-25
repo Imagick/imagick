@@ -9192,8 +9192,6 @@ PHP_METHOD(Imagick, compareImageLayers)
 /* }}} */
 #endif
 
-#if MagickLibVersion < 0x700
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto Imagick Imagick::flattenImages()
 	Merges a sequence of images.  This is useful for combining Photoshop layers into a single image.
 */
@@ -9201,8 +9199,6 @@ PHP_METHOD(Imagick, flattenImages)
 {
 	php_imagick_object *intern, *intern_return;
 	MagickWand *tmp_wand;
-
-	IMAGICK_METHOD_DEPRECATED ("Imagick", "flattenImages");
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -9212,11 +9208,14 @@ PHP_METHOD(Imagick, flattenImages)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
-
 	/* TODO: SHOULD THIS BE HERE? */
-	MagickSetFirstIterator(intern->magick_wand);
+	(void)MagickSetFirstIterator(intern->magick_wand);
 
+#if MagickLibVersion >= 0x700
+	tmp_wand = MagickMergeImageLayers(intern->magick_wand, FlattenLayer);
+#else
 	tmp_wand = MagickFlattenImages(intern->magick_wand);
+#endif
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Flatten images failed" TSRMLS_CC);
@@ -9230,8 +9229,7 @@ PHP_METHOD(Imagick, flattenImages)
 	return;
 }
 /* }}} */
-#endif
-#endif
+
 
 /* {{{ proto bool Imagick::flipImage()
 	Creates a vertical mirror image by reflecting the pixels around the central x-axis.
