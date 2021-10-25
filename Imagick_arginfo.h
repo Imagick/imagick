@@ -2886,7 +2886,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageIterations, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#if MagickLibVersion < 0x700
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageMatteColor, 0, 1, _IS_BOOL, 0)
@@ -2896,7 +2895,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageMatteColor, 0, 0, 1)
 
 	ZEND_ARG_OBJ_TYPE_MASK(0, matte_color, ImagickPixel, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
-#endif
 
 #define arginfo_class_Imagick_setImagePage arginfo_class_Imagick_cropImage
 
@@ -5664,9 +5662,7 @@ ZEND_METHOD(Imagick, setImageDelay);
 ZEND_METHOD(Imagick, setImageDepth);
 ZEND_METHOD(Imagick, setImageGamma);
 ZEND_METHOD(Imagick, setImageIterations);
-#if MagickLibVersion < 0x700
 ZEND_METHOD(Imagick, setImageMatteColor);
-#endif
 ZEND_METHOD(Imagick, setImagePage);
 ZEND_METHOD(Imagick, setImageProgressMonitor);
 #if MagickLibVersion > 0x653
@@ -6340,9 +6336,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, setImageDepth, arginfo_class_Imagick_setImageDepth, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageGamma, arginfo_class_Imagick_setImageGamma, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageIterations, arginfo_class_Imagick_setImageIterations, ZEND_ACC_PUBLIC)
-#if MagickLibVersion < 0x700
-	ZEND_ME(Imagick, setImageMatteColor, arginfo_class_Imagick_setImageMatteColor, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
-#endif
+	ZEND_ME(Imagick, setImageMatteColor, arginfo_class_Imagick_setImageMatteColor, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImagePage, arginfo_class_Imagick_setImagePage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageProgressMonitor, arginfo_class_Imagick_setImageProgressMonitor, ZEND_ACC_PUBLIC)
 #if MagickLibVersion > 0x653

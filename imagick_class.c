@@ -2090,6 +2090,9 @@ PHP_METHOD(Imagick, setImageAlphaChannel)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+	// TODO - allegedly only
+	// ActivateAlphaChannel, DeactivateAlphaChannel, OpaqueAlphaChannel, or SetAlphaChannel.
+	// should be allowed?
 	status = MagickSetImageAlphaChannel(intern->magick_wand, alpha_channel);
 
 	if (status == MagickFalse) {
@@ -9666,7 +9669,6 @@ PHP_METHOD(Imagick, setImageIterations)
 }
 /* }}} */
 
-#if MagickLibVersion < 0x700
 /* {{{ proto bool Imagick::setImageMatteColor(ImagickPixel matte)
 	Sets the image matte color.
 */
@@ -9705,7 +9707,6 @@ PHP_METHOD(Imagick, setImageMatteColor)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif //#if MagickLibVersion < 0x700
 
 /* {{{ proto bool Imagick::setImagePage(int width, int height, int x, int y)
 	Sets the page geometry of the image.
