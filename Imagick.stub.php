@@ -475,13 +475,8 @@ class Imagick
     public function clear(): bool  {}
 
     public function clone(): Imagick  {}
-        
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#if MagickLibVersion < 0x700
-    /** @deprecated */
+
     public function getImageSize(): int  {}
-#endif
-#endif
 
     public function getImageBlob(): string  {}
 

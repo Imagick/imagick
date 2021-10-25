@@ -2072,7 +2072,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_clone, 0, 0, 0)
 
 ZEND_END_ARG_INFO()
 
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED) && MagickLibVersion < 0x700
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getImageSize, 0, 0, IS_LONG, 0)
@@ -2081,7 +2080,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageSize, 0, 0, 0)
 #endif
 
 ZEND_END_ARG_INFO()
-#endif
 
 #define arginfo_class_Imagick_getImageBlob arginfo_class_Imagick___toString
 
@@ -2123,14 +2121,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageIndex, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getImageIndex, 0, 0, IS_LONG, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageIndex, 0, 0, 0)
-#endif
-
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_getImageIndex arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -2229,7 +2220,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageCompressionQuality, 0, 0, 1
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_getImageCompressionQuality arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageCompressionQuality arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -2246,7 +2237,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageCompression, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_getImageCompression arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageCompression arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -2338,7 +2329,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_modulateImage, 0, 0, 3)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_getImageColors arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageColors arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -3822,13 +3813,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageColormapColor, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_getImageColorspace arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageColorspace arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageCompose arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageCompose arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageDelay arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageDelay arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageDepth arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageDepth arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -3857,7 +3848,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageExtrema, 0, 0, 0)
 ZEND_END_ARG_INFO()
 #endif
 
-#define arginfo_class_Imagick_getImageDispose arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageDispose arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -3870,13 +3861,13 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getImageGreenPrimary arginfo_class_Imagick_getImageGeometry
 
-#define arginfo_class_Imagick_getImageHeight arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageHeight arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getImageHistogram arginfo_class_Imagick_getImageGeometry
 
-#define arginfo_class_Imagick_getImageInterlaceScheme arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageInterlaceScheme arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageIterations arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageIterations arginfo_class_Imagick_getImageSize
 
 #if MagickLibVersion < 0x700
 
@@ -3953,27 +3944,27 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getImageRedPrimary arginfo_class_Imagick_getImageGeometry
 
-#define arginfo_class_Imagick_getImageRenderingIntent arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageRenderingIntent arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getImageResolution arginfo_class_Imagick_getImageGeometry
 
-#define arginfo_class_Imagick_getImageScene arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageScene arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getImageSignature arginfo_class_Imagick___toString
 
-#define arginfo_class_Imagick_getImageTicksPerSecond arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageTicksPerSecond arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageType arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageType arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageUnits arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageUnits arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getImageVirtualPixelMethod arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageVirtualPixelMethod arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getImageWhitePoint arginfo_class_Imagick_getImageGeometry
 
-#define arginfo_class_Imagick_getImageWidth arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getImageWidth arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getNumberImages arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getNumberImages arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getImageTotalInkDensity arginfo_class_Imagick_getImageGamma
 
@@ -4693,9 +4684,9 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_newPseudoImage, 0, 0, 3)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_getCompression arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getCompression arginfo_class_Imagick_getImageSize
 
-#define arginfo_class_Imagick_getCompressionQuality arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getCompressionQuality arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getCopyright arginfo_class_Imagick___toString
 
@@ -4726,7 +4717,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getHomeURL arginfo_class_Imagick___toString
 
-#define arginfo_class_Imagick_getInterlaceScheme arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getInterlaceScheme arginfo_class_Imagick_getImageSize
 
 
 #if PHP_VERSION_ID >= 80000
@@ -4747,7 +4738,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getPage arginfo_class_Imagick_getImageGeometry
 
-#define arginfo_class_Imagick_getQuantum arginfo_class_Imagick_getImageIndex
+#define arginfo_class_Imagick_getQuantum arginfo_class_Imagick_getImageSize
 
 #define arginfo_class_Imagick_getHdriEnabled arginfo_class_Imagick_removeImage
 
@@ -5614,9 +5605,7 @@ ZEND_METHOD(Imagick, getImageMimeType);
 ZEND_METHOD(Imagick, removeImage);
 ZEND_METHOD(Imagick, clear);
 ZEND_METHOD(Imagick, clone);
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED) && MagickLibVersion < 0x700
 ZEND_METHOD(Imagick, getImageSize);
-#endif
 ZEND_METHOD(Imagick, getImageBlob);
 ZEND_METHOD(Imagick, getImagesBlob);
 ZEND_METHOD(Imagick, setFirstIterator);
@@ -6292,9 +6281,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_MALIAS(Imagick, destroy, clear, arginfo_class_Imagick_destroy, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, clear, arginfo_class_Imagick_clear, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, clone, arginfo_class_Imagick_clone, ZEND_ACC_PUBLIC)
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED) && MagickLibVersion < 0x700
-	ZEND_ME(Imagick, getImageSize, arginfo_class_Imagick_getImageSize, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
-#endif
+	ZEND_ME(Imagick, getImageSize, arginfo_class_Imagick_getImageSize, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, getImageBlob, arginfo_class_Imagick_getImageBlob, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, getImagesBlob, arginfo_class_Imagick_getImagesBlob, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setFirstIterator, arginfo_class_Imagick_setFirstIterator, ZEND_ACC_PUBLIC)

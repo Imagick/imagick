@@ -8352,27 +8352,34 @@ PHP_METHOD(Imagick, getImageFilename)
 }
 /* }}} */
 
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#if MagickLibVersion < 0x700
 /* {{{ proto int Imagick::getImageSize()
 	returns the image length in bytes
 */
 PHP_METHOD(Imagick, getImageSize)
 {
 	php_imagick_object *intern;
-
-	IMAGICK_METHOD_DEPRECATED_USE_INSTEAD("Imagick", "getImageSize", "Imagick", "getImageLength");
-
+#if MagickLibVersion >= 0x700
+    MagickSizeType length;
+    MagickBooleanType status;
+#endif
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion >= 0x700
+	status = MagickGetImageLength(intern->magick_wand, &length);
+	if (status == MagickFalse) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to acquire image length" TSRMLS_CC);
+		return;
+	}
+	ZVAL_LONG(return_value, (long)length);
+#else
 	ZVAL_LONG(return_value, (long)MagickGetImageSize(intern->magick_wand));
+#endif
+
 	return;
 }
 /* }}} */
-#endif
-#endif
 
 static
 zend_bool s_image_has_format (MagickWand *magick_wand)
