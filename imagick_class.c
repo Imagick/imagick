@@ -9669,6 +9669,7 @@ PHP_METHOD(Imagick, setImageIterations)
 }
 /* }}} */
 
+#if MagickLibVersion < 0x700 || MagickLibVersion >= 0x705
 /* {{{ proto bool Imagick::setImageMatteColor(ImagickPixel matte)
 	Sets the image matte color.
 */
@@ -9707,6 +9708,7 @@ PHP_METHOD(Imagick, setImageMatteColor)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif
 
 /* {{{ proto bool Imagick::setImagePage(int width, int height, int x, int y)
 	Sets the page geometry of the image.
