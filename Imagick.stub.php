@@ -618,7 +618,10 @@ class Imagick
 
     public function setImageIterations(int $iterations): bool  {}
 
+
+#if MagickLibVersion < 0x700 || MagickLibVersion >= 0x705
     public function setImageMatteColor(ImagickPixel|string $matte_color): bool  {}
+#endif
 
     public function setImagePage(int $width, int $height, int $x, int $y): bool  {}
 
