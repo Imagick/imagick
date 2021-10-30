@@ -1255,7 +1255,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     public function subimageMatch(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 
     /** @alias Imagick::subimageMatch */
-    public function similarityimage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+    public function similarityImage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
@@ -1357,4 +1357,16 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //        int $y,
 //        bool $invert,
 //        int $channel = Imagick::CHANNEL_DEFAULT): null {}
+
+
+#if MagickLibVersion >= 0x709
+    public function cannyEdgeImage(
+        float $radius,
+        float $sigma,
+        float $lower_percent,
+        float $upper_percent
+    ): bool {}
+#endif
+
+
 }

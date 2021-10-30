@@ -13226,4 +13226,43 @@ PHP_METHOD(Imagick, setImageMask)
 /* }}} */
 #endif // IM_HAVE_IMAGICK_GETSETIMAGEMASK
 
+
+
+#if MagickLibVersion >= 0x709
+/* {{{ proto void Imagick::cannyEdgeImage(float $radius, float $sigma, float $lower_percent, float $upper_percent
+*/
+PHP_METHOD(Imagick, cannyEdgeImage)
+{
+	php_imagick_object *intern;
+	double radius, sigma, lower_percent, upper_percent;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &radius, &sigma, &lower_percent, &upper_percent) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickCannyEdgeImage(
+		intern->magick_wand,
+		radius,
+		sigma,
+		lower_percent,
+		upper_percent
+	);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to cannyEdgeImage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // MagickLibVersion >= 0x709
+
 /* end of Imagick */

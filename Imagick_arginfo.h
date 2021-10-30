@@ -5043,7 +5043,7 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628 && MagickLibVersion >= 0x652
-#define arginfo_class_Imagick_similarityimage arginfo_class_Imagick_subimageMatch
+#define arginfo_class_Imagick_similarityImage arginfo_class_Imagick_subimageMatch
 #endif
 
 #if MagickLibVersion > 0x628
@@ -5300,6 +5300,41 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageMask, 0, 0, 2)
     ZEND_ARG_TYPE_INFO(0, pixelmask, IS_LONG, 0)
 #else
     ZEND_ARG_INFO(0, pixelmask)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_cannyEdgeImage, 0, 4, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_cannyEdgeImage, 0, 0, 4)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, radius)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, sigma, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, sigma)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, lower_percent, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, lower_percent)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, upper_percent, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, upper_percent)
 #endif
 ZEND_END_ARG_INFO()
 #endif
@@ -5974,6 +6009,9 @@ ZEND_METHOD(Imagick, getImageMask);
 #if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 ZEND_METHOD(Imagick, setImageMask);
 #endif
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+ZEND_METHOD(Imagick, cannyEdgeImage);
+#endif
 
 
 static const zend_function_entry class_Imagick_methods[] = {
@@ -6607,7 +6645,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, subimageMatch, arginfo_class_Imagick_subimageMatch, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x628 && MagickLibVersion >= 0x652
-	ZEND_MALIAS(Imagick, similarityimage, subimageMatch, arginfo_class_Imagick_similarityimage, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(Imagick, similarityImage, subimageMatch, arginfo_class_Imagick_similarityImage, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x628
 	ZEND_ME(Imagick, setRegistry, arginfo_class_Imagick_setRegistry, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
@@ -6659,6 +6697,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 #endif
 #if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_GETSETIMAGEMASK
 	ZEND_ME(Imagick, setImageMask, arginfo_class_Imagick_setImageMask, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+	ZEND_ME(Imagick, cannyEdgeImage, arginfo_class_Imagick_cannyEdgeImage, ZEND_ACC_PUBLIC)
 #endif
 	ZEND_FE_END
 };
