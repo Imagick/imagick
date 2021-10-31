@@ -114,4 +114,4 @@ echo "Configuring, regardless of whether IM was cached."
 
 }
 
-imagemagick_fetch_and_build $1
+imagemagick_fetch_and_build $1 $2
