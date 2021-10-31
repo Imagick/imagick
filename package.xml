@@ -368,6 +368,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="functions.inc" role="test" />
 				<file name="github_174.phpt" role="test" />
 				<file name="houghline_input_image.png" role="test" />
+				<file name="Biter_500.jpg" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
 				<file name="skipprobefourier.inc" role="test" />
