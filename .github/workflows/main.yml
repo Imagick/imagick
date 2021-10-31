@@ -19,17 +19,12 @@ jobs:
         os: [ ubuntu-latest ]
         php: [ 5.4 ]
         imagemagick: [
-            7.0.10-27,
+            7.1.0-13,
+#             7.0.10-27,
             6.9.2-0,
 #            git7,
 #            git6
         ]
-#        exclude:
-#          - php: 5.4
-#            imagemagick: 6.8.7-0
-#        allow_failures:
-#         - imagemagick: git7
-#          - imagemagick: git6
 
     steps:
       - name: Checkout code
@@ -59,8 +54,10 @@ jobs:
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
+          echo "path for enum check is ~/im/imagemagick-${{ matrix.imagemagick }}"
+          php util/check_for_missing_enums.php "~/im/imagemagick-${{ matrix.imagemagick }}"
 
-      - name: Configure and check fonts are present
+      - name: Configure, install, and basic checks
         run: |
           export NO_INTERACTION=1
           export REPORT_EXIT_STATUS=1
@@ -93,6 +90,7 @@ jobs:
         os: [ubuntu-latest]
         php: [5.4, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
         imagemagick: [
+          7.1.0-13,
           7.0.10-27,
           7.0.8-4,
           7.0.1-0,

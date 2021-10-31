@@ -35,6 +35,12 @@ $includeDir = null;
 
 $directory = realpath($pathToImageMagick);
 
+if ($directory === false) {
+    echo "Path $pathToImageMagick isn't a real path?\n";
+    exit(-1);
+}
+
+
 // IM6 checks
 if (file_exists($directory.'/'.'magick') == true) {
 	$enumToCheck = [
@@ -213,14 +219,8 @@ else {
 }
 
 
-
-
-
-
-
-
-$imagickHelperContents = file_get_contents("../imagick_helpers.c");
-
+// Read the current list of enums in Imagick
+$imagickHelperContents = file_get_contents(__DIR__ . "/../imagick_helpers.c");
 if ($imagickHelperContents == false) {
 	echo "failed to read ../imagick_helpers.c\n";
 	exit(-1);
@@ -233,6 +233,7 @@ $skipEnumList = [
 //	'PixelIntensityMethod', // Used by GrayscaleImage function that is not expose in wand api
 ];
 
+$any_missing = false;
 
 foreach ($enumToCheck as $filename => $enums) {
 	foreach ($enums as $enum) {
@@ -246,14 +247,17 @@ foreach ($enumToCheck as $filename => $enums) {
 			//echo "checking for $enumName\n";
 			if (stripos($imagickHelperContents, $enumName) === false) {
 				echo "value '$enumName' is missing for enum $enum.\n";
+				$any_missing = true;
 			}
 		}
 	}
 }
 
 
-
-
+if ($any_missing === true) {
+    exit(-1);
+}
+exit(0);
 
 function getEnumList($enum, $filename)
 {
