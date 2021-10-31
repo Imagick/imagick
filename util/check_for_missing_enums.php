@@ -23,7 +23,7 @@ else {
 
 $pathToImageMagick .= '/';
 
-
+echo "pathToImageMagick is allegedly $pathToImageMagick\n";
 
 if (file_exists($pathToImageMagick) == false || 
 	is_dir($pathToImageMagick) == false) {
@@ -39,7 +39,6 @@ if ($directory === false) {
     echo "Path $pathToImageMagick isn't a real path?\n";
     exit(-1);
 }
-
 
 // IM6 checks
 if (file_exists($directory . '/'.'magick') == true) {

@@ -53,9 +53,7 @@ jobs:
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
-          echo "path for enum check is ${HOME}/im/imagemagick-${{ matrix.imagemagick }}"
-          php util/check_for_missing_enums.php "${HOME}/im/imagemagick-${{ matrix.imagemagick }}"
+          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
 
       - name: Configure, install, and basic checks
         run: |
