@@ -85,7 +85,7 @@ $unsupportedMethods = [
 
 	// Draw
 	"DrawAllocateWand", // not a user function
-	"IsDrawingWand", //Not needed
+	"IsDrawingWand", // Not needed
 
 
     // TODO - add these when someone asks for them or they are required
@@ -112,27 +112,7 @@ $unsupportedMethods = [
     "IsPixelIterator",
     "IsWandView",
 
-
-
-
-
 ];
-
-
-//$methods = [];
-//
-//foreach ($tests as $test) {
-//	$lines = file($test."_methods.txt");
-//	if ($lines === false) {
-//		echo "Couldn't read file for $test \n";
-//		exit(-1);
-//	}
-//
-//	foreach ($lines as $line) {
-//		$methods[trim($line)] = false;
-//	}
-//}
-
 
 
 $files = glob("../*.c");
@@ -174,7 +154,8 @@ foreach ($files as $file) {
 	}
 }
 
-//exit(0);
+$any_missing = false;
+
 ksort($methods);
 foreach ($methods as $name => $found) {
 	if (in_array($name, $unsupportedMethods) == true) {
@@ -183,10 +164,16 @@ foreach ($methods as $name => $found) {
 
 	if ($found == false) {
 		echo "Missing: $name\n";
+		$any_missing = true;
 	}
 }
 
 
+if ($any_missing === true) {
+    exit(-1);
+}
+
+exit(0);
 
 
 

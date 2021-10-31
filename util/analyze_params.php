@@ -2,7 +2,9 @@
 
 declare(strict_types = 1);
 
-
+// This was used to figure out what parameters were called during the
+// update to PHP 8, as that's the time when named params became a thing,
+// and so parameter names became part of the API, mostly to spite Marco.
 $classes = [
     'Imagick',
     'ImagickDraw',
@@ -12,11 +14,9 @@ $classes = [
 
 
 foreach ($classes as $class) {
+    echo "Checking class = $class \n";
+
     $nameCounts = [];
-
-
-    echo "class = $class \n";
-
     $classReflection = new ReflectionClass($class);
     $classMethods = $classReflection->getMethods();
 
@@ -28,7 +28,6 @@ foreach ($classes as $class) {
         }
     }
 
-
     arsort($nameCounts);
 
     foreach ($nameCounts as $name => $count) {
@@ -36,6 +35,4 @@ foreach ($classes as $class) {
     }
 
     echo "\n\n";
-
 }
-

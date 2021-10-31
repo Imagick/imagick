@@ -10,12 +10,7 @@ imagemagick_fetch_and_build () {
 
     im_dir=${HOME}/im/imagemagick-${version}
 
-    echo "version is ${version}, im_dir=${im_dir}"
-
-    echo "contents of im_dir are:"
-    ls -l "${im_dir}"
-
-    echo "imagick_dir is ${imagick_dir}"
+    echo "version is ${version}, im_dir=${im_dir}, imagick_dir is ${imagick_dir}"
 
     case $version in
         git7)
