@@ -42,7 +42,7 @@ if ($directory === false) {
 
 
 // IM6 checks
-if (file_exists($directory.'/'.'magick') == true) {
+if (file_exists($directory . '/'.'magick') == true) {
 	$enumToCheck = [
 		'magick/compare.h' => [
 			'MetricType',
@@ -215,6 +215,8 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 else {
     echo "oops - couldn't figure out enums to check.\n";
     echo "Check what directories exist in $directory \n";
+    system("ls -l $directory");
+
     exit(-1);
 }
 
