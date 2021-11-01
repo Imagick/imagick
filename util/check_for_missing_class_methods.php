@@ -128,7 +128,7 @@ $todoList = [
     "MagickCLAHEImage",
     "MagickColorThresholdImage",
     "MagickComplexImages",
-    "MagickConnectedComponentsImage",
+    "MagickConnectedComponentsImage", // MagickBooleanType MagickConnectedComponentsImage(MagickWand *wand, const size_t connectivity,CCObjectInfo **objects)
     "MagickDeleteImageProperty",
     "MagickDeleteOption",
     "MagickGetBackgroundColor",

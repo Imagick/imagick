@@ -5339,6 +5339,226 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_cannyEdgeImage, 0, 0, 4)
 ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_SETSEED
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setSeed, 0, 1, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setSeed, 0, 0, 1)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, seed, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, seed)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_waveletDenoiseImage, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_waveletDenoiseImage, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, threshold, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, threshold)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, softness, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, softness)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_MEANSHIFTIMAGE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_meanShiftImage, 0, 3, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_meanShiftImage, 0, 0, 3)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, width)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, height)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, color_distance, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, color_distance)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_KMEANSIMAGE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_kmeansImage, 0, 3, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_kmeansImage, 0, 0, 3)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, number_colors, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, number_colors)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, max_iterations, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, max_iterations)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, tolerance, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, tolerance)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_rangeThresholdImage, 0, 4, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_rangeThresholdImage, 0, 0, 4)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, low_black, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, low_black)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, low_white, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, low_white)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, high_white, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, high_white)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, high_black, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, high_black)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_autoThresholdImage, 0, 1, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_autoThresholdImage, 0, 0, 1)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, auto_threshold_method, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, auto_threshold_method)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_BILATERALBLURIMAGE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_bilateralBlurImage, 0, 4, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_bilateralBlurImage, 0, 0, 4)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, radius)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, sigma, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, sigma)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, intensity_sigma, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, intensity_sigma)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, spatial_sigma, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, spatial_sigma)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_claheImage, 0, 4, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_claheImage, 0, 0, 4)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, width, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, width)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, height, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, height)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, number_bins, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, number_bins)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, clip_limit, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, clip_limit)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
 
 #if MagickLibVersion > 0x628
 ZEND_METHOD(Imagick, optimizeImageLayers);
@@ -6011,6 +6231,30 @@ ZEND_METHOD(Imagick, setImageMask);
 #endif
 #if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
 ZEND_METHOD(Imagick, cannyEdgeImage);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_SETSEED
+ZEND_METHOD(Imagick, setSeed);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
+ZEND_METHOD(Imagick, waveletDenoiseImage);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_MEANSHIFTIMAGE
+ZEND_METHOD(Imagick, meanShiftImage);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_KMEANSIMAGE
+ZEND_METHOD(Imagick, kmeansImage);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
+ZEND_METHOD(Imagick, rangeThresholdImage);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
+ZEND_METHOD(Imagick, autoThresholdImage);
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_BILATERALBLURIMAGE
+ZEND_METHOD(Imagick, bilateralBlurImage);
+#endif
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+ZEND_METHOD(Imagick, claheImage);
 #endif
 
 
@@ -6700,6 +6944,30 @@ static const zend_function_entry class_Imagick_methods[] = {
 #endif
 #if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
 	ZEND_ME(Imagick, cannyEdgeImage, arginfo_class_Imagick_cannyEdgeImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_SETSEED
+	ZEND_ME(Imagick, setSeed, arginfo_class_Imagick_setSeed, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
+	ZEND_ME(Imagick, waveletDenoiseImage, arginfo_class_Imagick_waveletDenoiseImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_MEANSHIFTIMAGE
+	ZEND_ME(Imagick, meanShiftImage, arginfo_class_Imagick_meanShiftImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_KMEANSIMAGE
+	ZEND_ME(Imagick, kmeansImage, arginfo_class_Imagick_kmeansImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
+	ZEND_ME(Imagick, rangeThresholdImage, arginfo_class_Imagick_rangeThresholdImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
+	ZEND_ME(Imagick, autoThresholdImage, arginfo_class_Imagick_autoThresholdImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && IM_HAVE_IMAGICK_BILATERALBLURIMAGE
+	ZEND_ME(Imagick, bilateralBlurImage, arginfo_class_Imagick_bilateralBlurImage, ZEND_ACC_PUBLIC)
+#endif
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x709
+	ZEND_ME(Imagick, claheImage, arginfo_class_Imagick_claheImage, ZEND_ACC_PUBLIC)
 #endif
 	ZEND_FE_END
 };

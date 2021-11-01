@@ -153,7 +153,7 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 			'PreviewType',
 		],
 		'MagickCore/fourier.h' => [
-			// 'ComplexOperator', // used by ComplexImages - not exposed in wand api
+			'ComplexOperator', // used by ComplexImages - not exposed in wand api
 		],
 		'MagickCore/geometry.h' => [
 			// 'GeometryFlags', this is a nightmare of an 'enum'
@@ -205,6 +205,9 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 		'MagickCore/type.h' => [
 			'StretchType',
 			'StyleType',
+		],
+		'MagickCore/threshold.h' => [
+			'AutoThresholdMethod'
 		],
 		'MagickCore/visual-effects.h' => [
 			'NoiseType',

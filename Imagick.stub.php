@@ -1368,5 +1368,59 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     ): bool {}
 #endif
 
+#if IM_HAVE_IMAGICK_SETSEED
+	public static function setSeed(int $seed): void {}
+#endif
 
+#if IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
+	public function waveletDenoiseImage(float $threshold, float $softness): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_MEANSHIFTIMAGE
+	public function meanShiftImage(
+		int $width,
+		int $height,
+		float $color_distance
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_KMEANSIMAGE
+	public function kmeansImage(
+		int $number_colors,
+		int $max_iterations,
+		float $tolerance
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
+	public function rangeThresholdImage(
+		float $low_black,
+		float $low_white,
+		float $high_white,
+		float $high_black
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
+	// AUTO_THRESHOLD_*
+	public function autoThresholdImage(int $auto_threshold_method): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_BILATERALBLURIMAGE
+	public function bilateralBlurImage(
+		float $radius,
+		float $sigma,
+		float $intensity_sigma,
+		float $spatial_sigma
+	): bool {}
+#endif
+
+#if MagickLibVersion >= 0x709
+	public function claheImage(
+		int $width,
+		int $height,
+		int $number_bins,
+		float $clip_limit
+	): bool {}
+#endif
 }

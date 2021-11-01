@@ -959,6 +959,22 @@ PHP_METHOD(imagick, localcontrastimage);
 PHP_METHOD(imagick, identifyimagetype);
 #endif // #if MagickLibVersion >= 0x700
 
+
+PHP_METHOD(imagick, setSeed);
+PHP_METHOD(imagick, waveletDenoiseImage);
+PHP_METHOD(imagick, meanShiftImage);
+PHP_METHOD(imagick, kmeansImage);
+PHP_METHOD(imagick, rangeThresholdImage);
+PHP_METHOD(imagick, autoThresholdImage);
+PHP_METHOD(imagick, bilateralBlurImage);
+PHP_METHOD(imagick, claheImage);
+
+
+
+
+
+
+
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628
 PHP_METHOD(imagickdraw, resetvectorgraphics);
