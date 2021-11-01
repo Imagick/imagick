@@ -13265,6 +13265,7 @@ PHP_METHOD(Imagick, cannyEdgeImage)
 /* }}} */
 #endif // MagickLibVersion >= 0x709
 
+#if IM_HAVE_IMAGICK_SETSEED
 /* {{{ proto void Imagick::setSeed(int seed)
 	Set the random number seed for ImageMagick
 */
@@ -13281,8 +13282,9 @@ PHP_METHOD(Imagick, setSeed)
 	RETURN_NULL();
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_SETSEED
 
-
+#if IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
 /* {{{ proto bool Imagick::waveletDenoiseImage(float $threshold, float $softness
 */
 PHP_METHOD(Imagick, waveletDenoiseImage)
@@ -13315,7 +13317,9 @@ PHP_METHOD(Imagick, waveletDenoiseImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
 
+#if IM_HAVE_IMAGICK_MEANSHIFTIMAGE
 /* {{{ proto bool Imagick::meanShiftImage(int $width, int $height, float $color_distance
 */
 PHP_METHOD(Imagick, meanShiftImage)
@@ -13350,10 +13354,9 @@ PHP_METHOD(Imagick, meanShiftImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_MEANSHIFTIMAGE
 
-
-
-
+#if IM_HAVE_IMAGICK_KMEANSIMAGE
 /* {{{ proto bool Imagick::kmeansImage(int $number_colors, int $max_iterations, float $tolerance
 */
 PHP_METHOD(Imagick, kmeansImage)
@@ -13388,8 +13391,9 @@ PHP_METHOD(Imagick, kmeansImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_KMEANSIMAGE
 
-
+#if IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
 /* {{{ proto void Imagick::rangeThresholdImage(float $low_black, float $low_white, float $high_white, float $high_black
 */
 PHP_METHOD(Imagick, rangeThresholdImage)
@@ -13424,7 +13428,9 @@ PHP_METHOD(Imagick, rangeThresholdImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
 
+#if IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
 /* {{{ proto bool Imagick::autoThresholdImage(int $auto_threshold_method
 */
 PHP_METHOD(Imagick, autoThresholdImage)
@@ -13456,7 +13462,9 @@ PHP_METHOD(Imagick, autoThresholdImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
 
+#if IM_HAVE_IMAGICK_BILATERALBLURIMAGE
 /* {{{ proto void Imagick::bilateralBlurImage(float $radius, float $sigma, float $intensity_sigma, float $spatial_sigma
 */
 PHP_METHOD(Imagick, bilateralBlurImage)
@@ -13491,7 +13499,9 @@ PHP_METHOD(Imagick, bilateralBlurImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif // IM_HAVE_IMAGICK_BILATERALBLURIMAGE
 
+#if IM_HAVE_IMAGICK_CLAHEIMAGE
 /* {{{ proto void Imagick::claheImage(int $width, int $height, int $number_bins, float $clip_limit
 */
 PHP_METHOD(Imagick, claheImage)
@@ -13527,5 +13537,6 @@ PHP_METHOD(Imagick, claheImage)
 	RETURN_TRUE;
 }
 /* }}} */
+#endif //IM_HAVE_IMAGICK_CLAHEIMAGE
 
 /* end of Imagick */

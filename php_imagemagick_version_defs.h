@@ -62,7 +62,6 @@
 	#define IM_HAVE_IMAGICK_BILATERALBLURIMAGE 1
 #endif
 
-
 #if MagickLibVersion >= 0x709
 	#define IM_HAVE_IMAGICK_CLAHEIMAGE 1
 #endif
