@@ -697,12 +697,7 @@ class Imagick
 
     public function affineTransformImage(ImagickDraw $settings): bool  {}
 
-#if MagickLibVersion < 0x700
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-    /** @deprecated */
     public function averageImages(): Imagick  {}
-#endif
-#endif
 
     public function borderImage(
         ImagickPixel|string $border_color,

@@ -10454,8 +10454,6 @@ PHP_METHOD(Imagick, affineTransformImage)
 }
 /* }}} */
 
-#if MagickLibVersion < 0x700
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 /* {{{ proto Imagick Imagick::averageImages()
 	Average a set of images.
 */
@@ -10463,8 +10461,9 @@ PHP_METHOD(Imagick, averageImages)
 {
 	MagickWand *tmp_wand;
 	php_imagick_object *intern, *intern_return;
-
-	IMAGICK_METHOD_DEPRECATED ("Imagick", "averageImages");
+//#if MagickLibVersion > 0x700
+//	MagickBooleanType status;
+//#endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
@@ -10474,7 +10473,13 @@ PHP_METHOD(Imagick, averageImages)
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
 
+#if MagickLibVersion > 0x700
+	// MagickEvaluateImages appears to crash if index is not zero.
+	status = MagickSetIteratorIndex(intern->magick_wand, 0);
+	tmp_wand = MagickEvaluateImages(intern->magick_wand, MeanEvaluateOperator);
+#else
 	tmp_wand = MagickAverageImages(intern->magick_wand);
+#endif
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Averaging images failed" TSRMLS_CC);
@@ -10487,8 +10492,6 @@ PHP_METHOD(Imagick, averageImages)
 	return;
 }
 /* }}} */
-#endif
-#endif
 
 /* {{{ proto bool Imagick::borderImage(ImagickPixel bordercolor, int width, int height)
 	Surrounds the image with a border of the color defined by the bordercolor pixel wand.

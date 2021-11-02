@@ -3221,9 +3221,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_affineTransformImage, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, settings, ImagickDraw, 0)
 ZEND_END_ARG_INFO()
 
-#if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#define arginfo_class_Imagick_averageImages arginfo_class_Imagick_mosaicImages
-#endif
+#define arginfo_class_Imagick_averageImages arginfo_class_Imagick_clone
 
 
 #if PHP_VERSION_ID >= 80000
@@ -5955,9 +5953,7 @@ ZEND_METHOD(Imagick, mosaicImages);
 ZEND_METHOD(Imagick, morphImages);
 ZEND_METHOD(Imagick, minifyImage);
 ZEND_METHOD(Imagick, affineTransformImage);
-#if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 ZEND_METHOD(Imagick, averageImages);
-#endif
 ZEND_METHOD(Imagick, borderImage);
 #if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, borderImageWithComposite);
@@ -6658,9 +6654,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, morphImages, arginfo_class_Imagick_morphImages, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, minifyImage, arginfo_class_Imagick_minifyImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, affineTransformImage, arginfo_class_Imagick_affineTransformImage, ZEND_ACC_PUBLIC)
-#if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-	ZEND_ME(Imagick, averageImages, arginfo_class_Imagick_averageImages, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
-#endif
+	ZEND_ME(Imagick, averageImages, arginfo_class_Imagick_averageImages, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, borderImage, arginfo_class_Imagick_borderImage, ZEND_ACC_PUBLIC)
 #if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, borderImageWithComposite, arginfo_class_Imagick_borderImageWithComposite, ZEND_ACC_PUBLIC)
