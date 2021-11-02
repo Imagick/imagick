@@ -79,8 +79,8 @@ class Imagick
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool  {}
 
-#if MagickLibVersion < 0x700
-    /** @deprecated */
+
+
     public function roundCornersImage(
         float $x_rounding,
         float $y_rounding,
@@ -88,7 +88,6 @@ class Imagick
         float $displace = 5,
         float $size_correction = -6): bool {}
 
-    /* This alias is due to BWC */
     /**
      * @deprecated
      * @alias Imagick::roundCornersImage
@@ -99,8 +98,6 @@ class Imagick
         float $stroke_width = 10,
         float $displace = 5,
         float $size_correction = -6): bool {}
-
-#endif
 
     public function setIteratorIndex(int $index): bool  {}
 

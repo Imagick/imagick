@@ -397,7 +397,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_randomThresholdImage, 0, 0, 2)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion > 0x628 && MagickLibVersion < 0x700
+#if MagickLibVersion > 0x628
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_roundCornersImage, 0, 2, _IS_BOOL, 0)
@@ -435,7 +435,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_roundCornersImage, 0, 0, 2)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion > 0x628 && MagickLibVersion < 0x700
+#if MagickLibVersion > 0x628
 #define arginfo_class_Imagick_roundCorners arginfo_class_Imagick_roundCornersImage
 #endif
 
@@ -5623,7 +5623,7 @@ ZEND_METHOD(Imagick, adaptiveSharpenImage);
 #if MagickLibVersion > 0x628
 ZEND_METHOD(Imagick, randomThresholdImage);
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion < 0x700
+#if MagickLibVersion > 0x628
 ZEND_METHOD(Imagick, roundCornersImage);
 #endif
 #if MagickLibVersion > 0x628
@@ -6322,10 +6322,10 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion > 0x628
 	ZEND_ME(Imagick, randomThresholdImage, arginfo_class_Imagick_randomThresholdImage, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion < 0x700
-	ZEND_ME(Imagick, roundCornersImage, arginfo_class_Imagick_roundCornersImage, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
+#if MagickLibVersion > 0x628
+	ZEND_ME(Imagick, roundCornersImage, arginfo_class_Imagick_roundCornersImage, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion > 0x628 && MagickLibVersion < 0x700
+#if MagickLibVersion > 0x628
 	ZEND_MALIAS(Imagick, roundCorners, roundCornersImage, arginfo_class_Imagick_roundCorners, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
 #endif
 #if MagickLibVersion > 0x628

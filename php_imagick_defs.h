@@ -443,9 +443,7 @@ PHP_METHOD(imagick, adaptiveblurimage);
 PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
 PHP_METHOD(imagick, randomthresholdimage);
-#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, roundcornersimage);
-#endif
 PHP_METHOD(imagick, setiteratorindex);
 PHP_METHOD(imagick, getiteratorindex);
 #if MagickLibVersion < 0x700

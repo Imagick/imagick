@@ -10,7 +10,6 @@ checkClassMethods('Imagick', array('roundCornersImage'));
 --FILE--
 <?php
 
-
 function roundCorners() {
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
@@ -33,12 +32,13 @@ function roundCorners() {
     );
 
     $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
+    $imagick->setImageFormat('png');
+    if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
+// $imagick->writeImage(__DIR__ . "/112_round_corner.png");
 }
 
 roundCorners() ;
 echo "Ok";
 ?>
 --EXPECTF--
-Deprecated: %s Imagick::roundCornersImage() is deprecated in %s
 Ok

@@ -550,7 +550,6 @@ PHP_METHOD(Imagick, randomThresholdImage)
 /* {{{ proto string Imagick::roundCornersImage(float x_rounding, float y_rounding[, float stroke_width = 10[, float displace = 5[, float size_correction = -6]]] )
    Rounds image corners
 */
-#if MagickLibVersion < 0x700
 PHP_METHOD(Imagick, roundCornersImage)
 {
 	char *old_locale;
@@ -669,7 +668,12 @@ PHP_METHOD(Imagick, roundCornersImage)
 		return;
 	}
 
+
+#if MagickLibVersion >= 0x700
+	status = MagickCompositeImage(intern->magick_wand, mask_image, DstInCompositeOp, MagickTrue, 0, 0);
+#else
 	status = MagickCompositeImage(intern->magick_wand, mask_image, DstInCompositeOp, 0, 0);
+#endif
 
 	if (status == MagickFalse) {
 		exit_cleanup();
@@ -682,7 +686,6 @@ PHP_METHOD(Imagick, roundCornersImage)
 #undef exit_cleanup
 }
 /* }}} */
-#endif
 
 /* {{{ proto int Imagick::getIteratorIndex()
 	Returns the index of the current active image
