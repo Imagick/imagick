@@ -17,8 +17,8 @@ function claheImage() {
 		8,
 		2
 	);
-    $imagick->writeImage(__DIR__ . '/claheImage_output_image.png');
-//    $imagick->getImageBlob();
+//    $imagick->writeImage(__DIR__ . '/claheImage_output_image.png');
+    $imagick->getImageBlob();
 }
 
 claheImage() ;
