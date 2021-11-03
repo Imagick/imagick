@@ -10476,6 +10476,14 @@ PHP_METHOD(Imagick, averageImages)
 #if MagickLibVersion > 0x700
 	// MagickEvaluateImages appears to crash if index is not zero.
 	status = MagickSetIteratorIndex(intern->magick_wand, 0);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(
+			intern->magick_wand,
+			"Averaging images failed, images are empty?" TSRMLS_CC
+		);
+		return;
+	}
+
 	tmp_wand = MagickEvaluateImages(intern->magick_wand, MeanEvaluateOperator);
 #else
 	tmp_wand = MagickAverageImages(intern->magick_wand);
