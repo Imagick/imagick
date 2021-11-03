@@ -10461,9 +10461,9 @@ PHP_METHOD(Imagick, averageImages)
 {
 	MagickWand *tmp_wand;
 	php_imagick_object *intern, *intern_return;
-//#if MagickLibVersion > 0x700
-//	MagickBooleanType status;
-//#endif
+#if MagickLibVersion > 0x700
+	MagickBooleanType status;
+#endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
