@@ -19,12 +19,14 @@ cd /var/app/imagemagick_src/${SRCFILE}
            --with-magick-plus-plus=no \
            --without-perl \
            --disable-docs \
+           --with-fontconfig=yes \
+           --with-fftw \
+           --with-heic=yes \
            --with-jpeg=yes \
            --with-png=yes \
-           --with-fftw \
-           --with-fontconfig=yes \
-           --with-webp=yes \
-           --with-tiff=yes
+           --with-tiff=yes \
+           --with-webp=yes
+
 
 
 #       --with-urw-base35-font-dir=/usr/share/fonts/opentype/urw-base35
