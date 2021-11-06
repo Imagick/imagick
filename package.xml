@@ -365,6 +365,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="301_Imagick_bilateralBlurImage.phpt" role="test" />
 				<file name="302_Imagick_claheImage.phpt" role="test" />
 				<file name="303_Imagick_averageImages.phpt" role="test" />
+				<file name="304_Imagick_is_imagemagick_borked.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />

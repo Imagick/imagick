@@ -47,8 +47,9 @@ function testOpacity() {
     $canvas->compositeImage($gradient, Imagick::COMPOSITE_SOFTLIGHT, 0, 0);
 
     $output->compositeImage($canvas, \Imagick::COMPOSITE_ATOP, 0, 0);
-    $output->writeImage(__DIR__ . "/304_output_with_softlight.png");
-
+    // TODO - we need to store a known good output and compare
+    // the result image against that.
+//    $output->writeImage(__DIR__ . "/304_output_with_softlight.png");
 }
 
 testOpacity() ;
