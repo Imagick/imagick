@@ -14,7 +14,15 @@
   * Imagick::setImageMatteColor() should be available on IM7.
 - Added:
   * Imagick::borderImageWithComposite() same as Imagick::borderImage() but allows user to set composite operator used.
-  * Imagick::cannyEdgeImage()
+  * function Imagick::cannyEdgeImage
+  * Imagick::setSeed
+  * Imagick::waveletDenoiseImage
+  * Imagick::meanShiftImage
+  * Imagick::kmeansImage
+  * Imagick::rangeThresholdImage
+  * Imagick::autoThresholdImage
+  * Imagick::bilateralBlurImage
+  * Imagick::claheImage
 
 3.5.1
   - No change from 3.5.1RC1
