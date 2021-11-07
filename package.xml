@@ -366,6 +366,14 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="302_Imagick_claheImage.phpt" role="test" />
 				<file name="303_Imagick_averageImages.phpt" role="test" />
 				<file name="304_Imagick_is_imagemagick_borked.phpt" role="test" />
+				<file name="305_Imagick_complexImages.phpt" role="test" />
+				<file name="306_Imagick_interpolativeResizeImage.phpt" role="test" />
+				<file name="307_Imagick_levelImageColors.phpt" role="test" />
+				<file name="308_Imagick_levelizeImage.phpt" role="test" />
+				<file name="309_Imagick_orderedDitherImage.phpt" role="test" />
+				<file name="310_Imagick_whiteBalanceImage.phpt" role="test" />
+				<file name="311_Imagick_channelFxImage.phpt" role="test" />
+				<file name="312_Imagick_colorThresholdImage.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
