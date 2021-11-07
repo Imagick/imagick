@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, claheImage
+Test Imagick, interpolativeResizeImage
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');

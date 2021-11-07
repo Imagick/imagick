@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, averageImages
+Test whether ImageMagick is producing valid images.
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');

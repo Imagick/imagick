@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, claheImage
+Test Imagick, colorThresholdImage
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');

@@ -13597,11 +13597,10 @@ PHP_METHOD(Imagick, colorThresholdImage)
 	MagickBooleanType status;
 	zval *start_color_param, *stop_color_param;
 	PixelWand *start_color_wand, *stop_color_wand;
-	zend_bool invert;
 	zend_bool start_color_allocated = 0, stop_color_allocated = 0;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzb", &start_color_param, &stop_color_param, &invert) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &start_color_param, &stop_color_param) == FAILURE) {
 		return;
 	}
 
@@ -13660,6 +13659,12 @@ PHP_METHOD(Imagick, complexImages)
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
 		return;
+
+	status = MagickSetIteratorIndex(intern->magick_wand, 0);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "complexImages failed to set iterator index to 0" TSRMLS_CC);
+		return;
+	}
 
 	complexed = MagickComplexImages(
 		intern->magick_wand,

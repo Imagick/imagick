@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, claheImage
+Test Imagick, levelImageColors
 --SKIPIF--
 <?php
 require_once(dirname(__FILE__) . '/skipif.inc');
@@ -14,8 +14,8 @@ function levelImageColors() {
 		"rgb(240, 240, 240)",
 		false
 	);
-//    $imagick->writeImage(__DIR__ . '/claheImage_output_image.png');
-    $imagick->levelImageColors();
+//    $imagick->writeImage(__DIR__ . '/levelImageColors_output_image.png');
+    $imagick->getImageBlob();
 }
 
 levelImageColors() ;
