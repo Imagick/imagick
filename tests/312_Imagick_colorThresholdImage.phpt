@@ -12,7 +12,7 @@ function colorThresholdImage() {
     $imagick = new \Imagick(__DIR__ . '/Biter_500.jpg');
     $imagick->colorThresholdImage(
         "rgb(10, 10, 10)",
-        "rgb(240, 240, 240)",
+        "rgb(240, 240, 240)"
     );
 //    $imagick->writeImage(__DIR__ . '/colorThresholdImage_output_image.png');
     $imagick->getImageBlob();
