@@ -8,21 +8,23 @@
   - Imagick::getImageSize is undeprecated. For IM 7 it now calls MagickGetImageLength internally.
   - Imagick::roundCornersImage is undeprecated and available on IM7.
 - Fixes:
-  * Imagick::borderImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick>7
+  * Imagick::borderImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick > 7. If you need the old behaviour, please use Imagick::borderImageWithComposite() instead, which allows you to set the composite method.
+  * Imagick::frameImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick > 7. If you need the old behaviour, please use Imagick::frameImageWithComposite() instead, which allows you to set the composite method.
   * Imagick::profileImage() fixed to allow null as second paramter again. If you can't upgrade to this version yet, pass in "", which has the same effect.
   * Imagick::ALPHACHANNEL_COPY and Imagick::ALPHACHANNEL_OPAQUE should be available on IM7.
   * Imagick::setImageMatteColor() should be available on IM7.
 - Added:
   * Imagick::borderImageWithComposite() same as Imagick::borderImage() but allows user to set composite operator used.
+  * Imagick::frameImageWithComposite() same as Imagick::frameImage() but allows user to set composite operator used.
   * function Imagick::cannyEdgeImage
-  * Imagick::setSeed
-  * Imagick::waveletDenoiseImage
-  * Imagick::meanShiftImage
-  * Imagick::kmeansImage
-  * Imagick::rangeThresholdImage
-  * Imagick::autoThresholdImage
-  * Imagick::bilateralBlurImage
-  * Imagick::claheImage
+  * function Imagick::setSeed
+  * function Imagick::waveletDenoiseImage
+  * function Imagick::meanShiftImage
+  * function Imagick::kmeansImage
+  * function Imagick::rangeThresholdImage
+  * function Imagick::autoThresholdImage
+  * function Imagick::bilateralBlurImage
+  * function Imagick::claheImage
 
 3.5.1
   - No change from 3.5.1RC1

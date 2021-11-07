@@ -66,6 +66,38 @@
 	#define IM_HAVE_IMAGICK_CLAHEIMAGE 1
 #endif
 
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_CHANNELFXIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x710
+	#define IM_HAVE_IMAGICK_COLORTHRESHOLDIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_COMPLEXIMAGES 1
+#endif
+
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_INTERPOLATIVERESIZEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_LEVELIMAGECOLORS 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_LEVELIZEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_ORDEREDDITHERIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x70B
+	#define IM_HAVE_IMAGICK_WHITEBALANCEIMAGE 1
+#endif
+
 #if MagickLibVersion >= 0x70A
 	// Technically, this may be available earlier, but the behaviour around
 	// default mask changed.

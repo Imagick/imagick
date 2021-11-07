@@ -993,7 +993,7 @@ class Imagick
 
     public function profileImage(string $name, ?string $profile): bool  {}
 
-    public function  quantizeImage(
+    public function quantizeImage(
         int $number_colors,
         int $colorspace,
         int $tree_depth,
@@ -1407,12 +1407,76 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 	): bool {}
 #endif
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CLAHEIMAGE
 	public function claheImage(
 		int $width,
 		int $height,
 		int $number_bins,
 		float $clip_limit
 	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_CHANNELFXIMAGE
+	// MagickChannelFxImage() applies a channel expression to the specified image.
+	// The expression consists of one or more channels, either mnemonic or numeric
+	// (e.g. red, 1), separated by actions as follows:
+	//
+	//   <=>     exchange two channels (e.g. red<=>blue)
+	//   =>      transfer a channel to another (e.g. red=>green)
+	//   ,       separate channel operations (e.g. red, green)
+	//   |       read channels from next input image (e.g. red | green)
+	//   ;       write channels to next output image (e.g. red; green; blue)
+	public function channelFxImage(string $expression): Imagick {}
+#endif
+
+#if IM_HAVE_IMAGICK_COLORTHRESHOLDIMAGE
+	public function colorThresholdImage(
+		ImagickPixel|string $start_color,
+		ImagickPixel|string $stop_color
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_COMPLEXIMAGES
+	// COMPLEX_OPERATOR_
+	public function complexImages(int $complex_operator): Imagick {}
+#endif
+
+#if IM_HAVE_IMAGICK_INTERPOLATIVERESIZEIMAGE
+	public function interpolativeResizeImage(
+		int $columns,
+		int $rows,
+		int $interpolate // INTERPOLATE_
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_LEVELIMAGECOLORS
+	public function levelImageColors(
+		ImagickPixel|string $black_color,
+		ImagickPixel|string $white_color,
+		bool $invert
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_LEVELIZEIMAGE
+	public function levelizeImage(
+		float $black_point,
+		float $gamma,
+		float $white_point
+	): bool {}
+#endif
+
+	//For example: "o3x3,6" generates a 6 level posterization of the image
+	// with a ordered 3x3 diffused pixel dither being applied between each
+	// level. While checker,8,8,4 will produce a 332 colormaped image with
+	// only a single checkerboard hash pattern (50% grey) between each color
+	// level, to basically double the number of color levels with a bare
+	// minimim of dithering.
+
+#if IM_HAVE_IMAGICK_ORDEREDDITHERIMAGE
+	public function orderedDitherImage(string $dither_format): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_WHITEBALANCEIMAGE
+	public function whiteBalanceImage(): bool {}
 #endif
 }
