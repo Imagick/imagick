@@ -13559,7 +13559,6 @@ PHP_METHOD(Imagick, claheImage)
 PHP_METHOD(Imagick, channelFxImage)
 {
 	php_imagick_object *intern;
-	MagickBooleanType status;
 	MagickWand *fx_image;
 	php_imagick_object *intern_return;
 
