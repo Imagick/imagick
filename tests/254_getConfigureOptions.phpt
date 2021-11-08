@@ -31,6 +31,8 @@ if (!is_array($optionsStartingWithC)) {
 }
 else if (count($optionsStartingWithC) == 0) {
 	echo "optionsStartingWithC is empty".PHP_EOL;
+	echo "All options are:\n";
+	var_dump(Imagick::getConfigureOptions());
 }
 
 //Example output on Debian
