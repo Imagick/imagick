@@ -10,7 +10,7 @@ jobs:
           version: ["7.4", "8.0"]
           arch: [x64]
           ts: [ts]
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - name: Checkout imagick
         uses: actions/checkout@v2
