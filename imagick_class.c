@@ -3168,7 +3168,7 @@ PHP_METHOD(Imagick, smushImages)
 {
 	php_imagick_object *intern, *intern_return;
 	zend_bool stack;
-	long offset;
+	im_long offset;
 	MagickWand *retwand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bl", &stack, &offset) == FAILURE) {
@@ -5503,7 +5503,7 @@ PHP_METHOD(Imagick, setImageColormapColor)
 {
 	php_imagick_object *intern;
 	zval *param;
-	long index;
+	im_long index;
 	MagickBooleanType status;
 	PixelWand *color_wand;
 	zend_bool allocated;
