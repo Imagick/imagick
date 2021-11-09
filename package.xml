@@ -377,6 +377,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
+				<file name="bug59378_windows.phpt" role="test" />
 				<file name="bug64015.phpt" role="test" />
 				<file name="bug_66098.phpt" role="test" />
 				<file name="bug_71742.phpt" role="test" />
