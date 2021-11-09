@@ -9,6 +9,9 @@ $imagick = new Imagick();
 $imagick->newPseudoImage(640, 480, "LOGO:");
 $imagick->setFormat("png");
 
+// Although the bug was about php://memory, that isn'--TEST--
+// available to use as a filehandle on Windows, so may as well
+// just test php://temp instead.
 $fp = fopen("php://temp", 'r+');
 $imagick->writeImageFile($fp);
 rewind($fp);
