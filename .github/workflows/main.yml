@@ -98,9 +98,6 @@ jobs:
         exclude:
           - php: 5.4
             imagemagick: 6.8.7-0
-        allow_failures:
-          - imagemagick: git7
-          - imagemagick: git6
 
     steps:
       - name: Checkout code
