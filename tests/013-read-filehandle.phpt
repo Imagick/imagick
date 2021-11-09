@@ -24,5 +24,9 @@ unlink($file);
 echo 'success';
 
 ?>
+--CLEAN--
+<?php
+@unlink(dirname(__FILE__) . '/__tmp_rose.jpg');
+?>
 --EXPECT--
 success

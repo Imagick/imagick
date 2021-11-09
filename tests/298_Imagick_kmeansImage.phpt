@@ -24,5 +24,9 @@ function kmeansImage() {
 kmeansImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/kmeansImage_output_image.png');
+?>
 --EXPECTF--
 Ok

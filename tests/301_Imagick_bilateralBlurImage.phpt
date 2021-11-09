@@ -26,5 +26,9 @@ function bilateralBlurImage() {
 bilateralBlurImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/bilateralBlurImage_output_image.png');
+?>
 --EXPECTF--
 Ok

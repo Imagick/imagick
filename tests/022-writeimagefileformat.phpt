@@ -60,6 +60,11 @@ unlink (JPEG_FILE);
 
 echo 'done' . PHP_EOL;
 ?>
+--CLEAN--
+<?php
+@unlink(dirname (__FILE__) . "/imagick_test.jpg");
+@unlink(dirname (__FILE__) . "/imagick_test.png");
+?>
 --EXPECT--
 JPEG
 PNG

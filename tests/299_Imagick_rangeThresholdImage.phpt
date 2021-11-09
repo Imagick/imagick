@@ -26,5 +26,9 @@ function rangeThresholdImage() {
 rangeThresholdImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/rangeThresholdImage_output_image.png');
+?>
 --EXPECTF--
 Ok
