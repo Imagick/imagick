@@ -9,7 +9,7 @@ $imagick = new Imagick();
 $imagick->newPseudoImage(640, 480, "LOGO:");
 $imagick->setFormat("png");
 
-$fp = fopen("php://memory", 'r+');
+$fp = fopen("php://temp", 'r+');
 $imagick->writeImageFile($fp);
 rewind($fp);
 $memoryBlob = stream_get_contents($fp);
