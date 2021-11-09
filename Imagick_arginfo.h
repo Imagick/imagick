@@ -4688,15 +4688,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getCopyright arginfo_class_Imagick___toString
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getConfigureOptions, 0, 0, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getConfigureOptions, 0, 0, 0)
-#endif
-
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, pattern, IS_STRING, 0, "\"*\"")
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_getConfigureOptions arginfo_class_Imagick_queryFormats
 
 #if MagickLibVersion > 0x660
 
