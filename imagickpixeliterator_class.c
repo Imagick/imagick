@@ -398,7 +398,7 @@ PHP_METHOD(ImagickPixelIterator, setIteratorRow)
 {
 	php_imagickpixeliterator_object *internpix;
 	MagickBooleanType status;
-	long row;
+	im_long row;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &row) == FAILURE) {
