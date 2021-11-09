@@ -5131,7 +5131,7 @@ PHP_METHOD(Imagick, profileImage)
 PHP_METHOD(Imagick, quantizeImage)
 {
 	php_imagick_object *intern;
-	long number_colors, colorspace, tree_depth;
+	im_long number_colors, colorspace, tree_depth;
 	zend_bool dither, measure_error;
 	MagickBooleanType status;
 
@@ -10950,7 +10950,7 @@ PHP_METHOD(Imagick, shadowImage)
 	php_imagick_object *intern;
 	MagickBooleanType status;
 	double opacity, sigma;
-	long x, y;
+	im_long x, y;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddll", &opacity, &sigma, &x, &y) == FAILURE) {
 		return;
