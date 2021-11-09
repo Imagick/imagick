@@ -13804,7 +13804,7 @@ PHP_METHOD(Imagick, levelizeImage)
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to orderedDitherImage" TSRMLS_CC);
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to levelizeImage" TSRMLS_CC);
 		return;
 	}
 
