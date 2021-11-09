@@ -19,5 +19,9 @@ function autoThresholdImage() {
 autoThresholdImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/autoThresholdImage_output_image.png');
+?>
 --EXPECTF--
 Ok

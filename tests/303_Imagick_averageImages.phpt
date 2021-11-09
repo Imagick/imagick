@@ -28,5 +28,9 @@ function averageImages() {
 averageImages() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/averageImages_output_image.png');
+?>
 --EXPECTF--
 Ok

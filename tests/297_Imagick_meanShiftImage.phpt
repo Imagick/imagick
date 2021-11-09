@@ -24,5 +24,9 @@ function meanShiftImage() {
 meanShiftImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/meanShiftImage_output_image.png');
+?>
 --EXPECTF--
 Ok

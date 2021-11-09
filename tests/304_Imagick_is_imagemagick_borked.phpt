@@ -55,5 +55,10 @@ function testOpacity() {
 testOpacity() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . "/304_output_trans.png");
+@unlink(__DIR__ . "/304_output_before_softlight.png");
+?>
 --EXPECTF--
 Ok

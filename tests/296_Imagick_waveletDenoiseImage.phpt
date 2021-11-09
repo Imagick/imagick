@@ -20,5 +20,9 @@ function waveletDenoiseImage() {
 waveletDenoiseImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/waveletDenoiseImage_output_image.png');
+?>
 --EXPECTF--
 Ok
