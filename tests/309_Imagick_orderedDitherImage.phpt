@@ -9,14 +9,14 @@ checkClassMethods('Imagick', array('orderedDitherImage'));
 <?php
 
 
-function claheImage() {
+function orderedDitherImage() {
     $imagick = new \Imagick(__DIR__ . '/Biter_500.jpg');
     $imagick->orderedDitherImage("o3x3,6");
 //    $imagick->writeImage(__DIR__ . '/claheImage_output_image.png');
     $imagick->getImageBlob();
 }
 
-claheImage() ;
+orderedDitherImage() ;
 echo "Ok";
 ?>
 --EXPECTF--
