@@ -2,7 +2,7 @@
 Test PHP bug #59378 writing to php://memory is incomplete
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
-<?php if (substr(PHP_OS, 0, 3) == 'WIN') {  die("skip php://memory can't be used as filehandle staWindows"); } ?>
+<?php if (substr(PHP_OS, 0, 3) == 'WIN') {  die("skip php://memory can't be used as filehandle on Windows"); } ?>
 --FILE--
 <?php
 
