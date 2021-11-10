@@ -6490,7 +6490,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, roundCornersImage, arginfo_class_Imagick_roundCornersImage, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x628
-	ZEND_MALIAS(Imagick, roundCorners, roundCornersImage, arginfo_class_Imagick_roundCorners, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
+	ZEND_MALIAS(Imagick, roundCorners, roundCornersImage, arginfo_class_Imagick_roundCorners, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x628
 	ZEND_ME(Imagick, setIteratorIndex, arginfo_class_Imagick_setIteratorIndex, ZEND_ACC_PUBLIC)

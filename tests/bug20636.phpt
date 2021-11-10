@@ -30,5 +30,4 @@ try {
 
 ?>
 --EXPECTF--
-Deprecated: %s Imagick::roundCorners() is deprecated in %s
 success

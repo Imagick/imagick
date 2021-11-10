@@ -89,7 +89,6 @@ class Imagick
         float $size_correction = -6): bool {}
 
     /**
-     * @deprecated
      * @alias Imagick::roundCornersImage
      */
     public function roundCorners(
