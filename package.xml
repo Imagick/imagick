@@ -24,7 +24,39 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-	- Better detection of appropriate OpenMP library to use, i.e. GCC or Clang.
+	- Imagick::getImageInterlaceScheme is undeprecated. It's the appropriate function to call to get the image interlace setting.
+	- Image formats are now normalised to lower case.
+	- Imagick::getImageIndex and Imagick::setImageIndex are undeprecated and work on ImageMagick 7. They call MagickGetIteratorIndex and MagickSetIteratorIndex internally.
+	- Imagick::averageImages is undeprecated. For IM 7 it now calls EvaluateImages(wand->images,MeanEvaluateOperator).
+	- Imagick::flattenImages is undeprecated. For IM 7 it now calls MagickMergeImageLayers(intern->magick_wand, FlattenLayer); internally.
+	- Imagick::getImageSize is undeprecated. For IM 7 it now calls MagickGetImageLength internally.
+	- Imagick::roundCornersImage is undeprecated and available on IM7.
+	- Fixes:
+	* Imagick::borderImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick > 7. If you need the old behaviour, please use Imagick::borderImageWithComposite() instead, which allows you to set the composite method.
+	* Imagick::frameImage() changed internally to use OverCompositeOp rather than AtopCompositeOp for ImageMagick > 7. If you need the old behaviour, please use Imagick::frameImageWithComposite() instead, which allows you to set the composite method.
+	* Imagick::profileImage() fixed to allow null as second paramter again. If you can't upgrade to this version yet, pass in "", which has the same effect.
+	* Imagick::ALPHACHANNEL_COPY and Imagick::ALPHACHANNEL_OPAQUE should be available on IM7.
+	* Imagick::setImageMatteColor() should be available on IM7.
+	- Added:
+	* Imagick::borderImageWithComposite() same as Imagick::borderImage() but allows user to set composite operator used.
+	* Imagick::frameImageWithComposite() same as Imagick::frameImage() but allows user to set composite operator used.
+	* function Imagick::cannyEdgeImage
+	* function Imagick::setSeed
+	* function Imagick::waveletDenoiseImage
+	* function Imagick::meanShiftImage
+	* function Imagick::kmeansImage
+	* function Imagick::rangeThresholdImage
+	* function Imagick::autoThresholdImage
+	* function Imagick::bilateralBlurImage
+	* function Imagick::claheImage
+	* function Imagick::channelFxImage
+	* function Imagick::colorThresholdImage
+	* function Imagick::complexImages
+	* function Imagick::interpolativeResizeImage
+	* function Imagick::levelImageColors
+	* function Imagick::levelizeImage
+	* function Imagick::orderedDitherImage
+	* function Imagick::whiteBalanceImage
 </notes>
 	<contents>
 		<dir name="/">
