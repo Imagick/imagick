@@ -10402,7 +10402,12 @@ PHP_METHOD(Imagick, addNoiseImageWithAttenuate)
 		return;
 
 
-	status = MagickAddNoiseImageChannel(intern->magick_wand, channel, noise);
+	status = MagickAddNoiseImageChannelWithAttenuate(
+		intern->magick_wand,
+		channel,
+		noise,
+		attenuate
+	);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to add image noise" TSRMLS_CC);
