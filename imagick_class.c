@@ -10379,6 +10379,41 @@ PHP_METHOD(Imagick, addNoiseImage)
 }
 /* }}} */
 
+
+#if IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+/* {{{ proto bool Imagick::addNoiseImageWithAttenuate(int noise_type, float attenuate[, int channel])
+	Adds random noise to the image.
+*/
+PHP_METHOD(Imagick, addNoiseImageWithAttenuate)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long noise;
+	im_long channel = IM_DEFAULT_CHANNEL;
+	double attenuate;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld|l", &noise, &attenuate, &channel) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+
+	status = MagickAddNoiseImageChannel(intern->magick_wand, channel, noise);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to add image noise" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+
 /* {{{ proto Imagick Imagick::montageImage(ImagickDraw drawing_wand, string tile_geometry, string thumbnail_geometry, int mode, string frame)
 	Creates a composite image by combining several separate images. The images are tiled on the composite image with the name of the image optionally appearing just below the individual tile.
 */

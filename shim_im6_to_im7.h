@@ -43,6 +43,14 @@ MagickBooleanType MagickAddNoiseImageChannel(
 	const ChannelType channel,
 	const NoiseType noise_type
 );
+
+MagickBooleanType MagickAddNoiseImageChannelWithAttenuate(
+	MagickWand *wand,
+	const ChannelType channel,
+	const NoiseType noise_type,
+	double attenuate
+);
+
 MagickBooleanType MagickAutoGammaImageChannel(MagickWand *wand,
   const ChannelType channel);
 MagickBooleanType MagickAutoLevelImageChannel(MagickWand *wand,

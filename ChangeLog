@@ -1,3 +1,9 @@
+3.6.0RC2
+- Fixes:
+  * Remove deprecated message from Imagick::roundCorners()
+- Added:
+  * Imagick::addNoiseImageWithAttenuate()
+
 3.6.0RC1
   - Imagick::getImageInterlaceScheme is undeprecated. It's the appropriate function to call to get the image interlace setting.
   - Image formats are now normalised to lower case.

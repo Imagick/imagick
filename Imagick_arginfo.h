@@ -3155,6 +3155,30 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_addNoiseImage, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
 ZEND_END_ARG_INFO()
 
+#if IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_addNoiseImageWithAttenuate, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_addNoiseImageWithAttenuate, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, noise, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, noise)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, attenuate, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, attenuate)
+#endif
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
+ZEND_END_ARG_INFO()
+#endif
+
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_motionBlurImage, 0, 3, _IS_BOOL, 0)
@@ -6090,6 +6114,9 @@ ZEND_METHOD(Imagick, queryFonts);
 ZEND_METHOD(Imagick, queryFontMetrics);
 ZEND_METHOD(Imagick, steganoImage);
 ZEND_METHOD(Imagick, addNoiseImage);
+#if IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+ZEND_METHOD(Imagick, addNoiseImageWithAttenuate);
+#endif
 ZEND_METHOD(Imagick, motionBlurImage);
 #if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 ZEND_METHOD(Imagick, mosaicImages);
@@ -6815,6 +6842,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, queryFontMetrics, arginfo_class_Imagick_queryFontMetrics, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, steganoImage, arginfo_class_Imagick_steganoImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, addNoiseImage, arginfo_class_Imagick_addNoiseImage, ZEND_ACC_PUBLIC)
+#if IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+	ZEND_ME(Imagick, addNoiseImageWithAttenuate, arginfo_class_Imagick_addNoiseImageWithAttenuate, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, motionBlurImage, arginfo_class_Imagick_motionBlurImage, ZEND_ACC_PUBLIC)
 #if MagickLibVersion < 0x700 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
 	ZEND_ME(Imagick, mosaicImages, arginfo_class_Imagick_mosaicImages, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)

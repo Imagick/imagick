@@ -98,6 +98,10 @@
 	#define IM_HAVE_IMAGICK_WHITEBALANCEIMAGE 1
 #endif
 
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE 1
+#endif
+
 #if MagickLibVersion >= 0x70A
 	// Technically, this may be available earlier, but the behaviour around
 	// default mask changed.

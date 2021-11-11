@@ -19,16 +19,6 @@
 #include "php_imagick_helpers.h"
 #include "php_imagick_file.h"
 
-//derprecated 
-
-//MagickReduceNoiseImage
-//MagickMedianFilterImage
-//MagickRecolorImage
-
-//Mising
-//MagickSetImageBias
-//MagickSetImageClipMask
-
 
 #if MagickLibVersion >= 0x700
 
@@ -85,6 +75,26 @@ MagickBooleanType MagickAddNoiseImageChannel(MagickWand *wand,const ChannelType 
 
 	return status;
 }
+
+// This is not actually an ImageMagick function, but the name is likely to
+// avoid any symbol clash for the foreseeable.
+MagickBooleanType MagickAddNoiseImageChannelWithAttenuate(MagickWand *wand,const ChannelType channel,const NoiseType noise_type, double attenuate) {
+	MagickBooleanType status;
+	ChannelType previous_channel_mask;
+
+	if (channel != UndefinedChannel) {
+		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
+	}
+
+	status = MagickAddNoiseImage(wand, noise_type, attenuate);
+
+	if (channel != UndefinedChannel) {
+		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
+	}
+
+	return status;
+}
+
 
 MagickBooleanType MagickAutoGammaImageChannel(MagickWand *wand, const ChannelType channel) {
   	MagickBooleanType status;

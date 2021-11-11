@@ -676,6 +676,14 @@ class Imagick
     // NOISE_*
     public function addNoiseImage(int $noise, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
+#if IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+    public function addNoiseImageWithAttenuate(
+        int $noise,
+        float $attenuate,
+        int $channel = Imagick::CHANNEL_DEFAULT
+    ): bool  {}
+#endif
+
     public function motionBlurImage(
         float $radius,
         float $sigma,
