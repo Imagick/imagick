@@ -379,6 +379,19 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="310_Imagick_whiteBalanceImage.phpt" role="test" />
 				<file name="311_Imagick_channelFxImage.phpt" role="test" />
 				<file name="312_Imagick_colorThresholdImage.phpt" role="test" />
+				<file name="314_Imagick_getBackgroundColor.phpt" role="test" />
+				<file name="315_Imagick_getImageArtifacts.phpt" role="test" />
+				<file name="316_Imagick_getImageKurtosis.phpt" role="test" />
+				<file name="317_Imagick_getImageMean.phpt" role="test" />
+				<file name="318_Imagick_getImageRange.phpt" role="test" />
+				<file name="319_Imagick_getInterpolateMethod.phpt" role="test" />
+				<file name="320_Imagick_getOptions.phpt" role="test" />
+				<file name="321_Imagick_getOrientation.phpt" role="test" />
+				<file name="322_Imagick_getResolution.phpt" role="test" />
+				<file name="323_Imagick_getType.phpt" role="test" />
+				<file name="324_Imagick_polynomialImage.phpt" role="test" />
+				<file name="325_Imagick_setDepth.phpt" role="test" />
+				<file name="326_Imagick_setExtract.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
