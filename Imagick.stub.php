@@ -1499,4 +1499,120 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #if IM_HAVE_IMAGICK_WHITEBALANCEIMAGE
 	public function whiteBalanceImage(): bool {}
 #endif
+
+#if IM_HAVE_IMAGICK_DELETE_OPTION
+	public function deleteOption(string $option): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_BACKGROUND_COLOR
+	public function getBackgroundColor(): ImagickPixel {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_ARTIFACTS
+	/**
+	 * @return string[]
+	 */
+	public function getImageArtifacts(string $pattern = "*"): array {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_DISTORTIONS
+
+	/**
+	 * metric - MetricType_
+	 * @return float[]
+	 */
+//	public function getImageDistortions(int $metric): array{}
+//    for (j=0; j <= MaxPixelChannels; j++)
+//      distortion[j]+=channel_distortion[j];
+//	Use MagickRelinquishMemory() to free the metrics when you are done with them.
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_KURTOSIS
+
+	/**
+	 * return [kurtosis:float,skewness: float]
+	 */
+	public function getImageKurtosis(): array {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_MEAN
+	/**
+	 * return [$mean, $standard_deviation]
+	 */
+	public function getImageMean(): array {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_RANGE
+	/**
+	 * return [minima, float $maxima]
+	 */
+	public function getImageRange(): array {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_INTERPOLATE_METHOD
+	/**
+	 * return int - PixelInterpolateMethod
+	 */
+	public function getInterpolateMethod(): int {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_OPTIONS
+	/**
+	 * return string[]
+	 */
+	public function getOptions(string $pattern = "*"): array {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_ORIENTATION
+	/**
+	 * return int OrientationType
+	 */
+	public function getOrientation(): int {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_RESOLUTION
+	/**
+	 * return [x: float, y: float]
+	 */
+	public function getResolution(): array {}
+#endif
+
+#if IM_HAVE_IMAGICK_GET_TYPE
+	/**
+	 * return ImageType
+	 */
+	public function getType(): int {}
+#endif
+
+#if IM_HAVE_IMAGICK_POLYNOMIAL_IMAGE
+	//%    o number_terms: the number of terms in the list.  The actual list length
+	//%      is 2 x number_terms + 1 (the constant).
+	public function polynomialImage(array $terms): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_SET_DEPTH
+	public function setDepth(int $depth): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_SET_EXTRACT
+	//%  MagickSetExtract() sets the extract geometry before you read or write an
+	//%  image file.  Use it for inline cropping (e.g. 200x200+0+0) or resizing
+	//%  (e.g.200x200).
+	public function setExtract(string $geometry): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_SET_INTERPOLATE_METHOD
+/**
+ * int $method - PixelInterpolateMethod
+ */
+	public function setInterpolateMethod(int $method): bool{}
+#endif
+
+#if IM_HAVE_IMAGICK_SET_ORIENTATION
+	/**
+	 * $orientation - OrientationType
+	 */
+	public function setOrientation(int $orientation): bool {}
+#endif
+
 }

@@ -35,6 +35,8 @@ function setImageArtifact() {
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
 }
 
+echo "Fail - need to check setImageArtifact with null \n";
+
 setImageArtifact() ;
 echo "Ok";
 ?>

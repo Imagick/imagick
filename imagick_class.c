@@ -13974,4 +13974,516 @@ PHP_METHOD(Imagick, whiteBalanceImage)
 /* }}} */
 #endif //IM_HAVE_IMAGICK_WHITEBALANCEIMAGE
 
+
+#if IM_HAVE_IMAGICK_DELETE_OPTION
+/* {{{ proto boolean Imagick::deleteOption(string $option)
+*/
+PHP_METHOD(Imagick, deleteOption)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	char *option;
+	IM_LEN_TYPE option_len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &option, &option_len) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickDeleteOption(intern->magick_wand, option);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to deleteOption" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_BACKGROUND_COLOR
+/* {{{ proto int Imagick::getBackgroundColor()
+*/
+PHP_METHOD(Imagick, getBackgroundColor)
+{
+	php_imagick_object *intern;
+	ssize_t offset;
+	php_imagickpixel_object *imagickpixel_object;
+	PixelWand *pixel_wand;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	pixel_wand = MagickGetBackgroundColor(intern->magick_wand);
+
+	if (pixel_wand == NULL) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "getBackgroundColor" TSRMLS_CC);
+		return;
+	}
+
+	object_init_ex(return_value, php_imagickpixel_sc_entry);
+	imagickpixel_object = Z_IMAGICKPIXEL_P(return_value);
+	php_imagick_replace_pixelwand(imagickpixel_object, pixel_wand);
+
+	return;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_ARTIFACTS
+/* {{{ proto array Imagick::getImageArtifacts(string $pattern = "*")
+*/
+PHP_METHOD(Imagick, getImageArtifacts)
+{
+	php_imagick_object *intern;
+	size_t number_artifacts;
+	char *pattern = "*";
+	IM_LEN_TYPE pattern_len;
+	char **artifacts;
+	char *artifact_value;
+	unsigned int i;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	artifacts = MagickGetImageArtifacts(
+		intern->magick_wand,
+		pattern,
+		&number_artifacts
+	);
+
+	array_init(return_value);
+	for (i=0; i<number_artifacts; i++) {
+		artifact_value = MagickGetImageArtifact(intern->magick_wand, artifacts[i]);
+		if (artifact_value == NULL) {
+			add_assoc_null(return_value, artifacts[i]);
+		}
+		else {
+			IM_add_assoc_string(return_value, artifacts[i], artifact_value);
+			MagickRelinquishMemory(artifact_value);
+		}
+	}
+}
+/* }}} */
+#endif
+
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_DISTORTIONS
+
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_KURTOSIS
+/* {{{ proto int Imagick::getImageKurtosis()
+	[kurtosis: float, skewness: float]
+*/
+PHP_METHOD(Imagick, getImageKurtosis)
+{
+	php_imagick_object *intern;
+
+	MagickBooleanType status;
+	double kurtosis;
+	double skewness;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	status = MagickGetImageKurtosis(intern->magick_wand, &kurtosis, &skewness);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getImageKurtosis" TSRMLS_CC);
+		return;
+	}
+
+	array_init(return_value);
+	add_assoc_double(return_value, "kurtosis", kurtosis);
+	add_assoc_double(return_value, "skewness", skewness);
+
+	return;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_MEAN
+/* {{{ proto int Imagick::getImageMean()
+	[mean: float, standard_deviation: float]
+*/
+PHP_METHOD(Imagick, getImageMean)
+{
+	php_imagick_object *intern;
+
+	MagickBooleanType status;
+	double mean;
+	double standard_deviation;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	status = MagickGetImageMean(intern->magick_wand, &mean, &standard_deviation);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getImageMean" TSRMLS_CC);
+		return;
+	}
+
+	array_init(return_value);
+	add_assoc_double(return_value, "mean", mean);
+	add_assoc_double(return_value, "standard_deviation", standard_deviation);
+
+	return;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_IMAGE_RANGE
+/* {{{ proto int Imagick::getImageRange()
+	[minima: float, maxima: float]
+*/
+PHP_METHOD(Imagick, getImageRange)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	double minima;
+	double maxima;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	status = MagickGetImageRange(intern->magick_wand, &minima, &maxima);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getImageRange" TSRMLS_CC);
+		return;
+	}
+
+	array_init(return_value);
+	add_assoc_double(return_value, "minima", minima);
+	add_assoc_double(return_value, "maxima", maxima);
+
+	return;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_INTERPOLATE_METHOD
+/* {{{ proto int Imagick::getInterpolateMethod()
+*/
+PHP_METHOD(Imagick, getInterpolateMethod)
+{
+	php_imagick_object *intern;
+	PixelInterpolateMethod pixelInterpolateMethod;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	pixelInterpolateMethod = MagickGetInterpolateMethod(intern->magick_wand);
+
+	RETVAL_LONG(pixelInterpolateMethod);
+}
+/* }}} */
+#endif
+
+
+#if IM_HAVE_IMAGICK_GET_OPTIONS
+/* {{{ proto array Imagick::getOptions(string $pattern = "*")
+*/
+PHP_METHOD(Imagick, getOptions)
+{
+	php_imagick_object *intern;
+	size_t number_options;
+	char *pattern = "*";
+	IM_LEN_TYPE pattern_len;
+	char **options;
+	char *option_value;
+	unsigned int i;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	options = MagickGetOptions(
+		intern->magick_wand,
+		pattern,
+		&number_options
+	);
+
+	array_init(return_value);
+
+	for (i=0; i<number_options; i++) {
+		option_value = MagickGetOption(intern->magick_wand, options[i]);
+		IM_add_assoc_string(return_value, options[i], option_value);
+		MagickRelinquishMemory(option_value);
+	}
+
+	return;
+}
+/* }}} */
+#endif
+
+
+#if IM_HAVE_IMAGICK_GET_ORIENTATION
+/* {{{ proto int Imagick::getOrientation()
+*/
+PHP_METHOD(Imagick, getOrientation)
+{
+	php_imagick_object *intern;
+	OrientationType orientation;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	orientation = MagickGetOrientation(intern->magick_wand);
+
+	RETVAL_LONG(orientation);
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_RESOLUTION
+/* {{{ proto int Imagick::getSizeOffset()
+	[x: float, y: float]
+*/
+PHP_METHOD(Imagick, getResolution)
+{
+	php_imagick_object *intern;
+
+	MagickBooleanType status;
+	double x;
+	double y;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	status = MagickGetResolution(intern->magick_wand, &x, &y);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getResolution" TSRMLS_CC);
+		return;
+	}
+
+	array_init(return_value);
+	add_assoc_double(return_value, "x", x);
+	add_assoc_double(return_value, "y", y);
+
+	return;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_GET_TYPE
+/* {{{ proto int Imagick::getType()
+*/
+PHP_METHOD(Imagick, getType)
+{
+	php_imagick_object *intern;
+	ImageType type;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	type = MagickGetType(intern->magick_wand);
+
+	RETVAL_LONG(type);
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_POLYNOMIAL_IMAGE
+/* {{{ proto Imagick Imagick::polynomialImage(array $terms)
+	number_terms: the number of terms in the list.  The actual list length
+      	//%      is 2 x number_terms + 1 (the constant).
+*/
+PHP_METHOD(Imagick, polynomialImage)
+{
+	MagickWand *tmp_wand;
+	php_imagick_object *intern;
+	zval *terms;
+	double *terms_double_array;
+	MagickBooleanType status;
+	im_long terms_count = 0;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &terms) == FAILURE) {
+		return;
+	}
+
+	terms_double_array = php_imagick_zval_to_double_array(terms, &terms_count TSRMLS_CC);
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSetIteratorIndex(intern->magick_wand, 0);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polynomialImage, failed to set iterator to zero" TSRMLS_CC);
+		return;
+	}
+
+	// TODO - sanity check terms_count
+
+	status = MagickPolynomialImage(
+		intern->magick_wand,
+		terms_count,
+		terms_double_array
+	);
+
+	efree(terms_double_array);
+
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polynomialImage" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_SET_DEPTH
+/* {{{ proto bool Imagick::setDepth(int depth)
+	Sets the depth
+*/
+PHP_METHOD(Imagick, setDepth)
+{
+	php_imagick_object *intern;
+	im_long depth;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &depth) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+
+	status = MagickSetDepth(intern->magick_wand, depth);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setDepth" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+
+#if IM_HAVE_IMAGICK_SET_EXTRACT
+/* {{{ proto bool Imagick::setExtract(string $geometry)
+	Use it for inline cropping (e.g. 200x200+0+0)
+*/
+PHP_METHOD(Imagick, setExtract)
+{
+	char *geometry_string;
+	IM_LEN_TYPE geometry_string_len;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &geometry_string, &geometry_string_len) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+//	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+//		return;
+
+	status = MagickSetExtract(intern->magick_wand, geometry_string);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setExtract" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_SET_INTERPOLATE_METHOD
+/* {{{ proto bool Imagick::setInterpolateMethod(int method)
+	Sets the interpolate pixel method.
+*/
+PHP_METHOD(Imagick, setInterpolateMethod)
+{
+	php_imagick_object *intern;
+	im_long interpolate;
+	MagickBooleanType status;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &interpolate) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+//	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+//		return;
+
+	status = MagickSetInterpolateMethod(intern->magick_wand, interpolate);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setInterpolateMethod" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
+#if IM_HAVE_IMAGICK_SET_ORIENTATION
+/* {{{ proto bool Imagick::setOrientation(int orientation)
+*/
+PHP_METHOD(Imagick, setOrientation)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long orientation_type;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &orientation_type) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSetOrientation(intern->magick_wand, orientation_type);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setOrientation" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif
+
 /* end of Imagick */

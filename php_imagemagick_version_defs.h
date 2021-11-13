@@ -102,6 +102,74 @@
 	#define IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE 1
 #endif
 
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_DELETE_OPTION 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_BACKGROUND_COLOR 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_IMAGE_ARTIFACTS 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_IMAGE_DISTORTIONS 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_IMAGE_KURTOSIS 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_IMAGE_MEAN 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_IMAGE_RANGE 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_INTERPOLATE_METHOD 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_OPTIONS 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_ORIENTATION 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_RESOLUTION 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_GET_TYPE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_POLYNOMIAL_IMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_SET_DEPTH 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_SET_EXTRACT 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_SET_INTERPOLATE_METHOD 1
+#endif
+
+#if MagickLibVersion >= 0x701
+	#define IM_HAVE_IMAGICK_SET_ORIENTATION 1
+#endif
+
 #if MagickLibVersion >= 0x70A
 	// Technically, this may be available earlier, but the behaviour around
 	// default mask changed.

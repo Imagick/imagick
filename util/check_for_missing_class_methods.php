@@ -118,6 +118,10 @@ $unsupportedMethods = [
     "IsMagickWandInstantiated",
     "IsPixelIterator",
     "IsWandView",
+
+    // Yeah, no: https://www.zdnet.com/article/london-protesters-slam-us-copyright-laws/
+    "MagickSetPassphrase",
+
 ];
 
 //    "MagickConnectedComponentsImage", // MagickBooleanType MagickConnectedComponentsImage(MagickWand *wand, const size_t connectivity,CCObjectInfo **objects)
@@ -125,28 +129,28 @@ $unsupportedMethods = [
 $todoList = [
 	"DrawGetTypeMetrics",
 	"MagickConnectedComponentsImage",
-	"MagickDeleteImageProperty",
-	"MagickDeleteOption",
-	"MagickGetBackgroundColor",
+//	"MagickDeleteImageProperty" // er, we seem to call DeleteImageProperty directly.
+//	"MagickDeleteOption",
+//	"MagickGetBackgroundColor",
 	"MagickGetExceptionType",
-	"MagickGetImageArtifacts",
-	"MagickGetImageDistortions",
-	"MagickGetImageFeatures",
-	"MagickGetImageKurtosis",
-	"MagickGetImageMean",
-	"MagickGetImageRange",
-	"MagickGetInterpolateMethod",
-	"MagickGetOptions",
-	"MagickGetOrientation",
-	"MagickGetResolution",
-	"MagickGetType",
-	"MagickPolynomialImage",
-	"MagickSetDepth",
-	"MagickSetExtract",
-	"MagickSetInterpolateMethod",
-	"MagickSetOrientation",
-	"MagickSetPassphrase",
-	"MagickSetProgressMonitor",
+//	"MagickGetImageArtifacts",
+//	"MagickGetImageDistortions",
+//	"MagickGetImageFeatures",
+//	"MagickGetImageKurtosis",
+//	"MagickGetImageMean",
+//	"MagickGetImageRange",
+//	"MagickGetInterpolateMethod",
+//	"MagickGetOptions",
+//	"MagickGetOrientation",
+//	"MagickGetResolution",
+//	"MagickGetType",
+//	"MagickPolynomialImage",
+//	"MagickSetDepth",
+//	"MagickSetExtract",
+//	"MagickSetInterpolateMethod",
+//	"MagickSetOrientation",
+//
+//	"MagickSetProgressMonitor",
 	"MagickSetSecurityPolicy",
 	"PixelGetIteratorExceptionType",
 ];

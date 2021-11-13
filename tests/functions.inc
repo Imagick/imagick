@@ -110,3 +110,27 @@ function setFontForImagickDraw(\ImagickDraw $imagickDraw)
 
     $imagickDraw->setFont($font);
 }
+
+
+function check_value(array $values, $name, $expected_value)
+{
+	if (array_key_exists($name, $values) !== true) {
+
+		$message = "Expected key '$name' not set. Array contains:\n";
+		$message .= var_export($values, true);
+
+		throw new \Exception($message);
+	}
+
+
+	$value = $values[$name];
+
+	$epsilon = 0.01;
+
+	if (($value < $expected_value - $epsilon) || ($value > $expected_value + $epsilon)) {
+		$message = "Value for $name doesn't match expected. Expected: $expected_value, actual: $value";
+		throw new \Exception($message);
+	}
+
+	echo "Value for '$name' is $value which is close enough to expected $expected_value\n";
+}
