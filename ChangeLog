@@ -1,3 +1,6 @@
+3.6.0
+  - No change from 3.6.0RC2
+
 3.6.0RC2
 - Fixes:
   * Remove deprecated message from Imagick::roundCorners()
