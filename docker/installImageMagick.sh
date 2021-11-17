@@ -19,6 +19,7 @@ cd /var/app/imagemagick_src/${SRCFILE}
   --with-magick-plus-plus=no \
   --without-perl \
   --disable-docs \
+  --with-openexr=yes \
   --with-fontconfig=yes \
   --with-fftw \
   --with-heic=yes \
