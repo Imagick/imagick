@@ -112,6 +112,20 @@ jobs:
             imagemagick: git6
           - php: 5.5
             imagemagick: git6
+          - php: 7.4
+            imagemagick: git7
+          - php: 7.3
+            imagemagick: git7
+          - php: 7.2
+            imagemagick: git7
+          - php: 7.1
+            imagemagick: git7
+          - php: 7.0
+            imagemagick: git7
+          - php: 5.6
+            imagemagick: git7
+          - php: 5.5
+            imagemagick: git7
 
     steps:
       - name: Checkout code
