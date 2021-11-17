@@ -24,10 +24,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-- Fixes:
-  * Remove deprecated message from Imagick::roundCorners()
-- Added:
-  * Imagick::addNoiseImageWithAttenuate()
+- No change from 3.6.0RC2
 </notes>
 	<contents>
 		<dir name="/">
