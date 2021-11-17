@@ -2411,7 +2411,14 @@ PHP_METHOD(Imagick, importImagePixels)
 	array = Z_ARRVAL_P(pixels);
 
 	if (zend_hash_num_elements(array) != ((width * height) * map_len)) {
-		php_imagick_throw_exception(IMAGICK_CLASS, "The map contains incorrect number of elements" TSRMLS_CC);
+		zend_throw_exception_ex(
+			php_imagick_exception_class_entry,
+				0,
+				"The map contains incorrect number of elements. Expected %d, array has %d",
+				(width * height) * map_len,
+				zend_hash_num_elements(array)
+			);
+
 		return;
 	} else {
 		if (!php_imagick_validate_map(map TSRMLS_CC)) {
