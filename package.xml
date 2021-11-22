@@ -13,18 +13,21 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2021-07-22</date>
+	<date>2021-11-11</date>
 	<version>
-		<release>3.5.1</release>
-		<api>3.5.1</api>
+		<release>3.6.0RC2</release>
+		<api>3.6.0RC2</api>
 	</version>
 	<stability>
-		<release>stable</release>
-		<api>stable</api>
+		<release>beta</release>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
-	- Better detection of appropriate OpenMP library to use, i.e. GCC or Clang.
+- Fixes:
+  * Remove deprecated message from Imagick::roundCorners()
+- Added:
+  * Imagick::addNoiseImageWithAttenuate()
 </notes>
 	<contents>
 		<dir name="/">
@@ -353,9 +356,31 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="288_imagick_prevent_zero_size_images.phpt" role="test" />
 				<file name="289_Imagick_setImageMask_basic.phpt" role="test" />
 				<file name="290_imagick_profileimage.phpt" role="test" />
+				<file name="291_reflection.phpt" role="test" />
+				<file name="292_index_iterator.phpt" role="test" />
+				<file name="294_Imagick_cannyEdgeImage.phpt" role="test" />
+				<file name="295_Imagick_setSeed.phpt" role="test" />
+				<file name="296_Imagick_waveletDenoiseImage.phpt" role="test" />
+				<file name="297_Imagick_meanShiftImage.phpt" role="test" />
+				<file name="298_Imagick_kmeansImage.phpt" role="test" />
+				<file name="299_Imagick_rangeThresholdImage.phpt" role="test" />
+				<file name="300_Imagick_autoThresholdImage.phpt" role="test" />
+				<file name="301_Imagick_bilateralBlurImage.phpt" role="test" />
+				<file name="302_Imagick_claheImage.phpt" role="test" />
+				<file name="303_Imagick_averageImages.phpt" role="test" />
+				<file name="304_Imagick_is_imagemagick_borked.phpt" role="test" />
+				<file name="305_Imagick_complexImages.phpt" role="test" />
+				<file name="306_Imagick_interpolativeResizeImage.phpt" role="test" />
+				<file name="307_Imagick_levelImageColors.phpt" role="test" />
+				<file name="308_Imagick_levelizeImage.phpt" role="test" />
+				<file name="309_Imagick_orderedDitherImage.phpt" role="test" />
+				<file name="310_Imagick_whiteBalanceImage.phpt" role="test" />
+				<file name="311_Imagick_channelFxImage.phpt" role="test" />
+				<file name="312_Imagick_colorThresholdImage.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />
+				<file name="bug59378_windows.phpt" role="test" />
 				<file name="bug64015.phpt" role="test" />
 				<file name="bug_66098.phpt" role="test" />
 				<file name="bug_71742.phpt" role="test" />
@@ -365,6 +390,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="functions.inc" role="test" />
 				<file name="github_174.phpt" role="test" />
 				<file name="houghline_input_image.png" role="test" />
+				<file name="Biter_500.jpg" role="test" />
 				<file name="php.gif" role="test" />
 				<file name="skipif.inc" role="test" />
 				<file name="skipprobefourier.inc" role="test" />

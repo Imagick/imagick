@@ -79,8 +79,8 @@ class Imagick
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool  {}
 
-#if MagickLibVersion < 0x700
-    /** @deprecated */
+
+
     public function roundCornersImage(
         float $x_rounding,
         float $y_rounding,
@@ -88,9 +88,7 @@ class Imagick
         float $displace = 5,
         float $size_correction = -6): bool {}
 
-    /* This alias is due to BWC */
     /**
-     * @deprecated
      * @alias Imagick::roundCornersImage
      */
     public function roundCorners(
@@ -99,8 +97,6 @@ class Imagick
         float $stroke_width = 10,
         float $displace = 5,
         float $size_correction = -6): bool {}
-
-#endif
 
     public function setIteratorIndex(int $index): bool  {}
 
@@ -293,7 +289,7 @@ class Imagick
     // CHANNEL_
     public function getImageChannelRange(int $channel): array  {}
 
-    public function getImageAlphaChannel(): int  {}
+    public function getImageAlphaChannel(): bool  {}
 #endif
 
 #if MagickLibVersion > 0x642
@@ -475,13 +471,8 @@ class Imagick
     public function clear(): bool  {}
 
     public function clone(): Imagick  {}
-        
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#if MagickLibVersion < 0x700
-    /** @deprecated */
+
     public function getImageSize(): int  {}
-#endif
-#endif
 
     public function getImageBlob(): string  {}
 
@@ -501,15 +492,9 @@ class Imagick
 
     public function hasNextImage(): bool  {}
 
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-#if MagickLibVersion < 0x700
-    /** @deprecated */
     public function setImageIndex(int $index): bool  {}
 
-    /** @deprecated */
     public function getImageIndex(): int  {}
-#endif
-#endif
 
     public function commentImage(string $comment): bool  {}
 
@@ -629,8 +614,8 @@ class Imagick
 
     public function setImageIterations(int $iterations): bool  {}
 
-#if MagickLibVersion < 0x700
-    /** @deprecated */
+
+#if MagickLibVersion < 0x700 || MagickLibVersion >= 0x705
     public function setImageMatteColor(ImagickPixel|string $matte_color): bool  {}
 #endif
 
@@ -691,6 +676,14 @@ class Imagick
     // NOISE_*
     public function addNoiseImage(int $noise, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
+#if IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE
+    public function addNoiseImageWithAttenuate(
+        int $noise,
+        float $attenuate,
+        int $channel = Imagick::CHANNEL_DEFAULT
+    ): bool  {}
+#endif
+
     public function motionBlurImage(
         float $radius,
         float $sigma,
@@ -711,12 +704,7 @@ class Imagick
 
     public function affineTransformImage(ImagickDraw $settings): bool  {}
 
-#if MagickLibVersion < 0x700
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-    /** @deprecated */
     public function averageImages(): Imagick  {}
-#endif
-#endif
 
     public function borderImage(
         ImagickPixel|string $border_color,
@@ -808,12 +796,8 @@ class Imagick
 
 #endif
 
-#if MagickLibVersion < 0x700
-#if !defined(MAGICKCORE_EXCLUDE_DEPRECATED)
-    /** @deprecated */
     public function flattenImages(): Imagick  {}
-#endif
-#endif
+
     public function flipImage(): bool  {}
 
     public function flopImage(): bool  {}
@@ -1016,7 +1000,7 @@ class Imagick
 
     public function profileImage(string $name, ?string $profile): bool  {}
 
-    public function  quantizeImage(
+    public function quantizeImage(
         int $number_colors,
         int $colorspace,
         int $tree_depth,
@@ -1136,8 +1120,10 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function getCopyright(): string  {}
 
-    public static function getConfigureOptions(string $pattern = "*"): string {}
-
+    /**
+     * @return string[]
+     */
+    public static function getConfigureOptions(string $pattern = "*"): array {}
 
 #if MagickLibVersion > 0x660
     public static function getFeatures(): string {}
@@ -1270,7 +1256,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     public function subimageMatch(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 
     /** @alias Imagick::subimageMatch */
-    public function similarityimage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+    public function similarityImage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
@@ -1372,4 +1358,134 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //        int $y,
 //        bool $invert,
 //        int $channel = Imagick::CHANNEL_DEFAULT): null {}
+
+
+#if MagickLibVersion >= 0x709
+    public function cannyEdgeImage(
+        float $radius,
+        float $sigma,
+        float $lower_percent,
+        float $upper_percent
+    ): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_SETSEED
+	public static function setSeed(int $seed): void {}
+#endif
+
+#if IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
+	public function waveletDenoiseImage(float $threshold, float $softness): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_MEANSHIFTIMAGE
+	public function meanShiftImage(
+		int $width,
+		int $height,
+		float $color_distance
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_KMEANSIMAGE
+	public function kmeansImage(
+		int $number_colors,
+		int $max_iterations,
+		float $tolerance
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
+	public function rangeThresholdImage(
+		float $low_black,
+		float $low_white,
+		float $high_white,
+		float $high_black
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
+	// AUTO_THRESHOLD_*
+	public function autoThresholdImage(int $auto_threshold_method): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_BILATERALBLURIMAGE
+	public function bilateralBlurImage(
+		float $radius,
+		float $sigma,
+		float $intensity_sigma,
+		float $spatial_sigma
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_CLAHEIMAGE
+	public function claheImage(
+		int $width,
+		int $height,
+		int $number_bins,
+		float $clip_limit
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_CHANNELFXIMAGE
+	// MagickChannelFxImage() applies a channel expression to the specified image.
+	// The expression consists of one or more channels, either mnemonic or numeric
+	// (e.g. red, 1), separated by actions as follows:
+	//
+	//   <=>     exchange two channels (e.g. red<=>blue)
+	//   =>      transfer a channel to another (e.g. red=>green)
+	//   ,       separate channel operations (e.g. red, green)
+	//   |       read channels from next input image (e.g. red | green)
+	//   ;       write channels to next output image (e.g. red; green; blue)
+	public function channelFxImage(string $expression): Imagick {}
+#endif
+
+#if IM_HAVE_IMAGICK_COLORTHRESHOLDIMAGE
+	public function colorThresholdImage(
+		ImagickPixel|string $start_color,
+		ImagickPixel|string $stop_color
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_COMPLEXIMAGES
+	// COMPLEX_OPERATOR_
+	public function complexImages(int $complex_operator): Imagick {}
+#endif
+
+#if IM_HAVE_IMAGICK_INTERPOLATIVERESIZEIMAGE
+	public function interpolativeResizeImage(
+		int $columns,
+		int $rows,
+		int $interpolate // INTERPOLATE_
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_LEVELIMAGECOLORS
+	public function levelImageColors(
+		ImagickPixel|string $black_color,
+		ImagickPixel|string $white_color,
+		bool $invert
+	): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_LEVELIZEIMAGE
+	public function levelizeImage(
+		float $black_point,
+		float $gamma,
+		float $white_point
+	): bool {}
+#endif
+
+	//For example: "o3x3,6" generates a 6 level posterization of the image
+	// with a ordered 3x3 diffused pixel dither being applied between each
+	// level. While checker,8,8,4 will produce a 332 colormaped image with
+	// only a single checkerboard hash pattern (50% grey) between each color
+	// level, to basically double the number of color levels with a bare
+	// minimim of dithering.
+
+#if IM_HAVE_IMAGICK_ORDEREDDITHERIMAGE
+	public function orderedDitherImage(string $dither_format): bool {}
+#endif
+
+#if IM_HAVE_IMAGICK_WHITEBALANCEIMAGE
+	public function whiteBalanceImage(): bool {}
+#endif
 }

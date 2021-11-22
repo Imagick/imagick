@@ -443,9 +443,7 @@ PHP_METHOD(imagick, adaptiveblurimage);
 PHP_METHOD(imagick, contraststretchimage);
 PHP_METHOD(imagick, adaptivesharpenimage);
 PHP_METHOD(imagick, randomthresholdimage);
-#if MagickLibVersion < 0x700
 PHP_METHOD(imagick, roundcornersimage);
-#endif
 PHP_METHOD(imagick, setiteratorindex);
 PHP_METHOD(imagick, getiteratorindex);
 #if MagickLibVersion < 0x700
@@ -958,6 +956,68 @@ PHP_METHOD(imagick, localcontrastimage);
 #if MagickLibVersion >= 0x700
 PHP_METHOD(imagick, identifyimagetype);
 #endif // #if MagickLibVersion >= 0x700
+
+#if IM_HAVE_IMAGICK_SETSEED
+PHP_METHOD(imagick, setSeed);
+#endif
+#if IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE
+PHP_METHOD(imagick, waveletDenoiseImage);
+#endif
+#if IM_HAVE_IMAGICK_MEANSHIFTIMAGE
+PHP_METHOD(imagick, meanShiftImage);
+#endif
+#if IM_HAVE_IMAGICK_KMEANSIMAGE
+PHP_METHOD(imagick, kmeansImage);
+#endif
+#if IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE
+PHP_METHOD(imagick, rangeThresholdImage);
+#endif
+#if IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE
+PHP_METHOD(imagick, autoThresholdImage);
+#endif
+#if IM_HAVE_IMAGICK_BILATERALBLURIMAGE
+PHP_METHOD(imagick, bilateralBlurImage);
+#endif
+#if IM_HAVE_IMAGICK_CLAHEIMAGE
+PHP_METHOD(imagick, claheImage);
+#endif
+
+#if IM_HAVE_IMAGICK_CHANNELFXIMAGE
+PHP_METHOD(imagick, channelFxImage);
+#endif
+
+#if IM_HAVE_IMAGICK_COLORTHRESHOLDIMAGE
+PHP_METHOD(imagick, colorThresholdImage);
+#endif
+#if IM_HAVE_IMAGICK_COMPLEXIMAGES
+PHP_METHOD(imagick, complexImages);
+#endif
+#if IM_HAVE_IMAGICK_INTERPOLATIVERESIZEIMAGE
+PHP_METHOD(imagick, interpolativeResizeImage);
+#endif
+#if IM_HAVE_IMAGICK_LEVELIMAGECOLORS
+PHP_METHOD(imagick, levelImageColors);
+#endif
+#if IM_HAVE_IMAGICK_LEVELIZEIMAGE
+PHP_METHOD(imagick, levelizeImage);
+#endif
+#if IM_HAVE_IMAGICK_ORDEREDDITHERIMAGE
+PHP_METHOD(imagick, orderedDitherImage);
+#endif
+#if IM_HAVE_IMAGICK_WHITEBALANCEIMAGE
+PHP_METHOD(imagick, whiteBalanceImage);
+#endif
+
+
+
+
+
+
+
+
+
+
+
 
 /* Forward declarations (ImagickDraw) */
 #if MagickLibVersion > 0x628

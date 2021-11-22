@@ -23,7 +23,7 @@ else if (count($allOptions) == 0) {
 }
 
 
-$optionsStartingWithC = Imagick::getConfigureOptions("C*");
+$optionsStartingWithC = Imagick::getConfigureOptions("Q*");
 
 if (!is_array($optionsStartingWithC)) {
 	echo "Failed to return array".PHP_EOL;
@@ -31,6 +31,8 @@ if (!is_array($optionsStartingWithC)) {
 }
 else if (count($optionsStartingWithC) == 0) {
 	echo "optionsStartingWithC is empty".PHP_EOL;
+	echo "All options are:\n";
+	var_dump(Imagick::getConfigureOptions());
 }
 
 //Example output on Debian
@@ -146,7 +148,7 @@ if (!(count($optionsStartingWithC) < count($allOptions))) {
 foreach ($optionsStartingWithC as $key => $value) {
 	$key = strtolower($key);
 
-	if (strpos($key, "c") !== 0) {
+	if (stripos($key, "q") !== 0) {
 		echo "key $key does not start with c".PHP_EOL;
 	}
 }

@@ -1,0 +1,40 @@
+name: Build and Test on Windows
+on: [push]
+jobs:
+  windows:
+    defaults:
+      run:
+        shell: cmd
+    strategy:
+      matrix:
+          version: ["7.4", "8.0"]
+          arch: [x64]
+          ts: [ts]
+    runs-on: windows-2019
+    steps:
+      - name: Checkout imagick
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        id: setup-php
+        uses: cmb69/setup-php-sdk@v0.2
+        with:
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+      - name: Download deps
+        run: |
+          curl -LO https://windows.php.net/downloads/pecl/deps/ImageMagick-7.1.0-13-1-vc15-${{matrix.arch}}.zip
+          7z x ImageMagick-7.1.0-13-1-vc15-${{matrix.arch}}.zip -o..\deps
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
+      - name: phpize
+        run: phpize
+      - name: configure
+        run: configure --with-imagick --with-php-build=..\deps --with-prefix=${{steps.setup-php.outputs.prefix}}
+      - name: make
+        run: nmake
+      - name: test
+        run: nmake test TESTS="-j4 --show-diff -g FAIL,BORK,WARN,LEAK tests"

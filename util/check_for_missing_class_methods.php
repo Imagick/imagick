@@ -46,7 +46,6 @@ else {
             }
         }
     }
-
 }
 
 
@@ -63,10 +62,16 @@ $unsupportedMethods = [
 	"MagickDestroyImage", //this shouldn't be needed. It's covered by clear?
 	"MagickGetImageFuzz", // I'm not aware of any operations that use the built in fuzz
 	"MagickSetImageFuzz", // I'm not aware of any operations that use the built in fuzz
-	"MagickGetImageChannelDistortions", //Don't understand
-	"MagickGetImageChannelFeatures", //Don't understand
-	"MagickConstituteImage", //duplicate functionality.
-	"MagickCompositeLayers", //duplicate functionality.
+	"MagickGetImageChannelDistortions", // Don't understand
+	"MagickGetImageChannelFeatures", // Don't understand
+	"MagickConstituteImage", // duplicate functionality.
+	"MagickCompositeLayers", // duplicate functionality.
+	"SetWandViewDescription", // don't understand
+	"DuplexTransferWandViewIterator",
+
+    "NewMagickWandFromImage", // We don't expose Image types
+    "NewWandView",      // don't understand and we don't expose views
+    "NewWandViewExtent", // don't understand and we don't expose views
 
 	//Pixel
 	"PixelGetException", // not a user function
@@ -82,13 +87,18 @@ $unsupportedMethods = [
 	"PixelGetExceptionType", // This should be everywhere?
 	"PixelGetQuantumColor", //pixelpackets are not exposed.
 	"PixelSetQuantumColor", //pixelpackets are not exposed.
+    "PixelGetPixel", // don't understand
+    "PixelGetQuantumPacket", // don't understand
+    "PixelGetQuantumPixel", // don't understand
+    "PixelSetPixelColor", // we don't expose PixelInfo
+    "PixelSetQuantumPixel", // don't understand
 
 	// Draw
 	"DrawAllocateWand", // not a user function
-	"IsDrawingWand", //Not needed
-
+	"IsDrawingWand", // Not needed
 
     // TODO - add these when someone asks for them or they are required
+    // but curently we don't expose wand view.
     "SetWandViewIterator",
     "TransferWandViewIterator",
     "UpdateWandViewIterator",
@@ -103,39 +113,45 @@ $unsupportedMethods = [
     "DrawCloneExceptionInfo",
     "DrawGetExceptionType",
 
-
-
-
     // TODO - these should not be needed in PHP land
     "IsMagickWand",
     "IsMagickWandInstantiated",
     "IsPixelIterator",
     "IsWandView",
-
-
-
-
-
 ];
 
+//    "MagickConnectedComponentsImage", // MagickBooleanType MagickConnectedComponentsImage(MagickWand *wand, const size_t connectivity,CCObjectInfo **objects)
+// These functions almost certainly need to be implemented.
+$todoList = [
+	"DrawGetTypeMetrics",
+	"MagickConnectedComponentsImage",
+	"MagickDeleteImageProperty",
+	"MagickDeleteOption",
+	"MagickGetBackgroundColor",
+	"MagickGetExceptionType",
+	"MagickGetImageArtifacts",
+	"MagickGetImageDistortions",
+	"MagickGetImageFeatures",
+	"MagickGetImageKurtosis",
+	"MagickGetImageMean",
+	"MagickGetImageRange",
+	"MagickGetInterpolateMethod",
+	"MagickGetOptions",
+	"MagickGetOrientation",
+	"MagickGetResolution",
+	"MagickGetType",
+	"MagickPolynomialImage",
+	"MagickSetDepth",
+	"MagickSetExtract",
+	"MagickSetInterpolateMethod",
+	"MagickSetOrientation",
+	"MagickSetPassphrase",
+	"MagickSetProgressMonitor",
+	"MagickSetSecurityPolicy",
+	"PixelGetIteratorExceptionType",
+];
 
-//$methods = [];
-//
-//foreach ($tests as $test) {
-//	$lines = file($test."_methods.txt");
-//	if ($lines === false) {
-//		echo "Couldn't read file for $test \n";
-//		exit(-1);
-//	}
-//
-//	foreach ($lines as $line) {
-//		$methods[trim($line)] = false;
-//	}
-//}
-
-
-
-$files = glob("../*.c");
+$files = glob(__DIR__ . "/../*.c");
 
 $contents = [];
 
@@ -174,19 +190,30 @@ foreach ($files as $file) {
 	}
 }
 
-//exit(0);
+$any_missing = false;
+
 ksort($methods);
 foreach ($methods as $name => $found) {
 	if (in_array($name, $unsupportedMethods) == true) {
 		continue;
 	}
 
+	if (in_array($name, $todoList) == true) {
+		continue;
+	}
+
 	if ($found == false) {
 		echo "Missing: $name\n";
+		$any_missing = true;
 	}
 }
 
 
+if ($any_missing === true) {
+    exit(-1);
+}
+
+exit(0);
 
 
 

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/imagick/imagick.png)](https://travis-ci.org/imagick/imagick)
+[![Build status](https://github.com/imagick/imagick/actions/workflows/main.yml/badge.svg)](https://github.com/Imagick/imagick/actions)
 
 # 🌈🌈 Imagick 🌈🌈
 

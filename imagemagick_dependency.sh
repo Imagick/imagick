@@ -6,13 +6,11 @@ set -x
 
 imagemagick_fetch_and_build () {
     local version=$1
+    local imagick_dir=$2
 
     im_dir=${HOME}/im/imagemagick-${version}
 
-    echo "version is ${version}, im_dir=${im_dir}"
-
-    echo "contents of im_dir are:"
-
+    echo "version is ${version}, im_dir=${im_dir}, imagick_dir is ${imagick_dir}"
 
     case $version in
         git7)
@@ -93,6 +91,10 @@ imagemagick_fetch_and_build () {
         ;;
     esac
 
+
+echo "About to check for missing enums"
+php "${imagick_dir}/util/check_for_missing_enums.php" $(pwd)
+
 #ignore compile warnings/errors
 set +e
 
@@ -112,4 +114,4 @@ echo "Configuring, regardless of whether IM was cached."
 
 }
 
-imagemagick_fetch_and_build $1
+imagemagick_fetch_and_build $1 $2

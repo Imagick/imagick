@@ -1,8 +1,7 @@
 --TEST--
-Test PHP bug #59378 writing to php://memory is incomplete
+Test PHP bug #59378 writing to php://temp is incomplete
 --SKIPIF--
 <?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
-<?php if (substr(PHP_OS, 0, 3) == 'WIN') {  die("skip php://memory can't be used as filehandle on Windows"); } ?>
 --FILE--
 <?php
 
@@ -10,7 +9,10 @@ $imagick = new Imagick();
 $imagick->newPseudoImage(640, 480, "LOGO:");
 $imagick->setFormat("png");
 
-$fp = fopen("php://memory", 'r+');
+// Although the bug was about php://memory, that isn'--TEST--
+// available to use as a filehandle on Windows, so may as well
+// just test php://temp instead.
+$fp = fopen("php://temp", 'r+');
 $imagick->writeImageFile($fp);
 rewind($fp);
 $memoryBlob = stream_get_contents($fp);

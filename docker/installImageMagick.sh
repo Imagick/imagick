@@ -16,18 +16,17 @@ tar -xzf /var/app/imagemagick_src/${SRCFILE}.tar.gz -C /var/app/imagemagick_src
 cd /var/app/imagemagick_src/${SRCFILE}
 
 ./configure --with-quantum-depth=16 \
-           --with-magick-plus-plus=no \
-           --without-perl \
-           --disable-docs \
-           --with-jpeg=yes \
-           --with-png=yes \
-           --with-fontconfig=yes \
-           --with-webp=yes \
-           --with-tiff=yes
-
-
-#       --with-urw-base35-font-dir=/usr/share/fonts/opentype/urw-base35
-
+  --with-magick-plus-plus=no \
+  --without-perl \
+  --disable-docs \
+  --with-fontconfig=yes \
+  --with-fftw \
+  --with-heic=yes \
+  --with-jpeg=yes \
+  --with-png=yes \
+  --with-tiff=yes \
+  --with-urw-base35-font-dir=/usr/share/fonts/type1/urw-base35 \
+  --with-webp=yes
 
 # --disable-openmp
 

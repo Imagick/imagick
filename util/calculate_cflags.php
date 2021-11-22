@@ -2,6 +2,8 @@
 
 // Run with something like:
 // export CLFAGS=$(php util/calculate_cflags.php "8.0" "7.0.1-0")
+// where the first number is the PHP version, and the second number
+// is the ImageMagick version number
 
 if ($argc !== 3) {
     fwrite(STDERR, "usage php calculate_cflags.php \$PHP_VERSION \$IMAGEMAGICK_VERSION \n");

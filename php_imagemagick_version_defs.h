@@ -34,6 +34,74 @@
 #endif
 
 
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_SETSEED 1
+#endif
+
+#if MagickLibVersion >= 0x709
+		#define IM_HAVE_IMAGICK_WAVELETDENOISEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_MEANSHIFTIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x710
+	#define IM_HAVE_IMAGICK_KMEANSIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_RANGETHRESHOLDIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_AUTOTHRESHOLDIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x710
+	#define IM_HAVE_IMAGICK_BILATERALBLURIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_CLAHEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_CHANNELFXIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x710
+	#define IM_HAVE_IMAGICK_COLORTHRESHOLDIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_COMPLEXIMAGES 1
+#endif
+
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_INTERPOLATIVERESIZEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_LEVELIMAGECOLORS 1
+#endif
+
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_LEVELIZEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_ORDEREDDITHERIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x70B
+	#define IM_HAVE_IMAGICK_WHITEBALANCEIMAGE 1
+#endif
+
+#if MagickLibVersion >= 0x702
+	#define IM_HAVE_IMAGICK_ADD_NOISE_WITH_ATTENUATE 1
+#endif
+
 #if MagickLibVersion >= 0x70A
 	// Technically, this may be available earlier, but the behaviour around
 	// default mask changed.
@@ -77,6 +145,13 @@ WandExport MagickBooleanType MagickSetImageMask(
 WandExport MagickBooleanType MagickSetImageMask(
 	MagickWand *wand, const PixelMask type, const MagickWand *clip_mask
 );
+#endif
+
+#if MagickLibVersion >= 0x710
+// declare symbols only defined in C source and not in header
+WandExport MagickBooleanType MagickBilateralBlurImage(MagickWand *wand,
+  const double radius,const double sigma,const double intensity_sigma,
+  const double spatial_sigma);
 #endif
 
 #endif /* PHP_IMAGEMAGICK_VERSION_DEFS_H */

@@ -1,4 +1,4 @@
-name: Tests
+name: Build and Test on Debian
 
 on:
   push:
@@ -19,17 +19,9 @@ jobs:
         os: [ ubuntu-latest ]
         php: [ 5.4 ]
         imagemagick: [
-            7.0.10-27,
+            7.1.0-13,
             6.9.2-0,
-#            git7,
-#            git6
         ]
-#        exclude:
-#          - php: 5.4
-#            imagemagick: 6.8.7-0
-#        allow_failures:
-#         - imagemagick: git7
-#          - imagemagick: git6
 
     steps:
       - name: Checkout code
@@ -58,9 +50,9 @@ jobs:
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
+          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
 
-      - name: Configure and check fonts are present
+      - name: Configure, install, and basic checks
         run: |
           export NO_INTERACTION=1
           export REPORT_EXIT_STATUS=1
@@ -90,9 +82,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-20.04]
         php: [5.4, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
         imagemagick: [
+          7.1.0-13,
           7.0.10-27,
           7.0.8-4,
           7.0.1-0,
@@ -105,9 +98,6 @@ jobs:
         exclude:
           - php: 5.4
             imagemagick: 6.8.7-0
-        allow_failures:
-          - imagemagick: git7
-          - imagemagick: git6
 
     steps:
       - name: Checkout code
@@ -136,7 +126,7 @@ jobs:
       - name: Sanity check package.xml and install ImageMagick
         run: |
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}"
+          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
 
       - name: Configure and check fonts are present
         run: |

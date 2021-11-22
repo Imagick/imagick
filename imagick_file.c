@@ -328,7 +328,7 @@ zend_bool php_imagick_stream_handler(php_imagick_object *intern, php_stream *str
 	IMAGICK_SET_ERROR_HANDLING_THROW;
 
 	if (php_stream_can_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL) == FAILURE ||
-		php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void*)&fp, 0) == FAILURE) {
+		php_stream_cast(stream, PHP_STREAM_AS_STDIO | PHP_STREAM_CAST_INTERNAL, (void **)&fp, 0) == FAILURE) {
 		IMAGICK_RESTORE_ERROR_HANDLING;
 		return 0;
 	}
