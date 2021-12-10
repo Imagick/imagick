@@ -3019,7 +3019,7 @@ PHP_METHOD(Imagick, setImageArtifact)
 	char *artifact, *value;
 	IM_LEN_TYPE artifact_len, value_len;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss!", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
 		return;
 	}
 
@@ -3052,16 +3052,18 @@ PHP_METHOD(Imagick, getImageArtifact)
 
 	value = MagickGetImageArtifact(intern->magick_wand, artifact);
 
-	if (!value) {
-		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image artifact" TSRMLS_CC);
-		return;
+	if (value == NULL) {
+		RETVAL_NULL();
 	}
+	else {
 #if PHP_VERSION_ID >= 70000
-	RETVAL_STRING(value);
+		RETVAL_STRING(value);
 #else
-	RETVAL_STRING(value, 1);
+		RETVAL_STRING(value, 1);
 #endif
-	IMAGICK_FREE_MAGICK_MEMORY(value);
+		IMAGICK_FREE_MAGICK_MEMORY(value);
+	}
+
 	return;
 }
 

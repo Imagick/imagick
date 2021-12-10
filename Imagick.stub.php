@@ -383,14 +383,14 @@ class Imagick
      *  $artifact example 'compose:args'
      *
      */
-    public function getImageArtifact(string $artifact): string  {}
+    public function getImageArtifact(string $artifact): string|null  {}
 
     /**
      * $artifact example 'compose:args'
      * $value example  "1,0,-0.5,0.5"
      *
      */
-    public function setImageArtifact(string $artifact, string $value): bool  {}
+    public function setImageArtifact(string $artifact, string|null $value): bool  {}
 
     public function deleteImageArtifact(string $artifact): bool  {}
 

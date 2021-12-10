@@ -12,9 +12,6 @@ RUN apt-get update -qq \
     strace valgrind libtiff5-dev libfftw3-dev libde265-dev libheif-dev \
     libssl-dev libzip-dev unzip
 
-# libssl1.0-dev libonig-dev libssl1.0-dev
-
-
 # Make the default directory you
 WORKDIR /var/app
 
