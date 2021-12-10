@@ -13,12 +13,46 @@ if ($directory) {
 	$pathToImageMagick = $directory;
 }
 else {
-	if ($argc != 2) {
-		echo "usage 'php scanHeaders.php /path/to/ImageMagick\n";
+	if ($argc != 3) {
+		echo "usage 'php scanHeaders.php \$path_to_imagemagick \$imagemagick_version\n";
+		echo "e.g. 'php scanHeaders.php /path/to/ImageMagick 7.0.11-12 \n";
 		exit(-1);
 	}
 
 	$pathToImageMagick = $argv[1];
+	$imageMagickVersion = $argv[2];
+}
+
+echo "Deciding whether to perform check:\n";
+
+if (strpos($imageMagickVersion, "git") === 0) {
+	echo "yes - version is a git version\n";
+}
+else {
+	$matched = preg_match(
+		"#(?<major>\d)\.(?<minor>\d)\.(?<patch>\d)-(?<patchier>\d)#iu",
+		$imageMagickVersion,
+		$matches
+	);
+
+	if ($matched !== 1) {
+		echo "Failed to match version number [$imageMagickVersion]. Which is odd.\n";
+		exit(-1);
+	}
+
+	$major_int = (int)$matches["major"];
+	$minor_int = (int)$matches["minor"];
+
+	if ($major_int === 7 && $minor_int >= 1) {
+		echo "Yes - version is new enough to bother checking for new functions\n";
+	}
+	else if ($major_int === 6 && $minor_int >= 9) {
+		echo "Yes - version is new enough to bother checking for new functions\n";
+	}
+	else {
+		echo "No - version is too old to bother checking for new functions.\n";
+		exit(0);
+	}
 }
 
 $pathToImageMagick .= '/';
@@ -261,6 +295,7 @@ foreach ($enumToCheck as $filename => $enums) {
 if ($any_missing === true) {
     exit(-1);
 }
+echo "No missing enums found.\n";
 exit(0);
 
 function getEnumList($enum, $filename)

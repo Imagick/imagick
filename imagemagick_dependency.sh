@@ -93,7 +93,7 @@ imagemagick_fetch_and_build () {
 
 
 echo "About to check for missing enums"
-php "${imagick_dir}/util/check_for_missing_enums.php" $(pwd)
+php "${imagick_dir}/util/check_for_missing_enums.php" $(pwd) $(version)
 
 #ignore compile warnings/errors
 set +e
