@@ -9957,17 +9957,12 @@ PHP_METHOD(Imagick, oilPaintImage)
 	MagickBooleanType status;
 	php_imagick_object *intern;
 #if MagickLibVersion >= 0x700
-	float sigma = 1.0;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|d", &radius, &sigma) == FAILURE) {
-		return;
-	}
-#else
+	double sigma = 1.0;
+#endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
 		return;
 	}
-#endif // #if MagickLibVersion >= 0x700
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
@@ -9988,6 +9983,38 @@ PHP_METHOD(Imagick, oilPaintImage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::oilPaintImageWithSigma(float radius, float sigma)
+	Applies a special effect filter that simulates an oil painting.  Each pixel is replaced by the most frequent color occurring in a circular region defined by radius.
+*/
+PHP_METHOD(Imagick, oilPaintImageWithSigma)
+{
+	double radius;
+	double sigma;
+	MagickBooleanType status;
+	php_imagick_object *intern;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickOilPaintImage(intern->magick_wand, radius, sigma);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse)
+	{
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to oilPaintImageWithSigma image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // #if MagickLibVersion >= 0x700
 
 /* {{{ proto bool Imagick::normalizeImage([int channel])
 	Enhances the contrast of a color image by adjusting the pixels color to span the entire range of colors available, Channel parameter is ignored in ImageMagick below 6.2.8

@@ -1,7 +1,6 @@
 3.x.y
-- Changed:
-  * Imagick::oilPaintImage added sigma parameter, so signature is now oilPaintImage(float $radius, float $sigma = 1.0): bool  {}
-  * Imagick::
+- Added:
+  * Imagick::oilPaintImageWithSigma(float $radius, float $sigma)
 
 3.6.0RC2
 - Fixes:

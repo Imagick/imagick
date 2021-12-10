@@ -1,5 +1,5 @@
 --TEST--
-Test Imagick, oilPaintImage
+Test Imagick, oilPaintImageWithSigma
 --SKIPIF--
 <?php
 $imageMagickRequiredVersion=0x700;
@@ -13,13 +13,7 @@ $radius = 5;
 function oilPaintImage($radius) {
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
-    $imagick->oilPaintImage($radius);
-    $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
-
-    $imagick = new \Imagick();
-    $imagick->newPseudoImage(640, 480, "magick:logo");
-    $imagick->oilPaintImage($radius, 2.0);
+    $imagick->oilPaintImageWithSigma($radius, 2.0);
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
 }

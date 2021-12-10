@@ -2485,6 +2485,28 @@ ZEND_END_ARG_INFO()
 #if MagickLibVersion >= 0x700
 
 #if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_oilPaintImageWithSigma, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_oilPaintImageWithSigma, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, radius)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, sigma, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, sigma)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_oilPaintImage, 0, 1, _IS_BOOL, 0)
 #else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_oilPaintImage, 0, 0, 1)
@@ -2496,26 +2518,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_oilPaintImage, 0, 0, 1)
 #else
     ZEND_ARG_INFO(0, radius)
 #endif
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, sigma, IS_DOUBLE, 0, "1.0")
 ZEND_END_ARG_INFO()
-#endif
-
-#if !(MagickLibVersion >= 0x700)
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_oilPaintImage, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_oilPaintImage, 0, 0, 1)
-#endif
-
-	
-#if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
-#else
-    ZEND_ARG_INFO(0, radius)
-#endif
-ZEND_END_ARG_INFO()
-#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -3089,20 +3092,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_displayImages arginfo_class_Imagick_displayImage
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_spreadImage, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_spreadImage, 0, 0, 1)
-#endif
-
-	
-#if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
-#else
-    ZEND_ARG_INFO(0, radius)
-#endif
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_spreadImage arginfo_class_Imagick_oilPaintImage
 
 
 #if PHP_VERSION_ID >= 80000
@@ -3572,7 +3562,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_despeckleImage arginfo_class_Imagick_removeImage
 
-#define arginfo_class_Imagick_edgeImage arginfo_class_Imagick_spreadImage
+#define arginfo_class_Imagick_edgeImage arginfo_class_Imagick_oilPaintImage
 
 #define arginfo_class_Imagick_embossImage arginfo_class_Imagick_charcoalImage
 
@@ -4056,7 +4046,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageRegion, 0, 0, 4)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_implodeImage arginfo_class_Imagick_spreadImage
+#define arginfo_class_Imagick_implodeImage arginfo_class_Imagick_oilPaintImage
 
 #if MagickLibVersion >= 0x658
 
@@ -6094,11 +6084,9 @@ ZEND_METHOD(Imagick, appendImages);
 ZEND_METHOD(Imagick, charcoalImage);
 ZEND_METHOD(Imagick, normalizeImage);
 #if MagickLibVersion >= 0x700
-ZEND_METHOD(Imagick, oilPaintImage);
+ZEND_METHOD(Imagick, oilPaintImageWithSigma);
 #endif
-#if !(MagickLibVersion >= 0x700)
 ZEND_METHOD(Imagick, oilPaintImage);
-#endif
 ZEND_METHOD(Imagick, posterizeImage);
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED) && MagickLibVersion < 0x700
 ZEND_METHOD(Imagick, radialBlurImage);
@@ -6827,11 +6815,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, charcoalImage, arginfo_class_Imagick_charcoalImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, normalizeImage, arginfo_class_Imagick_normalizeImage, ZEND_ACC_PUBLIC)
 #if MagickLibVersion >= 0x700
-	ZEND_ME(Imagick, oilPaintImage, arginfo_class_Imagick_oilPaintImage, ZEND_ACC_PUBLIC)
+	ZEND_ME(Imagick, oilPaintImageWithSigma, arginfo_class_Imagick_oilPaintImageWithSigma, ZEND_ACC_PUBLIC)
 #endif
-#if !(MagickLibVersion >= 0x700)
 	ZEND_ME(Imagick, oilPaintImage, arginfo_class_Imagick_oilPaintImage, ZEND_ACC_PUBLIC)
-#endif
 	ZEND_ME(Imagick, posterizeImage, arginfo_class_Imagick_posterizeImage, ZEND_ACC_PUBLIC)
 #if !defined(MAGICKCORE_EXCLUDE_DEPRECATED) && MagickLibVersion < 0x700
 	ZEND_ME(Imagick, radialBlurImage, arginfo_class_Imagick_radialBlurImage, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)

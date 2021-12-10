@@ -559,10 +559,10 @@ class Imagick
     public function normalizeImage(int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
 #if MagickLibVersion >= 0x700
-    public function oilPaintImage(float $radius, float $sigma = 1.0): bool  {}
-#else
-    public function oilPaintImage(float $radius): bool  {}
+    public function oilPaintImageWithSigma(float $radius, float $sigma): bool  {}
 #endif
+
+    public function oilPaintImage(float $radius): bool  {}
 
     public function posterizeImage(int $levels, bool $dither): bool  {}
 
