@@ -1,3 +1,8 @@
+3.x.y
+- Changed:
+  * Imagick::oilPaintImage added sigma parameter, so signature is now oilPaintImage(float $radius, float $sigma = 1.0): bool  {}
+  * Imagick::
+
 3.6.0RC2
 - Fixes:
   * Remove deprecated message from Imagick::roundCorners()

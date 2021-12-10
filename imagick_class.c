@@ -9958,13 +9958,16 @@ PHP_METHOD(Imagick, oilPaintImage)
 	php_imagick_object *intern;
 #if MagickLibVersion >= 0x700
 	float sigma = 1.0;
-	//TODO - allow sigma to be set.
-#endif // #if MagickLibVersion >= 0x700
 
-	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|d", &radius, &sigma) == FAILURE) {
+		return;
+	}
+#else
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
 		return;
 	}
+#endif // #if MagickLibVersion >= 0x700
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
