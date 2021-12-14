@@ -2,6 +2,9 @@
 Test Imagick, getImageMean
 --SKIPIF--
 <?php
+// mean calculation seems unstable on earlier versions
+// lets only check modern versions, and see if it breaks
+$imageMagickRequiredVersion=0x710;
 require_once(dirname(__FILE__) . '/skipif.inc');
 checkClassMethods('Imagick', array('getImageMean'));
 ?>
