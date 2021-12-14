@@ -22,7 +22,11 @@ $methods = [];
 if ($cache === false) {
 
     foreach ($urls as $type => $url) {
-        $html = file_get_contents($url);
+        $html = @file_get_contents($url);
+        if ($html === false) {
+            echo "Failed to retrieve URL $url\n";
+            exit(-1);
+        }
 
         $pattern = '#<a href=".+" id="(.+)">\1</a>#iu';
         $count = preg_match_all($pattern, $html, $matches);

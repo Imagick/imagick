@@ -30,7 +30,7 @@ if (strpos($imageMagickVersion, "git") === 0) {
 }
 else {
 	$matched = preg_match(
-		"#(?<major>\d)\.(?<minor>\d)\.(?<patch>\d)-(?<patchier>\d)#iu",
+		"#(?<major>\d)\.(?<minor>\d+)\.(?<patch>\d+)-(?<patchier>\d+)#iu",
 		$imageMagickVersion,
 		$matches
 	);
