@@ -165,6 +165,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="086_Imagick_forwardFourierTransformImage_basic.phpt" role="test" />
 				<file name="087_Imagick_levelImage_basic.phpt" role="test" />
 				<file name="088_Imagick_implodeImage_basic.phpt" role="test" />
+				<file name="088_Imagick_implodeImageWithMethod_basic.phpt" role="test" />
 				<file name="089_Imagick_medianFilterImage_basic.phpt" role="test" />
 				<file name="090_Imagick_magnifyImage_basic.phpt" role="test" />
 				<file name="091_Imagick_linearStretchImage_basic.phpt" role="test" />
@@ -176,6 +177,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="097_Imagick_newPseudoImage_basic.phpt" role="test" />
 				<file name="098_Imagick_orderedPosterizeImage_basic.phpt" role="test" />
 				<file name="099_Imagick_oilPaintImage_basic.phpt" role="test" />
+				<file name="099_Imagick_oilPaintImage_sigma.phpt" role="test" />
 				<file name="100_Imagick_posterizeImage_basic.phpt" role="test" />
 				<file name="101_Imagick_quantizeImage_basic.phpt" role="test" />
 				<file name="102_Imagick_radialBlurImage_basic.phpt" role="test" />

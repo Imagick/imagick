@@ -22,8 +22,8 @@ cd /var/app/php_src/${SRCFILE}
   --without-pdo-sqlite \
   --with-openssl \
   --enable-mbstring \
-  --with-curl
-
+  --with-curl \
+  --with-zip
 
 
 

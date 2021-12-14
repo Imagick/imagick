@@ -945,6 +945,13 @@ class Imagick
 
     public function implodeImage(float $radius): bool  {}
 
+#if MagickLibVersion >= 0x700
+	public function implodeImageWithMethod(
+		float $radius,
+		int $pixel_interpolate_method // PixelInterpolateMethod
+	): bool  {}
+#endif
+
 #if MagickLibVersion >= 0x658
     // TODO MagickWand *magnitude_wand,MagickWand *phase_wand,
     public function inverseFourierTransformImage(Imagick $complement, bool $magnitude): bool  {}

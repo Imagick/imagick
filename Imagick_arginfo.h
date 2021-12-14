@@ -4048,6 +4048,29 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_implodeImage arginfo_class_Imagick_oilPaintImage
 
+#if MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_implodeImageWithMethod, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_implodeImageWithMethod, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, radius)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, pixel_interpolate_method, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, pixel_interpolate_method)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
 #if MagickLibVersion >= 0x658
 
 #if PHP_VERSION_ID >= 80000
@@ -6246,6 +6269,9 @@ ZEND_METHOD(Imagick, getNumberImages);
 ZEND_METHOD(Imagick, getImageTotalInkDensity);
 ZEND_METHOD(Imagick, getImageRegion);
 ZEND_METHOD(Imagick, implodeImage);
+#if MagickLibVersion >= 0x700
+ZEND_METHOD(Imagick, implodeImageWithMethod);
+#endif
 #if MagickLibVersion >= 0x658
 ZEND_METHOD(Imagick, inverseFourierTransformImage);
 #endif
@@ -6978,6 +7004,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, getImageTotalInkDensity, arginfo_class_Imagick_getImageTotalInkDensity, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, getImageRegion, arginfo_class_Imagick_getImageRegion, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, implodeImage, arginfo_class_Imagick_implodeImage, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
+	ZEND_ME(Imagick, implodeImageWithMethod, arginfo_class_Imagick_implodeImageWithMethod, ZEND_ACC_PUBLIC)
+#endif
 #if MagickLibVersion >= 0x658
 	ZEND_ME(Imagick, inverseFourierTransformImage, arginfo_class_Imagick_inverseFourierTransformImage, ZEND_ACC_PUBLIC)
 #endif

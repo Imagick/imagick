@@ -4684,6 +4684,41 @@ PHP_METHOD(Imagick, implodeImage)
 }
 /* }}} */
 
+
+
+/* {{{ proto bool Imagick::implodeImageWithMethod(float radius, int pixel_interpolate_method )
+	Creates a new image that is a copy of an existing one with the image pixels "implode" by the specified percentage. It allocates the memory necessary for the new Image structure and returns a pointer to the new image.
+*/
+PHP_METHOD(Imagick, implodeImageWithMethod)
+{
+	php_imagick_object *intern;
+	double radius;
+	im_long method;
+	MagickBooleanType status;
+//	PixelInterpolateMethod method;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &radius, &method) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickImplodeImage(intern->magick_wand, radius, method);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to implode image" TSRMLS_CC);
+		return;
+	}
+	RETURN_TRUE;
+}
+/* }}} */
+
+
+
 #if MagickLibVersion >= 0x658
 //Only stable as of 658
 //http://upstream-tracker.org/compat_reports/imagemagick/6.5.7.7_to_6.5.7.8/abi_compat_report.html
