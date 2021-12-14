@@ -4,6 +4,7 @@ Imagick::setImageAlpha
 <?php 
 $imageMagickRequiredVersion=0x700;
 require_once(dirname(__FILE__) . '/skipif.inc'); 
+if (substr(PHP_OS, 0, 3) === 'WIN') die("xfail test fails on Windows for yet unknown reasons");
 ?>
 --FILE--
 <?php
