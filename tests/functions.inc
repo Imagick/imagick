@@ -134,3 +134,25 @@ function check_value(array $values, $name, $expected_value)
 
 	echo "Value for '$name' is $value which is close enough to expected $expected_value\n";
 }
+
+
+function check_value_with_epsilon(array $values, $name, $expected_value, $epsilon)
+{
+	if (array_key_exists($name, $values) !== true) {
+
+		$message = "Expected key '$name' not set. Array contains:\n";
+		$message .= var_export($values, true);
+
+		throw new \Exception($message);
+	}
+
+
+	$value = $values[$name];
+
+	if (($value < $expected_value - $epsilon) || ($value > $expected_value + $epsilon)) {
+		$message = "Value for $name doesn't match expected. Expected: $expected_value, actual: $value, epsilon = $epsilon";
+		throw new \Exception($message);
+	}
+
+	echo "Value for '$name' is $value which is close enough to expected $expected_value\n";
+}
