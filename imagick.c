@@ -30,10 +30,10 @@
 #include "ext/standard/php_smart_str.h"
 #endif
 
-//#if PHP_VERSION_ID < 70200
+#if PHP_VERSION_ID < 70200
 ///* For the countable interface */
-//#include "ext/spl/spl_iterators.h"
-//#endif
+#include "ext/spl/spl_iterators.h"
+#endif
 
 #include "shim_php7_to_php8.h"
 
