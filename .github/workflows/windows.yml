@@ -23,8 +23,8 @@ jobs:
           ts: ${{matrix.ts}}
       - name: Download deps
         run: |
-          curl -LO https://windows.php.net/downloads/pecl/deps/ImageMagick-7.1.0-13-1-vc15-${{matrix.arch}}.zip
-          7z x ImageMagick-7.1.0-13-1-vc15-${{matrix.arch}}.zip -o..\deps
+          curl -LO https://windows.php.net/downloads/pecl/deps/ImageMagick-7.1.0-18-vc15-${{matrix.arch}}.zip
+          7z x ImageMagick-7.1.0-18-vc15-${{matrix.arch}}.zip -o..\deps
       - name: Enable Developer Command Prompt
         uses: ilammy/msvc-dev-cmd@v1
         with:
