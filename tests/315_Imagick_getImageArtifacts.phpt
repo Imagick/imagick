@@ -29,10 +29,16 @@ function getImageArtifacts() {
         }
     }
 
+    $any_failed = false;
     foreach ($expectedEntries as $key => $value) {
         if ($value !== true) {
             echo "Expected entry $key was not set\n";
+            $any_failed = true;
         }
+    }
+
+    if ($any_failed === true) {
+        var_dump($artifacts);
     }
 
     $imagick->getImageBlob();
