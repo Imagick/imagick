@@ -4684,8 +4684,7 @@ PHP_METHOD(Imagick, implodeImage)
 }
 /* }}} */
 
-
-
+#if MagickLibVersion >= 0x700
 /* {{{ proto bool Imagick::implodeImageWithMethod(float radius, int pixel_interpolate_method )
 	Creates a new image that is a copy of an existing one with the image pixels "implode" by the specified percentage. It allocates the memory necessary for the new Image structure and returns a pointer to the new image.
 */
@@ -4716,7 +4715,7 @@ PHP_METHOD(Imagick, implodeImageWithMethod)
 	RETURN_TRUE;
 }
 /* }}} */
-
+#endif // #if MagickLibVersion >= 0x700
 
 
 #if MagickLibVersion >= 0x658
