@@ -14,7 +14,6 @@ function getImageArtifacts() {
 
     $expectedEntries = [
         "exif:ApertureValue" => false,
-        "exif:BodySerialNumber" => false,
         "exif:ColorSpace" => false,
         "exif:CustomRendered" => false,
         "exif:DateTime" => false,
@@ -23,7 +22,6 @@ function getImageArtifacts() {
         "exif:ExifOffset" => false,
         "exif:ExifVersion" => false,
     ];
-
 
     foreach ($artifacts as $key => $value) {
        if (array_key_exists($key, $expectedEntries) === true) {
