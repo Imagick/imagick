@@ -66,7 +66,6 @@ script:
     - export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
     - export CFLAGS=$(php util/calculate_cflags.php $TRAVIS_PHP_VERSION $IMAGEMAGICK_VERSION)
     - echo "CFLAGS are ${CFLAGS}"
-    # - . ./configure-cflags.sh
     - phpize
     - ./configure --with-imagick="${HOME}/im/imagemagick-${IMAGEMAGICK_VERSION}"
     - make install
