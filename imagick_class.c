@@ -14324,7 +14324,6 @@ PHP_METHOD(Imagick, getType)
 */
 PHP_METHOD(Imagick, polynomialImage)
 {
-	MagickWand *tmp_wand;
 	php_imagick_object *intern;
 	zval *terms;
 	double *terms_double_array;
