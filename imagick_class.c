@@ -14018,10 +14018,8 @@ PHP_METHOD(Imagick, deleteOption)
 PHP_METHOD(Imagick, getBackgroundColor)
 {
 	php_imagick_object *intern;
-	ssize_t offset;
 	php_imagickpixel_object *imagickpixel_object;
 	PixelWand *pixel_wand;
-	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
