@@ -1,5 +1,7 @@
 [![Build status](https://github.com/imagick/imagick/actions/workflows/main.yml/badge.svg)](https://github.com/Imagick/imagick/actions)
 
+[![Build status](https://github.com/imagick/imagick/actions/workflows/windows.yml/badge.svg)](https://github.com/Imagick/imagick/actions)
+
 # 🌈🌈 Imagick 🌈🌈
 
 Imagick is a PHP extension to create and modify images using the ImageMagick library. There is also a version of Imagick available for HHVM. Although the two extensions are mostly compatible in their API, and they both call the ImageMagick library, the two extensions are completely separate code-bases.
