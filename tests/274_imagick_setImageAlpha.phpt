@@ -4,14 +4,11 @@ Imagick::setImageAlpha
 <?php 
 $imageMagickRequiredVersion=0x700;
 require_once(dirname(__FILE__) . '/skipif.inc'); 
-if (substr(PHP_OS, 0, 3) === 'WIN') die("xfail test fails on Windows for yet unknown reasons");
 ?>
 --FILE--
 <?php
 
 require_once __DIR__ . "/../util/functions.php";
-
-
 
 $imagick = new Imagick();
 $imagick->newPseudoImage(256, 256, 'xc:purple');
@@ -47,7 +44,6 @@ function getColorError($type, $expected, $actual) {
 
     echo "Unknown type: $type \n";
     exit(-1);
-
 }
 
 
@@ -56,10 +52,10 @@ foreach ($pixelTypes as $pixelType => $expectedValues) {
 	$channelNames = ['R', 'G', 'B', 'A'];
 
 	// Loop over the colours
-	for ($channel=0; $channel<4; $channel++) {
+	for ($channel = 0; $channel < 4; $channel++) {
 		$actual = $pixels[$channel];
 		$expected = $expectedValues[$channel];
-		if (abs($actual - $expected) > 0.0000001) {
+		if (abs($actual - $expected) > get_epsilon_for_off_by_half_errors()) {
 		    $channelName = $channelNames[$channel];
 
 			echo "Pixel values appear incorrect for pixelType $pixelType channel:$channelName\n";

@@ -200,3 +200,59 @@ function float_compare_32(float $value1, float $value2)
 
     return $output;
 }
+
+/**
+ * So. One of the disadvantages of non-HDRI compiled Image Magick
+ * is that it can't accurately represent a '50%' color accurately.
+ *
+ * For example, if ImageMagick is compiled with 16bit color depth
+ * then the two closest colors to midpoint are:
+ *   32767 / 65535 = 0.5 - (1 / (2 ^ 17)) = 0.499992370...
+ *  or
+ *   32768 / 65535 = 0.5 + (1 / (2 ^ 17)) = 0.50000762951
+ *
+ * Either way there is going to be 'error' of
+ * 0.00000762939453125
+ *
+ * The problem is even worse when ImageMagick is compiled with 8-bit
+ * numbers (though this really shouldn't be used any more) and the
+ * error would be 0.001953125
+ *
+ */
+function get_epsilon_for_off_by_half_errors()
+{
+    // These could be defined better...
+    $epsilon_values_for_non_hdri = [
+        255 => (1 / (pow(2, 8) - 1)) + 0.0000000000001,
+        65535 => (1 / (pow(2, 16) - 1)) + 0.0000000000001,
+        16777215 => (1 / (pow(2, 24) - 1) ) + 0.0000000000001,
+        4294967295 => (1 / (pow(2, 32) - 1)) + 0.0000000000001,
+    ];
+
+    // These could definitely be defined better...
+    $epsilon_values_for_hdri = [
+        255 => 0.0000000000001,
+        65535 => 0.0000000000001,
+        16777215 => 0.0000000000001,
+        4294967295 => 0.0000000000001
+    ];
+
+    if (Imagick::getHdriEnabled() === false) {
+        $quantum = Imagick::getQuantum();
+        if (array_key_exists($quantum, $epsilon_values_for_non_hdri) !== true) {
+            throw new Exception(
+                "Quantum values is $quantum which is not any of (2^(8|16|24|32)) - 1. Please report this as a bug."
+            );
+        }
+        return $epsilon_values_for_non_hdri[$quantum];
+    }
+
+    $quantum = Imagick::getQuantum();
+    if (array_key_exists($quantum, $epsilon_values_for_hdri) !== true) {
+        throw new Exception(
+            "Quantum values is $quantum which is not any of (2^(8|16|24|32)) - 1. Please report this as a bug."
+        );
+    }
+
+    return $epsilon_values_for_hdri[$quantum];
+}
