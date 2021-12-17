@@ -5,8 +5,6 @@
 // where the first number is the PHP version, and the second number
 // is the ImageMagick version number
 
-//export CFLAGS=$(php util/calculate_cflags.php "7.3" "7.0.10-27")
-
 if ($argc !== 3) {
     fwrite(STDERR, "usage php calculate_cflags.php \$PHP_VERSION \$IMAGEMAGICK_VERSION \n");
     exit(-1);
@@ -30,17 +28,17 @@ $CFLAGS = array(
     "-Wextra",
     "-Wimplicit-function-declaration",
     "-Wno-variadic-macros",
-//    "-Wno-sign-compare",
+
 );
+
+if (strpos($IMAGEMAGICK_VERSION, "6") === 0) {
+    $CFLAGS[] = "-Wno-sign-compare";
+    $CFLAGS[] = "-Wno-unused-parameter";
+}
 
 if (strpos($IMAGEMAGICK_VERSION, "6.8") === 0) {
     $CFLAGS = array("-Wno-deprecated-declarations");
 }
-
-//if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0 ||
-//    strpos($PHP_VERSION, "7") === 0) {
-//    $CFLAGS[] = "-Wno-unused-parameter";
-//}
 
 if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0) {
     $CFLAGS[] = "-Wno-unused-variable";
