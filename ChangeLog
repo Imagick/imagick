@@ -1,6 +1,26 @@
-3.x.y
+Unreleased
 - Added:
-  * Imagick::oilPaintImageWithSigma(float $radius, float $sigma)
+  * function Imagick::oilPaintImageWithSigma(float $radius, float $sigma)
+  * function Imagick::deleteOption(string $option): bool {}
+  * function Imagick::getBackgroundColor(): ImagickPixel {}
+  * function Imagick::getImageArtifacts(string $pattern = "*"): array {}
+  * function Imagick::getImageKurtosis(): array {}
+  * function Imagick::getImageMean(): array {}
+  * function Imagick::getImageRange(): array {}
+  * function Imagick::getInterpolateMethod(): int {}
+  * function Imagick::getOptions(string $pattern = "*"): array {}
+  * function Imagick::getOrientation(): int {}
+  * function Imagick::getResolution(): array {}
+  * function Imagick::getType(): int {}
+  * function Imagick::polynomialImage(array $terms): bool {}
+  * function Imagick::setDepth(int $depth): bool {}
+  * function Imagick::setExtract(string $geometry): bool {}
+  * function Imagick::setInterpolateMethod(int $method): bool{}
+  * function Imagick::setOrientation(int $orientation): bool {}
+
+- Changed:
+  * Imagick::setImageArtifact can now take null for the string value.
+  * Return type for Imagick::getImageArtifact is string|null instead of string.
 
 3.6.0
   - No change from 3.6.0RC2
