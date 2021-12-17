@@ -1196,7 +1196,9 @@ PHP_MINFO_FUNCTION(imagick)
 
 PHP_MSHUTDOWN_FUNCTION(imagick)
 {
+#if !HAVE_OMP_PAUSE_RESOURCE_ALL
     int i;
+#endif
 
 // This suppresses an 'unused parameter' warning.
 	(void)type;
