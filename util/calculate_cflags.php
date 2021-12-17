@@ -28,18 +28,17 @@ $CFLAGS = array(
     "-Wextra",
     "-Wimplicit-function-declaration",
     "-Wno-variadic-macros",
-    "-Wno-sign-compare",
-
-    //Errors in IM6.9.2-0
-    "-Wno-unused-parameter",
-    "-Wno-unused-variable"
+//    "-Wno-sign-compare",
 );
-
 
 if (strpos($IMAGEMAGICK_VERSION, "6.8") === 0) {
     $CFLAGS = array("-Wno-deprecated-declarations");
 }
 
+if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0) {
+    $CFLAGS[] = "-Wno-unused-parameter";
+    $CFLAGS[] = "-Wno-unused-variable";
+}
 
 if ($PHP_VERSION == "5.4" || $PHP_VERSION == "5.5") {
     $CFLAGS = array("-Wno-deprecated-declarations");
