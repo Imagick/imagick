@@ -31,7 +31,8 @@ $CFLAGS = array(
 
 );
 
-if (strpos($IMAGEMAGICK_VERSION, "6") === 0) {
+if (strpos($IMAGEMAGICK_VERSION, "6") === 0 ||
+    strpos($IMAGEMAGICK_VERSION, "git6") === 0) {
     $CFLAGS[] = "-Wno-sign-compare";
     $CFLAGS[] = "-Wno-unused-parameter";
 }
