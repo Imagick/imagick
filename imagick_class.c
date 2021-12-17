@@ -7508,7 +7508,7 @@ PHP_METHOD(Imagick, setImagePixelColor)
 		return;
 	}
 
-	return;
+	RETURN_NULL();
 }
 /* }}} */
 #endif

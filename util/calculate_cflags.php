@@ -37,10 +37,10 @@ if (strpos($IMAGEMAGICK_VERSION, "6.8") === 0) {
     $CFLAGS = array("-Wno-deprecated-declarations");
 }
 
-if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0 ||
-    strpos($PHP_VERSION, "7") === 0) {
-    $CFLAGS[] = "-Wno-unused-parameter";
-}
+//if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0 ||
+//    strpos($PHP_VERSION, "7") === 0) {
+//    $CFLAGS[] = "-Wno-unused-parameter";
+//}
 
 if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0) {
     $CFLAGS[] = "-Wno-unused-variable";
