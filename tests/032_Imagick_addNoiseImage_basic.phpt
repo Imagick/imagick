@@ -16,19 +16,24 @@ function addNoiseImage($noiseType, $channel) {
     $imagick->newPseudoImage(640, 480, "magick:logo");
     $imagick->addNoiseImage($noiseType, $channel);
     $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
+    if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
+    echo "addNoiseImage\n";
 }
 
-function addNoiseImageWithAttenuate($noiseType, $channel) {
+function addNoiseWithAttenuate($noiseType, $channel) {
     $imagick = new \Imagick();
     $imagick->newPseudoImage(640, 480, "magick:logo");
     $imagick->addNoiseImageWithAttenuate($noiseType, 1.4, $channel);
     $bytes = $imagick->getImageBlob();
     if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
+    echo "addNoiseWithAttenuate\n";
 }
 
 addNoiseImage($noiseType, $channel);
+addNoiseWithAttenuate($noiseType, $channel);
 echo "Ok";
 ?>
 --EXPECTF--
+addNoiseImage
+addNoiseWithAttenuate
 Ok

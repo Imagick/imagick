@@ -12,7 +12,7 @@ RUN apt-get update -qq \
     strace valgrind libtiff5-dev libfftw3-dev libde265-dev libheif-dev \
     libssl-dev libzip-dev unzip
 
-# Make the default directory you
+# Make the default directory a useful one
 WORKDIR /var/app
 
 CMD tail -f /var/app/README.md
