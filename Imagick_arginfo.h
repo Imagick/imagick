@@ -119,6 +119,35 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_waveImage, 0, 0, 2)
 ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_waveImageWithMethod, 0, 3, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_waveImageWithMethod, 0, 0, 3)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, amplitude, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, amplitude)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, length, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, length)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, interpolate_method, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, interpolate_method)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
 #if MagickLibVersion > 0x628
 
 #if PHP_VERSION_ID >= 80000
@@ -532,6 +561,36 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_orderedPosterizeImage, 0, 0, 1)
     ZEND_ARG_INFO(0, threshold_map)
 #endif
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
+ZEND_END_ARG_INFO()
+#endif
+
+#if MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_polaroidWithTextAndMethod, 0, 4, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_polaroidWithTextAndMethod, 0, 0, 4)
+#endif
+
+	ZEND_ARG_OBJ_INFO(0, settings, ImagickDraw, 0)
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, angle, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, angle)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, caption, IS_STRING, 0)
+#else
+    ZEND_ARG_INFO(0, caption)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, method, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, method)
+#endif
 ZEND_END_ARG_INFO()
 #endif
 
@@ -3094,6 +3153,29 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_spreadImage arginfo_class_Imagick_oilPaintImage
 
+#if MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_spreadImageWithMethod, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_spreadImageWithMethod, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, radius, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, radius)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, interpolate_method, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, interpolate_method)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_swirlImage, 0, 1, _IS_BOOL, 0)
@@ -3108,6 +3190,29 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_swirlImage, 0, 0, 1)
     ZEND_ARG_INFO(0, degrees)
 #endif
 ZEND_END_ARG_INFO()
+
+#if MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_swirlImageWithMethod, 0, 2, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_swirlImageWithMethod, 0, 0, 2)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, degrees, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, degrees)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, interpolate_method, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, interpolate_method)
+#endif
+ZEND_END_ARG_INFO()
+#endif
 
 #define arginfo_class_Imagick_stripImage arginfo_class_Imagick_removeImage
 
@@ -6010,6 +6115,9 @@ ZEND_METHOD(Imagick, trimImage);
 #if MagickLibVersion > 0x628
 ZEND_METHOD(Imagick, waveImage);
 #endif
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x700
+ZEND_METHOD(Imagick, waveImageWithMethod);
+#endif
 #if MagickLibVersion > 0x628
 ZEND_METHOD(Imagick, vignetteImage);
 #endif
@@ -6069,6 +6177,9 @@ ZEND_METHOD(Imagick, setImageAlpha);
 #endif
 #if MagickLibVersion > 0x630 && MagickLibVersion < 0x700
 ZEND_METHOD(Imagick, orderedPosterizeImage);
+#endif
+#if MagickLibVersion >= 0x700
+ZEND_METHOD(Imagick, polaroidWithTextAndMethod);
 #endif
 #if MagickLibVersion > 0x631
 ZEND_METHOD(Imagick, polaroidImage);
@@ -6370,7 +6481,13 @@ ZEND_METHOD(Imagick, readImageFile);
 ZEND_METHOD(Imagick, displayImage);
 ZEND_METHOD(Imagick, displayImages);
 ZEND_METHOD(Imagick, spreadImage);
+#if MagickLibVersion >= 0x700
+ZEND_METHOD(Imagick, spreadImageWithMethod);
+#endif
 ZEND_METHOD(Imagick, swirlImage);
+#if MagickLibVersion >= 0x700
+ZEND_METHOD(Imagick, swirlImageWithMethod);
+#endif
 ZEND_METHOD(Imagick, stripImage);
 ZEND_METHOD(Imagick, queryFormats);
 ZEND_METHOD(Imagick, queryFonts);
@@ -6788,6 +6905,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion > 0x628
 	ZEND_ME(Imagick, waveImage, arginfo_class_Imagick_waveImage, ZEND_ACC_PUBLIC)
 #endif
+#if MagickLibVersion > 0x628 && MagickLibVersion >= 0x700
+	ZEND_ME(Imagick, waveImageWithMethod, arginfo_class_Imagick_waveImageWithMethod, ZEND_ACC_PUBLIC)
+#endif
 #if MagickLibVersion > 0x628
 	ZEND_ME(Imagick, vignetteImage, arginfo_class_Imagick_vignetteImage, ZEND_ACC_PUBLIC)
 #endif
@@ -6850,6 +6970,9 @@ static const zend_function_entry class_Imagick_methods[] = {
 #endif
 #if MagickLibVersion > 0x630 && MagickLibVersion < 0x700
 	ZEND_ME(Imagick, orderedPosterizeImage, arginfo_class_Imagick_orderedPosterizeImage, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
+#endif
+#if MagickLibVersion >= 0x700
+	ZEND_ME(Imagick, polaroidWithTextAndMethod, arginfo_class_Imagick_polaroidWithTextAndMethod, ZEND_ACC_PUBLIC)
 #endif
 #if MagickLibVersion > 0x631
 	ZEND_ME(Imagick, polaroidImage, arginfo_class_Imagick_polaroidImage, ZEND_ACC_PUBLIC)
@@ -7152,7 +7275,13 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, displayImage, arginfo_class_Imagick_displayImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, displayImages, arginfo_class_Imagick_displayImages, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, spreadImage, arginfo_class_Imagick_spreadImage, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
+	ZEND_ME(Imagick, spreadImageWithMethod, arginfo_class_Imagick_spreadImageWithMethod, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, swirlImage, arginfo_class_Imagick_swirlImage, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
+	ZEND_ME(Imagick, swirlImageWithMethod, arginfo_class_Imagick_swirlImageWithMethod, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, stripImage, arginfo_class_Imagick_stripImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, queryFormats, arginfo_class_Imagick_queryFormats, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_ME(Imagick, queryFonts, arginfo_class_Imagick_queryFonts, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)

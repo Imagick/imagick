@@ -24,6 +24,14 @@ class Imagick
 
     public function waveImage(float $amplitude, float $length): bool  {}
 
+#if MagickLibVersion >= 0x700
+    public function waveImageWithMethod(
+        float $amplitude,
+        float $length,
+        int $interpolate_method // INTERPOLATE_*
+    ): bool  {}
+#endif
+
     public function vignetteImage(float $black_point, float $white_point, int $x, int $y): bool  {}
 
     public function uniqueImageColors(): bool  {}
@@ -128,8 +136,17 @@ class Imagick
 #endif
 #endif
 
+#if MagickLibVersion >= 0x700
+    public function polaroidWithTextAndMethod(
+        ImagickDraw $settings,
+        float $angle,
+        string $caption,
+        int $method
+    ): bool {}
+#endif
+
 #if MagickLibVersion > 0x631
-    // TODO - ImagickDraw ....
+
     public function polaroidImage(ImagickDraw $settings, float $angle): bool  {}
 
     public function getImageProperty(string $name): string  {}
@@ -664,7 +681,21 @@ class Imagick
 
     public function spreadImage(float $radius): bool  {}
 
+#if MagickLibVersion >= 0x700
+    public function spreadImageWithMethod(
+        float $radius,
+        int $interpolate_method // INTERPOLATE_*
+    ): bool  {}
+#endif
+
     public function swirlImage(float $degrees): bool  {}
+
+#if MagickLibVersion >= 0x700
+    public function swirlImageWithMethod(
+        float $degrees,
+        int $interpolate_method // INTERPOLATE_*
+    ): bool  {}
+#endif
 
     public function stripImage(): bool  {}
 

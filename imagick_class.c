@@ -875,6 +875,51 @@ PHP_METHOD(Imagick, orderedPosterizeImage)
 #endif //#if MagickLibVersion < 0x700
 #endif //#if MagickLibVersion > 0x630
 
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::polaroidWithTextAndMethod(ImagickDraw properties, double angle, string text, int method)
+	Simulates a Polaroid picture with text and PixelInterpolateMethod
+*/
+PHP_METHOD(Imagick, polaroidWithTextAndMethod)
+{
+	zval *objvar;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	php_imagickdraw_object *internd;
+	double angle;
+	char *caption;
+	IM_LEN_TYPE caption_len;
+	im_long method;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Odsl", &objvar, php_imagickdraw_sc_entry, &angle,  &caption, &caption_len, &method) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	internd = Z_IMAGICKDRAW_P(objvar);
+
+	status = MagickPolaroidImage(
+		intern->magick_wand,
+		internd->drawing_wand,
+		caption,
+		angle,
+		method
+	);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polaroidWithTextAndMethod image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // MagickLibVersion >= 0x700
+
+
 #if MagickLibVersion > 0x631
 /* {{{ proto bool Imagick::polaroidImage(ImagickDraw properties, double angle )
 	Simulates a Polaroid picture
@@ -905,9 +950,6 @@ PHP_METHOD(Imagick, polaroidImage)
 #else
 	status = MagickPolaroidImage(intern->magick_wand, internd->drawing_wand, angle);
 #endif
-
-	
-	
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -3971,6 +4013,42 @@ PHP_METHOD(Imagick, waveImage)
 }
 /* }}} */
 
+
+
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::waveImageWithMethod(float amplitude, float length, int pixel_interpolate_method)
+	Adds wave filter to the image.
+*/
+PHP_METHOD(Imagick, waveImageWithMethod)
+{
+	double amplitude, wave_length;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long method;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &amplitude, &wave_length, &method) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickWaveImage(intern->magick_wand, amplitude, wave_length, method);
+
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to wave image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //MagickLibVersion >= 0x700
+
 /* {{{ proto bool Imagick::clear()
 	Clears all resources associated to Imagick object
 */
@@ -4102,6 +4180,39 @@ PHP_METHOD(Imagick, spreadImage)
 }
 /* }}} */
 
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::spreadImageWithMethod(float radius, int interpolate_method)
+	Special effects method that randomly displaces each pixel in a block defined by the radius parameter.
+*/
+PHP_METHOD(Imagick, spreadImageWithMethod)
+{
+	double radius;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long method;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &radius, &method) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSpreadImage(intern->magick_wand, radius, method);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to spread image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif // MagickLibVersion >= 0x700
+
 /* {{{ proto bool Imagick::swirlImage(float degrees )
 	Swirls the pixels about the center of the image, where degrees indicates the sweep of the arc through which each pixel is moved. You get a more dramatic effect as the degrees move from 1 to 360.
 */
@@ -4139,6 +4250,41 @@ PHP_METHOD(Imagick, swirlImage)
 	RETURN_TRUE;
 }
 /* }}} */
+
+
+#if MagickLibVersion >= 0x700
+/* {{{ proto bool Imagick::swirlImageWithMethod(float degrees )
+	Swirls the pixels about the center of the image, where degrees indicates the sweep of the arc through which each pixel is moved. You get a more dramatic effect as the degrees move from 1 to 360.
+*/
+PHP_METHOD(Imagick, swirlImageWithMethod)
+{
+	double degrees;
+	php_imagick_object *intern;
+	MagickBooleanType status;
+	im_long method;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &degrees, &method) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	status = MagickSwirlImage(intern->magick_wand, degrees, method);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to swirl image" TSRMLS_CC);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+#endif //MagickLibVersion >= 0x700
+
 
 /* {{{ proto bool Imagick::stripImage()
 	Strips an image of all profiles and comments.
@@ -4703,7 +4849,6 @@ PHP_METHOD(Imagick, implodeImageWithMethod)
 	double radius;
 	im_long method;
 	MagickBooleanType status;
-//	PixelInterpolateMethod method;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &radius, &method) == FAILURE) {

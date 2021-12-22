@@ -1,6 +1,5 @@
 Unreleased
 - Added:
-  * function Imagick::oilPaintImageWithSigma(float $radius, float $sigma)
   * function Imagick::deleteOption(string $option): bool {}
   * function Imagick::getBackgroundColor(): ImagickPixel {}
   * function Imagick::getImageArtifacts(string $pattern = "*"): array {}
@@ -12,12 +11,16 @@ Unreleased
   * function Imagick::getOrientation(): int {}
   * function Imagick::getResolution(): array {}
   * function Imagick::getType(): int {}
+  * function Imagick::oilPaintImageWithSigma(float $radius, float $sigma)
+  * function Imagick::polaroidWithTextAndMethod(ImagickDraw $settings, float $angle, string $caption, int $method): bool {}
   * function Imagick::polynomialImage(array $terms): bool {}
   * function Imagick::setDepth(int $depth): bool {}
   * function Imagick::setExtract(string $geometry): bool {}
   * function Imagick::setInterpolateMethod(int $method): bool{}
   * function Imagick::setOrientation(int $orientation): bool {}
-
+  * function Imagick::spreadImageWithMethod(float $radius, int $interpolate_method): bool  {}
+  * function Imagick::swirlImageWithMethod(float $degrees, int $interpolate_method): bool  {}
+  * function Imagick::waveImageWithMethod(float $amplitude, float $length, int $interpolate_method): bool {}
 - Changed:
   * Imagick::setImageArtifact can now take null for the string value.
   * Return type for Imagick::getImageArtifact is string|null instead of string.
