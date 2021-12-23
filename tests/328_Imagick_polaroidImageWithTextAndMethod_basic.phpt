@@ -15,6 +15,9 @@ function polaroidWithTextAndMethod() {
     $src1->newPseudoImage(640, 480, "magick:logo");
 
     $imagickDraw = new \ImagickDraw();
+    $font = findDefaultFont();
+    $imagickDraw->setFont($font);
+
     $src1->polaroidWithTextAndMethod(
         $imagickDraw,
         15,
