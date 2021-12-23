@@ -2,7 +2,7 @@
 Test Imagick, addNoiseImage
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=0x700;
+$imageMagickRequiredVersion=0x702;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--

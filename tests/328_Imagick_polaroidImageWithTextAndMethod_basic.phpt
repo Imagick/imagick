@@ -8,6 +8,7 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
 
 function polaroidWithTextAndMethod() {
     $src1 = new \Imagick();

@@ -8,12 +8,17 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+require_once(dirname(__FILE__) . '/functions.inc');
 
 function polaroidImage() {
     $src1 = new \Imagick();
     $src1->newPseudoImage(640, 480, "magick:logo");
 
     $imagickDraw = new \ImagickDraw();
+    $font = findDefaultFont();
+
+    $imagickDraw->setFont($font);
+
     $src1->polaroidImage($imagickDraw, 15);
 
     $src1->setImageFormat('png');
