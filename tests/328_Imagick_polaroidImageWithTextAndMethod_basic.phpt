@@ -2,7 +2,7 @@
 Test Imagick, polaroidWithTextAndMethod
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=0x631;
+$imageMagickRequiredVersion=0x700;
 require_once(dirname(__FILE__) . '/skipif.inc');
 ?>
 --FILE--
