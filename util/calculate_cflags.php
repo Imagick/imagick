@@ -1,7 +1,7 @@
 <?php
 
 // Run with something like:
-// export CFLAGS=$(php util/calculate_cflags.php "8.0" "7.0.1-0")
+// export CFLAGS=$(php util/calculate_cflags.php "8.1" "7.1.0-17")
 // where the first number is the PHP version, and the second number
 // is the ImageMagick version number
 

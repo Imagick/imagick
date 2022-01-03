@@ -8806,7 +8806,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 		//str, what, what_len, mode
 		trim = php_trim(line_string, NULL, 0, 3);
 		for (i = 0; i < num_keys; i++) {
-			if (trim->val) {
+			if (trim->val != NULL) {
 				if (strncmp (trim->val, str_keys [i], strlen (str_keys [i])) == 0) {
 					// This should be our line
 					IM_add_assoc_string (array, arr_keys [i], trim->val + strlen (str_keys [i]));
