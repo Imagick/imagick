@@ -251,7 +251,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="141_Imagick_sketchImage_basic.phpt" role="test" />
 				<file name="142_Imagick_solarizeImage_basic.phpt" role="test" />
 				<file name="143_Imagick_spreadImage_basic.phpt" role="test" />
-                <file name="143_Imagick_spreadImageWithMethod_basic.phpt" role="test" />
+				<file name="143_Imagick_spreadImageWithMethod_basic.phpt" role="test" />
 				<file name="144_Imagick_spliceImage_basic.phpt" role="test" />
 				<file name="145_imagickkernel_coverage.phpt" role="test" />
 				<file name="149_Imagick_sparseColorImage.phpt" role="test" />
@@ -273,7 +273,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="164_Imagick_trimImage_basic.phpt" role="test" />
 				<file name="165_Imagick_unsharpMaskImage_basic.phpt" role="test" />
 				<file name="166_Imagick_waveImage_basic.phpt" role="test" />
-				<file name="166_Imagick_waveImageWithMethod_basic.phpt" />
+				<file name="166_Imagick_waveImageWithMethod_basic.phpt" role="test"  />
 				<file name="167_Imagick_vignetteImage_basic.phpt" role="test" />
 				<file name="168_Imagick_whiteThresholdImage_basic.phpt" role="test" />
 				<file name="169_ImagickPixel_construct_basic.phpt" role="test" />
