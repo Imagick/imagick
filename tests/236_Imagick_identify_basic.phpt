@@ -13,9 +13,9 @@ $imagick->newPseudoImage(640, 480, "magick:logo");
 $imagick->setImageFormat('png');
 $data = $imagick->identifyimage();
 
-echo "format: " . $data["format"] . "\n";
-echo "units: " . $data["units"] . "\n";
-echo "type: " . $data["type"] . "\n";
+echo "format: " . strtolower($data["format"]) . "\n";
+echo "units: " . strtolower($data["units"]) . "\n";
+echo "type: " . strtolower($data["type"] . "\n";
 
 if (array_key_exists('geometry', $data)) {
 	$geometry = $data['geometry'];
@@ -34,7 +34,7 @@ var_dump($data);
 
 ?>
 --EXPECTF--
-format: PNG (Portable Network Graphics)
-units: Undefined
-type: Palette
+format: png (portable network graphics)
+units: undefined
+type: palette
 Image geometry 640x480
