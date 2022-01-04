@@ -15,7 +15,7 @@ $data = $imagick->identifyimage();
 
 echo "format: " . strtolower($data["format"]) . "\n";
 echo "units: " . strtolower($data["units"]) . "\n";
-echo "type: " . strtolower($data["type"] . "\n";
+echo "type: " . strtolower($data["type"]) . "\n";
 
 if (array_key_exists('geometry', $data)) {
 	$geometry = $data['geometry'];
