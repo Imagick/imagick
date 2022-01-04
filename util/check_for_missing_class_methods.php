@@ -131,32 +131,15 @@ $unsupportedMethods = [
 //    "MagickConnectedComponentsImage", // MagickBooleanType MagickConnectedComponentsImage(MagickWand *wand, const size_t connectivity,CCObjectInfo **objects)
 // These functions almost certainly need to be implemented.
 $todoList = [
-	"DrawGetTypeMetrics",
-	"MagickConnectedComponentsImage",
-//	"MagickDeleteImageProperty" // er, we seem to call DeleteImageProperty directly.
-//	"MagickDeleteOption",
-//	"MagickGetBackgroundColor",
-	"MagickGetExceptionType",
-//	"MagickGetImageArtifacts",
-//	"MagickGetImageDistortions",
-//	"MagickGetImageFeatures",
-//	"MagickGetImageKurtosis",
-//	"MagickGetImageMean",
-//	"MagickGetImageRange",
-//	"MagickGetInterpolateMethod",
-//	"MagickGetOptions",
-//	"MagickGetOrientation",
-//	"MagickGetResolution",
-//	"MagickGetType",
-//	"MagickPolynomialImage",
-//	"MagickSetDepth",
-//	"MagickSetExtract",
-//	"MagickSetInterpolateMethod",
-//	"MagickSetOrientation",
-//
-//	"MagickSetProgressMonitor",
-	"MagickSetSecurityPolicy",
-	"PixelGetIteratorExceptionType",
+    "DrawGetTypeMetrics",
+    "MagickConnectedComponentsImage",
+    "MagickGetExceptionType",
+    "MagickDeleteImageProperty",
+    "MagickGetImageDistortions",
+    "MagickGetImageFeatures",
+    "MagickSetProgressMonitor",
+    "MagickSetSecurityPolicy",
+    "PixelGetIteratorExceptionType",
 ];
 
 $files = glob(__DIR__ . "/../*.c");

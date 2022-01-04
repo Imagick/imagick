@@ -28,7 +28,7 @@ $CFLAGS = array(
     "-Wextra",
     "-Wimplicit-function-declaration",
     "-Wno-variadic-macros",
-
+    "-Wformat"
 );
 
 if (strpos($IMAGEMAGICK_VERSION, "6") === 0 ||
