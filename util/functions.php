@@ -223,22 +223,22 @@ function get_epsilon_for_off_by_half_errors()
 {
     // These could be defined better...
     $epsilon_values_for_non_hdri = [
-        255 => (1 / (pow(2, 8) - 1)) + 0.0000000000001,
-        65535 => (1 / (pow(2, 16) - 1)) + 0.0000000000001,
-        16777215 => (1 / (pow(2, 24) - 1) ) + 0.0000000000001,
-        4294967295 => (1 / (pow(2, 32) - 1)) + 0.0000000000001,
+        '255' => (1 / (pow(2, 8) - 1)) + 0.0000000000001,
+        '65535' => (1 / (pow(2, 16) - 1)) + 0.0000000000001,
+        '16777215' => (1 / (pow(2, 24) - 1) ) + 0.0000000000001,
+        '4294967295' => (1 / (pow(2, 32) - 1)) + 0.0000000000001,
     ];
 
     // These could definitely be defined better...
     $epsilon_values_for_hdri = [
-        255 => 0.0000000000001,
-        65535 => 0.0000000000001,
-        16777215 => 0.0000000000001,
-        4294967295 => 0.0000000000001
+        '255' => 0.0000000000001,
+        '65535' => 0.0000000000001,
+        '16777215' => 0.0000000000001,
+        '4294967295' => 0.0000000000001
     ];
 
     if (Imagick::getHdriEnabled() === false) {
-        $quantum = Imagick::getQuantum();
+        $quantum = (string)Imagick::getQuantum();
         if (array_key_exists($quantum, $epsilon_values_for_non_hdri) !== true) {
             throw new Exception(
                 "Quantum values is $quantum which is not any of (2^(8|16|24|32)) - 1. Please report this as a bug."
