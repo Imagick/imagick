@@ -1,3 +1,7 @@
+Unreleased
+- Added:
+  * Imagick::COMPOSITE_SALIENCY_BLEND
+
 3.7.0RC1
 - Added:
   * function Imagick::deleteOption(string $option): bool {}

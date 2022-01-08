@@ -1124,6 +1124,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 
 #if MagickLibVersion >= 0x711
+    IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SALIENCY_BLEND", SaliencyBlendCompositeOp);
     IMAGICK_REGISTER_CONST_LONG("COMPOSITE_SEAMLESS_BLEND", SeamlessBlendCompositeOp);
 #endif
 
