@@ -6249,7 +6249,7 @@ PHP_METHOD(Imagick, unsharpMaskImage)
 
 #if MagickLibVersion >= 0x700
 
-/* {{{ proto bool Imagick::convolveImage(array kernel[, int channel])
+/* {{{ proto bool Imagick::convolveImage(ImagickKernel kernel[, int channel])
 	Applies a custom convolution kernel to the image.
 */
 PHP_METHOD(Imagick, convolveImage)
@@ -13066,7 +13066,7 @@ PHP_METHOD(Imagick, listRegistry)
 /* }}} */
 
 #if MagickLibVersion >= 0x680
-/* {{{ proto bool Imagick::morphology(int morphologyMethod, int iterations, kernel, [int CHANNEL]  )
+/* {{{ proto bool Imagick::morphology(int morphologyMethod, int iterations, ImagickKernel kernel[, int CHANNEL]  )
 	Applies a user supplied kernel to the image according to the given morphology method.
 	iterations - A value of -1 means loop until no change found. How this is applied may depend on the morphology method. Typically this is a value of 1.
 */
@@ -13108,7 +13108,7 @@ PHP_METHOD(Imagick, morphology)
 
 #ifdef IMAGICK_WITH_KERNEL
 #if MagickLibVersion < 0x700
-/* {{{ proto bool Imagick::filter(ImagickKernel kernel, [int CHANNEL] )
+/* {{{ proto bool Imagick::filter(ImagickKernel kernel[, int CHANNEL] )
 	Applies a custom convolution kernel to the image.
 */
 PHP_METHOD(Imagick, filter)
