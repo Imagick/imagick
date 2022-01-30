@@ -1,3 +1,7 @@
+Unreleased
+- Added:
+  * Imagick::COMPOSITE_SALIENCY_BLEND
+
 3.7.0RC1
 - Added:
   * function Imagick::deleteOption(string $option): bool {}
@@ -33,6 +37,7 @@
   * Imagick::IMAGE_TYPE_COLOR_SEPARATION_ALPHA
   * Imagick::IMAGE_TYPE_OPTIMIZE
   * Imagick::IMAGE_TYPE_PALETTE_BILEVEL_ALPHA
+  * Imagick::COMPOSITE_SEAMLESS_BLEND
 - Changed:
   * Imagick::setImageArtifact can now take null for the string value.
   * Return type for Imagick::getImageArtifact is string|null instead of string.
