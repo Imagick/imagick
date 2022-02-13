@@ -274,7 +274,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="164_Imagick_trimImage_basic.phpt" role="test" />
 				<file name="165_Imagick_unsharpMaskImage_basic.phpt" role="test" />
 				<file name="166_Imagick_waveImage_basic.phpt" role="test" />
-				<file name="166_Imagick_waveImageWithMethod_basic.phpt"  />
+				<file name="166_Imagick_waveImageWithMethod_basic.phpt" role="test" />
 				<file name="167_Imagick_vignetteImage_basic.phpt" role="test" />
 				<file name="168_Imagick_whiteThresholdImage_basic.phpt" role="test" />
 				<file name="169_ImagickPixel_construct_basic.phpt" role="test" />
