@@ -47,7 +47,7 @@ jobs:
 
       - name: Sanity check package.xml and install ImageMagick
         run: |
-          pear package-validate
+          bash validate_package.sh
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
 
