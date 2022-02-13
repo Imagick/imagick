@@ -215,7 +215,8 @@ jobs:
 
       - name: Build a zip file of the package
         run: |
-          yes "" | pecl install package.xml
+          # yes "" | pecl install package.xml
+          pecl install package.xml
           php --ini
 
       - name: Run basic test
