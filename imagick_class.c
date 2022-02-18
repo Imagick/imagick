@@ -6529,7 +6529,7 @@ PHP_METHOD(Imagick, enhanceImage)
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
-		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to enchance image" TSRMLS_CC);
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to enhance image" TSRMLS_CC);
 		return;
 	}
 
