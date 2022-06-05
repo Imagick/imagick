@@ -18,6 +18,15 @@ services:
     build: docker/developing
     volumes:
       - .:/var/app
+    environment:
+      PDOTEST_DSN: 'mysql:host=mysql;dbname=phptesting;charset=utf8mb4'
+      PDOTEST_USER: phptesting
+      PDOTEST_PASS: phptesting
+      PDO_MYSQL_TEST_DSN: 'mysql:host=mysql;dbname=phptesting;charset=utf8mb4'
+      PDO_MYSQL_TEST_USER: phptesting
+      PDO_MYSQL_TEST_PASS: phptesting
+      PDO_PGSQL_TEST_DSN: 'pgsql:host=postgres;dbname=phptesting;user=phptesting;password=phptesting'
+      REDIR_TEST_DIR: '/var/app/php_src/imagick_php_src/ext/pdo/tests/'
   repro:
     build: docker/repro
     volumes:
@@ -59,3 +68,17 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp:unconfined
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: pass1234
+      MYSQL_DATABASE: phptesting
+      MYSQL_USER: phptesting
+      MYSQL_PASSWORD: phptesting
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: phptesting
+      POSTGRES_USER: phptesting
+      POSTGRES_PASSWORD: phptesting
+      # PGDATA: /var/lib/postgresql/data
