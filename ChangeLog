@@ -1,3 +1,9 @@
+Unreleased
+- Fixes:
+  * Imagick::clutImage(...) now respects the images interpolate method.
+- Added:
+  * function Imagick::clutImageWithInterpolate(Imagick $lookup_table, int $pixel_interpolate_method): bool  {}
+
 3.7.0
 - Added:
   * Imagick::COMPOSITE_SALIENCY_BLEND

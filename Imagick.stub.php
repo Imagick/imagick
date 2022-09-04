@@ -200,8 +200,15 @@ class Imagick
 
 #if MagickLibVersion > 0x635
 
-    // TODO - Imagick
+
     public function clutImage(Imagick $lookup_table, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
+
+#if MagickLibVersion > 0x700
+    public function clutImageWithInterpolate(
+        Imagick $lookup_table,
+        int $pixel_interpolate_method // PixelInterpolateMethod
+    ): bool  {}
+#endif
 
     public function getImageProperties(string $pattern = "*", bool $include_values = true): array  {}
 

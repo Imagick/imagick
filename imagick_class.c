@@ -1392,6 +1392,47 @@ PHP_METHOD(Imagick, clutImage)
 }
 /* }}} */
 
+
+
+/* {{{ proto Imagick Imagick::clutImageWithInterpolate(Imagick lookup, int pixel_interpolate_method)
+   Replaces colors in the image from a color lookup table.
+*/
+PHP_METHOD(Imagick, clutImageWithInterpolate)
+{
+	zval *objvar;
+	php_imagick_object *intern, *lookup;
+	MagickBooleanType status;
+	im_long interpolate_method;
+
+	/* Parse parameters given to function */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &interpolate_method) == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
+		return;
+
+	lookup = Z_IMAGICK_P(objvar);
+	if (php_imagick_ensure_not_empty (lookup->magick_wand) == 0)
+		return;
+
+	status = MagickClutImage(intern->magick_wand, lookup->magick_wand, interpolate_method);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		php_imagick_convert_imagick_exception(
+			intern->magick_wand,
+			"Unable to replace colors in the image from a color lookup table" TSRMLS_CC
+		);
+		return;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
+
+
 /* {{{ proto Imagick Imagick::getImageProperties([string pattern, bool values] )
   	Returns all the property names that match the specified pattern
 */

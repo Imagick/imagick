@@ -8,20 +8,50 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 --FILE--
 <?php
 
+$draw = new \ImagickDraw();
+$draw->setStrokeOpacity(0);
+$draw->setFillColor('black');
+$points = [
+	['x' => 40 * 3, 'y' => 10 * 5],
+	['x' => 20 * 3, 'y' => 20 * 5],
+	['x' => 70 * 3, 'y' => 50 * 5],
+	['x' => 80 * 3, 'y' => 15 * 5],
+];
+$draw->polygon($points);
+$imagick = new \Imagick();
 
-function clutImage() {
-    $imagick = new \Imagick();
-    $imagick->newPseudoImage(640, 480, "magick:logo");
-    //$imagick->quantizeImage(16, \Imagick::COLORSPACE_YIQ, 8, true, false);
-    
-    $clutImagick = new \Imagick();
-    $clutImagick->newPseudoImage(640, 480, "magick:NETSCAPE");
-    $imagick->clutImage($clutImagick);
-    $bytes = $imagick->getImageBlob();
-    if (strlen($bytes) <= 0) { echo "Failed to generate image.";} 
-}
+$imagick->setColorspace(\Imagick::COLORSPACE_GRAY);
 
-clutImage() ;
+$imagick->newPseudoImage(
+	300, 300,
+	"xc:white"
+);
+
+$imagick->drawImage($draw);
+$imagick->blurImage(0, 10);
+
+$draw = new \ImagickDraw();
+$draw->setStrokeOpacity(1);
+$draw->setFillColor('red');
+$draw->point(0, 2);
+$draw->setFillColor('yellow');
+$draw->rectangle(0, 0, 1, 1);
+$gradient = new Imagick();
+$gradient->newPseudoImage(1, 5, 'xc:black');
+$gradient->drawImage($draw);
+$gradient->setImageFormat('png');
+
+
+
+$imagick->setImageFormat('png');
+
+$imagick->setInterpolateMethod(Imagick::INTERPOLATE_BILINEAR);
+$imagick->clutImage($gradient);
+
+$bytes = $imagick->getImageBlob();
+if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
+
+
 echo "Ok";
 ?>
 --EXPECTF--

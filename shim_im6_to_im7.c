@@ -181,18 +181,24 @@ MagickBooleanType MagickClampImageChannel(MagickWand *wand, const ChannelType ch
 	}
 
 	return status;
-
 }
 
-MagickBooleanType MagickClutImageChannel(MagickWand *wand, const ChannelType channel, const MagickWand *clut_wand) {
+MagickBooleanType MagickClutImageChannel(
+	MagickWand *wand,
+	const ChannelType channel,
+	const MagickWand *clut_wand
+) {
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
 
 	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
-	//TODO - need to take parameter
-	status = MagickClutImage(wand, clut_wand, AverageInterpolatePixel);
+
+	PixelInterpolateMethod pixelInterpolateMethod;
+
+	pixelInterpolateMethod = MagickGetInterpolateMethod(wand);
+	status = MagickClutImage(wand, clut_wand, pixelInterpolateMethod);
 
 	if (channel != UndefinedChannel) {
 		(void) MagickSetImageChannelMask(wand, previous_channel_mask);
