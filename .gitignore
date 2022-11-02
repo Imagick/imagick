@@ -70,3 +70,4 @@ tests/*.php
 tests/*.sh
 bugReports
 data
+*.dep
