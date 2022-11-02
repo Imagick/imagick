@@ -117,6 +117,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="040_Imagick_charcoalImage_basic.phpt" role="test" />
 				<file name="041_Imagick_chopImage_basic.phpt" role="test" />
 				<file name="042_Imagick_clutImage_basic.phpt" role="test" />
+				<file name="042_Imagick_clutImage_im7.phpt" role="test" />
 				<file name="043_Imagick_colorizeImage_basic.phpt" role="test" />
 				<file name="044_Imagick_colorMatrixImage_basic.phpt" role="test" />
 				<file name="045_Imagick_compositeImage_basic.phpt" role="test" />
