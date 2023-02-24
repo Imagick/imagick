@@ -4515,6 +4515,36 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageBiasQuantum, 0, 0, 1)
 ZEND_END_ARG_INFO()
 #endif
 
+#if MagickLibVersion >= 0x700
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageBluePrimary, 0, 3, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageBluePrimary, 0, 0, 3)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, x, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, x)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, y, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, y)
+#endif
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, z, IS_DOUBLE, 0)
+#else
+    ZEND_ARG_INFO(0, z)
+#endif
+ZEND_END_ARG_INFO()
+#endif
+
+#if !(MagickLibVersion >= 0x700)
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_setImageBluePrimary, 0, 2, _IS_BOOL, 0)
@@ -4535,6 +4565,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageBluePrimary, 0, 0, 2)
     ZEND_ARG_INFO(0, y)
 #endif
 ZEND_END_ARG_INFO()
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -4615,7 +4646,13 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_setImageExtent arginfo_class_Imagick_sampleImage
 
+#if MagickLibVersion >= 0x700
 #define arginfo_class_Imagick_setImageGreenPrimary arginfo_class_Imagick_setImageBluePrimary
+#endif
+
+#if !(MagickLibVersion >= 0x700)
+#define arginfo_class_Imagick_setImageGreenPrimary arginfo_class_Imagick_setImageBluePrimary
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -4653,7 +4690,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageProfile, 0, 0, 2)
 #endif
 ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x700
 #define arginfo_class_Imagick_setImageRedPrimary arginfo_class_Imagick_setImageBluePrimary
+#endif
+
+#if !(MagickLibVersion >= 0x700)
+#define arginfo_class_Imagick_setImageRedPrimary arginfo_class_Imagick_setImageBluePrimary
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -4685,7 +4728,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageVirtualPixelMethod, 0, 0, 1
 #endif
 ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x700
 #define arginfo_class_Imagick_setImageWhitePoint arginfo_class_Imagick_setImageBluePrimary
+#endif
+
+#if !(MagickLibVersion >= 0x700)
+#define arginfo_class_Imagick_setImageWhitePoint arginfo_class_Imagick_setImageBluePrimary
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -5031,7 +5080,13 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628
-ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_next, 0, 0, 0)
+#endif
+
 ZEND_END_ARG_INFO()
 #endif
 
@@ -6640,20 +6695,40 @@ ZEND_METHOD(Imagick, setImageBias);
 #if MagickLibVersion < 0x700
 ZEND_METHOD(Imagick, setImageBiasQuantum);
 #endif
+#if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, setImageBluePrimary);
+#endif
+#if !(MagickLibVersion >= 0x700)
+ZEND_METHOD(Imagick, setImageBluePrimary);
+#endif
 ZEND_METHOD(Imagick, setImageBorderColor);
 ZEND_METHOD(Imagick, setImageChannelDepth);
 ZEND_METHOD(Imagick, setImageColormapColor);
 ZEND_METHOD(Imagick, setImageColorspace);
 ZEND_METHOD(Imagick, setImageDispose);
 ZEND_METHOD(Imagick, setImageExtent);
+#if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, setImageGreenPrimary);
+#endif
+#if !(MagickLibVersion >= 0x700)
+ZEND_METHOD(Imagick, setImageGreenPrimary);
+#endif
 ZEND_METHOD(Imagick, setImageInterlaceScheme);
 ZEND_METHOD(Imagick, setImageProfile);
+#if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, setImageRedPrimary);
+#endif
+#if !(MagickLibVersion >= 0x700)
+ZEND_METHOD(Imagick, setImageRedPrimary);
+#endif
 ZEND_METHOD(Imagick, setImageRenderingIntent);
 ZEND_METHOD(Imagick, setImageVirtualPixelMethod);
+#if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, setImageWhitePoint);
+#endif
+#if !(MagickLibVersion >= 0x700)
+ZEND_METHOD(Imagick, setImageWhitePoint);
+#endif
 ZEND_METHOD(Imagick, sigmoidalContrastImage);
 ZEND_METHOD(Imagick, stereoImage);
 ZEND_METHOD(Imagick, textureImage);
@@ -7435,20 +7510,40 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion < 0x700
 	ZEND_ME(Imagick, setImageBiasQuantum, arginfo_class_Imagick_setImageBiasQuantum, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
 #endif
+#if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, setImageBluePrimary, arginfo_class_Imagick_setImageBluePrimary, ZEND_ACC_PUBLIC)
+#endif
+#if !(MagickLibVersion >= 0x700)
+	ZEND_ME(Imagick, setImageBluePrimary, arginfo_class_Imagick_setImageBluePrimary, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, setImageBorderColor, arginfo_class_Imagick_setImageBorderColor, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageChannelDepth, arginfo_class_Imagick_setImageChannelDepth, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageColormapColor, arginfo_class_Imagick_setImageColormapColor, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageColorspace, arginfo_class_Imagick_setImageColorspace, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageDispose, arginfo_class_Imagick_setImageDispose, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageExtent, arginfo_class_Imagick_setImageExtent, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, setImageGreenPrimary, arginfo_class_Imagick_setImageGreenPrimary, ZEND_ACC_PUBLIC)
+#endif
+#if !(MagickLibVersion >= 0x700)
+	ZEND_ME(Imagick, setImageGreenPrimary, arginfo_class_Imagick_setImageGreenPrimary, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, setImageInterlaceScheme, arginfo_class_Imagick_setImageInterlaceScheme, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageProfile, arginfo_class_Imagick_setImageProfile, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, setImageRedPrimary, arginfo_class_Imagick_setImageRedPrimary, ZEND_ACC_PUBLIC)
+#endif
+#if !(MagickLibVersion >= 0x700)
+	ZEND_ME(Imagick, setImageRedPrimary, arginfo_class_Imagick_setImageRedPrimary, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, setImageRenderingIntent, arginfo_class_Imagick_setImageRenderingIntent, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, setImageVirtualPixelMethod, arginfo_class_Imagick_setImageVirtualPixelMethod, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, setImageWhitePoint, arginfo_class_Imagick_setImageWhitePoint, ZEND_ACC_PUBLIC)
+#endif
+#if !(MagickLibVersion >= 0x700)
+	ZEND_ME(Imagick, setImageWhitePoint, arginfo_class_Imagick_setImageWhitePoint, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, sigmoidalContrastImage, arginfo_class_Imagick_sigmoidalContrastImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, stereoImage, arginfo_class_Imagick_stereoImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, textureImage, arginfo_class_Imagick_textureImage, ZEND_ACC_PUBLIC)
