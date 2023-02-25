@@ -5186,13 +5186,13 @@ PHP_METHOD(Imagick, optimizeImageLayers)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	tmp_wand = MagickOptimizeImageLayers(intern->magick_wand);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image layers failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
@@ -6231,14 +6231,14 @@ PHP_METHOD(Imagick, unsharpMaskImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickUnsharpMaskImageChannel(intern->magick_wand, channel, radius, sigma, amount, threshold);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to unsharp mask image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6273,7 +6273,7 @@ PHP_METHOD(Imagick, convolveImage)
 	// No magick is going to happen
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to filter image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6301,13 +6301,13 @@ PHP_METHOD(Imagick, convolveImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	kernel = php_imagick_zval_to_double_array(kernel_array, &num_elements TSRMLS_CC);
 
 	if (!kernel) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read matrix array" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	order = (unsigned long) sqrt(num_elements);
@@ -6317,7 +6317,7 @@ PHP_METHOD(Imagick, convolveImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to convolve image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6341,14 +6341,14 @@ PHP_METHOD(Imagick, cycleColormapImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickCycleColormapImage(intern->magick_wand, displace);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to cycle image colormap" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6617,7 +6617,7 @@ PHP_METHOD(Imagick, evaluateImages)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 // MagickEvaluateImages appears to crash if index is not zero.
 #if MagickLibVersion > 0x628
@@ -6630,7 +6630,7 @@ PHP_METHOD(Imagick, evaluateImages)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set iterator index" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	evaluated_wand = MagickEvaluateImages(intern->magick_wand, evaluate_operator);
@@ -13166,7 +13166,7 @@ PHP_METHOD(Imagick, setAntialias)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13174,7 +13174,7 @@ PHP_METHOD(Imagick, setAntialias)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setAntiAlias" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13249,14 +13249,14 @@ PHP_METHOD(Imagick, optimizeImageTransparency)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickOptimizeImageTransparency(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13280,14 +13280,14 @@ PHP_METHOD(Imagick, autoGammaImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickAutoGammaImageChannel(intern->magick_wand, channel);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "autoGammaImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13310,14 +13310,14 @@ PHP_METHOD(Imagick, autoOrient)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickAutoOrientImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable autoOrient image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13381,14 +13381,14 @@ PHP_METHOD(Imagick, localContrastImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickLocalContrastImage(intern->magick_wand, radius, strength);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to localContrastImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13475,11 +13475,11 @@ PHP_METHOD(Imagick, setImageMask)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	clip_mask = Z_IMAGICK_P(objvar);
 	if (php_imagick_ensure_not_empty (clip_mask->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	MagickSetImageMask(
 		intern->magick_wand,
