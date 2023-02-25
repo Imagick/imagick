@@ -6272,14 +6272,14 @@ PHP_METHOD(Imagick, unsharpMaskImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickUnsharpMaskImageChannel(intern->magick_wand, channel, radius, sigma, amount, threshold);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to unsharp mask image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6314,7 +6314,7 @@ PHP_METHOD(Imagick, convolveImage)
 	// No magick is going to happen
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to filter image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6342,13 +6342,13 @@ PHP_METHOD(Imagick, convolveImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	kernel = php_imagick_zval_to_double_array(kernel_array, &num_elements TSRMLS_CC);
 
 	if (!kernel) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read matrix array" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	order = (unsigned long) sqrt(num_elements);
@@ -6358,7 +6358,7 @@ PHP_METHOD(Imagick, convolveImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to convolve image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6382,14 +6382,14 @@ PHP_METHOD(Imagick, cycleColormapImage)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	status = MagickCycleColormapImage(intern->magick_wand, displace);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to cycle image colormap" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6658,7 +6658,7 @@ PHP_METHOD(Imagick, evaluateImages)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 // MagickEvaluateImages appears to crash if index is not zero.
 #if MagickLibVersion > 0x628
@@ -6671,7 +6671,7 @@ PHP_METHOD(Imagick, evaluateImages)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set iterator index" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	evaluated_wand = MagickEvaluateImages(intern->magick_wand, evaluate_operator);
