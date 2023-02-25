@@ -10,14 +10,14 @@ $imagick = new Imagick();
 try {
     $imagick->newPseudoImage(200, 200, "xc:red");
 	$result = $imagick->getImageBlob();
-	echo "Imagick failed to throw exception";
+	echo "Imagick failed to throw exception" . PHP_EOL;
 } catch (ImagickException $e) {
-	echo "ImagickException: " . $e->getMessage();
+	echo "ImagickException: " . $e->getMessage() . PHP_EOL;
 }
 
 echo "Fin.\n";
 
 ?>
 --EXPECTF--
-ImagickException: Some words here.
+ImagickException: Failed to get the image contents (empty or invalid image?)
 Fin.

@@ -8644,16 +8644,17 @@ PHP_METHOD(Imagick, getImageBlob)
 
 	intern = Z_IMAGICK_P(getThis());
 	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+		RETURN_THROWS();
 
 	if (!s_image_has_format (intern->magick_wand)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	image_contents = MagickGetImageBlob(intern->magick_wand, &image_size);
 	if (!image_contents) {
-		return;
+		php_imagick_throw_exception(IMAGICK_CLASS, "Failed to get the image contents (empty or invalid image?)" TSRMLS_CC);
+		RETURN_THROWS();
 	}
 
 	IM_ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
