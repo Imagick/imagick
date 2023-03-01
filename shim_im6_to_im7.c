@@ -190,12 +190,11 @@ MagickBooleanType MagickClutImageChannel(
 ) {
 	MagickBooleanType status;
 	ChannelType previous_channel_mask;
+	PixelInterpolateMethod pixelInterpolateMethod;
 
 	if (channel != UndefinedChannel) {
 		previous_channel_mask = MagickSetImageChannelMask(wand, channel);
 	}
-
-	PixelInterpolateMethod pixelInterpolateMethod;
 
 	pixelInterpolateMethod = MagickGetInterpolateMethod(wand);
 	status = MagickClutImage(wand, clut_wand, pixelInterpolateMethod);
