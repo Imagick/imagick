@@ -1393,7 +1393,7 @@ PHP_METHOD(Imagick, clutImage)
 /* }}} */
 
 
-
+#if MagickLibVersion >= 0x700
 /* {{{ proto Imagick Imagick::clutImageWithInterpolate(Imagick lookup, int pixel_interpolate_method)
    Replaces colors in the image from a color lookup table.
 */
@@ -1431,7 +1431,7 @@ PHP_METHOD(Imagick, clutImageWithInterpolate)
 	RETURN_TRUE;
 }
 /* }}} */
-
+#endif
 
 /* {{{ proto Imagick Imagick::getImageProperties([string pattern, bool values] )
   	Returns all the property names that match the specified pattern

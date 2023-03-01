@@ -45,7 +45,9 @@ $gradient->setImageFormat('png');
 
 $imagick->setImageFormat('png');
 
-$imagick->setInterpolateMethod(Imagick::INTERPOLATE_BILINEAR);
+// This test is for IM < 7 so setInterpolate not available
+// Which probably means the clutImage method isn't usuable...
+//$imagick->setInterpolateMethod(Imagick::INTERPOLATE_BILINEAR);
 $imagick->clutImage($gradient);
 
 $bytes = $imagick->getImageBlob();

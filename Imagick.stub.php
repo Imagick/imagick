@@ -203,7 +203,7 @@ class Imagick
 
     public function clutImage(Imagick $lookup_table, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
-#if MagickLibVersion > 0x700
+#if MagickLibVersion >= 0x700
     public function clutImageWithInterpolate(
         Imagick $lookup_table,
         int $pixel_interpolate_method // PixelInterpolateMethod
@@ -1253,7 +1253,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //    public function key(): int  {}
 //
 //# endif
-//#endif
+#endif
 
     /** @alias Imagick::nextImage
      *  @tentative-return-type
