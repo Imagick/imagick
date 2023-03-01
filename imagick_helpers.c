@@ -1279,6 +1279,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_WEBP", WebPCompression);
 #endif
 
+#if MagickLibVersion >= 0x711
+    IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC5", BC5Compression);
+    IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC7", BC7Compression);
+#endif
+
 #if MagickLibVersion >= 0x70C
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAA", DWAACompression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
