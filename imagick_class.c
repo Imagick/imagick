@@ -8855,7 +8855,7 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 				}
 			}
 		}
-		// zend_string_release(line_string); - 0 in zend_string_init means no need to free?
+		zend_string_release(line_string);
 		zend_string_release(trim);
 		line = php_strtok_r (NULL, "\r\n", &last_ptr);
 #else
@@ -8939,9 +8939,8 @@ PHP_METHOD(Imagick, identifyImage)
 #else
 	MAKE_STD_ZVAL(array);
 	pArray = array;
-#endif
-
 	array_init(pArray);
+#endif
 
 	add_assoc_long (pArray, "width", MagickGetImageWidth (intern->magick_wand));
 	add_assoc_long (pArray, "height", MagickGetImageHeight (intern->magick_wand));
