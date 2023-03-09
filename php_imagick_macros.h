@@ -46,4 +46,10 @@
 		RETURN_NULL(); \
 	}
 
+/* RETURN_THROWS() isn't defined in PHP 5.6 through 7.4
+ */
+#if PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < 80000
+#define RETURN_THROWS() return
+#endif
+
 #endif /* PHP_IMAGICK_MACROS_H */
