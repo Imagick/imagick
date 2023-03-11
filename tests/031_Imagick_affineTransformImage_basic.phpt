@@ -4,6 +4,7 @@ Test Imagick, affineTransformImage
 <?php
 $imageMagickRequiredVersion=0x675;
 require_once(dirname(__FILE__) . '/skipif.inc');
+if (PHP_OS_FAMILY == 'Windows') die('skip dither is apparently borken on Windows https://github.com/Imagick/imagick/issues/590');
 ?>
 --XFAIL--
 I don't understand what values are returned in which elements of getImageChannelStatistics
