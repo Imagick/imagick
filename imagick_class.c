@@ -14384,7 +14384,9 @@ PHP_METHOD(Imagick, getOptions)
 		option_value = MagickGetOption(intern->magick_wand, options[i]);
 		IM_add_assoc_string(return_value, options[i], option_value);
 		MagickRelinquishMemory(option_value);
+		DestroyString(options[i]);
 	}
+	RelinquishMagickMemory(options);
 
 	return;
 }
