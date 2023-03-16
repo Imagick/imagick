@@ -11853,7 +11853,10 @@ PHP_METHOD(Imagick, getConfigureOptions)
 	for (i=0; i<number_options; i++) {
 		option_value = MagickQueryConfigureOption(result[i]);
 		IM_add_assoc_string(return_value, result[i], option_value);
+		DestroyString(result[i]);
+		DestroyString(option_value);
 	}
+	RelinquishMagickMemory(result);
 }
 /* }}} */
 
