@@ -14221,8 +14221,11 @@ PHP_METHOD(Imagick, getImageArtifacts)
 		else {
 			IM_add_assoc_string(return_value, artifacts[i], artifact_value);
 			MagickRelinquishMemory(artifact_value);
+			DestroyString(artifact_value);
 		}
+		DestroyString(artifacts[i]);
 	}
+	RelinquishMagickMemory(artifacts);
 }
 /* }}} */
 #endif
