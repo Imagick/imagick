@@ -762,6 +762,7 @@ PHP_METHOD(ImagickKernel, separate)
 			kernel_info->x,
 			kernel_info->y
 		);
+		RelinquishAlignedMemory(values_copy);
 
 #if PHP_VERSION_ID >= 70000
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
