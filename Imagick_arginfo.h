@@ -5237,9 +5237,9 @@ ZEND_END_ARG_INFO()
 #if MagickLibVersion > 0x628
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getRegistry, 0, 1, IS_STRING, 0)
+    ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_class_Imagick_getRegistry, 0, 1, MAY_BE_STRING|MAY_BE_FALSE)
 #else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getRegistry, 0, 0, 1)
+    ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getRegistry, 0, 0, 1)
 #endif
 
 	

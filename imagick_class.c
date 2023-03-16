@@ -13023,7 +13023,7 @@ PHP_METHOD(Imagick, getRegistry)
 	if (ex_info->severity != 0) {
 		zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Imagick::getRegistry exception (%s) ", ex_info->reason);
 		ex_info = DestroyExceptionInfo(ex_info);
-		return;
+		RETURN_THROWS();
 	}
 
 	ex_info = DestroyExceptionInfo(ex_info);
