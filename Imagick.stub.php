@@ -7,6 +7,7 @@
 
 class Imagick
 {
+
     public function optimizeImageLayers(): Imagick {}
 
     // METRIC_*
@@ -830,7 +831,7 @@ class Imagick
 //http://www.imagemagick.org/Usage/layers/#evaluate-sequence
 
     // EVALUATE_*
-    public function evaluateImages(int $evaluate): bool {}
+    public function evaluateImages(int $evaluate): Imagick {}
 
 #endif
 

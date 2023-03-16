@@ -6640,7 +6640,7 @@ PHP_METHOD(Imagick, evaluateImage)
 
 
 #if MagickLibVersion >= 0x687
-/* {{{ proto bool Imagick::evaluateImages(int EVALUATE_CONSTANT)
+/* {{{ proto Imagick Imagick::evaluateImages(int EVALUATE_CONSTANT)
 	Merge multiple images of the same size together with the selected operator.
 http://www.imagemagick.org/Usage/layers/#evaluate-sequence
 */
