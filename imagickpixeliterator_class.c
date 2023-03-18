@@ -109,7 +109,7 @@ PHP_METHOD(ImagickPixelIterator, resetIterator)
 
 	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	PixelResetIterator(internpix->pixel_iterator);
@@ -516,7 +516,7 @@ PHP_METHOD(ImagickPixelIterator, getCurrentIteratorRow)
 
 	if (!internpix->initialized) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 #if MagickLibVersion <= 0x628

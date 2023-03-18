@@ -374,7 +374,7 @@ class ImagickDraw
     public function push(): bool {}
 
     // A typical stroke dash array might contain the members 5 3 2.
-    public function setStrokeDashArray(array $dashes): bool {}
+    public function setStrokeDashArray(array|null $dashes): bool {}
 
 #if MagickLibVersion >= 0x693
     public function getOpacity(): float {}

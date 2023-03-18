@@ -31,6 +31,18 @@ $CFLAGS = array(
     "-Wformat"
 );
 
+if (strpos($IMAGEMAGICK_VERSION, "7.1.1") === 0 ||
+    strpos($IMAGEMAGICK_VERSION, "git7") === 0) {
+    // The definition of channel changed to be a non-negative number, which
+    // results in this code:
+    //
+    // if (((ssize_t) channel < 0) || ((ssize_t) channel >= MaxPixelChannels))
+    //
+    // giving this error:
+    // error: comparison is always false due to limited range of data type [-Werror=type-limits]
+    $CFLAGS[] = "-Wno-type-limits";
+}
+
 if (strpos($IMAGEMAGICK_VERSION, "6") === 0 ||
     strpos($IMAGEMAGICK_VERSION, "git6") === 0) {
     $CFLAGS[] = "-Wno-sign-compare";

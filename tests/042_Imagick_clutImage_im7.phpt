@@ -1,9 +1,12 @@
 --TEST--
-Test Imagick, clutImage
+Test Imagick, clutImageWithInterpolate
 --SKIPIF--
 <?php
-$imageMagickRequiredVersion=0x675;
-require_once(dirname(__FILE__) . '/skipif.inc'); 
+
+require_once(dirname(__FILE__) . '/skipif.inc');
+
+checkClassMethods('Imagick', array('clutImageWithInterpolate'));
+
 ?>
 --FILE--
 <?php
@@ -27,6 +30,7 @@ $imagick->newPseudoImage(
 	"xc:white"
 );
 
+
 $imagick->drawImage($draw);
 $imagick->blurImage(0, 10);
 
@@ -39,20 +43,15 @@ $draw->rectangle(0, 0, 1, 1);
 $gradient = new Imagick();
 $gradient->newPseudoImage(1, 5, 'xc:black');
 $gradient->drawImage($draw);
-$gradient->setImageFormat('png');
-
 
 
 $imagick->setImageFormat('png');
-
-// This test is for IM < 7 so setInterpolate not available
-// Which probably means the clutImage method isn't usuable...
-//$imagick->setInterpolateMethod(Imagick::INTERPOLATE_BILINEAR);
-$imagick->clutImage($gradient);
+$imagick->clutImageWithInterpolate($gradient, Imagick::INTERPOLATE_BILINEAR);
 
 $bytes = $imagick->getImageBlob();
 if (strlen($bytes) <= 0) { echo "Failed to generate image.";}
 
+// $imagick->writeImage(__DIR__ . "/feels_bad_man.png");
 
 echo "Ok";
 ?>

@@ -1,4 +1,12 @@
 Unreleased
+- Fixes:
+  * Imagick::clutImage(...) now respects the images interpolate method.
+  * You can now pass null to ImagickDraw::setStrokeDashArray() to reset the dash array.
+- Added:
+  * function Imagick::clutImageWithInterpolate(Imagick $lookup_table, int $pixel_interpolate_method): bool  {}
+  * Constants Imagick::COMPRESSION_BC5, Imagick::COMPRESSION_BC7
+
+3.7.0
 - Added:
   * Imagick::COMPOSITE_SALIENCY_BLEND
 

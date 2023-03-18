@@ -1616,9 +1616,16 @@ PHP_METHOD(ImagickDraw, setStrokeDashArray)
 	php_imagickdraw_object *internd;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &param_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a!", &param_array) == FAILURE) {
 		return;
 	}
+
+    internd = Z_IMAGICKDRAW_P(getThis());
+
+    if (param_array == NULL) {
+        DrawSetStrokeDashArray(internd->drawing_wand, 0, NULL);
+    	RETURN_TRUE;
+    }
 
 	double_array = php_imagick_zval_to_double_array(param_array, &elements TSRMLS_CC);
 
@@ -1626,8 +1633,6 @@ PHP_METHOD(ImagickDraw, setStrokeDashArray)
 		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Cannot read stroke dash array parameter" TSRMLS_CC);
 		return;
 	}
-
-	internd = Z_IMAGICKDRAW_P(getThis());
 
 	DrawSetStrokeDashArray(internd->drawing_wand, elements, double_array);
 	efree(double_array);

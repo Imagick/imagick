@@ -350,7 +350,11 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 #endif
 
 
-
+/* RETURN_THROWS() isn't defined in PHP 5.6 through 7.4
+ */
+#if !defined(RETURN_THROWS)
+#define RETURN_THROWS() return
+#endif
 
 
 /* Define some color constants */

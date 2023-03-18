@@ -140,27 +140,15 @@ ZEND_METHOD(ImagickKernel, separate);
 #endif
 
 
+#if defined(IMAGICK_WITH_KERNEL)
 static const zend_function_entry class_ImagickKernel_methods[] = {
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, addKernel, arginfo_class_ImagickKernel_addKernel, ZEND_ACC_PUBLIC)
-#endif
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, addUnityKernel, arginfo_class_ImagickKernel_addUnityKernel, ZEND_ACC_PUBLIC)
-#endif
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, fromBuiltin, arginfo_class_ImagickKernel_fromBuiltin, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-#endif
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, fromMatrix, arginfo_class_ImagickKernel_fromMatrix, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-#endif
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, getMatrix, arginfo_class_ImagickKernel_getMatrix, ZEND_ACC_PUBLIC)
-#endif
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, scale, arginfo_class_ImagickKernel_scale, ZEND_ACC_PUBLIC)
-#endif
-#if defined(IMAGICK_WITH_KERNEL)
 	ZEND_ME(ImagickKernel, separate, arginfo_class_ImagickKernel_separate, ZEND_ACC_PUBLIC)
-#endif
 	ZEND_FE_END
 };
+#endif

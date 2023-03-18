@@ -16,7 +16,7 @@ $allOptions = Imagick::getConfigureOptions();
 
 if (!is_array($allOptions)) {
 	echo "Failed to return array".PHP_EOL;
-	var_dump($options);
+	var_dump($allOptions);
 }
 else if (count($allOptions) == 0) {
 	echo "allOptions is empty".PHP_EOL;

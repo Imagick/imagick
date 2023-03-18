@@ -68,3 +68,6 @@ tests/*.exp
 tests/*.log
 tests/*.php
 tests/*.sh
+bugReports
+data
+*.dep

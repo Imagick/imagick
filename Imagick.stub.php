@@ -200,8 +200,15 @@ class Imagick
 
 #if MagickLibVersion > 0x635
 
-    // TODO - Imagick
+
     public function clutImage(Imagick $lookup_table, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
+
+#if MagickLibVersion >= 0x700
+    public function clutImageWithInterpolate(
+        Imagick $lookup_table,
+        int $pixel_interpolate_method // PixelInterpolateMethod
+    ): bool  {}
+#endif
 
     public function getImageProperties(string $pattern = "*", bool $include_values = true): array  {}
 
@@ -1079,7 +1086,11 @@ class Imagick
     public function setImageBiasQuantum(string $bias): void  {}
 #endif
 
+#if MagickLibVersion >= 0x700
+    public function setImageBluePrimary(float $x, float $y, float $z): bool  {}
+#else
     public function setImageBluePrimary(float $x, float $y): bool  {}
+#endif
     /* {{{ proto bool Imagick::setImageBluePrimary(float x,float y)
 For IM7 the prototype is
 proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
@@ -1096,21 +1107,33 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public function setImageExtent(int $columns, int $rows): bool  {}
 
+#if MagickLibVersion >= 0x700
+    public function setImageGreenPrimary(float $x, float $y, float $z): bool  {}
+#else
     public function setImageGreenPrimary(float $x, float $y): bool  {}
+#endif
 
     // INTERLACE_*
     public function setImageInterlaceScheme(int $interlace): bool  {}
 
     public function setImageProfile(string $name, string $profile): bool  {}
 
+#if MagickLibVersion >= 0x700
+    public function setImageRedPrimary(float $x, float $y, float $z): bool  {}
+#else
     public function setImageRedPrimary(float $x, float $y): bool  {}
+#endif
 
     // RENDERINGINTENT
     public function setImageRenderingIntent(int $rendering_intent): bool  {}
 
     public function setImageVirtualPixelMethod(int $method): bool  {}
 
+#if MagickLibVersion >= 0x700
+    public function setImageWhitePoint(float $x, float $y, float $z): bool  {}
+#else
     public function setImageWhitePoint(float $x, float $y): bool  {}
+#endif
 
     public function  sigmoidalContrastImage(
         bool $sharpen,
@@ -1246,7 +1269,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //    public function key(): int  {}
 //
 //# endif
-//#endif
+#endif
 
     /** @alias Imagick::nextImage
      *  @tentative-return-type

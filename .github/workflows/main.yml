@@ -2,14 +2,12 @@ name: Build and Test on Debian
 
 on:
   push:
-#    branches: [master]
   pull_request:
     types: [opened, synchronize, reopened]
   release:
     types: [created]
 
 jobs:
-
   test_basic:
     name: basic PHP ${{ matrix.php }} - I ${{ matrix.imagemagick }}
     runs-on: ubuntu-20.04
@@ -40,7 +38,7 @@ jobs:
           sudo apt-get install -y texlive-fonts-recommended || true
 
       - name: Cache ImageMagick
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-ImageMagick
         with:
@@ -73,7 +71,6 @@ jobs:
           php run-tests.php ${JOBS} -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff -g FAIL,BORK,WARN,LEAK
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php
-
 
   test_all:
     name: Full PHP ${{ matrix.php }} - I ${{ matrix.imagemagick }}
@@ -177,4 +174,3 @@ jobs:
           php run-tests.php ${JOBS} -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff -g FAIL,BORK,WARN,LEAK
           for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
           php ./util/check_version.php
-

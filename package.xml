@@ -13,55 +13,19 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2022-01-04</date>
+	<date>2022-01-11</date>
 	<version>
-		<release>3.7.0RC1</release>
-		<api>3.7.0RC1</api>
+		<release>3.7.0</release>
+		<api>3.7.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
-		<api>beta</api>
+		<release>stable</release>
+		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Added:
-  * function Imagick::deleteOption(string $option): bool {}
-  * function Imagick::getBackgroundColor(): ImagickPixel {}
-  * function Imagick::getImageArtifacts(string $pattern = "*"): array {}
-  * function Imagick::getImageKurtosis(): array {}
-  * function Imagick::getImageMean(): array {}
-  * function Imagick::getImageRange(): array {}
-  * function Imagick::getInterpolateMethod(): int {}
-  * function Imagick::getOptions(string $pattern = "*"): array {}
-  * function Imagick::getOrientation(): int {}
-  * function Imagick::getResolution(): array {}
-  * function Imagick::getType(): int {}
-  * function Imagick::implodeImageWithMethod(float $radius, int $pixel_interpolate_method): bool  {}
-  * function Imagick::oilPaintImageWithSigma(float $radius, float $sigma)
-  * function Imagick::polaroidWithTextAndMethod(ImagickDraw $settings, float $angle, string $caption, int $method): bool {}
-  * function Imagick::polynomialImage(array $terms): bool {}
-  * function Imagick::setDepth(int $depth): bool {}
-  * function Imagick::setExtract(string $geometry): bool {}
-  * function Imagick::setInterpolateMethod(int $method): bool{}
-  * function Imagick::setOrientation(int $orientation): bool {}
-  * function Imagick::spreadImageWithMethod(float $radius, int $interpolate_method): bool  {}
-  * function Imagick::swirlImageWithMethod(float $degrees, int $interpolate_method): bool  {}
-  * function Imagick::waveImageWithMethod(float $amplitude, float $length, int $interpolate_method): bool {}
-  * Imagick::IMAGE_TYPE_BILEVEL
-  * Imagick::IMAGE_TYPE_GRAYSCALE
-  * Imagick::IMAGE_TYPE_GRAYSCALE_ALPHA
-  * Imagick::IMAGE_TYPE_PALETTE
-  * Imagick::IMAGE_TYPE_PALETTE_ALPHA
-  * Imagick::IMAGE_TYPE_TRUE_COLOR
-  * Imagick::IMAGE_TYPE_TRUE_COLOR_ALPHA
-  * Imagick::IMAGE_TYPE_COLOR_SEPARATION
-  * Imagick::IMAGE_TYPE_COLOR_SEPARATION_ALPHA
-  * Imagick::IMAGE_TYPE_OPTIMIZE
-  * Imagick::IMAGE_TYPE_PALETTE_BILEVEL_ALPHA
-  * Imagick::COMPOSITE_SEAMLESS_BLEND
-- Changed:
-  * Imagick::setImageArtifact can now take null for the string value.
-  * Return type for Imagick::getImageArtifact is string|null instead of string.
+	* Imagick::COMPOSITE_SALIENCY_BLEND
 </notes>
 	<contents>
 		<dir name="/">
@@ -153,6 +117,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="040_Imagick_charcoalImage_basic.phpt" role="test" />
 				<file name="041_Imagick_chopImage_basic.phpt" role="test" />
 				<file name="042_Imagick_clutImage_basic.phpt" role="test" />
+				<file name="042_Imagick_clutImage_im7.phpt" role="test" />
 				<file name="043_Imagick_colorizeImage_basic.phpt" role="test" />
 				<file name="044_Imagick_colorMatrixImage_basic.phpt" role="test" />
 				<file name="045_Imagick_compositeImage_basic.phpt" role="test" />
@@ -274,7 +239,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="164_Imagick_trimImage_basic.phpt" role="test" />
 				<file name="165_Imagick_unsharpMaskImage_basic.phpt" role="test" />
 				<file name="166_Imagick_waveImage_basic.phpt" role="test" />
-				<file name="166_Imagick_waveImageWithMethod_basic.phpt" role="test"  />
+				<file name="166_Imagick_waveImageWithMethod_basic.phpt" role="test" />
 				<file name="167_Imagick_vignetteImage_basic.phpt" role="test" />
 				<file name="168_Imagick_whiteThresholdImage_basic.phpt" role="test" />
 				<file name="169_ImagickPixel_construct_basic.phpt" role="test" />
