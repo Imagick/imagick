@@ -397,8 +397,6 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
-	return;
-
 cleanup:
 	if (values != NULL) {
 		RelinquishAlignedMemory(values);
@@ -764,6 +762,7 @@ PHP_METHOD(ImagickKernel, separate)
 			kernel_info->x,
 			kernel_info->y
 		);
+		RelinquishAlignedMemory(values_copy);
 
 #if PHP_VERSION_ID >= 70000
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
