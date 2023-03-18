@@ -12155,7 +12155,7 @@ PHP_METHOD(Imagick, getResource)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::getResourceLimit(int type)
+/* {{{ proto int Imagick::getResourceLimit(int type)
 	Returns the specified resource limit in megabytes.
 */
 PHP_METHOD(Imagick, getResourceLimit)
@@ -12166,7 +12166,7 @@ PHP_METHOD(Imagick, getResourceLimit)
 		return;
 	}
 
-	RETVAL_DOUBLE(MagickGetResourceLimit(resource_type));
+	RETVAL_LONG(MagickGetResourceLimit(resource_type));
 }
 /* }}} */
 
