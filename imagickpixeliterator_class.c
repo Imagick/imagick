@@ -116,7 +116,6 @@ PHP_METHOD(ImagickPixelIterator, resetIterator)
 #if MagickLibVersion <= 0x628
 	internpix->iterator_position = 0;
 #endif
-	RETURN_TRUE;
 }
 /* }}} */
 

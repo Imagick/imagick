@@ -8308,7 +8308,7 @@ PHP_METHOD(Imagick, cropThumbnailImage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::resetIterator();
+/* {{{ proto void Imagick::resetIterator();
 	Resets the iterator.  Use it in conjunction with Imagick::nextImage() to iterate over all the images in a wand container.
 */
 PHP_METHOD(Imagick, resetIterator)
@@ -8322,11 +8322,10 @@ PHP_METHOD(Imagick, resetIterator)
 
 	/* No magick is going to happen */
 	if (intern->magick_wand == NULL) {
-		RETURN_FALSE;
+		return;
 	}
 	intern->next_out_of_bound = 0;
 	MagickResetIterator(intern->magick_wand);
-	RETURN_TRUE;
 }
 /* }}} */
 
@@ -13199,7 +13198,7 @@ PHP_METHOD(Imagick, filter)
 #endif //#if MagickLibVersion < 0x700
 #endif // #ifdef IMAGICK_WITH_KERNEL
 
-/* {{{ proto int Imagick::setAntiAlias(bool antialias)
+/* {{{ proto void Imagick::setAntiAlias(bool antialias)
 	Set whether antialiasing should be used for operations. On by default.
 */
 PHP_METHOD(Imagick, setAntialias)
@@ -13220,8 +13219,6 @@ PHP_METHOD(Imagick, setAntialias)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setAntiAlias" TSRMLS_CC);
 		return;
 	}
-
-	RETURN_TRUE;
 }
 /* }}} */
 
@@ -13302,8 +13299,6 @@ PHP_METHOD(Imagick, optimizeImageTransparency)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
 		return;
 	}
-
-	RETURN_TRUE;
 }
 /* }}} */
 #endif
@@ -13333,8 +13328,6 @@ PHP_METHOD(Imagick, autoGammaImage)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "autoGammaImage" TSRMLS_CC);
 		return;
 	}
-
-	RETURN_TRUE;
 }
 /* }}} */
 #endif //#if MagickLibVersion >= 0x660
@@ -13363,8 +13356,6 @@ PHP_METHOD(Imagick, autoOrient)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable autoOrient image" TSRMLS_CC);
 		return;
 	}
-
-	RETURN_TRUE;
 }
 /* }}} */
 #endif // #if MagickLibVersion >= 0x692
@@ -13407,7 +13398,7 @@ PHP_METHOD(Imagick, compositeImageGravity)
 #endif
 
 #if MagickLibVersion >= 0x693
-/* {{{ proto bool Imagick::localContrastImage(float radius, float strength)
+/* {{{ proto void Imagick::localContrastImage(float radius, float strength)
 Attempts to increase the appearance of large-scale light-dark transitions. 
 Local contrast enhancement works similarly to sharpening with an unsharp mask,
 however the mask is instead created using an image with a greater blur distance.
@@ -13434,8 +13425,6 @@ PHP_METHOD(Imagick, localContrastImage)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to localContrastImage" TSRMLS_CC);
 		return;
 	}
-
-	RETURN_TRUE;
 }
 /* }}} */
 #endif // #if MagickLibVersion >= 0x693
@@ -13536,8 +13525,6 @@ PHP_METHOD(Imagick, setImageMask)
 	//	You want ei->severity. ei->error_number
 	// the Go Imagick library does something like:
 	//return &MagickWandException{ExceptionType(C.int(et)), C.GoString(csdescription)}
-
-	RETURN_TRUE;
 }
 /* }}} */
 #endif // IM_HAVE_IMAGICK_GETSETIMAGEMASK
