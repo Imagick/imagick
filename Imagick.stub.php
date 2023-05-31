@@ -1326,7 +1326,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function setRegistry(string $key, string $value): bool  {}
 
-    public static function getRegistry(string $key): string  {}
+    public static function getRegistry(string $key): false|string  {}
 
     public static function listRegistry(): array {}
 

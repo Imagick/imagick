@@ -5290,7 +5290,20 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_setRegistry arginfo_class_Imagick_setOption
 
-#define arginfo_class_Imagick_getRegistry arginfo_class_Imagick_getOption
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_class_Imagick_getRegistry, 0, 1, MAY_BE_FALSE|MAY_BE_STRING)
+#else
+    ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getRegistry, 0, 0, 1)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, key, IS_STRING, 0)
+#else
+    ZEND_ARG_INFO(0, key)
+#endif
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_listRegistry arginfo_class_Imagick_getImageGeometry
 
