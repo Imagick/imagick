@@ -506,7 +506,7 @@ class Imagick
 
     public function setLastIterator(): bool  {}
 
-    public function resetIterator(): void {}
+    public function resetIterator(): bool {}
 
     public function previousImage(): bool  {}
 
