@@ -5,7 +5,7 @@
 class Imagick
 {
 #if MagickLibVersion > 0x628
-    public function optimizeImageLayers(): bool  {}
+    public function optimizeImageLayers(): Imagick  {}
 
     // METRIC_*
     public function compareImageLayers(int $metric): Imagick  {}

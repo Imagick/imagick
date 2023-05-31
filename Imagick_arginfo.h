@@ -5,7 +5,7 @@
 #if MagickLibVersion > 0x628
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_optimizeImageLayers, 0, 0, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_optimizeImageLayers, 0, 0, Imagick, 0)
 #else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_optimizeImageLayers, 0, 0, 0)
 #endif
@@ -72,11 +72,18 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628
-#define arginfo_class_Imagick_transposeImage arginfo_class_Imagick_optimizeImageLayers
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_transposeImage, 0, 0, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_transposeImage, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628
-#define arginfo_class_Imagick_transverseImage arginfo_class_Imagick_optimizeImageLayers
+#define arginfo_class_Imagick_transverseImage arginfo_class_Imagick_transposeImage
 #endif
 
 #if MagickLibVersion > 0x628
@@ -184,7 +191,7 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion > 0x628
-#define arginfo_class_Imagick_uniqueImageColors arginfo_class_Imagick_optimizeImageLayers
+#define arginfo_class_Imagick_uniqueImageColors arginfo_class_Imagick_transposeImage
 #endif
 
 #if MagickLibVersion > 0x628 && !defined(MAGICKCORE_EXCLUDE_DEPRECATED) && MagickLibVersion < 0x700
