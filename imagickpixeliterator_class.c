@@ -572,7 +572,6 @@ PHP_METHOD(ImagickPixelIterator, getCurrentIteratorRow)
 PHP_METHOD(ImagickPixelIterator, next)
 {
 	php_imagickpixeliterator_object *internpix;
-	PixelWand **wand_array;
 	size_t num_wands;
 
 	if (zend_parse_parameters_none() == FAILURE) {
@@ -587,7 +586,7 @@ PHP_METHOD(ImagickPixelIterator, next)
 		return;
 	}
 
-	wand_array = PixelGetNextIteratorRow(internpix->pixel_iterator, &num_wands);
+	PixelGetNextIteratorRow(internpix->pixel_iterator, &num_wands);
 
 #if MagickLibVersion <= 0x628
 	internpix->iterator_position++;
