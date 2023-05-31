@@ -94,6 +94,31 @@ PHP_METHOD(ImagickPixelIterator, __construct)
 }
 /* }}} */
 
+/* {{{ proto void ImagickPixelIterator::rewind()
+	Resets the pixel iterator.  Use it in conjunction with PixelGetNextIteratorRow() to iterate over all the pixels in a pixel container.
+*/
+PHP_METHOD(ImagickPixelIterator, rewind)
+{
+	php_imagickpixeliterator_object *internpix;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internpix = Z_IMAGICKPIXELITERATOR_P(getThis());
+
+	if (!internpix->initialized) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
+		RETURN_THROWS();
+	}
+
+	PixelResetIterator(internpix->pixel_iterator);
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position = 0;
+#endif
+}
+/* }}} */
+
 /* {{{ proto bool ImagickPixelIterator::resetIterator()
 	Resets the pixel iterator.  Use it in conjunction with PixelGetNextIteratorRow() to iterate over all the pixels in a pixel container.
 */
@@ -537,6 +562,34 @@ PHP_METHOD(ImagickPixelIterator, getCurrentIteratorRow)
 
 	s_pixelwands_to_zval (wand_array, num_wands, return_value TSRMLS_CC);
 	return;
+}
+/* }}} */
+
+/* {{{ proto void ImagickPixelIterator::next()
+	Returns the next row as an array of pixel wands from the pixel iterator.
+*/
+PHP_METHOD(ImagickPixelIterator, next)
+{
+	php_imagickpixeliterator_object *internpix;
+	PixelWand **wand_array;
+	size_t num_wands;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	internpix = Z_IMAGICKPIXELITERATOR_P(getThis());
+
+	if (!internpix->initialized) {
+		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "ImagickPixelIterator is not initialized correctly" TSRMLS_CC);
+		return;
+	}
+
+	wand_array = PixelGetNextIteratorRow(internpix->pixel_iterator, &num_wands);
+
+#if MagickLibVersion <= 0x628
+	internpix->iterator_position++;
+#endif
 }
 /* }}} */
 
