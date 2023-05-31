@@ -286,7 +286,9 @@ static zend_object_value php_imagick_object_new_ex(zend_class_entry *class_type,
 	object_properties_init(&intern->zo, class_type);
 
 #if PHP_VERSION_ID >= 70000
+#if PHP_VERSION_ID <  80300
 	intern->zo.handlers = &imagick_object_handlers;
+#endif
 	return &intern->zo;
 #else
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagick_object_free_storage, NULL TSRMLS_CC);
@@ -321,7 +323,9 @@ static zend_object_value php_imagickdraw_object_new_ex(zend_class_entry *class_t
 
 	zend_object_std_init(&intern->zo, class_type TSRMLS_CC);
 	object_properties_init(&intern->zo, class_type);
+#if PHP_VERSION_ID < 80300
 	intern->zo.handlers = &imagickdraw_object_handlers;
+#endif
 #else
 	zend_object_value retval;
 	intern = (php_imagickdraw_object *) emalloc(sizeof(php_imagickdraw_object));
@@ -398,8 +402,9 @@ static zend_object_value php_imagickpixeliterator_object_new(zend_class_entry *c
 	object_properties_init(&intern->zo, class_type);
 
 #if PHP_VERSION_ID >= 70000
+#if PHP_VERSION_ID <  80300
 	intern->zo.handlers = &imagickpixeliterator_object_handlers;
-
+#endif
 	return &intern->zo;
 #else
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixeliterator_object_free_storage, NULL TSRMLS_CC);
@@ -439,8 +444,9 @@ static zend_object_value php_imagickpixel_object_new_ex(zend_class_entry *class_
 	object_properties_init(&intern->zo, class_type);
 	
 #if PHP_VERSION_ID >= 70000
+#if PHP_VERSION_ID <  80300
 	intern->zo.handlers = &imagickpixel_object_handlers;
-
+#endif
 	return &intern->zo;
 #else
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickpixel_object_free_storage, NULL TSRMLS_CC);
@@ -494,8 +500,9 @@ static zend_object_value php_imagickkernel_object_new_ex(zend_class_entry *class
 	object_properties_init(&intern->zo, class_type);
 
 #if PHP_VERSION_ID >= 70000
+#if PHP_VERSION_ID <  80300
 	intern->zo.handlers = &imagickkernel_object_handlers;
-
+#endif
 	return &intern->zo;
 #else
 	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) php_imagickkernel_object_free_storage, NULL TSRMLS_CC);
@@ -1041,7 +1048,9 @@ PHP_MINIT_FUNCTION(imagick)
 		Initialize the class (Imagick)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICK_SC_NAME, php_imagick_class_methods);
+#if PHP_VERSION_ID < 80300
 	ce.create_object = php_imagick_object_new;
+#endif
 	imagick_object_handlers.clone_obj = php_imagick_clone_imagick_object;
 	imagick_object_handlers.read_property = php_imagick_read_property;
 	imagick_object_handlers.count_elements = php_imagick_count_elements;
@@ -1051,38 +1060,56 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+#if PHP_VERSION_ID >= 80300
+	php_imagick_sc_entry->create_object = php_imagick_object_new;
+	php_imagick_sc_entry->default_object_handlers = &imagick_object_handlers;
+#endif
 	zend_class_implements(php_imagick_sc_entry TSRMLS_CC, 2, zend_ce_iterator, im_ce_countable);
 
 	/*
 		Initialize the class (ImagickDraw)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKDRAW_SC_NAME, php_imagickdraw_class_methods);
+#if PHP_VERSION_ID < 80300
 	ce.create_object = php_imagickdraw_object_new;
+#endif
 	imagickdraw_object_handlers.clone_obj = php_imagick_clone_imagickdraw_object;
 #if PHP_VERSION_ID >= 70000
 	imagickdraw_object_handlers.offset = XtOffsetOf(php_imagickdraw_object, zo);
 	imagickdraw_object_handlers.free_obj = php_imagickdraw_object_free_storage;
 #endif
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+#if PHP_VERSION_ID >= 80300
+	php_imagickdraw_sc_entry->create_object = php_imagickdraw_object_new;
+	php_imagickdraw_sc_entry->default_object_handlers = &imagickdraw_object_handlers;
+#endif
 
 	/*
 		Initialize the class (ImagickPixelIterator)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXELITERATOR_SC_NAME, php_imagickpixeliterator_class_methods);
+#if PHP_VERSION_ID < 80300
 	ce.create_object = php_imagickpixeliterator_object_new;
+#endif
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
 #if PHP_VERSION_ID >= 70000
 	imagickpixeliterator_object_handlers.offset = XtOffsetOf(php_imagickpixeliterator_object, zo);
 	imagickpixeliterator_object_handlers.free_obj = php_imagickpixeliterator_object_free_storage;
 #endif
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+#if PHP_VERSION_ID >= 80300
+	php_imagickpixeliterator_sc_entry->create_object = php_imagickpixeliterator_object_new;
+	php_imagickpixeliterator_sc_entry->default_object_handlers = &imagickpixeliterator_object_handlers;
+#endif
 	zend_class_implements(php_imagickpixeliterator_sc_entry TSRMLS_CC, 1, zend_ce_iterator);
 
 	/*
 		Initialize the class (ImagickPixel)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKPIXEL_SC_NAME, php_imagickpixel_class_methods);
+#if PHP_VERSION_ID < 80300
 	ce.create_object = php_imagickpixel_object_new;
+#endif
 	imagickpixel_object_handlers.clone_obj = php_imagick_clone_imagickpixel_object;
 #if PHP_VERSION_ID >= 70000
 	imagickpixel_object_handlers.offset = XtOffsetOf(php_imagickpixel_object, zo);
@@ -1090,13 +1117,19 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	php_imagickpixel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+#if PHP_VERSION_ID >= 80300
+	php_imagickpixel_sc_entry->create_object = php_imagickpixel_object_new;
+	php_imagickpixel_sc_entry->default_object_handlers = &imagickpixel_object_handlers;
+#endif
 
 #ifdef IMAGICK_WITH_KERNEL
 	/*
 		Initialize the class (ImagickKernel)
 	*/
 	INIT_CLASS_ENTRY(ce, PHP_IMAGICKKERNEL_SC_NAME, php_imagickkernel_class_methods);
+#if PHP_VERSION_ID < 80300
 	ce.create_object = php_imagickkernel_object_new;
+#endif
 	// Disabled until can be compiled under wall correctly
 	imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
@@ -1106,6 +1139,10 @@ PHP_MINIT_FUNCTION(imagick)
     #endif
 
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+#if PHP_VERSION_ID >= 80300
+	php_imagickkernel_sc_entry->create_object = php_imagickkernel_object_new;
+	php_imagickkernel_sc_entry->default_object_handlers = &imagickkernel_object_handlers;
+#endif
 #endif
 
 	php_imagick_initialize_constants (TSRMLS_C);
