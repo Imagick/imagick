@@ -1374,18 +1374,18 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x687
-    public function optimizeImageTransparency(): ?bool {}
+    public function optimizeImageTransparency(): bool {}
 #endif
 
 #if MagickLibVersion >= 0x660
-    public function autoGammaImage(?int $channel = Imagick::CHANNEL_ALL): ?bool {}
+    public function autoGammaImage(?int $channel = Imagick::CHANNEL_ALL): bool {}
 #endif
 
 #if MagickLibVersion >= 0x692
-    public function autoOrient(): ?bool {}
+    public function autoOrient(): bool {}
 
     /** @alias Imagick::autoOrient */
-    public function autoOrientate(): ?bool {}
+    public function autoOrientate(): bool {}
 
     // COMPOSITE_*
     public function compositeImageGravity(Imagick $image, int $composite_constant, int $gravity): bool {}
@@ -1393,7 +1393,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x693
-    public function localContrastImage(float $radius, float $strength): ?bool {}
+    public function localContrastImage(float $radius, float $strength): bool {}
 #endif
 
 #if MagickLibVersion >= 0x700
@@ -1407,7 +1407,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     public function getImageMask(int $pixelmask): ?Imagick {}
 
     // PIXELMASK_*
-    public function setImageMask(Imagick $clip_mask, int $pixelmask): ?bool {}
+    public function setImageMask(Imagick $clip_mask, int $pixelmask): bool {}
 #endif
 
 
