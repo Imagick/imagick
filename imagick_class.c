@@ -8330,7 +8330,7 @@ PHP_METHOD(Imagick, resetIterator)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::rewind()
+/* {{{ proto void Imagick::rewind()
 	Sets the wand iterator to the first image.
 */
 PHP_METHOD(Imagick, rewind)
@@ -8341,6 +8341,7 @@ PHP_METHOD(Imagick, rewind)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	/* No magick is going to happen */
 	if (intern->magick_wand == NULL) {
@@ -8420,7 +8421,7 @@ PHP_METHOD(Imagick, previousImage)
 }
 /* }}} */
 
-/* {{{ proto bool Imagick::next()
+/* {{{ proto void Imagick::next()
 	Associates the next image in the image list with an Imagick object.
 */
 PHP_METHOD(Imagick, next)
@@ -8431,6 +8432,7 @@ PHP_METHOD(Imagick, next)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	status = MagickNextImage(intern->magick_wand);

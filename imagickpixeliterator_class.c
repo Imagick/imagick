@@ -104,6 +104,7 @@ PHP_METHOD(ImagickPixelIterator, rewind)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	internpix = Z_IMAGICKPIXELITERATOR_P(getThis());
 
@@ -577,6 +578,7 @@ PHP_METHOD(ImagickPixelIterator, next)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	internpix = Z_IMAGICKPIXELITERATOR_P(getThis());
 
