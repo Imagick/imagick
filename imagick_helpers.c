@@ -1549,6 +1549,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
     IMAGICK_REGISTER_CONST_LONG("COLORSPACE_PROPHOTO", ProPhotoColorspace);
 #endif
 
+#if MagickLibVersion >= 0x712
+	// Technically >= 7.1.1-9 but we still don't have a mechanism for
+	// detecting patch versions.
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
+#endif
+
 #if MagickLibVersion >= 0x70A
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_JZAZBZ", JzazbzColorspace);
 #endif
