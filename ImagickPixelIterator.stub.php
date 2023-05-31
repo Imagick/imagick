@@ -22,7 +22,7 @@ class ImagickPixelIterator {
     /** @alias ImagickPixelIterator::clear */
     public function destroy(): bool {}
 
-    public function getCurrentIteratorRow(): array {}
+    public function getCurrentIteratorRow(): ?array {}
 
     public function getIteratorRow(): int {}
 
@@ -33,18 +33,12 @@ class ImagickPixelIterator {
     /** @alias ImagickPixelIterator::getIteratorRow */
     public function key(): int {}
 
-    /** @alias ImagickPixelIterator::getNextIteratorRow
-     *  @tentative-return-type
-     */
     public function next(): void {}
 
-    /** @alias ImagickPixelIterator::resetIterator
-     *  @tentative-return-type
-     */
     public function rewind(): void {}
 
     /** @alias ImagickPixelIterator::getCurrentIteratorRow */
-    public function current(): array {}
+    public function current(): ?array {}
 
     public function newPixelIterator(Imagick $imagick): bool {}
 
