@@ -1553,6 +1553,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_JZAZBZ", JzazbzColorspace);
 #endif
 
+
+#if MagickLibVersion >= 0x720
+	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
+	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
+#endif
+
+
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
 #if MagickLibVersion < 0x700
