@@ -3657,6 +3657,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_combineImages, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
+#if MagickLibVersion >= 0x700
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_convolveImage, 0, 1, _IS_BOOL, 0)
@@ -3667,6 +3668,25 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_convolveImage, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, kernel, ImagickKernel, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
 ZEND_END_ARG_INFO()
+#endif
+
+#if !(MagickLibVersion >= 0x700)
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_convolveImage, 0, 1, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_convolveImage, 0, 0, 1)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, kernel, IS_ARRAY, 0)
+#else
+    ZEND_ARG_INFO(0, kernel)
+#endif
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
+ZEND_END_ARG_INFO()
+#endif
 
 
 #if PHP_VERSION_ID >= 80000
@@ -6560,7 +6580,12 @@ ZEND_METHOD(Imagick, compareImageChannels);
 ZEND_METHOD(Imagick, compareImages);
 ZEND_METHOD(Imagick, contrastImage);
 ZEND_METHOD(Imagick, combineImages);
+#if MagickLibVersion >= 0x700
 ZEND_METHOD(Imagick, convolveImage);
+#endif
+#if !(MagickLibVersion >= 0x700)
+ZEND_METHOD(Imagick, convolveImage);
+#endif
 ZEND_METHOD(Imagick, cycleColormapImage);
 ZEND_METHOD(Imagick, deconstructImages);
 ZEND_METHOD(Imagick, despeckleImage);
@@ -7358,7 +7383,12 @@ static const zend_function_entry class_Imagick_methods[] = {
 	ZEND_ME(Imagick, compareImages, arginfo_class_Imagick_compareImages, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, contrastImage, arginfo_class_Imagick_contrastImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, combineImages, arginfo_class_Imagick_combineImages, ZEND_ACC_PUBLIC)
+#if MagickLibVersion >= 0x700
 	ZEND_ME(Imagick, convolveImage, arginfo_class_Imagick_convolveImage, ZEND_ACC_PUBLIC)
+#endif
+#if !(MagickLibVersion >= 0x700)
+	ZEND_ME(Imagick, convolveImage, arginfo_class_Imagick_convolveImage, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, cycleColormapImage, arginfo_class_Imagick_cycleColormapImage, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, deconstructImages, arginfo_class_Imagick_deconstructImages, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, despeckleImage, arginfo_class_Imagick_despeckleImage, ZEND_ACC_PUBLIC)
