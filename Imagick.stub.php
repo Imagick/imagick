@@ -810,7 +810,7 @@ class Imagick
     public function combineImages(int $colorspace): Imagick  {}
 
     // kernel is a 2d array of float values
-    public function convolveImage(array $kernel, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
+    public function convolveImage(ImagickKernel $kernel, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
     public function cycleColormapImage(int $displace): bool  {}
 

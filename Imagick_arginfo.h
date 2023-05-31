@@ -3671,12 +3671,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_convolveImage, 0, 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_convolveImage, 0, 0, 1)
 #endif
 
-	
-#if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO(0, kernel, IS_ARRAY, 0)
-#else
-    ZEND_ARG_INFO(0, kernel)
-#endif
+	ZEND_ARG_OBJ_INFO(0, kernel, ImagickKernel, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, channel, IS_LONG, 0, "Imagick::CHANNEL_DEFAULT")
 ZEND_END_ARG_INFO()
 
