@@ -79,7 +79,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixelIterator_getIteratorRow, 0, 0, 
 
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ImagickPixelIterator_getNextIteratorRow arginfo_class_ImagickPixelIterator_getCurrentIteratorRow
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_getNextIteratorRow, 0, 0, IS_ARRAY, 1)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixelIterator_getNextIteratorRow, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickPixelIterator_getPreviousIteratorRow arginfo_class_ImagickPixelIterator_getCurrentIteratorRow
 
