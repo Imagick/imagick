@@ -689,7 +689,14 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickDraw_getTextDecoration arginfo_class_ImagickDraw_getFontStyle
 
-#define arginfo_class_ImagickDraw_getTextEncoding arginfo_class_ImagickDraw_getFont
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_class_ImagickDraw_getTextEncoding, 0, 0, MAY_BE_FALSE|MAY_BE_STRING)
+#else
+    ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickDraw_getTextEncoding, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickDraw_getFontStretch arginfo_class_ImagickDraw_getFontStyle
 
@@ -904,7 +911,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickDraw_comment, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ImagickDraw_getClipPath arginfo_class_ImagickDraw_getFont
+#define arginfo_class_ImagickDraw_getClipPath arginfo_class_ImagickDraw_getTextEncoding
 
 #define arginfo_class_ImagickDraw_getClipRule arginfo_class_ImagickDraw_getFontStyle
 
