@@ -15,7 +15,7 @@ class ImagickKernel
     // KERNEL_*
     public static function fromBuiltin(int $kernel, string $shape): ImagickKernel {}
 
-    public static function fromMatrix(array $matrix, ?array $origin = null): ImagickKernel {}
+    public static function fromMatrix(array $matrix, array $origin = null): ImagickKernel {}
 
     public function getMatrix(): array {}
 
