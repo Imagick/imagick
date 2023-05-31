@@ -2180,14 +2180,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_setLastIterator arginfo_class_Imagick_removeImage
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_resetIterator, 0, 0, IS_VOID, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_resetIterator, 0, 0, 0)
-#endif
-
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_resetIterator arginfo_class_Imagick_removeImage
 
 #define arginfo_class_Imagick_previousImage arginfo_class_Imagick_removeImage
 
@@ -5119,9 +5112,16 @@ ZEND_END_ARG_INFO()
 #define arginfo_class_Imagick_key arginfo_class_Imagick_getSizeOffset
 #endif
 
-#define arginfo_class_Imagick_next arginfo_class_Imagick_resetIterator
 
-#define arginfo_class_Imagick_rewind arginfo_class_Imagick_resetIterator
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_next, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_Imagick_rewind arginfo_class_Imagick_next
 
 #define arginfo_class_Imagick_valid arginfo_class_Imagick_removeImage
 
