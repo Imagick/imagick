@@ -1390,7 +1390,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x693
-    public function localContrastImage(float $radius, float $strength): void {}
+    public function localContrastImage(float $radius, float $strength): ?bool {}
 #endif
 
 #if MagickLibVersion >= 0x700
