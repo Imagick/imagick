@@ -5253,8 +5253,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_subimageMatch, 0, 0, 1)
 #endif
 
 	ZEND_ARG_OBJ_INFO(0, image, Imagick, 0)
-	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, offset, "null")
-	ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, similarity, "null")
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, offset, "null")
+#else
+    ZEND_ARG_INFO(1, offset)
+#endif
+
+
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE(1, similarity, "null")
+#else
+    ZEND_ARG_INFO(1, similarity)
+#endif
+
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, threshold, IS_DOUBLE, 0, "0.0")
 
 #if PHP_VERSION_ID >= 80000
