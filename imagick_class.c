@@ -8330,6 +8330,28 @@ PHP_METHOD(Imagick, resetIterator)
 }
 /* }}} */
 
+/* {{{ proto bool Imagick::rewind()
+	Sets the wand iterator to the first image.
+*/
+PHP_METHOD(Imagick, rewind)
+{
+	php_imagick_object *intern;
+	intern = Z_IMAGICK_P(getThis());
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	/* No magick is going to happen */
+	if (intern->magick_wand == NULL) {
+		return;
+	}
+	intern->next_out_of_bound = 0;
+	MagickSetFirstIterator(intern->magick_wand);
+	return;
+}
+/* }}} */
+
 /* {{{ proto bool Imagick::setFirstIterator()
 	Sets the wand iterator to the first image.
 */
@@ -8395,6 +8417,28 @@ PHP_METHOD(Imagick, previousImage)
 	}
 	intern->next_out_of_bound = 0;
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto bool Imagick::next()
+	Associates the next image in the image list with an Imagick object.
+*/
+PHP_METHOD(Imagick, next)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	intern = Z_IMAGICK_P(getThis());
+	status = MagickNextImage(intern->magick_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		intern->next_out_of_bound = 1;
+	}
 }
 /* }}} */
 
