@@ -23,7 +23,7 @@ class ImagickPixelIterator {
 
     public function getIteratorRow(): int {}
 
-    public function getNextIteratorRow(): array {}
+    public function getNextIteratorRow(): ?array {}
 
     public function getPreviousIteratorRow(): array {}
 
