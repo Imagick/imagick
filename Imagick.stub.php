@@ -1220,7 +1220,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function getResource(int $type): int  {}
 
-    public static function getResourceLimit(int $type): int  {}
+    public static function getResourceLimit(int $type): float  {}
 
     public function getSamplingFactors(): array  {}
 

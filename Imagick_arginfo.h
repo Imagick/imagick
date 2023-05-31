@@ -4995,7 +4995,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getResource, 0, 0, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_Imagick_getResourceLimit arginfo_class_Imagick_getResource
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getResourceLimit, 0, 1, IS_DOUBLE, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getResourceLimit, 0, 0, 1)
+#endif
+
+	
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_TYPE_INFO(0, type, IS_LONG, 0)
+#else
+    ZEND_ARG_INFO(0, type)
+#endif
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getSamplingFactors arginfo_class_Imagick_getImageGeometry
 
