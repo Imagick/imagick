@@ -1378,14 +1378,14 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x660
-    public function autoGammaImage(?int $channel = Imagick::CHANNEL_ALL): void {}
+    public function autoGammaImage(?int $channel = Imagick::CHANNEL_ALL): ?bool {}
 #endif
 
 #if MagickLibVersion >= 0x692
-    public function autoOrient(): void {}
+    public function autoOrient(): ?bool {}
 
     /** @alias Imagick::autoOrient */
-    public function autoOrientate(): void {}
+    public function autoOrientate(): ?bool {}
 
     // COMPOSITE_*
     public function compositeImageGravity(Imagick $image, int $composite_constant, int $gravity): bool {}
