@@ -1349,7 +1349,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 #endif
 
-    public function setAntialias(bool $antialias): void {}
+    public function setAntialias(bool $antialias): bool {}
 
     public function getAntialias(): bool {}
 
