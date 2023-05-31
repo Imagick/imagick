@@ -125,6 +125,17 @@ $replace[] = "
 #endif
 ";
 
+// ZEND_ARG_INFO_WITH_DEFAULT_VALUE(0, filename, "null")
+$search[] = "#.*ZEND_ARG_INFO_WITH_DEFAULT_VALUE\((\w*), (\w*), ([\w\"]*)\)#iu";
+$replace[] = "
+#if PHP_VERSION_ID >= 80000
+    ZEND_ARG_INFO_WITH_DEFAULT_VALUE($1, $2, $3)
+#else
+    ZEND_ARG_INFO($1, $2)
+#endif
+";
+
+
 
 //#if PHP_VERSION_ID >= 80000
 //ZEND_ARG_TYPE_MASK(0, files, MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_NULL, NULL)
