@@ -1318,10 +1318,18 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x652
-    public function subimageMatch(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+	/**
+	 * @param array $offset
+	 * @param float $similarity
+	 */
+    public function subimageMatch(Imagick $image, &$offset = null, &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 
-    /** @alias Imagick::subimageMatch */
-    public function similarityImage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+	/**
+	 * @alias Imagick::subimageMatch
+	 * @param array $offset
+	 * @param float $similarity
+	 */
+    public function similarityImage(Imagick $image, &$offset = null, &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
