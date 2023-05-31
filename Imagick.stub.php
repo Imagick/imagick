@@ -1374,7 +1374,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x687
-    public function optimizeImageTransparency(): void {}
+    public function optimizeImageTransparency(): ?bool {}
 #endif
 
 #if MagickLibVersion >= 0x660
