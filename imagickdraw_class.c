@@ -1315,8 +1315,7 @@ PHP_METHOD(ImagickDraw, composite)
 
 	intern = Z_IMAGICK_P(magick_obj);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		RETURN_THROWS();
+	IMAGICK_NOT_EMPTY(intern);
 
 	internd = Z_IMAGICKDRAW_P(getThis());
 	status = DrawComposite(internd->drawing_wand, compose, x, y, width, height, intern->magick_wand);
