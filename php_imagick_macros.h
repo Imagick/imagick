@@ -47,7 +47,12 @@
 	}
 
 #define IMAGICK_NOT_EMPTY(wand) \
-	if (php_imagick_ensure_not_empty (wand->magick_wand) == 0) { \
+	if (php_imagick_ensure_not_empty(wand->magick_wand) == 0) { \
+		RETURN_THROWS(); \
+	}
+
+#define IMAGICK_PIXEL_NOT_EMPTY(pixel) \
+	if (php_imagickpixel_ensure_not_null(pixel->pixel_wand) == 0) { \
 		RETURN_THROWS(); \
 	}
 
