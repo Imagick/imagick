@@ -40,7 +40,7 @@ PHP_METHOD(Imagick, pingImageFile)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE)
 	{
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -56,7 +56,7 @@ PHP_METHOD(Imagick, pingImageFile)
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to ping image from the filehandle" TSRMLS_CC);
 		}
-		return;
+		RETURN_THROWS();
 	}
 
 	if (filename) {
@@ -80,12 +80,12 @@ PHP_METHOD(Imagick, pingImageBlob)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &image_string, &image_string_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if (image_string_len == 0) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Empty image string passed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -94,7 +94,7 @@ PHP_METHOD(Imagick, pingImageBlob)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to ping image blob" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -113,19 +113,18 @@ PHP_METHOD(Imagick, vignetteImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddll", &black_point, &white_point, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickVignetteImage(intern->magick_wand, black_point, white_point, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to apply vignette filter" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -141,19 +140,18 @@ PHP_METHOD(Imagick, transposeImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickTransposeImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to transpose image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -169,19 +167,18 @@ PHP_METHOD(Imagick, transverseImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickTransverseImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to transverse image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -200,19 +197,18 @@ PHP_METHOD(Imagick, adaptiveBlurImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAdaptiveBlurImageChannel(intern->magick_wand, channel, radius, sigma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to adaptive blur image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -228,19 +224,18 @@ PHP_METHOD(Imagick, uniqueImageColors)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickUniqueImageColors(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get unique image colors" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -258,19 +253,18 @@ PHP_METHOD(Imagick, contrastStretchImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &black_point, &white_point, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickContrastStretchImageChannel(intern->magick_wand, channel, black_point, white_point);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to contrast strech image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -288,14 +282,13 @@ PHP_METHOD(Imagick, getImageMatte)
 	MagickBooleanType matte;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageMatte");
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	matte = MagickGetImageMatte(intern->magick_wand);
 
@@ -320,19 +313,18 @@ PHP_METHOD(Imagick, setImageMatte)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &matte) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageMatte(intern->magick_wand, matte);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image matte" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -354,23 +346,22 @@ PHP_METHOD(Imagick, adaptiveResizeImage)
 	zend_bool legacy = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bb", &width, &height, &bestfit, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickAdaptiveResizeImage(intern->magick_wand, new_width, new_height);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to adaptive resize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -387,19 +378,18 @@ PHP_METHOD(Imagick, sketchImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &radius, &sigma, &angle) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSketchImage(intern->magick_wand, sigma, radius, angle);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sketch image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -417,19 +407,18 @@ PHP_METHOD(Imagick, shadeImage)
 	zend_bool gray;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd", &gray, &azimuth, &elevation) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickShadeImage(intern->magick_wand, gray, azimuth, elevation);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to shade image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -446,7 +435,7 @@ PHP_METHOD(Imagick, getSizeOffset)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -454,7 +443,7 @@ PHP_METHOD(Imagick, getSizeOffset)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get size offset" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_LONG(offset);
@@ -472,7 +461,7 @@ PHP_METHOD(Imagick, setSizeOffset)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &columns, &rows, &offset) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -481,7 +470,7 @@ PHP_METHOD(Imagick, setSizeOffset)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set size offset" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -498,18 +487,17 @@ PHP_METHOD(Imagick, adaptiveSharpenImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAdaptiveSharpenImageChannel(intern->magick_wand, channel, radius, sigma);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to adaptive sharpen image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -528,19 +516,18 @@ PHP_METHOD(Imagick, randomThresholdImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &low, &high, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickRandomThresholdImageChannel(intern->magick_wand, channel, low, high);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to random threshold image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -564,41 +551,40 @@ PHP_METHOD(Imagick, roundCornersImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|ddd", &x_rounding, &y_rounding, &stroke_width, &displace, &correction) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	image_width = MagickGetImageWidth(intern->magick_wand);
 	image_height = MagickGetImageHeight(intern->magick_wand);
 
 	if (!image_width || !image_height) {
 	    php_imagick_throw_exception(IMAGICK_CLASS, "Unable to round corners on empty image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickSetImageMatte(intern->magick_wand, MagickTrue);
 
 	if (status == MagickFalse) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set image matte" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	/* Here we go.. */
 	color = NewPixelWand();
 	if (!color) {
 		php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate PixelWand structure" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	draw = NewDrawingWand();
 	if (!draw) {
 		DestroyPixelWand (color);
 		php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate DrawingWand structure" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	mask_image = NewMagickWand();
@@ -606,7 +592,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 		DestroyPixelWand (color);
 		DestroyDrawingWand (draw);
 		php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate MagickWand structure" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 
@@ -620,7 +606,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 	if (status == MagickFalse) {
         exit_cleanup();
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickNewImage(mask_image, image_width, image_height, color);
@@ -628,7 +614,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 	if (status == MagickFalse) {
 		exit_cleanup();
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to allocate mask image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	MagickSetImageBackgroundColor(mask_image, color);
@@ -637,7 +623,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 	if (status == MagickFalse) {
 		exit_cleanup();
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	DrawSetFillColor(draw, color);
@@ -646,7 +632,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 	if (status == MagickFalse) {
 		exit_cleanup();
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set pixel color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	DrawSetStrokeColor(draw, color);
@@ -665,7 +651,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 	if (status == MagickFalse) {
 		exit_cleanup();
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to draw on image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 
@@ -678,7 +664,7 @@ PHP_METHOD(Imagick, roundCornersImage)
 	if (status == MagickFalse) {
 		exit_cleanup();
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to composite image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	exit_cleanup();
@@ -696,14 +682,13 @@ PHP_METHOD(Imagick, getIteratorIndex)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
 	status = MagickGetIteratorIndex(intern->magick_wand);
 	ZVAL_LONG(return_value, (long)status);
-	return;
 }
 /* }}} */
 
@@ -718,7 +703,7 @@ PHP_METHOD(Imagick, setIteratorIndex)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -727,7 +712,7 @@ PHP_METHOD(Imagick, setIteratorIndex)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set iterator index" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern->next_out_of_bound = 0;
@@ -748,25 +733,23 @@ PHP_METHOD(Imagick, transformImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &crop, &crop_len, &geometry, &geometry_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	transformed = MagickTransformImage(intern->magick_wand, crop, geometry);
 
 	if (!transformed) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Transforming image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 
 	php_imagick_replace_magickwand(intern_return, transformed);
-	return;
 }
 #endif //#if MagickLibVersion < 0x700
 
@@ -786,19 +769,18 @@ PHP_METHOD(Imagick, setImageOpacity)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &opacity) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageOpacity(intern->magick_wand, opacity);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image opacity" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -820,19 +802,18 @@ PHP_METHOD(Imagick, setImageAlpha)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &alpha) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageAlpha(intern->magick_wand, alpha);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image alpha" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -855,18 +836,17 @@ PHP_METHOD(Imagick, orderedPosterizeImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &map, &map_len, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickOrderedPosterizeImageChannel(intern->magick_wand, channel, map);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to posterize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -891,12 +871,11 @@ PHP_METHOD(Imagick, polaroidWithTextAndMethod)
 	im_long method;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Odsl", &objvar, php_imagickdraw_sc_entry, &angle,  &caption, &caption_len, &method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	internd = Z_IMAGICKDRAW_P(objvar);
 
@@ -911,7 +890,7 @@ PHP_METHOD(Imagick, polaroidWithTextAndMethod)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polaroidWithTextAndMethod image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -933,12 +912,11 @@ PHP_METHOD(Imagick, polaroidImage)
 	double angle;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Od", &objvar, php_imagickdraw_sc_entry, &angle) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;	
+	IMAGICK_NOT_EMPTY(intern);
 
 	internd = Z_IMAGICKDRAW_P(objvar);
 #if MagickLibVersion >= 0x700
@@ -954,7 +932,7 @@ PHP_METHOD(Imagick, polaroidImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polaroid image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -971,12 +949,11 @@ PHP_METHOD(Imagick, getImageProperty)
 	IM_LEN_TYPE name_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	value = MagickGetImageProperty(intern->magick_wand, name);
 
@@ -1000,19 +977,18 @@ PHP_METHOD(Imagick, setImageProperty)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &name, &name_len, &value, &value_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+	IMAGICK_NOT_EMPTY(intern);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 	status = MagickSetImageProperty(intern->magick_wand, name, value);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image property" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1032,13 +1008,12 @@ PHP_METHOD(Imagick, deleteImageProperty)
 	Image *image;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	image = GetImageFromMagickWand(intern->magick_wand);
 	status = DeleteImageProperty(image, name);
@@ -1066,14 +1041,12 @@ PHP_METHOD(Imagick, identifyFormat)
 	Image *image;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &embedText, &embedText_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0) {
-		return;
-	}
+	IMAGICK_NOT_EMPTY(intern);
 
 	image_info = AcquireImageInfo();
 	image = GetImageFromMagickWand(intern->magick_wand);
@@ -1113,12 +1086,11 @@ PHP_METHOD(Imagick, getImageInterpolateMethod)
 	long interpolate;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	interpolate = MagickGetImageInterpolateMethod(intern->magick_wand);
 	RETVAL_LONG(interpolate);
@@ -1137,19 +1109,18 @@ PHP_METHOD(Imagick, setImageInterpolateMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &interpolate) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageInterpolateMethod(intern->magick_wand, interpolate);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set the image interpolate method" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1167,19 +1138,18 @@ PHP_METHOD(Imagick, linearStretchImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &blackPoint, &whitePoint) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickLinearStretchImage(intern->magick_wand, blackPoint, whitePoint);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to linear strech image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1195,18 +1165,17 @@ PHP_METHOD(Imagick, getImageLength)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImageLength(intern->magick_wand, &length);
 
 	if (status == MagickFalse) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to acquire image length" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_LONG(length);
@@ -1225,18 +1194,17 @@ PHP_METHOD(Imagick, extentImage)
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE)
 	{
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickExtentImage(intern->magick_wand, width, height, x, y);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to extent image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1253,12 +1221,11 @@ PHP_METHOD(Imagick, getImageOrientation)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	RETVAL_LONG(MagickGetImageOrientation(intern->magick_wand));
 }
@@ -1275,19 +1242,18 @@ PHP_METHOD(Imagick, setImageOrientation)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &orientation) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageOrientation(intern->magick_wand, orientation);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image orientation" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1315,12 +1281,11 @@ PHP_METHOD(Imagick, paintFloodfillImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdzll|l", &fill_param, &fuzz, &border_param, &x, &y, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	fill_wand = php_imagick_zval_to_pixelwand (fill_param, IMAGICK_CLASS, &fill_allocated TSRMLS_CC);
 	if (!fill_wand)
@@ -1347,7 +1312,7 @@ PHP_METHOD(Imagick, paintFloodfillImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to paint floodfill image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1369,23 +1334,21 @@ PHP_METHOD(Imagick, clutImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	lookup = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (lookup->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(lookup);
 
 	status = MagickClutImageChannel(intern->magick_wand, channel, lookup->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to replace colors in the image from a color lookup table" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1406,16 +1369,14 @@ PHP_METHOD(Imagick, clutImageWithInterpolate)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &interpolate_method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	lookup = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (lookup->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(lookup);
 
 	status = MagickClutImage(intern->magick_wand, lookup->magick_wand, interpolate_method);
 
@@ -1425,7 +1386,7 @@ PHP_METHOD(Imagick, clutImageWithInterpolate)
 			intern->magick_wand,
 			"Unable to replace colors in the image from a color lookup table" TSRMLS_CC
 		);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1447,18 +1408,17 @@ PHP_METHOD(Imagick, getImageProperties)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &pattern_len, &values) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	properties = MagickGetImageProperties(intern->magick_wand, pattern, &properties_count);
 
 	if (!properties) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image properties" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -1479,7 +1439,6 @@ PHP_METHOD(Imagick, getImageProperties)
 	}
 
 	IMAGICK_FREE_MAGICK_MEMORY(properties);
-	return;
 }
 /* }}} */
 
@@ -1497,18 +1456,17 @@ PHP_METHOD(Imagick, getImageProfiles)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|sb", &pattern, &pattern_len, &values) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	profiles = MagickGetImageProfiles(intern->magick_wand, pattern, &profiles_count);
 
 	if (!profiles) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image profiles" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -1534,7 +1492,6 @@ PHP_METHOD(Imagick, getImageProfiles)
 	}
 
 	IMAGICK_FREE_MAGICK_MEMORY(profiles);
-	return;
 }
 /* }}} */
 #endif
@@ -1553,18 +1510,17 @@ PHP_METHOD(Imagick, distortImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lab", &distort_method, &arg_array, &bestfit) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	arguments = php_imagick_zval_to_double_array(arg_array, &elements TSRMLS_CC);
 
 	if (!arguments) {
 		php_imagick_throw_exception (IMAGICK_CLASS, "Can't read argument array" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickDistortImage(intern->magick_wand, distort_method, elements, arguments, bestfit);
@@ -1573,7 +1529,7 @@ PHP_METHOD(Imagick, distortImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to distort the image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1595,12 +1551,11 @@ PHP_METHOD(Imagick, writeImageFile)
 	char *orig_name = NULL, *buffer;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &format, &format_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	// Get the current name
 	if (format) {
@@ -1628,9 +1583,8 @@ PHP_METHOD(Imagick, writeImageFile)
 		/* php_stream_cast returns warning on some streams but still does not return FAILURE */
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to write image to the filehandle" TSRMLS_CC);
-			return;
 		}
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1650,12 +1604,11 @@ PHP_METHOD(Imagick, writeImagesFile)
 	char *orig_name = NULL, *buffer;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &format, &format_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	// Get the current name
 	if (format) {
@@ -1682,9 +1635,8 @@ PHP_METHOD(Imagick, writeImagesFile)
 	if (result == 0) {
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to write images to the filehandle" TSRMLS_CC);
-			return;
 		}
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1701,18 +1653,17 @@ PHP_METHOD(Imagick, resetImagePage)
 	IM_LEN_TYPE page_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &page, &page_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickResetImagePage(intern->magick_wand, page);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to reset image page" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1731,26 +1682,24 @@ PHP_METHOD(Imagick, getImageClipMask)
 	php_imagick_object *intern_return;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickGetImageClipMask(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image clip mask" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 #endif
 /* }}} */
@@ -1767,22 +1716,20 @@ PHP_METHOD(Imagick, setImageClipMask)
 	zval *objvar;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagick_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	clip_mask = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (clip_mask->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(clip_mask);
 
 	status = MagickSetImageClipMask(intern->magick_wand, clip_mask->magick_wand);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image clip mask" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1800,20 +1747,18 @@ PHP_METHOD(Imagick, animateImages)
 	IM_LEN_TYPE server_name_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
-
+	IMAGICK_NOT_EMPTY(intern);
 	/* TODO: should this call be there? Not sure */
 	(void)MagickSetFirstIterator(intern->magick_wand);
 	status = MagickAnimateImages(intern->magick_wand, server_name);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to animate images" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -1836,18 +1781,17 @@ PHP_METHOD(Imagick, recolorImage)
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "recolorImage");
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &matrix) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	array = php_imagick_zval_to_double_array(matrix, &num_elements TSRMLS_CC);
 
 	if (!array) {
 		php_imagick_throw_exception (IMAGICK_CLASS, "The map contains disallowed characters" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	order = (unsigned long)sqrt(num_elements);
@@ -1855,7 +1799,7 @@ PHP_METHOD(Imagick, recolorImage)
 	if ((order * order) != num_elements) {
 		efree(array);
 		php_imagick_throw_exception(IMAGICK_CLASS, "The color matrix must contain a square number of elements" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickRecolorImage(intern->magick_wand, order, array);
@@ -1863,7 +1807,7 @@ PHP_METHOD(Imagick, recolorImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to recolor image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1884,13 +1828,13 @@ PHP_METHOD(Imagick, setFont)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &font, &font_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* Check that no empty string is passed */
 	if (font_len == 0) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Can not set empty font" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -1900,13 +1844,13 @@ PHP_METHOD(Imagick, setFont)
 
 		if (!(absolute = expand_filepath(font, NULL TSRMLS_CC))) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set font" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 
 		if ((rc = php_imagick_file_access_check (absolute TSRMLS_CC)) != IMAGICK_RW_OK) {
 			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, absolute TSRMLS_CC);
 			efree(absolute);
-			return;
+			RETURN_THROWS();
 		}
 		status = MagickSetFont(intern->magick_wand, absolute);
 		efree(absolute);
@@ -1917,7 +1861,7 @@ PHP_METHOD(Imagick, setFont)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set font" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1929,7 +1873,7 @@ PHP_METHOD(Imagick, getFont)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -1951,7 +1895,7 @@ PHP_METHOD(Imagick, setPointSize)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &point_size) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -1960,7 +1904,7 @@ PHP_METHOD(Imagick, setPointSize)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set point size" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -1971,7 +1915,7 @@ PHP_METHOD(Imagick, getPointSize)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -1986,12 +1930,11 @@ PHP_METHOD(Imagick, mergeImageLayers)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &layer_method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	/* TODO: SHOULD THIS BE HERE? 
 	   Reset the iterator */
@@ -2002,14 +1945,13 @@ PHP_METHOD(Imagick, mergeImageLayers)
 	/* No magick is going to happen */
 	if (!merged) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to merge image layers" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 
 	php_imagick_replace_magickwand(intern_return, merged);
-	return;
 }
 #endif
 
@@ -2030,12 +1972,11 @@ PHP_METHOD(Imagick, floodfillPaintImage)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdzllb|l",
 		&fill_param, &fuzz, &border_param, &x, &y, &invert, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	fill_wand = php_imagick_zval_to_pixelwand (fill_param, IMAGICK_CLASS, &fill_allocated TSRMLS_CC);
 	if (!fill_wand)
@@ -2063,7 +2004,7 @@ PHP_METHOD(Imagick, floodfillPaintImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception (intern->magick_wand, "Unable to floodfill paint image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2085,12 +2026,11 @@ PHP_METHOD(Imagick, opaquePaintImage)
 	zend_bool fill_allocated = 0, target_allocated = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzdb|l", &fill_param, &target_param, &fuzz, &invert, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	fill_wand = php_imagick_zval_to_pixelwand (fill_param, IMAGICK_CLASS, &fill_allocated TSRMLS_CC);
 	if (!fill_wand)
@@ -2113,7 +2053,7 @@ PHP_METHOD(Imagick, opaquePaintImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to opaque paint image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2134,12 +2074,11 @@ PHP_METHOD(Imagick, transparentPaintImage)
 	zend_bool target_allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zddb", &target_param, &alpha, &fuzz, &invert) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	target_wand = php_imagick_zval_to_pixelwand (target_param, IMAGICK_CLASS, &target_allocated TSRMLS_CC);
 	if (!target_wand)
@@ -2152,7 +2091,7 @@ PHP_METHOD(Imagick, transparentPaintImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to paint transparent image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2169,12 +2108,11 @@ PHP_METHOD(Imagick, setImageAlphaChannel)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &alpha_channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	// TODO - allegedly only
 	// ActivateAlphaChannel, DeactivateAlphaChannel, OpaqueAlphaChannel, or SetAlphaChannel.
@@ -2183,7 +2121,7 @@ PHP_METHOD(Imagick, setImageAlphaChannel)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image alpha channel" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2201,18 +2139,17 @@ PHP_METHOD(Imagick, liquidRescaleImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lldd", &cols, &rows, &delta_x, &rigidity) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickLiquidRescaleImage(intern->magick_wand, cols, rows, delta_x, rigidity);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to liquid rescale image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2230,18 +2167,17 @@ PHP_METHOD(Imagick, decipherImage)
 	IM_LEN_TYPE passphrase_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &passphrase, &passphrase_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDecipherImage(intern->magick_wand, passphrase);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to decipher image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2258,18 +2194,17 @@ PHP_METHOD(Imagick, encipherImage)
 	IM_LEN_TYPE passphrase_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &passphrase, &passphrase_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickEncipherImage(intern->magick_wand, passphrase);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to encipher image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2286,14 +2221,14 @@ PHP_METHOD(Imagick, setGravity)
 	im_long gravity;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
 	if (MagickSetGravity(intern->magick_wand, gravity) == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set gravity" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2308,7 +2243,7 @@ PHP_METHOD(Imagick, getGravity)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -2327,22 +2262,20 @@ PHP_METHOD(Imagick, getImageChannelRange)
 	double maxima, minima;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
 	if (MagickGetImageChannelRange(intern->magick_wand, channel, &minima, &maxima) == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get channel range" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 
 	add_assoc_double(return_value, "minima", minima);
 	add_assoc_double(return_value, "maxima", maxima);
-
-	return;
 }
 /* }}} */
 
@@ -2355,12 +2288,11 @@ PHP_METHOD(Imagick, getImageAlphaChannel)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	RETVAL_BOOL(MagickGetImageAlphaChannel(intern->magick_wand));
 }
@@ -2381,22 +2313,20 @@ PHP_METHOD(Imagick, getImageChannelDistortions)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol|l", &reference_param, php_imagick_sc_entry, &metric, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_reference = Z_IMAGICK_P(reference_param);
-	if (php_imagick_ensure_not_empty (intern_reference->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_reference);
 
 	status = MagickGetImageChannelDistortion(intern->magick_wand, intern_reference->magick_wand, channel, metric, &distortion);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image channel distortion metrics" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_DOUBLE(distortion);
@@ -2413,12 +2343,11 @@ PHP_METHOD(Imagick, getImageGravity)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	RETVAL_LONG(MagickGetImageGravity(intern->magick_wand));
 }
@@ -2434,18 +2363,17 @@ PHP_METHOD(Imagick, setImageGravity)
 	im_long gravity;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &gravity) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageGravity(intern->magick_wand, gravity);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image gravity" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2474,21 +2402,20 @@ PHP_METHOD(Imagick, importImagePixels)
 	HashTable *array;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsla", &x, &y, &width, &height, &map, &map_len, &storage, &pixels) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (x < 0 || y < 0) {
 		php_imagick_throw_exception (IMAGICK_CLASS, "The coordinates must be non-negative" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (width <= 0 || height <= 0) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The width and height must be greater than zero" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array = Z_ARRVAL_P(pixels);
@@ -2502,11 +2429,11 @@ PHP_METHOD(Imagick, importImagePixels)
 				zend_hash_num_elements(array)
 			);
 
-		return;
+		RETURN_THROWS();
 	} else {
 		if (!php_imagick_validate_map(map TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "The map contains disallowed characters" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	}
 
@@ -2518,7 +2445,7 @@ PHP_METHOD(Imagick, importImagePixels)
 			double_array = php_imagick_zval_to_double_array(pixels, &num_elements TSRMLS_CC);
 			if (!double_array) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, double_array);
 			efree(double_array);
@@ -2534,7 +2461,7 @@ PHP_METHOD(Imagick, importImagePixels)
 			long_array = php_imagick_zval_to_long_array(pixels, &num_elements TSRMLS_CC);
 			if (!long_array) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, long_array);
 			efree(long_array);
@@ -2544,7 +2471,7 @@ PHP_METHOD(Imagick, importImagePixels)
 			char_array = php_imagick_zval_to_char_array(pixels, &num_elements TSRMLS_CC);
 			if (!char_array) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "The character array contains incorrect values" TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 			status = MagickImportImagePixels(intern->magick_wand, x, y, width, height, map, storage, char_array);
 			efree(char_array);
@@ -2552,13 +2479,13 @@ PHP_METHOD(Imagick, importImagePixels)
 
 		default:
 			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown storage format" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		break;
 	}
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to import image pixels" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2571,17 +2498,16 @@ PHP_METHOD(Imagick, deskewImage)
 	double threshold;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &threshold) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDeskewImage(intern->magick_wand, threshold);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to deskew image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2600,17 +2526,16 @@ PHP_METHOD(Imagick, houghLineImage)
         im_long width, height;
 
         if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lld", &width, &height, &threshold) == FAILURE) {
-                return;
+			RETURN_THROWS();
         }
 
         intern = Z_IMAGICK_P(getThis());
-        if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-                return;
+		IMAGICK_NOT_EMPTY(intern);
 
         status = MagickHoughLineImage(intern->magick_wand, width, height, threshold);
         if (status == MagickFalse) {
                 php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to Hough line image" TSRMLS_CC);
-                return;
+				RETURN_THROWS();
         }
         RETURN_TRUE;
 }
@@ -2626,18 +2551,17 @@ PHP_METHOD(Imagick, segmentImage)
 	double cluster_threshold, smooth_threshold;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ldd|b", &colorspace, &cluster_threshold, &smooth_threshold, &verbose) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSegmentImage(intern->magick_wand, colorspace, verbose, cluster_threshold, smooth_threshold);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to segment image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2651,18 +2575,17 @@ PHP_METHOD(Imagick, sparseColorImage)
 	double *double_array;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|l", &sparse_method, &arguments, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	double_array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!double_array) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The map must contain only numeric values" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	
 #if MagickLibVersion >= 0x700
@@ -2675,7 +2598,7 @@ PHP_METHOD(Imagick, sparseColorImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sparse color image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -2692,22 +2615,20 @@ PHP_METHOD(Imagick, remapImage)
 	zval *remap_param;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &remap_param, php_imagick_sc_entry, &dither_method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_remap = Z_IMAGICK_P(remap_param);
-	if (php_imagick_ensure_not_empty (intern_remap->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_remap);
 
 	status = MagickRemapImage(intern->magick_wand, intern_remap->magick_wand, dither_method);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to remap image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2756,27 +2677,26 @@ PHP_METHOD(Imagick, exportImagePixels)
 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsl", &x, &y, &width, &height, &map, &map_len, &storage) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if ((x < 0) || (y < 0)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The coordinates must be non-negative" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (width <= 0 || height <= 0) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The width and height must be greater than zero" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (!php_imagick_validate_map(map TSRMLS_CC)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The map contains disallowed characters" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	map_size = (map_len * width * height);
 
@@ -2895,15 +2815,14 @@ PHP_METHOD(Imagick, exportImagePixels)
 
 		default:
 			php_imagick_throw_exception(IMAGICK_CLASS, "Unknown pixel type " TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		break;
 	}
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to export image pixels" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
-	return;
 }
 /* }}} */
 #endif
@@ -2920,24 +2839,22 @@ PHP_METHOD(Imagick, getImageChannelKurtosis)
 	im_long channel = DefaultChannels;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImageChannelKurtosis(intern->magick_wand, channel, &kurtosis, &skewness);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image channel kurtosis" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "kurtosis", kurtosis);
 	add_assoc_double(return_value, "skewness", skewness);
-	return;
 }
 /* }}} */
 
@@ -2953,18 +2870,17 @@ PHP_METHOD(Imagick, functionImage)
 	double *array;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|l", &func, &arguments, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	array = php_imagick_zval_to_double_array(arguments, &num_elements TSRMLS_CC);
 
 	if (!array) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The arguments array contains disallowed characters or is empty." TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickFunctionImageChannel(intern->magick_wand, channel, func, num_elements, array);
@@ -2972,7 +2888,7 @@ PHP_METHOD(Imagick, functionImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to execute function on the image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -2992,19 +2908,18 @@ PHP_METHOD(Imagick, transformImageColorspace)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &colorspace) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickTransformImageColorspace(intern->magick_wand, colorspace);
 
     /* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to transform image colorspace" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -3024,23 +2939,21 @@ PHP_METHOD(Imagick, haldClutImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagick_sc_entry, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	hald = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (hald->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(hald);
 
 	status = MagickHaldClutImageChannel(intern->magick_wand, channel, hald->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to hald clut image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -3058,17 +2971,16 @@ PHP_METHOD(Imagick, autoLevelImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAutoLevelImageChannel(intern->magick_wand, channel);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to autolevel image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -3084,17 +2996,16 @@ PHP_METHOD(Imagick, blueShiftImage)
 	double factor = 1.5;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|d", &factor) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickBlueShiftImage(intern->magick_wand, factor);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to blue shift image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -3110,17 +3021,16 @@ PHP_METHOD(Imagick, setImageArtifact)
 	IM_LEN_TYPE artifact_len, value_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss!", &artifact, &artifact_len, &value, &value_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageArtifact(intern->magick_wand, artifact, value);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image artifact" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -3133,12 +3043,11 @@ PHP_METHOD(Imagick, getImageArtifact)
 	IM_LEN_TYPE artifact_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &artifact, &artifact_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	value = MagickGetImageArtifact(intern->magick_wand, artifact);
 
@@ -3153,8 +3062,6 @@ PHP_METHOD(Imagick, getImageArtifact)
 #endif
 		IMAGICK_FREE_MAGICK_MEMORY(value);
 	}
-
-	return;
 }
 
 /* {{{ proto boolean Imagick::deleteImageArtifact(string $artifact)
@@ -3168,18 +3075,17 @@ PHP_METHOD(Imagick, deleteImageArtifact)
 	IM_LEN_TYPE artifact_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &artifact, &artifact_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDeleteImageArtifact(intern->magick_wand, artifact);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to delete image artifact" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -3194,7 +3100,7 @@ PHP_METHOD(Imagick, getColorspace)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3212,7 +3118,7 @@ PHP_METHOD(Imagick, setColorspace)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &colorspace) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3232,18 +3138,17 @@ PHP_METHOD(Imagick, clampImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickClampImageChannel(intern->magick_wand, channel);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to clamp image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -3264,24 +3169,22 @@ PHP_METHOD(Imagick, smushImages)
 	MagickWand *retwand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bl", &stack, &offset) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	retwand = MagickSmushImages(intern->magick_wand, (stack ? MagickTrue : MagickFalse), offset);
 
 	if (!retwand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to smush images" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, retwand);
-	return;
 }
 /* }}} */
 #endif
@@ -3299,7 +3202,7 @@ PHP_METHOD(Imagick, __construct)
 	php_imagick_rw_result_t rc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|z!/", &files) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* No files given.. or null passed */
@@ -3318,14 +3221,14 @@ PHP_METHOD(Imagick, __construct)
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(files), Z_STRLEN_P(files) TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 		php_imagick_file_deinit(&file);
 
 		if (rc != IMAGICK_RW_OK) {
 			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_P(files) TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	}
 
@@ -3338,7 +3241,7 @@ PHP_METHOD(Imagick, __construct)
 
 			if (!php_imagick_file_init(&file, Z_STRVAL_P(pzval), Z_STRLEN_P(pzval) TSRMLS_CC)) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 
 			rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -3346,7 +3249,7 @@ PHP_METHOD(Imagick, __construct)
 
 			if (rc != IMAGICK_RW_OK) {
 				php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_P(pzval) TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 		} ZEND_HASH_FOREACH_END();
 	}
@@ -3365,7 +3268,7 @@ PHP_METHOD(Imagick, __construct)
 	php_imagick_rw_result_t rc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|z!/", &files) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* No files given.. or null passed */
@@ -3384,14 +3287,14 @@ PHP_METHOD(Imagick, __construct)
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(files), Z_STRLEN_P(files) TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 		php_imagick_file_deinit(&file);
 
 		if (rc != IMAGICK_RW_OK) {
 			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_P(files) TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	}
 
@@ -3411,7 +3314,7 @@ PHP_METHOD(Imagick, __construct)
 
 			if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
 				php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 
 			rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -3419,7 +3322,7 @@ PHP_METHOD(Imagick, __construct)
 
 			if (rc != IMAGICK_RW_OK) {
 				php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_PP(ppzval) TSRMLS_CC);
-				return;
+				RETURN_THROWS();
 			}
 		}
 	}
@@ -3444,7 +3347,7 @@ PHP_METHOD(Imagick, __toString)
 	size_t image_size;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3466,7 +3369,6 @@ PHP_METHOD(Imagick, __toString)
 	image = MagickGetImageBlob(intern->magick_wand, &image_size);
 	IM_ZVAL_STRINGL(return_value, (char *)image, image_size);
 	IMAGICK_FREE_MAGICK_MEMORY(image);
-	return;
 }
 /* }}} */
 
@@ -3479,7 +3381,7 @@ PHP_METHOD(Imagick, count)
 	im_long mode = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &mode) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3499,7 +3401,7 @@ PHP_METHOD(Imagick, queryFormats)
 	size_t num_formats = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	supported_formats = (char **) MagickQueryFormats(pattern, &num_formats);
@@ -3511,7 +3413,6 @@ PHP_METHOD(Imagick, queryFormats)
 	}
 
 	IMAGICK_FREE_MAGICK_MEMORY(supported_formats);
-	return;
 }
 /* }}} */
 
@@ -3527,7 +3428,7 @@ PHP_METHOD(Imagick, queryFonts)
 	size_t num_fonts;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	fonts = (char **) MagickQueryFonts(pattern, &num_fonts);
@@ -3539,7 +3440,6 @@ PHP_METHOD(Imagick, queryFonts)
 	}
 
 	IMAGICK_FREE_MAGICK_MEMORY(fonts);
-	return;
 }
 /* }}} */
 
@@ -3561,7 +3461,7 @@ PHP_METHOD(Imagick, queryFontMetrics)
 	query_multiline = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Os|z!", &objvar, php_imagickdraw_sc_entry, &text, &text_len, &multiline) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* No parameter passed, this means we should autodetect */
@@ -3594,7 +3494,7 @@ PHP_METHOD(Imagick, queryFontMetrics)
 
 		if (!pixel_wand) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to allocate background color for the temporary canvas" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 
 		/* 1x1 should be enough to get the metrics */
@@ -3603,7 +3503,7 @@ PHP_METHOD(Imagick, queryFontMetrics)
 
 		if (status == MagickFalse) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to allocate temporary canvas" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 		remove_canvas = 1;
 	}
@@ -3622,7 +3522,7 @@ PHP_METHOD(Imagick, queryFontMetrics)
 
 	if (!metrics) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to query the font metrics" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	} else {
 		zval *pbounding;
 #if PHP_VERSION_ID >= 70000
@@ -3664,13 +3564,12 @@ PHP_METHOD(Imagick, valid)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (intern->next_out_of_bound) {
 		RETURN_FALSE;
@@ -3685,7 +3584,7 @@ PHP_METHOD(Imagick, valid)
 PHP_METHOD(Imagick, current)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_ZVAL(getThis(), 1, 0);
@@ -3705,14 +3604,14 @@ PHP_METHOD(Imagick, readImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -3720,7 +3619,7 @@ PHP_METHOD(Imagick, readImage)
 
 	if (rc != IMAGICK_RW_OK) {
 		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -3741,7 +3640,7 @@ PHP_METHOD(Imagick, readImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &files) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3751,7 +3650,7 @@ PHP_METHOD(Imagick, readImages)
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_P(value), Z_STRLEN_P(value) TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 
 		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -3759,7 +3658,7 @@ PHP_METHOD(Imagick, readImages)
 
 		if (rc != IMAGICK_RW_OK) {
 			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_P(value) TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	} ZEND_HASH_FOREACH_END();
 	RETURN_TRUE;
@@ -3774,7 +3673,7 @@ PHP_METHOD(Imagick, readImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &files) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3792,7 +3691,7 @@ PHP_METHOD(Imagick, readImages)
 
 		if (!php_imagick_file_init(&file, Z_STRVAL_PP(ppzval), Z_STRLEN_PP(ppzval) TSRMLS_CC)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 
 		rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
@@ -3800,7 +3699,7 @@ PHP_METHOD(Imagick, readImages)
 
 		if (rc != IMAGICK_RW_OK) {
 			php_imagick_rw_fail_to_exception (intern->magick_wand, rc, Z_STRVAL_PP(ppzval) TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	}
 	RETURN_TRUE;
@@ -3821,21 +3720,21 @@ PHP_METHOD(Imagick, pingImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	rc = php_imagick_read_file(intern, &file, ImagickPingImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
 	if (rc != IMAGICK_RW_OK) {
 		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -3855,7 +3754,7 @@ PHP_METHOD(Imagick, readImageFile)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "r|s!", &zstream, &filename, &filename_len) == FAILURE)
 	{
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3870,9 +3769,8 @@ PHP_METHOD(Imagick, readImageFile)
 	if (result == 0) {
 		if (!EG(exception)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to read image from the filehandle" TSRMLS_CC);
-			return;
 		}
-		return;
+		RETURN_THROWS();
 	}
 
 	if (filename) {
@@ -3896,19 +3794,18 @@ PHP_METHOD(Imagick, displayImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDisplayImage(intern->magick_wand, server_name);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to display image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -3927,19 +3824,18 @@ PHP_METHOD(Imagick, displayImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &server_name, &server_name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDisplayImages(intern->magick_wand, server_name);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to display images" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -3960,12 +3856,12 @@ PHP_METHOD(Imagick, readImageBlob)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|s!", &image_string, &image_string_len, &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if (!image_string_len) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Zero size image string passed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -3974,7 +3870,7 @@ PHP_METHOD(Imagick, readImageBlob)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to read image blob" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	/* Even if filename is null we need to give a name here. Otherwise segfaults will happen */
@@ -3997,19 +3893,18 @@ PHP_METHOD(Imagick, blurImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickBlurImageChannel(intern->magick_wand, channel, radius, sigma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to blur image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4027,12 +3922,11 @@ PHP_METHOD(Imagick, waveImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &amplitude, &wave_length) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	{
@@ -4047,7 +3941,7 @@ PHP_METHOD(Imagick, waveImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to wave image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4069,12 +3963,11 @@ PHP_METHOD(Imagick, waveImageWithMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddl", &amplitude, &wave_length, &method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickWaveImage(intern->magick_wand, amplitude, wave_length, method);
 
@@ -4082,7 +3975,7 @@ PHP_METHOD(Imagick, waveImageWithMethod)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to wave image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4098,7 +3991,7 @@ PHP_METHOD(Imagick, clear)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -4129,16 +4022,15 @@ PHP_METHOD(Imagick, scaleImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bb", &width, &height, &bestfit, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickScaleImage(intern->magick_wand, new_width, new_height);
@@ -4146,7 +4038,7 @@ PHP_METHOD(Imagick, scaleImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to scale image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4164,19 +4056,18 @@ PHP_METHOD(Imagick, cropImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickCropImage(intern->magick_wand, width, height, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to crop image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4194,12 +4085,11 @@ PHP_METHOD(Imagick, spreadImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	{
@@ -4214,7 +4104,7 @@ PHP_METHOD(Imagick, spreadImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to spread image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4234,19 +4124,18 @@ PHP_METHOD(Imagick, spreadImageWithMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &radius, &method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSpreadImage(intern->magick_wand, radius, method);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to spread image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4265,12 +4154,11 @@ PHP_METHOD(Imagick, swirlImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &degrees) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	{
@@ -4285,7 +4173,7 @@ PHP_METHOD(Imagick, swirlImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to swirl image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4306,19 +4194,18 @@ PHP_METHOD(Imagick, swirlImageWithMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &degrees, &method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSwirlImage(intern->magick_wand, degrees, method);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to swirl image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4336,19 +4223,18 @@ PHP_METHOD(Imagick, stripImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickStripImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to strip image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4366,19 +4252,18 @@ PHP_METHOD(Imagick, trimImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &fuzz) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickTrimImage(intern->magick_wand, fuzz);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to trim image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4396,19 +4281,18 @@ PHP_METHOD(Imagick, chopImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickChopImage(intern->magick_wand, width, height, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to chop image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4425,19 +4309,18 @@ PHP_METHOD(Imagick, clipImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+	IMAGICK_NOT_EMPTY(intern);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 	status = MagickClipImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to clip image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4456,12 +4339,11 @@ PHP_METHOD(Imagick, clipPathImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sb", &clip_path, &clip_path_len, &inside) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 #if MagickLibVersion > 0x636
 	status = MagickClipImagePath(intern->magick_wand, clip_path, inside);
 #else
@@ -4471,7 +4353,7 @@ PHP_METHOD(Imagick, clipPathImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to clip path image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -4488,25 +4370,22 @@ PHP_METHOD(Imagick, coalesceImages)
 	php_imagick_object *intern, *intern_return;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickCoalesceImages(intern->magick_wand);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Coalesce image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
-
 }
 /* }}} */
 
@@ -4529,13 +4408,12 @@ PHP_METHOD(Imagick, colorFloodfillImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdzll", &fill_param, &fuzz, &border_param, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	fill_wand = php_imagick_zval_to_pixelwand (fill_param, IMAGICK_CLASS, &fill_allocated TSRMLS_CC);
 	if (!fill_wand)
@@ -4559,7 +4437,7 @@ PHP_METHOD(Imagick, colorFloodfillImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to color floodfill image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4581,25 +4459,22 @@ PHP_METHOD(Imagick, combineImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 	tmp_wand = MagickCombineImages(intern->magick_wand, channel_type);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Combine images failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -4614,23 +4489,21 @@ PHP_METHOD(Imagick, setImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagick_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	replace = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (replace->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(replace);
 
 	status = MagickSetImage(intern->magick_wand, replace->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set the image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 
@@ -4646,25 +4519,22 @@ PHP_METHOD(Imagick, getImage)
 	php_imagick_object *intern, *intern_return;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickGetImage(intern->magick_wand);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Get image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -4679,21 +4549,20 @@ PHP_METHOD(Imagick, addImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &add_obj, php_imagick_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 	intern_add = Z_IMAGICK_P(add_obj);
 
-	if (php_imagick_ensure_not_empty (intern_add->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_add);
 
 	status = MagickAddImage(intern->magick_wand, intern_add->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to add image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	MagickSetLastIterator(intern->magick_wand);
@@ -4717,7 +4586,7 @@ PHP_METHOD(Imagick, newImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llz|s", &columns, &rows, &param, &format, &format_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -4734,7 +4603,7 @@ PHP_METHOD(Imagick, newImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to create new image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	/* If the optional fourth parameter was given
@@ -4746,7 +4615,7 @@ PHP_METHOD(Imagick, newImage)
 		/* No magick is going to happen */
 		if (status == MagickFalse) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set the image format" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	}
 
@@ -4770,7 +4639,7 @@ PHP_METHOD(Imagick, newPseudoImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lls", &columns, &rows, &pseudo_string, &pseudo_string_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if (IMAGICK_G(allow_zero_dimension_images) == 0) {
@@ -4793,7 +4662,7 @@ PHP_METHOD(Imagick, newPseudoImage)
 	/* Allow only pseudo formats in this method */
 	if (strchr (pseudo_string, ':') == NULL) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid pseudo format string" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -4804,19 +4673,19 @@ PHP_METHOD(Imagick, newPseudoImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to create new pseudo image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (!php_imagick_file_init(&file, pseudo_string, pseudo_string_len TSRMLS_CC)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	rc = php_imagick_read_file(intern, &file, ImagickReadImage TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
 	if (rc != IMAGICK_RW_OK) {
 		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, pseudo_string TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4831,12 +4700,11 @@ PHP_METHOD(Imagick, getImageTotalInkDensity)
 	double ink_density;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	ink_density = MagickGetImageTotalInkDensity(intern->magick_wand);
 	RETVAL_DOUBLE(ink_density);
@@ -4854,12 +4722,11 @@ PHP_METHOD(Imagick, implodeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	{
@@ -4874,7 +4741,7 @@ PHP_METHOD(Imagick, implodeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to implode image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4893,19 +4760,18 @@ PHP_METHOD(Imagick, implodeImageWithMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dl", &radius, &method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickImplodeImage(intern->magick_wand, radius, method);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to implode image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4928,12 +4794,11 @@ PHP_METHOD(Imagick, inverseFourierTransformImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ob", &complement_obj, php_imagick_sc_entry, &magnitude) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_complement = Z_IMAGICK_P(complement_obj);
 	status =  MagickInverseFourierTransformImage(intern->magick_wand, intern_complement->magick_wand, magnitude);
@@ -4941,7 +4806,7 @@ PHP_METHOD(Imagick, inverseFourierTransformImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to inversefouriertransformimage image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4960,19 +4825,18 @@ PHP_METHOD(Imagick, levelImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &black_point, &gamma, &white_point, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickLevelImageChannel(intern->magick_wand, channel, black_point, gamma, white_point);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to level image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -4987,19 +4851,18 @@ PHP_METHOD(Imagick, magnifyImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickMagnifyImage(intern->magick_wand);
 		
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to magnify image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5021,12 +4884,11 @@ PHP_METHOD(Imagick, mapImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ob", &map_obj, php_imagick_sc_entry, &dither) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_map = Z_IMAGICK_P(map_obj);
 	status = MagickMapImage(intern->magick_wand, intern_map->magick_wand, dither);
@@ -5034,7 +4896,7 @@ PHP_METHOD(Imagick, mapImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to map image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5059,12 +4921,11 @@ PHP_METHOD(Imagick, matteFloodfillImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddzll", &alpha, &fuzz, &param, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -5078,7 +4939,7 @@ PHP_METHOD(Imagick, matteFloodfillImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to matte floodfill image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5101,19 +4962,18 @@ PHP_METHOD(Imagick, medianFilterImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickMedianFilterImage(intern->magick_wand, radius);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to median filter image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5133,19 +4993,18 @@ PHP_METHOD(Imagick, negateImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b|l", &gray, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickNegateImageChannel(intern->magick_wand, channel, gray);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to negate image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5170,13 +5029,12 @@ PHP_METHOD(Imagick, paintOpaqueImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzd|l", &target_param, &fill_param, &fuzz, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	target_wand = php_imagick_zval_to_pixelwand (target_param, IMAGICK_CLASS, &target_allocated TSRMLS_CC);
 	if (!target_wand)
@@ -5204,7 +5062,7 @@ PHP_METHOD(Imagick, paintOpaqueImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable paint opaque image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5222,25 +5080,22 @@ PHP_METHOD(Imagick, optimizeImageLayers)
 	php_imagick_object *intern, *intern_return;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickOptimizeImageLayers(intern->magick_wand);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image layers failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -5262,12 +5117,11 @@ PHP_METHOD(Imagick, paintTransparentImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &param, &alpha, &fuzz) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -5281,7 +5135,7 @@ PHP_METHOD(Imagick, paintTransparentImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to paint transparent image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5302,24 +5156,22 @@ PHP_METHOD(Imagick, previewImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &preview) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickPreviewImages(intern->magick_wand, preview);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Preview images failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 /* }}} */
 
@@ -5335,19 +5187,18 @@ PHP_METHOD(Imagick, profileImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss!", &name, &name_len, &profile, &profile_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickProfileImage(intern->magick_wand, name, profile, profile_len);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to profile image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5366,19 +5217,18 @@ PHP_METHOD(Imagick, quantizeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lllbb", &number_colors, &colorspace, &tree_depth, &dither, &measure_error) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickQuantizeImage(intern->magick_wand, number_colors, colorspace, tree_depth, dither, measure_error);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to quantize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5397,19 +5247,18 @@ PHP_METHOD(Imagick, quantizeImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lllbb", &number_colors, &colorspace, &tree_depth, &dither, &measure_error) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickQuantizeImages(intern->magick_wand, number_colors, colorspace, tree_depth, dither, measure_error);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to quantize images" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5430,19 +5279,18 @@ PHP_METHOD(Imagick, reduceNoiseImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickReduceNoiseImage(intern->magick_wand, radius);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to reduce image noise" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5467,23 +5315,21 @@ PHP_METHOD(Imagick, removeImageProfile)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	profile = MagickRemoveImageProfile(intern->magick_wand, name, &profile_len);
 
 	if (!profile) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "The image profile does not exist" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	IM_ZVAL_STRING(return_value, (char *)profile);
 	IMAGICK_FREE_MAGICK_MEMORY(profile);
-	return;
 }
 /* }}} */
 
@@ -5498,12 +5344,11 @@ PHP_METHOD(Imagick, separateImageChannel)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickSeparateImage(intern->magick_wand, channel);
@@ -5514,7 +5359,7 @@ PHP_METHOD(Imagick, separateImageChannel)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to separate image channel" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5532,21 +5377,20 @@ PHP_METHOD(Imagick, sepiaToneImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &threshold) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	c_opacity = (threshold * QuantumRange) / 100;
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSepiaToneImage(intern->magick_wand, c_opacity);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sepia tone image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5565,12 +5409,11 @@ void s_set_image_bias(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &bias) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (use_quantum) {
 		bias *= QuantumRange;
@@ -5581,7 +5424,7 @@ void s_set_image_bias(INTERNAL_FUNCTION_PARAMETERS, zend_bool use_quantum)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image bias" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5636,12 +5479,11 @@ PHP_METHOD(Imagick, setImageBluePrimary)
 #else 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 #endif
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickSetImageBluePrimary(intern->magick_wand, x, y, z);
@@ -5652,7 +5494,7 @@ PHP_METHOD(Imagick, setImageBluePrimary)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image blue primary" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5670,13 +5512,12 @@ PHP_METHOD(Imagick, setImageBorderColor)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -5690,7 +5531,7 @@ PHP_METHOD(Imagick, setImageBorderColor)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image border color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5707,19 +5548,18 @@ PHP_METHOD(Imagick, setImageChannelDepth)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &channel_type, &depth) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageChannelDepth(intern->magick_wand, channel_type, depth);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image channel depth" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5739,12 +5579,11 @@ PHP_METHOD(Imagick, setImageColormapColor)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lz", &index, &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -5758,7 +5597,7 @@ PHP_METHOD(Imagick, setImageColormapColor)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image color map color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 
@@ -5776,19 +5615,18 @@ PHP_METHOD(Imagick, setImageColorspace)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &colorspace) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageColorspace(intern->magick_wand, colorspace);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image colorspace" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5805,19 +5643,18 @@ PHP_METHOD(Imagick, setImageDispose)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &dispose) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageDispose(intern->magick_wand, dispose);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image dispose" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5834,19 +5671,18 @@ PHP_METHOD(Imagick, setImageExtent)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &rows, &columns) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageExtent(intern->magick_wand, rows, columns);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image extent" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5873,12 +5709,11 @@ PHP_METHOD(Imagick, setImageGreenPrimary)
 #else
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 #endif
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickSetImageGreenPrimary(intern->magick_wand, x, y, z);
@@ -5889,7 +5724,7 @@ PHP_METHOD(Imagick, setImageGreenPrimary)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image green primary" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5906,19 +5741,18 @@ PHP_METHOD(Imagick, setImageInterlaceScheme)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &interlace) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageInterlaceScheme(intern->magick_wand, interlace);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image interlace scheme" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5936,19 +5770,18 @@ PHP_METHOD(Imagick, setImageProfile)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &name, &name_len, &profile, &profile_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageProfile(intern->magick_wand, name, profile, profile_len);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image profile" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -5975,12 +5808,11 @@ PHP_METHOD(Imagick, setImageRedPrimary)
 #else 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 #endif
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickSetImageRedPrimary(intern->magick_wand, x, y, z);
@@ -5991,7 +5823,7 @@ PHP_METHOD(Imagick, setImageRedPrimary)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image red primary" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6008,19 +5840,18 @@ PHP_METHOD(Imagick, setImageRenderingIntent)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &rendering_intent) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageRenderingIntent(intern->magick_wand, rendering_intent);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image rendering intent" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6036,12 +5867,11 @@ PHP_METHOD(Imagick, setImageVirtualPixelMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &virtual_pixel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	MagickSetImageVirtualPixelMethod(intern->magick_wand, virtual_pixel);
 	RETURN_TRUE;
@@ -6070,12 +5900,11 @@ PHP_METHOD(Imagick, setImageWhitePoint)
 #else
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x, &y) == FAILURE) {
 #endif
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickSetImageWhitePoint(intern->magick_wand, x, y, z);
@@ -6086,7 +5915,7 @@ PHP_METHOD(Imagick, setImageWhitePoint)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image white point" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6105,19 +5934,18 @@ PHP_METHOD(Imagick, sigmoidalContrastImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "bdd|l", &sharpen, &contrast, &midpoint, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSigmoidalContrastImageChannel(intern->magick_wand, channel, sharpen, contrast, midpoint);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sigmoidal contrast image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6134,29 +5962,25 @@ PHP_METHOD(Imagick, stereoImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(magick_object);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 	tmp_wand = MagickStereoImage(intern->magick_wand, intern_second->magick_wand);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Stereo image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -6171,29 +5995,25 @@ PHP_METHOD(Imagick, textureImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &magick_object, php_imagick_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(magick_object);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 	tmp_wand = MagickTextureImage(intern->magick_wand, intern_second->magick_wand);
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Texture image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -6213,12 +6033,11 @@ PHP_METHOD(Imagick, tintImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz|b", &tint_param, &opacity_param, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tint_wand = php_imagick_zval_to_pixelwand (tint_param, IMAGICK_CLASS, &tint_allocated TSRMLS_CC);
 	if (!tint_wand)
@@ -6249,7 +6068,7 @@ PHP_METHOD(Imagick, tintImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable tint image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6267,12 +6086,11 @@ PHP_METHOD(Imagick, unsharpMaskImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd|l", &radius, &sigma, &amount, &threshold, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		RETURN_THROWS();
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickUnsharpMaskImageChannel(intern->magick_wand, channel, radius, sigma, amount, threshold);
 
@@ -6302,7 +6120,7 @@ PHP_METHOD(Imagick, convolveImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -6337,12 +6155,11 @@ PHP_METHOD(Imagick, convolveImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|l",  &kernel_array, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		RETURN_THROWS();
+	IMAGICK_NOT_EMPTY(intern);
 
 	kernel = php_imagick_zval_to_double_array(kernel_array, &num_elements TSRMLS_CC);
 
@@ -6377,12 +6194,11 @@ PHP_METHOD(Imagick, cycleColormapImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &displace) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		RETURN_THROWS();
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickCycleColormapImage(intern->magick_wand, displace);
 
@@ -6405,25 +6221,22 @@ PHP_METHOD(Imagick, deconstructImages)
 	php_imagick_object *intern, *intern_return;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickDeconstructImages(intern->magick_wand);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Deconstruct image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -6438,26 +6251,22 @@ PHP_METHOD(Imagick, getImageRegion)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickGetImageRegion(intern->magick_wand, width, height, x, y);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Get image region failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
-
 }
 /* }}} */
 
@@ -6470,19 +6279,18 @@ PHP_METHOD(Imagick, despeckleImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDespeckleImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to despeckle image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6500,19 +6308,18 @@ PHP_METHOD(Imagick, edgeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickEdgeImage(intern->magick_wand, radius);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to edge image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6531,19 +6338,18 @@ PHP_METHOD(Imagick, embossImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickEmbossImage(intern->magick_wand, radius, sigma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to emboss image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6559,19 +6365,18 @@ PHP_METHOD(Imagick, enhanceImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickEnhanceImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to enhance image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6587,19 +6392,18 @@ PHP_METHOD(Imagick, equalizeImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickEqualizeImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to equalize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6619,19 +6423,18 @@ PHP_METHOD(Imagick, evaluateImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld|l", &evaluate_operator, &constant, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickEvaluateImageChannel(intern->magick_wand, channel, evaluate_operator, constant);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to evaluate image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -6653,12 +6456,11 @@ PHP_METHOD(Imagick, evaluateImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &evaluate_operator) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		RETURN_THROWS();
+	IMAGICK_NOT_EMPTY(intern);
 
 // MagickEvaluateImages appears to crash if index is not zero.
 #if MagickLibVersion > 0x628
@@ -6679,7 +6481,6 @@ PHP_METHOD(Imagick, evaluateImages)
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, evaluated_wand);
-	return;
 }
 /* }}} */
 #endif //MagickLibVersion >= 0x687
@@ -6699,19 +6500,18 @@ PHP_METHOD(Imagick, forwardFourierTransformImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &magnitude) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickForwardFourierTransformImage(intern->magick_wand, magnitude);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to forwardfouriertransformimage image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -6729,13 +6529,12 @@ PHP_METHOD(Imagick, getImageGeometry)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	width = MagickGetImageWidth(intern->magick_wand);
 	height = MagickGetImageHeight(intern->magick_wand);
@@ -6743,8 +6542,6 @@ PHP_METHOD(Imagick, getImageGeometry)
 	array_init(return_value);
 	add_assoc_long(return_value, "width", width);
 	add_assoc_long(return_value, "height", height);
-
-	return;
 }
 /* }}} */
 
@@ -6763,7 +6560,7 @@ PHP_METHOD(Imagick, getImageAttribute)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -6775,8 +6572,6 @@ PHP_METHOD(Imagick, getImageAttribute)
 
 	IM_ZVAL_STRING(return_value, attribute);
 	IMAGICK_FREE_MAGICK_MEMORY(attribute);
-
-	return;
 }
 /* }}} */
 #endif
@@ -6793,32 +6588,29 @@ PHP_METHOD(Imagick, getImageBackgroundColor)
 	PixelWand *tmp_wand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageBackgroundColor(intern->magick_wand, tmp_wand);
 
 	if (tmp_wand == (PixelWand *)NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image background color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (status == MagickFalse) {
 		tmp_wand = DestroyPixelWand(tmp_wand);
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image background color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = Z_IMAGICKPIXEL_P(return_value);
 	php_imagick_replace_pixelwand(internp, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -6836,12 +6628,11 @@ PHP_METHOD(Imagick, getImageBluePrimary)
 #endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickGetImageBluePrimary(intern->magick_wand, &x, &y, &z);
@@ -6851,7 +6642,7 @@ PHP_METHOD(Imagick, getImageBluePrimary)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image blue primary" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -6860,8 +6651,6 @@ PHP_METHOD(Imagick, getImageBluePrimary)
 #if MagickLibVersion >= 0x700
 	add_assoc_double(return_value, "z", z);
 #endif
-
-	return;
 }
 /* }}} */
 
@@ -6876,32 +6665,29 @@ PHP_METHOD(Imagick, getImageBorderColor)
 	PixelWand *tmp_wand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageBorderColor(intern->magick_wand, tmp_wand);
 
 	if (tmp_wand == (PixelWand *)NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image border color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (status == MagickFalse) {
 		tmp_wand = DestroyPixelWand(tmp_wand);
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image border color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = Z_IMAGICKPIXEL_P(return_value);
 	php_imagick_replace_pixelwand(internp, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -6915,12 +6701,11 @@ PHP_METHOD(Imagick, getImageChannelDepth)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	channel_depth = MagickGetImageChannelDepth(intern->magick_wand, channel_type);
 	RETVAL_LONG(channel_depth);
@@ -6939,22 +6724,20 @@ PHP_METHOD(Imagick, getImageChannelDistortion)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &channel_type, &metric_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 	status = MagickGetImageChannelDistortion(intern->magick_wand, intern_second->magick_wand, channel_type, metric_type, &distortion);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image channel distortion" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_DOUBLE(distortion);
@@ -6977,25 +6760,22 @@ PHP_METHOD(Imagick, getImageChannelExtrema)
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageChannelExtrema");
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImageChannelExtrema(intern->magick_wand, channel_type, &minima, &maxima);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image channel extrema" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_long(return_value, "minima", minima);
 	add_assoc_long(return_value, "maxima", maxima);
-
-	return;
 }
 /* }}} */
 #endif //#if MagickLibVersion < 0x700
@@ -7012,25 +6792,22 @@ PHP_METHOD(Imagick, getImageChannelMean)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImageChannelMean(intern->magick_wand, channel_type, &mean, &standard_deviation);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image channel mean" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "mean", mean);
 	add_assoc_double(return_value, "standardDeviation", standard_deviation);
-
-	return;
 }
 /* }}} */
 
@@ -7061,12 +6838,11 @@ PHP_METHOD(Imagick, getImageChannelStatistics)
 #endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	statistics = MagickGetImageStatistics(intern->magick_wand);
@@ -7139,7 +6915,6 @@ PHP_METHOD(Imagick, getImageChannelStatistics)
 //    channel_statistics[i].sum_fourth_power*=area;
 
 	MagickRelinquishMemory(statistics);
-	return;
 }
 /* }}} */
 
@@ -7155,32 +6930,29 @@ PHP_METHOD(Imagick, getImageColormapColor)
 	im_long index;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageColormapColor(intern->magick_wand, index , tmp_wand);
 
 	if (tmp_wand == (PixelWand *)NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image colormap color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (status == MagickFalse) {
 		tmp_wand = DestroyPixelWand(tmp_wand);
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image colormap color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = Z_IMAGICKPIXEL_P(return_value);
 	php_imagick_replace_pixelwand(internp, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -7193,12 +6965,11 @@ PHP_METHOD(Imagick, getImageColorspace)
 	long colorSpace;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	colorSpace = MagickGetImageColorspace(intern->magick_wand);
 	RETVAL_LONG(colorSpace);
@@ -7214,12 +6985,11 @@ PHP_METHOD(Imagick, getImageCompose)
 	long composite;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	composite = MagickGetImageCompose(intern->magick_wand);
 	RETVAL_LONG(composite);
@@ -7235,12 +7005,11 @@ PHP_METHOD(Imagick, getImageDelay)
 	long delay;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	delay = MagickGetImageDelay(intern->magick_wand);
 	RETVAL_LONG(delay);
@@ -7256,12 +7025,11 @@ PHP_METHOD(Imagick, getImageDepth)
 	long depth;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	depth = MagickGetImageDepth(intern->magick_wand);
 	RETVAL_LONG(depth);
@@ -7280,22 +7048,20 @@ PHP_METHOD(Imagick, getImageDistortion)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &metric_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 	status = MagickGetImageDistortion(intern->magick_wand, intern_second->magick_wand, metric_type, &distortion);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image distortion" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_DOUBLE(distortion);
@@ -7316,25 +7082,22 @@ PHP_METHOD(Imagick, getImageExtrema)
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "getImageExtrema");
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImageExtrema(intern->magick_wand, &min, &max);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image extrema" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_long(return_value, "min", min);
 	add_assoc_long(return_value, "max", max);
-
-	return;
 }
 /* }}} */
 #endif //#if MagickLibVersion < 0x700
@@ -7349,12 +7112,11 @@ PHP_METHOD(Imagick, getImageDispose)
 	long dispose;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	dispose = MagickGetImageDispose(intern->magick_wand);
 	RETVAL_LONG(dispose);
@@ -7370,12 +7132,11 @@ PHP_METHOD(Imagick, getImageGamma)
 	double gamma;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	gamma = MagickGetImageGamma(intern->magick_wand);
 	RETVAL_DOUBLE(gamma);
@@ -7396,12 +7157,11 @@ PHP_METHOD(Imagick, getImageGreenPrimary)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickGetImageGreenPrimary(intern->magick_wand, &x, &y, &z);
@@ -7411,7 +7171,7 @@ PHP_METHOD(Imagick, getImageGreenPrimary)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image green primary" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -7420,8 +7180,6 @@ PHP_METHOD(Imagick, getImageGreenPrimary)
 #if MagickLibVersion >= 0x700
 	add_assoc_double(return_value, "z", z);
 #endif
-
-	return;
 }
 /* }}} */
 
@@ -7434,12 +7192,11 @@ PHP_METHOD(Imagick, getImageHeight)
 	long height;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	height = MagickGetImageHeight(intern->magick_wand);
 	RETVAL_LONG(height);
@@ -7464,12 +7221,11 @@ PHP_METHOD(Imagick, getImageHistogram)
 
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	wand_array = MagickGetImageHistogram(intern->magick_wand, &colors);
 	array_init(return_value);
@@ -7492,7 +7248,6 @@ PHP_METHOD(Imagick, getImageHistogram)
 	}
 
 	IMAGICK_FREE_MAGICK_MEMORY(wand_array);
-	return;
 }
 /* }}} */
 
@@ -7505,12 +7260,11 @@ PHP_METHOD(Imagick, getImageInterlaceScheme)
 	long interlace;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	interlace = MagickGetImageInterlaceScheme(intern->magick_wand);
 	RETVAL_LONG(interlace);
@@ -7526,12 +7280,11 @@ PHP_METHOD(Imagick, getImageIterations)
 	long iterations;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	iterations = MagickGetImageIterations(intern->magick_wand);
 	RETVAL_LONG(iterations);
@@ -7550,32 +7303,29 @@ PHP_METHOD(Imagick, getImageMatteColor)
 	PixelWand *tmp_wand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = NewPixelWand();
 	status = MagickGetImageMatteColor(intern->magick_wand, tmp_wand);
 
 	if (tmp_wand == (PixelWand *)NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image matte color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (status == MagickFalse) {
 		tmp_wand = DestroyPixelWand(tmp_wand);
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable get image matter color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = Z_IMAGICKPIXEL_P(return_value);
 	php_imagick_replace_pixelwand(internp, tmp_wand);
-
-	return;
 }
 /* }}} */
 #endif //#if MagickLibVersion < 0x700
@@ -7591,18 +7341,17 @@ PHP_METHOD(Imagick, getImagePage)
 	ssize_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImagePage(intern->magick_wand, &width, &height, &x, &y);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image page" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -7611,8 +7360,6 @@ PHP_METHOD(Imagick, getImagePage)
 	add_assoc_long(return_value, "height", height);
 	add_assoc_long(return_value, "x", x);
 	add_assoc_long(return_value, "y", y);
-
-	return;
 }
 /* }}} */
 
@@ -7628,18 +7375,17 @@ PHP_METHOD(Imagick, getImagePixelColor)
 	im_long x, y;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = NewPixelWand();
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to allocate new PixelWand" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickGetImagePixelColor(intern->magick_wand, x, y , tmp_wand);
@@ -7647,14 +7393,12 @@ PHP_METHOD(Imagick, getImagePixelColor)
 	if (status == MagickFalse) {
 		tmp_wand = DestroyPixelWand(tmp_wand);
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable get image pixel color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	internp = Z_IMAGICKPIXEL_P(return_value);
 	php_imagick_replace_pixelwand(internp, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -7673,7 +7417,7 @@ PHP_METHOD(Imagick, setImagePixelColor)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llz", &x, &y, &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
@@ -7681,8 +7425,7 @@ PHP_METHOD(Imagick, setImagePixelColor)
 		return;
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImagePixelColor(intern->magick_wand, x, y , color_wand);
 
@@ -7691,7 +7434,7 @@ PHP_METHOD(Imagick, setImagePixelColor)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image pixel color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_NULL();
@@ -7714,12 +7457,11 @@ PHP_METHOD(Imagick, getImageProfile)
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &name, &name_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	profile = (char *)MagickGetImageProfile(intern->magick_wand, name, &length);
 
@@ -7730,7 +7472,7 @@ PHP_METHOD(Imagick, getImageProfile)
 	}
 
 	php_imagick_throw_exception(IMAGICK_CLASS, "Can not get image profile" TSRMLS_CC);
-	return;
+	RETURN_THROWS();
 }
 /* }}} */
 
@@ -7748,12 +7490,11 @@ PHP_METHOD(Imagick, getImageRedPrimary)
 #endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickGetImageRedPrimary(intern->magick_wand, &x, &y, &z);
@@ -7763,7 +7504,7 @@ PHP_METHOD(Imagick, getImageRedPrimary)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image red primary" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -7772,8 +7513,6 @@ PHP_METHOD(Imagick, getImageRedPrimary)
 #if MagickLibVersion >= 0x700
 	add_assoc_double(return_value, "z", z);
 #endif
-
-	return;
 }
 /* }}} */
 
@@ -7786,12 +7525,11 @@ PHP_METHOD(Imagick, getImageRenderingIntent)
 	long renderingIntent;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	renderingIntent = MagickGetImageRenderingIntent(intern->magick_wand);
 	RETVAL_LONG(renderingIntent);
@@ -7808,25 +7546,22 @@ PHP_METHOD(Imagick, getImageResolution)
 	double x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGetImageResolution(intern->magick_wand, &x, &y);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image resolution" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
 	add_assoc_double(return_value, "y", y);
-
-	return;
 }
 /* }}} */
 
@@ -7839,12 +7574,11 @@ PHP_METHOD(Imagick, getImageScene)
 	unsigned long scene;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	scene = MagickGetImageScene(intern->magick_wand);
 	RETVAL_LONG(scene);
@@ -7860,17 +7594,15 @@ PHP_METHOD(Imagick, getImageSignature)
 	char *signature;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	signature = MagickGetImageSignature(intern->magick_wand);
 	IM_ZVAL_STRING(return_value, signature);
 	IMAGICK_FREE_MAGICK_MEMORY(signature);
-	return;
 }
 /* }}} */
 
@@ -7883,12 +7615,11 @@ PHP_METHOD(Imagick, getImageTicksPerSecond)
 	unsigned long ticks;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	ticks = MagickGetImageTicksPerSecond(intern->magick_wand);
 	RETVAL_LONG(ticks);
@@ -7904,12 +7635,11 @@ PHP_METHOD(Imagick, getImageType)
 	long imageType;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	imageType = MagickGetImageType(intern->magick_wand);
 	RETVAL_LONG(imageType);
@@ -7925,12 +7655,11 @@ PHP_METHOD(Imagick, getImageUnits)
 	long resolutionType;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	resolutionType = MagickGetImageUnits(intern->magick_wand);
 	RETVAL_LONG(resolutionType);
@@ -7946,12 +7675,11 @@ PHP_METHOD(Imagick, getImageVirtualPixelMethod)
 	long pixelMethod;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	pixelMethod = MagickGetImageVirtualPixelMethod(intern->magick_wand);
 	RETVAL_LONG(pixelMethod);
@@ -7972,12 +7700,11 @@ PHP_METHOD(Imagick, getImageWhitePoint)
 #endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickGetImageWhitePoint(intern->magick_wand, &x, &y, &z);
@@ -7987,7 +7714,7 @@ PHP_METHOD(Imagick, getImageWhitePoint)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image white point" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -7996,8 +7723,6 @@ PHP_METHOD(Imagick, getImageWhitePoint)
 #if MagickLibVersion >= 0x700
 	add_assoc_double(return_value, "z", z);
 #endif
-
-	return;
 }
 /* }}} */
 
@@ -8010,12 +7735,11 @@ PHP_METHOD(Imagick, getImageWidth)
 	unsigned long width;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	width = MagickGetImageWidth(intern->magick_wand);
 	RETVAL_LONG(width);
@@ -8031,7 +7755,7 @@ PHP_METHOD(Imagick, getNumberImages)
 	unsigned long num_images;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8095,7 +7819,7 @@ PHP_METHOD(Imagick, thumbnailImage)
 #if PHP_VERSION_ID < 80100
     // This uses an implicit conversion of null to 0 for longs
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|bbb", &width, &height, &bestfit, &fill, &legacy) == FAILURE) {
-	    return;
+		RETURN_THROWS();
 	}
 #else
     // Changing longs to be nullable "l!", means that zpp
@@ -8110,33 +7834,32 @@ PHP_METHOD(Imagick, thumbnailImage)
 	    &width, &width_is_null,
 	    &height, &height_is_null,
 	    &bestfit, &fill, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 #endif
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (bestfit && fill) {
 #if MagickLibVersion > 0x631
 		if (!s_resize_bounding_box(intern->magick_wand, width, height, fill, legacy)) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to resize and fill image" TSRMLS_CC);
-		return;
+			RETURN_THROWS();
 		}
 #else 
 		php_imagick_throw_exception(IMAGICK_CLASS, "Fill parameter is only supported with ImageMagick 6.3.2+" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 #endif
 	} else {
 		if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 		/* No magick is going to happen */
 		if (MagickThumbnailImage(intern->magick_wand, new_width, new_height) == MagickFalse) {
 			php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to thumbnail image" TSRMLS_CC);
-		return;
+			RETURN_THROWS();
 		}
 	}
 	RETURN_TRUE;
@@ -8209,7 +7932,7 @@ PHP_METHOD(Imagick, calculateCrop)
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll|b", 
 		&orig_width, &orig_height, &desired_width, &desired_height, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if (orig_width <= 0 || orig_height <= 0 ||
@@ -8231,8 +7954,6 @@ PHP_METHOD(Imagick, calculateCrop)
 
 	add_assoc_long(return_value, "offset_x", offset_x);
 	add_assoc_long(return_value, "offset_y", offset_y);
-
-	return;
 }
 /* }}} */
 
@@ -8291,17 +8012,16 @@ PHP_METHOD(Imagick, cropThumbnailImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll|b", &crop_width, &crop_height, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	/* The world collapses.. */
 	if (!s_crop_thumbnail_image(intern->magick_wand, crop_width, crop_height, legacy TSRMLS_CC)) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to crop-thumbnail image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -8317,7 +8037,7 @@ PHP_METHOD(Imagick, resetIterator)
 	intern = Z_IMAGICK_P(getThis());
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* No magick is going to happen */
@@ -8330,6 +8050,28 @@ PHP_METHOD(Imagick, resetIterator)
 }
 /* }}} */
 
+/* {{{ proto void Imagick::rewind()
+	Sets the wand iterator to the first image.
+*/
+PHP_METHOD(Imagick, rewind)
+{
+	php_imagick_object *intern;
+	intern = Z_IMAGICK_P(getThis());
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_THROWS();
+	}
+	(void)return_value; // fix -Werror=unused-parameter
+
+	/* No magick is going to happen */
+	if (intern->magick_wand == NULL) {
+		return;
+	}
+	intern->next_out_of_bound = 0;
+	MagickSetFirstIterator(intern->magick_wand);
+}
+/* }}} */
+
 /* {{{ proto bool Imagick::setFirstIterator()
 	Sets the wand iterator to the first image.
 */
@@ -8339,7 +8081,7 @@ PHP_METHOD(Imagick, setFirstIterator)
 	intern = Z_IMAGICK_P(getThis());
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* No magick is going to happen */
@@ -8361,7 +8103,7 @@ PHP_METHOD(Imagick, setLastIterator)
 	intern = Z_IMAGICK_P(getThis());
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	/* No magick is going to happen */
@@ -8383,7 +8125,7 @@ PHP_METHOD(Imagick, previousImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8398,6 +8140,29 @@ PHP_METHOD(Imagick, previousImage)
 }
 /* }}} */
 
+/* {{{ proto void Imagick::next()
+	Associates the next image in the image list with an Imagick object.
+*/
+PHP_METHOD(Imagick, next)
+{
+	php_imagick_object *intern;
+	MagickBooleanType status;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_THROWS();
+	}
+	(void)return_value; // fix -Werror=unused-parameter
+
+	intern = Z_IMAGICK_P(getThis());
+	status = MagickNextImage(intern->magick_wand);
+
+	/* No magick is going to happen */
+	if (status == MagickFalse) {
+		intern->next_out_of_bound = 1;
+	}
+}
+/* }}} */
+
 /* {{{ proto bool Imagick::nextImage()
 	Associates the next image in the image list with an Imagick object.
 */
@@ -8407,7 +8172,7 @@ PHP_METHOD(Imagick, nextImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8432,7 +8197,7 @@ PHP_METHOD(Imagick, hasPreviousImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8456,7 +8221,7 @@ PHP_METHOD(Imagick, hasNextImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8480,7 +8245,7 @@ PHP_METHOD(Imagick, getImageIndex)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8492,7 +8257,6 @@ PHP_METHOD(Imagick, getImageIndex)
 #endif
 
 	ZVAL_LONG(return_value, (long)status);
-	return;
 }
 /* }}} */
 
@@ -8508,7 +8272,7 @@ PHP_METHOD(Imagick, setImageIndex)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &index) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -8522,7 +8286,7 @@ PHP_METHOD(Imagick, setImageIndex)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image index" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	intern->next_out_of_bound = 0;
 	RETURN_TRUE;
@@ -8539,19 +8303,18 @@ PHP_METHOD(Imagick, removeImage)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickRemoveImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to remove image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	intern->next_out_of_bound = 0;
 	MagickSetLastIterator(intern->magick_wand);
@@ -8568,12 +8331,11 @@ PHP_METHOD(Imagick, getImageFilename)
 	char *filename;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	filename = MagickGetImageFilename(intern->magick_wand);
 
@@ -8583,7 +8345,6 @@ PHP_METHOD(Imagick, getImageFilename)
 
 	IM_ZVAL_STRING(return_value, filename);
 	IMAGICK_FREE_MAGICK_MEMORY(filename);
-	return;
 }
 /* }}} */
 
@@ -8598,21 +8359,18 @@ PHP_METHOD(Imagick, getImageSize)
     MagickBooleanType status;
 #endif
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickGetImageLength(intern->magick_wand, &length);
 	if (status == MagickFalse) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to acquire image length" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	ZVAL_LONG(return_value, (long)length);
 #else
 	ZVAL_LONG(return_value, (long)MagickGetImageSize(intern->magick_wand));
 #endif
-
-	return;
 }
 /* }}} */
 
@@ -8639,16 +8397,15 @@ PHP_METHOD(Imagick, getImageBlob)
 	size_t image_size;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (!s_image_has_format (intern->magick_wand)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	image_contents = MagickGetImageBlob(intern->magick_wand, &image_size);
@@ -8658,7 +8415,6 @@ PHP_METHOD(Imagick, getImageBlob)
 
 	IM_ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
 	IMAGICK_FREE_MAGICK_MEMORY(image_contents);
-	return;
 }
 /* }}} */
 
@@ -8674,12 +8430,11 @@ PHP_METHOD(Imagick, getImagesBlob)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion > 0x628
 	/* Get the current iterator position */
@@ -8696,7 +8451,7 @@ PHP_METHOD(Imagick, getImagesBlob)
 	while (MagickNextImage(intern->magick_wand)) {
 		if (!s_image_has_format (intern->magick_wand)) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 	}
 
@@ -8710,7 +8465,7 @@ PHP_METHOD(Imagick, getImagesBlob)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set the iterator index" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	image_contents = MagickGetImagesBlob(intern->magick_wand, &image_size);
@@ -8720,7 +8475,6 @@ PHP_METHOD(Imagick, getImagesBlob)
 
 	IM_ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
 	IMAGICK_FREE_MAGICK_MEMORY(image_contents);
-	return;
 }
 /* }}} */
 
@@ -8733,21 +8487,19 @@ PHP_METHOD(Imagick, getImageFormat)
 	char *format;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 	intern = Z_IMAGICK_P(getThis());
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 	if (!s_image_has_format (intern->magick_wand)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	format = MagickGetImageFormat (intern->magick_wand);
 	IM_ZVAL_STRING(return_value, format);
 	IMAGICK_FREE_MAGICK_MEMORY(format);
-	return;
 }
 /* }}} */
 
@@ -8760,16 +8512,15 @@ PHP_METHOD(Imagick, getImageMimeType)
 	char *format = NULL, *mime_type = NULL;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+	IMAGICK_NOT_EMPTY(intern);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 	if (!s_image_has_format (intern->magick_wand)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Image has no format" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	format = MagickGetImageFormat (intern->magick_wand);
@@ -8779,12 +8530,11 @@ PHP_METHOD(Imagick, getImageMimeType)
 
 	if (!mime_type) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to get image mime-type" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	IM_ZVAL_STRING(return_value, mime_type);
 	IMAGICK_FREE_MAGICK_MEMORY(mime_type);
-	return;
 }
 /* }}} */
 
@@ -8895,12 +8645,11 @@ PHP_METHOD(Imagick, identifyImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|b", &append_raw_string) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	// This is to parse some string options, ugly hack but easier than using CommandOptionToMNemonic
 	// or MagickOptionToMnemonic and FormatMagickSize, which have changed names and signatures between
@@ -8972,7 +8721,6 @@ PHP_METHOD(Imagick, identifyImage)
 		IM_add_assoc_string (return_value, "rawOutput", identify);
 
 	IMAGICK_FREE_MAGICK_MEMORY(identify);
-	return;
 }
 /* }}} */
 
@@ -8986,15 +8734,13 @@ PHP_METHOD(Imagick, getImageColors)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	ZVAL_LONG(return_value, (long)MagickGetImageColors(intern->magick_wand));
-	return;
 }
 /* }}} */
 
@@ -9010,20 +8756,18 @@ PHP_METHOD(Imagick, commentImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &comment, &comment_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickCommentImage(intern->magick_wand, comment);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to comment image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -9042,19 +8786,18 @@ PHP_METHOD(Imagick, setImageFilename)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageFilename(intern->magick_wand, filename);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image filename" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -9076,19 +8819,18 @@ PHP_METHOD(Imagick, setImageAttribute)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &key, &key_len, &attribute, &attribute_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageAttribute(intern->magick_wand, key, attribute);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image attribute" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9107,13 +8849,11 @@ PHP_METHOD(Imagick, setImageBackgroundColor)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -9127,7 +8867,7 @@ PHP_METHOD(Imagick, setImageBackgroundColor)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image background color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -9146,12 +8886,11 @@ PHP_METHOD(Imagick, setImageChannelMask)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	previous_channel_type = MagickSetImageChannelMask(intern->magick_wand, channel);
 
@@ -9172,19 +8911,18 @@ PHP_METHOD(Imagick, setImageCompose)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &compose) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageCompose(intern->magick_wand, compose);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image composite operator" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9198,7 +8936,7 @@ PHP_METHOD(Imagick, getImageCompression)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -9217,20 +8955,18 @@ PHP_METHOD(Imagick, setImageCompression)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &compression) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageCompression(intern->magick_wand, compression);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image compression" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9247,19 +8983,18 @@ PHP_METHOD(Imagick, setImageDelay)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &delay) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageDelay(intern->magick_wand, delay);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image delay" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9283,12 +9018,11 @@ PHP_METHOD(Imagick, colorizeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz|b", &color_param, &opacity_param, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (color_param, IMAGICK_CLASS, &color_allocated TSRMLS_CC);
 	if (!color_wand)
@@ -9313,7 +9047,7 @@ PHP_METHOD(Imagick, colorizeImage)
 		param_wand = php_imagick_clone_pixelwand (color_wand);
 		if (!param_wand) {
 			php_imagick_throw_exception (IMAGICK_CLASS, "Failed to allocate" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 #if MagickLibVersion < 0x700
 		PixelSetOpacity(param_wand, PixelGetOpacity(opacity_wand));
@@ -9334,7 +9068,7 @@ PHP_METHOD(Imagick, colorizeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to colorize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9360,22 +9094,20 @@ PHP_METHOD(Imagick, compareImageChannels)
 
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &channel_type, &metric_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 	tmp_wand = MagickCompareImageChannels(intern->magick_wand, intern_second->magick_wand, channel_type, metric_type, &distortion);
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Compare image channels failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 #if PHP_VERSION_ID >= 70000
@@ -9392,8 +9124,6 @@ PHP_METHOD(Imagick, compareImageChannels)
 
 	add_next_index_zval(return_value, pNewWand);
 	add_next_index_double(return_value, distortion);
-
-	return;
 }
 /* }}} */
 #if MagickLibVersion > 0x628
@@ -9407,12 +9137,11 @@ PHP_METHOD(Imagick, compareImageLayers)
 	im_long compare_method;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &compare_method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	tmp_wand = (MagickWand *)MagickCompareImagesLayers(intern->magick_wand, compare_method);
@@ -9422,14 +9151,12 @@ PHP_METHOD(Imagick, compareImageLayers)
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Compare image layers failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 #endif
@@ -9443,12 +9170,11 @@ PHP_METHOD(Imagick, flattenImages)
 	MagickWand *tmp_wand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	/* TODO: SHOULD THIS BE HERE? */
 	(void)MagickSetFirstIterator(intern->magick_wand);
@@ -9461,14 +9187,12 @@ PHP_METHOD(Imagick, flattenImages)
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Flatten images failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -9482,19 +9206,18 @@ PHP_METHOD(Imagick, flipImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickFlipImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to flip image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9509,19 +9232,18 @@ PHP_METHOD(Imagick, flopImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickFlopImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to flop image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9540,13 +9262,11 @@ PHP_METHOD(Imagick, frameImage)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zllll", &param, &width, &height, &inner_bevel, &outer_bevel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -9573,7 +9293,7 @@ PHP_METHOD(Imagick, frameImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to frame image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9594,13 +9314,11 @@ PHP_METHOD(Imagick, frameImageWithComposite)
 	im_long composite = OverCompositeOp; // Over is the default https://imagemagick.org/script/command-line-options.php#frame
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zlllll", &param, &width, &height, &inner_bevel, &outer_bevel, &composite) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -9627,7 +9345,7 @@ PHP_METHOD(Imagick, frameImageWithComposite)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to frame image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9647,25 +9365,22 @@ PHP_METHOD(Imagick, fxImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &expression, &expression_len, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickFxImageChannel(intern->magick_wand, channel, expression);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Fx image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -9680,19 +9395,18 @@ PHP_METHOD(Imagick, gammaImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &gamma, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGammaImageChannel(intern->magick_wand, channel, gamma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to gamma image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -9710,19 +9424,18 @@ PHP_METHOD(Imagick, gaussianBlurImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickGaussianBlurImageChannel(intern->magick_wand, channel, radius, sigma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to gaussian blur image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -9748,16 +9461,14 @@ PHP_METHOD(Imagick, compareImages)
 	zval *pNewWand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &metric_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 #if PHP_VERSION_ID >= 70000
 	pNewWand = &new_wand;
@@ -9771,7 +9482,7 @@ PHP_METHOD(Imagick, compareImages)
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Compare images failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(pNewWand, php_imagick_sc_entry);
@@ -9780,8 +9491,6 @@ PHP_METHOD(Imagick, compareImages)
 
 	add_next_index_zval(return_value, pNewWand);
 	add_next_index_double(return_value, distortion);
-
-	return;
 }
 /* }}} */
 
@@ -9796,19 +9505,18 @@ PHP_METHOD(Imagick, contrastImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &contrast) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickContrastImage(intern->magick_wand, contrast);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to contrast image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9825,19 +9533,18 @@ PHP_METHOD(Imagick, setImageDepth)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &depth) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageDepth(intern->magick_wand, depth);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image depth" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9854,19 +9561,18 @@ PHP_METHOD(Imagick, setImageGamma)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &gamma) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageGamma(intern->magick_wand, gamma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image gamma" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9883,19 +9589,18 @@ PHP_METHOD(Imagick, setImageIterations)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &iterations) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageIterations(intern->magick_wand, iterations);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image iterations" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9914,13 +9619,11 @@ PHP_METHOD(Imagick, setImageMatteColor)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -9934,7 +9637,7 @@ PHP_METHOD(Imagick, setImageMatteColor)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image matte color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -9953,19 +9656,18 @@ PHP_METHOD(Imagick, setImagePage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImagePage(intern->magick_wand, width, height, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image page" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -9982,19 +9684,18 @@ PHP_METHOD(Imagick, setImageResolution)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x_res, &y_res) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageResolution(intern->magick_wand, x_res, y_res);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image resolution" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10011,19 +9712,18 @@ PHP_METHOD(Imagick, setImageScene)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &scene) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageScene(intern->magick_wand, scene);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image scene" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10040,19 +9740,18 @@ PHP_METHOD(Imagick, setImageTicksPerSecond)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &ticks_per_second) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageTicksPerSecond(intern->magick_wand, ticks_per_second);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image ticks per second" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10069,19 +9768,18 @@ PHP_METHOD(Imagick, setImageType)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &image_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageType(intern->magick_wand, image_type);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image type" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10098,20 +9796,18 @@ PHP_METHOD(Imagick, setImageUnits)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &units) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageUnits(intern->magick_wand, units);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image units" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10129,19 +9825,18 @@ PHP_METHOD(Imagick, setImageFormat)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &format, &format_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageFormat(intern->magick_wand, format);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image format" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10159,19 +9854,18 @@ PHP_METHOD(Imagick, charcoalImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickCharcoalImage(intern->magick_wand, sigma, radius);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to charcoal image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10190,12 +9884,11 @@ PHP_METHOD(Imagick, oilPaintImage)
 #endif // #if MagickLibVersion >= 0x700
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &radius) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	status = MagickOilPaintImage(intern->magick_wand, radius, sigma);
@@ -10207,7 +9900,7 @@ PHP_METHOD(Imagick, oilPaintImage)
 	if (status == MagickFalse)
 	{
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to oilpaint image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10225,12 +9918,11 @@ PHP_METHOD(Imagick, oilPaintImageWithSigma)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &sigma) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickOilPaintImage(intern->magick_wand, radius, sigma);
 
@@ -10238,7 +9930,7 @@ PHP_METHOD(Imagick, oilPaintImageWithSigma)
 	if (status == MagickFalse)
 	{
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to oilPaintImageWithSigma image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10256,12 +9948,11 @@ PHP_METHOD(Imagick, normalizeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion > 0x628
 	status = MagickNormalizeImageChannel(intern->magick_wand, channel);
@@ -10271,7 +9962,7 @@ PHP_METHOD(Imagick, normalizeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to normalize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10289,19 +9980,18 @@ PHP_METHOD(Imagick, labelImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &label, &label_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+	IMAGICK_NOT_EMPTY(intern);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 	status = MagickLabelImage(intern->magick_wand, label);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to label image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10321,19 +10011,18 @@ PHP_METHOD(Imagick, writeImage)
 	php_imagick_rw_result_t rc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s!", &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (!filename) {
 		filename = MagickGetImageFilename(intern->magick_wand);
 
 		if (!filename) {
 			php_imagick_throw_exception(IMAGICK_CLASS, "No image filename specified" TSRMLS_CC);
-			return;
+			RETURN_THROWS();
 		}
 		filename_len = strlen(filename);
 		free_filename = 1;
@@ -10341,12 +10030,12 @@ PHP_METHOD(Imagick, writeImage)
 
 	if (!filename_len) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Can not use empty string as a filename" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	rc = php_imagick_write_file(intern, &file, ImagickWriteImage, 0 TSRMLS_CC);
 	php_imagick_file_deinit(&file);
@@ -10356,7 +10045,7 @@ PHP_METHOD(Imagick, writeImage)
 		if (free_filename) {
 			IMAGICK_FREE_MAGICK_MEMORY(filename);
 		}
-		return;
+		RETURN_THROWS();
 	}
 
 	if (free_filename) {
@@ -10379,28 +10068,27 @@ PHP_METHOD(Imagick, writeImages)
 	php_imagick_rw_result_t rc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sb", &filename, &filename_len, &adjoin) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (!filename_len) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Can not use empty string as a filename" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (!php_imagick_file_init(&file, filename, filename_len TSRMLS_CC)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid filename provided" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	rc = php_imagick_write_file(intern, &file, ImagickWriteImages, adjoin TSRMLS_CC);
 	php_imagick_file_deinit(&file);
 
 	if (rc != IMAGICK_RW_OK) {
 		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 
@@ -10419,12 +10107,10 @@ PHP_METHOD(Imagick, drawImage)
 	char *old_locale;
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickdraw_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	internd = Z_IMAGICKDRAW_P(objvar);
@@ -10441,7 +10127,7 @@ PHP_METHOD(Imagick, drawImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to draw image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10465,12 +10151,11 @@ PHP_METHOD(Imagick, annotateImage)
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oddds", &objvar, php_imagickdraw_sc_entry, &x, &y, &angle, &text, &text_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	internd = Z_IMAGICKDRAW_P(objvar);
 
@@ -10480,7 +10165,7 @@ PHP_METHOD(Imagick, annotateImage)
 	/* Fixes PECL Bug #11328 */
 	if (!font) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Font needs to be set before annotating an image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 #endif
 
@@ -10489,7 +10174,7 @@ PHP_METHOD(Imagick, annotateImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to annotate image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10504,7 +10189,7 @@ PHP_METHOD(Imagick, getImageCompressionQuality)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -10522,19 +10207,18 @@ PHP_METHOD(Imagick, setImageCompressionQuality)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &quality) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetImageCompressionQuality(intern->magick_wand, quality);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set image compression quality" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10555,16 +10239,14 @@ PHP_METHOD(Imagick, compositeImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Olll|l", &objvar, php_imagick_sc_entry, &composite_id, &x, &y, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 #if MagickLibVersion > 0x628
 	MagickCompositeImageChannel(intern->magick_wand, channel, intern_second->magick_wand, composite_id, x, y);
@@ -10586,18 +10268,17 @@ PHP_METHOD(Imagick, modulateImage)
 	double brightness, saturation, hue;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &brightness, &saturation, &hue) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickModulateImage(intern->magick_wand, brightness, saturation, hue);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to modulate image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10615,13 +10296,11 @@ PHP_METHOD(Imagick, addNoiseImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l|l", &noise, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion > 0x628
 	status = MagickAddNoiseImageChannel(intern->magick_wand, channel, noise);
@@ -10631,7 +10310,7 @@ PHP_METHOD(Imagick, addNoiseImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to add image noise" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10652,14 +10331,11 @@ PHP_METHOD(Imagick, addNoiseImageWithAttenuate)
 	double attenuate;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld|l", &noise, &attenuate, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
-
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAddNoiseImageChannelWithAttenuate(
 		intern->magick_wand,
@@ -10670,7 +10346,7 @@ PHP_METHOD(Imagick, addNoiseImageWithAttenuate)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to add image noise" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10698,27 +10374,24 @@ PHP_METHOD(Imagick, montageImage)
 		&montage_mode,
 		&frame, &frame_len) == FAILURE)
 	{
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+	IMAGICK_NOT_EMPTY(intern);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 	internd = Z_IMAGICKDRAW_P(objvar);
 
 	tmp_wand = MagickMontageImage(intern->magick_wand, internd->drawing_wand, tile_geometry, thumbnail_geometry, montage_mode, frame);
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Montage image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 }
 /* }}} */
 
@@ -10733,12 +10406,11 @@ PHP_METHOD(Imagick, affineTransformImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickdraw_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	internd = Z_IMAGICKDRAW_P(objvar);
 	status = MagickAffineTransformImage(intern->magick_wand, internd->drawing_wand);
@@ -10746,7 +10418,7 @@ PHP_METHOD(Imagick, affineTransformImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to affine transform image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10765,12 +10437,11 @@ PHP_METHOD(Imagick, averageImages)
 #endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion > 0x700
 	// MagickEvaluateImages appears to crash if index is not zero.
@@ -10780,7 +10451,7 @@ PHP_METHOD(Imagick, averageImages)
 			intern->magick_wand,
 			"Averaging images failed, images are empty?" TSRMLS_CC
 		);
-		return;
+		RETURN_THROWS();
 	}
 
 	tmp_wand = MagickEvaluateImages(intern->magick_wand, MeanEvaluateOperator);
@@ -10790,13 +10461,12 @@ PHP_METHOD(Imagick, averageImages)
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Averaging images failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 /* }}} */
 
@@ -10813,13 +10483,11 @@ PHP_METHOD(Imagick, borderImage)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zll", &param, &width, &height) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -10837,7 +10505,7 @@ PHP_METHOD(Imagick, borderImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to border image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10862,13 +10530,11 @@ PHP_METHOD(Imagick, borderImageWithComposite)
 	im_long composite;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zlll", &param, &width, &height, &composite) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -10882,7 +10548,7 @@ PHP_METHOD(Imagick, borderImageWithComposite)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to border image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10902,20 +10568,18 @@ PHP_METHOD(Imagick, thresholdImage)
 	im_long channel = DefaultChannels;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &threshold, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickThresholdImageChannel(intern->magick_wand, channel, threshold);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to threshold image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10932,19 +10596,18 @@ PHP_METHOD(Imagick, adaptiveThresholdImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &width, &height, &offset) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAdaptiveThresholdImage(intern->magick_wand, width, height, offset);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to adaptive threshold image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -10963,19 +10626,18 @@ PHP_METHOD(Imagick, sharpenImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &radius, &sigma, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSharpenImageChannel(intern->magick_wand, channel, radius, sigma);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sharpen image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -10991,19 +10653,18 @@ PHP_METHOD(Imagick, shaveImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &columns, &rows) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickShaveImage(intern->magick_wand, columns, rows);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to shave image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11023,12 +10684,11 @@ PHP_METHOD(Imagick, shearImage)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zdd", &param, &x_shear, &y_shear) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -11042,7 +10702,7 @@ PHP_METHOD(Imagick, shearImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to shear image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11060,19 +10720,18 @@ PHP_METHOD(Imagick, spliceImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSpliceImage(intern->magick_wand, width, height, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to splice image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11090,28 +10749,25 @@ PHP_METHOD(Imagick, steganoImage)
 	MagickWand *tmp_wand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &offset) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	intern_second = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (intern_second->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern_second);
 
 	tmp_wand = MagickSteganoImage(intern->magick_wand, intern_second->magick_wand, offset);
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Stegano image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 /* }}} */
 
@@ -11124,7 +10780,7 @@ PHP_METHOD(Imagick, clone)
 	MagickWand *tmp_wand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	IMAGICK_METHOD_DEPRECATED("Imagick", "clone");
@@ -11133,13 +10789,12 @@ PHP_METHOD(Imagick, clone)
 
 	if (tmp_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Cloning Imagick object failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 /* }}} */
 
@@ -11156,12 +10811,11 @@ PHP_METHOD(Imagick, rotateImage)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zd", &param, &degrees) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -11175,7 +10829,7 @@ PHP_METHOD(Imagick, rotateImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to rotate image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11192,19 +10846,18 @@ PHP_METHOD(Imagick, sampleImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &columns, &rows) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSampleImage(intern->magick_wand, columns, rows);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to sample image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11221,12 +10874,11 @@ PHP_METHOD(Imagick, solarizeImage)
 	im_long threshold;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &threshold) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSolarizeImage(intern->magick_wand, threshold);
 
@@ -11234,7 +10886,7 @@ PHP_METHOD(Imagick, solarizeImage)
 	if (status == MagickFalse)
 	{
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to solarize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11252,19 +10904,18 @@ PHP_METHOD(Imagick, shadowImage)
 	im_long x, y;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddll", &opacity, &sigma, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickShadowImage(intern->magick_wand, opacity, sigma, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to shadow image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11282,12 +10933,11 @@ PHP_METHOD(Imagick, motionBlurImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &radius, &sigma, &angle, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion > 0x643
 	status = MagickMotionBlurImageChannel(intern->magick_wand, channel, radius, sigma, angle);
@@ -11298,7 +10948,7 @@ PHP_METHOD(Imagick, motionBlurImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to motion blur image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11320,12 +10970,11 @@ PHP_METHOD(Imagick, mosaicImages)
 	IMAGICK_METHOD_DEPRECATED ("Imagick", "mosaicImages");
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	/* TODO: should this be here? */
 	MagickSetFirstIterator(intern->magick_wand);
@@ -11333,14 +10982,12 @@ PHP_METHOD(Imagick, mosaicImages)
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Mosaic image failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 
 }
 /* }}} */
@@ -11356,25 +11003,22 @@ PHP_METHOD(Imagick, morphImages)
 	im_long frames;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &frames) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickMorphImages(intern->magick_wand, frames);
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Morphing images failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-
-	return;
 
 }
 /* }}} */
@@ -11388,19 +11032,18 @@ PHP_METHOD(Imagick, minifyImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickMinifyImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to minify image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11419,19 +11062,18 @@ PHP_METHOD(Imagick, posterizeImage)
 	zend_bool dither;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lb", &levels, &dither) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickPosterizeImage(intern->magick_wand, levels, dither);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to posterize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11452,19 +11094,18 @@ PHP_METHOD(Imagick, radialBlurImage)
 	im_long channel = DefaultChannels;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &angle, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickRadialBlurImageChannel(intern->magick_wand, channel, angle);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to radial blur image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11484,19 +11125,18 @@ PHP_METHOD(Imagick, raiseImage)
 	zend_bool raise;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllb", &width, &height, &x, &y, &raise) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickRaiseImage(intern->magick_wand, width, height, x, y, raise);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to raise image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11515,12 +11155,11 @@ PHP_METHOD(Imagick, blackThresholdImage)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -11534,7 +11173,7 @@ PHP_METHOD(Imagick, blackThresholdImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to black threshold image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11552,12 +11191,11 @@ PHP_METHOD(Imagick, resampleImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddld", &xRes, &yRes, &filter, &blur) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 		
 #if MagickLibVersion >= 0x700
 	//TODO - allow filter to be set.
@@ -11570,7 +11208,7 @@ PHP_METHOD(Imagick, resampleImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to resample image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11593,16 +11231,15 @@ PHP_METHOD(Imagick, resizeImage)
 	zend_bool legacy = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld|bb", &width, &height, &filter, &blur, &bestfit, &legacy) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	if (!php_imagick_thumbnail_dimensions(intern->magick_wand, bestfit, width, height, &new_width, &new_height, legacy)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Invalid image geometry" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 #if MagickLibVersion >= 0x700
@@ -11615,7 +11252,7 @@ PHP_METHOD(Imagick, resizeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to resize image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11632,18 +11269,17 @@ PHP_METHOD(Imagick, rollImage)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 	status = MagickRollImage(intern->magick_wand, x, y);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to roll image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11660,24 +11296,22 @@ PHP_METHOD(Imagick, appendImages)
 	zend_bool stack;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &stack) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
+	IMAGICK_NOT_EMPTY(intern);
 
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
 	tmp_wand = MagickAppendImages(intern->magick_wand, stack);
 
 	if (!tmp_wand) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to append images" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 /* }}} */
 
@@ -11693,12 +11327,11 @@ PHP_METHOD(Imagick, whiteThresholdImage)
 	zend_bool allocated;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	color_wand = php_imagick_zval_to_pixelwand (param, IMAGICK_CLASS, &allocated TSRMLS_CC);
 	if (!color_wand)
@@ -11712,7 +11345,7 @@ PHP_METHOD(Imagick, whiteThresholdImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to white threshold image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -11728,23 +11361,20 @@ PHP_METHOD(Imagick, getPixelIterator)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	pixel_it = NewPixelIterator(intern->magick_wand);
 
 	if (!pixel_it) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	php_imagick_pixel_iterator_new (pixel_it, return_value TSRMLS_CC);
-	return;
 }
 /* }}} */
 
@@ -11759,23 +11389,20 @@ PHP_METHOD(Imagick, getPixelRegionIterator)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &x, &y, &columns, &rows) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	pixel_it = NewPixelRegionIterator(intern->magick_wand, x, y, columns, rows);
 
 	if (!pixel_it) {
 		php_imagick_throw_exception (IMAGICKPIXELITERATOR_CLASS, "Can not allocate ImagickPixelIterator" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	php_imagick_pixel_iterator_new (pixel_it, return_value TSRMLS_CC);
-	return;
 }
 /* }}} */
 
@@ -11787,7 +11414,7 @@ PHP_METHOD(Imagick, getCompression)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 		
 	intern = Z_IMAGICK_P(getThis());
@@ -11803,7 +11430,7 @@ PHP_METHOD(Imagick, getCompressionQuality)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -11819,12 +11446,11 @@ PHP_METHOD(Imagick, getCopyright)
 	char *copyright;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	copyright = (char *)MagickGetCopyright();
 	IM_ZVAL_STRING(return_value, copyright);
-	return;
 }
 /* }}} */
 
@@ -11843,7 +11469,7 @@ PHP_METHOD(Imagick, getConfigureOptions)
 	unsigned int i;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	result = MagickQueryConfigureOptions(pattern, &number_options);
@@ -11869,7 +11495,7 @@ PHP_METHOD(Imagick, getFeatures)
 	const char *features;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	features = GetMagickFeatures();
@@ -11890,7 +11516,7 @@ PHP_METHOD(Imagick, getFilename)
 	char *filename;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -11900,7 +11526,6 @@ PHP_METHOD(Imagick, getFilename)
 		IM_ZVAL_STRING(return_value, filename);
 		IMAGICK_FREE_MAGICK_MEMORY(filename);
 	}
-	return;
 }
 /* }}} */
 
@@ -11913,7 +11538,7 @@ PHP_METHOD(Imagick, getFormat)
 	char *format;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -11923,7 +11548,6 @@ PHP_METHOD(Imagick, getFormat)
 		IM_ZVAL_STRING(return_value, format);
 		IMAGICK_FREE_MAGICK_MEMORY(format);
 	}
-	return;
 }
 /* }}} */
 
@@ -11935,7 +11559,7 @@ PHP_METHOD(Imagick, getHomeURL)
 	char *home_url;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	home_url = (char *)MagickGetHomeURL();
@@ -11943,7 +11567,6 @@ PHP_METHOD(Imagick, getHomeURL)
 		IM_ZVAL_STRING(return_value, home_url);
 		IMAGICK_FREE_MAGICK_MEMORY(home_url);
 	}
-	return;
 }
 /* }}} */
 
@@ -11955,7 +11578,7 @@ PHP_METHOD(Imagick, getInterlaceScheme)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -11973,7 +11596,7 @@ PHP_METHOD(Imagick, getOption)
 	IM_LEN_TYPE key_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -11984,7 +11607,6 @@ PHP_METHOD(Imagick, getOption)
 		IM_ZVAL_STRING(return_value, value);
 		IMAGICK_FREE_MAGICK_MEMORY(value);
 	}
-	return;
 }
 /* }}} */
 
@@ -11996,12 +11618,11 @@ PHP_METHOD(Imagick, getPackageName)
 	char *package_name;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	package_name = (char *)MagickGetPackageName();
 	IM_ZVAL_STRING(return_value, package_name);
-	return;
 }
 /* }}} */
 
@@ -12016,7 +11637,7 @@ PHP_METHOD(Imagick, getPage)
 	ssize_t x, y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12024,7 +11645,7 @@ PHP_METHOD(Imagick, getPage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get page" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -12032,8 +11653,6 @@ PHP_METHOD(Imagick, getPage)
 	add_assoc_long(return_value, "height", height);
 	add_assoc_long(return_value, "x", x);
 	add_assoc_long(return_value, "y", y);
-
-	return;
 }
 /* }}} */
 
@@ -12043,7 +11662,7 @@ PHP_METHOD(Imagick, getPage)
 PHP_METHOD(Imagick, getHdriEnabled)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 #if MAGICKCORE_HDRI_ENABLE
@@ -12051,7 +11670,6 @@ PHP_METHOD(Imagick, getHdriEnabled)
 #else
 	RETURN_FALSE;
 #endif
-	return;
 }
 /* }}} */
 
@@ -12064,7 +11682,7 @@ PHP_METHOD(Imagick, getQuantum)
 	size_t range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	MagickGetQuantumRange(&range);
@@ -12075,7 +11693,6 @@ PHP_METHOD(Imagick, getQuantum)
 //#else
 //	RETVAL_LONG(color_value);
 //#endif
-	return;
 }
 /* }}} */
 
@@ -12089,7 +11706,7 @@ PHP_METHOD(Imagick, getQuantumDepth)
 	size_t depth;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	quantum_depth = MagickGetQuantumDepth(&depth);
@@ -12097,8 +11714,6 @@ PHP_METHOD(Imagick, getQuantumDepth)
 	array_init(return_value);
 	add_assoc_long(return_value, "quantumDepthLong", depth);
 	IM_add_assoc_string(return_value, "quantumDepthString", (char *)quantum_depth);
-
-	return;
 }
 /* }}} */
 
@@ -12111,7 +11726,7 @@ PHP_METHOD(Imagick, getQuantumRange)
 	size_t range;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	quantum_range = MagickGetQuantumRange(&range);
@@ -12119,7 +11734,6 @@ PHP_METHOD(Imagick, getQuantumRange)
 
 	add_assoc_long(return_value, "quantumRangeLong", range);
 	IM_add_assoc_string(return_value, "quantumRangeString", (char *)quantum_range);
-	return;
 }
 /* }}} */
 
@@ -12131,12 +11745,11 @@ PHP_METHOD(Imagick, getReleaseDate)
 	char *release_date;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	release_date = (char *)MagickGetReleaseDate();
 	IM_ZVAL_STRING(return_value, release_date);
-	return;
 }
 /* }}} */
 
@@ -12148,7 +11761,7 @@ PHP_METHOD(Imagick, getResource)
 	im_long resource_type;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &resource_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_LONG(MagickGetResource(resource_type));
@@ -12163,7 +11776,7 @@ PHP_METHOD(Imagick, getResourceLimit)
 	im_long resource_type;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &resource_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	RETVAL_DOUBLE(MagickGetResourceLimit(resource_type));
@@ -12181,7 +11794,7 @@ PHP_METHOD(Imagick, getSamplingFactors)
 	size_t number_factors = 0;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12195,8 +11808,6 @@ PHP_METHOD(Imagick, getSamplingFactors)
 	}
 
 	MagickRelinquishMemory(sampling_factors);
-
-	return;
 }
 /* }}} */
 
@@ -12210,7 +11821,7 @@ PHP_METHOD(Imagick, getSize)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12218,14 +11829,12 @@ PHP_METHOD(Imagick, getSize)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get size" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_long(return_value, "columns", columns);
 	add_assoc_long(return_value, "rows", rows);
-
-	return;
 }
 /* }}} */
 
@@ -12238,7 +11847,7 @@ PHP_METHOD(Imagick, getVersion)
 	size_t version_number;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	version_string = (char *)MagickGetVersion(&version_number);
@@ -12246,7 +11855,6 @@ PHP_METHOD(Imagick, getVersion)
 
 	add_assoc_long(return_value, "versionNumber", (long) version_number);
 	IM_add_assoc_string(return_value, "versionString", version_string);
-	return;
 }
 /* }}} */
 
@@ -12262,7 +11870,7 @@ PHP_METHOD(Imagick, setBackgroundColor)
 	zend_bool allocated = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", &param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12279,7 +11887,7 @@ PHP_METHOD(Imagick, setBackgroundColor)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set background color" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12297,7 +11905,7 @@ PHP_METHOD(Imagick, setCompression)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &compression) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12306,7 +11914,7 @@ PHP_METHOD(Imagick, setCompression)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set compression" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12323,7 +11931,7 @@ PHP_METHOD(Imagick, setCompressionQuality)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &quality) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12332,7 +11940,7 @@ PHP_METHOD(Imagick, setCompressionQuality)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set compression quality" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12350,7 +11958,7 @@ PHP_METHOD(Imagick, setFilename)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12359,7 +11967,7 @@ PHP_METHOD(Imagick, setFilename)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set filename" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12378,7 +11986,7 @@ PHP_METHOD(Imagick, setFormat)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &format, &format_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12387,7 +11995,7 @@ PHP_METHOD(Imagick, setFormat)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set format" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12405,7 +12013,7 @@ PHP_METHOD(Imagick, setInterlaceScheme)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &schema) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12414,7 +12022,7 @@ PHP_METHOD(Imagick, setInterlaceScheme)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set interlace scheme" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12432,7 +12040,7 @@ PHP_METHOD(Imagick, setOption)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &key, &key_len, &value, &value_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12441,7 +12049,7 @@ PHP_METHOD(Imagick, setOption)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set option" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12458,7 +12066,7 @@ PHP_METHOD(Imagick, setPage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llll", &width, &height, &x, &y) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12467,7 +12075,7 @@ PHP_METHOD(Imagick, setPage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set page" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12482,19 +12090,19 @@ PHP_METHOD(Imagick, setImageProgressMonitor)
 
 	if (!IMAGICK_G(progress_monitor)) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Progress monitoring is disabled in ini-settings" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &filename, &filename_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
 
 	if ((rc = php_imagick_file_access_check (filename TSRMLS_CC)) != IMAGICK_RW_OK) {
 		php_imagick_rw_fail_to_exception (intern->magick_wand, rc, filename TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (intern->progress_monitor_name) {
@@ -12565,7 +12173,7 @@ PHP_METHOD(Imagick, setResourceLimit)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ld", &type, &limit) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	status = MagickSetResourceLimit(type, (MagickSizeType)limit);
@@ -12573,7 +12181,7 @@ PHP_METHOD(Imagick, setResourceLimit)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to set resource limit" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12590,7 +12198,7 @@ PHP_METHOD(Imagick, setResolution)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &x_resolution, &y_resolution) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12599,7 +12207,7 @@ PHP_METHOD(Imagick, setResolution)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set resolution" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12618,14 +12226,14 @@ PHP_METHOD(Imagick, setSamplingFactors)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &factors) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	double_array = php_imagick_zval_to_double_array(factors, &elements TSRMLS_CC);
 
 	if (!double_array) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Can't read array" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12636,7 +12244,7 @@ PHP_METHOD(Imagick, setSamplingFactors)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set sampling factors" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12653,7 +12261,7 @@ PHP_METHOD(Imagick, setSize)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ll", &columns, &rows) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12662,7 +12270,7 @@ PHP_METHOD(Imagick, setSize)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set size" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12679,7 +12287,7 @@ PHP_METHOD(Imagick, setType)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -12688,7 +12296,7 @@ PHP_METHOD(Imagick, setType)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to set type" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -12707,19 +12315,18 @@ PHP_METHOD(Imagick, brightnessContrastImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd|l", &brightness, &contrast, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickBrightnessContrastImageChannel(intern->magick_wand, channel, brightness, contrast);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to brightnesscontrastimage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12779,18 +12386,17 @@ PHP_METHOD(Imagick, colorMatrixImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a",  &color_matrix_array) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	colors = php_imagick_zval_to_double_array(color_matrix_array, &num_elements TSRMLS_CC);
 
 	if (!colors) {
 		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to read color matrix array" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	
 	if (num_elements == 25) {
@@ -12802,7 +12408,7 @@ PHP_METHOD(Imagick, colorMatrixImage)
 	else {
 		efree(colors);
 		php_imagick_throw_exception(IMAGICK_CLASS, "Color matrix array must be 5x5 or 6x6" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	kernel_color_matrix = php_imagick_getKernelInfo(colors, order);
@@ -12823,7 +12429,7 @@ PHP_METHOD(Imagick, colorMatrixImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to colormatriximage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12843,19 +12449,18 @@ PHP_METHOD(Imagick, selectiveBlurImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd|l", &brightness, &contrast, &threshold, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSelectiveBlurImageChannel(intern->magick_wand, channel, brightness, contrast, threshold);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to selectiveblurimage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12876,19 +12481,18 @@ PHP_METHOD(Imagick, rotationalBlurImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &angle, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickRotationalBlurImageChannel(intern->magick_wand, channel, angle);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to rotational blur image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12918,19 +12522,18 @@ PHP_METHOD(Imagick, statisticImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll|l", &type, &width, &height, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickStatisticImageChannel(intern->magick_wand, channel, type, width, height);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to statisticImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -12977,13 +12580,12 @@ PHP_METHOD(Imagick, subimageMatch)
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, param_string, &reference_obj, php_imagick_sc_entry, &z_best_match_offset, &z_similarity, &similarity_threshold, &metric) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 	reference_intern = Z_IMAGICK_P(reference_obj);
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 #if MagickLibVersion >= 0x700
 	new_wand = MagickSimilarityImage(intern->magick_wand, reference_intern->magick_wand,
@@ -12995,7 +12597,7 @@ PHP_METHOD(Imagick, subimageMatch)
 
 	if (new_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "subimagematch failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (z_similarity) {
@@ -13013,8 +12615,6 @@ PHP_METHOD(Imagick, subimageMatch)
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 	php_imagick_replace_magickwand(intern_return, new_wand);
-
-	return;
 }
 /* }}} */
 #endif
@@ -13032,7 +12632,7 @@ PHP_METHOD(Imagick, setRegistry)
 	IM_LEN_TYPE key_len, value_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &key, &key_len, &value, &value_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	status = SetImageRegistry(StringRegistryType, key, value, NULL);
@@ -13057,7 +12657,7 @@ PHP_METHOD(Imagick, getRegistry)
 	ExceptionInfo *ex_info;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &key, &key_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	ex_info = AcquireExceptionInfo();
@@ -13067,7 +12667,7 @@ PHP_METHOD(Imagick, getRegistry)
 	if (ex_info->severity != 0) {
 		zend_throw_exception_ex(php_imagick_exception_class_entry, 1 TSRMLS_CC, "Imagick::getRegistry exception (%s) ", ex_info->reason);
 		ex_info = DestroyExceptionInfo(ex_info);
-		return;
+		RETURN_THROWS();
 	}
 
 	ex_info = DestroyExceptionInfo(ex_info);
@@ -13092,7 +12692,7 @@ PHP_METHOD(Imagick, listRegistry)
 	char *value = NULL;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
@@ -13104,8 +12704,6 @@ PHP_METHOD(Imagick, listRegistry)
 		IM_add_assoc_string(return_value, registry, value);
 		IMAGICK_FREE_MAGICK_MEMORY(value);
 	}
-
-	return;
 }
 /* }}} */
 
@@ -13124,7 +12722,7 @@ PHP_METHOD(Imagick, morphology)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llO|l", &morphologyMethod, &iterations, &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13142,7 +12740,7 @@ PHP_METHOD(Imagick, morphology)
 	// No magick is going to happen
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to morphology image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13164,7 +12762,7 @@ PHP_METHOD(Imagick, filter)
 	ChannelType channel = UndefinedChannel;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O|l", &objvar, php_imagickkernel_sc_entry, &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13172,12 +12770,12 @@ PHP_METHOD(Imagick, filter)
 
 	if ((kernel->kernel_info->width % 2) != 1) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Only odd-sized, square kernels can be applied as a filter." TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (kernel->kernel_info->width != kernel->kernel_info->height) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Only odd-sized, square kernels can be applied as a filter." TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	if (channel == 0) {
@@ -13190,7 +12788,7 @@ PHP_METHOD(Imagick, filter)
 	// No magick is going to happen
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to filter image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13210,7 +12808,7 @@ PHP_METHOD(Imagick, setAntialias)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13218,7 +12816,7 @@ PHP_METHOD(Imagick, setAntialias)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setAntiAlias" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13234,7 +12832,7 @@ PHP_METHOD(Imagick, getAntialias)
 	MagickBooleanType antialias;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13262,7 +12860,7 @@ PHP_METHOD(Imagick, colorDecisionListImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &color_correction_collection, &ccc_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13270,7 +12868,7 @@ PHP_METHOD(Imagick, colorDecisionListImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to colorDecisionListImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13288,19 +12886,18 @@ PHP_METHOD(Imagick, optimizeImageTransparency)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickOptimizeImageTransparency(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Optimize image transparency failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13319,19 +12916,18 @@ PHP_METHOD(Imagick, autoGammaImage)
 	im_long channel = IM_DEFAULT_CHANNEL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAutoGammaImageChannel(intern->magick_wand, channel);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "autoGammaImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13349,19 +12945,18 @@ PHP_METHOD(Imagick, autoOrient)
 	MagickBooleanType status;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAutoOrientImage(intern->magick_wand);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable autoOrient image" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13382,23 +12977,21 @@ PHP_METHOD(Imagick, compositeImageGravity)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Oll", &objvar, php_imagick_sc_entry, &composite, &gravity) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	image_to_composite = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (image_to_composite->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(image_to_composite);
 
 	status = MagickCompositeImageGravity(intern->magick_wand, image_to_composite->magick_wand, composite, gravity);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to compositeImageGravity" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13420,19 +13013,18 @@ PHP_METHOD(Imagick, localContrastImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &radius, &strength) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickLocalContrastImage(intern->magick_wand, radius, strength);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to localContrastImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13451,12 +13043,11 @@ PHP_METHOD(Imagick, identifyImageType)
 	long imageType;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	imageType = MagickIdentifyImageType(intern->magick_wand);
 
@@ -13478,12 +13069,11 @@ PHP_METHOD(Imagick, getImageMask)
 	MagickWand *tmp_wand;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &pixelmask_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	tmp_wand = MagickGetImageMask(intern->magick_wand, pixelmask_type);
 
@@ -13492,14 +13082,14 @@ PHP_METHOD(Imagick, getImageMask)
 		RETURN_NULL();
 
 //		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to get image clip mask" TSRMLS_CC);
-//		return;
+//		RETURN_THROWS();
+
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 
 	php_imagick_replace_magickwand(intern_return, tmp_wand);
-	return;
 }
 /* }}} */
 
@@ -13514,16 +13104,14 @@ PHP_METHOD(Imagick, setImageMask)
 	im_long pixelmask_type;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &pixelmask_type) == FAILURE) {
-        return;
+		RETURN_THROWS();
     }
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	clip_mask = Z_IMAGICK_P(objvar);
-	if (php_imagick_ensure_not_empty (clip_mask->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(clip_mask);
 
 	MagickSetImageMask(
 		intern->magick_wand,
@@ -13555,12 +13143,11 @@ PHP_METHOD(Imagick, cannyEdgeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &radius, &sigma, &lower_percent, &upper_percent) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickCannyEdgeImage(
 		intern->magick_wand,
@@ -13573,7 +13160,7 @@ PHP_METHOD(Imagick, cannyEdgeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to cannyEdgeImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13590,7 +13177,7 @@ PHP_METHOD(Imagick, setSeed)
 	im_long seed;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &seed) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	MagickSetSeed(seed);
@@ -13611,12 +13198,11 @@ PHP_METHOD(Imagick, waveletDenoiseImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dd", &threshold, &softness) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickWaveletDenoiseImage(
 		intern->magick_wand,
@@ -13627,7 +13213,7 @@ PHP_METHOD(Imagick, waveletDenoiseImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to waveletDenoiseImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13647,12 +13233,11 @@ PHP_METHOD(Imagick, meanShiftImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lld", &width, &height, &color_distance) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickMeanShiftImage(
 		intern->magick_wand,
@@ -13664,7 +13249,7 @@ PHP_METHOD(Imagick, meanShiftImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to meanShiftImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13684,12 +13269,11 @@ PHP_METHOD(Imagick, kmeansImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lld", &number_colors, &max_iterations, &tolerance) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickKmeansImage(
 		intern->magick_wand,
@@ -13701,7 +13285,7 @@ PHP_METHOD(Imagick, kmeansImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to kmeansImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13720,12 +13304,11 @@ PHP_METHOD(Imagick, rangeThresholdImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &low_black, &low_white, &high_white, &high_black) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickRangeThresholdImage(
 		intern->magick_wand,
@@ -13738,7 +13321,7 @@ PHP_METHOD(Imagick, rangeThresholdImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to rangeThresholdImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13757,12 +13340,11 @@ PHP_METHOD(Imagick, autoThresholdImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &auto_threshold_method) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickAutoThresholdImage(
 		intern->magick_wand,
@@ -13772,7 +13354,7 @@ PHP_METHOD(Imagick, autoThresholdImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to autoThresholdImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13791,12 +13373,11 @@ PHP_METHOD(Imagick, bilateralBlurImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd", &radius, &sigma, &intensity_sigma, &spatial_sigma) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickBilateralBlurImage(
 		intern->magick_wand,
@@ -13809,7 +13390,7 @@ PHP_METHOD(Imagick, bilateralBlurImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to bilateralBlurImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13829,12 +13410,11 @@ PHP_METHOD(Imagick, claheImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llld", &width, &height, &number_bins, &clip_limit) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickCLAHEImage(
 		intern->magick_wand,
@@ -13847,7 +13427,7 @@ PHP_METHOD(Imagick, claheImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to claheImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13869,7 +13449,7 @@ PHP_METHOD(Imagick, channelFxImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &expression, &expression_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -13877,14 +13457,13 @@ PHP_METHOD(Imagick, channelFxImage)
 
 	if (!fx_image) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "channelFxImage failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 
 	php_imagick_replace_magickwand(intern_return, fx_image);
-	return;
 }
 /* }}} */
 #endif // IM_HAVE_IMAGICK_CHANNELFXIMAGE
@@ -13902,12 +13481,11 @@ PHP_METHOD(Imagick, colorThresholdImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zz", &start_color_param, &stop_color_param) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	start_color_wand = php_imagick_zval_to_pixelwand (start_color_param, IMAGICK_CLASS, &start_color_allocated TSRMLS_CC);
 	if (!start_color_wand)
@@ -13932,7 +13510,7 @@ PHP_METHOD(Imagick, colorThresholdImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to colorThresholdImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -13954,17 +13532,16 @@ PHP_METHOD(Imagick, complexImages)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &complex_operator) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetIteratorIndex(intern->magick_wand, 0);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "complexImages failed to set iterator index to 0" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	complexed = MagickComplexImages(
@@ -13974,14 +13551,13 @@ PHP_METHOD(Imagick, complexImages)
 
 	if (!complexed) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "complexImages failed" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
 
 	php_imagick_replace_magickwand(intern_return, complexed);
-	return;
 }
 /* }}} */
 #endif //IM_HAVE_IMAGICK_COMPLEXIMAGES
@@ -13998,12 +13574,11 @@ PHP_METHOD(Imagick, interpolativeResizeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "lll", &columns, &rows, &interpolate) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickInterpolativeResizeImage(
 		intern->magick_wand,
@@ -14015,7 +13590,7 @@ PHP_METHOD(Imagick, interpolativeResizeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to interpolativeResizeImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -14038,12 +13613,11 @@ PHP_METHOD(Imagick, levelImageColors)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzb", &black_color_param, &white_color_param, &invert) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	black_color_wand = php_imagick_zval_to_pixelwand (black_color_param, IMAGICK_CLASS, &black_color_allocated TSRMLS_CC);
 	if (!black_color_wand)
@@ -14069,7 +13643,7 @@ PHP_METHOD(Imagick, levelImageColors)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to levelImageColors" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -14090,12 +13664,11 @@ PHP_METHOD(Imagick, levelizeImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ddd", &black_point, &gamma, &white_point) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickLevelizeImage(
 		intern->magick_wand,
@@ -14107,7 +13680,7 @@ PHP_METHOD(Imagick, levelizeImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to levelizeImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -14128,12 +13701,11 @@ PHP_METHOD(Imagick, orderedDitherImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &dither_format, &dither_format_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickOrderedDitherImage(
 		intern->magick_wand,
@@ -14143,7 +13715,7 @@ PHP_METHOD(Imagick, orderedDitherImage)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to orderedDitherImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -14159,7 +13731,7 @@ PHP_METHOD(Imagick, whiteBalanceImage)
 	php_imagick_object *intern;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14182,18 +13754,17 @@ PHP_METHOD(Imagick, deleteOption)
 	IM_LEN_TYPE option_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &option, &option_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickDeleteOption(intern->magick_wand, option);
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to deleteOption" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -14211,7 +13782,7 @@ PHP_METHOD(Imagick, getBackgroundColor)
 	PixelWand *pixel_wand;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14219,14 +13790,12 @@ PHP_METHOD(Imagick, getBackgroundColor)
 
 	if (pixel_wand == NULL) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "getBackgroundColor" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	object_init_ex(return_value, php_imagickpixel_sc_entry);
 	imagickpixel_object = Z_IMAGICKPIXEL_P(return_value);
 	php_imagick_replace_pixelwand(imagickpixel_object, pixel_wand);
-
-	return;
 }
 /* }}} */
 #endif
@@ -14245,7 +13814,7 @@ PHP_METHOD(Imagick, getImageArtifacts)
 	unsigned int i;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14292,7 +13861,7 @@ PHP_METHOD(Imagick, getImageKurtosis)
 	double skewness;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14300,14 +13869,12 @@ PHP_METHOD(Imagick, getImageKurtosis)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getImageKurtosis" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "kurtosis", kurtosis);
 	add_assoc_double(return_value, "skewness", skewness);
-
-	return;
 }
 /* }}} */
 #endif
@@ -14325,7 +13892,7 @@ PHP_METHOD(Imagick, getImageMean)
 	double standard_deviation;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14333,14 +13900,12 @@ PHP_METHOD(Imagick, getImageMean)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getImageMean" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "mean", mean);
 	add_assoc_double(return_value, "standard_deviation", standard_deviation);
-
-	return;
 }
 /* }}} */
 #endif
@@ -14357,7 +13922,7 @@ PHP_METHOD(Imagick, getImageRange)
 	double maxima;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14365,14 +13930,12 @@ PHP_METHOD(Imagick, getImageRange)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getImageRange" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "minima", minima);
 	add_assoc_double(return_value, "maxima", maxima);
-
-	return;
 }
 /* }}} */
 #endif
@@ -14386,7 +13949,7 @@ PHP_METHOD(Imagick, getInterpolateMethod)
 	PixelInterpolateMethod pixelInterpolateMethod;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14412,7 +13975,7 @@ PHP_METHOD(Imagick, getOptions)
 	unsigned int i;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s", &pattern, &pattern_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14431,8 +13994,6 @@ PHP_METHOD(Imagick, getOptions)
 		DestroyString(options[i]);
 	}
 	RelinquishMagickMemory(options);
-
-	return;
 }
 /* }}} */
 #endif
@@ -14447,7 +14008,7 @@ PHP_METHOD(Imagick, getOrientation)
 	OrientationType orientation;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14471,7 +14032,7 @@ PHP_METHOD(Imagick, getResolution)
 	double y;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14479,14 +14040,12 @@ PHP_METHOD(Imagick, getResolution)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to getResolution" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	array_init(return_value);
 	add_assoc_double(return_value, "x", x);
 	add_assoc_double(return_value, "y", y);
-
-	return;
 }
 /* }}} */
 #endif
@@ -14500,7 +14059,7 @@ PHP_METHOD(Imagick, getType)
 	ImageType type;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14526,19 +14085,18 @@ PHP_METHOD(Imagick, polynomialImage)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &terms) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	terms_double_array = php_imagick_zval_to_double_array(terms, &terms_count TSRMLS_CC);
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetIteratorIndex(intern->magick_wand, 0);
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polynomialImage, failed to set iterator to zero" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	// TODO - sanity check terms_count
@@ -14553,7 +14111,7 @@ PHP_METHOD(Imagick, polynomialImage)
 
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polynomialImage" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	RETURN_TRUE;
@@ -14573,7 +14131,7 @@ PHP_METHOD(Imagick, setDepth)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &depth) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
@@ -14583,7 +14141,7 @@ PHP_METHOD(Imagick, setDepth)
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setDepth" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -14604,19 +14162,18 @@ PHP_METHOD(Imagick, setExtract)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &geometry_string, &geometry_string_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-//	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-//		return;
+//	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetExtract(intern->magick_wand, geometry_string);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setExtract" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -14635,19 +14192,18 @@ PHP_METHOD(Imagick, setInterpolateMethod)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &interpolate) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-//	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-//		return;
+//	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetInterpolateMethod(intern->magick_wand, interpolate);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setInterpolateMethod" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }
@@ -14665,19 +14221,18 @@ PHP_METHOD(Imagick, setOrientation)
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &orientation_type) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	intern = Z_IMAGICK_P(getThis());
-	if (php_imagick_ensure_not_empty (intern->magick_wand) == 0)
-		return;
+	IMAGICK_NOT_EMPTY(intern);
 
 	status = MagickSetOrientation(intern->magick_wand, orientation_type);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to setOrientation" TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 	RETURN_TRUE;
 }

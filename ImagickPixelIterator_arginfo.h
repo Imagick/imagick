@@ -63,7 +63,7 @@ ZEND_END_ARG_INFO()
 
 
 #if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_getCurrentIteratorRow, 0, 0, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_getCurrentIteratorRow, 0, 0, IS_ARRAY, 1)
 #else
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixelIterator_getCurrentIteratorRow, 0, 0, 0)
 #endif
@@ -81,11 +81,24 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickPixelIterator_getNextIteratorRow arginfo_class_ImagickPixelIterator_getCurrentIteratorRow
 
-#define arginfo_class_ImagickPixelIterator_getPreviousIteratorRow arginfo_class_ImagickPixelIterator_getCurrentIteratorRow
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_getPreviousIteratorRow, 0, 0, IS_ARRAY, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixelIterator_getPreviousIteratorRow, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickPixelIterator_key arginfo_class_ImagickPixelIterator_getIteratorRow
 
-ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_next, 0, 0, IS_VOID, 0)
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_next, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixelIterator_next, 0, 0, 0)
+#endif
+
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickPixelIterator_rewind arginfo_class_ImagickPixelIterator_next
@@ -170,9 +183,11 @@ ZEND_METHOD(ImagickPixelIterator, getCurrentIteratorRow);
 ZEND_METHOD(ImagickPixelIterator, getIteratorRow);
 ZEND_METHOD(ImagickPixelIterator, getNextIteratorRow);
 ZEND_METHOD(ImagickPixelIterator, getPreviousIteratorRow);
-ZEND_METHOD(ImagickPixelIterator, resetIterator);
+ZEND_METHOD(ImagickPixelIterator, next);
+ZEND_METHOD(ImagickPixelIterator, rewind);
 ZEND_METHOD(ImagickPixelIterator, newPixelIterator);
 ZEND_METHOD(ImagickPixelIterator, newPixelRegionIterator);
+ZEND_METHOD(ImagickPixelIterator, resetIterator);
 ZEND_METHOD(ImagickPixelIterator, setIteratorFirstRow);
 ZEND_METHOD(ImagickPixelIterator, setIteratorLastRow);
 ZEND_METHOD(ImagickPixelIterator, setIteratorRow);
@@ -191,8 +206,8 @@ static const zend_function_entry class_ImagickPixelIterator_methods[] = {
 	ZEND_ME(ImagickPixelIterator, getNextIteratorRow, arginfo_class_ImagickPixelIterator_getNextIteratorRow, ZEND_ACC_PUBLIC)
 	ZEND_ME(ImagickPixelIterator, getPreviousIteratorRow, arginfo_class_ImagickPixelIterator_getPreviousIteratorRow, ZEND_ACC_PUBLIC)
 	ZEND_MALIAS(ImagickPixelIterator, key, getIteratorRow, arginfo_class_ImagickPixelIterator_key, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ImagickPixelIterator, next, getNextIteratorRow, arginfo_class_ImagickPixelIterator_next, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ImagickPixelIterator, rewind, resetIterator, arginfo_class_ImagickPixelIterator_rewind, ZEND_ACC_PUBLIC)
+	ZEND_ME(ImagickPixelIterator, next, arginfo_class_ImagickPixelIterator_next, ZEND_ACC_PUBLIC)
+	ZEND_ME(ImagickPixelIterator, rewind, arginfo_class_ImagickPixelIterator_rewind, ZEND_ACC_PUBLIC)
 	ZEND_MALIAS(ImagickPixelIterator, current, getCurrentIteratorRow, arginfo_class_ImagickPixelIterator_current, ZEND_ACC_PUBLIC)
 	ZEND_ME(ImagickPixelIterator, newPixelIterator, arginfo_class_ImagickPixelIterator_newPixelIterator, ZEND_ACC_PUBLIC)
 	ZEND_ME(ImagickPixelIterator, newPixelRegionIterator, arginfo_class_ImagickPixelIterator_newPixelRegionIterator, ZEND_ACC_PUBLIC)

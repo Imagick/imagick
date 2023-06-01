@@ -43,7 +43,18 @@
 #define IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel) \
 	if (kernel->kernel_info == NULL) { \
 		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0 TSRMLS_CC); \
-		RETURN_NULL(); \
+		RETURN_THROWS(); \
 	}
+
+#define IMAGICK_NOT_EMPTY(wand) \
+	if (php_imagick_ensure_not_empty(wand->magick_wand) == 0) { \
+		RETURN_THROWS(); \
+	}
+
+#define IMAGICK_PIXEL_NOT_EMPTY(pixel) \
+	if (php_imagickpixel_ensure_not_null(pixel->pixel_wand) == 0) { \
+		RETURN_THROWS(); \
+	}
+
 
 #endif /* PHP_IMAGICK_MACROS_H */
