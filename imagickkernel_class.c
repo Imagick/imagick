@@ -816,6 +816,7 @@ PHP_METHOD(ImagickKernel, scale)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &scale, &normalize_flag) == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value;
 
 	internp = Z_IMAGICKKERNEL_P(getThis());
 	IMAGICK_KERNEL_NOT_NULL_EMPTY(internp);
@@ -840,6 +841,7 @@ PHP_METHOD(ImagickKernel, addUnityKernel)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &scale) == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value;
 
 	internp = Z_IMAGICKKERNEL_P(getThis());
 	IMAGICK_KERNEL_NOT_NULL_EMPTY(internp);
