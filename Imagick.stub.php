@@ -1271,6 +1271,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //# endif
 #endif
 
+#if PHP_VERSION_ID < 80200
     /** @alias Imagick::nextImage
      *  @tentative-return-type
      */
@@ -1280,7 +1281,10 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
      *  @tentative-return-type
      */
     public function rewind(): void  {}
-
+#else
+    public function rewind(): void  {}
+    public function next(): void  {}
+#endif
     public function valid(): bool  {}
 
     public function current(): Imagick  {}

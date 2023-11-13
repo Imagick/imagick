@@ -8352,6 +8352,23 @@ PHP_METHOD(Imagick, setFirstIterator)
 }
 /* }}} */
 
+/* {{{ proto bool Imagick::rewind()
+	Alias for "setFirstIterator" but retuns void
+*/
+PHP_METHOD(Imagick, rewind)
+{
+	zval retval;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	ZVAL_UNDEF(&retval);
+	zend_call_method_with_0_params(Z_OBJ_P(getThis()), Z_OBJCE_P(getThis()), NULL, "setFirstIterator", &retval);
+}
+/* }}} */
+
+
 /* {{{ proto bool Imagick::setLastIterator()
 	Sets the wand iterator to the last image.
 */
@@ -8420,6 +8437,23 @@ PHP_METHOD(Imagick, nextImage)
 	}
 
 	RETURN_TRUE;
+}
+/* }}} */
+
+
+/* {{{ proto bool Imagick::next()
+	Alias for "nextImage" but retuns void
+*/
+PHP_METHOD(Imagick, next)
+{
+	zval retval;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		return;
+	}
+
+	ZVAL_UNDEF(&retval);
+	zend_call_method_with_0_params(Z_OBJ_P(getThis()), Z_OBJCE_P(getThis()), NULL, "nextImage", &retval);
 }
 /* }}} */
 
