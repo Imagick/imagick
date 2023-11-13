@@ -5097,10 +5097,35 @@ ZEND_END_ARG_INFO()
 #define arginfo_class_Imagick_key arginfo_class_Imagick_getSizeOffset
 #endif
 
-ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
-ZEND_END_ARG_INFO()
+#if PHP_VERSION_ID < 80200
 
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_next, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
+#endif
+
+#if PHP_VERSION_ID < 80200
 #define arginfo_class_Imagick_rewind arginfo_class_Imagick_next
+#endif
+
+#if !(PHP_VERSION_ID < 80200)
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_rewind, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_rewind, 0, 0, 0)
+#endif
+
+ZEND_END_ARG_INFO()
+#endif
+
+#if !(PHP_VERSION_ID < 80200)
+#define arginfo_class_Imagick_next arginfo_class_Imagick_rewind
+#endif
 
 #define arginfo_class_Imagick_valid arginfo_class_Imagick_removeImage
 
@@ -6725,6 +6750,18 @@ ZEND_METHOD(Imagick, setResolution);
 ZEND_METHOD(Imagick, setSamplingFactors);
 ZEND_METHOD(Imagick, setSize);
 ZEND_METHOD(Imagick, setType);
+#if PHP_VERSION_ID < 80200
+ZEND_METHOD(Imagick, nextImage);
+#endif
+#if PHP_VERSION_ID < 80200
+ZEND_METHOD(Imagick, setFirstIterator);
+#endif
+#if !(PHP_VERSION_ID < 80200)
+ZEND_METHOD(Imagick, rewind);
+#endif
+#if !(PHP_VERSION_ID < 80200)
+ZEND_METHOD(Imagick, next);
+#endif
 ZEND_METHOD(Imagick, valid);
 ZEND_METHOD(Imagick, current);
 #if MagickLibVersion >= 0x659
@@ -7524,8 +7561,18 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if MagickLibVersion > 0x628
 	ZEND_MALIAS(Imagick, key, getIteratorIndex, arginfo_class_Imagick_key, ZEND_ACC_PUBLIC)
 #endif
+#if PHP_VERSION_ID < 80200
 	ZEND_MALIAS(Imagick, next, nextImage, arginfo_class_Imagick_next, ZEND_ACC_PUBLIC)
+#endif
+#if PHP_VERSION_ID < 80200
 	ZEND_MALIAS(Imagick, rewind, setFirstIterator, arginfo_class_Imagick_rewind, ZEND_ACC_PUBLIC)
+#endif
+#if !(PHP_VERSION_ID < 80200)
+	ZEND_ME(Imagick, rewind, arginfo_class_Imagick_rewind, ZEND_ACC_PUBLIC)
+#endif
+#if !(PHP_VERSION_ID < 80200)
+	ZEND_ME(Imagick, next, arginfo_class_Imagick_next, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_ME(Imagick, valid, arginfo_class_Imagick_valid, ZEND_ACC_PUBLIC)
 	ZEND_ME(Imagick, current, arginfo_class_Imagick_current, ZEND_ACC_PUBLIC)
 #if MagickLibVersion >= 0x659
