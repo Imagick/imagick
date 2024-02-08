@@ -15,7 +15,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 5.4 ]
+        # php: [ 5.4 ]
+        php: [ 8.3 ]
         imagemagick: [
             7.1.0-13,
             6.9.2-0,
