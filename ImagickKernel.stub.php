@@ -1,6 +1,9 @@
 <?php
 
-/** @generate-function-entries */
+/**
+ * @generate-function-entries
+ * @generate-legacy-arginfo 70000
+ */
 
 #ifdef IMAGICK_WITH_KERNEL
 class ImagickKernel

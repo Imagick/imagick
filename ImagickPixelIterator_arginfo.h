@@ -85,7 +85,11 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickPixelIterator_key arginfo_class_ImagickPixelIterator_getIteratorRow
 
+#if (PHP_VERSION_ID >= 80100)
 ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_INFO_EX(arginfo_class_ImagickPixelIterator_next, 0, 0, IS_VOID, 0)
+#else
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickPixelIterator_next, 0, 0, 0)
+#endif
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ImagickPixelIterator_rewind arginfo_class_ImagickPixelIterator_next
