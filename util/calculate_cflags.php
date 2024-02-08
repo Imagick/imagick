@@ -22,7 +22,6 @@ fwrite(STDERR, $message);
 
 $CFLAGS = array(
     "-Wno-deprecated-declarations",
-    "-Wdeclaration-after-statement",
     "-Werror",
     "-Wall",
     "-Wextra",
