@@ -4,7 +4,6 @@
 
 class Imagick
 {
-#if MagickLibVersion > 0x628
     public function optimizeImageLayers(): bool  {}
 
     // METRIC_*
@@ -114,12 +113,12 @@ class Imagick
     /** @deprecated */
     public function transformImage(string $crop, string $geometry): Imagick  {}
 #endif
-#endif
 
 #if MagickLibVersion > 0x630
 #if MagickLibVersion < 0x700
     /** @deprecated */
     public function setImageOpacity(float $opacity): bool  {}
+#endif
 #endif
 
 #if MagickLibVersion >= 0x700
@@ -134,7 +133,6 @@ class Imagick
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool  {}
 #endif
-#endif
 
 #if MagickLibVersion >= 0x700
     public function polaroidWithTextAndMethod(
@@ -145,7 +143,6 @@ class Imagick
     ): bool {}
 #endif
 
-#if MagickLibVersion > 0x631
 
     public function polaroidImage(ImagickDraw $settings, float $angle): bool  {}
 
@@ -175,7 +172,7 @@ class Imagick
     public function getImageLength(): int  {}
 
     public function extentImage(int $width, int $height, int $x, int $y): bool  {}
-#endif
+
 #if MagickLibVersion > 0x633
     public function getImageOrientation(): int  {}
 
@@ -197,9 +194,6 @@ class Imagick
 #endif
 #endif
 #endif
-
-#if MagickLibVersion > 0x635
-
 
     public function clutImage(Imagick $lookup_table, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
@@ -244,7 +238,7 @@ class Imagick
     public function recolorImage(array $matrix): bool  {}
 #endif
 #endif
-#endif
+
 
 #if MagickLibVersion > 0x636
     public function setFont(string $font): bool  {}
@@ -299,7 +293,6 @@ class Imagick
 
     public function encipherImage(string $passphrase): bool  {}
 
-//    PHP_ME(imagick, decipherimage, imagick_decipherimage_args, ZEND_ACC_PUBLIC)
     public function decipherImage(string $passphrase): bool  {}
 #endif
 
