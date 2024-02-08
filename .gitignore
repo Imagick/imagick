@@ -71,3 +71,5 @@ tests/*.sh
 bugReports
 data
 *.dep
+bugs
+inkscape
