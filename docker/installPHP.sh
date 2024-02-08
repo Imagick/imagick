@@ -27,7 +27,31 @@ cd /var/app/php_src/${SRCFILE}
 
 
 
-make -j 4
+
+# For Mac
+
+
+export PKG_CONFIG_PATH="/opt/homebrew/Cellar/openssl@1.1/1.1.1s/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+./configure \
+  --without-pear \
+  --without-sqlite3 \
+  --without-pdo-sqlite \
+  --with-openssl \
+  --enable-mbstring \
+  --with-curl \
+  --with-zip \
+  --without-iconv \
+  --prefix=/opt/danack \
+  --exec-prefix=/opt/danack
+
+
+./configure --with-imagick=/opt/danack
+
+
+
+
+make -j 20
 
 make install
 
