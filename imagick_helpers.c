@@ -1289,6 +1289,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x70C
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAA", DWAACompression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
+
+
+#if MagickLibVersion >= 0x712
+	// actually 7.1.1-16, but still can't test patch versions
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_LERC", LERCCompression);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("PAINT_POINT", PointMethod);
@@ -1554,7 +1559,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 
 
-#if MagickLibVersion >= 0x720
+#if MagickLibVersion >= 0x712
+	// Technically >= 7.1.1-9 but we still don't have a mechanism for
+	// detecting patch versions.
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
 #endif
@@ -1955,6 +1962,12 @@ IMAGICK_REGISTER_CONST_LONG("KERNEL_BINOMIAL", BinomialKernel);
 /* Draw directions */
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_LEFT_TO_RIGHT", LeftToRightDirection);
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_RIGHT_TO_LEFT", RightToLeftDirection);
+
+#if MagickLibVersion >= 0x712
+	// Technically >= 7.1.1-14 but we still don't have a mechanism for
+	// detecting patch versions.
+	IMAGICK_REGISTER_CONST_LONG("DIRECTION_TOP_TO_BOTTOM", TopToBottomDirection);
+#endif
 
 // The kernel is scaled directly using given scaling factor without change.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_NONE", 0);

@@ -158,6 +158,9 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 		'MagickCore/cache-view.h' => [
 			'VirtualPixelMethod',
 		],
+		'MagickCore/channel.h' => [
+			'AlphaChannelOption',
+		],
 		'MagickCore/compare.h' => [
 			'MetricType',
 		],
@@ -194,7 +197,6 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 			'GravityType',
 		],
 		'MagickCore/image.h' => [
-			'AlphaChannelOption',
 			'ImageType',
 			'InterlaceType',
 			'OrientationType',
