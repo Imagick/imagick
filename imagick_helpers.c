@@ -1289,7 +1289,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x70C
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAA", DWAACompression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
-
+#endif
 
 #if MagickLibVersion >= 0x712
 	// actually 7.1.1-16, but still can't test patch versions
