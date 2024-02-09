@@ -111,7 +111,10 @@ function setFontForImagickDraw(\ImagickDraw $imagickDraw)
     $imagickDraw->setFont($font);
 }
 
-
+/**
+ * Checks that a named value exists in an array and it matches
+ * an expected value.
+ */
 function check_value(array $values, $name, $expected_value)
 {
 	if (array_key_exists($name, $values) !== true) {
@@ -133,6 +136,41 @@ function check_value(array $values, $name, $expected_value)
 	}
 
 	echo "Value for '$name' is $value which is close enough to expected $expected_value\n";
+}
+
+
+/**
+ * Checks that a named value exists in an array and it matches
+ * one of a number of expected values.
+ * This function exists because the expected values for Kurtosis can
+ * change when the underlying maths changes: https://github.com/ImageMagick/ImageMagick/issues/6924
+ */
+function check_value_posibilities(array $values, $name, array $expected_values)
+{
+    if (array_key_exists($name, $values) !== true) {
+
+        $message = "Expected key '$name' not set. Array contains:\n";
+        $message .= var_export($values, true);
+
+        throw new \Exception($message);
+    }
+
+
+    $value = $values[$name];
+
+    $epsilon = 0.01;
+
+    foreach ($expected_values as $expected_value) {
+        if (($value > $expected_value - $epsilon) && ($value < $expected_value + $epsilon)) {
+            echo "Value for '$name' is $value which is close enough to expected $expected_value\n";
+            return;
+        }
+    }
+
+    $expected_string = implode(", ", $expected_values);
+
+    $message = "Value for $name doesn't match expected possibilities. Expected one of: $expected_string, actual: $value";
+    throw new \Exception($message);
 }
 
 
