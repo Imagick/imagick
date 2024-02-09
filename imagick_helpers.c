@@ -1823,6 +1823,13 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_ASSOCIATE", AssociateAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DISSOCIATE", DisassociateAlphaChannel);
 #endif
+
+#if MagickLibVersion >= 0x712
+	// Technically >= 7.1.1-26 but we still don't have a mechanism for
+	// detecting patch versions.
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF_IF_OPAQUE", OffIfOpaqueAlphaChannel);
+#endif
+
 	/*
 	 DiscreteAlphaChannel,                  CopyAlphaChannel,
 	 DisassociateAlphaChannel,              DeactivateAlphaChannel,
