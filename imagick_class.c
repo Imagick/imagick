@@ -712,7 +712,7 @@ PHP_METHOD(Imagick, getIteratorIndex)
 */
 PHP_METHOD(Imagick, setIteratorIndex)
 {
-	const im_long index;
+	im_long index;
 	MagickBooleanType status;
 	php_imagick_object *intern;
 
