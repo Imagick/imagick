@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
           version: ["8.3"]
-          arch: [x86, x64]
+          arch: [x64]
           ts: [nts, ts]
     runs-on: windows-latest
     steps:
@@ -20,7 +20,7 @@ jobs:
           chcp 65001
           $r = Select-String -Path package.xml -Pattern '<release>([\d\.]+)</release>'
           $s = $r.Matches[0].Groups[1]
-          echo $s > PACKAGE_VERSION
+          (Get-Content php_imagick.h).Replace('@PACKAGE_VERSION@', $s) | Set-Content php_imagick.h
           $extension_version = 'EXTENSION_VERSION=' + $s
           echo $extension_version >> $env:GITHUB_ENV
           echo $extension_version
