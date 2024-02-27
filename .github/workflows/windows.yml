@@ -25,7 +25,7 @@ jobs:
           echo $extension_version
       - name: Setup PHP
         id: setup-php
-        uses: cmb69/setup-php-sdk@v0.8
+        uses: php/setup-php-sdk@v0.8
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
