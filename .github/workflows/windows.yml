@@ -8,9 +8,9 @@ jobs:
     strategy:
       matrix:
           version: ["8.3"]
-          arch: [x64]
-          ts: [ts]
-    runs-on: windows-2019
+          arch: [x86, x64]
+          ts: [nts, ts]
+    runs-on: windows-latest
     steps:
       - name: Checkout imagick
         uses: actions/checkout@v4
@@ -20,6 +20,7 @@ jobs:
           chcp 65001
           $r = Select-String -Path package.xml -Pattern '<release>([\d\.]+)</release>'
           $s = $r.Matches[0].Groups[1]
+          echo $s > PACKAGE_VERSION
           $extension_version = 'EXTENSION_VERSION=' + $s
           echo $extension_version >> $env:GITHUB_ENV
           echo $extension_version
@@ -59,6 +60,7 @@ jobs:
 
           $artifact_name = 'php_imagick-${{env.EXTENSION_VERSION}}-${{matrix.version}}'
 
+          if ('7.4' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vc15' }
           if ('8.0' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs16' }
           if ('8.1' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs16' }
           if ('8.2' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs16' }
