@@ -87,6 +87,8 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="011_polygon.phpt" role="test" />
 				<file name="012-clone-separation.phpt" role="test" />
 				<file name="013-read-filehandle.phpt" role="test" />
+				<file name="013-read-filehandle-memory-stream.phpt" role="test" />
+				<file name="013-read-filehandle-file-stream.phpt" role="test" />
 				<file name="014-setresourcelimit.phpt" role="test" />
 				<file name="015-imagickdrawsetresolution.phpt" role="test" />
 				<file name="016-static-methods.phpt" role="test" />
