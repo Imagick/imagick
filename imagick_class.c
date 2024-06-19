@@ -13544,7 +13544,7 @@ PHP_METHOD(Imagick, setImageMask)
 
 
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CANNYEDGEIMAGE
 /* {{{ proto void Imagick::cannyEdgeImage(float $radius, float $sigma, float $lower_percent, float $upper_percent
 */
 PHP_METHOD(Imagick, cannyEdgeImage)
@@ -13579,7 +13579,7 @@ PHP_METHOD(Imagick, cannyEdgeImage)
 	RETURN_TRUE;
 }
 /* }}} */
-#endif // MagickLibVersion >= 0x709
+#endif // IM_HAVE_IMAGICK_CANNYEDGEIMAGE
 
 #if IM_HAVE_IMAGICK_SETSEED
 /* {{{ proto void Imagick::setSeed(int seed)

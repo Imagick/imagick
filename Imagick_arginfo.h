@@ -5248,7 +5248,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_setImageMask, 0, 0, 2)
 ZEND_END_ARG_INFO()
 #endif
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CANNYEDGEIMAGE
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_cannyEdgeImage, 0, 4, _IS_BOOL, 0)
@@ -6482,7 +6482,7 @@ ZEND_METHOD(Imagick, getImageMask);
 #if IM_HAVE_IMAGICK_GETSETIMAGEMASK
 ZEND_METHOD(Imagick, setImageMask);
 #endif
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CANNYEDGEIMAGE
 ZEND_METHOD(Imagick, cannyEdgeImage);
 #endif
 #if IM_HAVE_IMAGICK_SETSEED
@@ -7207,7 +7207,7 @@ static const zend_function_entry class_Imagick_methods[] = {
 #if IM_HAVE_IMAGICK_GETSETIMAGEMASK
 	ZEND_ME(Imagick, setImageMask, arginfo_class_Imagick_setImageMask, ZEND_ACC_PUBLIC)
 #endif
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CANNYEDGEIMAGE
 	ZEND_ME(Imagick, cannyEdgeImage, arginfo_class_Imagick_cannyEdgeImage, ZEND_ACC_PUBLIC)
 #endif
 #if IM_HAVE_IMAGICK_SETSEED

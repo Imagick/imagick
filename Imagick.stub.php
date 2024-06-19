@@ -1421,7 +1421,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //        int $channel = Imagick::CHANNEL_DEFAULT): null {}
 
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CANNYEDGEIMAGE
     public function cannyEdgeImage(
         float $radius,
         float $sigma,

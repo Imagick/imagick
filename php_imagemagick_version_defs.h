@@ -34,6 +34,16 @@
 #endif
 
 
+#if MagickLibVersion >= 0x700
+  #if MagickLibVersion >= 0x709
+    #define IM_HAVE_IMAGICK_CANNYEDGEIMAGE 1
+  #endif
+#elif MagickLibVersion >= 0x690
+  // This may actually be available from 6.8.10, but both versions are ancient
+  #define IM_HAVE_IMAGICK_CANNYEDGEIMAGE 1
+#endif
+
+
 #if MagickLibVersion >= 0x709
 	#define IM_HAVE_IMAGICK_SETSEED 1
 #endif
