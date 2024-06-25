@@ -1566,14 +1566,6 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #endif
 
 
-#if MagickLibVersion >= 0x712
-	// Technically >= 7.1.1-9 but we still don't have a mechanism for
-	// detecting patch versions.
-	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
-	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
-#endif
-
-
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
 #if MagickLibVersion < 0x700
