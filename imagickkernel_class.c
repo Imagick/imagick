@@ -752,6 +752,8 @@ PHP_METHOD(ImagickKernel, separate)
 
 	while (kernel_info != NULL) {
 		number_values = kernel_info->width * kernel_info->height;
+		// TODO - why do the values need to be copied here? Couldn't they just
+		// be passed into 'imagick_createKernel' below?
 		values_copy = (KernelValueType *)AcquireAlignedMemory(kernel_info->width, kernel_info->height*sizeof(KernelValueType));
 		memcpy(values_copy, kernel_info->values, number_values * sizeof(KernelValueType));
 
