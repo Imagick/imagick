@@ -7,7 +7,7 @@
 
 class Imagick
 {
-    public function optimizeImageLayers(): bool  {}
+    public function optimizeImageLayers(): Imagick {}
 
     // METRIC_*
     public function compareImageLayers(int $metric): Imagick  {}
