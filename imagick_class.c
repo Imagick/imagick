@@ -13275,7 +13275,7 @@ PHP_METHOD(Imagick, colorDecisionListImage)
 #endif
 
 #if MagickLibVersion >= 0x687
-/* {{{ proto Imagick Imagick::optimizeimagetransparency()
+/* {{{ proto void Imagick::optimizeimagetransparency()
        Takes a frame optimized GIF animation, and compares the overlayed pixels against the disposal image resulting fr
 */
 PHP_METHOD(Imagick, optimizeImageTransparency)
