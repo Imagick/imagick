@@ -13016,6 +13016,8 @@ PHP_METHOD(Imagick, localContrastImage)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Failed to localContrastImage" TSRMLS_CC);
 		RETURN_THROWS();
 	}
+
+	RETURN_TRUE;
 }
 /* }}} */
 #endif // #if MagickLibVersion >= 0x693
