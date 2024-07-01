@@ -13067,7 +13067,6 @@ PHP_METHOD(Imagick, getImageMask)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &pixelmask_type) == FAILURE) {
 		RETURN_THROWS();
 	}
-	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
@@ -13100,9 +13099,10 @@ PHP_METHOD(Imagick, setImageMask)
 	zval *objvar;
 	im_long pixelmask_type;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &pixelmask_type) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Ol", &objvar, php_imagick_sc_entry, &pixelmask_type) == FAILURE) {
 		RETURN_THROWS();
-    }
+	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
