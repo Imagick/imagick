@@ -4585,7 +4585,7 @@ PHP_METHOD(Imagick, newImage)
 	zend_bool allocated;
 
 	/* Parse parameters given to function */
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llz|s", &columns, &rows, &param, &format, &format_len) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llz|s!", &columns, &rows, &param, &format, &format_len) == FAILURE) {
 		RETURN_THROWS();
 	}
 
