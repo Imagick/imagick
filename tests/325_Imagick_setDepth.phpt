@@ -16,7 +16,10 @@ function setDepth() {
 
     echo "Depth is " .$imagick->getImageDepth() . "\n";
 
-    $imagick->getImageBlob();
+    // $imagick->getImageBlob();
+    // TODO - check that the depth has actually worked?
+    // this could be done by generating a gradient, and counting the unique
+    // numbers of colours, or by looking at gradient artifacts.
 }
 
 setDepth() ;
