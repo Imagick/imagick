@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: ab3a04294aa2cbcda50db6db343dede06b8a2570 */
+ * Stub hash: ce06b50baf20276ed7642165874f7e64fa22cb6e */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_optimizeImageLayers, 0, 0, Imagick, 0)
 ZEND_END_ARG_INFO()
@@ -1724,7 +1724,7 @@ ZEND_END_ARG_INFO()
 #endif
 
 #if MagickLibVersion >= 0x687
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_optimizeImageTransparency, 0, 0, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_optimizeImageTransparency, 0, 0, IS_VOID, 0)
 ZEND_END_ARG_INFO()
 #endif
 
