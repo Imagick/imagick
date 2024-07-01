@@ -8039,6 +8039,7 @@ PHP_METHOD(Imagick, resetIterator)
 	if (zend_parse_parameters_none() == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	/* No magick is going to happen */
 	if (intern->magick_wand == NULL) {
@@ -12809,6 +12810,7 @@ PHP_METHOD(Imagick, setAntialias)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &antialias) == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	status = MagickSetAntialias(intern->magick_wand, antialias);
@@ -12885,6 +12887,7 @@ PHP_METHOD(Imagick, optimizeImageTransparency)
 	if (zend_parse_parameters_none() == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
@@ -12913,6 +12916,7 @@ PHP_METHOD(Imagick, autoGammaImage)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l", &channel) == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
@@ -12940,6 +12944,7 @@ PHP_METHOD(Imagick, autoOrient)
 	if (zend_parse_parameters_none() == FAILURE) {
 		RETURN_THROWS();
 	}
+	(void)return_value; // fix -Werror=unused-parameter
 
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
