@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: ce06b50baf20276ed7642165874f7e64fa22cb6e */
+ * Stub hash: 8a2548df78974ceb7a86f3fa545d5c4a2bcaa443 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_Imagick_optimizeImageLayers, 0, 0, Imagick, 0)
 ZEND_END_ARG_INFO()
@@ -646,7 +646,8 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_setLastIterator arginfo_class_Imagick_transposeImage
 
-#define arginfo_class_Imagick_resetIterator arginfo_class_Imagick_transposeImage
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_resetIterator, 0, 0, IS_VOID, 0)
+ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_previousImage arginfo_class_Imagick_transposeImage
 
@@ -1627,10 +1628,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_key, 0, 0, IS_LONG
 ZEND_END_ARG_INFO()
 #endif
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_next, 0, 0, IS_VOID, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_next arginfo_class_Imagick_resetIterator
 
-#define arginfo_class_Imagick_rewind arginfo_class_Imagick_next
+#define arginfo_class_Imagick_rewind arginfo_class_Imagick_resetIterator
 
 #define arginfo_class_Imagick_valid arginfo_class_Imagick_transposeImage
 
