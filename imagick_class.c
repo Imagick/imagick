@@ -12901,7 +12901,7 @@ PHP_METHOD(Imagick, optimizeImageTransparency)
 #endif
 
 #if MagickLibVersion >= 0x660
-/* {{{ proto bool Imagick::autoGammaImage([int channel = CHANNEL_ALL])
+/* {{{ proto void Imagick::autoGammaImage([int channel = CHANNEL_ALL])
 	Extracts the 'mean' from the image and adjust the image to try make set its gamma appropriately.
 */
 PHP_METHOD(Imagick, autoGammaImage)
@@ -12929,7 +12929,7 @@ PHP_METHOD(Imagick, autoGammaImage)
 #endif //#if MagickLibVersion >= 0x660
 
 #if MagickLibVersion >= 0x692
-/* {{{ proto bool Imagick::autoOrient()
+/* {{{ proto void Imagick::autoOrient()
 	Adjusts an image so that its orientation is suitable $ for viewing (i.e. top-left orientation).
 */
 PHP_METHOD(Imagick, autoOrient)
