@@ -503,7 +503,7 @@ class Imagick
 
     public function setLastIterator(): bool  {}
 
-    public function resetIterator(): bool {}
+    public function resetIterator(): void {}
 
     public function previousImage(): bool  {}
 
@@ -1375,7 +1375,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x687
-    public function optimizeImageTransparency(): bool {}
+    public function optimizeImageTransparency(): void {}
 #endif
 
 #if MagickLibVersion >= 0x660
