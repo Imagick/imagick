@@ -1408,7 +1408,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
     public function getImageMask(int $pixelmask): ?Imagick {}
 
     // PIXELMASK_*
-    public function setImageMask(Imagick $clip_mask, int $pixelmask): bool {}
+    public function setImageMask(Imagick $clip_mask, int $pixelmask): void {}
 #endif
 
 
