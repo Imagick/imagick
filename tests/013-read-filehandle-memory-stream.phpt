@@ -20,8 +20,13 @@ rewind($handle);
 
 $imagick->readImageFile($handle);
 
+echo "Width: " . $imagick->getImageWidth() . "\n";
+echo "Height: " . $imagick->getImageHeight() . "\n";
+
 echo 'success';
 
 ?>
 --EXPECT--
+Width: 70
+Height: 46
 success
