@@ -233,7 +233,6 @@ PHP_METHOD(ImagickKernel, __construct)
 */
 #if PHP_VERSION_ID >= 70000
 PHP_METHOD(ImagickKernel, fromMatrix)
-
 {
 	zval *kernel_array;
 	zval *origin_array;
@@ -257,7 +256,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	row = 0;
 	origin_array = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a!", &kernel_array, &origin_array) == FAILURE) {
 		RETURN_THROWS();
 	}
 

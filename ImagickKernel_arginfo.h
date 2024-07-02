@@ -70,7 +70,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ImagickKernel_fromMatrix, 0, 0, 1)
 #endif
 
 #if PHP_VERSION_ID >= 80000
-    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, origin, IS_ARRAY, 0, "null")
+    ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, origin, IS_ARRAY, 1, "null")
 #else
     ZEND_ARG_INFO(0, origin)
 #endif
