@@ -21,6 +21,9 @@ rewind($handle);
 
 $imagick->readImageFile($handle);
 
+echo "Width: " . $imagick->getImageWidth() . "\n";
+echo "Height: " . $imagick->getImageHeight() . "\n";
+
 unlink($file);
 
 echo 'success';
@@ -31,4 +34,6 @@ echo 'success';
 @unlink(dirname(__FILE__) . '/__tmp_rose.jpg');
 ?>
 --EXPECT--
+Width: 70
+Height: 46
 success
