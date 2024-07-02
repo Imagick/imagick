@@ -204,6 +204,25 @@ if ($kernelMatrix !== $matrix) {
 	var_dump($kernelMatrix);
 }
 
+
+
+
+//Test Scaling, and with null origin
+$matrixIn = array(
+	array(-1, 0, -1),
+	array( 0, 8,  0),
+	array(-1, 0, -1),
+);
+$kernel = ImagickKernel::fromMatrix($matrixIn, null); // <-- line under test
+$kernel->scale(1, \Imagick::NORMALIZE_KERNEL_VALUE);
+$matrixOut = $kernel->getMatrix();
+
+if ($matrixOut[1][1] != 2) {
+	echo "Matrix was not normalised correctly.";
+	var_dump($matrixOut);
+}
+
+
 echo "Complete".PHP_EOL;
 ?>
 --EXPECTF--
