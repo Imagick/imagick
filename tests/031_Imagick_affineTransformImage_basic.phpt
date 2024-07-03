@@ -134,7 +134,9 @@ echo "Ok";
 --CLEAN--
 <?php
 $f = __DIR__ . "/test_031.png";
-if (file_exists($f)) unlink($f);
+if (file_exists($f)) {
+    @unlink($f);
+}
 ?>
 --EXPECTF--
 Checking white
