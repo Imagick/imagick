@@ -24,7 +24,7 @@ $imagick->readImageFile($handle);
 echo "Width: " . $imagick->getImageWidth() . "\n";
 echo "Height: " . $imagick->getImageHeight() . "\n";
 
-unlink($file);
+@unlink($file);
 
 echo 'success';
 

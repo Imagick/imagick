@@ -71,7 +71,9 @@ echo "Ok";
 --CLEAN--
 <?php
 $f = __DIR__ . '/setAlphaTest.png';
-if (file_exists($f)) unlink($f);
+if (file_exists($f)) {
+    @unlink($f);
+}
 ?>
 --EXPECTF--
 Ok
