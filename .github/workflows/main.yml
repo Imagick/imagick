@@ -10,7 +10,6 @@ on:
 jobs:
   test_basic:
     name: basic PHP ${{ matrix.php }} - I ${{ matrix.imagemagick }}
-    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -21,6 +20,7 @@ jobs:
             7.1.0-13,
             6.8.7-0,
         ]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -76,11 +76,10 @@ jobs:
   test_all:
     name: Full PHP ${{ matrix.php }} - I ${{ matrix.imagemagick }}
     needs: test_basic
-    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
+        os: [ ubuntu-latest ]
         php: [5.4, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
         imagemagick: [
           7.1.0-13,
@@ -124,6 +123,7 @@ jobs:
             imagemagick: git7
           - php: 5.5
             imagemagick: git7
+      runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
