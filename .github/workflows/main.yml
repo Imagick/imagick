@@ -123,7 +123,7 @@ jobs:
             imagemagick: git7
           - php: 5.5
             imagemagick: git7
-      runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
