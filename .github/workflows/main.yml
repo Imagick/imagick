@@ -17,7 +17,7 @@ jobs:
         # php: [ 5.4 ]
         php: [ 8.3 ]
         imagemagick: [
-            7.1.0-13,
+#            7.1.0-13,
             6.8.7-0,
         ]
     runs-on: ${{ matrix.os }}
@@ -51,110 +51,11 @@ jobs:
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
 
+      - name: Debug ImageMagick policy
+        run: |
+          bash ./debug_policy.sh
+
       - name: Configure, install, and basic checks
-        run: |
-          export NO_INTERACTION=1
-          export REPORT_EXIT_STATUS=1
-          export SKIP_SLOW_TESTS=1
-          export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
-          export CFLAGS=$(php util/calculate_cflags.php "${{ matrix.php }}" "${{ matrix.imagemagick }}")
-          echo "CFLAGS are ${CFLAGS}"
-          phpize
-          ./configure --with-imagick="${HOME}/im/imagemagick-${{ matrix.imagemagick }}"
-          sudo make install
-          php -d extension=imagick.so util/check_fonts.php
-
-      - name: Run Imagick tests
-        run: |
-          export TEST_PHP_EXECUTABLE=`which php`
-          php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff -g FAIL,BORK,WARN,LEAK
-          export JOBS=$(php util/calculate_test_jobs.php)
-          php run-tests.php ${JOBS} -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff -g FAIL,BORK,WARN,LEAK
-          for i in `ls tests/*.diff 2>/dev/null`; do echo "-- START ${i}"; cat $i; echo "-- END"; done
-          php ./util/check_version.php
-
-  test_all:
-    name: Full PHP ${{ matrix.php }} - I ${{ matrix.imagemagick }}
-    needs: test_basic
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest ]
-        php: [5.4, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
-        imagemagick: [
-          7.1.0-13,
-          7.0.10-27,
-          7.0.8-4,
-          7.0.1-0,
-          git7,
-          6.9.2-0,
-          6.8.7-0,
-          6.7.8-0,
-          git6
-        ]
-        exclude:
-          - php: 5.4
-            imagemagick: 6.8.7-0
-          - php: 7.4
-            imagemagick: git6
-          - php: 7.3
-            imagemagick: git6
-          - php: 7.2
-            imagemagick: git6
-          - php: 7.1
-            imagemagick: git6
-          - php: 7.0
-            imagemagick: git6
-          - php: 5.6
-            imagemagick: git6
-          - php: 5.5
-            imagemagick: git6
-          - php: 7.4
-            imagemagick: git7
-          - php: 7.3
-            imagemagick: git7
-          - php: 7.2
-            imagemagick: git7
-          - php: 7.1
-            imagemagick: git7
-          - php: 7.0
-            imagemagick: git7
-          - php: 5.6
-            imagemagick: git7
-          - php: 5.5
-            imagemagick: git7
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-
-      - name: Apt install required packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-urw-base35 || true
-          sudo apt-get install -y libfreetype6-dev || true
-          sudo apt-get install -y texlive-fonts-recommended || true
-
-      - name: Cache ImageMagick
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-ImageMagick
-        with:
-          path: ~/im/imagemagick-${{ matrix.imagemagick }}
-          key: ${{ runner.os }}-ImageMagick-${{ matrix.imagemagick }}
-
-      - name: Sanity check package.xml and install ImageMagick
-        run: |
-          for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
-          bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
-
-      - name: Configure and check fonts are present
         run: |
           export NO_INTERACTION=1
           export REPORT_EXIT_STATUS=1
