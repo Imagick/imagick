@@ -12,8 +12,7 @@ require_once(dirname(__FILE__) . '/skipif.inc');
 
 $k = 1024;
 $m = $k * $k;
-$g = $k * $m;
-$t = $k * $g;
+
 
 // These tests are flaky as the values ImageMagick will accept
 // are limited by the policy.xml of the system.
@@ -29,10 +28,10 @@ $tests = array(
 	Imagick::RESOURCETYPE_FILE => 100,
 	
 	// Set maximum amount of memory map in bytes to allocate for the pixel cache. When this limit is exceeded, the image pixels are cached to disk
-	Imagick::RESOURCETYPE_MAP => 10 * $g,
+	Imagick::RESOURCETYPE_MAP => 123 * $m,
 	
 	// Set maximum amount of memory in bytes to allocate for the pixel cache from the heap. When this limit is exceeded, the image pixels are cached to memory-mapped disk
-	Imagick::RESOURCETYPE_MEMORY => 10 * $g,
+	Imagick::RESOURCETYPE_MEMORY => 234 * $m,
 );
 
 if (defined('Imagick::RESOURCETYPE_TIME')) {
