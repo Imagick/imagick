@@ -46,10 +46,10 @@ if (defined('Imagick::RESOURCETYPE_THREAD')) {
 	$tests[Imagick::RESOURCETYPE_THREAD] = 1; 
 }
 if (defined('Imagick::RESOURCETYPE_WIDTH')) {
-	$tests[Imagick::RESOURCETYPE_WIDTH] = $g; 
+	$tests[Imagick::RESOURCETYPE_WIDTH] = 15 * $k;
 }
 if (defined('Imagick::RESOURCETYPE_HEIGHT')) {
-	$tests[Imagick::RESOURCETYPE_HEIGHT] = $g; 
+	$tests[Imagick::RESOURCETYPE_HEIGHT] = 15 * $k;
 }
 
 $reflection_class = new ReflectionClass(Imagick::class);
