@@ -51,9 +51,9 @@ jobs:
           for file in tests/*.phpt; do grep $(basename $file) package.xml >/dev/null || (echo "Missing $file from package.xml" ; exit 1); done
           bash ./imagemagick_dependency.sh "${{ matrix.imagemagick }}" $(pwd)
 
-      - name: Debug ImageMagick policy
-        run: |
-          bash ./debug_policy.sh
+#      - name: Debug ImageMagick policy
+#        run: |
+#          bash ./debug_policy.sh
 
       - name: Configure, install, and basic checks
         run: |
