@@ -52,12 +52,24 @@ if (defined('Imagick::RESOURCETYPE_HEIGHT')) {
 	$tests[Imagick::RESOURCETYPE_HEIGHT] = $g; 
 }
 
+$reflection_class = new ReflectionClass(Imagick::class);
+$constants = $reflection_class->getConstants();
+$resource_constants = [];
+foreach ($constants as $name => $value) {
+    if (strpos($name, "RESOURCETYPE") === 0) {
+//        echo "Name: $name, value: $value\n";
+        $resource_constants[$value] = $name;
+    }
+}
+
+
 foreach ($tests as $resourceType => $value) {
 	Imagick::setResourceLimit($resourceType, $value);
 	$actualValue = Imagick::getResourceLimit($resourceType);
 
 	if ($actualValue != $value) {
-		echo "Error testing $resourceType, value returned $actualValue is not $value \n";
+		$resourceTypeString = $resource_constants[$resourceType];
+		echo "Error testing $resourceTypeString, value returned $actualValue is not $value \n";
 	}
 }
 
