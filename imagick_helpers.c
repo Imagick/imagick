@@ -23,6 +23,25 @@
 #include "php_imagick_macros.h"
 #include "php_imagick_helpers.h"
 
+#define EXTRACT_BUILD_NUMBER(str) ({ \
+    int build = 0; \
+    const char *s = str; \
+    while (*s && !isdigit(*s)) s++; \
+    if (*s) build = atoi(s); \
+    build; \
+})
+
+#define MAGICK_LIB_VERSION_MAJOR ((MagickLibVersion >> 8) & 0xFF)
+#define MAGICK_LIB_VERSION_MINOR ((MagickLibVersion >> 4) & 0xF)
+#define MAGICK_LIB_VERSION_PATCH (MagickLibVersion & 0xF)
+#define MAGICK_LIB_VERSION_BUILD EXTRACT_BUILD_NUMBER(MagickLibAddendum)
+
+#define MAGICK_LIB_VERSION_GTE(major, minor, patch, build) \
+    ((VERSION_MAJOR > (major)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR > (minor)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR == (minor) && VERSION_PATCH > (patch)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR == (minor) && VERSION_PATCH == (patch) && VERSION_BUILD >= (build)))
+
 MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOffsetType offset, const MagickSizeType span, void *client_data)
 {
 	FILE *fp;
@@ -1197,6 +1216,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x707
 	IMAGICK_REGISTER_CONST_LONG("FILTER_CUBIC_SPLINE", CubicSplineFilter);
 #endif
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 40)
+	IMAGICK_REGISTER_CONST_LONG("FILTER_MAGIC_KERNEL_SHARP_2013", MagicKernelSharp2013Filter);
+	IMAGICK_REGISTER_CONST_LONG("FILTER_MAGIC_KERNEL_SHARP_2021", MagicKernelSharp2021Filter);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_UNDEFINED", UndefinedType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_BILEVEL", BilevelType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_GRAYSCALE", GrayscaleType);
@@ -1279,9 +1302,8 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_WEBP", WebPCompression);
 #endif
 
-#if MagickLibVersion >= 0x711
-	// Technically >= 7.1.0-13 but we still don't have a mechanism for
-	// detecting patch versions.
+// ImageMagick version >= 7.1.0-13
+#if MAGICK_LIB_VERSION_GTE(7, 1, 0, 13)
     IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC5", BC5Compression);
     IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC7", BC7Compression);
 #endif
@@ -1289,6 +1311,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x70C
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAA", DWAACompression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
+#endif
+
+// ImageMagick version >= 7.1.1-16
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 16)
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_LERC", LERCCompression);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("PAINT_POINT", PointMethod);
@@ -1553,6 +1580,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_JZAZBZ", JzazbzColorspace);
 #endif
 
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 9)
+	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
+	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
 #if MagickLibVersion < 0x700
@@ -1802,6 +1834,9 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x700
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF", OffAlphaChannel);
 #endif
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 26)
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF_IF_OPAQUE", OffIfOpaqueAlphaChannel);
+#endif
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OPAQUE", OpaqueAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_SHAPE", ShapeAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_TRANSPARENT", TransparentAlphaChannel);
@@ -1948,6 +1983,10 @@ IMAGICK_REGISTER_CONST_LONG("KERNEL_BINOMIAL", BinomialKernel);
 /* Draw directions */
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_LEFT_TO_RIGHT", LeftToRightDirection);
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_RIGHT_TO_LEFT", RightToLeftDirection);
+
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 14)
+    IMAGICK_REGISTER_CONST_LONG("DIRECTION_TOP_TO_BOTTOM", TopToBottomDirection);
+#endif
 
 // The kernel is scaled directly using given scaling factor without change.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_NONE", 0);

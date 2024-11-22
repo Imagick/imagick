@@ -15,10 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 5.4 ]
+        php: [ 8.1 ]
         imagemagick: [
-            7.1.0-13,
-            6.9.2-0,
+          7.1.1-41,
+          6.9.2-0
         ]
 
     steps:
@@ -80,48 +80,21 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04]
-        php: [5.4, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
+        php: [8.4, 8.3, 8.2, 8.1, 7.4, 5.6]
         imagemagick: [
-          7.1.0-13,
-          7.0.10-27,
-          7.0.8-4,
+          7.1.1-41,
+          7.1.0-62,
+          7.0.11-14,
           7.0.1-0,
           git7,
           6.9.2-0,
           6.8.7-0,
           6.7.8-0,
-          git6
         ]
         exclude:
-          - php: 5.4
-            imagemagick: 6.8.7-0
-          - php: 7.4
-            imagemagick: git6
-          - php: 7.3
-            imagemagick: git6
-          - php: 7.2
-            imagemagick: git6
-          - php: 7.1
-            imagemagick: git6
-          - php: 7.0
-            imagemagick: git6
-          - php: 5.6
-            imagemagick: git6
-          - php: 5.5
-            imagemagick: git6
           - php: 7.4
             imagemagick: git7
-          - php: 7.3
-            imagemagick: git7
-          - php: 7.2
-            imagemagick: git7
-          - php: 7.1
-            imagemagick: git7
-          - php: 7.0
-            imagemagick: git7
           - php: 5.6
-            imagemagick: git7
-          - php: 5.5
             imagemagick: git7
 
     steps:
@@ -141,7 +114,7 @@ jobs:
           sudo apt-get install -y texlive-fonts-recommended || true
 
       - name: Cache ImageMagick
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-ImageMagick
         with:

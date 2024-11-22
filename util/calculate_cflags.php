@@ -70,6 +70,14 @@ else if ($PHP_VERSION == "5.6") {
     );
 }
 
-$result = implode(" ", $CFLAGS);
+// Problem with zend_*.h files on newer PHP builds
+if (in_array($PHP_VERSION, ['8.2', '8.3', '8.4'], true)) {
+    $CFLAGS = array_values(array_diff($CFLAGS, ['-Wdeclaration-after-statement']));
+}
+if (in_array($PHP_VERSION, ['8.4'], true)) {
+    $CFLAGS[] = "-Wno-missing-field-initializers";
+}
+
+$result = implode(" ", array_unique($CFLAGS));
 echo $result;
 fwrite(STDERR, "Ok. CFLAGS are: $result\n");
