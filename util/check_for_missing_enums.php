@@ -159,9 +159,9 @@ else if (file_exists($directory.'/'.'MagickCore') == true) {
 			'VirtualPixelMethod',
 		],
 		'MagickCore/channel.h' => [
-            'AlphaChannelOption',
+			'AlphaChannelOption',
 		],
-        'MagickCore/compare.h' => [
+		'MagickCore/compare.h' => [
 			'MetricType',
 		],
 		'MagickCore/colorspace.h' => [
