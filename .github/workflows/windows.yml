@@ -7,7 +7,7 @@ jobs:
         shell: cmd
     strategy:
       matrix:
-          version: ["8.0", "8.1", "8.2", "8.3"]
+          version: ["8.0", "8.1", "8.2", "8.3", "8.4"]
           arch: [x64, x86]
           ts: [nts, ts]
     runs-on: windows-latest
@@ -26,7 +26,7 @@ jobs:
           echo $extension_version
       - name: Setup PHP
         id: setup-php
-        uses: php/setup-php-sdk@v0.8
+        uses: php/setup-php-sdk@v0.10
         with:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
@@ -68,6 +68,7 @@ jobs:
           if ('8.1' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs16' }
           if ('8.2' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs16' }
           if ('8.3' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs16' }
+          if ('8.4' -eq '${{matrix.version}}') { $artifact_name = $artifact_name + '-vs17' }
 
           if ('x64' -eq '${{matrix.arch}}') { $artifact_name = $artifact_name + '-x64' }
           if ('x86' -eq '${{matrix.arch}}') { $artifact_name = $artifact_name + '-x86' }
