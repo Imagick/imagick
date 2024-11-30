@@ -106,6 +106,8 @@ jobs:
             imagemagick: git7
           - php: 5.5
             imagemagick: git7
+          - php: 5.5
+            imagemagick: 7.1.1-41
     runs-on: ${{ matrix.os }}
 
     steps:
