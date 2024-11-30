@@ -58,8 +58,7 @@ if (strpos($IMAGEMAGICK_VERSION, "6.9") === 0) {
 
 if ($PHP_VERSION == "5.4" || $PHP_VERSION == "5.5") {
     $CFLAGS = array("-Wno-deprecated-declarations");
-}
-else if ($PHP_VERSION == "5.6") {
+} elseif ($PHP_VERSION == "5.6") {
     $CFLAGS = array(
         "-Wno-deprecated-declarations",
         "-Wdeclaration-after-statement",
@@ -67,6 +66,8 @@ else if ($PHP_VERSION == "5.6") {
         "-Wall",
         "-Wimplicit-function-declaration"
     );
+} elseif ($PHP_VERSION == "8.4") {
+    $CFLAGS[] = "-Wno-missing-field-initializers";
 }
 
 $result = implode(" ", $CFLAGS);
