@@ -1646,4 +1646,5 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 	public function setOrientation(int $orientation): bool {}
 #endif
 
+#endif
 }
