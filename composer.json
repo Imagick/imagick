@@ -1,0 +1,19 @@
+{
+    "name": "imagick/imagick",
+    "type": "php-ext",
+    "license": "PHP-3.01",
+    "description": "The Imagick PHP extension",
+    "require": {
+        "php": ">= 5.4.0"
+    },
+    "php-ext": {
+        "extension-name": "imagick",
+        "configure-options": [
+            {
+                "name": "with-imagick",
+                "description": "Enables the imagick extension. DIR is the prefix to ImageMagick installation directory.",
+                "needs-value": true
+            }
+        ]
+    }
+}
