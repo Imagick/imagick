@@ -8597,11 +8597,11 @@ void s_add_named_strings (zval *array, const char *haystack TSRMLS_DC)
 		line_string = zend_string_init(line, strlen(line), 0);
 		//str, what, what_len, mode
 		trim = php_trim(line_string, NULL, 0, 3);
-		for (i = 0; i < num_keys; i++) {
-			if (trim->val != NULL) {
-				if (strncmp (trim->val, str_keys [i], strlen (str_keys [i])) == 0) {
+		if (trim != NULL) {
+			for (i = 0; i < num_keys; i++) {
+				if (strncmp(ZSTR_VAL(trim), str_keys[i], strlen(str_keys[i])) == 0) {
 					// This should be our line
-					IM_add_assoc_string (array, arr_keys [i], trim->val + strlen (str_keys [i]));
+					IM_add_assoc_string(array, arr_keys[i], ZSTR_VAL(trim) + strlen(str_keys[i]));
 					found++;
 				}
 			}
