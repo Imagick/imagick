@@ -37,6 +37,7 @@ jobs:
           sudo apt-get install -y fonts-urw-base35 || true
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
+          sudo apt-get install -y libpcre3-dev || true
 
       - name: Cache ImageMagick
         uses: actions/cache@v4
@@ -140,6 +141,7 @@ jobs:
           sudo apt-get install -y fonts-urw-base35 || true
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
+          sudo apt-get install -y libpcre3-dev || true
 
       - name: Cache ImageMagick
         uses: actions/cache@v4
