@@ -64,7 +64,7 @@ zend_bool php_imagick_is_virtual_format(const char *format)
 		"PRINT",
 		"RADIAL-GRADIENT",
 		"RADIAL_GRADIENT",
-		"ROSE"
+		"ROSE",
 		"SCAN",
 		"SCANX",
 		"TILE",	 // Tiled image
