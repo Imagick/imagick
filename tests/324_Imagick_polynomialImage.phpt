@@ -30,5 +30,9 @@ function polynomialImage() {
 polynomialImage() ;
 echo "Ok";
 ?>
+--CLEAN--
+<?php
+@unlink(__DIR__ . '/polynomialImage_output_image.png');
+?>
 --EXPECTF--
 Ok
