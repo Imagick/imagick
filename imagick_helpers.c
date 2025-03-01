@@ -817,45 +817,39 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 #if PHP_VERSION_ID >= 70000
 	ZVAL_DEREF(param);
 #endif
-	if (Z_TYPE_P (param) == IS_STRING) {
-		zval var;
-		var = *param;
+	if (Z_TYPE_P(param) == IS_STRING || Z_TYPE_P(param) == IS_LONG || Z_TYPE_P(param) == IS_DOUBLE) {
+		if (Z_TYPE_P (param) == IS_STRING) {
+			zval var;
+			var = *param;
 
-		zval_copy_ctor(&var);
-		convert_to_double(&var);
-		param = &var;
-	}
-
-	switch (Z_TYPE_P(param)) {
-		case IS_LONG:
-		case IS_DOUBLE:
-		{
-			pixel_wand = NewPixelWand();
-			if (!pixel_wand) {
-				zend_error(E_ERROR, "Failed to allocate PixelWand structure");
-			}
-#if MagickLibVersion >= 0x700
-			//TOOD - this should be one minus? Or should we just make a BC break
-			// and make users do it in user land?
-			PixelSetAlpha(pixel_wand, Z_DVAL_P(param));
-#else
-			PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
-#endif
-			*allocated = 1;
+			zval_copy_ctor(&var);
+			convert_to_double(&var);
+			param = &var;
 		}
-		break;
 
-		case IS_OBJECT:
-			if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
-				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
-				pixel_wand = intern->pixel_wand;
-			} else
-				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string"  TSRMLS_CC);
-		break;
-
-		default:
-			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
+		pixel_wand = NewPixelWand();
+		if (!pixel_wand) {
+			zend_error(E_ERROR, "Failed to allocate PixelWand structure");
+		}
+#if MagickLibVersion >= 0x700
+		//TOOD - this should be one minus? Or should we just make a BC break
+		// and make users do it in user land?
+		PixelSetAlpha(pixel_wand, Z_DVAL_P(param));
+#else
+		PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
+#endif
+		*allocated = 1;
+	} else if (Z_TYPE_P(param) == IS_OBJECT) {
+		if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
+			php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
+			pixel_wand = intern->pixel_wand;
+		} else {
+			php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string"  TSRMLS_CC);
+		}
+	} else {
+		php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
 	}
+
 	return pixel_wand;
 }
 
