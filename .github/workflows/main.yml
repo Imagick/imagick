@@ -144,7 +144,7 @@ jobs:
           sudo apt-get install -y libpcre3-dev || true
           sudo apt-get install -y libraqm0 || true
           sudo apt-get install -y libwmf0.2-7 || true
-          sudo apt-get install -y libopenexr30 || true
+          sudo apt-get install -y libopenexr-3-1-30 || true
 
       - name: Cache ImageMagick
         uses: actions/cache@v4
