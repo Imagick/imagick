@@ -775,10 +775,10 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 #endif 
 
 	if (Z_TYPE_P(param) == IS_STRING || Z_TYPE_P(param) == IS_LONG || Z_TYPE_P(param) == IS_DOUBLE) {
-		if (Z_TYPE_P(param) != IS_STRING) {
-			zval var;
-			var = *param;
+		zval var;
 
+		if (Z_TYPE_P(param) != IS_STRING) {
+			var = *param;
 			zval_copy_ctor(&var);
 			convert_to_string(&var);
 			param = &var;
@@ -818,10 +818,10 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 	ZVAL_DEREF(param);
 #endif
 	if (Z_TYPE_P(param) == IS_STRING || Z_TYPE_P(param) == IS_LONG || Z_TYPE_P(param) == IS_DOUBLE) {
-		if (Z_TYPE_P (param) == IS_STRING) {
-			zval var;
-			var = *param;
+		zval var;
 
+		if (Z_TYPE_P (param) == IS_STRING) {
+			var = *param;
 			zval_copy_ctor(&var);
 			convert_to_double(&var);
 			param = &var;
