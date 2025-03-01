@@ -21,6 +21,25 @@
 #ifndef PHP_IMAGICK_MACROS_H
 # define PHP_IMAGICK_MACROS_H
 
+#define EXTRACT_BUILD_NUMBER(str) ({ \
+    int build = 0; \
+    const char *s = str; \
+    while (*s && !isdigit(*s)) s++; \
+    if (*s) build = atoi(s); \
+    build; \
+})
+
+#define MAGICK_LIB_VERSION_MAJOR ((MagickLibVersion >> 8) & 0xFF)
+#define MAGICK_LIB_VERSION_MINOR ((MagickLibVersion >> 4) & 0xF)
+#define MAGICK_LIB_VERSION_PATCH (MagickLibVersion & 0xF)
+#define MAGICK_LIB_VERSION_BUILD EXTRACT_BUILD_NUMBER(MagickLibAddendum)
+
+#define MAGICK_LIB_VERSION_GTE(major, minor, patch, build) \
+    ((VERSION_MAJOR > (major)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR > (minor)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR == (minor) && VERSION_PATCH > (patch)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR == (minor) && VERSION_PATCH == (patch) && VERSION_BUILD >= (build)))
+
 #define IMAGICK_FREE_MAGICK_MEMORY(value) \
 	do { \
 		if (value) { \
