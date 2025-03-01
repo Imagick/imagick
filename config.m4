@@ -42,6 +42,11 @@ IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
     AC_MSG_ERROR(no. found $PHP_IMAGICK_FOUND_VERSION)
   fi
 
+  if test "$PHP_IMAGICK_FOUND_VERNUM" -ge "80400"; then
+    AC_MSG_NOTICE([Applying workaround for PHP 8.4])
+    CPPFLAGS="$CPPFLAGS -Dphp_strtolower=zend_str_tolower"
+  fi
+
 #
 # Set libs and CFLAGS for building
 #
