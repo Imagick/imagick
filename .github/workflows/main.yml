@@ -140,10 +140,8 @@ jobs:
           sudo apt-get install -y fonts-urw-base35 || true
           sudo apt-get install -y libfreetype6-dev || true
           sudo apt-get install -y texlive-fonts-recommended || true
-          sudo apt-get install -y libdjvulibre21 || true
-          sudo apt-get install -y libpcre3-dev || true
-          sudo apt-get install -y libraqm0 || true
-          sudo apt-get install -y libwmf0.2-7 || true
+# TODO: REMOVE after dropping support for PHP5.4 and PHP5.5
+          sudo apt-get install -y libdjvulibre21 libpcre3-dev libraqm0 libwmf0.2-7 libopenexr30 || true
 
       - name: Cache ImageMagick
         uses: actions/cache@v4
