@@ -1187,6 +1187,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x707
 	IMAGICK_REGISTER_CONST_LONG("FILTER_CUBIC_SPLINE", CubicSplineFilter);
 #endif
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 40)
+	IMAGICK_REGISTER_CONST_LONG("FILTER_MAGIC_KERNEL_SHARP_2013", MagicKernelSharp2013Filter);
+	IMAGICK_REGISTER_CONST_LONG("FILTER_MAGIC_KERNEL_SHARP_2021", MagicKernelSharp2021Filter);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_UNDEFINED", UndefinedType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_BILEVEL", BilevelType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_GRAYSCALE", GrayscaleType);
@@ -1269,9 +1274,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_WEBP", WebPCompression);
 #endif
 
-#if MagickLibVersion >= 0x711
-	// Technically >= 7.1.0-13 but we still don't have a mechanism for
-	// detecting patch versions.
+#if MAGICK_LIB_VERSION_GTE(7, 1, 0, 13)
     IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC5", BC5Compression);
     IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC7", BC7Compression);
 #endif
@@ -1281,8 +1284,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
 #endif
 
-#if MagickLibVersion >= 0x712
-	// actually 7.1.1-16, but still can't test patch versions
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 16)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_LERC", LERCCompression);
 #endif
 
@@ -1544,9 +1546,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
     IMAGICK_REGISTER_CONST_LONG("COLORSPACE_PROPHOTO", ProPhotoColorspace);
 #endif
 
-#if MagickLibVersion >= 0x712
-	// Technically >= 7.1.1-9 but we still don't have a mechanism for
-	// detecting patch versions.
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 9)
     IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
     IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
 #endif
@@ -1813,9 +1813,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DISSOCIATE", DisassociateAlphaChannel);
 #endif
 
-#if MagickLibVersion >= 0x712
-	// Technically >= 7.1.1-26 but we still don't have a mechanism for
-	// detecting patch versions.
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 26)
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF_IF_OPAQUE", OffIfOpaqueAlphaChannel);
 #endif
 
@@ -1959,10 +1957,8 @@ IMAGICK_REGISTER_CONST_LONG("KERNEL_BINOMIAL", BinomialKernel);
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_LEFT_TO_RIGHT", LeftToRightDirection);
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_RIGHT_TO_LEFT", RightToLeftDirection);
 
-#if MagickLibVersion >= 0x712
-	// Technically >= 7.1.1-14 but we still don't have a mechanism for
-	// detecting patch versions.
-	IMAGICK_REGISTER_CONST_LONG("DIRECTION_TOP_TO_BOTTOM", TopToBottomDirection);
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 14)
+    IMAGICK_REGISTER_CONST_LONG("DIRECTION_TOP_TO_BOTTOM", TopToBottomDirection);
 #endif
 
 // The kernel is scaled directly using given scaling factor without change.
