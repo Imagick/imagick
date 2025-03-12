@@ -31,7 +31,9 @@ echo "Ok";
 --CLEAN--
 <?php
 $f = __DIR__ . '/maskTest.png';
-if (file_exists($f)) unlink($f);
+if (file_exists($f)) {
+    unlink($f);
+}
 ?>
 --EXPECTF--
 Ok

@@ -4,7 +4,7 @@ Unreleased
   * You can now pass null to ImagickDraw::setStrokeDashArray() to reset the dash array.
 - Added:
   * function Imagick::clutImageWithInterpolate(Imagick $lookup_table, int $pixel_interpolate_method): bool  {}
-  * Constants Imagick::COMPRESSION_BC5, Imagick::COMPRESSION_BC7
+  * Constants Imagick::COMPRESSION_BC5, Imagick::COMPRESSION_BC7, Imagick::COMPRESSION_LERC, Imagick::DIRECTION_TOP_TO_BOTTOM, Imagick::ALPHACHANNEL_OFF_IF_OPAQUE
 
 3.7.0
 - Added:

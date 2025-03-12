@@ -34,6 +34,13 @@
 #endif
 
 
+// Although there is some 'cannyEdgeImage' code in ImageMagick 6,
+// there is no 'MagickCannyEdgeImage' exported function in the API.
+#if MagickLibVersion >= 0x709
+	#define IM_HAVE_IMAGICK_CANNYEDGEIMAGE 1
+#endif
+
+
 #if MagickLibVersion >= 0x709
 	#define IM_HAVE_IMAGICK_SETSEED 1
 #endif

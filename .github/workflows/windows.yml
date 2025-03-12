@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       - name: Checkout imagick
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup PHP
         id: setup-php
         uses: php/setup-php-sdk@v0.10

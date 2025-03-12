@@ -1,11 +1,14 @@
 <?php
 
-/** @generate-function-entries */
+/**
+ * @generate-function-entries
+ * @generate-legacy-arginfo 70000
+ */
 
 class Imagick
 {
-#if MagickLibVersion > 0x628
-    public function optimizeImageLayers(): bool  {}
+
+    public function optimizeImageLayers(): Imagick {}
 
     // METRIC_*
     public function compareImageLayers(int $metric): Imagick  {}
@@ -114,12 +117,12 @@ class Imagick
     /** @deprecated */
     public function transformImage(string $crop, string $geometry): Imagick  {}
 #endif
-#endif
 
 #if MagickLibVersion > 0x630
 #if MagickLibVersion < 0x700
     /** @deprecated */
     public function setImageOpacity(float $opacity): bool  {}
+#endif
 #endif
 
 #if MagickLibVersion >= 0x700
@@ -134,7 +137,6 @@ class Imagick
         int $channel = Imagick::CHANNEL_DEFAULT
     ): bool  {}
 #endif
-#endif
 
 #if MagickLibVersion >= 0x700
     public function polaroidWithTextAndMethod(
@@ -145,7 +147,6 @@ class Imagick
     ): bool {}
 #endif
 
-#if MagickLibVersion > 0x631
 
     public function polaroidImage(ImagickDraw $settings, float $angle): bool  {}
 
@@ -175,7 +176,7 @@ class Imagick
     public function getImageLength(): int  {}
 
     public function extentImage(int $width, int $height, int $x, int $y): bool  {}
-#endif
+
 #if MagickLibVersion > 0x633
     public function getImageOrientation(): int  {}
 
@@ -197,9 +198,6 @@ class Imagick
 #endif
 #endif
 #endif
-
-#if MagickLibVersion > 0x635
-
 
     public function clutImage(Imagick $lookup_table, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
 
@@ -244,7 +242,7 @@ class Imagick
     public function recolorImage(array $matrix): bool  {}
 #endif
 #endif
-#endif
+
 
 #if MagickLibVersion > 0x636
     public function setFont(string $font): bool  {}
@@ -299,7 +297,6 @@ class Imagick
 
     public function encipherImage(string $passphrase): bool  {}
 
-//    PHP_ME(imagick, decipherimage, imagick_decipherimage_args, ZEND_ACC_PUBLIC)
     public function decipherImage(string $passphrase): bool  {}
 #endif
 
@@ -498,7 +495,7 @@ class Imagick
 
     public function getImageSize(): int  {}
 
-    public function getImageBlob(): string  {}
+    public function getImageBlob(): ?string  {}
 
     public function getImagesBlob(): string  {}
 
@@ -809,8 +806,12 @@ class Imagick
 
     public function combineImages(int $colorspace): Imagick  {}
 
+#if MagickLibVersion >= 0x700
+    public function convolveImage(ImagickKernel $kernel, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
+#else
     // kernel is a 2d array of float values
     public function convolveImage(array $kernel, int $channel = Imagick::CHANNEL_DEFAULT): bool  {}
+#endif
 
     public function cycleColormapImage(int $displace): bool  {}
 
@@ -834,7 +835,7 @@ class Imagick
 //http://www.imagemagick.org/Usage/layers/#evaluate-sequence
 
     // EVALUATE_*
-    public function evaluateImages(int $evaluate): bool {}
+    public function evaluateImages(int $evaluate): Imagick {}
 
 #endif
 
@@ -1173,7 +1174,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
         int $columns,
         int $rows,
         ImagickPixel|string $background_color,
-        string $format = null
+        ?string $format = null
     ): bool  {}
 
     // TODO - canvas? description
@@ -1220,7 +1221,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 
     public static function getResource(int $type): int  {}
 
-    public static function getResourceLimit(int $type): int  {}
+    public static function getResourceLimit(int $type): float  {}
 
     public function getSamplingFactors(): array  {}
 
@@ -1271,14 +1272,8 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //# endif
 #endif
 
-    /** @alias Imagick::nextImage
-     *  @tentative-return-type
-     */
     public function next(): void  {}
 
-    /** @alias Imagick::setFirstIterator
-     *  @tentative-return-type
-     */
     public function rewind(): void  {}
 
     public function valid(): bool  {}
@@ -1318,15 +1313,23 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x652
-    public function subimageMatch(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+	/**
+	 * @param array $offset
+	 * @param float $similarity
+	 */
+    public function subimageMatch(Imagick $image, &$offset = null, &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 
-    /** @alias Imagick::subimageMatch */
-    public function similarityImage(Imagick $image, ?array &$offset = null, ?float &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
+	/**
+	 * @alias Imagick::subimageMatch
+	 * @param array $offset
+	 * @param float $similarity
+	 */
+    public function similarityImage(Imagick $image, &$offset = null, &$similarity = null, float $threshold = 0.0, int $metric = 0): Imagick  {}
 #endif
 
     public static function setRegistry(string $key, string $value): bool  {}
 
-    public static function getRegistry(string $key): string  {}
+    public static function getRegistry(string $key): string|false  {}
 
     public static function listRegistry(): array {}
 
@@ -1391,7 +1394,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 #endif
 
 #if MagickLibVersion >= 0x693
-    public function localContrastImage(float $radius, float $strength): void {}
+    public function localContrastImage(float $radius, float $strength): bool {}
 #endif
 
 #if MagickLibVersion >= 0x700
@@ -1425,7 +1428,7 @@ proto bool Imagick::setImageBluePrimary(float x, float y, float z) */
 //        int $channel = Imagick::CHANNEL_DEFAULT): null {}
 
 
-#if MagickLibVersion >= 0x709
+#if IM_HAVE_IMAGICK_CANNYEDGEIMAGE
     public function cannyEdgeImage(
         float $radius,
         float $sigma,

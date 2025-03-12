@@ -1,6 +1,9 @@
 <?php
 
-/** @generate-function-entries */
+/**
+ * @generate-function-entries
+ * @generate-legacy-arginfo 70000
+ */
 
 #ifdef IMAGICK_WITH_KERNEL
 class ImagickKernel
@@ -12,7 +15,7 @@ class ImagickKernel
     // KERNEL_*
     public static function fromBuiltin(int $kernel, string $shape): ImagickKernel {}
 
-    public static function fromMatrix(array $matrix, ?array $origin): ImagickKernel {}
+    public static function fromMatrix(array $matrix, ?array $origin = null): ImagickKernel {}
 
     public function getMatrix(): array {}
 

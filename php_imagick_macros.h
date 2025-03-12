@@ -21,6 +21,25 @@
 #ifndef PHP_IMAGICK_MACROS_H
 # define PHP_IMAGICK_MACROS_H
 
+#define EXTRACT_BUILD_NUMBER(str) ({ \
+    int build = 0; \
+    const char *s = str; \
+    while (*s && !isdigit(*s)) s++; \
+    if (*s) build = atoi(s); \
+    build; \
+})
+
+#define MAGICK_LIB_VERSION_MAJOR ((MagickLibVersion >> 8) & 0xFF)
+#define MAGICK_LIB_VERSION_MINOR ((MagickLibVersion >> 4) & 0xF)
+#define MAGICK_LIB_VERSION_PATCH (MagickLibVersion & 0xF)
+#define MAGICK_LIB_VERSION_BUILD EXTRACT_BUILD_NUMBER(MagickLibAddendum)
+
+#define MAGICK_LIB_VERSION_GTE(major, minor, patch, build) \
+    ((VERSION_MAJOR > (major)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR > (minor)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR == (minor) && VERSION_PATCH > (patch)) || \
+    (VERSION_MAJOR == (major) && VERSION_MINOR == (minor) && VERSION_PATCH == (patch) && VERSION_BUILD >= (build)))
+
 #define IMAGICK_FREE_MAGICK_MEMORY(value) \
 	do { \
 		if (value) { \
@@ -43,7 +62,18 @@
 #define IMAGICK_KERNEL_NOT_NULL_EMPTY(kernel) \
 	if (kernel->kernel_info == NULL) { \
 		zend_throw_exception(php_imagickkernel_exception_class_entry, "ImagickKernel is empty, cannot be used", (long)0 TSRMLS_CC); \
-		RETURN_NULL(); \
+		RETURN_THROWS(); \
 	}
+
+#define IMAGICK_NOT_EMPTY(wand) \
+	if (php_imagick_ensure_not_empty(wand->magick_wand) == 0) { \
+		RETURN_THROWS(); \
+	}
+
+#define IMAGICK_PIXEL_NOT_EMPTY(pixel) \
+	if (php_imagickpixel_ensure_not_null(pixel->pixel_wand) == 0) { \
+		RETURN_THROWS(); \
+	}
+
 
 #endif /* PHP_IMAGICK_MACROS_H */

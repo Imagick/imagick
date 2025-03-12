@@ -39,6 +39,7 @@ config.nice
 config.status
 config.sub
 configure
+configure~
 configure.in
 configure.ac
 conftest
@@ -71,3 +72,5 @@ tests/*.sh
 bugReports
 data
 *.dep
+bugs
+inkscape

@@ -87,6 +87,8 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="011_polygon.phpt" role="test" />
 				<file name="012-clone-separation.phpt" role="test" />
 				<file name="013-read-filehandle.phpt" role="test" />
+				<file name="013-read-filehandle-memory-stream.phpt" role="test" />
+				<file name="013-read-filehandle-file-stream.phpt" role="test" />
 				<file name="014-setresourcelimit.phpt" role="test" />
 				<file name="015-imagickdrawsetresolution.phpt" role="test" />
 				<file name="016-static-methods.phpt" role="test" />
@@ -396,6 +398,8 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 				<file name="326_Imagick_setExtract.phpt" role="test" />
 				<file name="327_Imagick_polaroidImage_basic.phpt" role="test" />
 				<file name="328_Imagick_polaroidImageWithTextAndMethod_basic.phpt" role="test" />
+				<file name="329_imagick_getImageBlob_empty.phpt" role="test" />
+				<file name="330_Imagick_newImage.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />

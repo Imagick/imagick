@@ -1,6 +1,9 @@
 <?php
 
-/** @generate-function-entries */
+/**
+ * @generate-function-entries
+ * @generate-legacy-arginfo 70000
+ */
 class ImagickDraw
 {
 #if MagickLibVersion > 0x628
@@ -140,7 +143,7 @@ class ImagickDraw
 
     public function getTextDecoration(): int {}
 
-    public function getTextEncoding(): string {}
+    public function getTextEncoding(): false|string {}
 
     public function getFontStretch(): int {}
 
@@ -180,7 +183,7 @@ class ImagickDraw
 
     public function comment(string $comment): bool {}
 
-    public function getClipPath(): string {}
+    public function getClipPath(): false|string {}
 
     public function getClipRule(): int {}
 

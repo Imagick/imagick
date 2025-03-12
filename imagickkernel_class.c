@@ -148,8 +148,6 @@ static void im_CalcKernelMetaData(KernelInfo *kernel) {
 			kernel->maximum = kernel->values[i];
 		}
 	}
-
-	return;
 }
 
 
@@ -216,7 +214,7 @@ PHP_METHOD(ImagickKernel, __construct)
 	(void)return_value;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 	// this method is private.
 }
@@ -235,7 +233,6 @@ PHP_METHOD(ImagickKernel, __construct)
 */
 #if PHP_VERSION_ID >= 70000
 PHP_METHOD(ImagickKernel, fromMatrix)
-
 {
 	zval *kernel_array;
 	zval *origin_array;
@@ -259,8 +256,8 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	row = 0;
 	origin_array = NULL;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
-		return;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a!", &kernel_array, &origin_array) == FAILURE) {
+		RETURN_THROWS();
 	}
 
 	num_rows = zend_hash_num_elements(Z_ARRVAL_P(kernel_array));
@@ -268,7 +265,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	if (num_rows == 0) {
 		//error - array has zero elements.
 		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 
@@ -397,6 +394,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
+// The values are still used here, as free'ing them causes problems
 	return;
 
 cleanup:
@@ -435,7 +433,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	origin_array = NULL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a|a", &kernel_array, &origin_array) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	num_rows = zend_hash_num_elements(Z_ARRVAL_P(kernel_array));
@@ -443,7 +441,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	if (num_rows == 0) {
 		//error - array has zero elements.
 		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_EMPTY TSRMLS_CC);
-		return;
+		RETURN_THROWS();
 	}
 
 	for (row=0 ; row<num_rows ; row++) {
@@ -665,7 +663,7 @@ PHP_METHOD(ImagickKernel, fromBuiltin)
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ls", &kernel_type, &string, &string_len) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	flags = ParseGeometry(string, &geometry_info);
@@ -678,8 +676,6 @@ PHP_METHOD(ImagickKernel, fromBuiltin)
 	kernel_info = AcquireKernelBuiltIn(kernel_type, &geometry_info);
 #endif
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
-
-	return;
 }
 
 /* }}} */
@@ -700,7 +696,7 @@ PHP_METHOD(ImagickKernel, addKernel)
 	php_imagickkernel_object *internp;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "O", &objvar, php_imagickkernel_sc_entry) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	kernel = Z_IMAGICKKERNEL_P(objvar);
@@ -719,8 +715,6 @@ PHP_METHOD(ImagickKernel, addKernel)
 
 	kernel_info_add_clone = CloneKernelInfo(kernel->kernel_info);
 	kernel_info_target->next = kernel_info_add_clone;
-
-	return;
 }
 /* }}} */
 
@@ -743,7 +737,7 @@ PHP_METHOD(ImagickKernel, separate)
 #endif
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	internp = Z_IMAGICKKERNEL_P(getThis());
@@ -754,6 +748,8 @@ PHP_METHOD(ImagickKernel, separate)
 
 	while (kernel_info != NULL) {
 		number_values = kernel_info->width * kernel_info->height;
+		// TODO - why do the values need to be copied here? Couldn't they just
+		// be passed into 'imagick_createKernel' below?
 		values_copy = (KernelValueType *)AcquireAlignedMemory(kernel_info->width, kernel_info->height*sizeof(KernelValueType));
 		memcpy(values_copy, kernel_info->values, number_values * sizeof(KernelValueType));
 
@@ -765,6 +761,9 @@ PHP_METHOD(ImagickKernel, separate)
 			kernel_info->y
 		);
 
+// The values are still used here, as free'ing them causes problems
+//		RelinquishAlignedMemory(values_copy);
+
 #if PHP_VERSION_ID >= 70000
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
 		add_next_index_zval(return_value, &separate_object);
@@ -775,8 +774,6 @@ PHP_METHOD(ImagickKernel, separate)
 #endif
 		kernel_info = kernel_info->next;
 	}
-
-	return;
 }
 /* }}} */
 
@@ -790,7 +787,7 @@ PHP_METHOD(ImagickKernel, getMatrix)
 	php_imagickkernel_object *internp;
 
 	if (zend_parse_parameters_none() == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	internp = Z_IMAGICKKERNEL_P(getThis());
@@ -798,8 +795,6 @@ PHP_METHOD(ImagickKernel, getMatrix)
 
 	array_init(return_value);
 	php_imagickkernelvalues_to_zval(return_value, internp->kernel_info);
-
-	return;
 }
 /* }}} */
 
@@ -824,14 +819,13 @@ PHP_METHOD(ImagickKernel, scale)
 	im_long normalize_flag = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l", &scale, &normalize_flag) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
+	(void)return_value;
 
 	internp = Z_IMAGICKKERNEL_P(getThis());
 	IMAGICK_KERNEL_NOT_NULL_EMPTY(internp);
 	ScaleKernelInfo(internp->kernel_info, scale, normalize_flag);
-
-	return;
 }
 /* }}} */
 
@@ -850,14 +844,13 @@ PHP_METHOD(ImagickKernel, addUnityKernel)
 	double scale;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &scale) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
+	(void)return_value;
 
 	internp = Z_IMAGICKKERNEL_P(getThis());
 	IMAGICK_KERNEL_NOT_NULL_EMPTY(internp);
 	UnityAddKernelInfo(internp->kernel_info, scale);
-
-	return;
 }
 /* }}} */
 

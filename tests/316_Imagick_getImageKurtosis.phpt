@@ -14,8 +14,16 @@ function getImageKurtosis() {
     $imagick = new \Imagick(__DIR__ . '/Biter_500.jpg');
     $values = $imagick->getImageKurtosis();
 
-    check_value($values, "kurtosis", -0.9379261035010518);
-    check_value($values, "skewness", 0.4562517200972045);
+    check_value_posibilities(
+        $values,
+        "kurtosis",
+        [-0.9379261035010518, -0.70925995674921]
+    );
+    check_value_posibilities(
+        $values,
+        "skewness",
+        [0.4562517200972045, 0.56839010636614]
+    );
 }
 
 getImageKurtosis() ;

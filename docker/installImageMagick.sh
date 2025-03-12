@@ -16,6 +16,7 @@ tar -xzf /var/app/imagemagick_src/${SRCFILE}.tar.gz -C /var/app/imagemagick_src
 cd /var/app/imagemagick_src/${SRCFILE}
 
 ./configure --with-quantum-depth=16 \
+  --disable-dependency-tracking \
   --with-magick-plus-plus=no \
   --without-perl \
   --disable-docs \

@@ -773,43 +773,39 @@ PixelWand *php_imagick_zval_to_pixelwand (zval *param, php_imagick_class_type_t 
 #if PHP_VERSION_ID >= 70000
 	ZVAL_DEREF(param);
 #endif 
-	if (Z_TYPE_P (param) == IS_LONG || Z_TYPE_P (param) == IS_DOUBLE) {
+
+	if (Z_TYPE_P(param) == IS_STRING || Z_TYPE_P(param) == IS_LONG || Z_TYPE_P(param) == IS_DOUBLE) {
 		zval var;
-		var = *param;
 
-		zval_copy_ctor(&var);
-		convert_to_string(&var);
-		param = &var;
-	}
-
-	switch (Z_TYPE_P(param)) {
-		case IS_STRING:
-		{
-			pixel_wand = NewPixelWand();
-			if (!pixel_wand) {
-				zend_error(E_ERROR, "Failed to allocate PixelWand structure");
-			}
-			*allocated = 1;
-
-			if (PixelSetColor (pixel_wand, Z_STRVAL_P(param)) == MagickFalse) {
-				pixel_wand = DestroyPixelWand(pixel_wand);
-				php_imagick_throw_exception (caller, "Unrecognized color string" TSRMLS_CC);
-				return NULL;
-			}
+		if (Z_TYPE_P(param) != IS_STRING) {
+			var = *param;
+			zval_copy_ctor(&var);
+			convert_to_string(&var);
+			param = &var;
 		}
-		break;
 
-		case IS_OBJECT:
-			if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
-				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
-				pixel_wand = intern->pixel_wand;
-			} else
-				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string" TSRMLS_CC);
-		break;
+		pixel_wand = NewPixelWand();
+		if (!pixel_wand) {
+			zend_error(E_ERROR, "Failed to allocate PixelWand structure");
+		}
+		*allocated = 1;
 
-		default:
-			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
+		if (PixelSetColor (pixel_wand, Z_STRVAL_P(param)) == MagickFalse) {
+			pixel_wand = DestroyPixelWand(pixel_wand);
+			php_imagick_throw_exception (caller, "Unrecognized color string" TSRMLS_CC);
+			return NULL;
+		}
+	} else if (Z_TYPE_P(param) == IS_OBJECT) {
+		if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
+			php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
+			pixel_wand = intern->pixel_wand;
+		} else {
+			php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string" TSRMLS_CC);
+		}
+	} else {
+		php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
 	}
+
 	return pixel_wand;
 }
 
@@ -821,45 +817,39 @@ PixelWand *php_imagick_zval_to_opacity (zval *param, php_imagick_class_type_t ca
 #if PHP_VERSION_ID >= 70000
 	ZVAL_DEREF(param);
 #endif
-	if (Z_TYPE_P (param) == IS_STRING) {
+	if (Z_TYPE_P(param) == IS_STRING || Z_TYPE_P(param) == IS_LONG || Z_TYPE_P(param) == IS_DOUBLE) {
 		zval var;
-		var = *param;
 
-		zval_copy_ctor(&var);
-		convert_to_double(&var);
-		param = &var;
-	}
-
-	switch (Z_TYPE_P(param)) {
-		case IS_LONG:
-		case IS_DOUBLE:
-		{
-			pixel_wand = NewPixelWand();
-			if (!pixel_wand) {
-				zend_error(E_ERROR, "Failed to allocate PixelWand structure");
-			}
-#if MagickLibVersion >= 0x700
-			//TOOD - this should be one minus? Or should we just make a BC break
-			// and make users do it in user land?
-			PixelSetAlpha(pixel_wand, Z_DVAL_P(param));
-#else
-			PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
-#endif
-			*allocated = 1;
+		if (Z_TYPE_P (param) == IS_STRING) {
+			var = *param;
+			zval_copy_ctor(&var);
+			convert_to_double(&var);
+			param = &var;
 		}
-		break;
 
-		case IS_OBJECT:
-			if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
-				php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
-				pixel_wand = intern->pixel_wand;
-			} else
-				php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string"  TSRMLS_CC);
-		break;
-
-		default:
-			php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
+		pixel_wand = NewPixelWand();
+		if (!pixel_wand) {
+			zend_error(E_ERROR, "Failed to allocate PixelWand structure");
+		}
+#if MagickLibVersion >= 0x700
+		//TOOD - this should be one minus? Or should we just make a BC break
+		// and make users do it in user land?
+		PixelSetAlpha(pixel_wand, Z_DVAL_P(param));
+#else
+		PixelSetOpacity(pixel_wand, Z_DVAL_P(param));
+#endif
+		*allocated = 1;
+	} else if (Z_TYPE_P(param) == IS_OBJECT) {
+		if (instanceof_function(Z_OBJCE_P(param), php_imagickpixel_sc_entry TSRMLS_CC)) {
+			php_imagickpixel_object *intern = Z_IMAGICKPIXEL_P(param);
+			pixel_wand = intern->pixel_wand;
+		} else {
+			php_imagick_throw_exception(caller, "The parameter must be an instance of ImagickPixel or a string"  TSRMLS_CC);
+		}
+	} else {
+		php_imagick_throw_exception(caller, "Invalid color parameter provided" TSRMLS_CC);
 	}
+
 	return pixel_wand;
 }
 
@@ -1197,6 +1187,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x707
 	IMAGICK_REGISTER_CONST_LONG("FILTER_CUBIC_SPLINE", CubicSplineFilter);
 #endif
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 40)
+	IMAGICK_REGISTER_CONST_LONG("FILTER_MAGIC_KERNEL_SHARP_2013", MagicKernelSharp2013Filter);
+	IMAGICK_REGISTER_CONST_LONG("FILTER_MAGIC_KERNEL_SHARP_2021", MagicKernelSharp2021Filter);
+#endif
+
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_UNDEFINED", UndefinedType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_BILEVEL", BilevelType);
 	IMAGICK_REGISTER_CONST_LONG("IMGTYPE_GRAYSCALE", GrayscaleType);
@@ -1279,9 +1274,7 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_WEBP", WebPCompression);
 #endif
 
-#if MagickLibVersion >= 0x711
-	// Technically >= 7.1.0-13 but we still don't have a mechanism for
-	// detecting patch versions.
+#if MAGICK_LIB_VERSION_GTE(7, 1, 0, 13)
     IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC5", BC5Compression);
     IMAGICK_REGISTER_CONST_LONG("COMPRESSION_BC7", BC7Compression);
 #endif
@@ -1289,6 +1282,10 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x70C
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAA", DWAACompression);
 	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_DWAB", DWABCompression);
+#endif
+
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 16)
+	IMAGICK_REGISTER_CONST_LONG("COMPRESSION_LERC", LERCCompression);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("PAINT_POINT", PointMethod);
@@ -1410,6 +1407,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 #if MagickLibVersion >= 0x707
 	IMAGICK_REGISTER_CONST_LONG("METRIC_STRUCTURAL_SIMILARITY_ERROR", StructuralSimilarityErrorMetric);
 	IMAGICK_REGISTER_CONST_LONG("METRIC_STRUCTURAL_DISSIMILARITY_ERROR", StructuralDissimilarityErrorMetric);
+#endif
+
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 44)
+    IMAGICK_REGISTER_CONST_LONG("METRIC_PHASE_CORRELATION_ERROR", PhaseCorrelationErrorMetric);
+    IMAGICK_REGISTER_CONST_LONG("METRIC_PRODUCT_CORRELATION_ERROR", DotProductCorrelationErrorMetric);
 #endif
 
 	IMAGICK_REGISTER_CONST_LONG("PIXEL_CHAR", CharPixel);
@@ -1549,9 +1551,19 @@ void php_imagick_initialize_constants(TSRMLS_D)
     IMAGICK_REGISTER_CONST_LONG("COLORSPACE_PROPHOTO", ProPhotoColorspace);
 #endif
 
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 9)
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLAB", OklabColorspace);
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_OKLCH", OklchColorspace);
+#endif
+
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 44)
+    IMAGICK_REGISTER_CONST_LONG("COLORSPACE_CAT02LMS", CAT02LMSColorspace);
+#endif
+
 #if MagickLibVersion >= 0x70A
 	IMAGICK_REGISTER_CONST_LONG("COLORSPACE_JZAZBZ", JzazbzColorspace);
 #endif
+
 
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_UNDEFINED", UndefinedVirtualPixelMethod);
 	IMAGICK_REGISTER_CONST_LONG("VIRTUALPIXELMETHOD_BACKGROUND", BackgroundVirtualPixelMethod);
@@ -1809,6 +1821,11 @@ void php_imagick_initialize_constants(TSRMLS_D)
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_ASSOCIATE", AssociateAlphaChannel);
 	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_DISSOCIATE", DisassociateAlphaChannel);
 #endif
+
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 26)
+	IMAGICK_REGISTER_CONST_LONG("ALPHACHANNEL_OFF_IF_OPAQUE", OffIfOpaqueAlphaChannel);
+#endif
+
 	/*
 	 DiscreteAlphaChannel,                  CopyAlphaChannel,
 	 DisassociateAlphaChannel,              DeactivateAlphaChannel,
@@ -1948,6 +1965,10 @@ IMAGICK_REGISTER_CONST_LONG("KERNEL_BINOMIAL", BinomialKernel);
 /* Draw directions */
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_LEFT_TO_RIGHT", LeftToRightDirection);
 IMAGICK_REGISTER_CONST_LONG("DIRECTION_RIGHT_TO_LEFT", RightToLeftDirection);
+
+#if MAGICK_LIB_VERSION_GTE(7, 1, 1, 14)
+    IMAGICK_REGISTER_CONST_LONG("DIRECTION_TOP_TO_BOTTOM", TopToBottomDirection);
+#endif
 
 // The kernel is scaled directly using given scaling factor without change.
 IMAGICK_REGISTER_CONST_LONG("NORMALIZE_KERNEL_NONE", 0);

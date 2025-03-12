@@ -15,7 +15,7 @@ m4_include(ifdef('PHP_IMAGICK_STATIC',PHP_EXT_BUILDDIR(imagick)[/],)[imagemagick
 
 # This line checks that ImageMagick is available, and
 # meets our minimum supported version. TODO change to 6.7.0
-IM_FIND_IMAGEMAGICK([6.2.4], [$PHP_IMAGICK])
+IM_FIND_IMAGEMAGICK([6.5.3], [$PHP_IMAGICK])
 
 #
 # PHP minimum version

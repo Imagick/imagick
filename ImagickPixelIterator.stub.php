@@ -1,6 +1,9 @@
 <?php
 
-/** @generate-function-entries */
+/**
+ * @generate-function-entries
+ * @generate-legacy-arginfo 70000
+ */
 class ImagickPixelIterator {
     public function __construct(Imagick $imagick) {}
 
@@ -19,29 +22,23 @@ class ImagickPixelIterator {
     /** @alias ImagickPixelIterator::clear */
     public function destroy(): bool {}
 
-    public function getCurrentIteratorRow(): array {}
+    public function getCurrentIteratorRow(): ?array {}
 
     public function getIteratorRow(): int {}
 
-    public function getNextIteratorRow(): array {}
+    public function getNextIteratorRow(): ?array {}
 
     public function getPreviousIteratorRow(): array {}
 
     /** @alias ImagickPixelIterator::getIteratorRow */
     public function key(): int {}
 
-    /** @alias ImagickPixelIterator::getNextIteratorRow
-     *  @tentative-return-type
-     */
     public function next(): void {}
 
-    /** @alias ImagickPixelIterator::resetIterator
-     *  @tentative-return-type
-     */
     public function rewind(): void {}
 
     /** @alias ImagickPixelIterator::getCurrentIteratorRow */
-    public function current(): array {}
+    public function current(): ?array {}
 
     public function newPixelIterator(Imagick $imagick): bool {}
 

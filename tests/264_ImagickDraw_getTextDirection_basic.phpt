@@ -65,7 +65,9 @@ echo "Ok";
 --CLEAN--
 <?php
 $f = __DIR__ . '/directionTest.png';
-if (file_exists($f)) unlink($f);
+if (file_exists($f)) {
+    unlink($f);
+}
 ?>
 --EXPECTF--
 Ok
