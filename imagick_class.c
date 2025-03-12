@@ -11768,7 +11768,7 @@ PHP_METHOD(Imagick, getResource)
 }
 /* }}} */
 
-/* {{{ proto Imagick Imagick::getResourceLimit(int type)
+/* {{{ proto float Imagick::getResourceLimit(int type)
 	Returns the specified resource limit in megabytes.
 */
 PHP_METHOD(Imagick, getResourceLimit)
