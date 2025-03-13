@@ -5,7 +5,7 @@
 	<summary>Provides a wrapper to the ImageMagick library.</summary>
 <description>
 Imagick is a native php extension to create and modify images using the ImageMagick API.
-This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
+This extension requires ImageMagick version 6.5.3-10+ and PHP 5.6.0+.
 </description>
 	<lead>
 		<name>Dan Ackroyd</name>
