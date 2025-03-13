@@ -13,19 +13,32 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.4.0+.
 		<email>danack@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2022-01-11</date>
+	<lead>
+		<name>Jakub Zelenka</name>
+		<user>bukka</user>
+		<email>bukka@php.net</email>
+		<active>yes</active>
+	</lead>
+	<date>2024-04-13</date>
 	<version>
-		<release>3.7.0</release>
-		<api>3.7.0</api>
+		<release>3.8.0RC1</release>
+		<api>3.8.0RC1</api>
 	</version>
 	<stability>
-		<release>stable</release>
-		<api>stable</api>
+		<release>beta</release>
+		<api>beta</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
+- Fixes:
+  * Imagick::clutImage(...) now respects the images interpolate method.
+  * You can now pass null to ImagickDraw::setStrokeDashArray() to reset the dash array.
+  * Fixed memory leak in ImageKernel
+  * Fixed compiling against PHP 8.4.
+  * Fixed various reflection issues related to incorrect arginfo
 - Added:
-	* Imagick::COMPOSITE_SALIENCY_BLEND
+  * function Imagick::clutImageWithInterpolate(Imagick $lookup_table, int $pixel_interpolate_method): bool  {}
+  * Constants Imagick::COMPRESSION_BC5, Imagick::COMPRESSION_BC7, Imagick::COMPRESSION_LERC, Imagick::DIRECTION_TOP_TO_BOTTOM, Imagick::ALPHACHANNEL_OFF_IF_OPAQUE
 </notes>
 	<contents>
 		<dir name="/">

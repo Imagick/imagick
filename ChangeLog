@@ -1,4 +1,4 @@
-Unreleased
+3.8.0RC1
 - Fixes:
   * Imagick::clutImage(...) now respects the images interpolate method.
   * You can now pass null to ImagickDraw::setStrokeDashArray() to reset the dash array.
