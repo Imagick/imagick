@@ -14,8 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        # php: [ 5.4 ]
-        php: [ 8.3 ]
+        php: [ 8.4 ]
         imagemagick: [
             7.1.0-13,
             6.8.7-0,
@@ -80,7 +79,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [5.4, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6, 5.5]
+        php: [8.3, 8.2, 8.1, 8.0, 7.4, 7.3, 7.2, 7.1, 7.0, 5.6]
         imagemagick: [
           7.1.0-13,
           7.0.10-27,
@@ -93,8 +92,12 @@ jobs:
           git6
         ]
         exclude:
-          - php: 5.4
-            imagemagick: 6.8.7-0
+          - php: 8.2
+            imagemagick: git6
+          - php: 8.1
+            imagemagick: git6
+          - php: 8.0
+            imagemagick: git6
           - php: 7.4
             imagemagick: git6
           - php: 7.3
@@ -109,6 +112,12 @@ jobs:
             imagemagick: git6
           - php: 5.5
             imagemagick: git6
+          - php: 8.2
+            imagemagick: git7
+          - php: 8.1
+            imagemagick: git7
+          - php: 8.0
+            imagemagick: git7
           - php: 7.4
             imagemagick: git7
           - php: 7.3
@@ -120,8 +129,6 @@ jobs:
           - php: 7.0
             imagemagick: git7
           - php: 5.6
-            imagemagick: git7
-          - php: 5.5
             imagemagick: git7
     runs-on: ${{ matrix.os }}
 
