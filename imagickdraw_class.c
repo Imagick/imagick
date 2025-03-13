@@ -355,10 +355,10 @@ PHP_METHOD(ImagickDraw, setResolution)
 
 	draw_info = PeekDrawingWand(internd->drawing_wand);
 #if MagickLibVersion >= 0x693
-	d_wand    = AcquireDrawingWand(draw_info, NULL);
+	d_wand = AcquireDrawingWand(draw_info, NULL);
 
 	if (!DrawSetDensity(d_wand, buf)) {
-		efree (buf);
+		efree(buf);
 		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to SetDensity" TSRMLS_CC);
 		RETURN_THROWS();
 	}
@@ -366,7 +366,7 @@ PHP_METHOD(ImagickDraw, setResolution)
 	density = AcquireString(buf);
 
 	if (!density) {
-		efree (buf);
+		efree(buf);
 		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to allocate memory" TSRMLS_CC);
 		RETURN_THROWS();
 	}
@@ -376,8 +376,8 @@ PHP_METHOD(ImagickDraw, setResolution)
 
 	d_wand = (DrawingWand *) DrawAllocateWand(draw_info, NULL);
 #endif
-	efree (buf);
-	draw_info=DestroyDrawInfo(draw_info);
+	efree(buf);
+	draw_info = DestroyDrawInfo(draw_info);
 
 	if (!d_wand) {
 		php_imagick_throw_exception(IMAGICKDRAW_CLASS, "Failed to allocate new DrawingWand structure" TSRMLS_CC);
