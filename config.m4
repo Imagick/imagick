@@ -20,7 +20,7 @@ IM_FIND_IMAGEMAGICK([6.5.3], [$PHP_IMAGICK])
 #
 # PHP minimum version
 #
-  AC_MSG_CHECKING([PHP version is at least 5.3.2])
+  AC_MSG_CHECKING([PHP version is at least 5.6.0])
 
   if test -z "${PHP_VERSION_ID}"; then
     if test -z "${PHP_CONFIG}"; then
@@ -36,7 +36,7 @@ IM_FIND_IMAGEMAGICK([6.5.3], [$PHP_IMAGICK])
     PHP_IMAGICK_FOUND_VERSION="${PHP_VERSION}"
   fi
 
-  if test "$PHP_IMAGICK_FOUND_VERNUM" -ge "50302"; then
+  if test "$PHP_IMAGICK_FOUND_VERNUM" -ge "50600"; then
     AC_MSG_RESULT(yes. found $PHP_IMAGICK_FOUND_VERSION)
   else
     AC_MSG_ERROR(no. found $PHP_IMAGICK_FOUND_VERSION)
