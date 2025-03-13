@@ -42,7 +42,7 @@ MagickBooleanType php_imagick_progress_monitor(const char *text, const MagickOff
 		return MagickFalse;
 	}
 
-	fprintf(fp, "text: %s, offset: %lld, span: %lld\n", text, offset, span);
+	fprintf(fp, "text: %s, offset: %lld, span: %llu\n", text, offset, span);
 	fclose(fp);
 	return MagickTrue;
 }
