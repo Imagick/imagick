@@ -185,8 +185,11 @@ static KernelInfo *imagick_createKernel(KernelValueType *values, size_t width, s
 	for (i=0; i<width*height;i++) {
 		kernel_info->values[i] = (MagickRealType)values[i];
 	}
+	// The values are not going to be used so free them
+	RelinquishAlignedMemory(values);
 	
 #else
+	// For IM 6, the values get used
 	kernel_info->values = values;
 #endif
 
@@ -394,7 +397,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
 	createKernelZval(return_value, kernel_info TSRMLS_CC);
 
-// The values are still used here, as free'ing them causes problems
+	// values are freed / used by imagick_createKernel so do not try to free them
 	return;
 
 cleanup:
@@ -748,8 +751,7 @@ PHP_METHOD(ImagickKernel, separate)
 
 	while (kernel_info != NULL) {
 		number_values = kernel_info->width * kernel_info->height;
-		// TODO - why do the values need to be copied here? Couldn't they just
-		// be passed into 'imagick_createKernel' below?
+		// The values are created because they can by used by imagick_createKernel which takes their ownership
 		values_copy = (KernelValueType *)AcquireAlignedMemory(kernel_info->width, kernel_info->height*sizeof(KernelValueType));
 		memcpy(values_copy, kernel_info->values, number_values * sizeof(KernelValueType));
 
@@ -760,9 +762,6 @@ PHP_METHOD(ImagickKernel, separate)
 			kernel_info->x,
 			kernel_info->y
 		);
-
-// The values are still used here, as free'ing them causes problems
-//		RelinquishAlignedMemory(values_copy);
 
 #if PHP_VERSION_ID >= 70000
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
