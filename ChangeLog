@@ -1,3 +1,7 @@
+3.8.0RC2
+- Fixes:
+  * Corrected PHP_IMAGICK_EXTNUM
+
 3.8.0RC1
 - Fixes:
   * Imagick::clutImage(...) now respects the images interpolate method.
