@@ -365,7 +365,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
 				5 TSRMLS_CC,
-				"origin_x for matrix is outside bounds of columns: " ZEND_LONG_FMT,
+				"origin_x for matrix is outside bounds of columns: %zu",
 				origin_x
 			);
 			goto cleanup;
@@ -387,7 +387,7 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 			zend_throw_exception_ex(
 				php_imagickkernel_exception_class_entry,
 				5 TSRMLS_CC,
-				"origin_y for matrix is outside bounds of rows: " ZEND_LONG_FMT,
+				"origin_y for matrix is outside bounds of rows: %zu",
 				origin_x
 			);
 			goto cleanup;

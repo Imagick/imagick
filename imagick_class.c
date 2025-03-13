@@ -2424,7 +2424,7 @@ PHP_METHOD(Imagick, importImagePixels)
 		zend_throw_exception_ex(
 			php_imagick_exception_class_entry,
 				0,
-				"The map contains incorrect number of elements. Expected %ld, array has %d",
+				"The map contains incorrect number of elements. Expected %ld, array has %u",
 				(width * height) * map_len,
 				zend_hash_num_elements(array)
 			);
