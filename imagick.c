@@ -102,7 +102,7 @@ PHP_IMAGICK_API zend_class_entry *php_imagickpixel_get_class_entry()
 
 static zend_function_entry php_imagick_functions[] =
 {
-	{ NULL, NULL, NULL, 0, 0 }
+	PHP_FE_END,
 };
 
 
