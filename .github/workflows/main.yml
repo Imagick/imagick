@@ -168,9 +168,6 @@ jobs:
 
       - name: Configure and check fonts are present
         run: |
-          export NO_INTERACTION=1
-          export REPORT_EXIT_STATUS=1
-          export SKIP_SLOW_TESTS=1
           export PHP_IMAGICK_VERSION=$(php -r '$sxe = simplexml_load_file ("package.xml"); echo (string) $sxe->version->release;')
           export CFLAGS=$(php util/calculate_cflags.php "${{ matrix.php }}" "${{ matrix.imagemagick }}")
           echo "CFLAGS are ${CFLAGS}"
@@ -182,6 +179,9 @@ jobs:
       - name: Run Imagick tests
         run: |
           export TEST_PHP_EXECUTABLE=`which php`
+          export NO_INTERACTION=1
+          export REPORT_EXIT_STATUS=1
+          export SKIP_SLOW_TESTS=1
           php run-tests.php -d extension=imagick.so -d extension_dir=modules -n ./*.phpt --show-diff -g FAIL,BORK,WARN,LEAK
           export JOBS=$(php util/calculate_test_jobs.php)
           php run-tests.php ${JOBS} -d extension=imagick.so -d extension_dir=modules -n ./tests/*.phpt --show-diff -g FAIL,BORK,WARN,LEAK
