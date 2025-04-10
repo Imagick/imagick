@@ -1,3 +1,7 @@
+3.8.0
+- Fixes:
+  * Fix signedness formatting mistakes
+
 3.8.0RC2
 - Fixes:
   * Corrected PHP_IMAGICK_EXTNUM
