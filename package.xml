@@ -19,19 +19,19 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.6.0+.
 		<email>bukka@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2024-04-13</date>
+	<date>2025-04-10</date>
 	<version>
-		<release>3.8.0RC2</release>
-		<api>3.8.0RC2</api>
+		<release>3.8.0</release>
+		<api>3.8.0</api>
 	</version>
 	<stability>
-		<release>beta</release>
-		<api>beta</api>
+		<release>stable</release>
+		<api>stable</api>
 	</stability>
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Fixes:
-  * Corrected PHP_IMAGICK_EXTNUM
+  * Fix signedness formatting mistakes
 </notes>
 	<contents>
 		<dir name="/">
