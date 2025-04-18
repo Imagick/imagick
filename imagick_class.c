@@ -8475,7 +8475,8 @@ PHP_METHOD(Imagick, getImagesBlob)
 
 	image_contents = MagickGetImagesBlob(intern->magick_wand, &image_size);
 	if (!image_contents) {
-		return;
+		php_imagick_throw_exception(IMAGICK_CLASS, "Failed to get the image contents (empty or invalid image?)" TSRMLS_CC);
+		RETURN_THROWS();
 	}
 
 	IM_ZVAL_STRINGL(return_value, (char *)image_contents, image_size);
