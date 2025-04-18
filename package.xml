@@ -406,6 +406,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.6.0+.
 				<file name="328_Imagick_polaroidImageWithTextAndMethod_basic.phpt" role="test" />
 				<file name="329_imagick_getImageBlob_empty.phpt" role="test" />
 				<file name="330_Imagick_newImage.phpt" role="test" />
+				<file name="331_Imagick_getImagesBlob_empty.phpt" role="test" />
 				<file name="bug20636.phpt" role="test" />
 				<file name="bug21229.phpt" role="test" />
 				<file name="bug59378.phpt" role="test" />

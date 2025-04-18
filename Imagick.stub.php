@@ -495,7 +495,7 @@ class Imagick
 
     public function getImageSize(): int  {}
 
-    public function getImageBlob(): ?string  {}
+    public function getImageBlob(): string  {}
 
     public function getImagesBlob(): string  {}
 
