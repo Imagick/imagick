@@ -2002,14 +2002,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_Imagick_getImageSize arginfo_class_Imagick_getSizeOffset
 
-
-#if PHP_VERSION_ID >= 80000
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_Imagick_getImageBlob, 0, 0, IS_STRING, 1)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_Imagick_getImageBlob, 0, 0, 0)
-#endif
-
-ZEND_END_ARG_INFO()
+#define arginfo_class_Imagick_getImageBlob arginfo_class_Imagick___toString
 
 #define arginfo_class_Imagick_getImagesBlob arginfo_class_Imagick___toString
 
