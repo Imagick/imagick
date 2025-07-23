@@ -954,7 +954,7 @@ static void checkImagickVersion()
 
 	GetMagickVersion(&imageMagickLibraryVersion);
 
-	if (imagickVersion == imageMagickLibraryVersion) {
+	if ((imagickVersion >= imageMagickLibraryVersion) && ((imagickVersion - imageMagickLibraryVersion) < 0x010)) {
 		return;
 	}
 
