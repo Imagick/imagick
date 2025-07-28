@@ -530,7 +530,12 @@ static zend_object_value php_imagickkernel_object_new(zend_class_entry *class_ty
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_ENTRY("imagick.locale_fix", "0", PHP_INI_ALL, OnUpdateBool, locale_fix, zend_imagick_globals, imagick_globals)
+#ifdef PHP_WIN32
 	STD_PHP_INI_ENTRY("imagick.skip_version_check", "0", PHP_INI_ALL, OnUpdateBool, skip_version_check, zend_imagick_globals, imagick_globals)
+#else
+	/* ABI relies on soname */
+	STD_PHP_INI_ENTRY("imagick.skip_version_check", "1", PHP_INI_ALL, OnUpdateBool, skip_version_check, zend_imagick_globals, imagick_globals)
+#endif
 	STD_PHP_INI_ENTRY("imagick.progress_monitor", "0", PHP_INI_SYSTEM, OnUpdateBool, progress_monitor, zend_imagick_globals, imagick_globals)
 
 	STD_PHP_INI_ENTRY("imagick.set_single_thread", "1", PHP_INI_SYSTEM, OnUpdateBool, set_single_thread, zend_imagick_globals, imagick_globals)
