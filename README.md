@@ -51,7 +51,7 @@ If using Imagick on NixOS, you probably [want to define](https://github.com/Imag
 
 # Examples
 
-Almost all of the functions in the library have an example at [www.phpimagick.com](http://www.phpimagick.com/), where you can see the example code to call the function, as well as the generated image or output.
+Almost all of the functions in the library have an example at [phpimagick.com](https://phpimagick.com), where you can see the example code to call the function, as well as the generated image or output.
 
 
 # ImageMagick
