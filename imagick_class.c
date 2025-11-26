@@ -2425,7 +2425,7 @@ PHP_METHOD(Imagick, importImagePixels)
 			php_imagick_exception_class_entry,
 				0,
 #if PHP_VERSION_ID >= 70000
-				"The map contains incorrect number of elements. Expected %ld, array has %u",
+				"The map contains incorrect number of elements. Expected %zu, array has %u",
 #else
 				"The map contains incorrect number of elements. Expected %ld, array has %d",
 #endif
