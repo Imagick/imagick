@@ -1,3 +1,8 @@
+3.8.1
+- Fixes:
+  * Fixed compiling against PHP 8.5
+  * Fixed getImage(s)Blob return type
+
 3.8.0
 - Fixes:
   * Fix signedness formatting mistakes

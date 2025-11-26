@@ -19,10 +19,10 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.6.0+.
 		<email>bukka@php.net</email>
 		<active>yes</active>
 	</lead>
-	<date>2025-04-10</date>
+	<date>2025-11-26</date>
 	<version>
-		<release>3.8.0</release>
-		<api>3.8.0</api>
+		<release>3.8.1</release>
+		<api>3.8.1</api>
 	</version>
 	<stability>
 		<release>stable</release>
@@ -31,7 +31,8 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.6.0+.
 	<license uri="http://www.php.net/license">PHP License</license>
 <notes>
 - Fixes:
-  * Fix signedness formatting mistakes
+  * Fixed compiling against PHP 8.5
+  * Fixed getImage(s)Blob return type
 </notes>
 	<contents>
 		<dir name="/">
