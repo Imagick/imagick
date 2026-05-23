@@ -13492,8 +13492,12 @@ PHP_METHOD(Imagick, colorThresholdImage)
 		return;
 
 	stop_color_wand = php_imagick_zval_to_pixelwand (stop_color_param, IMAGICK_CLASS, &stop_color_allocated TSRMLS_CC);
-	if (!stop_color_wand)
+	if (!stop_color_wand) {
+		if (start_color_allocated)
+			start_color_wand = DestroyPixelWand (start_color_wand);
+
 		return;
+	}
 
 	status = MagickColorThresholdImage(
 		intern->magick_wand,
