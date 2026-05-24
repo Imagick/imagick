@@ -14088,8 +14088,6 @@ PHP_METHOD(Imagick, polynomialImage)
 		RETURN_THROWS();
 	}
 
-	terms_double_array = php_imagick_zval_to_double_array(terms, &terms_count TSRMLS_CC);
-
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
 
@@ -14098,6 +14096,8 @@ PHP_METHOD(Imagick, polynomialImage)
 		php_imagick_convert_imagick_exception(intern->magick_wand, "Unable to polynomialImage, failed to set iterator to zero" TSRMLS_CC);
 		RETURN_THROWS();
 	}
+
+	terms_double_array = php_imagick_zval_to_double_array(terms, &terms_count TSRMLS_CC);
 
 	// TODO - sanity check terms_count
 
