@@ -6481,6 +6481,10 @@ PHP_METHOD(Imagick, evaluateImages)
 	}
 
 	evaluated_wand = MagickEvaluateImages(intern->magick_wand, evaluate_operator);
+	if (evaluated_wand == NULL) {
+		php_imagick_convert_imagick_exception(intern->magick_wand, "Evaluating images failed" TSRMLS_CC);
+		RETURN_THROWS();
+	}
 
 	object_init_ex(return_value, php_imagick_sc_entry);
 	intern_return = Z_IMAGICK_P(return_value);
