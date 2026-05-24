@@ -452,6 +452,10 @@ zend_bool php_imagick_check_font(char *font, int font_len TSRMLS_DC)
 		}
 	}
 
+	for(i = 0 ; i < num_fonts ; i++) {
+		IMAGICK_FREE_MAGICK_MEMORY(fonts[i]);
+	}
+
 	IMAGICK_FREE_MAGICK_MEMORY(fonts);
 	return retval;
 }
