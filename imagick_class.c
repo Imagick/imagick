@@ -12422,11 +12422,6 @@ PHP_METHOD(Imagick, colorMatrixImage)
 	status = MagickColorMatrixImage(intern->magick_wand, kernel_color_matrix);
 
 	//Free the memory
-#if MagickLibVersion >= 0x700
-	kernel_color_matrix->values = (MagickRealType *) NULL;
-#else
-	kernel_color_matrix->values = (double *) NULL;
-#endif
 	kernel_color_matrix = DestroyKernelInfo(kernel_color_matrix);
 	efree(colors);
 
