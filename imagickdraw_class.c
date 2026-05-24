@@ -1609,6 +1609,7 @@ PHP_METHOD(ImagickDraw, setStrokeDashArray)
 	double *double_array;
 	im_long elements;
 	php_imagickdraw_object *internd;
+	MagickBooleanType status;
 
 	/* Parse parameters given to function */
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a!", &param_array) == FAILURE) {
@@ -1629,7 +1630,12 @@ PHP_METHOD(ImagickDraw, setStrokeDashArray)
 		RETURN_THROWS();
 	}
 
-	DrawSetStrokeDashArray(internd->drawing_wand, elements, double_array);
+	status = DrawSetStrokeDashArray(internd->drawing_wand, elements, double_array);
+	if (status == MagickFalse) {
+		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to set stroke dash array" TSRMLS_CC);
+		RETURN_THROWS();
+	}
+
 	efree(double_array);
 
 	RETURN_TRUE;
