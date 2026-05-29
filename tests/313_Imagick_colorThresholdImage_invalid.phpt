@@ -16,7 +16,7 @@ function colorThresholdImage() {
             "complete garbage"
         );
     } catch (ImagickException $e) {
-        echo $e::class, ": ", $e->getMessage(), "\n";
+        echo "ImagickException: ", $e->getMessage(), "\n";
     }
 }
 
