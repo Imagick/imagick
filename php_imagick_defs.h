@@ -273,24 +273,24 @@ typedef struct _php_imagickkernel_object  {
 #if PHP_VERSION_ID >= 70000
 
 static inline php_imagick_object *php_imagick_fetch_object(zend_object *obj) {
-	return (php_imagick_object *)((char*)(obj) - XtOffsetOf(php_imagick_object, zo));
+	return (php_imagick_object *)((char*)(obj) - offsetof(php_imagick_object, zo));
 }
 
 static inline php_imagickdraw_object *php_imagickdraw_fetch_object(zend_object *obj) {
-	return (php_imagickdraw_object *)((char*)(obj) - XtOffsetOf(php_imagickdraw_object, zo));
+	return (php_imagickdraw_object *)((char*)(obj) - offsetof(php_imagickdraw_object, zo));
 }
 
 static inline php_imagickpixel_object *php_imagickpixel_fetch_object(zend_object *obj) {
-	return (php_imagickpixel_object *)((char*)(obj) - XtOffsetOf(php_imagickpixel_object, zo));
+	return (php_imagickpixel_object *)((char*)(obj) - offsetof(php_imagickpixel_object, zo));
 }
 
 static inline php_imagickpixeliterator_object *php_imagickpixeliterator_fetch_object(zend_object *obj) {
-	return (php_imagickpixeliterator_object *)((char*)(obj) - XtOffsetOf(php_imagickpixeliterator_object, zo));
+	return (php_imagickpixeliterator_object *)((char*)(obj) - offsetof(php_imagickpixeliterator_object, zo));
 }
 
 #ifdef IMAGICK_WITH_KERNEL
 static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_object *obj) {
-	return (php_imagickkernel_object *)((char*)(obj) - XtOffsetOf(php_imagickkernel_object, zo));
+	return (php_imagickkernel_object *)((char*)(obj) - offsetof(php_imagickkernel_object, zo));
 }
 #endif
 

@@ -1057,7 +1057,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagick_object_handlers.read_property = php_imagick_read_property;
 	imagick_object_handlers.count_elements = php_imagick_count_elements;
 #if PHP_VERSION_ID >= 70000
-	imagick_object_handlers.offset = XtOffsetOf(php_imagick_object, zo);
+	imagick_object_handlers.offset = offsetof(php_imagick_object, zo);
 	imagick_object_handlers.free_obj = php_imagick_object_free_storage;
 #endif
 
@@ -1077,7 +1077,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 	imagickdraw_object_handlers.clone_obj = php_imagick_clone_imagickdraw_object;
 #if PHP_VERSION_ID >= 70000
-	imagickdraw_object_handlers.offset = XtOffsetOf(php_imagickdraw_object, zo);
+	imagickdraw_object_handlers.offset = offsetof(php_imagickdraw_object, zo);
 	imagickdraw_object_handlers.free_obj = php_imagickdraw_object_free_storage;
 #endif
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
@@ -1095,7 +1095,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 	imagickpixeliterator_object_handlers.clone_obj = NULL;
 #if PHP_VERSION_ID >= 70000
-	imagickpixeliterator_object_handlers.offset = XtOffsetOf(php_imagickpixeliterator_object, zo);
+	imagickpixeliterator_object_handlers.offset = offsetof(php_imagickpixeliterator_object, zo);
 	imagickpixeliterator_object_handlers.free_obj = php_imagickpixeliterator_object_free_storage;
 #endif
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
@@ -1114,7 +1114,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 	imagickpixel_object_handlers.clone_obj = php_imagick_clone_imagickpixel_object;
 #if PHP_VERSION_ID >= 70000
-	imagickpixel_object_handlers.offset = XtOffsetOf(php_imagickpixel_object, zo);
+	imagickpixel_object_handlers.offset = offsetof(php_imagickpixel_object, zo);
 	imagickpixel_object_handlers.free_obj = php_imagickpixel_object_free_storage;
 #endif
 
@@ -1136,7 +1136,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickkernel_object_handlers.get_debug_info = php_imagickkernel_get_debug_info;
 	imagickkernel_object_handlers.clone_obj = php_imagick_clone_imagickkernel_object;
 	#if PHP_VERSION_ID >= 70000
-	imagickkernel_object_handlers.offset = XtOffsetOf(php_imagickkernel_object, zo);
+	imagickkernel_object_handlers.offset = offsetof(php_imagickkernel_object, zo);
 	imagickkernel_object_handlers.free_obj = php_imagickkernel_object_free_storage;
     #endif
 
