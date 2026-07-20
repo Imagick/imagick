@@ -704,7 +704,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, voi
 	}
 
 	if (member == &tmp_member) {
-		zval_dtor(member);
+		zval_ptr_dtor_nogc(member);
 	}
 
 	return retval;
@@ -778,7 +778,7 @@ static zval *php_imagick_read_property(zval *object, zval *member, int type, con
 		}
 	}
 	if (member == &tmp_member) {
-    	zval_dtor(member);
+    	zval_ptr_dtor_nogc(member);
     }
 
 	if (!retval) {

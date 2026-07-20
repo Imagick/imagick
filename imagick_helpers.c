@@ -323,7 +323,7 @@ double *php_imagick_zval_to_double_array(zval *param_array, im_long *num_element
 			convert_to_double(tmp_pzval);
 
 			value = Z_DVAL_P(tmp_pzval);
-			zval_dtor (tmp_pzval);
+			zval_ptr_dtor_nogc (tmp_pzval);
 		}
 		double_array[i] = value;
 	}
@@ -374,7 +374,7 @@ im_long *php_imagick_zval_to_long_array(zval *param_array, im_long *num_elements
 			convert_to_long(tmp_pzval);
 
 			value = Z_LVAL_P(tmp_pzval);
-			zval_dtor (tmp_pzval);
+			zval_ptr_dtor_nogc (tmp_pzval);
 		}
 		long_array[i] = value;
 	}
@@ -425,7 +425,7 @@ unsigned char *php_imagick_zval_to_char_array(zval *param_array, im_long *num_el
 			convert_to_long(tmp_pzval);
 
 			value = Z_LVAL_P(tmp_pzval);
-			zval_dtor (tmp_pzval);
+			zval_ptr_dtor_nogc (tmp_pzval);
 		}
 		char_array[i] = value;
 	}
