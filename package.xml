@@ -390,6 +390,7 @@ This extension requires ImageMagick version 6.5.3-10+ and PHP 5.6.0+.
 				<file name="310_Imagick_whiteBalanceImage.phpt" role="test" />
 				<file name="311_Imagick_channelFxImage.phpt" role="test" />
 				<file name="312_Imagick_colorThresholdImage.phpt" role="test" />
+				<file name="313_Imagick_colorThresholdImage_invalid.phpt" role="test" />
 				<file name="314_Imagick_getBackgroundColor.phpt" role="test" />
 				<file name="315_Imagick_getImageArtifacts.phpt" role="test" />
 				<file name="316_Imagick_getImageKurtosis.phpt" role="test" />
