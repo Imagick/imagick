@@ -2400,6 +2400,8 @@ PHP_METHOD(Imagick, importImagePixels)
 	char *map;
 	zval *pixels;
 	HashTable *array;
+	size_t pixel_count;
+	size_t expected_elements;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "llllsla", &x, &y, &width, &height, &map, &map_len, &storage, &pixels) == FAILURE) {
 		RETURN_THROWS();
@@ -2420,16 +2422,30 @@ PHP_METHOD(Imagick, importImagePixels)
 
 	array = Z_ARRVAL_P(pixels);
 
-	if (zend_hash_num_elements(array) != ((width * height) * map_len)) {
+	if ((size_t) height > ((size_t) -1) / (size_t) width) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "The requested dimensions are too large to process" TSRMLS_CC);
+		RETURN_THROWS();
+	}
+
+	pixel_count = (size_t) width * (size_t) height;
+
+	if (map_len != 0 && (size_t) map_len > ((size_t) -1) / pixel_count) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "The requested dimensions are too large to process" TSRMLS_CC);
+		RETURN_THROWS();
+	}
+
+	expected_elements = pixel_count * (size_t) map_len;
+
+	if (zend_hash_num_elements(array) != expected_elements) {
 		zend_throw_exception_ex(
 			php_imagick_exception_class_entry,
 				0,
 #if PHP_VERSION_ID >= 70000
-				"The map contains incorrect number of elements. Expected %ld, array has %u",
+				"The map contains incorrect number of elements. Expected %zu, array has %u",
 #else
-				"The map contains incorrect number of elements. Expected %ld, array has %d",
+				"The map contains incorrect number of elements. Expected %zu, array has %d",
 #endif
-				(width * height) * map_len,
+				expected_elements,
 				zend_hash_num_elements(array)
 			);
 
