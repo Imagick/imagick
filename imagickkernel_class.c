@@ -223,6 +223,7 @@ PHP_METHOD(ImagickKernel, __construct)
 }
 /* }}} */
 
+#define MATRIX_ERROR_NULL "Cannot create kernel."
 #define MATRIX_ERROR_EMPTY "Cannot create kernel, matrix is empty."
 #define MATRIX_ERROR_UNEVEN "Values must be matrix, with the same number of columns in each row."
 #define MATRIX_ERROR_BAD_VALUE "Only numbers or false are valid values in a kernel matrix."
@@ -395,10 +396,14 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	}
 
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
-	createKernelZval(return_value, kernel_info TSRMLS_CC);
+	if (kernel_info) {
+		createKernelZval(return_value, kernel_info TSRMLS_CC);
 
-	// values are freed / used by imagick_createKernel so do not try to free them
-	return;
+		// values are freed / used by imagick_createKernel so do not try to free them
+		return;
+	} else {
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_NULL TSRMLS_CC);
+	}
 
 cleanup:
 	if (values != NULL) {
@@ -564,9 +569,14 @@ PHP_METHOD(ImagickKernel, fromMatrix)
 	}
 
 	kernel_info = imagick_createKernel(values, num_columns, num_rows, origin_x, origin_y);
-	createKernelZval(return_value, kernel_info TSRMLS_CC);
+	if (kernel_info) {
+		createKernelZval(return_value, kernel_info TSRMLS_CC);
 
-	return;
+		// values are freed / used by imagick_createKernel so do not try to free them
+		return;
+	} else {
+		php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_NULL TSRMLS_CC);
+	}
 
 cleanup:
 	if (values != NULL) {
@@ -762,6 +772,11 @@ PHP_METHOD(ImagickKernel, separate)
 			kernel_info->x,
 			kernel_info->y
 		);
+		if (!kernel_info_copy) {
+			RelinquishMagickMemory(values_copy);
+			php_imagick_throw_exception(IMAGICKKERNEL_CLASS, MATRIX_ERROR_NULL TSRMLS_CC);
+			return;
+		}
 
 #if PHP_VERSION_ID >= 70000
 		createKernelZval(&separate_object, kernel_info_copy TSRMLS_CC);
