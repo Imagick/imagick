@@ -322,11 +322,11 @@ static inline php_imagickkernel_object *php_imagickkernel_fetch_object(zend_obje
 // String access
 #if PHP_VERSION_ID >= 70000
 	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar);
-	#define IM_RETURN_STRING(s) RETURN_STRING(s)
+	#define IM_RETVAL_STRING(s) RETVAL_STRING(s)
 #else
 	#define IM_ZVAL_STRING(zv, charstar) ZVAL_STRING(zv, charstar, 1);
 	//RETURN_STRING(s, duplicate) 
-	#define IM_RETURN_STRING(s) RETURN_STRING(s, 0)
+	#define IM_RETVAL_STRING(s) RETVAL_STRING(s, 1)
 #endif
 
 #if PHP_VERSION_ID >= 70000

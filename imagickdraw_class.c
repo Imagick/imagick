@@ -3070,7 +3070,8 @@ PHP_METHOD(ImagickDraw, getDensity)
 		RETURN_NULL();
 	}
 	else {
-		IM_RETURN_STRING(density);
+		IM_RETVAL_STRING(density);
+		MagickRelinquishMemory(density);
 	}
 }
 /* }}} */
