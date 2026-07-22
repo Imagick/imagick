@@ -2717,6 +2717,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(float_array);
 				return;
 			}
+			efree(float_array);
 		break;
 
 		case DoublePixel:
@@ -2731,6 +2732,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(double_array);
 				return;
 			}
+			efree(double_array);
 		break;
 
 		case ShortPixel:
@@ -2745,6 +2747,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(short_array);
 				return;
 			}
+			efree(short_array);
 		break;
 
 #if MagickLibVersion >= 0x700
@@ -2765,6 +2768,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(longlong_array);
 				return;
 			}
+			efree(longlong_array);
 		break;
 #endif
 
@@ -2783,6 +2787,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(long_array);
 				return;
 			}
+			efree(long_array);
 		break;
 
 		case CharPixel:
@@ -2797,6 +2802,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(char_array);
 				return;
 			}
+			efree(char_array);
 		break;
 
 		case QuantumPixel:
@@ -2815,6 +2821,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 				efree(quantum_array);
 				return;
 			}
+			efree(quantum_array);
 		break;
 
 		default:
