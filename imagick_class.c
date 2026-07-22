@@ -10246,6 +10246,7 @@ PHP_METHOD(Imagick, compositeImage)
 	im_long x, y;
 	im_long composite_id = 0;
 	im_long channel = IM_DEFAULT_CHANNEL;
+	MagickBooleanType status;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Olll|l", &objvar, php_imagick_sc_entry, &composite_id, &x, &y, &channel) == FAILURE) {
 		RETURN_THROWS();
@@ -10258,10 +10259,15 @@ PHP_METHOD(Imagick, compositeImage)
 	IMAGICK_NOT_EMPTY(intern_second);
 
 #if MagickLibVersion > 0x628
-	MagickCompositeImageChannel(intern->magick_wand, channel, intern_second->magick_wand, composite_id, x, y);
+	status = MagickCompositeImageChannel(intern->magick_wand, channel, intern_second->magick_wand, composite_id, x, y);
 #else
-	MagickCompositeImage(intern->magick_wand, intern_second->magick_wand, composite_id, x, y);
+	status = MagickCompositeImage(intern->magick_wand, intern_second->magick_wand, composite_id, x, y);
 #endif
+
+	if (status == MagickFalse) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Unable to composite image" TSRMLS_CC);
+		RETURN_THROWS();
+	}
 
 	RETURN_TRUE;
 }
