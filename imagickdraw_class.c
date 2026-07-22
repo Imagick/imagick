@@ -1631,12 +1631,13 @@ PHP_METHOD(ImagickDraw, setStrokeDashArray)
 	}
 
 	status = DrawSetStrokeDashArray(internd->drawing_wand, elements, double_array);
+
+	efree(double_array);
+
 	if (status == MagickFalse) {
 		php_imagick_convert_imagickdraw_exception (internd->drawing_wand, "Unable to set stroke dash array" TSRMLS_CC);
 		RETURN_THROWS();
 	}
-
-	efree(double_array);
 
 	RETURN_TRUE;
 }
