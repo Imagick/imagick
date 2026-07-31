@@ -2661,7 +2661,7 @@ PHP_METHOD(Imagick, exportImagePixels)
 	MagickBooleanType status;
 	im_long x, y, width, height, storage;
 	char *map;
-	int map_size, i = 0;
+	size_t map_size, i = 0;
 	IM_LEN_TYPE map_len;
 	double *double_array;
 	float *float_array;
@@ -2702,7 +2702,34 @@ PHP_METHOD(Imagick, exportImagePixels)
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
 
-	map_size = (map_len * width * height);
+	// Check for integer overflow in map_size calculation
+	// map_size = map_len * width * height
+	if (width > 0 && map_len > SIZE_MAX / (size_t)width) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Integer overflow detected in pixel calculation (width * map_len)" TSRMLS_CC);
+		RETURN_THROWS();
+	}
+
+	size_t temp = (size_t)map_len * (size_t)width;
+	if (height > 0 && temp > SIZE_MAX / (size_t)height) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Integer overflow detected in pixel calculation (width * height * map_len)" TSRMLS_CC);
+		RETURN_THROWS();
+	}
+
+	map_size = temp * (size_t)height;
+
+	// Check for overflow in memory allocation
+	// The largest pixel type is either double (8 bytes) or unsigned long long int (8 bytes)
+	// We check against the largest to ensure safety for all types
+	size_t max_element_size = sizeof(double);
+#if MagickLibVersion >= 0x700
+	if (sizeof(unsigned long long int) > max_element_size) {
+		max_element_size = sizeof(unsigned long long int);
+	}
+#endif
+	if (map_size > SIZE_MAX / max_element_size) {
+		php_imagick_throw_exception(IMAGICK_CLASS, "Memory allocation would overflow (pixel buffer too large)" TSRMLS_CC);
+		RETURN_THROWS();
+	}
 
 	switch (storage) {
 		case FloatPixel:
