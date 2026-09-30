@@ -968,6 +968,16 @@ static void checkImagickVersion()
 	);
 }
 
+static void php_imagick_deny_serialization(zend_class_entry *ce)
+{
+#if PHP_VERSION_ID >= 80100
+	ce->ce_flags |= ZEND_ACC_NOT_SERIALIZABLE;
+#else
+	ce->serialize = zend_class_serialize_deny;
+	ce->unserialize = zend_class_unserialize_deny;
+#endif
+}
+
 PHP_MINIT_FUNCTION(imagick)
 {
 	zend_class_entry ce;
@@ -1062,6 +1072,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	php_imagick_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+	php_imagick_deny_serialization(php_imagick_sc_entry);
 #if PHP_VERSION_ID >= 80300
 	php_imagick_sc_entry->create_object = php_imagick_object_new;
 	php_imagick_sc_entry->default_object_handlers = &imagick_object_handlers;
@@ -1081,6 +1092,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickdraw_object_handlers.free_obj = php_imagickdraw_object_free_storage;
 #endif
 	php_imagickdraw_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+	php_imagick_deny_serialization(php_imagickdraw_sc_entry);
 #if PHP_VERSION_ID >= 80300
 	php_imagickdraw_sc_entry->create_object = php_imagickdraw_object_new;
 	php_imagickdraw_sc_entry->default_object_handlers = &imagickdraw_object_handlers;
@@ -1099,6 +1111,7 @@ PHP_MINIT_FUNCTION(imagick)
 	imagickpixeliterator_object_handlers.free_obj = php_imagickpixeliterator_object_free_storage;
 #endif
 	php_imagickpixeliterator_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+	php_imagick_deny_serialization(php_imagickpixeliterator_sc_entry);
 #if PHP_VERSION_ID >= 80300
 	php_imagickpixeliterator_sc_entry->create_object = php_imagickpixeliterator_object_new;
 	php_imagickpixeliterator_sc_entry->default_object_handlers = &imagickpixeliterator_object_handlers;
@@ -1119,6 +1132,7 @@ PHP_MINIT_FUNCTION(imagick)
 #endif
 
 	php_imagickpixel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+	php_imagick_deny_serialization(php_imagickpixel_sc_entry);
 #if PHP_VERSION_ID >= 80300
 	php_imagickpixel_sc_entry->create_object = php_imagickpixel_object_new;
 	php_imagickpixel_sc_entry->default_object_handlers = &imagickpixel_object_handlers;
@@ -1141,6 +1155,7 @@ PHP_MINIT_FUNCTION(imagick)
     #endif
 
 	php_imagickkernel_sc_entry = zend_register_internal_class(&ce TSRMLS_CC);
+	php_imagick_deny_serialization(php_imagickkernel_sc_entry);
 #if PHP_VERSION_ID >= 80300
 	php_imagickkernel_sc_entry->create_object = php_imagickkernel_object_new;
 	php_imagickkernel_sc_entry->default_object_handlers = &imagickkernel_object_handlers;
