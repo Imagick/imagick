@@ -5227,7 +5227,7 @@ PHP_METHOD(Imagick, quantizeImage)
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
 
-	status = MagickQuantizeImage(intern->magick_wand, number_colors, colorspace, tree_depth, dither, measure_error);
+	status = MagickQuantizeImage(intern->magick_wand, number_colors, colorspace, tree_depth, IMAGICK_DITHER_METHOD(dither), measure_error);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -5257,7 +5257,7 @@ PHP_METHOD(Imagick, quantizeImages)
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
 
-	status = MagickQuantizeImages(intern->magick_wand, number_colors, colorspace, tree_depth, dither, measure_error);
+	status = MagickQuantizeImages(intern->magick_wand, number_colors, colorspace, tree_depth, IMAGICK_DITHER_METHOD(dither), measure_error);
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {
@@ -11077,7 +11077,7 @@ PHP_METHOD(Imagick, posterizeImage)
 	intern = Z_IMAGICK_P(getThis());
 	IMAGICK_NOT_EMPTY(intern);
 
-	status = MagickPosterizeImage(intern->magick_wand, levels, dither);
+	status = MagickPosterizeImage(intern->magick_wand, levels, IMAGICK_DITHER_METHOD(dither));
 
 	/* No magick is going to happen */
 	if (status == MagickFalse) {

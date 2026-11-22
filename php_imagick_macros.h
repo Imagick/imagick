@@ -76,4 +76,10 @@
 	}
 
 
+#if MagickLibVersion >= 0x700
+#define IMAGICK_DITHER_METHOD(dither) ((dither) ? RiemersmaDitherMethod : NoDitherMethod)
+#else
+#define IMAGICK_DITHER_METHOD(dither) ((dither) ? MagickTrue : MagickFalse)
+#endif
+
 #endif /* PHP_IMAGICK_MACROS_H */
